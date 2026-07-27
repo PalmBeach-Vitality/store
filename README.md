@@ -34,8 +34,22 @@ Premium American-made peptides for researchers, clinics, and B2B brands.
 - Gold accents sparingly for premium feel
 - Clean white cards
 
-## How to View
-Simply open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge).
+## Purpose: Backup / failover site
+This repository is a **standby copy** of the site for `www.palmbeach-vitality.store`, kept in case the primary store (Shopify) becomes unavailable. It is intentionally **not published live** — the domain still points to Shopify. The `CNAME` file already contains `www.palmbeach-vitality.store` so that going live later is only a DNS change.
+
+### Go-live (failover) runbook
+If you need to switch this domain over to this GitHub Pages backup:
+1. Enable Pages: repo Settings → Pages → Source "Deploy from a branch" → Branch `main`, folder `/ (root)` → Save.
+2. Repoint DNS at your registrar from Shopify to GitHub Pages:
+   - Apex `palmbeach-vitality.store` → A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - `www` → CNAME `palmbeach-vitality.github.io`
+3. In Settings → Pages, confirm the custom domain `www.palmbeach-vitality.store` verifies and "Enforce HTTPS" is enabled (may take a few minutes).
+
+### Preview without touching the domain
+To preview the backup on GitHub's own URL without any DNS change, temporarily delete the `CNAME` file, enable Pages (step 1 above), and browse `https://palmbeach-vitality.github.io/store/`.
+
+## How to View (locally)
+Simply open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge), or serve the folder: `python3 -m http.server 8000` then browse `http://localhost:8000/`.
 
 All pages are fully linked and mobile-responsive. No build step required (uses Tailwind CDN).
 
