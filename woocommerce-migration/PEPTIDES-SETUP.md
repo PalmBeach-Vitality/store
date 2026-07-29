@@ -1,28 +1,31 @@
-# Peptides — finish the 16 missing vials + new header
+# Peptides — missing products are likely Private
 
-## A. Theme (lab header)
-Upload **v2.5.2**:  
+Your Products screen shows:
+
+- **Published (30)** — visible on the store
+- **Private (20)** — hidden from customers / category pages
+- **All (50)**
+
+## Should all 50 be published?
+
+**Publish every product you want customers to see and buy.**
+
+- Keep **Private** only for incomplete, duplicate, or not-for-sale items
+- For the **Peptides** menu page to show all 22 vials, those vials must be **Published** (not Private)
+
+## Fix the missing Peptides vials (most likely)
+
+1. **Products → All products**
+2. Click **Private (20)**
+3. Select the peptide vials (BPC-157 10mg, Cargrilinitide, CJC, GLOW, etc.)
+4. Bulk actions → **Edit** → Status → **Published** → Update  
+   (or open each → set to Published → Update)
+
+Then reopen **Peptides** — they should appear under the header.
+
+## Also upload theme v2.5.3
+
+Fixes the duplicated menu (one clean Primary menu):  
 https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/shopify-to-woocommerce-c0c9/woocommerce-migration/palmbeach-vitality-theme.zip
 
-Peptides page header is now the lab image with centered readable white/cyan text.
-
-## B. Import the 16 missing vials
-
-Your first import only updated 6 existing products. These 16 still need to be **created**.
-
-1. Download:  
-   https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/shopify-to-woocommerce-c0c9/woocommerce-migration/data/products-peptides-vials-NEW.csv
-2. **Products → Import → Upload**
-3. **Do NOT check** “Update existing products”
-4. Continue → map columns → Run
-
-Expected result: **16 products imported** (not skipped).
-
-### Checklist if anything is still skipped
-- Update existing must be **off**
-- Category **Peptides** exists (Products → Categories)
-- After import: Products → filter by category Peptides → should show ~22
-- Settings → Permalinks → Save Changes once
-
-### The 16 new vials
-BPC-157 10mg, Cargrilinitide, CJC, CJC Ipamorelin, GHK-cu, GLOW, KLOW, MOTS-C, PT-141, Selank, Semax, Sermorelin, SS-31, TB-500, Tesamorelin, Wolverine
+Visit the homepage once after upload so the menu rebuild runs.
