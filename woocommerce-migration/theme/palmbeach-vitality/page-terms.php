@@ -1,37 +1,46 @@
 <?php
 /**
- * Terms and Conditions page template (slug: terms).
+ * Terms and Policies — accordion sections (no Shopify references).
  *
  * @package PalmBeachVitality
  */
 
 get_header();
-
-$title = __('Terms and Conditions', 'palmbeach-vitality');
-$content_html = pbv_default_terms_html();
-
-if (have_posts()) {
-    while (have_posts()) {
-        the_post();
-        $title = get_the_title() ?: $title;
-        $body = trim(get_the_content());
-        if ($body) {
-            ob_start();
-            the_content();
-            $content_html = ob_get_clean();
-        }
-    }
-}
+$sections = pbv_terms_policy_sections();
 ?>
 <header class="pbv-page-header">
   <div class="pbv-container">
-    <h1><?php echo esc_html($title); ?></h1>
+    <h1><?php esc_html_e('Terms and Policies', 'palmbeach-vitality'); ?></h1>
   </div>
 </header>
 <main id="primary" class="site-main pbv-section">
-  <div class="pbv-container entry-content pbv-legal">
-    <?php echo $content_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+  <div class="pbv-container pbv-policies">
+    <p class="pbv-policies__intro">Select a policy below to read the full text.</p>
+    <div class="pbv-policies__list">
+      <?php foreach ($sections as $id => $section) : ?>
+        <details class="pbv-policy" id="<?php echo esc_attr($id); ?>">
+          <summary class="pbv-policy__summary">
+            <span><?php echo esc_html($section['title']); ?></span>
+            <span class="pbv-policy__chevron" aria-hidden="true"></span>
+          </summary>
+          <div class="pbv-policy__body entry-content pbv-legal">
+            <?php echo $section['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+          </div>
+        </details>
+      <?php endforeach; ?>
+    </div>
   </div>
 </main>
+<script>
+(function () {
+  var hash = window.location.hash.replace(/^#/, '');
+  if (!hash) return;
+  var el = document.getElementById(hash);
+  if (el && el.tagName.toLowerCase() === 'details') {
+    el.open = true;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+})();
+</script>
 <?php
 get_footer();

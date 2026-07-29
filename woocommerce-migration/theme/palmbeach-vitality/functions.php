@@ -9,8 +9,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.4.1');
-define('PBV_SEED_VERSION', '2.4.0');
+define('PBV_THEME_VERSION', '2.5.0');
+define('PBV_SEED_VERSION', '2.5.0');
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -266,6 +266,228 @@ function pbv_ensure_product_categories() {
 }
 
 /**
+ * Terms and Policies sections for footer dropdown + /terms/ accordion.
+ *
+ * Shopify platform language removed. Brand: Palm Beach Vitality.
+ *
+ * @return array<string,array{title:string,html:string}>
+ */
+function pbv_terms_policy_sections() {
+    return array(
+        'refund' => array(
+            'title' => 'Refund and Return Policy',
+            'html'  => pbv_policy_refund_html(),
+        ),
+        'privacy' => array(
+            'title' => 'Privacy Policy',
+            'html'  => pbv_policy_privacy_html(),
+        ),
+        'terms-of-service' => array(
+            'title' => 'Terms of Service',
+            'html'  => pbv_policy_tos_html(),
+        ),
+        'shipping' => array(
+            'title' => 'Shipping Policy',
+            'html'  => pbv_policy_shipping_html(),
+        ),
+        'legal-notice' => array(
+            'title' => 'Legal Notice',
+            'html'  => pbv_policy_legal_notice_html(),
+        ),
+    );
+}
+
+/**
+ * Combined terms HTML (legacy helper / page seed).
+ */
+function pbv_default_terms_html() {
+    $out = '';
+    foreach (pbv_terms_policy_sections() as $section) {
+        $out .= '<h2>' . esc_html($section['title']) . '</h2>' . $section['html'];
+    }
+    return $out;
+}
+
+function pbv_policy_refund_html() {
+    return <<<HTML
+<h3>No Refund / No Return Policy</h3>
+<p>Due to the nature of our products being research chemicals intended for laboratory use only, all sales are final. We do not accept returns, refunds, or exchanges for any reason. Please make sure you are certain about your purchase before ordering, as we cannot accept opened, used, or unused products back for hygiene, safety, and regulatory reasons.</p>
+<p>By completing your purchase, you acknowledge and agree to this no refund / no return policy. If you have any questions about a product before buying, feel free to contact us. Thank you for understanding.</p>
+HTML;
+}
+
+function pbv_policy_privacy_html() {
+    return <<<HTML
+<p><strong>Last updated:</strong> July 15, 2026</p>
+<p>Palm Beach Vitality operates this store and website, including all related information, content, features, tools, products and services, in order to provide you, the customer, with a curated shopping experience (the "Services"). This Privacy Policy describes how we collect, use, and disclose your personal information when you visit, use, or make a purchase or other transaction using the Services or otherwise communicate with us. If there is a conflict between our Terms of Service and this Privacy Policy, this Privacy Policy controls with respect to the collection, processing, and disclosure of your personal information.</p>
+<p>Please read this Privacy Policy carefully. By using and accessing any of the Services, you acknowledge that you have read this Privacy Policy and understand the collection, use, and disclosure of your information as described in this Privacy Policy.</p>
+
+<h3>Personal Information We Collect or Process</h3>
+<p>When we use the term "personal information," we are referring to information that identifies or can reasonably be linked to you or another person. Personal information does not include information that is collected anonymously or that has been de-identified, so that it cannot identify or be reasonably linked to you. We may collect or process the following categories of personal information, including inferences drawn from this personal information, depending on how you interact with the Services, where you live, and as permitted or required by applicable law:</p>
+<ul>
+<li>Contact details including your name, address, billing address, shipping address, phone number, and email address.</li>
+<li>Financial information including credit card, debit card, and financial account numbers, payment card information, financial account information, transaction details, form of payment, payment confirmation and other payment details.</li>
+<li>Account information including your username, password, security questions, preferences and settings.</li>
+<li>Transaction information including the items you view, put in your cart, add to your wishlist, or purchase, return, exchange or cancel and your past transactions.</li>
+<li>Communications with us including the information you include in communications with us, for example, when sending a customer support inquiry.</li>
+<li>Device information including information about your device, browser, or network connection, your IP address, and other unique identifiers.</li>
+<li>Usage information including information regarding your interaction with the Services, including how and when you interact with or navigate the Services.</li>
+</ul>
+
+<h3>Personal Information Sources</h3>
+<p>We may collect personal information from the following sources:</p>
+<ul>
+<li>Directly from you including when you create an account, visit or use the Services, communicate with us, or otherwise provide us with your personal information;</li>
+<li>Automatically through the Services including from your device when you use our products or services or visit our websites, and through the use of cookies and similar technologies;</li>
+<li>From our service providers including when we engage them to enable certain technology and when they collect or process your personal information on our behalf;</li>
+<li>From our partners or other third parties.</li>
+</ul>
+
+<h3>How We Use Your Personal Information</h3>
+<p>Depending on how you interact with us or which of the Services you use, we may use personal information for the following purposes:</p>
+<ul>
+<li><strong>Provide, Tailor, and Improve the Services.</strong> We use your personal information to provide you with the Services, including to perform our contract with you, to process your payments, to fulfill your orders, to remember your preferences and items you are interested in, to send notifications to you related to your account, to process purchases, returns, exchanges or other transactions, to create, maintain and otherwise manage your account, to arrange for shipping, to facilitate any returns and exchanges, to enable you to post reviews, and to create a customized shopping experience for you, such as recommending products related to your purchases. This may include using your personal information to better tailor and improve the Services.</li>
+<li><strong>Marketing and Advertising.</strong> We use your personal information for marketing and promotional purposes, such as to send marketing, advertising and promotional communications by email, text message or postal mail, and to show you online advertisements for products or services on the Services or other websites, including based on items you previously have purchased or added to your cart and other activity on the Services.</li>
+<li><strong>Security and Fraud Prevention.</strong> We use your personal information to authenticate your account, to provide a secure payment and shopping experience, detect, investigate or take action regarding possible fraudulent, illegal, unsafe, or malicious activity, protect public safety, and to secure our services. If you choose to use the Services and register an account, you are responsible for keeping your account credentials safe. We highly recommend that you do not share your username, password or other access details with anyone else.</li>
+<li><strong>Communicating with You.</strong> We use your personal information to provide you with customer support, to be responsive to you, to provide effective services to you and to maintain our business relationship with you.</li>
+<li><strong>Legal Reasons.</strong> We use your personal information to comply with applicable law or respond to valid legal process, including requests from law enforcement or government agencies, to investigate or participate in civil discovery, potential or actual litigation, or other adversarial legal proceedings, and to enforce or investigate potential violations of our terms or policies.</li>
+</ul>
+
+<h3>How We Disclose Personal Information</h3>
+<p>In certain circumstances, we may disclose your personal information to third parties for legitimate purposes subject to this Privacy Policy. Such circumstances may include:</p>
+<ul>
+<li>With vendors and other third parties who perform services on our behalf (e.g. IT management, payment processing, data analytics, customer support, cloud storage, fulfillment and shipping).</li>
+<li>With business and marketing partners to provide marketing services and advertise to you. Our business and marketing partners will use your information in accordance with their own privacy notices. Depending on where you reside, you may have a right to direct us not to share information about you to show you targeted advertisements and marketing based on your online activity with different merchants and websites.</li>
+<li>When you direct, request us or otherwise consent to our disclosure of certain information to third parties, such as to ship you products or through your use of social media widgets or login integrations.</li>
+<li>With our affiliates or otherwise within our corporate group.</li>
+<li>In connection with a business transaction such as a merger or bankruptcy, to comply with any applicable legal obligations (including to respond to subpoenas, search warrants and similar requests), to enforce any applicable terms of service or policies, and to protect or defend the Services, our rights, and the rights of our users or others.</li>
+</ul>
+
+<h3>Website Hosting and Service Providers</h3>
+<p>The Services are hosted and operated using third-party website, ecommerce, and infrastructure providers that collect and process personal information about your access to and use of the Services in order to provide and improve the Services for you. Information you submit to the Services may be transmitted to and shared with those providers as well as other third parties that may be located in countries other than where you reside, in order to provide and improve the Services for you.</p>
+
+<h3>Third Party Websites and Links</h3>
+<p>The Services may provide links to websites or other online platforms operated by third parties. If you follow links to sites not affiliated or controlled by us, you should review their privacy and security policies and other terms and conditions. We do not guarantee and are not responsible for the privacy or security of such sites, including the accuracy, completeness, or reliability of information found on these sites. Information you provide on public or semi-public venues, including information you share on third-party social networking platforms may also be viewable by other users of the Services and/or users of those third-party platforms without limitation as to its use by us or by a third party. Our inclusion of such links does not, by itself, imply any endorsement of the content on such platforms or of their owners or operators, except as disclosed on the Services.</p>
+
+<h3>Children's Data</h3>
+<p>The Services are not intended to be used by children, and we do not knowingly collect any personal information about children under the age of majority in your jurisdiction. If you are the parent or guardian of a child who has provided us with their personal information, you may contact us using the contact details set out below to request that it be deleted. As of the Effective Date of this Privacy Policy, we do not have actual knowledge that we "share" or "sell" (as those terms are defined in applicable law) personal information of individuals under 16 years of age.</p>
+
+<h3>Security and Retention of Your Information</h3>
+<p>Please be aware that no security measures are perfect or impenetrable, and we cannot guarantee "perfect security." In addition, any information you send to us may not be secure while in transit. We recommend that you do not use unsecure channels to communicate sensitive or confidential information to us.</p>
+<p>How long we retain your personal information depends on different factors, such as whether we need the information to maintain your account, to provide you with Services, comply with legal obligations, resolve disputes or enforce other applicable contracts and policies.</p>
+
+<h3>Your Rights and Choices</h3>
+<p>Depending on where you live, you may have some or all of the rights listed below in relation to your personal information. However, these rights are not absolute, may apply only in certain circumstances and, in certain cases, we may decline your request as permitted by law.</p>
+<ul>
+<li><strong>Right to Access / Know.</strong> You may have a right to request access to personal information that we hold about you.</li>
+<li><strong>Right to Delete.</strong> You may have a right to request that we delete personal information we maintain about you.</li>
+<li><strong>Right to Correct.</strong> You may have a right to request that we correct inaccurate personal information we maintain about you.</li>
+<li><strong>Right of Portability.</strong> You may have a right to receive a copy of the personal information we hold about you and to request that we transfer it to a third party, in certain circumstances and with certain exceptions.</li>
+<li><strong>Right to Opt out of Sale or Sharing for Targeted Advertising.</strong> Depending on where you reside, you may have a right to opt out of the "sale" or "share" of your personal information or to opt out of the processing of your personal information for purposes considered to be "targeted advertising", as defined in applicable privacy laws. Please note that if you visit our website with the Global Privacy Control opt-out preference signal enabled, depending on where you are, we will automatically treat this as a request to opt-out for the device and browser that you use to visit the website. To learn more about Global Privacy Control, you can visit <a href="https://globalprivacycontrol.org/" rel="noopener noreferrer" target="_blank">https://globalprivacycontrol.org/</a>.</li>
+<li><strong>Managing Communication Preferences.</strong> We may send you promotional emails, and you may opt out of receiving these at any time by using the unsubscribe option displayed in our emails to you. If you opt out, we may still send you non-promotional emails, such as those about your account or orders that you have made.</li>
+</ul>
+<p>You may exercise any of these rights where indicated on the Services or by contacting us using the contact details provided below.</p>
+<p>We will not discriminate against you for exercising any of these rights. We may need to verify your identity before we can process your requests, as permitted or required under applicable law. In accordance with applicable laws, you may designate an authorized agent to make requests on your behalf to exercise your rights. Before accepting such a request from an agent, we will require that the agent provide proof you have authorized them to act on your behalf, and we may need you to verify your identity directly with us. We will respond to your request in a timely manner as required under applicable law.</p>
+
+<h3>Complaints</h3>
+<p>If you have complaints about how we process your personal information, please contact us using the contact details provided below. Depending on where you live, you may have the right to appeal our decision by contacting us using the contact details set out below, or lodge your complaint with your local data protection authority.</p>
+
+<h3>International Transfers</h3>
+<p>Please note that we may transfer, store and process your personal information outside the country you live in.</p>
+<p>If we transfer your personal information out of the European Economic Area or the United Kingdom, we will rely on recognized transfer mechanisms like the European Commission's Standard Contractual Clauses, or any equivalent contracts issued by the relevant competent authority of the UK, as relevant, unless the data transfer is to a country that has been determined to provide an adequate level of protection.</p>
+
+<h3>Changes to This Privacy Policy</h3>
+<p>We may update this Privacy Policy from time to time, including to reflect changes to our practices or for other operational, legal, or regulatory reasons. We will post the revised Privacy Policy on this website, update the "Last updated" date and provide notice as required by applicable law.</p>
+
+<h3>Contact</h3>
+<p>Should you have any questions about our privacy practices or this Privacy Policy, or if you would like to exercise any of the rights available to you, please call <a href="tel:+15612916304">+1 561-291-6304</a> or email us at <a href="mailto:palmbeachpeptides@gmail.com">palmbeachpeptides@gmail.com</a>.</p>
+HTML;
+}
+
+function pbv_policy_tos_html() {
+    return <<<HTML
+<p><strong>Last Updated:</strong> July 22, 2026</p>
+<p>Welcome to Palm Beach Vitality (also referred to as “Palm Beach Vitality,” “we,” “us,” or “our”). By accessing or using our website and purchasing any products, you agree to be bound by these Terms of Service. Please read them carefully.</p>
+
+<h3>1. Research Use Only</h3>
+<p>All products sold on this website are intended strictly for laboratory and research use only. They are not intended for human consumption, medical treatment, or any therapeutic purpose. By purchasing from us, you confirm that you are purchasing these products solely for legitimate research purposes and that you are qualified to handle them responsibly.</p>
+
+<h3>2. No Medical Claims or Advice</h3>
+<p>We make no claims that our products can diagnose, treat, cure, or prevent any disease or medical condition. The information on this site is for informational and research purposes only and should not be considered medical advice. Always consult with a licensed healthcare professional before using any research compound.</p>
+
+<h3>3. Eligibility</h3>
+<p>You must be at least 21 years of age to purchase products from this website. By placing an order, you represent and warrant that you are 18 years or older and legally able to enter into this agreement.</p>
+
+<h3>4. Orders, Shipping &amp; Returns</h3>
+<p>All sales are final. Due to the nature of research chemicals, we do not accept returns or offer refunds. Please review our full Shipping Policy and No Refund Policy before placing an order.</p>
+
+<h3>5. Limitation of Liability</h3>
+<p>To the fullest extent permitted by law, Palm Beach Vitality shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use or inability to use our products or website. This includes, but is not limited to, any damages resulting from misuse, improper handling, or failure to follow applicable laws and regulations.</p>
+
+<h3>6. Intellectual Property</h3>
+<p>All content on this website, including text, images, logos, and product descriptions, is the property of Palm Beach Vitality and is protected by applicable copyright and trademark laws. You may not reproduce, distribute, or use any content without prior written permission.</p>
+
+<h3>7. Governing Law</h3>
+<p>These Terms of Service shall be governed by and construed in accordance with the laws of the State of Florida, without regard to its conflict of law principles. Any disputes arising under these terms shall be resolved in the courts located in Palm Beach County, Florida.</p>
+
+<h3>8. Changes to Terms</h3>
+<p>We reserve the right to update or modify these Terms of Service at any time. Any changes will be effective immediately upon posting on this page. Your continued use of the website after changes are posted constitutes your acceptance of the updated terms.</p>
+<p>By using this website and making a purchase, you acknowledge that you have read, understood, and agree to these Terms of Service.</p>
+<p>Questions about the Terms of Service should be sent to us at <a href="mailto:Sales@palmbeach-vitality.com">Sales@palmbeach-vitality.com</a>.</p>
+<p>Sal Johnson<br><a href="mailto:Sales@palmbeach-vitality.com">Sales@palmbeach-vitality.com</a><br><a href="tel:+15612919304">(561) 291-9304</a></p>
+HTML;
+}
+
+function pbv_policy_shipping_html() {
+    return <<<HTML
+<p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and shipped with full insurance included at no extra cost to you. We proudly cover all standard shipping fees within the United States.</p>
+
+<h3>Shipping &amp; Delivery</h3>
+<p>Most orders ship within 1–2 business days. Delivery times typically range from 3–7 business days depending on your location. You will receive a tracking number via email once your order has shipped.</p>
+
+<h3>Damaged, Lost, or Stolen Packages</h3>
+<p>All shipments are fully insured. In the rare event that your package arrives damaged, is lost, or is stolen, please contact us immediately with a report from the shipping carrier (USPS, UPS, FedEx, etc.). Upon receiving the required documentation, we will gladly replace your order at no additional charge.</p>
+<p>We take great care in packaging and shipping every order. If you have any questions about your shipment, feel free to reach out to our support team — we’re here to help.</p>
+<p>Thank you for choosing Palm Beach Vitality.</p>
+HTML;
+}
+
+function pbv_policy_legal_notice_html() {
+    return <<<HTML
+<p><strong>Legal Notice &amp; Research Use Only Disclaimer</strong><br>Palm Beach Vitality<br><strong>Effective Date:</strong> July 22, 2026</p>
+<p>All products sold by Palm Beach Vitality are intended strictly for laboratory research purposes only.</p>
+<p>These materials are not:</p>
+<ul>
+<li>Intended for human consumption</li>
+<li>Intended for veterinary use</li>
+<li>Intended for medical, diagnostic, therapeutic, or clinical use</li>
+<li>Intended to diagnose, treat, cure, or prevent any disease</li>
+</ul>
+<p>By purchasing from this website, you represent and warrant that:</p>
+<ul>
+<li>You are at least 18 years of age.</li>
+<li>You are a qualified researcher or laboratory professional purchasing these materials solely for legitimate scientific research.</li>
+<li>You understand the potential hazards associated with handling research-grade compounds and will handle, store, and dispose of them in accordance with proper laboratory safety protocols.</li>
+<li>You will comply with all applicable local, state, federal, and international laws and regulations regarding the purchase, possession, and use of these materials.</li>
+<li>You will not use these products in or on humans or animals under any circumstances.</li>
+</ul>
+
+<h3>No Medical Claims</h3>
+<p>Nothing on this website constitutes medical advice. Palm Beach Vitality does not make any claims regarding the safety, efficacy, or suitability of any product for any purpose other than laboratory research. These statements have not been evaluated by the U.S. Food and Drug Administration (FDA).</p>
+
+<h3>Assumption of Risk &amp; Limitation of Liability</h3>
+<p>All products are sold “as is.” The purchaser assumes full responsibility and risk for the handling, storage, use, and disposal of any products purchased from Palm Beach Vitality. Palm Beach Vitality, its owners, employees, and affiliates shall not be held liable for any damages, injuries, losses, or legal consequences arising from the misuse, mishandling, or unauthorized use of these materials.</p>
+
+<h3>Indemnification</h3>
+<p>By completing a purchase, you agree to indemnify, defend, and hold harmless Palm Beach Vitality and its affiliates from any and all claims, liabilities, damages, costs, and expenses (including reasonable attorney’s fees) arising out of your use or misuse of any products purchased from this site.</p>
+
+<h3>Age &amp; Qualification Requirement</h3>
+<p>You must be 18 years of age or older to purchase. By placing an order you confirm you meet this requirement and are purchasing solely for research purposes.</p>
+<p>If you do not agree to these terms in full, do not purchase or use any products from this website.</p>
+HTML;
+}
+
+/**
  * Create a published page by slug if missing.
  *
  * @param string $slug    Page slug.
@@ -276,6 +498,14 @@ function pbv_ensure_product_categories() {
 function pbv_ensure_page($slug, $title, $content = '') {
     $existing = get_page_by_path($slug);
     if ($existing) {
+        // Keep Terms page title/content in sync with latest policies.
+        if ($slug === 'terms') {
+            wp_update_post(array(
+                'ID'           => $existing->ID,
+                'post_title'   => $title,
+                'post_content' => $content,
+            ));
+        }
         return (int) $existing->ID;
     }
 
@@ -289,54 +519,6 @@ function pbv_ensure_page($slug, $title, $content = '') {
 }
 
 /**
- * Default Terms and Conditions HTML.
- */
-function pbv_default_terms_html() {
-    $year = gmdate('Y');
-    return <<<HTML
-<p><strong>Effective date:</strong> {$year}</p>
-<p>Welcome to Palm Beach Vitality. By accessing this website and placing an order, you agree to these Terms and Conditions. If you do not agree, do not use this site or purchase products.</p>
-
-<h2>1. Research use only</h2>
-<p>All products sold by Palm Beach Vitality are intended strictly for laboratory research purposes only. Products are not for human or veterinary consumption, clinical use, diagnostic use, or household use. Nothing on this site is medical advice.</p>
-
-<h2>2. Eligibility</h2>
-<p>By purchasing, you represent that you are at least 18 years of age and a qualified researcher or purchasing on behalf of a research organization. You agree to handle, store, and use products in accordance with all applicable laws and institutional policies.</p>
-
-<h2>3. Orders and payment</h2>
-<p>Orders are subject to acceptance and availability. We reserve the right to refuse or cancel any order. Prices may change without notice. Payment is due as specified at checkout. For wholesale accounts, separate payment terms may apply.</p>
-
-<h2>4. Shipping</h2>
-<p>We ship to destinations we support at checkout. Delivery times are estimates. Risk of loss passes to you upon delivery to the carrier, except where prohibited by law. Cold-chain packaging is used when required for product integrity.</p>
-
-<h2>5. Inspection and returns</h2>
-<p>Inspect shipments promptly. Contact us within 48 hours of delivery for damaged, incorrect, or missing items. Because products are research materials, returns may be limited; approved returns must be unused and in original packaging unless we made an error.</p>
-
-<h2>6. Certificates of Analysis</h2>
-<p>Where provided, Certificates of Analysis (COAs) describe tested lot characteristics. You are responsible for verifying suitability for your research protocol.</p>
-
-<h2>7. Intellectual property</h2>
-<p>Site content, branding, and product imagery are owned by Palm Beach Vitality or its licensors. You may not copy or reuse them without written permission.</p>
-
-<h2>8. Limitation of liability</h2>
-<p>To the fullest extent permitted by law, Palm Beach Vitality is not liable for indirect, incidental, special, or consequential damages arising from use of the site or products. Our total liability for any claim related to an order will not exceed the amount you paid for that order.</p>
-
-<h2>9. Indemnification</h2>
-<p>You agree to indemnify and hold harmless Palm Beach Vitality from claims arising out of your misuse of products, violation of these terms, or violation of law.</p>
-
-<h2>10. Privacy</h2>
-<p>Information collected through this site is used to process orders and operate the storefront. See our privacy practices as published on this site or at checkout.</p>
-
-<h2>11. Changes</h2>
-<p>We may update these Terms and Conditions at any time by posting a revised version on this page. Continued use of the site after changes constitutes acceptance.</p>
-
-<h2>12. Contact</h2>
-<p>Questions about these terms: use our <a href="/contact/">Contact</a> page or email the address listed on the site.</p>
-<p><em>Palm Beach Vitality — Precision. Purity. Performance.</em></p>
-HTML;
-}
-
-/**
  * Seed pages, categories, and Primary menu so links work out of the box.
  */
 function pbv_seed_storefront() {
@@ -346,7 +528,7 @@ function pbv_seed_storefront() {
 
     pbv_ensure_page(
         'terms',
-        'Terms and Conditions',
+        'Terms and Policies',
         pbv_default_terms_html()
     );
     pbv_ensure_page(
