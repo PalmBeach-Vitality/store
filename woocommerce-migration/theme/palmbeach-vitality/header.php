@@ -45,7 +45,7 @@
   </div>
 
   <header class="site-header">
-    <div class="pbv-container site-header__inner">
+    <div class="site-header__inner">
       <nav class="primary-nav" aria-label="<?php esc_attr_e('Primary', 'palmbeach-vitality'); ?>">
         <?php
         wp_nav_menu(array(
