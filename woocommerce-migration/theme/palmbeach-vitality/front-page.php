@@ -11,24 +11,7 @@ $hero = pbv_hero_image_url();
 $hero_style = $hero
     ? '--pbv-hero-image:url(' . esc_url($hero) . ')'
     : '';
-$logo_card = file_exists(pbv_asset_path('assets/images/logo-full.jpg'))
-    ? pbv_asset_uri('assets/images/logo-full.jpg')
-    : pbv_default_logo_uri();
 ?>
-
-<section class="pbv-logo-banner" aria-label="<?php esc_attr_e('Palm Beach Vitality logo', 'palmbeach-vitality'); ?>">
-  <a class="pbv-logo-card" href="<?php echo esc_url(home_url('/')); ?>">
-    <img
-      class="pbv-logo-card__img"
-      src="<?php echo esc_url($logo_card); ?>"
-      alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
-      width="720"
-      height="1280"
-      decoding="async"
-      fetchpriority="high"
-    />
-  </a>
-</section>
 
 <section class="pbv-hero" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
   <div class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>">

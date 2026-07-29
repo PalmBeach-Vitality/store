@@ -18,12 +18,34 @@
     <div class="pbv-announce"><?php echo esc_html($announce); ?></div>
   <?php endif; ?>
 
+  <?php
+  $logo_card = file_exists(pbv_asset_path('assets/images/logo-full.jpg'))
+      ? pbv_asset_uri('assets/images/logo-full.jpg')
+      : pbv_default_logo_uri();
+  if (has_custom_logo()) {
+      $custom_id = get_theme_mod('custom_logo');
+      $custom_url = $custom_id ? wp_get_attachment_image_url($custom_id, 'full') : '';
+      if ($custom_url) {
+          $logo_card = $custom_url;
+      }
+  }
+  ?>
+  <div class="pbv-logo-banner">
+    <a class="pbv-logo-card" href="<?php echo esc_url(home_url('/')); ?>">
+      <img
+        class="pbv-logo-card__img"
+        src="<?php echo esc_url($logo_card); ?>"
+        alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
+        width="720"
+        height="1280"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </a>
+  </div>
+
   <header class="site-header">
     <div class="pbv-container site-header__inner">
-      <div class="site-branding">
-        <?php pbv_site_logo(); ?>
-      </div>
-
       <nav class="primary-nav" aria-label="<?php esc_attr_e('Primary', 'palmbeach-vitality'); ?>">
         <?php
         wp_nav_menu(array(

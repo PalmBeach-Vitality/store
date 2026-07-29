@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, large 9:16 logo card, centered lab hero, FAQ accordion.
-Version: 2.3.2
+Version: 2.3.3
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -61,7 +61,7 @@ a:hover { opacity: 0.7; }
   border-bottom: 1px solid #eee;
 }
 
-/* Header */
+/* Header — nav + icons only (logo lives in banner above) */
 .site-header {
   position: sticky;
   top: 0;
@@ -75,36 +75,7 @@ a:hover { opacity: 0.7; }
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 3.75rem;
-}
-
-.site-branding {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-}
-
-.pbv-logo-link,
-.custom-logo-link {
-  display: inline-flex;
-  align-items: center;
-  line-height: 0;
-}
-
-.pbv-logo,
-.custom-logo {
-  height: 72px;
-  width: auto;
-  max-width: 200px;
-  object-fit: contain;
-}
-
-@media (min-width: 980px) {
-  .pbv-logo,
-  .custom-logo {
-    height: 88px;
-    max-width: 240px;
-  }
+  min-height: 3.25rem;
 }
 
 .primary-nav { display: none; flex: 1; }
@@ -189,18 +160,20 @@ a:hover { opacity: 0.7; }
   .mobile-nav { display: none !important; }
 }
 
-/* Large centered 9:16 logo card (homepage top) */
+/* Large centered 9:16 logo — directly under announcement bar */
 .pbv-logo-banner {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 1.5rem 1rem 0.75rem;
+  padding: 1.25rem 1rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #eee;
 }
 
 .pbv-logo-card {
   display: block;
-  width: min(94vw, 30rem);
+  width: min(94vw, 32rem);
   aspect-ratio: 9 / 16;
   border-radius: 1.5rem;
   overflow: hidden;
@@ -216,6 +189,7 @@ a:hover { opacity: 0.7; }
 .pbv-logo-card__img {
   width: 100%;
   height: 100%;
+  max-width: none;
   object-fit: cover;
   object-position: center;
 }
@@ -327,17 +301,17 @@ a:hover { opacity: 0.7; }
 
 @media (min-width: 750px) {
   .pbv-logo-banner {
-    padding: 2rem 1rem 1rem;
+    padding: 1.75rem 1rem 1.25rem;
   }
 
   .pbv-logo-card {
-    width: min(36rem, 44vw);
-    max-width: 36rem;
+    width: min(38rem, 48vw);
+    max-width: 38rem;
     border-radius: 1.75rem;
   }
 
   .pbv-hero {
-    padding: 1rem 1rem 0.75rem;
+    padding: 1.25rem 1rem 0.75rem;
   }
 
   .pbv-hero-photo {
