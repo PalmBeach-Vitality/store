@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage — announcement + full-bleed beach hero + FAQ accordion.
+ * Homepage — beach hero, Most Popular (middle), FAQ accordion.
  *
  * @package PalmBeachVitality
  */
@@ -19,6 +19,49 @@ $hero_style = $hero
       <p>Upload your beach homepage image:<br><strong>Appearance → Customize → Header Image</strong></p>
     </div>
   <?php endif; ?>
+</section>
+
+<section class="pbv-section pbv-popular" id="most-popular">
+  <div class="pbv-container">
+    <div class="pbv-popular__header">
+      <h2 class="pbv-popular__title">Most Popular</h2>
+      <a class="pbv-popular__link" href="<?php echo esc_url(home_url('/shop/')); ?>">View all</a>
+    </div>
+
+    <?php if (class_exists('WooCommerce')) : ?>
+      <?php
+      $popular_args = array(
+          'post_type'      => 'product',
+          'posts_per_page' => 8,
+          'post_status'    => 'publish',
+      );
+
+      $most_cat = get_term_by('slug', 'most-popular', 'product_cat');
+      if ($most_cat && !is_wp_error($most_cat)) {
+          $popular_args['tax_query'] = array(
+              array(
+                  'taxonomy' => 'product_cat',
+                  'field'    => 'slug',
+                  'terms'    => 'most-popular',
+              ),
+          );
+      }
+
+      $popular = new WP_Query($popular_args);
+      if ($popular->have_posts()) :
+          echo '<ul class="products columns-4">';
+          while ($popular->have_posts()) :
+              $popular->the_post();
+              wc_get_template_part('content', 'product');
+          endwhile;
+          echo '</ul>';
+          wp_reset_postdata();
+      else :
+          echo '<p class="pbv-popular__empty">Products will appear here after import.</p>';
+      endif;
+      ?>
+    <?php endif; ?>
+  </div>
 </section>
 
 <section class="pbv-faq" id="faq">
