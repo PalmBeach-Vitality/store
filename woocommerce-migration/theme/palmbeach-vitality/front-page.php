@@ -14,9 +14,11 @@ $hero_style = $hero
 ?>
 
 <section class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
-  <?php if (!$hero) : ?>
+  <?php if ($hero) : ?>
+    <a class="pbv-hero-photo__link" href="<?php echo esc_url(home_url('/shop/')); ?>"><span class="screen-reader-text"><?php esc_html_e('Shop catalog', 'palmbeach-vitality'); ?></span></a>
+  <?php else : ?>
     <div class="pbv-hero-photo__hint pbv-container">
-      <p>Upload your beach homepage image:<br><strong>Appearance → Customize → Header Image</strong></p>
+      <p>Upload your Shopify beach hero image:<br><strong>Appearance → Customize → Header Image</strong></p>
     </div>
   <?php endif; ?>
 </section>

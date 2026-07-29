@@ -160,17 +160,33 @@ a:hover { opacity: 0.7; }
   .mobile-nav { display: none !important; }
 }
 
-/* Full-bleed beach hero — image only */
+/* Full-bleed beach hero — Horizon-style media banner */
 .pbv-hero-photo {
-  min-height: min(72vh, 40rem);
+  position: relative;
+  min-height: min(70vh, 38rem);
+  width: 100%;
   background:
     var(--pbv-hero-image, none) center / cover no-repeat,
     linear-gradient(135deg, #1a0f0a 0%, #c45a2a 40%, #f0a060 70%, #6b3a8a 100%);
+  overflow: hidden;
+}
+
+.pbv-hero-photo__link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
 }
 
 .pbv-hero-photo--placeholder {
   display: grid;
   place-items: center;
+  min-height: min(60vh, 28rem);
+}
+
+@media (min-width: 750px) {
+  .pbv-hero-photo {
+    min-height: min(78vh, 44rem);
+  }
 }
 
 .pbv-hero-photo__hint {
