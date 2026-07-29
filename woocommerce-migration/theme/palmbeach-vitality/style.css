@@ -145,7 +145,7 @@ h1, h2, h3, h4, .font-display {
 
 .primary-nav .menu {
   display: flex;
-  gap: 1.5rem;
+  gap: 1.05rem;
   list-style: none;
   margin: 0;
   padding: 0;

@@ -38,14 +38,25 @@ Menu fallback also lists those four groups.
 
 1. **Appearance → Menus**
 2. Create menu **Primary**
-3. Add custom links or product categories:
+3. Add these items (Product categories + pages):
    - Peptides
    - Peptide Pens
    - Weight Loss
    - Weight Loss Pens
-   - All Products (`/shop/`)
-   - About / Contact (optional)
+   - Telehealth (`/telehealth/`)
+   - Wholesale (`/wholesale/`)
+   - FAQ (`/faq/`)
+   - Contact (`/contact/`)
 4. Check **Primary Menu** location → Save
+
+### Create missing pages
+**Pages → Add New** for any that don’t exist yet:
+- FAQ
+- Wholesale
+- Contact
+- **Telehealth** (new — create this if missing)
+
+You can paste copy later; empty published pages are fine for now so menu links don’t 404.
 
 ## D. If a category tile 404s
 

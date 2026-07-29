@@ -31,10 +31,11 @@
         <div>
           <h4>Company</h4>
           <ul>
-            <li><a href="<?php echo esc_url(home_url('/about/')); ?>">About</a></li>
-            <li><a href="<?php echo esc_url(home_url('/research/')); ?>">Research</a></li>
+            <li><a href="<?php echo esc_url(home_url('/telehealth/')); ?>">Telehealth</a></li>
+            <li><a href="<?php echo esc_url(home_url('/wholesale/')); ?>">Wholesale</a></li>
             <li><a href="<?php echo esc_url(home_url('/faq/')); ?>">FAQ</a></li>
             <li><a href="<?php echo esc_url(home_url('/contact/')); ?>">Contact</a></li>
+            <li><a href="<?php echo esc_url(home_url('/about/')); ?>">About</a></li>
           </ul>
         </div>
       </div>

@@ -115,8 +115,9 @@ function pbv_fallback_menu() {
         pbv_category_url('peptide-pens')      => 'Peptide Pens',
         pbv_category_url('weight-loss')       => 'Weight Loss',
         pbv_category_url('weight-loss-pens')  => 'Weight Loss Pens',
-        home_url('/shop/')                    => 'All Products',
-        home_url('/about/')                   => 'About',
+        home_url('/telehealth/')              => 'Telehealth',
+        home_url('/wholesale/')               => 'Wholesale',
+        home_url('/faq/')                     => 'FAQ',
         home_url('/contact/')                 => 'Contact',
     );
     echo '<ul class="menu">';
