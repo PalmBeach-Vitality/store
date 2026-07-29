@@ -158,6 +158,32 @@ function pbv_products_per_page() {
 }
 add_filter('loop_shop_per_page', 'pbv_products_per_page');
 
+/**
+ * Prefer portrait catalog thumbnails (product photos are tall vials/pens).
+ */
+function pbv_product_thumbnail_size($size) {
+    return array(
+        'width'  => 600,
+        'height' => 900,
+        'crop'   => 1,
+    );
+}
+add_filter('woocommerce_get_image_size_thumbnail', 'pbv_product_thumbnail_size');
+
+function pbv_single_product_image_size($size) {
+    return array(
+        'width'  => 900,
+        'height' => 1350,
+        'crop'   => 0,
+    );
+}
+add_filter('woocommerce_get_image_size_single', 'pbv_single_product_image_size');
+
+function pbv_loop_columns() {
+    return 2;
+}
+add_filter('loop_shop_columns', 'pbv_loop_columns');
+
 function pbv_product_disclaimer() {
     echo '<div class="pbv-disclaimer"><strong>Research Use Only:</strong> All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.</div>';
 }
