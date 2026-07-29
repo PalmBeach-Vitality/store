@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.5.3');
+define('PBV_THEME_VERSION', '2.5.4');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -159,25 +159,31 @@ function pbv_products_per_page() {
 add_filter('loop_shop_per_page', 'pbv_products_per_page');
 
 /**
- * Prefer portrait catalog thumbnails (product photos are tall vials/pens).
+ * Prefer sharper catalog images, displayed smaller in CSS.
+ * Avoid tiny 300px thumbs that look grainy when scaled up.
  */
 function pbv_product_thumbnail_size($size) {
     return array(
-        'width'  => 600,
-        'height' => 900,
-        'crop'   => 1,
+        'width'  => 800,
+        'height' => 1200,
+        'crop'   => 0,
     );
 }
 add_filter('woocommerce_get_image_size_thumbnail', 'pbv_product_thumbnail_size');
 
 function pbv_single_product_image_size($size) {
     return array(
-        'width'  => 900,
-        'height' => 1350,
+        'width'  => 1000,
+        'height' => 1500,
         'crop'   => 0,
     );
 }
 add_filter('woocommerce_get_image_size_single', 'pbv_single_product_image_size');
+
+function pbv_archive_thumbnail_size() {
+    return 'woocommerce_single';
+}
+add_filter('single_product_archive_thumbnail_size', 'pbv_archive_thumbnail_size');
 
 function pbv_loop_columns() {
     return 2;
