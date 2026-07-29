@@ -1,83 +1,56 @@
 <?php
 /**
- * Front page — brand hero + 4 Shopify-style shop groups + featured products.
+ * Homepage — announcement + full-bleed beach hero + FAQ accordion.
  *
  * @package PalmBeachVitality
  */
 
 get_header();
 
-$hero_image = 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/NAD__500mg.jpg?v=1784650000';
-// Prefer a known tropical vial shot from the catalog if CDN path differs:
-$hero_image = 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_90.jpg?v=1784042737';
-$groups = function_exists('pbv_shop_groups') ? pbv_shop_groups() : array();
+$hero = get_header_image();
+$hero_style = $hero
+    ? '--pbv-hero-image:url(' . esc_url($hero) . ')'
+    : '';
 ?>
 
-<section class="pbv-hero pbv-hero--photo" style="--pbv-hero-image:url('<?php echo esc_url($hero_image); ?>')">
-  <div class="pbv-container pbv-hero__inner">
-    <p class="pbv-hero__eyebrow">Palm Beach · Research grade</p>
-    <h1 class="pbv-hero__brand">Palm Beach Vitality</h1>
-    <p class="pbv-hero__text">Shop peptides and weight-loss compounds in vials or pens — documented, priced, and ready to order.</p>
-    <div class="pbv-hero__actions">
-      <a class="btn" href="<?php echo esc_url(home_url('/shop/')); ?>">Shop all</a>
-      <a class="btn btn-outline" href="<?php echo esc_url(pbv_category_url('peptide-pens')); ?>">Peptide Pens</a>
+<section class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
+  <?php if (!$hero) : ?>
+    <div class="pbv-hero-photo__hint pbv-container">
+      <p>Upload your beach homepage image:<br><strong>Appearance → Customize → Header Image</strong></p>
     </div>
-  </div>
+  <?php endif; ?>
 </section>
 
-<section class="pbv-section">
-  <div class="pbv-container">
-    <p class="pbv-section__eyebrow">Shop by group</p>
-    <h2 class="pbv-section__title">Four collections</h2>
-    <p class="pbv-section__lead">Same structure as your Shopify storefront — pick a group to browse.</p>
+<section class="pbv-faq" id="faq">
+  <div class="pbv-container pbv-faq__inner">
+    <h2 class="pbv-faq__title">Frequently asked questions</h2>
 
-    <div class="pbv-collections">
-      <?php foreach ($groups as $group) : ?>
-        <a class="pbv-collection-card" href="<?php echo esc_url(pbv_category_url($group['slug'])); ?>">
-          <span class="pbv-collection-card__media" style="background-image:url('<?php echo esc_url($group['image']); ?>')"></span>
-          <span class="pbv-collection-card__body">
-            <span class="pbv-collection-card__name"><?php echo esc_html($group['name']); ?></span>
-            <span class="pbv-collection-card__blurb"><?php echo esc_html($group['blurb']); ?></span>
-          </span>
-        </a>
-      <?php endforeach; ?>
+    <div class="pbv-faq__list">
+      <details class="pbv-faq__item">
+        <summary>Are your peptides intended for human consumption or medical use?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">No. All products are intended strictly for research purposes only. They are not for human or veterinary use, not evaluated by the FDA, and not sold as drugs, supplements, or cosmetics for consumption.</div>
+      </details>
+
+      <details class="pbv-faq__item">
+        <summary>Do you provide Certificates of Analysis (COAs) and purity testing?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">Yes. Every order includes a Certificate of Analysis. Most batches test at 99%+ purity via independent third-party HPLC, with full batch traceability.</div>
+      </details>
+
+      <details class="pbv-faq__item">
+        <summary>How should research peptides be stored?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">Lyophilized peptides are typically stable at room temperature for short periods but should be refrigerated (2–8°C) or frozen for long-term storage. Once reconstituted, follow the protocol for that compound. Protect from light and moisture.</div>
+      </details>
+
+      <details class="pbv-faq__item">
+        <summary>Do you ship to all 50 states? How fast is shipping?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">Yes. We ship to all 50 states with cold-chain packaging as needed. Overnight options are available Monday through Friday where carriers allow.</div>
+      </details>
+
+      <details class="pbv-faq__item">
+        <summary>Do you offer volume or bulk pricing?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">Yes. Volume pricing is available for verified wholesale buyers. Visit our <a href="<?php echo esc_url(home_url('/wholesale/')); ?>">Wholesale</a> page to apply, or <a href="<?php echo esc_url(home_url('/contact/')); ?>">contact us</a> for a custom quote.</div>
+      </details>
     </div>
-  </div>
-</section>
-
-<section class="pbv-section pbv-section--soft">
-  <div class="pbv-container">
-    <p class="pbv-section__eyebrow">Featured</p>
-    <h2 class="pbv-section__title">Latest products</h2>
-    <p class="pbv-section__lead">Fresh from the catalog.</p>
-
-    <?php if (class_exists('WooCommerce')) : ?>
-      <?php
-      $featured = new WP_Query(array(
-          'post_type'      => 'product',
-          'posts_per_page' => 8,
-          'post_status'    => 'publish',
-      ));
-      if ($featured->have_posts()) :
-          echo '<ul class="products columns-4">';
-          while ($featured->have_posts()) :
-              $featured->the_post();
-              wc_get_template_part('content', 'product');
-          endwhile;
-          echo '</ul>';
-          wp_reset_postdata();
-      endif;
-      ?>
-    <?php endif; ?>
-  </div>
-</section>
-
-<section class="pbv-section">
-  <div class="pbv-container">
-    <p class="pbv-section__eyebrow">Standards</p>
-    <h2 class="pbv-section__title">COA-backed. Research use only.</h2>
-    <p class="pbv-section__lead">Every order ships with documentation. Products are intended strictly for laboratory research.</p>
-    <a class="btn btn-outline" href="<?php echo esc_url(home_url('/contact/')); ?>">Contact</a>
   </div>
 </section>
 
