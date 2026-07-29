@@ -9,8 +9,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.5.1');
-define('PBV_SEED_VERSION', '2.5.1');
+define('PBV_THEME_VERSION', '2.5.2');
+define('PBV_SEED_VERSION', '2.5.2');
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -266,16 +266,20 @@ function pbv_ensure_product_categories() {
 }
 
 /**
- * Peptides category collection header markup.
+ * Peptides category collection header markup (lab image + centered copy).
  */
 function pbv_peptides_collection_header_html() {
-    return '<div class="pbv-cat-intro">'
-        . '<p class="pbv-cat-intro__title">Peptide Vials <span>Collection</span></p>'
+    $img = esc_url(pbv_asset_uri('assets/images/peptides-header.jpg'));
+    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Vials Collection">'
+        . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
+        . '<div class="pbv-cat-banner__content">'
+        . '<p class="pbv-cat-banner__title">Peptide Vials <span>Collection</span></p>'
         . '<p>Discover our premium range of pre-mixed, ready-to-use peptide vials — no reconstitution or mixing required. Each sterile multi-dose vial is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial.</p>'
         . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends such as KLOW our pre-mixed vials are designed for precise dosing and reliable results. Available in multiple strengths to perfectly match your protocol needs.</p>'
         . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
         . '<p>High-quality, hassle-free, and made for those who demand the best. Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
-        . '</div>';
+        . '</div>'
+        . '</section>';
 }
 
 /**
@@ -285,7 +289,7 @@ function pbv_render_peptides_archive_header() {
     if (!function_exists('is_product_category') || !is_product_category('peptides')) {
         return;
     }
-    echo '<div class="pbv-cat-header">' . pbv_peptides_collection_header_html() . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    echo pbv_peptides_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_header', 4);
 
