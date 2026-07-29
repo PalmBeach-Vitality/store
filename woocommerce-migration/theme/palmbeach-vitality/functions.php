@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.4.0');
+define('PBV_THEME_VERSION', '2.4.1');
 define('PBV_SEED_VERSION', '2.4.0');
 
 function pbv_asset_uri($relative) {
