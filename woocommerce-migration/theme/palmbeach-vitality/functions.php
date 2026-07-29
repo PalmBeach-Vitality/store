@@ -9,8 +9,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.5.2');
-define('PBV_SEED_VERSION', '2.5.2');
+define('PBV_THEME_VERSION', '2.5.3');
+define('PBV_SEED_VERSION', '2.5.3');
+define('PBV_MENU_FIX_VERSION', '2.5.3');
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -598,7 +599,7 @@ function pbv_seed_storefront() {
     }
 
     pbv_ensure_product_categories();
-    pbv_seed_primary_menu();
+    // Do not rebuild menu on every seed — menu has its own one-time fix routine.
     update_option('pbv_seed_version', PBV_SEED_VERSION);
 }
 add_action('after_switch_theme', 'pbv_seed_storefront');
@@ -606,16 +607,50 @@ add_action('init', 'pbv_seed_storefront', 30);
 add_action('woocommerce_init', 'pbv_seed_storefront');
 
 /**
- * Build / refresh the Primary menu with working category + page links.
+ * One-time Primary menu rebuild: wipe duplicates, keep a single clean set.
  */
-function pbv_seed_primary_menu() {
+function pbv_fix_primary_menu_once() {
+    if (get_option('pbv_menu_fix_version') === PBV_MENU_FIX_VERSION) {
+        return;
+    }
+    if (!taxonomy_exists('product_cat')) {
+        return;
+    }
+
+    pbv_ensure_product_categories();
+    pbv_seed_primary_menu(true);
+    update_option('pbv_menu_fix_version', PBV_MENU_FIX_VERSION);
+}
+add_action('init', 'pbv_fix_primary_menu_once', 40);
+add_action('woocommerce_init', 'pbv_fix_primary_menu_once');
+
+/**
+ * Build / refresh the Primary menu with working category + page links.
+ *
+ * @param bool $force_wipe Delete every existing item before recreating.
+ */
+function pbv_seed_primary_menu($force_wipe = false) {
     $menu_name = 'Primary';
     $menu = wp_get_nav_menu_object($menu_name);
     if (!$menu) {
         $menu_id = wp_create_nav_menu($menu_name);
     } else {
         $menu_id = (int) $menu->term_id;
-        $items = wp_get_nav_menu_items($menu_id);
+    }
+
+    if (is_wp_error($menu_id) || !$menu_id) {
+        return;
+    }
+
+    // Thorough wipe — WP.com sometimes leaves orphaned nav items if only wp_delete_post is used once.
+    if ($force_wipe || true) {
+        $object_ids = get_objects_in_term($menu_id, 'nav_menu');
+        if (!is_wp_error($object_ids) && $object_ids) {
+            foreach ($object_ids as $object_id) {
+                wp_delete_post((int) $object_id, true);
+            }
+        }
+        $items = wp_get_nav_menu_items($menu_id, array('post_status' => 'any'));
         if ($items) {
             foreach ($items as $item) {
                 wp_delete_post($item->ID, true);
@@ -623,11 +658,17 @@ function pbv_seed_primary_menu() {
         }
     }
 
-    if (is_wp_error($menu_id) || !$menu_id) {
-        return;
-    }
-
     $position = 1;
+    $desired  = array(
+        'Most Popular',
+        'Peptides',
+        'Peptide Pens',
+        'Weight Loss',
+        'Weight Loss Pens',
+        'Wholesale',
+        'Contact Us',
+        'Telehealth',
+    );
 
     // Most Popular → Shop
     $shop_id = function_exists('wc_get_page_id') ? wc_get_page_id('shop') : 0;
@@ -702,5 +743,37 @@ function pbv_seed_primary_menu() {
     }
     $locations['primary'] = $menu_id;
     set_theme_mod('nav_menu_locations', $locations);
+
+    // Final safety: remove any leftover duplicate titles.
+    pbv_dedupe_menu_items($menu_id, $desired);
+}
+
+/**
+ * Keep only the first menu item for each expected title.
+ *
+ * @param int   $menu_id Menu term ID.
+ * @param array $titles  Allowed titles in order.
+ */
+function pbv_dedupe_menu_items($menu_id, $titles) {
+    $items = wp_get_nav_menu_items($menu_id, array('post_status' => 'any'));
+    if (!$items) {
+        return;
+    }
+
+    $seen = array();
+    foreach ($items as $item) {
+        $title = trim(wp_strip_all_tags($item->title));
+        if ($title === '') {
+            continue;
+        }
+        if (isset($seen[$title])) {
+            wp_delete_post($item->ID, true);
+            continue;
+        }
+        // Drop unexpected duplicates of known labels only; keep unknown custom links.
+        if (in_array($title, $titles, true)) {
+            $seen[$title] = true;
+        }
+    }
 }
 
