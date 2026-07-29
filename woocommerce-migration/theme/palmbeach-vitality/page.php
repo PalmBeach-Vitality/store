@@ -13,8 +13,8 @@ while (have_posts()) :
       <h1><?php the_title(); ?></h1>
     </div>
   </header>
-  <main id="primary" class="site-main">
-    <div class="entry-content">
+  <main id="primary" class="site-main pbv-section">
+    <div class="pbv-container entry-content">
       <?php the_content(); ?>
     </div>
   </main>
