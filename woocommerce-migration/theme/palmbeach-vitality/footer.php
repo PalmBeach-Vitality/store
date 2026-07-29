@@ -21,11 +21,11 @@
         <div>
           <h4>Shop</h4>
           <ul>
+            <li><a href="<?php echo esc_url(pbv_category_url('peptides')); ?>">Peptides</a></li>
+            <li><a href="<?php echo esc_url(pbv_category_url('peptide-pens')); ?>">Peptide Pens</a></li>
+            <li><a href="<?php echo esc_url(pbv_category_url('weight-loss')); ?>">Weight Loss</a></li>
+            <li><a href="<?php echo esc_url(pbv_category_url('weight-loss-pens')); ?>">Weight Loss Pens</a></li>
             <li><a href="<?php echo esc_url(home_url('/shop/')); ?>">All products</a></li>
-            <?php if (function_exists('wc_get_cart_url')) : ?>
-              <li><a href="<?php echo esc_url(wc_get_cart_url()); ?>">Cart</a></li>
-              <li><a href="<?php echo esc_url(wc_get_checkout_url()); ?>">Checkout</a></li>
-            <?php endif; ?>
           </ul>
         </div>
         <div>

@@ -266,6 +266,71 @@ h1, h2, h3, h4, .font-display {
   padding: clamp(3rem, 8vw, 5.5rem) 0;
 }
 
+.pbv-hero--photo {
+  background:
+    linear-gradient(90deg, rgba(4, 16, 24, 0.88) 0%, rgba(4, 16, 24, 0.45) 55%, rgba(4, 16, 24, 0.2) 100%),
+    var(--pbv-hero-image) center / cover no-repeat;
+}
+
+.pbv-collections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.pbv-collection-card {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  min-height: 16rem;
+  color: #fff !important;
+  isolation: isolate;
+}
+
+.pbv-collection-card__media {
+  position: absolute;
+  inset: 0;
+  background: #0b1820 center / cover no-repeat;
+  transform: scale(1);
+  transition: transform 0.45s ease;
+  z-index: -2;
+}
+
+.pbv-collection-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.78));
+  z-index: -1;
+}
+
+.pbv-collection-card:hover .pbv-collection-card__media {
+  transform: scale(1.05);
+}
+
+.pbv-collection-card__body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.15rem 1.2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.pbv-collection-card__name {
+  font-family: var(--pbv-font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.pbv-collection-card__blurb {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .pbv-hero::before {
   content: "";
   position: absolute;

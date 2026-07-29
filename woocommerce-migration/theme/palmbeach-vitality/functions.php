@@ -90,18 +90,70 @@ function pbv_cart_count_fragment($fragments) {
 }
 add_filter('woocommerce_add_to_cart_fragments', 'pbv_cart_count_fragment');
 
+/**
+ * Product category URL helper.
+ */
+function pbv_category_url($slug) {
+    if (function_exists('get_term_by')) {
+        $term = get_term_by('slug', $slug, 'product_cat');
+        if ($term && !is_wp_error($term)) {
+            $link = get_term_link($term);
+            if (!is_wp_error($link)) {
+                return $link;
+            }
+        }
+    }
+    return home_url('/product-category/' . $slug . '/');
+}
+
+/**
+ * Default primary menu: 4 shop groups + company links.
+ */
 function pbv_fallback_menu() {
     $links = array(
-        home_url('/shop/')      => 'Shop',
-        home_url('/about/')     => 'About',
-        home_url('/research/')  => 'Research',
-        home_url('/faq/')       => 'FAQ',
-        home_url('/wholesale/') => 'Wholesale',
-        home_url('/contact/')   => 'Contact',
+        pbv_category_url('peptides')          => 'Peptides',
+        pbv_category_url('peptide-pens')      => 'Peptide Pens',
+        pbv_category_url('weight-loss')       => 'Weight Loss',
+        pbv_category_url('weight-loss-pens')  => 'Weight Loss Pens',
+        home_url('/shop/')                    => 'All Products',
+        home_url('/about/')                   => 'About',
+        home_url('/contact/')                 => 'Contact',
     );
     echo '<ul class="menu">';
     foreach ($links as $url => $label) {
         printf('<li><a href="%s">%s</a></li>', esc_url($url), esc_html($label));
     }
     echo '</ul>';
+}
+
+/**
+ * Four shop collections for homepage tiles.
+ */
+function pbv_shop_groups() {
+    return array(
+        array(
+            'name'  => 'Peptides',
+            'slug'  => 'peptides',
+            'blurb' => 'Research vials',
+            'image' => 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_90.jpg?v=1784042737',
+        ),
+        array(
+            'name'  => 'Peptide Pens',
+            'slug'  => 'peptide-pens',
+            'blurb' => 'Ready-to-use pens',
+            'image' => 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/KLOW_PEN_e76c3970-1145-46d6-adcd-cf2db8b633fe.jpg?v=1784146441',
+        ),
+        array(
+            'name'  => 'Weight Loss',
+            'slug'  => 'weight-loss',
+            'blurb' => 'Metabolic vials',
+            'image' => 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_95.jpg?v=1784047924',
+        ),
+        array(
+            'name'  => 'Weight Loss Pens',
+            'slug'  => 'weight-loss-pens',
+            'blurb' => 'Metabolic pens',
+            'image' => 'https://cdn.shopify.com/s/files/1/1056/1447/5345/files/SEMAGLUTIDE_PEN.jpg?v=1784299830',
+        ),
+    );
 }
