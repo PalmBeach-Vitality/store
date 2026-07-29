@@ -191,6 +191,9 @@ If WooCommerce fails badly: repoint DNS to Shopify (previous A/CNAME values). Ke
 woocommerce-migration/
   PLAN.md                          ← this file
   CHECKLIST.md                     ← printable execution checklist
+  WORDPRESS-COM-NEXT-STEPS.md      ← step-by-step for salvatorejohnson1984-eqvrh.wordpress.com
+  SHOPIFY-EXPORT.md                ← exact Shopify Admin export clicks
+  palmbeach-peptides-theme.zip     ← uploadable theme for Appearance → Themes
   data/
     products-catalog.json          ← structured catalog source
     products-woocommerce.csv       ← WooCommerce importer CSV (prices blank)
@@ -198,5 +201,7 @@ woocommerce-migration/
   scripts/
     build-woocommerce-csv.py       ← regenerates the CSV
   theme/
-    palmbeach-peptides/            ← WordPress + WooCommerce theme
+    palmbeach-peptides/            ← WordPress + WooCommerce theme (source)
 ```
+
+**Active WordPress.com site:** https://salvatorejohnson1984-eqvrh.wordpress.com — follow `WORDPRESS-COM-NEXT-STEPS.md` next.
