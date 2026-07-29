@@ -36,8 +36,8 @@
         class="pbv-logo-card__img"
         src="<?php echo esc_url($logo_card); ?>"
         alt="<?php echo esc_attr(get_bloginfo('name')); ?>"
-        width="720"
-        height="1280"
+        width="1175"
+        height="500"
         decoding="async"
         fetchpriority="high"
       />
