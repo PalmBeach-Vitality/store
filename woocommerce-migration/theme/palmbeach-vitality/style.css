@@ -2,8 +2,8 @@
 Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
-Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, logo header, full-bleed lab hero, FAQ accordion.
-Version: 2.2.0
+Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, logo header, centered 9:16 lab hero, FAQ accordion.
+Version: 2.3.1
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -189,42 +189,147 @@ a:hover { opacity: 0.7; }
   .mobile-nav { display: none !important; }
 }
 
-/* Full-bleed lab/beach hero — Horizon-style media banner */
+/* Centered 9:16 portrait hero card */
+.pbv-hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1.5rem 1rem 0.5rem;
+}
+
 .pbv-hero-photo {
   position: relative;
-  min-height: min(70vh, 38rem);
-  width: 100%;
+  display: grid;
+  place-items: center;
+  width: min(92vw, 22.5rem);
+  aspect-ratio: 9 / 16;
+  height: auto;
+  margin: 0 auto;
+  border-radius: 1.35rem;
+  overflow: hidden;
   background:
     var(--pbv-hero-image, none) center / cover no-repeat,
     linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
-  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
 }
 
-.pbv-hero-photo__link {
+.pbv-hero-photo__overlay {
   position: absolute;
   inset: 0;
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
+.pbv-hero-photo__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.35rem 1.05rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.pbv-hero-photo__title {
+  margin: 0 0 0.4rem;
+  font-family: var(--pbv-font-body);
+  font-size: clamp(1.35rem, 5.2vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.pbv-hero-photo__subtitle {
+  margin: 0 0 0.85rem;
+  font-family: var(--pbv-font-body);
+  font-size: clamp(0.88rem, 3.4vw, 1.05rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #7ec8ff;
+}
+
+.pbv-hero-photo__body {
+  margin: 0 0 0.65rem;
+  font-size: clamp(0.68rem, 2.55vw, 0.78rem);
+  font-weight: 400;
+  line-height: 1.4;
+  color: #fff;
+}
+
+.pbv-hero-photo__welcome {
+  margin: 0.7rem 0 0.75rem;
+  font-family: var(--pbv-font-body);
+  font-size: clamp(0.95rem, 3.6vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.pbv-hero-photo__wholesale {
+  margin: 0;
+  font-size: clamp(0.62rem, 2.3vw, 0.72rem);
+  line-height: 1.4;
+  color: #fff;
+}
+
+.pbv-hero-photo__wholesale a {
+  color: #7ec8ff;
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.pbv-hero-photo__wholesale a:hover {
+  opacity: 1;
+  color: #a8dbff;
+}
+
 .pbv-hero-photo--placeholder {
-  display: grid;
-  place-items: center;
-  min-height: min(60vh, 28rem);
+  background: linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
 }
 
 @media (min-width: 750px) {
-  .pbv-hero-photo {
-    min-height: min(78vh, 44rem);
+  .pbv-hero {
+    padding: 2rem 1rem 0.75rem;
   }
-}
 
-.pbv-hero-photo__hint {
-  text-align: center;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.35);
-  padding: 1.25rem 1.5rem;
-  border-radius: 0.5rem;
-  max-width: 28rem;
+  .pbv-hero-photo {
+    width: min(28rem, 36vw);
+    max-width: 28rem;
+    border-radius: 1.5rem;
+  }
+
+  .pbv-hero-photo__content {
+    padding: 1.75rem 1.35rem;
+  }
+
+  .pbv-hero-photo__title {
+    font-size: 1.85rem;
+  }
+
+  .pbv-hero-photo__subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pbv-hero-photo__body {
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .pbv-hero-photo__welcome {
+    font-size: 1.2rem;
+  }
+
+  .pbv-hero-photo__wholesale {
+    font-size: 0.74rem;
+  }
 }
 
 /* Most Popular — middle homepage section */

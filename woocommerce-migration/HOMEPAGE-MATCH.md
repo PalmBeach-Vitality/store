@@ -5,7 +5,7 @@ The theme homepage is laid out like your Shopify store:
 1. White announcement bar (FDA notice — editable)
 2. Logo (bundled) + menu: Most Popular · Peptides · Peptide Pens · Weight Loss · Weight Loss Pens · Wholesale · Contact Us · Telehealth
 3. Search / Account / Cart icons
-4. Full-bleed lab/beach hero (bundled by default)
+4. Lab/beach hero with centered brand copy overlay (bundled image + exact homepage text)
 5. **Most Popular** product grid (middle section)
 6. FAQ accordion
 7. Minimal footer: © Palm Beach Vitality · Terms and Policies

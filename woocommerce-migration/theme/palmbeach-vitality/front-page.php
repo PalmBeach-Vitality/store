@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage — beach hero, Most Popular (middle), FAQ accordion.
+ * Homepage — hero copy overlay, Most Popular, FAQ accordion.
  *
  * @package PalmBeachVitality
  */
@@ -13,14 +13,18 @@ $hero_style = $hero
     : '';
 ?>
 
-<section class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
-  <?php if ($hero) : ?>
-    <a class="pbv-hero-photo__link" href="<?php echo esc_url(home_url('/shop/')); ?>"><span class="screen-reader-text"><?php esc_html_e('Shop catalog', 'palmbeach-vitality'); ?></span></a>
-  <?php else : ?>
-    <div class="pbv-hero-photo__hint pbv-container">
-      <p>Upload your hero image:<br><strong>Appearance → Customize → Header Image</strong></p>
+<section class="pbv-hero" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
+  <div class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>">
+    <div class="pbv-hero-photo__overlay" aria-hidden="true"></div>
+    <div class="pbv-hero-photo__content">
+      <h1 class="pbv-hero-photo__title">Palm Beach Vitality</h1>
+      <p class="pbv-hero-photo__subtitle">Premium Peptides. Precision Crafted.</p>
+      <p class="pbv-hero-photo__body">Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>
+      <p class="pbv-hero-photo__body">No shortcuts. No compromises. Just the finest peptides available — made right here in America with cutting-edge science and uncompromising quality standards.</p>
+      <p class="pbv-hero-photo__welcome">Welcome to Palm Beach Vitality.<br>Where premium meets performance.</p>
+      <p class="pbv-hero-photo__wholesale">For wholesale information please visit <a href="https://www.palmbeach-vitality.com">www.palmbeach-vitality.com</a></p>
     </div>
-  <?php endif; ?>
+  </div>
 </section>
 
 <section class="pbv-section pbv-popular" id="most-popular">
