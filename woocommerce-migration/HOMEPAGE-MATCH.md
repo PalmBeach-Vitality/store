@@ -1,21 +1,31 @@
 # Homepage match (Shopify screenshots)
 
-The theme homepage is now laid out like your Shopify store:
+The theme homepage is laid out like your Shopify store:
 
 1. White announcement bar (FDA notice — editable)
-2. Menu: Most Popular · Peptides · Peptide Pens · Weight Loss · Weight Loss Pens · Wholesale · Contact Us · Telehealth
+2. Logo (bundled) + menu: Most Popular · Peptides · Peptide Pens · Weight Loss · Weight Loss Pens · Wholesale · Contact Us · Telehealth
 3. Search / Account / Cart icons
-4. Full-bleed beach hero (image only)
-5. FAQ accordion
-6. Minimal footer: © Palm Beach Vitality · Terms and Policies
+4. Full-bleed lab/beach hero (bundled by default)
+5. **Most Popular** product grid (middle section)
+6. FAQ accordion
+7. Minimal footer: © Palm Beach Vitality · Terms and Policies
 
-## Upload the beach hero image
+> Note: Shopify `.liquid` section files cannot run on WordPress. We rebuilt the same homepage structure in the PHP theme.
 
-1. Save the sunset beach homepage photo from Shopify (or your computer)
-2. WP Admin → **Appearance → Customize → Header Image**
-3. Upload / select that beach image → **Publish**
+## Bundled brand assets (v2.2)
 
-Until you do this, the hero shows a placeholder with upload instructions.
+Included in the theme zip — **no Customizer upload required** for a working homepage:
+
+| Asset | Path in theme | Source |
+| --- | --- | --- |
+| Hero | `assets/images/hero.jpg` | Lab + Palm Beach view (vials, pens, PRECISION. PURITY. PERFORMANCE) |
+| Logo mark | `assets/images/logo.jpg` | Cropped from your Shopify logo (`image_2.jpg`) |
+| Full logo banner | `assets/images/logo-full.jpg` | Original Shopify logo artwork |
+
+### Optional overrides
+
+- **Hero:** Appearance → Customize → Header Image
+- **Logo:** Appearance → Customize → Site Identity → Logo
 
 ## Edit announcement text
 

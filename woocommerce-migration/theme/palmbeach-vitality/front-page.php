@@ -7,7 +7,7 @@
 
 get_header();
 
-$hero = get_header_image();
+$hero = pbv_hero_image_url();
 $hero_style = $hero
     ? '--pbv-hero-image:url(' . esc_url($hero) . ')'
     : '';
@@ -18,7 +18,7 @@ $hero_style = $hero
     <a class="pbv-hero-photo__link" href="<?php echo esc_url(home_url('/shop/')); ?>"><span class="screen-reader-text"><?php esc_html_e('Shop catalog', 'palmbeach-vitality'); ?></span></a>
   <?php else : ?>
     <div class="pbv-hero-photo__hint pbv-container">
-      <p>Upload your Shopify beach hero image:<br><strong>Appearance → Customize → Header Image</strong></p>
+      <p>Upload your hero image:<br><strong>Appearance → Customize → Header Image</strong></p>
     </div>
   <?php endif; ?>
 </section>

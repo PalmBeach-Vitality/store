@@ -20,6 +20,10 @@
 
   <header class="site-header">
     <div class="pbv-container site-header__inner">
+      <div class="site-branding">
+        <?php pbv_site_logo(); ?>
+      </div>
+
       <nav class="primary-nav" aria-label="<?php esc_attr_e('Primary', 'palmbeach-vitality'); ?>">
         <?php
         wp_nav_menu(array(

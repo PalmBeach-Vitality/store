@@ -2,8 +2,8 @@
 Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
-Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, icon header, full-bleed beach hero, FAQ accordion.
-Version: 2.1.0
+Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, logo header, full-bleed lab hero, FAQ accordion.
+Version: 2.2.0
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -75,7 +75,36 @@ a:hover { opacity: 0.7; }
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-height: 3.5rem;
+  min-height: 3.75rem;
+}
+
+.site-branding {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.pbv-logo-link,
+.custom-logo-link {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.pbv-logo,
+.custom-logo {
+  height: 52px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+}
+
+@media (min-width: 980px) {
+  .pbv-logo,
+  .custom-logo {
+    height: 60px;
+    max-width: 160px;
+  }
 }
 
 .primary-nav { display: none; flex: 1; }
@@ -160,14 +189,14 @@ a:hover { opacity: 0.7; }
   .mobile-nav { display: none !important; }
 }
 
-/* Full-bleed beach hero — Horizon-style media banner */
+/* Full-bleed lab/beach hero — Horizon-style media banner */
 .pbv-hero-photo {
   position: relative;
   min-height: min(70vh, 38rem);
   width: 100%;
   background:
     var(--pbv-hero-image, none) center / cover no-repeat,
-    linear-gradient(135deg, #1a0f0a 0%, #c45a2a 40%, #f0a060 70%, #6b3a8a 100%);
+    linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
   overflow: hidden;
 }
 

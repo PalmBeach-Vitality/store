@@ -9,7 +9,29 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.1.0');
+define('PBV_THEME_VERSION', '2.2.0');
+
+function pbv_asset_uri($relative) {
+    return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
+}
+
+function pbv_asset_path($relative) {
+    return trailingslashit(get_template_directory()) . ltrim($relative, '/');
+}
+
+/**
+ * Default bundled hero (lab + Palm Beach view). Overridable via Header Image.
+ */
+function pbv_default_hero_uri() {
+    return pbv_asset_uri('assets/images/hero.jpg');
+}
+
+/**
+ * Default bundled logo mark. Overridable via Custom Logo.
+ */
+function pbv_default_logo_uri() {
+    return pbv_asset_uri('assets/images/logo.jpg');
+}
 
 function pbv_setup() {
     add_theme_support('title-tag');
@@ -20,18 +42,26 @@ function pbv_setup() {
     add_theme_support('wc-product-gallery-lightbox');
     add_theme_support('wc-product-gallery-slider');
     add_theme_support('custom-logo', array(
-        'height'      => 60,
-        'width'       => 220,
+        'height'      => 72,
+        'width'       => 168,
         'flex-height' => true,
         'flex-width'  => true,
     ));
     add_theme_support('custom-header', array(
-        'default-image' => '',
-        'width'         => 2000,
-        'height'        => 900,
+        'default-image' => pbv_default_hero_uri(),
+        'width'         => 1536,
+        'height'        => 1024,
         'flex-height'   => true,
         'flex-width'    => true,
         'header-text'   => false,
+    ));
+
+    register_default_headers(array(
+        'pbv_lab_hero' => array(
+            'url'           => pbv_default_hero_uri(),
+            'thumbnail_url' => pbv_default_hero_uri(),
+            'description'   => __('Palm Beach Vitality lab hero', 'palmbeach-vitality'),
+        ),
     ));
 
     register_nav_menus(array(
@@ -39,6 +69,38 @@ function pbv_setup() {
     ));
 }
 add_action('after_setup_theme', 'pbv_setup');
+
+/**
+ * Hero URL: Customizer header image, else bundled default.
+ */
+function pbv_hero_image_url() {
+    $hero = get_header_image();
+    if ($hero) {
+        return $hero;
+    }
+    if (file_exists(pbv_asset_path('assets/images/hero.jpg'))) {
+        return pbv_default_hero_uri();
+    }
+    return '';
+}
+
+/**
+ * Print site logo: custom logo, else bundled logo mark.
+ */
+function pbv_site_logo() {
+    if (has_custom_logo()) {
+        the_custom_logo();
+        return;
+    }
+
+    $logo = pbv_default_logo_uri();
+    printf(
+        '<a class="custom-logo-link pbv-logo-link" href="%s" rel="home"><img class="custom-logo pbv-logo" src="%s" alt="%s" width="140" height="120" decoding="async" /></a>',
+        esc_url(home_url('/')),
+        esc_url($logo),
+        esc_attr(get_bloginfo('name'))
+    );
+}
 
 function pbv_assets() {
     wp_enqueue_style(

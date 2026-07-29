@@ -1,15 +1,17 @@
-# Palm Beach Vitality theme (v2)
+# Palm Beach Vitality theme (v2.2)
 
-Replaces the old navy/teal “Peptides” theme. Matched to your Shopify **Horizon** settings:
+WooCommerce storefront matched to your Shopify Horizon homepage:
 
-- White / black storefront
-- **Work Sans** + **Anonymous Pro**
-- Brand: **Palm Beach Vitality**
-- Shop-first header (Cart + Shop)
-- Red + cyan accents from your product photography
+- White announcement bar + logo header + icon actions
+- Bundled lab/beach hero (`assets/images/hero.jpg`)
+- Bundled Palm Beach Vitality logo (`assets/images/logo.jpg`)
+- Most Popular grid + FAQ accordion
+- Fonts: **Work Sans** + **Libre Baskerville**
 
 ## Install
 1. Upload `palmbeach-vitality-theme.zip`
-2. Appearance → Themes → Activate **Palm Beach Vitality**
-3. Optional: Appearance → Customize → Site Identity → upload your logo
+2. Appearance → Themes → Activate **Palm Beach Vitality** (or Replace current)
+3. Optional overrides:
+   - Customize → Header Image (hero)
+   - Customize → Site Identity → Logo
 4. You can delete/deactivate **Palm Beach Peptides** after this is live
