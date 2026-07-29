@@ -1,50 +1,43 @@
-# Peptides (Vials) menu setup
+# Peptides (Vials) — import the remaining 16
 
-## 1. Upload theme v2.5.1
-https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/shopify-to-woocommerce-c0c9/woocommerce-migration/palmbeach-vitality-theme.zip
+The first import with **Update existing products** only updated the 6 vials that already existed. The other **16 were skipped** because they are new SKUs.
 
-The **Peptides** category page now shows your “Peptide Vials Collection” header above the product grid.
-
-## 2. Import the Peptides product list
+## Import the NEW vials now
 
 1. Download:  
-   https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/shopify-to-woocommerce-c0c9/woocommerce-migration/data/products-peptides-vials.csv
+   https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/shopify-to-woocommerce-c0c9/woocommerce-migration/data/products-peptides-vials-NEW.csv
 2. **Products → Import**
-3. Upload CSV
-4. Check **Update existing products**
-5. Map SKU, Name, Regular price, Categories, Short description, Published
+3. Upload that CSV
+4. Leave **Update existing products** UNCHECKED
+5. Map columns (SKU, Name, Regular price, Categories, etc.)
 6. Run importer
 
-This will:
-- Rename/update existing vials (AOD-9604, BPC-157 20mg, Melonotan, NAD+ 500/1000, TA-1) into **Peptides**
-- Create the missing vial products from your list (BPC-157 10mg, Cargrilinitide, CJC, blends, etc.)
+You should see **16 products imported** into **Peptides**.
 
-### Price note
-Existing products keep known prices. New vials use placeholder prices based on similar items — review/edit under **Products** before selling.
+Then open **Peptides** in the menu — all 22 vials should appear under your collection header.
 
-### Product list (22)
-- BPC-157 10mg Vial
+### Already updated (first import)
 - BPC-157 20mg Vial
 - AOD-9604 Vial
+- Melonotan Vial
+- NAD+ 1000mg Vial
+- NAD+ 500mg Vial
+- TA-1 Vial
+
+### Creating now (second import)
+- BPC-157 10mg Vial
 - Cargrilinitide Vial
 - CJC Vial
 - CJC/Ipamorelin Vial
 - GHK-cu Vial
 - GLOW Vial
 - KLOW Vial
-- Melonotan Vial
 - MOTS-C Vial
-- NAD+ 1000mg Vial
-- NAD+ 500mg Vial
 - PT-141 Vial
 - Selank Vial
 - Semax Vial
 - Sermorelin Vial
 - SS-31 Vial
-- TA-1 Vial
 - TB-500 Vial
 - Tesamorelin Vial
 - Wolverine Vial
-
-## 3. Confirm menu
-**Appearance → Menus** → Primary → **Peptides** should point to the Peptides product category. Theme seed usually sets this automatically.
