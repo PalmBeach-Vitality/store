@@ -1,17 +1,17 @@
-Type,SKU,Name,Published,Visibility in catalog,Short description,Tax status,In stock?,Regular price,Categories
-simple,PBV-BPC-157-10MG,BPC-157 10mg Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,140.00,Peptides
-simple,PBV-CARGRILINITIDE,Cargrilinitide Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides
-simple,PBV-CJC-VIAL,CJC Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides
-simple,PBV-CJC-IPAMORELIN-VIAL,CJC Ipamorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,195.00,Peptides
-simple,PBV-GHK-CU-VIAL,GHK-cu Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
-simple,PBV-GLOW-VIAL,GLOW Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,230.00,Peptides
-simple,PBV-KLOW-VIAL,KLOW Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,230.00,Peptides
-simple,PBV-MOTS-C-VIAL,MOTS-C Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,160.00,Peptides
-simple,PBV-PT-141-VIAL,PT-141 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
-simple,PBV-SELANK-VIAL,Selank Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
-simple,PBV-SEMAX-VIAL,Semax Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
-simple,PBV-SERMORELIN-VIAL,Sermorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,170.00,Peptides
-simple,PBV-SS-31-VIAL,SS-31 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,200.00,Peptides
-simple,PBV-TB-500-VIAL,TB-500 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides
-simple,PBV-TESAMORELIN-VIAL,Tesamorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
-simple,PBV-WOLVERINE-VIAL,Wolverine Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides
+Type,SKU,Name,Published,Visibility in catalog,Short description,Tax status,In stock?,Regular price,Categories,Images
+simple,PBV-BPC-157-10MG,BPC-157 10mg Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,140.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/BPC-157.jpg
+simple,PBV-CARGRILINITIDE,Cargrilinitide Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/CARGRILINITIDE.jpg
+simple,PBV-CJC-VIAL,CJC Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/CJC.jpg
+simple,PBV-CJC-IPAMORELIN-VIAL,CJC Ipamorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,195.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_87.jpg
+simple,PBV-GHK-CU-VIAL,GHK-cu Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_88.jpg
+simple,PBV-GLOW-VIAL,GLOW Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,230.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_89.jpg
+simple,PBV-KLOW-VIAL,KLOW Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,230.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/KLOW.jpg
+simple,PBV-MOTS-C-VIAL,MOTS-C Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,160.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/image_86.jpg
+simple,PBV-PT-141-VIAL,PT-141 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/PT-141.jpg
+simple,PBV-SELANK-VIAL,Selank Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/Selank_pen.jpg
+simple,PBV-SEMAX-VIAL,Semax Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/SEMAX.jpg
+simple,PBV-SERMORELIN-VIAL,Sermorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,170.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/Sermorelin_pen.jpg
+simple,PBV-SS-31-VIAL,SS-31 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,200.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/SS-31.jpg
+simple,PBV-TB-500-VIAL,TB-500 Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,110.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/TB-500.jpg
+simple,PBV-TESAMORELIN-VIAL,Tesamorelin Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/TESAMORELIN.jpg
+simple,PBV-WOLVERINE-VIAL,Wolverine Vial,1,visible,Research-use peptide vial. Not for human consumption.,taxable,1,150.00,Peptides,https://cdn.shopify.com/s/files/1/1056/1447/5345/files/Wolverine_pen.jpg

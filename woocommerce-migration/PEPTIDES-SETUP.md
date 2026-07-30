@@ -1,5 +1,9 @@
 # Peptides — missing products are likely Private
 
+**Missing images on Peptides?** Import  
+`data/products-peptides-images-UPDATE.csv`  
+(see `PEPTIDES-IMAGES.md`).
+
 Your Products screen shows:
 
 - **Published (30)** — visible on the store
