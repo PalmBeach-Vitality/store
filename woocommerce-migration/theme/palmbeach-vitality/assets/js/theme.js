@@ -41,68 +41,189 @@
 
   // Age gate + required Terms checkbox (21+)
   var gate = document.querySelector("[data-age-gate]");
-  if (!gate) return;
+  var ageAccepted = false;
 
-  var storageKey = "pbv_age_gate_v1";
-  var ageInput = gate.querySelector("[data-age-gate-age]");
-  var termsInput = gate.querySelector("[data-age-gate-terms]");
-  var errorEl = gate.querySelector("[data-age-gate-error]");
-  var enterBtn = gate.querySelector("[data-age-gate-enter]");
-  var exitBtn = gate.querySelector("[data-age-gate-exit]");
-
-  function hasAccepted() {
+  function hasAgeAccepted() {
     try {
-      return window.localStorage.getItem(storageKey) === "accepted";
+      return window.localStorage.getItem("pbv_age_gate_v1") === "accepted";
     } catch (e) {
       return false;
     }
   }
 
-  function accept() {
+  function acceptAgeGate() {
     try {
-      window.localStorage.setItem(storageKey, "accepted");
+      window.localStorage.setItem("pbv_age_gate_v1", "accepted");
     } catch (e) {}
-    gate.setAttribute("hidden", "");
+    if (gate) gate.setAttribute("hidden", "");
     document.body.classList.remove("pbv-age-gate-open");
+    ageAccepted = true;
+    scheduleLeadPopup();
   }
 
-  function showGate() {
-    gate.removeAttribute("hidden");
-    document.body.classList.add("pbv-age-gate-open");
-    if (ageInput) ageInput.focus();
-  }
+  if (gate) {
+    var ageInput = gate.querySelector("[data-age-gate-age]");
+    var termsInput = gate.querySelector("[data-age-gate-terms]");
+    var errorEl = gate.querySelector("[data-age-gate-error]");
+    var enterBtn = gate.querySelector("[data-age-gate-enter]");
+    var exitBtn = gate.querySelector("[data-age-gate-exit]");
 
-  if (hasAccepted()) {
-    gate.setAttribute("hidden", "");
-    return;
-  }
-
-  showGate();
-
-  if (enterBtn) {
-    enterBtn.addEventListener("click", function () {
-      var okAge = ageInput && ageInput.checked;
-      var okTerms = termsInput && termsInput.checked;
-      if (!okAge || !okTerms) {
-        if (errorEl) errorEl.removeAttribute("hidden");
-        return;
-      }
-      if (errorEl) errorEl.setAttribute("hidden", "");
-      accept();
-    });
-  }
-
-  if (exitBtn) {
-    exitBtn.addEventListener("click", function () {
-      window.location.href = "https://www.google.com/";
-    });
-  }
-
-  // Block Esc / backdrop click — user must choose.
-  gate.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-      event.preventDefault();
-      event.stopPropagation();
+    if (hasAgeAccepted()) {
+      gate.setAttribute("hidden", "");
+      ageAccepted = true;
+    } else {
+      gate.removeAttribute("hidden");
+      document.body.classList.add("pbv-age-gate-open");
+      if (ageInput) ageInput.focus();
     }
-  });
+
+    if (enterBtn) {
+      enterBtn.addEventListener("click", function () {
+        var okAge = ageInput && ageInput.checked;
+        var okTerms = termsInput && termsInput.checked;
+        if (!okAge || !okTerms) {
+          if (errorEl) errorEl.removeAttribute("hidden");
+          return;
+        }
+        if (errorEl) errorEl.setAttribute("hidden", "");
+        acceptAgeGate();
+      });
+    }
+
+    if (exitBtn) {
+      exitBtn.addEventListener("click", function () {
+        window.location.href = "https://www.google.com/";
+      });
+    }
+
+    gate.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+  } else {
+    ageAccepted = true;
+  }
+
+  // Homepage lead popup — 10 seconds after landing (after age gate)
+  var lead = document.querySelector("[data-lead-popup]");
+  var leadTimer = null;
+  var cfg = window.pbvTheme || {};
+
+  function hasLeadDismissed() {
+    try {
+      return window.localStorage.getItem("pbv_lead_popup_v1") === "done";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markLeadDone() {
+    try {
+      window.localStorage.setItem("pbv_lead_popup_v1", "done");
+    } catch (e) {}
+  }
+
+  function closeLeadPopup() {
+    if (!lead) return;
+    lead.setAttribute("hidden", "");
+    document.body.classList.remove("pbv-lead-popup-open");
+  }
+
+  function openLeadPopup() {
+    if (!lead || hasLeadDismissed()) return;
+    lead.removeAttribute("hidden");
+    document.body.classList.add("pbv-lead-popup-open");
+    var email = lead.querySelector("#pbv-lead-email");
+    if (email) email.focus();
+  }
+
+  function scheduleLeadPopup() {
+    if (!lead || !cfg.isHome || hasLeadDismissed() || !ageAccepted) return;
+    if (leadTimer) window.clearTimeout(leadTimer);
+    leadTimer = window.setTimeout(openLeadPopup, 10000);
+  }
+
+  if (lead) {
+    lead.querySelectorAll("[data-lead-popup-close]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        markLeadDone();
+        closeLeadPopup();
+      });
+    });
+
+    var form = lead.querySelector("[data-lead-popup-form]");
+    var statusEl = lead.querySelector("[data-lead-popup-status]");
+    if (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var emailInput = form.querySelector('input[name="email"]');
+        var optinInput = form.querySelector('input[name="optin"]');
+        var email = emailInput ? emailInput.value.trim() : "";
+        if (!email || email.indexOf("@") === -1) {
+          if (statusEl) {
+            statusEl.textContent = "Please enter a valid email address.";
+            statusEl.hidden = false;
+            statusEl.classList.add("is-error");
+          }
+          return;
+        }
+
+        var submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Sending…";
+        }
+
+        var body = new FormData();
+        body.append("action", "pbv_lead_popup");
+        body.append("nonce", cfg.nonce || "");
+        body.append("email", email);
+        if (optinInput && optinInput.checked) body.append("optin", "1");
+
+        fetch(cfg.ajaxUrl || "/wp-admin/admin-ajax.php", {
+          method: "POST",
+          body: body,
+          credentials: "same-origin",
+        })
+          .then(function (res) {
+            return res.json().then(function (data) {
+              return { ok: res.ok && data && data.success, data: data };
+            });
+          })
+          .then(function (result) {
+            if (statusEl) {
+              statusEl.classList.remove("is-error");
+              statusEl.hidden = false;
+              statusEl.textContent =
+                (result.data && result.data.data && result.data.data.message) ||
+                (result.ok
+                  ? "Thanks — we will be in touch soon."
+                  : "Something went wrong. Please try again.");
+              if (!result.ok) statusEl.classList.add("is-error");
+            }
+            if (result.ok) {
+              markLeadDone();
+              window.setTimeout(closeLeadPopup, 1600);
+            }
+          })
+          .catch(function () {
+            if (statusEl) {
+              statusEl.hidden = false;
+              statusEl.classList.add("is-error");
+              statusEl.textContent = "Something went wrong. Please try again.";
+            }
+          })
+          .finally(function () {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "I'd like to know more";
+            }
+          });
+      });
+    }
+
+    if (ageAccepted) scheduleLeadPopup();
+  }
 })();

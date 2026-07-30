@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.6.8
+Version: 2.6.9
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1224,5 +1224,192 @@ a:hover { opacity: 0.7; }
 }
 
 body.pbv-age-gate-open {
+  overflow: hidden;
+}
+
+/* Homepage lead popup (Omnisend-style) */
+.pbv-lead-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.pbv-lead-popup[hidden] {
+  display: none !important;
+}
+
+.pbv-lead-popup__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.pbv-lead-popup__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 52rem);
+  border-radius: 0.35rem;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.pbv-lead-popup__close {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  z-index: 3;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.pbv-lead-popup__split {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 22rem;
+}
+
+.pbv-lead-popup__form-side {
+  background: #000;
+  color: #fff;
+  padding: 2rem 1.5rem 1.35rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.pbv-lead-popup__title {
+  margin: 0 0 0.55rem;
+  font-family: var(--pbv-font-body);
+  font-size: clamp(1.8rem, 4vw, 2.35rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #7ec8ff;
+}
+
+.pbv-lead-popup__subtitle {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.pbv-lead-popup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pbv-lead-popup__input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 0.2rem;
+  background: #000;
+  color: #fff;
+  padding: 0.85rem 0.9rem;
+  font-family: var(--pbv-font-body);
+  font-size: 0.95rem;
+}
+
+.pbv-lead-popup__input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pbv-lead-popup__submit {
+  width: 100%;
+  border: 0;
+  border-radius: 0.35rem;
+  background: #7b3cff;
+  color: #fff;
+  padding: 0.9rem 1rem;
+  font-family: var(--pbv-font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pbv-lead-popup__submit:hover {
+  background: #6a2fe6;
+}
+
+.pbv-lead-popup__submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.pbv-lead-popup__optin {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+}
+
+.pbv-lead-popup__optin input {
+  margin-top: 0.15rem;
+  accent-color: #7b3cff;
+}
+
+.pbv-lead-popup__status {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #9fe6b8;
+}
+
+.pbv-lead-popup__status.is-error {
+  color: #ffb4b4;
+}
+
+.pbv-lead-popup__privacy {
+  margin: 1.1rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.pbv-lead-popup__privacy a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pbv-lead-popup__media {
+  min-height: 14rem;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.18)),
+    #12304a center / cover no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (min-width: 780px) {
+  .pbv-lead-popup__split {
+    grid-template-columns: 1.05fr 0.95fr;
+    min-height: 24rem;
+  }
+
+  .pbv-lead-popup__form-side {
+    padding: 2.4rem 2rem 1.75rem;
+  }
+
+  .pbv-lead-popup__media {
+    min-height: 100%;
+  }
+}
+
+body.pbv-lead-popup-open {
   overflow: hidden;
 }

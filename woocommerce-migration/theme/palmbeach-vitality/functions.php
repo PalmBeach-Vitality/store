@@ -9,9 +9,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.8');
+define('PBV_THEME_VERSION', '2.6.9');
 define('PBV_SEED_VERSION', '2.5.3');
-define('PBV_MENU_FIX_VERSION', '2.5.3');
+define('PBV_MENU_FIX_VERSION', '2.6.9');
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -119,8 +119,46 @@ function pbv_assets() {
         PBV_THEME_VERSION,
         true
     );
+    wp_localize_script('pbv-theme', 'pbvTheme', array(
+        'ajaxUrl' => admin_url('admin-ajax.php'),
+        'nonce'   => wp_create_nonce('pbv_lead_popup'),
+        'isHome'  => is_front_page() ? 1 : 0,
+    ));
 }
 add_action('wp_enqueue_scripts', 'pbv_assets');
+
+/**
+ * Homepage lead popup form submission → email site admin.
+ */
+function pbv_handle_lead_popup() {
+    check_ajax_referer('pbv_lead_popup', 'nonce');
+
+    $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    $optin = !empty($_POST['optin']);
+
+    if (!$email || !is_email($email)) {
+        wp_send_json_error(array('message' => 'Please enter a valid email address.'), 400);
+    }
+
+    $to = get_option('admin_email');
+    $subject = sprintf('[%s] Learn more request', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES));
+    $body = "New homepage lead popup submission:\n\n"
+        . "Email: {$email}\n"
+        . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
+        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
+        . 'Page: ' . home_url('/') . "\n";
+
+    $headers = array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email);
+    $sent = wp_mail($to, $subject, $body, $headers);
+
+    if (!$sent) {
+        wp_send_json_error(array('message' => 'Could not send right now. Please try again.'), 500);
+    }
+
+    wp_send_json_success(array('message' => 'Thanks — we will be in touch soon.'));
+}
+add_action('wp_ajax_pbv_lead_popup', 'pbv_handle_lead_popup');
+add_action('wp_ajax_nopriv_pbv_lead_popup', 'pbv_handle_lead_popup');
 
 function pbv_customize_register($wp_customize) {
     $wp_customize->add_section('pbv_storefront', array(
@@ -475,6 +513,7 @@ function pbv_menu_links() {
     }
 
     return array(
+        home_url('/')                            => 'Home',
         $shop                                    => 'Most Popular',
         pbv_category_url('peptides')             => 'Peptides',
         pbv_category_url('peptide-pens')         => 'Peptide Pens',
@@ -948,8 +987,8 @@ function pbv_seed_primary_menu($force_wipe = false) {
         return;
     }
 
-    // Thorough wipe — WP.com sometimes leaves orphaned nav items if only wp_delete_post is used once.
-    if ($force_wipe || true) {
+    // Only wipe when explicitly rebuilding (one-time menu fix).
+    if ($force_wipe) {
         $object_ids = get_objects_in_term($menu_id, 'nav_menu');
         if (!is_wp_error($object_ids) && $object_ids) {
             foreach ($object_ids as $object_id) {
@@ -966,6 +1005,7 @@ function pbv_seed_primary_menu($force_wipe = false) {
 
     $position = 1;
     $desired  = array(
+        'Home',
         'Most Popular',
         'Peptides',
         'Peptide Pens',
@@ -975,6 +1015,15 @@ function pbv_seed_primary_menu($force_wipe = false) {
         'Contact Us',
         'Telehealth',
     );
+
+    // Home
+    wp_update_nav_menu_item($menu_id, 0, array(
+        'menu-item-title'    => 'Home',
+        'menu-item-url'      => home_url('/'),
+        'menu-item-type'     => 'custom',
+        'menu-item-status'   => 'publish',
+        'menu-item-position' => $position++,
+    ));
 
     // Most Popular → Shop
     $shop_id = function_exists('wc_get_page_id') ? wc_get_page_id('shop') : 0;
