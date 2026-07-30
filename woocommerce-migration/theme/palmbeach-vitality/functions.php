@@ -888,7 +888,8 @@ function pbv_category_title_banner_html($slug) {
     }
 
     return sprintf(
-        '<figure class="pbv-cat-title-image"><img src="%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
+        '<figure class="pbv-cat-title-image%s"><img src="%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
+        (strpos($slug, 'weight-loss') === 0) ? ' pbv-cat-title-image--weight' : '',
         esc_url(pbv_asset_uri($item['file'])),
         esc_attr($item['alt']),
         (int) $item['width'],
