@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.6.2
+Version: 2.6.3
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -800,12 +800,12 @@ a:hover { opacity: 0.7; }
   margin-bottom: 0;
 }
 
-/* Research use only — always at bottom of product description */
+/* Research use only — exactly one large banner at bottom of description */
 .pbv-ruo-banner {
   width: 100%;
-  margin: 1.35rem 0 0;
-  padding: 1rem 1.15rem 1.05rem;
-  border-radius: 0.85rem;
+  margin: 1.5rem 0 0;
+  padding: 1.25rem 1.35rem 1.2rem;
+  border-radius: 0.95rem;
   background: #faf6f4;
   border: 1px solid #efe4df;
   text-align: left;
@@ -815,30 +815,40 @@ a:hover { opacity: 0.7; }
 .pbv-ruo-banner__title {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin: 0 0 0.4rem;
+  gap: 0.5rem;
+  margin: 0 0 0.55rem;
   font-family: var(--pbv-font-body);
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
   color: #7a2f2f;
 }
 
 .pbv-ruo-banner__icon {
   flex: 0 0 auto;
   color: #e0a21a;
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   line-height: 1;
 }
 
 .pbv-ruo-banner__body {
   margin: 0 !important;
   font-family: var(--pbv-font-body);
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.5;
   color: #111;
   text-align: left;
+}
+
+/* Never show a second theme banner, or the old Shopify disclaimer image */
+.pbv-product-description .pbv-ruo-banner ~ .pbv-ruo-banner {
+  display: none !important;
+}
+
+.pbv-product-description img[src*="image_6.jpg"],
+.woocommerce-product-details__short-description img[src*="image_6.jpg"] {
+  display: none !important;
 }
 
 .woocommerce div.product form.cart {

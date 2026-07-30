@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.2');
+define('PBV_THEME_VERSION', '2.6.3');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -217,22 +217,53 @@ function pbv_single_product_layout() {
 add_action('init', 'pbv_single_product_layout', 20);
 
 /**
- * Remove embedded Research Use Only blocks from product HTML so the theme banner is unique.
+ * Remove every embedded Research Use Only disclaimer (text blocks + old Shopify image)
+ * so each product shows exactly one theme banner.
  */
 function pbv_strip_embedded_research_disclaimer($html) {
     $html = (string) $html;
-    if ($html === '' || stripos($html, 'research use only') === false) {
+    if ($html === '') {
         return $html;
     }
 
-    $patterns = array(
-        '/<(div|aside|section|p)(\s[^>]*)?>[\s\S]*?Research\s+use\s+only[\s\S]*?(?:disease\.|FDA\.)[\s\S]*?<\/\1>/iu',
-        '/<(div|aside|section|p)(\s[^>]*)?>[\s\S]*?Not for human consumption\.[\s\S]*?research and educational purposes[\s\S]*?<\/\1>/iu',
+    // Old Shopify disclaimer graphic (image_6.jpg) pasted into many product descriptions.
+    $html = preg_replace(
+        '/<li[^>]*>\s*<img[^>]+(?:image_6\.jpg|Research\s*use\s*only)[^>]*>\s*<\/li>/iu',
+        '',
+        $html
+    );
+    $html = preg_replace(
+        '/<p[^>]*>\s*<img[^>]+(?:image_6\.jpg|Research\s*use\s*only)[^>]*>\s*<\/p>/iu',
+        '',
+        $html
+    );
+    $html = preg_replace(
+        '/<img[^>]+src=["\'][^"\']*image_6\.jpg[^"\']*["\'][^>]*>/iu',
+        '',
+        $html
+    );
+    $html = preg_replace(
+        '/<img[^>]+alt=["\'][^"\']*Research\s+use\s+only[^"\']*["\'][^>]*>/iu',
+        '',
+        $html
     );
 
-    foreach ($patterns as $pattern) {
-        $html = preg_replace($pattern, '', $html);
+    if (stripos($html, 'research use only') !== false || stripos($html, 'not for human consumption') !== false) {
+        $patterns = array(
+            '/<(div|aside|section|p|blockquote|figure)(\s[^>]*)?>[\s\S]*?Research\s+use\s+only[\s\S]*?(?:disease\.|FDA\.)[\s\S]*?<\/\1>/iu',
+            '/<(div|aside|section|p|blockquote)(\s[^>]*)?>[\s\S]*?Not for human consumption\.[\s\S]*?(?:disease\.|FDA\.)[\s\S]*?<\/\1>/iu',
+            '/<(strong|b|span)(\s[^>]*)?>\s*(?:⚠️|⚠)?\s*Research\s+use\s+only:?\s*<\/\1>\s*[^<]*(?:disease\.|FDA\.)/iu',
+        );
+
+        foreach ($patterns as $pattern) {
+            $html = preg_replace($pattern, '', $html);
+        }
     }
+
+    // Clean empty list items / wrappers left behind.
+    $html = preg_replace('/<li[^>]*>\s*<\/li>/iu', '', $html);
+    $html = preg_replace('/<p[^>]*>\s*<\/p>/iu', '', $html);
+    $html = preg_replace('/<ul[^>]*>\s*<\/ul>/iu', '', $html);
 
     return trim((string) $html);
 }
@@ -260,10 +291,19 @@ function pbv_single_product_details_and_cart() {
     if (trim(wp_strip_all_tags((string) $description)) !== '') {
         echo apply_filters('the_content', $description);
     }
+    // Exactly one disclaimer — the large theme banner.
     pbv_research_use_banner();
     echo '</div>';
 
-    woocommerce_template_single_excerpt();
+    // Short description without any embedded RUO copy/images.
+    $short = ($product instanceof WC_Product) ? $product->get_short_description() : '';
+    $short = pbv_strip_embedded_research_disclaimer($short);
+    if (trim(wp_strip_all_tags((string) $short)) !== '') {
+        echo '<div class="woocommerce-product-details__short-description">';
+        echo apply_filters('woocommerce_short_description', $short);
+        echo '</div>';
+    }
+
     woocommerce_template_single_add_to_cart();
 
     echo '</div>';
