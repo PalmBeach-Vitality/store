@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.5');
+define('PBV_THEME_VERSION', '2.6.6');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -520,73 +520,96 @@ function pbv_ensure_product_categories() {
 }
 
 /**
- * Peptides category collection header markup (lab image + centered copy).
+ * Category title-image map (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
+ *
+ * @return array<string,array{file:string,alt:string,width:int,height:int}>
  */
-function pbv_peptides_collection_header_html() {
-    $img = esc_url(pbv_asset_uri('assets/images/peptides-header.jpg'));
-    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Vials Collection">'
-        . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
-        . '<div class="pbv-cat-banner__content">'
-        . '<p class="pbv-cat-banner__title">Peptide Vials <span>Collection</span></p>'
-        . '<p>Discover our premium range of pre-mixed, ready-to-use peptide vials — no reconstitution or mixing required. Each sterile multi-dose vial is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial.</p>'
-        . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends such as KLOW our pre-mixed vials are designed for precise dosing and reliable results. Available in multiple strengths to perfectly match your protocol needs.</p>'
-        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
-        . '<p>High-quality, hassle-free, and made for those who demand the best. Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
-        . '</div>'
-        . '</section>';
+function pbv_category_title_images() {
+    return array(
+        'peptides' => array(
+            'file'   => 'assets/images/peptides-title.png',
+            'alt'    => 'Peptides',
+            'width'  => 1080,
+            'height' => 540,
+        ),
+        'peptide-pens' => array(
+            'file'   => 'assets/images/peptide-pens-title.png',
+            'alt'    => 'Peptide Pens',
+            'width'  => 1400,
+            'height' => 350,
+        ),
+        'weight-loss' => array(
+            'file'   => 'assets/images/weight-loss-title.png',
+            'alt'    => 'Weight Loss',
+            'width'  => 1540,
+            'height' => 298,
+        ),
+        'weight-loss-pens' => array(
+            'file'   => 'assets/images/weight-loss-pens-title.png',
+            'alt'    => 'Weight Loss Pens',
+            'width'  => 1369,
+            'height' => 237,
+        ),
+    );
 }
 
 /**
- * Shared Weight Loss / Weight Loss Pens title banner (same image + size, centered).
+ * Shared centered category title banner markup.
  */
-function pbv_weight_loss_title_banner_html($alt = 'Weight Loss') {
-    $img = esc_url(pbv_asset_uri('assets/images/weight-loss-header.png'));
-    $alt = esc_attr($alt);
-    return '<figure class="pbv-cat-title-image">'
-        . '<img src="' . $img . '" alt="' . $alt . '" width="1369" height="237" loading="eager" decoding="async" />'
-        . '</figure>';
-}
-
-/**
- * Output Peptides collection header on the category archive (above products).
- */
-function pbv_render_peptides_archive_header() {
-    if (!function_exists('is_product_category') || !is_product_category('peptides')) {
-        return;
+function pbv_category_title_banner_html($slug) {
+    $map = pbv_category_title_images();
+    if (!isset($map[$slug])) {
+        return '';
     }
-    echo pbv_peptides_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+    $item = $map[$slug];
+    $path = pbv_asset_path($item['file']);
+    if (!file_exists($path)) {
+        return '';
+    }
+
+    return sprintf(
+        '<figure class="pbv-cat-title-image"><img src="%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
+        esc_url(pbv_asset_uri($item['file'])),
+        esc_attr($item['alt']),
+        (int) $item['width'],
+        (int) $item['height']
+    );
 }
-add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_header', 4);
 
 /**
- * Output the same centered title image on Weight Loss + Weight Loss Pens.
+ * Render matching title images on the four main category archives.
  */
-function pbv_render_weight_loss_archive_header() {
+function pbv_render_category_title_banners() {
     if (!function_exists('is_product_category')) {
         return;
     }
 
-    if (is_product_category('weight-loss')) {
-        echo pbv_weight_loss_title_banner_html('Weight Loss'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    foreach (array_keys(pbv_category_title_images()) as $slug) {
+        if (is_product_category($slug)) {
+            echo pbv_category_title_banner_html($slug); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            return;
+        }
+    }
+}
+add_action('woocommerce_archive_description', 'pbv_render_category_title_banners', 4);
+
+/**
+ * Hide default WooCommerce term descriptions on categories that use title graphics.
+ */
+function pbv_suppress_category_term_descriptions() {
+    if (!function_exists('is_product_category')) {
         return;
     }
 
-    if (is_product_category('weight-loss-pens')) {
-        echo pbv_weight_loss_title_banner_html('Weight Loss Pens'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    foreach (array_keys(pbv_category_title_images()) as $slug) {
+        if (is_product_category($slug)) {
+            remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
+            return;
+        }
     }
 }
-add_action('woocommerce_archive_description', 'pbv_render_weight_loss_archive_header', 4);
-
-/**
- * Prevent WooCommerce from printing a duplicate term description on Peptides
- * (we render the collection header ourselves).
- */
-function pbv_suppress_peptides_term_description() {
-    if (function_exists('is_product_category') && is_product_category('peptides')) {
-        remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
-    }
-}
-add_action('wp', 'pbv_suppress_peptides_term_description');
+add_action('wp', 'pbv_suppress_category_term_descriptions');
 
 
 /**
