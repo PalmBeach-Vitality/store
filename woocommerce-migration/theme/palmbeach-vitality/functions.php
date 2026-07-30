@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.8');
+define('PBV_THEME_VERSION', '2.7.9');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -888,9 +888,10 @@ function pbv_category_title_banner_html($slug) {
     }
 
     return sprintf(
-        '<figure class="pbv-cat-title-image%s"><img src="%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
+        '<figure class="pbv-cat-title-image%s"><img src="%s?ver=%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
         (strpos($slug, 'weight-loss') === 0) ? ' pbv-cat-title-image--weight' : '',
         esc_url(pbv_asset_uri($item['file'])),
+        rawurlencode(PBV_THEME_VERSION),
         esc_attr($item['alt']),
         (int) $item['width'],
         (int) $item['height']

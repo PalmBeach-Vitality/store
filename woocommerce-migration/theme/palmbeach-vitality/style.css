@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.7.8
+Version: 2.7.9
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -591,12 +591,21 @@ a:hover { opacity: 0.7; }
 .tax-product_cat.term-weight-loss-pens .pbv-cat-title-image,
 .pbv-cat-title-image--weight {
   width: min(100% - 1.5rem, 37.8rem);
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
 }
 
 .tax-product_cat.term-weight-loss .pbv-cat-title-image img,
 .tax-product_cat.term-weight-loss-pens .pbv-cat-title-image img,
 .pbv-cat-title-image--weight img {
   max-width: 37.8rem;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  /* Drop any residual light plate against the white page */
+  mix-blend-mode: multiply;
 }
 
 /* Hide default category titles on the four graphic-header archives */
