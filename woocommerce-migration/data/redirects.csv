@@ -1,21 +1,103 @@
 source,target,type,notes
-/products/bpc-157,/product/bpc-157-20mg/,301,Shopify handle → WC BPC vial
-/products/bpc-157-pen,/product/bpc-157-20mg/,301,No standalone BPC pen; map to BPC-157 20mg vial
-/products/tb-500,/product/tb-500/,301,
-/products/ghk-cu,/product/ghk-cu-pen/,301,
-/products/semaglutide,/product/semaglutide/,301,
-/products/tirzepatide,/product/tirzepatide/,301,
-/products/retatrutide,/product/retatrutide/,301,
-/products/aod-9604,/product/aod-9604/,301,
-/products/semax,/product/semax-pen/,301,
-/products/selank,/product/selank-pen/,301,
-/products/ipamorelin,/product/ipamorelin/,301,
-/products/cjc-1295,/product/cjc-1295/,301,Adjust slug if Shopify handle differs
-/products/cjc-1295-dac,/product/cjc-1295/,301,
-/products/tesamorelin,/product/tesamorelin-10mg-pen/,301,
-/products/kpv,/product/kpv-pen/,301,
-/products/nad,/product/nad-pen-1000mg/,301,
-/products/nad-plus,/product/nad-pen-1000mg/,301,
-/products/wolverine,/product/wolverine-pen/,301,
-/products/glow,/product/glow-pen/,301,
-/products/klow,/product/klow-pen/,301,
+/products/5-amino-mq-pen,/product/5-amino-mq-pen/,301,5 Amino MQ Pen
+/products/aod-9604,/product/aod-9604/,301,AOD-9604
+/products/bpc-157-20mg,/product/bpc-157-20mg/,301,BPC-157 20mg
+/products/cjc-ipamorelin-1,/product/cjc-ipamorelin-pen/,301,CJC/Ipamorelin Pen
+/products/dsip-pen,/product/dsip-pen/,301,DSIP Pen
+/products/ghk-cu-pen,/product/ghk-cu-pen/,301,GHK-Cu Pen
+/products/glow-pen,/product/glow-pen/,301,GLOW Pen
+/products/klow-pen,/product/klow-pen/,301,KLOW Pen
+/products/kpv,/product/kpv-pen/,301,KPV Pen
+/products/melonotan,/product/melonotan/,301,Melonotan
+/products/mots-c,/product/mots-c-pen/,301,MOTS-C Pen
+/products/nad,/product/nad-pen-1000mg/,301,NAD+ Pen 1000mg
+/products/nad-1,/product/nad-1000mg/,301,NAD+ 1000mg
+/products/nad-500mg,/product/nad-500mg/,301,NAD+ 500mg
+/products/nad-pen-500mg,/product/nad-pen-500mg/,301,NAD+ Pen 500mg
+/products/pt-141-pen,/product/pt-141-pen/,301,PT-141 Pen
+/products/retatrutide,/product/retatrutide-60mg/,301,Retatrutide 60mg
+/products/retatrutide-100mg,/product/retatrutide-100mg/,301,Retatrutide 100mg
+/products/retatrutide-200mg,/product/retatrutide-200mg/,301,Retatrutide 200mg
+/products/retatrutride-16mg-pen,/product/retatrutride-16mg-pen/,301,Retatrutride 16mg Pen
+/products/retatrutride-24mg-pen,/product/retatrutride-24mg-pen/,301,Retatrutride 24mg Pen
+/products/retatrutride-32mg-pen,/product/retatrutride-32mg-pen/,301,Retatrutride 32mg Pen
+/products/retatrutride-40mg-pen,/product/retatrutride-40mg-pen/,301,Retatrutride 40mg Pen
+/products/retatrutride-8mg-pen,/product/retatrutride-8mg-pen/,301,Retatrutride 8mg Pen
+/products/selank-pen,/product/selank-pen/,301,Selank Pen
+/products/semaglutide,/product/semaglutide-25mg/,301,Semaglutide 25mg
+/products/semaglutide-1-5mg-pen,/product/semaglutide-1-5mg-pen/,301,Semaglutide 1.5mg Pen
+/products/semaglutide-10mg-pen,/product/semaglutide-10mg-pen/,301,Semaglutide 10mg Pen
+/products/semaglutide-15mg-pen,/product/semaglutide-15mg-pen/,301,Semaglutide 15mg Pen
+/products/semaglutide-3-5mg-pen,/product/semaglutide-3-5mg-pen/,301,Semaglutide 3.5mg Pen
+/products/semaglutide-5-5mg-pen,/product/semaglutide-5-5mg-pen/,301,Semaglutide 5.5mg Pen
+/products/semaglutide-50mg,/product/semaglutide-50mg/,301,Semaglutide 50mg
+/products/semaglutide-7-5mg-pen,/product/semaglutide-7-5mg-pen/,301,Semaglutide 7.5mg Pen
+/products/semax-pen,/product/semax-pen/,301,Semax Pen
+/products/sermorelin-pen,/product/sermorelin-pen/,301,Sermorelin Pen
+/products/ss-31-pen,/product/ss-31-pen/,301,SS-31 Pen
+/products/ta-1,/product/ta-1/,301,TA-1
+/products/ta-2,/product/ta-1/,301,TA-1
+/products/tesamorelin-10mg-pen,/product/tesamorelin-10mg-pen/,301,Tesamorelin 10mg Pen
+/products/tesamorelin-30mg-pen,/product/tesamorelin-30mg-pen/,301,Tesamorelin 30mg Pen
+/products/tesamorelin-ipamorelin-pen,/product/tesamorelin-ipamorelin-pen/,301,Tesamorelin/Ipamorelin Pen
+/products/tirzepatide,/product/tirzepatide-100mg/,301,Tirzepatide 100mg
+/products/tirzepatide-10mg-pen,/product/tirzepatide-10mg-pen/,301,Tirzepatide 10mg Pen
+/products/tirzepatide-200mg,/product/tirzepatide-200mg/,301,Tirzepatide 200mg
+/products/tirzepatide-20mg-pen,/product/tirzepatide-20mg-pen/,301,Tirzepatide 20mg Pen
+/products/tirzepatide-30mg-pen,/product/tirzepatide-30mg-pen/,301,Tirzepatide 30mg Pen
+/products/tirzepatide-40mg-pen,/product/tirzepatide-40mg-pen/,301,Tirzepatide 40mg Pen
+/products/tirzepatide-40mg-pen-copy,/product/tirzepatide-60mg-pen/,301,Tirzepatide 60mg Pen
+/products/tirzepatide-50mg-pen,/product/tirzepatide-50mg-pen/,301,Tirzepatide 50mg Pen
+/products/wolverine-pen,/product/wolverine-pen/,301,Wolverine Pen
+/products/bpc-157-10mg-vial,/product/bpc-157-10mg-vial/,301,bpc-157-10mg-vial
+/products/cargrilinitide-vial,/product/cargrilinitide-vial/,301,cargrilinitide-vial
+/products/cjc-ipamorelin-pen,/product/cjc-ipamorelin-pen/,301,cjc-ipamorelin-pen
+/products/cjc-ipamorelin-vial,/product/cjc-ipamorelin-vial/,301,cjc-ipamorelin-vial
+/products/cjc-vial,/product/cjc-vial/,301,cjc-vial
+/products/ghk-cu-vial,/product/ghk-cu-vial/,301,ghk-cu-vial
+/products/glow-vial,/product/glow-vial/,301,glow-vial
+/products/klow-vial,/product/klow-vial/,301,klow-vial
+/products/mots-c-pen,/product/mots-c-pen/,301,mots-c-pen
+/products/mots-c-vial,/product/mots-c-vial/,301,mots-c-vial
+/products/nad-pen-1000mg,/product/nad-pen-1000mg/,301,nad-pen-1000mg
+/products/pt-141-vial,/product/pt-141-vial/,301,pt-141-vial
+/products/retatrutide-60mg,/product/retatrutide-60mg/,301,retatrutide-60mg
+/products/selank-vial,/product/selank-vial/,301,selank-vial
+/products/semaglutide-25mg,/product/semaglutide-25mg/,301,semaglutide-25mg
+/products/semax-vial,/product/semax-vial/,301,semax-vial
+/products/sermorelin-vial,/product/sermorelin-vial/,301,sermorelin-vial
+/products/ss-31-vial,/product/ss-31-vial/,301,ss-31-vial
+/products/ta-1-2,/product/ta-1-2/,301,ta-1-2
+/products/tb-500-vial,/product/tb-500-vial/,301,tb-500-vial
+/products/tesamorelin-vial,/product/tesamorelin-vial/,301,tesamorelin-vial
+/products/tirzepatide-100mg,/product/tirzepatide-100mg/,301,tirzepatide-100mg
+/products/tirzepatide-60mg-pen,/product/tirzepatide-60mg-pen/,301,tirzepatide-60mg-pen
+/products/wolverine-vial,/product/wolverine-vial/,301,wolverine-vial
+/products/5-amino-mq,/product/5-amino-mq-pen/,301,alias
+/products/bpc-157,/product/bpc-157-20mg/,301,alias
+/products/bpc-157-10mg,/product/bpc-157-10mg-vial/,301,alias
+/products/bpc-157-pen,/product/bpc-157-20mg/,301,alias
+/products/cagrilintide,/product/cargrilinitide-vial/,301,alias
+/products/cargrilinitide,/product/cargrilinitide-vial/,301,alias
+/products/cjc-1295,/product/cjc-vial/,301,alias
+/products/cjc-1295-dac,/product/cjc-vial/,301,alias
+/products/cjc-ipamorelin,/product/cjc-ipamorelin-pen/,301,alias
+/products/dsip,/product/dsip-pen/,301,alias
+/products/ghk-cu,/product/ghk-cu-pen/,301,alias
+/products/glow,/product/glow-pen/,301,alias
+/products/ipamorelin,/product/cjc-ipamorelin-pen/,301,alias
+/products/klow,/product/klow-pen/,301,alias
+/products/kpv-pen,/product/kpv-pen/,301,alias
+/products/melanotan,/product/melonotan/,301,alias
+/products/melanotan-2,/product/melonotan/,301,alias
+/products/nad-1000mg,/product/nad-1000mg/,301,alias
+/products/nad-plus,/product/nad-pen-1000mg/,301,alias
+/products/pt-141,/product/pt-141-pen/,301,alias
+/products/selank,/product/selank-pen/,301,alias
+/products/semax,/product/semax-pen/,301,alias
+/products/sermorelin,/product/sermorelin-pen/,301,alias
+/products/ss-31,/product/ss-31-pen/,301,alias
+/products/tb-500,/product/tb-500-vial/,301,alias
+/products/tb-500-pen,/product/wolverine-pen/,301,alias
+/products/tesamorelin,/product/tesamorelin-10mg-pen/,301,alias
+/products/wolverine,/product/wolverine-pen/,301,alias
