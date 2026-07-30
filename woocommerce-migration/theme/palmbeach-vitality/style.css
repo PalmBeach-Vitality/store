@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.7.4
+Version: 2.7.5
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -225,15 +225,16 @@ a:hover { opacity: 0.7; }
 }
 
 /*
- * Mobile hero: full-bleed portrait (min 9:16) with FULL copy visible.
+ * Mobile hero: 9:16 portrait with FULL copy + rounded corners on all edges.
  * Content is in normal flow (not absolute) so text is never clipped.
  * Critical rules are also inlined on front-page.php for cache safety.
  */
 .pbv-hero {
   display: block;
   width: 100%;
-  padding: 0;
+  padding: 0.75rem 0.85rem 0.5rem;
   margin: 0;
+  box-sizing: border-box;
 }
 
 .pbv-hero-photo {
@@ -242,22 +243,23 @@ a:hover { opacity: 0.7; }
   flex-direction: column;
   width: 100%;
   max-width: none;
-  min-height: calc(100vw * 16 / 9);
+  min-height: calc((100vw - 1.7rem) * 16 / 9);
   height: auto;
   margin: 0;
-  border-radius: 0;
-  overflow: visible;
+  border-radius: 1.25rem;
+  overflow: hidden;
   isolation: isolate;
   background:
     var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center center / cover no-repeat,
     linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
   color: #fff;
-  box-shadow: none;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
 }
 
 .pbv-hero-photo__overlay {
   position: absolute;
   inset: 0;
+  border-radius: inherit;
   background:
     linear-gradient(
       180deg,
@@ -273,7 +275,7 @@ a:hover { opacity: 0.7; }
   position: relative;
   z-index: 2;
   width: 100%;
-  min-height: calc(100vw * 16 / 9);
+  min-height: calc((100vw - 1.7rem) * 16 / 9);
   height: auto;
   box-sizing: border-box;
   display: flex;

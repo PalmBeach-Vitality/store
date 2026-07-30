@@ -19,22 +19,23 @@ if ($hero_mobile) {
 ?>
 <style id="pbv-hero-critical">
 /* Critical mobile hero — survives stale theme CSS cache */
-.pbv-hero{display:block;width:100%;padding:0;margin:0;}
+.pbv-hero{display:block;width:100%;padding:.75rem .85rem .5rem;margin:0;box-sizing:border-box;}
 .pbv-hero-photo{
   position:relative;display:flex;flex-direction:column;width:100%;
-  min-height:calc(100vw * 16 / 9);height:auto;margin:0;border-radius:0;
-  overflow:visible;box-shadow:none;color:#fff;
+  min-height:calc((100vw - 1.7rem) * 16 / 9);height:auto;margin:0;
+  border-radius:1.25rem;overflow:hidden;isolation:isolate;
+  box-shadow:0 12px 28px rgba(0,0,0,.16);color:#fff;
   background:
     var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center center / cover no-repeat,
     linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
 }
 .pbv-hero-photo__overlay{
-  position:absolute;inset:0;z-index:1;pointer-events:none;
+  position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
   background:linear-gradient(180deg,rgba(3,8,18,.55) 0%,rgba(3,8,18,.72) 45%,rgba(3,8,18,.88) 100%);
 }
 .pbv-hero-photo__content{
   position:relative;z-index:2;box-sizing:border-box;width:100%;
-  min-height:calc(100vw * 16 / 9);height:auto;margin:0;
+  min-height:calc((100vw - 1.7rem) * 16 / 9);height:auto;margin:0;
   display:flex;flex-direction:column;justify-content:center;align-items:center;
   padding:1.15rem 1rem 1.35rem;text-align:center;overflow:visible;color:#fff;
 }
