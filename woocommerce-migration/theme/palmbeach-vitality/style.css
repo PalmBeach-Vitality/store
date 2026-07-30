@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.6.4
+Version: 2.6.5
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -574,6 +574,44 @@ a:hover { opacity: 0.7; }
   .pbv-cat-banner__content {
     padding: 2.75rem 1.25rem;
   }
+}
+
+/* Weight Loss + Weight Loss Pens — same centered title image under header */
+.pbv-cat-title-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: min(100% - 1.5rem, 48rem);
+  margin: 0.85rem auto 1.75rem;
+  padding: 0;
+}
+
+.pbv-cat-title-image img {
+  display: block;
+  width: 100%;
+  max-width: 48rem;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Keep default category titles from competing with the graphic */
+.tax-product_cat.term-weight-loss .woocommerce-products-header__title,
+.tax-product_cat.term-weight-loss-pens .woocommerce-products-header__title,
+.tax-product_cat.term-weight-loss header.woocommerce-products-header .page-title,
+.tax-product_cat.term-weight-loss-pens header.woocommerce-products-header .page-title,
+.tax-product_cat.term-weight-loss h1.page-title,
+.tax-product_cat.term-weight-loss-pens h1.page-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .btn,

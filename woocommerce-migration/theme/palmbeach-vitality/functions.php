@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.4');
+define('PBV_THEME_VERSION', '2.6.5');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -537,6 +537,17 @@ function pbv_peptides_collection_header_html() {
 }
 
 /**
+ * Shared Weight Loss / Weight Loss Pens title banner (same image + size, centered).
+ */
+function pbv_weight_loss_title_banner_html($alt = 'Weight Loss') {
+    $img = esc_url(pbv_asset_uri('assets/images/weight-loss-header.png'));
+    $alt = esc_attr($alt);
+    return '<figure class="pbv-cat-title-image">'
+        . '<img src="' . $img . '" alt="' . $alt . '" width="1369" height="237" loading="eager" decoding="async" />'
+        . '</figure>';
+}
+
+/**
  * Output Peptides collection header on the category archive (above products).
  */
 function pbv_render_peptides_archive_header() {
@@ -546,6 +557,25 @@ function pbv_render_peptides_archive_header() {
     echo pbv_peptides_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_header', 4);
+
+/**
+ * Output the same centered title image on Weight Loss + Weight Loss Pens.
+ */
+function pbv_render_weight_loss_archive_header() {
+    if (!function_exists('is_product_category')) {
+        return;
+    }
+
+    if (is_product_category('weight-loss')) {
+        echo pbv_weight_loss_title_banner_html('Weight Loss'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        return;
+    }
+
+    if (is_product_category('weight-loss-pens')) {
+        echo pbv_weight_loss_title_banner_html('Weight Loss Pens'); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+    }
+}
+add_action('woocommerce_archive_description', 'pbv_render_weight_loss_archive_header', 4);
 
 /**
  * Prevent WooCommerce from printing a duplicate term description on Peptides
