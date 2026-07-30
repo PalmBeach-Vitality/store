@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.2');
+define('PBV_THEME_VERSION', '2.7.3');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -136,6 +136,110 @@ function pbv_assets() {
     ));
 }
 add_action('wp_enqueue_scripts', 'pbv_assets');
+
+/**
+ * Shopify used /products/{handle}. WooCommerce uses /product/{slug}/.
+ * Old links were falling through to the blog index ("Updates").
+ */
+function pbv_redirect_shopify_product_urls() {
+    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+        return;
+    }
+
+    $path = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+    $path = strtok($path, '?');
+    $path = trim((string) $path, '/');
+
+    if (!preg_match('#^products/([^/]+)/?$#i', $path, $matches)) {
+        return;
+    }
+
+    $handle = sanitize_title(rawurldecode($matches[1]));
+    if ($handle === '') {
+        return;
+    }
+
+    // Known Shopify handle → current WooCommerce slug (when names changed).
+    $aliases = array(
+        'bpc-157-pen'       => 'bpc-157-20mg',
+        'bpc-157'           => 'bpc-157-20mg',
+        'bpc-157-10mg'      => 'bpc-157-10mg-vial',
+        'wolverine'         => 'wolverine-pen',
+        'glow'              => 'glow-pen',
+        'klow'              => 'klow-pen',
+        'ghk-cu'            => 'ghk-cu-pen',
+        'kpv'               => 'kpv-pen',
+        'selank'            => 'selank-pen',
+        'semax'             => 'semax-pen',
+        'nad'               => 'nad-pen-1000mg',
+        'nad-plus'          => 'nad-pen-1000mg',
+        'tesamorelin'       => 'tesamorelin-10mg-pen',
+    );
+
+    $candidates = array($handle);
+    if (isset($aliases[$handle])) {
+        array_unshift($candidates, $aliases[$handle]);
+    }
+
+    // Heuristics when a pen handle has no exact match.
+    if (substr($handle, -4) === '-pen') {
+        $base = substr($handle, 0, -4);
+        $candidates[] = $base;
+        $candidates[] = $base . '-20mg';
+        $candidates[] = $base . '-10mg-vial';
+        $candidates[] = $base . '-10mg';
+    } else {
+        $candidates[] = $handle . '-pen';
+        $candidates[] = $handle . '-20mg';
+        $candidates[] = $handle . '-10mg-vial';
+    }
+
+    $candidates = array_values(array_unique(array_filter($candidates)));
+
+    foreach ($candidates as $slug) {
+        $posts = get_posts(array(
+            'name'           => $slug,
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+        ));
+        if ($posts) {
+            $url = get_permalink((int) $posts[0]);
+            if ($url) {
+                wp_safe_redirect($url, 301);
+                exit;
+            }
+        }
+    }
+
+    // Last resort: category that matches the handle intent.
+    if (strpos($handle, 'pen') !== false) {
+        $term = get_term_by('slug', 'peptide-pens', 'product_cat');
+        if ($term && !is_wp_error($term)) {
+            $link = get_term_link($term);
+            if (!is_wp_error($link)) {
+                wp_safe_redirect($link, 301);
+                exit;
+            }
+        }
+    }
+
+    wp_safe_redirect(home_url('/shop/'), 301);
+    exit;
+}
+add_action('template_redirect', 'pbv_redirect_shopify_product_urls', 1);
+
+/**
+ * Never expose a posts/"Updates" index on this commerce site.
+ */
+function pbv_disable_blog_index() {
+    if (is_home() && !is_front_page()) {
+        wp_safe_redirect(home_url('/'), 301);
+        exit;
+    }
+}
+add_action('template_redirect', 'pbv_disable_blog_index', 2);
 
 /**
  * Homepage lead popup form submission → email site admin.
