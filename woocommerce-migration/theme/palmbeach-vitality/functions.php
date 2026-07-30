@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.1');
+define('PBV_THEME_VERSION', '2.7.2');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -84,6 +84,16 @@ function pbv_hero_image_url() {
         return pbv_default_hero_uri();
     }
     return '';
+}
+
+/**
+ * Bundled 9:16 mobile hero (portrait crop). Falls back to desktop hero.
+ */
+function pbv_hero_mobile_image_url() {
+    if (file_exists(pbv_asset_path('assets/images/hero-mobile.jpg'))) {
+        return pbv_asset_uri('assets/images/hero-mobile.jpg');
+    }
+    return pbv_hero_image_url();
 }
 
 /**
