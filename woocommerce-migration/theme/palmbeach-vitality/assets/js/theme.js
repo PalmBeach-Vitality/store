@@ -226,4 +226,89 @@
 
     if (ageAccepted) scheduleLeadPopup();
   }
+
+  // Contact page form → sales@palmbeach-vitality.com
+  var contactForm = document.querySelector("[data-contact-form]");
+  if (contactForm) {
+    var contactStatus = document.querySelector("[data-contact-status]");
+    var contactSubmit = contactForm.querySelector("[data-contact-submit]");
+    var cfg = window.pbvTheme || {};
+
+    contactForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var first = (contactForm.querySelector('[name="first_name"]') || {}).value || "";
+      var last = (contactForm.querySelector('[name="last_name"]') || {}).value || "";
+      var email = (contactForm.querySelector('[name="email"]') || {}).value || "";
+      var phone = (contactForm.querySelector('[name="phone"]') || {}).value || "";
+      var subject = (contactForm.querySelector('[name="subject"]') || {}).value || "";
+
+      if (contactStatus) {
+        contactStatus.hidden = true;
+        contactStatus.classList.remove("is-error", "is-success");
+        contactStatus.textContent = "";
+      }
+
+      if (!first.trim() || !last.trim() || !email.trim() || !phone.trim() || !subject.trim()) {
+        if (contactStatus) {
+          contactStatus.hidden = false;
+          contactStatus.classList.add("is-error");
+          contactStatus.textContent = "Please fill in all required fields.";
+        }
+        return;
+      }
+
+      if (contactSubmit) {
+        contactSubmit.disabled = true;
+        contactSubmit.textContent = "Sending…";
+      }
+
+      var body = new FormData(contactForm);
+      body.set("action", "pbv_contact_form");
+      body.set("nonce", cfg.contactNonce || "");
+      if (!body.get("pbv_contact_nonce") && cfg.contactNonce) {
+        body.set("pbv_contact_nonce", cfg.contactNonce);
+      }
+
+      fetch(cfg.ajaxUrl || "/wp-admin/admin-ajax.php", {
+        method: "POST",
+        credentials: "same-origin",
+        body: body,
+      })
+        .then(function (res) {
+          return res.json().then(function (data) {
+            return { ok: res.ok && data && data.success, data: data };
+          });
+        })
+        .then(function (result) {
+          var message =
+            (result.data && result.data.data && result.data.data.message) ||
+            (result.ok
+              ? "Thanks — your message has been sent."
+              : "Something went wrong. Please try again.");
+          if (contactStatus) {
+            contactStatus.hidden = false;
+            contactStatus.classList.add(result.ok ? "is-success" : "is-error");
+            contactStatus.textContent = message;
+          }
+          if (result.ok) {
+            contactForm.reset();
+          }
+        })
+        .catch(function () {
+          if (contactStatus) {
+            contactStatus.hidden = false;
+            contactStatus.classList.add("is-error");
+            contactStatus.textContent =
+              "Something went wrong. Please email sales@palmbeach-vitality.com directly.";
+          }
+        })
+        .finally(function () {
+          if (contactSubmit) {
+            contactSubmit.disabled = false;
+            contactSubmit.textContent = "Submit";
+          }
+        });
+    });
+  }
 })();

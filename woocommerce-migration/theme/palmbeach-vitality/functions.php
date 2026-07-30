@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.5');
+define('PBV_THEME_VERSION', '2.7.6');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -130,12 +130,89 @@ function pbv_assets() {
         true
     );
     wp_localize_script('pbv-theme', 'pbvTheme', array(
-        'ajaxUrl' => admin_url('admin-ajax.php'),
-        'nonce'   => wp_create_nonce('pbv_lead_popup'),
-        'isHome'  => is_front_page() ? 1 : 0,
+        'ajaxUrl'       => admin_url('admin-ajax.php'),
+        'nonce'         => wp_create_nonce('pbv_lead_popup'),
+        'contactNonce'  => wp_create_nonce('pbv_contact_form'),
+        'isHome'        => is_front_page() ? 1 : 0,
     ));
 }
 add_action('wp_enqueue_scripts', 'pbv_assets');
+
+/**
+ * Contact form → sales@palmbeach-vitality.com
+ */
+function pbv_handle_contact_form() {
+    $nonce = isset($_POST['pbv_contact_nonce']) ? sanitize_text_field(wp_unslash($_POST['pbv_contact_nonce'])) : '';
+    if (!$nonce) {
+        $nonce = isset($_POST['nonce']) ? sanitize_text_field(wp_unslash($_POST['nonce'])) : '';
+    }
+    if (!wp_verify_nonce($nonce, 'pbv_contact_form')) {
+        wp_send_json_error(array('message' => 'Security check failed. Please refresh and try again.'), 403);
+    }
+
+    // Honeypot — bots fill this; humans leave it empty.
+    $honeypot = isset($_POST['company']) ? trim((string) wp_unslash($_POST['company'])) : '';
+    if ($honeypot !== '') {
+        wp_send_json_success(array('message' => 'Thanks — your message has been sent.'));
+    }
+
+    $first   = isset($_POST['first_name']) ? sanitize_text_field(wp_unslash($_POST['first_name'])) : '';
+    $last    = isset($_POST['last_name']) ? sanitize_text_field(wp_unslash($_POST['last_name'])) : '';
+    $email   = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
+    $phone   = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
+    $subject = isset($_POST['subject']) ? sanitize_text_field(wp_unslash($_POST['subject'])) : '';
+
+    $errors = array();
+    if ($first === '') {
+        $errors[] = 'First name is required.';
+    }
+    if ($last === '') {
+        $errors[] = 'Last name is required.';
+    }
+    if (!$email || !is_email($email)) {
+        $errors[] = 'A valid email is required.';
+    }
+    if ($phone === '') {
+        $errors[] = 'Phone number is required.';
+    }
+    if ($subject === '') {
+        $errors[] = 'Subject is required.';
+    }
+
+    if ($errors) {
+        wp_send_json_error(array('message' => implode(' ', $errors)), 400);
+    }
+
+    $to = 'sales@palmbeach-vitality.com';
+    $mail_subject = sprintf(
+        '[%s] Contact: %s',
+        wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES),
+        $subject
+    );
+    $body = "New contact form submission from palmbeach-vitality.store\n\n"
+        . "First name: {$first}\n"
+        . "Last name: {$last}\n"
+        . "Email: {$email}\n"
+        . "Phone: {$phone}\n"
+        . "Subject: {$subject}\n"
+        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
+        . 'Page: ' . home_url('/contact/') . "\n";
+
+    $headers = array(
+        'Content-Type: text/plain; charset=UTF-8',
+        'Reply-To: ' . $first . ' ' . $last . ' <' . $email . '>',
+    );
+
+    $sent = wp_mail($to, $mail_subject, $body, $headers);
+
+    if (!$sent) {
+        wp_send_json_error(array('message' => 'Could not send right now. Please email sales@palmbeach-vitality.com directly.'), 500);
+    }
+
+    wp_send_json_success(array('message' => 'Thanks — your message has been sent. We will be in touch soon.'));
+}
+add_action('wp_ajax_pbv_contact_form', 'pbv_handle_contact_form');
+add_action('wp_ajax_nopriv_pbv_contact_form', 'pbv_handle_contact_form');
 
 /**
  * Shopify used /products/{handle}. WooCommerce uses /product/{slug}/.

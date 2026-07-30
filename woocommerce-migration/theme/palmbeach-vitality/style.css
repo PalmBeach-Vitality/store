@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.7.5
+Version: 2.7.6
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1465,4 +1465,116 @@ body.pbv-age-gate-open {
 
 body.pbv-lead-popup-open {
   overflow: hidden;
+}
+
+/* Contact form */
+.pbv-contact {
+  width: min(100% - 2rem, 40rem);
+  margin: 0 auto;
+}
+
+.pbv-contact__intro {
+  margin: 0 0 1.5rem;
+  color: #333;
+  line-height: 1.55;
+}
+
+.pbv-contact__status {
+  margin: 0 0 1.15rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.55rem;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.pbv-contact__status.is-success {
+  background: #e8f6ef;
+  color: #0f5132;
+  border: 1px solid #b7e1cb;
+}
+
+.pbv-contact__status.is-error {
+  background: #fdecea;
+  color: #842029;
+  border: 1px solid #f1aeb5;
+}
+
+.pbv-contact-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.pbv-contact-form__row {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 700px) {
+  .pbv-contact-form__row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.pbv-contact-form__field {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.pbv-contact-form__field label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.pbv-contact-form__field label span {
+  color: #b42318;
+}
+
+.pbv-contact-form__field input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d5dd;
+  border-radius: 0.55rem;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  font-size: 0.95rem;
+  color: #111;
+  background: #fff;
+}
+
+.pbv-contact-form__field input:focus {
+  outline: 2px solid #1a6b7a;
+  outline-offset: 1px;
+  border-color: #1a6b7a;
+}
+
+.pbv-contact-form__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.pbv-contact-form__submit {
+  justify-self: start;
+  margin-top: 0.35rem;
+  border: 0;
+  border-radius: 0.55rem;
+  padding: 0.85rem 1.5rem;
+  background: #0b1220;
+  color: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pbv-contact-form__submit:hover {
+  background: #12304a;
+}
+
+.pbv-contact-form__submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
