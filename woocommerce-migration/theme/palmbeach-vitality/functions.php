@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.1');
+define('PBV_THEME_VERSION', '2.6.2');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -194,9 +194,9 @@ add_filter('loop_shop_columns', 'pbv_loop_columns');
  * Single product layout (all products):
  * - Centered image + text
  * - Main description first
+ * - Research use only banner at bottom of description (every product)
  * - Short description + Add to cart below it
  * - No related products / upsells / data tabs
- * - No theme disclaimer (products already include their own)
  * - No SKU / category / tags meta row
  */
 function pbv_single_product_layout() {
@@ -216,6 +216,34 @@ function pbv_single_product_layout() {
 }
 add_action('init', 'pbv_single_product_layout', 20);
 
+/**
+ * Remove embedded Research Use Only blocks from product HTML so the theme banner is unique.
+ */
+function pbv_strip_embedded_research_disclaimer($html) {
+    $html = (string) $html;
+    if ($html === '' || stripos($html, 'research use only') === false) {
+        return $html;
+    }
+
+    $patterns = array(
+        '/<(div|aside|section|p)(\s[^>]*)?>[\s\S]*?Research\s+use\s+only[\s\S]*?(?:disease\.|FDA\.)[\s\S]*?<\/\1>/iu',
+        '/<(div|aside|section|p)(\s[^>]*)?>[\s\S]*?Not for human consumption\.[\s\S]*?research and educational purposes[\s\S]*?<\/\1>/iu',
+    );
+
+    foreach ($patterns as $pattern) {
+        $html = preg_replace($pattern, '', $html);
+    }
+
+    return trim((string) $html);
+}
+
+function pbv_research_use_banner() {
+    echo '<aside class="pbv-ruo-banner" role="note">';
+    echo '<p class="pbv-ruo-banner__title"><span class="pbv-ruo-banner__icon" aria-hidden="true">⚠</span> Research use only</p>';
+    echo '<p class="pbv-ruo-banner__body">Not for human consumption. This product is sold exclusively for research and educational purposes. It is not intended to diagnose, treat, cure, or prevent any disease.</p>';
+    echo '</aside>';
+}
+
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
         return;
@@ -226,11 +254,14 @@ function pbv_single_product_details_and_cart() {
     echo '<div class="pbv-product-purchase">';
 
     $description = ($product instanceof WC_Product) ? $product->get_description() : '';
+    $description = pbv_strip_embedded_research_disclaimer($description);
+
+    echo '<div class="pbv-product-description">';
     if (trim(wp_strip_all_tags((string) $description)) !== '') {
-        echo '<div class="pbv-product-description">';
         echo apply_filters('the_content', $description);
-        echo '</div>';
     }
+    pbv_research_use_banner();
+    echo '</div>';
 
     woocommerce_template_single_excerpt();
     woocommerce_template_single_add_to_cart();
