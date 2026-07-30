@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.3');
+define('PBV_THEME_VERSION', '2.6.4');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -360,6 +360,107 @@ function pbv_icon_account() {
 
 function pbv_icon_bag() {
     return '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>';
+}
+
+/**
+ * Footer social links. Empty URL = icon shown, link pending.
+ *
+ * @return array<string,array{label:string,url:string,icon:string}>
+ */
+function pbv_social_links() {
+    return array(
+        'instagram' => array(
+            'label' => 'Instagram',
+            'url'   => 'https://www.instagram.com/palmbeachvitality/',
+            'icon'  => pbv_icon_instagram(),
+        ),
+        'facebook' => array(
+            'label' => 'Facebook',
+            'url'   => 'https://www.facebook.com/profile.php?id=61592263329627',
+            'icon'  => pbv_icon_facebook(),
+        ),
+        'whatsapp' => array(
+            'label' => 'WhatsApp',
+            'url'   => 'https://wa.me/19172509323',
+            'icon'  => pbv_icon_whatsapp(),
+        ),
+        'tiktok' => array(
+            'label' => 'TikTok',
+            'url'   => '',
+            'icon'  => pbv_icon_tiktok(),
+        ),
+        'youtube' => array(
+            'label' => 'YouTube',
+            'url'   => '',
+            'icon'  => pbv_icon_youtube(),
+        ),
+        'twitter' => array(
+            'label' => 'Twitter / X',
+            'url'   => '',
+            'icon'  => pbv_icon_twitter(),
+        ),
+    );
+}
+
+function pbv_icon_instagram() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
+}
+
+function pbv_icon_facebook() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 9h3V6h-3c-2.2 0-4 1.8-4 4v2H7v3h3v7h3v-7h3l1-3h-4v-2c0-.6.4-1 1-1z"/></svg>';
+}
+
+function pbv_icon_whatsapp() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a9.9 9.9 0 0 0-8.6 14.8L2 22l5.4-1.4A9.9 9.9 0 1 0 12 2zm0 18a8.1 8.1 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8.1 8.1 0 1 1 12 20zm4.6-6.1c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.6 6.6 0 0 1-3.1-2.7c-.2-.4.2-.4.6-1.3.1-.2 0-.3 0-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3s-1 1-1 2.4 1 2.8 1.2 3 .1.2 2 3.1c1.7 1.5 2.2 1.7 2.6 1.9.3.1.7.1 1 .1.4 0 1.1-.4 1.3-.8s.4-.7.3-.9-.2-.2-.4-.3z"/></svg>';
+}
+
+function pbv_icon_tiktok() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.5 3c.4 2.4 1.9 4.1 4.3 4.4v2.7c-1.5 0-2.9-.5-4.1-1.3v6.2c0 3.2-2.6 5.7-5.8 5.7S3 18.2 3 15s2.6-5.7 5.9-5.7c.3 0 .6 0 .9.1v2.8c-.3-.1-.6-.2-.9-.2-1.6 0-2.9 1.3-2.9 3s1.3 3 2.9 3 2.9-1.3 2.9-3V3h2.7z"/></svg>';
+}
+
+function pbv_icon_youtube() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12.2s0-3.2-.4-4.6c-.2-.8-.9-1.5-1.7-1.7C18.5 5.5 12 5.5 12 5.5s-6.5 0-7.9.4c-.8.2-1.5.9-1.7 1.7C2 9 2 12.2 2 12.2s0 3.2.4 4.6c.2.8.9 1.5 1.7 1.7 1.4.4 7.9.4 7.9.4s6.5 0 7.9-.4c.8-.2 1.5-.9 1.7-1.7.4-1.4.4-4.6.4-4.6zM10 15.2V9.3l5.2 2.95L10 15.2z"/></svg>';
+}
+
+function pbv_icon_twitter() {
+    return '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.7 10.5 22 3h-1.9l-6.3 6.5L8.7 3H2.5l7.7 10.2L2.5 21h1.9l6.7-6.9L15.8 21h6.2l-7.3-10.5zm-2.4 2.5-1.1-1.4L5.3 4.4h2.7l4.5 5.9 1.1 1.4 6.5 8.5h-2.7l-4.9-6.6z"/></svg>';
+}
+
+function pbv_social_links_html() {
+    $links = pbv_social_links();
+    if (!$links) {
+        return '';
+    }
+
+    $html = '<nav class="pbv-social" aria-label="Social media">';
+    $html .= '<ul class="pbv-social__list">';
+
+    foreach ($links as $key => $item) {
+        $label = $item['label'];
+        $url   = trim((string) $item['url']);
+        $icon  = $item['icon'];
+        $ready = $url !== '';
+
+        $html .= '<li class="pbv-social__item">';
+        if ($ready) {
+            $html .= sprintf(
+                '<a class="pbv-social__link" href="%s" target="_blank" rel="noopener noreferrer" aria-label="%s">%s</a>',
+                esc_url($url),
+                esc_attr($label),
+                $icon
+            );
+        } else {
+            $html .= sprintf(
+                '<span class="pbv-social__link pbv-social__link--pending" aria-label="%s (coming soon)" title="Coming soon">%s</span>',
+                esc_attr($label),
+                $icon
+            );
+        }
+        $html .= '</li>';
+    }
+
+    $html .= '</ul></nav>';
+    return $html;
 }
 
 /**

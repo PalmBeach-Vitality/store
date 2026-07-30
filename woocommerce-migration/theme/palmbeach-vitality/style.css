@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.6.3
+Version: 2.6.4
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -907,27 +907,82 @@ a:hover { opacity: 0.7; }
   margin-inline: auto;
 }
 
-/* Footer — copyright + Terms and Policies dropdown */
+/* Footer — centered socials + copyright / Terms */
 .site-footer {
   margin-top: auto;
   border-top: 1px solid #eee;
   background: #fff;
   color: var(--pbv-muted);
-  padding: 1.35rem 0;
+  padding: 1.5rem 0 1.35rem;
   font-size: 0.82rem;
 }
 
 .site-footer__inner {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.site-footer__row {
+  display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
+  width: 100%;
 }
 
 .site-footer p { margin: 0; }
 .site-footer a { color: var(--pbv-muted); }
 .site-footer a:hover { color: #111; opacity: 1; }
+
+.pbv-social {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.pbv-social__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pbv-social__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  color: #222;
+  background: #f4f4f4;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.pbv-social__link:hover {
+  background: #111;
+  color: #fff;
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.pbv-social__link--pending {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.pbv-social__link--pending:hover {
+  background: #f4f4f4;
+  color: #222;
+  transform: none;
+}
 
 .pbv-terms-menu {
   position: relative;
