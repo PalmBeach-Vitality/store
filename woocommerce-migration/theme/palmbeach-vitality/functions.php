@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.9');
+define('PBV_THEME_VERSION', '2.8.0');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -839,98 +839,19 @@ function pbv_ensure_product_categories() {
 }
 
 /**
- * Category title-image map (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
- *
- * @return array<string,array{file:string,alt:string,width:int,height:int}>
+ * Category neon title graphics removed — plain WooCommerce titles are used.
  */
 function pbv_category_title_images() {
-    return array(
-        'peptides' => array(
-            'file'   => 'assets/images/peptides-title.png',
-            'alt'    => 'Peptides',
-            'width'  => 1679,
-            'height' => 504,
-        ),
-        'peptide-pens' => array(
-            'file'   => 'assets/images/peptide-pens-title.png',
-            'alt'    => 'Peptide Pens',
-            'width'  => 1679,
-            'height' => 504,
-        ),
-        'weight-loss' => array(
-            'file'   => 'assets/images/weight-loss-title.png',
-            'alt'    => 'Weight Loss',
-            'width'  => 1679,
-            'height' => 504,
-        ),
-        'weight-loss-pens' => array(
-            'file'   => 'assets/images/weight-loss-pens-title.png',
-            'alt'    => 'Weight Loss Pens',
-            'width'  => 1679,
-            'height' => 504,
-        ),
-    );
+    return array();
 }
 
-/**
- * Shared centered category title banner markup.
- */
 function pbv_category_title_banner_html($slug) {
-    $map = pbv_category_title_images();
-    if (!isset($map[$slug])) {
-        return '';
-    }
-
-    $item = $map[$slug];
-    $path = pbv_asset_path($item['file']);
-    if (!file_exists($path)) {
-        return '';
-    }
-
-    return sprintf(
-        '<figure class="pbv-cat-title-image%s"><img src="%s?ver=%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
-        (strpos($slug, 'weight-loss') === 0) ? ' pbv-cat-title-image--weight' : '',
-        esc_url(pbv_asset_uri($item['file'])),
-        rawurlencode(PBV_THEME_VERSION),
-        esc_attr($item['alt']),
-        (int) $item['width'],
-        (int) $item['height']
-    );
+    return '';
 }
 
-/**
- * Render matching title images on the four main category archives.
- */
 function pbv_render_category_title_banners() {
-    if (!function_exists('is_product_category')) {
-        return;
-    }
-
-    foreach (array_keys(pbv_category_title_images()) as $slug) {
-        if (is_product_category($slug)) {
-            echo pbv_category_title_banner_html($slug); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-            return;
-        }
-    }
+    // Disabled.
 }
-add_action('woocommerce_archive_description', 'pbv_render_category_title_banners', 4);
-
-/**
- * Hide default WooCommerce term descriptions on categories that use title graphics.
- */
-function pbv_suppress_category_term_descriptions() {
-    if (!function_exists('is_product_category')) {
-        return;
-    }
-
-    foreach (array_keys(pbv_category_title_images()) as $slug) {
-        if (is_product_category($slug)) {
-            remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
-            return;
-        }
-    }
-}
-add_action('wp', 'pbv_suppress_category_term_descriptions');
 
 
 /**
