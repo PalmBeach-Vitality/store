@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.0');
+define('PBV_THEME_VERSION', '2.6.1');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -190,24 +190,27 @@ function pbv_loop_columns() {
 }
 add_filter('loop_shop_columns', 'pbv_loop_columns');
 
-function pbv_product_disclaimer() {
-    echo '<div class="pbv-disclaimer"><strong>Research Use Only:</strong> All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.</div>';
-}
-
 /**
  * Single product layout (all products):
  * - Centered image + text
  * - Main description first
  * - Short description + Add to cart below it
  * - No related products / upsells / data tabs
+ * - No theme disclaimer (products already include their own)
+ * - No SKU / category / tags meta row
  */
 function pbv_single_product_layout() {
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
 
+    // Cover both classic and current WooCommerce hook priorities.
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 40);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30);
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 50);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40);
+    remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_meta', 60);
 
     add_action('woocommerce_after_single_product_summary', 'pbv_single_product_details_and_cart', 10);
 }
@@ -231,7 +234,6 @@ function pbv_single_product_details_and_cart() {
 
     woocommerce_template_single_excerpt();
     woocommerce_template_single_add_to_cart();
-    pbv_product_disclaimer();
 
     echo '</div>';
 }
