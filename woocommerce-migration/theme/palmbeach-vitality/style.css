@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.5.4
+Version: 2.6.0
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -631,14 +631,17 @@ a:hover { opacity: 0.7; }
 
 .woocommerce ul.products li.product a img,
 .woocommerce ul.products li.product img {
-  width: 100%;
+  display: block;
+  width: 70%;
+  max-width: 11.5rem;
   height: auto;
   aspect-ratio: 2 / 3;
-  object-fit: cover;
-  object-position: center 18%;
+  object-fit: contain;
+  object-position: center center;
   margin: 0 auto 0.65rem;
   background: #eef2f5;
-  border-radius: 0.75rem;
+  border-radius: 0.65rem;
+  image-rendering: auto;
 }
 
 .woocommerce ul.products li.product .woocommerce-loop-product__title {
@@ -689,19 +692,36 @@ a:hover { opacity: 0.7; }
   }
 }
 
+/* Single product — centered stack: image, title/price, description, then cart */
 .woocommerce div.product {
-  display: grid;
-  gap: 1.5rem;
-  margin: 1.25rem 0 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+  max-width: 36rem;
+  margin: 1.25rem auto 3rem;
+  text-align: center;
 }
 
-.woocommerce div.product div.images {
+.woocommerce div.product::before,
+.woocommerce div.product::after {
+  display: none !important;
+  content: none !important;
+}
+
+.woocommerce div.product div.images,
+.woocommerce div.product div.summary,
+.woocommerce div.product .pbv-product-purchase {
+  width: 100% !important;
+  float: none !important;
   margin: 0;
+  padding: 0;
+  clear: both;
 }
 
 .woocommerce div.product div.images .woocommerce-product-gallery,
 .woocommerce div.product div.images .woocommerce-product-gallery__wrapper {
-  max-width: 22rem;
+  max-width: 20rem;
   margin: 0 auto;
 }
 
@@ -720,33 +740,105 @@ a:hover { opacity: 0.7; }
 }
 
 .woocommerce div.product div.summary {
+  text-align: center;
+}
+
+.woocommerce div.product .product_title {
+  font-family: var(--pbv-font-display);
+  font-size: clamp(1.45rem, 3.5vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 0 0 0.55rem;
+}
+
+.woocommerce div.product p.price {
+  color: #111;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+}
+
+.woocommerce div.product .woocommerce-product-rating,
+.woocommerce div.product .product_meta {
+  justify-content: center;
+  text-align: center;
+}
+
+.woocommerce div.product .pbv-product-purchase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: 0.25rem;
+}
+
+.woocommerce div.product .pbv-product-description,
+.woocommerce div.product .woocommerce-product-details__short-description {
+  width: 100%;
+  max-width: 34rem;
+  margin: 0 auto;
+  text-align: center;
+  color: #222;
+  line-height: 1.65;
+  font-size: 0.98rem;
+}
+
+.woocommerce div.product .pbv-product-description p,
+.woocommerce div.product .woocommerce-product-details__short-description p {
+  margin: 0 0 0.75rem;
+}
+
+.woocommerce div.product .pbv-product-description p:last-child,
+.woocommerce div.product .woocommerce-product-details__short-description p:last-child {
+  margin-bottom: 0;
+}
+
+.woocommerce div.product form.cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0.15rem 0 0;
+  width: 100%;
+}
+
+.woocommerce div.product form.cart .quantity {
   margin: 0;
-  padding: 0 0.15rem;
+  float: none;
+}
+
+.woocommerce div.product form.cart .single_add_to_cart_button {
+  width: min(100%, 16rem);
+  margin: 0;
+}
+
+.woocommerce div.product .pbv-disclaimer {
+  width: 100%;
+  max-width: 34rem;
+  text-align: left;
+}
+
+.woocommerce div.product .related.products,
+.woocommerce div.product .upsells.products {
+  display: none !important;
 }
 
 @media (min-width: 900px) {
   .woocommerce div.product {
-    grid-template-columns: 0.85fr 1.15fr;
-    align-items: start;
-    gap: 2rem;
-    margin: 2rem 0 3rem;
-  }
-  .woocommerce div.product div.images,
-  .woocommerce div.product div.summary {
-    width: 100% !important;
-    float: none !important;
+    max-width: 38rem;
+    gap: 1.6rem;
+    margin: 2rem auto 3.5rem;
   }
 
   .woocommerce div.product div.images .woocommerce-product-gallery,
   .woocommerce div.product div.images .woocommerce-product-gallery__wrapper {
-    max-width: 20rem;
-    margin: 0;
+    max-width: 22rem;
   }
 
   .woocommerce div.product div.images img,
   .woocommerce div.product div.images .woocommerce-product-gallery__image img {
     width: 70%;
-    max-width: 17rem;
+    max-width: 18rem;
     max-height: 26rem;
   }
 }
