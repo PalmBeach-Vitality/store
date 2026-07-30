@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.6.6');
+define('PBV_THEME_VERSION', '2.6.7');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.5.3');
 
@@ -529,26 +529,26 @@ function pbv_category_title_images() {
         'peptides' => array(
             'file'   => 'assets/images/peptides-title.png',
             'alt'    => 'Peptides',
-            'width'  => 1080,
-            'height' => 540,
+            'width'  => 1679,
+            'height' => 504,
         ),
         'peptide-pens' => array(
             'file'   => 'assets/images/peptide-pens-title.png',
             'alt'    => 'Peptide Pens',
-            'width'  => 1400,
-            'height' => 350,
+            'width'  => 1679,
+            'height' => 504,
         ),
         'weight-loss' => array(
             'file'   => 'assets/images/weight-loss-title.png',
             'alt'    => 'Weight Loss',
-            'width'  => 1540,
-            'height' => 298,
+            'width'  => 1679,
+            'height' => 504,
         ),
         'weight-loss-pens' => array(
             'file'   => 'assets/images/weight-loss-pens-title.png',
             'alt'    => 'Weight Loss Pens',
-            'width'  => 1369,
-            'height' => 237,
+            'width'  => 1679,
+            'height' => 504,
         ),
     );
 }

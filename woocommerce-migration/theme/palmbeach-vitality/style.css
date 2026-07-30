@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.6.6
+Version: 2.6.7
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -506,25 +506,23 @@ a:hover { opacity: 0.7; }
   color: var(--pbv-muted);
 }
 
-/* Category title graphics — Peptides, Peptide Pens, Weight Loss, Weight Loss Pens
-   Fixed display height so all four headers render at the same visual text size. */
+/* Category title graphics — all four share identical canvas + display size
+   (letter height matched to Peptides). */
 .pbv-cat-title-image {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: min(100% - 1.5rem, 52rem);
-  height: clamp(3.75rem, 11vw, 5.75rem);
-  margin: 0.85rem auto 1.75rem;
+  width: min(100% - 1.5rem, 42rem);
+  margin: 0.5rem auto 1.5rem;
   padding: 0;
   box-sizing: border-box;
 }
 
 .pbv-cat-title-image img {
   display: block;
-  width: auto;
-  max-width: 100%;
-  height: 100%;
-  max-height: 100%;
+  width: 100%;
+  max-width: 42rem;
+  height: auto;
   margin: 0 auto;
   object-fit: contain;
   object-position: center;
