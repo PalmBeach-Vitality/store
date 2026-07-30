@@ -9,9 +9,9 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.7.0');
+define('PBV_THEME_VERSION', '2.7.1');
 define('PBV_SEED_VERSION', '2.5.3');
-define('PBV_MENU_FIX_VERSION', '2.6.9');
+define('PBV_MENU_FIX_VERSION', '2.7.1');
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -970,7 +970,10 @@ add_action('init', 'pbv_fix_primary_menu_once', 40);
 add_action('woocommerce_init', 'pbv_fix_primary_menu_once');
 
 /**
- * Build / refresh the Primary menu with working category + page links.
+ * Build / refresh the Primary menu.
+ *
+ * Always uses custom URL items so missing pages/terms never drop links
+ * from the nav (WP hides broken object-based menu items).
  *
  * @param bool $force_wipe Delete every existing item before recreating.
  */
@@ -1003,8 +1006,7 @@ function pbv_seed_primary_menu($force_wipe = false) {
         }
     }
 
-    $position = 1;
-    $desired  = array(
+    $desired = array(
         'Home',
         'Most Popular',
         'Peptides',
@@ -1016,80 +1018,16 @@ function pbv_seed_primary_menu($force_wipe = false) {
         'Telehealth',
     );
 
-    // Home
-    wp_update_nav_menu_item($menu_id, 0, array(
-        'menu-item-title'    => 'Home',
-        'menu-item-url'      => home_url('/'),
-        'menu-item-type'     => 'custom',
-        'menu-item-status'   => 'publish',
-        'menu-item-position' => $position++,
-    ));
-
-    // Most Popular → Shop
-    $shop_id = function_exists('wc_get_page_id') ? wc_get_page_id('shop') : 0;
-    if ($shop_id && $shop_id > 0) {
+    // Custom links only — never skip an item if a page/term lookup fails.
+    $position = 1;
+    foreach (pbv_menu_links() as $url => $label) {
         wp_update_nav_menu_item($menu_id, 0, array(
-            'menu-item-title'     => 'Most Popular',
-            'menu-item-object'    => 'page',
-            'menu-item-object-id' => $shop_id,
-            'menu-item-type'      => 'post_type',
-            'menu-item-status'    => 'publish',
-            'menu-item-position'  => $position++,
-        ));
-    } else {
-        wp_update_nav_menu_item($menu_id, 0, array(
-            'menu-item-title'    => 'Most Popular',
-            'menu-item-url'      => home_url('/shop/'),
+            'menu-item-title'    => $label,
+            'menu-item-url'      => $url,
             'menu-item-type'     => 'custom',
             'menu-item-status'   => 'publish',
             'menu-item-position' => $position++,
         ));
-    }
-
-    $cat_slugs = array(
-        'peptides'         => 'Peptides',
-        'peptide-pens'     => 'Peptide Pens',
-        'weight-loss'      => 'Weight Loss',
-        'weight-loss-pens' => 'Weight Loss Pens',
-    );
-    foreach ($cat_slugs as $slug => $label) {
-        $term = get_term_by('slug', $slug, 'product_cat');
-        if ($term && !is_wp_error($term)) {
-            wp_update_nav_menu_item($menu_id, 0, array(
-                'menu-item-title'     => $label,
-                'menu-item-object'    => 'product_cat',
-                'menu-item-object-id' => $term->term_id,
-                'menu-item-type'      => 'taxonomy',
-                'menu-item-status'    => 'publish',
-                'menu-item-position'  => $position++,
-            ));
-        } else {
-            wp_update_nav_menu_item($menu_id, 0, array(
-                'menu-item-title'    => $label,
-                'menu-item-url'      => home_url('/product-category/' . $slug . '/'),
-                'menu-item-type'     => 'custom',
-                'menu-item-status'   => 'publish',
-                'menu-item-position' => $position++,
-            ));
-        }
-    }
-
-    foreach (array(
-        'wholesale'  => 'Wholesale',
-        'contact'    => 'Contact Us',
-        'telehealth' => 'Telehealth',
-    ) as $slug => $label) {
-        $page = get_page_by_path($slug);
-        if ($page) {
-            wp_update_nav_menu_item($menu_id, 0, array(
-                'menu-item-title'     => $label,
-                'menu-item-object'    => 'page',
-                'menu-item-object-id' => $page->ID,
-                'menu-item-type'      => 'post_type',
-                'menu-item-status'    => 'publish',
-                'menu-item-position'  => $position++,
-            ));
-        }
     }
 
     $locations = get_theme_mod('nav_menu_locations');
