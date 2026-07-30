@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.0');
+define('PBV_THEME_VERSION', '2.8.1');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -839,19 +839,109 @@ function pbv_ensure_product_categories() {
 }
 
 /**
- * Category neon title graphics removed — plain WooCommerce titles are used.
+ * Category header cards (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
+ *
+ * @return array<string,array{file:string,alt:string,width:int,height:int}>
  */
 function pbv_category_title_images() {
-    return array();
+    return array(
+        'peptides' => array(
+            'file'   => 'assets/images/peptides-card.png',
+            'alt'    => 'Peptides',
+            'width'  => 1102,
+            'height' => 328,
+        ),
+        'peptide-pens' => array(
+            'file'   => 'assets/images/peptide-pens-card.png',
+            'alt'    => 'Peptide Pens',
+            'width'  => 1102,
+            'height' => 328,
+        ),
+        'weight-loss' => array(
+            'file'   => 'assets/images/weight-loss-card.png',
+            'alt'    => 'Weight Loss',
+            'width'  => 1091,
+            'height' => 328,
+        ),
+        'weight-loss-pens' => array(
+            'file'   => 'assets/images/weight-loss-pens-card.png',
+            'alt'    => 'Weight Loss Pens',
+            'width'  => 1102,
+            'height' => 328,
+        ),
+    );
 }
 
+/**
+ * Centered category header card markup.
+ */
 function pbv_category_title_banner_html($slug) {
-    return '';
+    $map = pbv_category_title_images();
+    if (!isset($map[$slug])) {
+        return '';
+    }
+
+    $item = $map[$slug];
+    $path = pbv_asset_path($item['file']);
+    if (!file_exists($path)) {
+        // Fallback to Media Library uploads if theme asset missing.
+        $uploads = array(
+            'peptides'         => '/wp-content/uploads/2026/07/peptides-card.png',
+            'peptide-pens'     => '/wp-content/uploads/2026/07/peptide-pens-card.png',
+            'weight-loss'      => '/wp-content/uploads/2026/07/weight-loss-card.png',
+            'weight-loss-pens' => '/wp-content/uploads/2026/07/weight-loss-pens-card.png',
+        );
+        if (!isset($uploads[$slug])) {
+            return '';
+        }
+        $src = home_url($uploads[$slug]);
+    } else {
+        $src = pbv_asset_uri($item['file']);
+    }
+
+    return sprintf(
+        '<figure class="pbv-cat-title-image"><img src="%s?ver=%s" alt="%s" width="%d" height="%d" loading="eager" decoding="async" /></figure>',
+        esc_url($src),
+        rawurlencode(PBV_THEME_VERSION),
+        esc_attr($item['alt']),
+        (int) $item['width'],
+        (int) $item['height']
+    );
 }
 
+/**
+ * Render header cards on the four main category archives.
+ */
 function pbv_render_category_title_banners() {
-    // Disabled.
+    if (!function_exists('is_product_category')) {
+        return;
+    }
+
+    foreach (array_keys(pbv_category_title_images()) as $slug) {
+        if (is_product_category($slug)) {
+            echo pbv_category_title_banner_html($slug); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            return;
+        }
+    }
 }
+add_action('woocommerce_archive_description', 'pbv_render_category_title_banners', 4);
+
+/**
+ * Hide default WooCommerce term descriptions on card-header categories.
+ */
+function pbv_suppress_category_term_descriptions() {
+    if (!function_exists('is_product_category')) {
+        return;
+    }
+
+    foreach (array_keys(pbv_category_title_images()) as $slug) {
+        if (is_product_category($slug)) {
+            remove_action('woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10);
+            return;
+        }
+    }
+}
+add_action('wp', 'pbv_suppress_category_term_descriptions');
 
 
 /**
