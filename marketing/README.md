@@ -34,3 +34,10 @@ git push -u origin cursor/figma-content-studio-4c4b
 Open **`n8n-figma-content-studio.md`** and build workflow **`PBVita — Figma Content Studio`**.  
 Reuse prompts already on pep PR #3 (`n8n-system-prompt-fixed.txt`, Imagine visual prompt, `spotlight-card.html`).  
 Leave the Buffer daily workflow untouched.
+
+## Also in this folder (Reel Studio)
+
+| File | Role |
+|---|---|
+| `n8n-creatomate-reel-studio.md` | Creatomate + n8n click-by-click (KEEP vs NEW) |
+| `sheets/4-reel-queue.csv` | Sheets tab headers for reel MP4 queue |
