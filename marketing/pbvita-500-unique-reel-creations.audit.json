@@ -1,5 +1,6 @@
 {
   "count": 500,
+  "quality_vars_per_creation": 12,
   "unique_creation_ids": true,
   "unique_scene_ids": true,
   "unique_prompts": true,
@@ -21,9 +22,10 @@
     "Text, Kinetic & Overlay-Friendly Scenes": 40
   },
   "prompt_length": {
-    "min": 696,
-    "max": 842,
-    "avg": 765
+    "min": 792,
+    "max": 948,
+    "avg": 875
   },
-  "sanitized_scene_count": 6
+  "sanitized_scene_count": 6,
+  "lab_preferred_pool_size": 42
 }

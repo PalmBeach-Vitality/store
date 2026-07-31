@@ -1,5 +1,5 @@
-// Paste into a Code node "pick_quality_vars" (or Edit Fields expression via Code)
-// After: Prep_day_variant / pick_scene | Before: grok imagine / creatomate visual prompt
+// Code node: pick_quality_vars
+// Picks 12 lab-preferred quality tokens → quality_suffix
 
 const preferred = ["ultra detailed", "extremely detailed", "hyper-detailed", "razor sharp focus", "tack sharp", "crystal clear", "ultra sharp", "8k resolution", "photorealistic", "hyperrealistic", "ultra realistic", "cinematic lighting", "dramatic lighting", "volumetric lighting", "soft diffused lighting", "studio lighting", "rim lighting", "high dynamic range", "HDR", "rich contrast", "perfect exposure", "shallow depth of field", "creamy bokeh", "perfect composition", "elegant framing", "premium aesthetic", "polished look", "clean and crisp", "refined details", "high fidelity", "realistic textures", "intricate textures", "detailed surface texture", "global illumination", "ambient occlusion", "soft shadows", "realistic reflections", "high-end commercial look", "editorial photography style", "medium format look", "DSLR sharpness", "professional photography"];
 
@@ -13,13 +13,7 @@ function pick(n) {
   return out;
 }
 
-const quality_vars = pick(6);
+const quality_vars = pick(12);
 const quality_suffix = quality_vars.join(', ');
 
-return [{
-  json: {
-    ...$json,
-    quality_vars,
-    quality_suffix,
-  }
-}];
+return [{ json: { ...$json, quality_vars, quality_var_count: quality_vars.length, quality_suffix } }];
