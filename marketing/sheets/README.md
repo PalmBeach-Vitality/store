@@ -24,3 +24,5 @@ Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene pe
 
 | `6-quality-variables.csv` | `6-quality-variables` (Grok Imagine quality tokens) |
 
+| `7-unique-reel-creations-500.csv` | `7-unique-reel-creations-500` (500 unique ready-to-render reel prompts) |
+

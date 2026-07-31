@@ -20,3 +20,15 @@ Append to Imagine / still prompts:
 ## FDA note
 Prefer `lab_preferred`. Pause/avoid tokens that imply human skin, wellness hype, or dreamy lifestyle (see JSON `avoid_for_fda_human_implication`).
 Also filter scene briefs that show hands/injection when generating research-safe reels.
+
+## 500 unique creations (canonical)
+Use these for production Reel Studio / Grok Imagine runs:
+
+| File | Role |
+|---|---|
+| `pbvita-500-unique-reel-creations.json` | Full library |
+| `sheets/7-unique-reel-creations-500.csv` | Sheets tab for n8n pick-one-per-run |
+| `pbvita-500-unique-reel-creations.audit.json` | Uniqueness + FDA audit |
+
+Each row = unique scene_id + unique quality bundle + full FDA-framed `video_prompt`.
+
