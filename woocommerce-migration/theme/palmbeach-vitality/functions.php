@@ -902,10 +902,10 @@ add_action('woocommerce_archive_description', 'pbv_render_peptide_pens_archive_h
  */
 function pbv_weight_loss_collection_header_html() {
     $img = esc_url(pbv_asset_uri('assets/images/weight-loss-header.jpg'));
-    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Metabolic Vial Compounds Collection">'
+    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Metabolic Compounds Vial Collection">'
         . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
         . '<div class="pbv-cat-banner__content">'
-        . '<p class="pbv-cat-banner__title">Metabolic Vial Compounds <span>Collection</span></p>'
+        . '<p class="pbv-cat-banner__title">Metabolic Compounds Vial <span>Collection</span></p>'
         . '<p>Discover our premium range of pre-mixed, ready-to-use metabolic research compounds—no reconstitution or mixing required. Each sterile multi-dose research pen is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial for those who demand consistent and precise research protocols.</p>'
         . '<p>Whether you\'re looking for single compounds like Semaglutide, Tirzepatide, or advanced blends our pre-mixed pens are available in multiple strengths to perfectly match your protocol needs. For Research-use-only. Not evaluated by the FDA.</p>'
         . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass Spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust. High-quality, hassle-free, and made for those who demand the best.</p>'
