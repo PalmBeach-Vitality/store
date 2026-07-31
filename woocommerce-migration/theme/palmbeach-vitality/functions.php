@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.8');
+define('PBV_THEME_VERSION', '2.8.9');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -895,6 +895,35 @@ function pbv_render_peptide_pens_archive_header() {
     echo pbv_peptide_pens_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action('woocommerce_archive_description', 'pbv_render_peptide_pens_archive_header', 3);
+
+/**
+ * Weight Loss category collection header (lab image + centered copy).
+ * Sits above the Weight Loss card title image.
+ */
+function pbv_weight_loss_collection_header_html() {
+    $img = esc_url(pbv_asset_uri('assets/images/weight-loss-header.jpg'));
+    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Metabolic Vial Compounds Collection">'
+        . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
+        . '<div class="pbv-cat-banner__content">'
+        . '<p class="pbv-cat-banner__title">Metabolic Vial Compounds <span>Collection</span></p>'
+        . '<p>Discover our premium range of pre-mixed, ready-to-use metabolic research compounds—no reconstitution or mixing required. Each sterile multi-dose research pen is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial for those who demand consistent and precise research protocols.</p>'
+        . '<p>Whether you\'re looking for single compounds like Semaglutide, Tirzepatide, or advanced blends our pre-mixed pens are available in multiple strengths to perfectly match your protocol needs. For Research-use-only. Not evaluated by the FDA.</p>'
+        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass Spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust. High-quality, hassle-free, and made for those who demand the best.</p>'
+        . '<p>Shop our full collection of pre-mixed metabolic research compounds and elevate your research today.</p>'
+        . '</div>'
+        . '</section>';
+}
+
+/**
+ * Render Weight Loss lab banner above the Weight Loss card header.
+ */
+function pbv_render_weight_loss_archive_header() {
+    if (!function_exists('is_product_category') || !is_product_category('weight-loss')) {
+        return;
+    }
+    echo pbv_weight_loss_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action('woocommerce_archive_description', 'pbv_render_weight_loss_archive_header', 3);
 
 /**
  * Category header cards (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
