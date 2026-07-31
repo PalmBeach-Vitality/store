@@ -2,329 +2,281 @@
 
 **Owner:** Salvatore (designer)  
 **Workflow name in n8n:** `PBVita — Reel Studio`  
-**Purpose:** Generate FDA-compliant **9:16 reel MP4s** via Creatomate from the same compound + Grok science pipeline. Separate from Buffer and from Figma Content Studio.
+**Purpose:** FDA-compliant **9:16 reel MP4s** via Creatomate. Separate from the live Buffer daily workflow.
 
-> We will go **one node at a time**. After each node: Execute → confirm output → stop and tell me before the next node.
+> Go **one node at a time**. After each: Execute → confirm → reply before the next.
 
 ---
 
-## KEEP / DUPLICATE / NEW / DELETE — read this first
+## KEEP / DUPLICATE / NEW / DELETE
 
-You asked: *“KEEP means we don’t need to duplicate, correct?”*
-
-**No.** Here is the exact meaning:
-
-| Word | What you do |
+| Word | Meaning |
 |---|---|
-| **DUPLICATE workflow** | One-time: copy an existing workflow so Buffer / Figma Studio stay untouched |
-| **KEEP** | In that copy, **leave this node** — do **not** delete it. You still “have” it because of the duplicate |
-| **TWEAK** | KEEP the node, then change 1–2 settings / fields |
-| **NEW** | Add a fresh node that did not exist before |
-| **DELETE / STRIP** | Remove this node from the copy (Buffer, Figma export, etc.) |
+| **Duplicate** | One-time copy of your **live Buffer daily** workflow |
+| **KEEP** | In the copy, **leave this node** (do not delete). You already have it from the duplicate |
+| **TWEAK** | KEEP + change a setting |
+| **NEW** | Add a fresh node |
+| **DELETE / STRIP** | Remove from the copy only |
 
-**So:**
-1. **Duplicate** Figma Content Studio (or copy the Sheets→Grok→IF segment) **once**.
-2. **KEEP** Manual → Sheets → Filter → Limit → Prep → Grok → Parse → IF.
-3. **DELETE** Figma / Imagine / Buffer / Sheets Figma-queue nodes from the copy.
-4. **NEW** Creatomate render + wait + status + Sheets reel queue.
-
-You are **not** rebuilding Grok from scratch. You are **not** skipping the duplicate step either.
+**KEEP ≠ skip duplicating.** Duplicate once → KEEP the Grok front half → DELETE image/Buffer tail → NEW Creatomate nodes.
 
 ---
 
-## Preferred start method
+## Your current live nodes (source of truth)
 
-### Option A (recommended)
-1. Open workflow **`PBVita — Figma Content Studio`**
-2. Top-right **⋯ → Duplicate**
-3. Rename duplicate to **`PBVita — Reel Studio`**
-4. Save
-5. Follow **DELETE** list below, then we add Creatomate nodes one by one
-
-### Option B (if Figma Studio not built yet)
-1. Open the **Buffer daily** workflow
-2. **⋯ → Duplicate** → rename `PBVita — Reel Studio`
-3. **DELETE** every Buffer / Figma_export / social node
-4. KEEP Sheets → Filter → Limit → Grok → Parse → IF
-
-**Never edit the live Buffer workflow in place.**
-
----
-
-## End-to-end chain (target)
+Duplicate **this** chain (Buffer daily), not any Figma-named workflow:
 
 ```text
-Manual_Trigger
-  → Sheets_Read_Compounds
-  → Filter_Active
-  → Limit_1
-  → Prep_Compound
-  → Build_Grok_Body   (optional; KEEP if you already use it)
+Schedule (daily)
+  → Sheets read queue
+  → Filter Active
+  → Pick_week_compound      (if present)
+  → Prep_day_variant
+  → Limit                   (if present; Max Items = 1)
+  → Grok                    (HTTP / Build body — whatever you use)
+  → Parse_Grok
+  → IF compliance_ok
+       → Build_spotlight_html
+       → Render_spotlight
+       → Save_render_url
+       → Create a post      (Buffer)
+       → Sheets writeback   (if present)
+```
+
+Disabled leftovers you may still see on canvas (do **not** re-enable in Reel Studio):  
+`Wait`, `Figma_export`, `Resolve_Image`, `Save_figma_image` — **DELETE** them from the Reel copy.
+
+### Field names (no `figma_`)
+
+Use Parse_Grok fields as you have them now:
+
+| Use in Reel Studio | Typical Parse_Grok key |
+|---|---|
+| Headline | `headline` |
+| Subhead | `subhead` |
+| Bullets | `bullet_1`, `bullet_2`, `bullet_3` |
+| CTA | `cta` |
+| Captions | `ig_caption_draft`, `fb_caption_draft` |
+| Hook / VO | `reel_hook` or `tiktok_hook`; `vo_script` or `tiktok_script_draft` |
+| Gate | `compliance_ok`, `compliance_flags` |
+
+> If your Parse_Grok still shows old keys when you Execute, tell me the exact keys from the output panel — we map to those. Do **not** rename live Buffer Parse until Reel Studio is stable.
+
+---
+
+## Phase 0 — Outside n8n (once)
+
+### 0A) Creatomate
+1. [creatomate.com](https://creatomate.com) — trial OK  
+2. API key → n8n Header Auth credential `Creatomate PBVita`  
+   - Header name: `Authorization`  
+   - Value: `Bearer YOUR_KEY`
+
+### 0B) Template 9:16
+Dynamic element names (match exactly in HTTP mods):
+
+| Dynamic name | Maps from |
+|---|---|
+| `Headline` | `headline` |
+| `Subhead` | `subhead` |
+| `Bullet-1` | `bullet_1` |
+| `Bullet-2` | `bullet_2` |
+| `Bullet-3` | `bullet_3` |
+| `CTA` | `cta` |
+| `Disclaimer` | fixed research-use line |
+| `Hook` | `reel_hook` / `tiktok_hook` (optional) |
+
+Copy **template_id** + API Integration **cURL**.
+
+### 0C) Sheets tab `4-reel-queue`
+Import `marketing/sheets/4-reel-queue.csv` (headers only).
+
+---
+
+## Phase 1 — Duplicate + strip
+
+1. Open your **live Buffer daily** workflow  
+2. **⋯ → Duplicate**  
+3. Rename → **`PBVita — Reel Studio`**  
+4. Save  
+
+### DELETE from the Reel copy only
+
+| Delete | Why |
+|---|---|
+| `Build_spotlight_html` | Still-image path |
+| `Render_spotlight` | HCTI still render |
+| `Save_render_url` | Still URL for Buffer |
+| `Create a post` | Buffer — keep live workflow only |
+| Sheets writeback that updates Buffer/spotlight post counts | Don’t touch daily rotation from Reel runs |
+| `Figma_export`, `Resolve_Image`, `Save_figma_image`, old `Wait` | Dead Figma path |
+
+### KEEP in the Reel copy
+
+| Keep |
+|---|
+| Trigger (`Schedule` → change to **Manual Trigger** for smoke tests, or leave Schedule disabled) |
+| Sheets read (`1-compounds-pens`) |
+| `Filter Active` |
+| `Pick_week_compound` (if you use it) |
+| `Prep_day_variant` |
+| `Limit` (must be 1) |
+| `Grok` (+ Build body node if you have one) |
+| `Parse_Grok` |
+| `IF` / compliance gate |
+| False-path stop/log if you have one |
+
+**Stop. Reply: “Phase 1 done”** before Node tweaks.
+
+---
+
+## Target chain after strip
+
+```text
+Manual_Trigger          (or Schedule — prefer Manual for first tests)
+  → Sheets_Read
+  → Filter Active
+  → Pick_week_compound  (KEEP if present)
+  → Prep_day_variant    (TWEAK: add template_id)
+  → Limit
   → Grok
   → Parse_Grok
-  → IF_Compliance
-       false → Log_Flags
-       true  → Map_Creatomate_Mods     ← NEW
-            → Creatomate_Render        ← NEW
-            → Wait_Render              ← NEW
-            → Creatomate_Status        ← NEW
-            → Switch_Status            ← NEW
+  → IF compliance_ok
+       false → (stop / log)
+       true  → Map_Creatomate_Mods      ← NEW
+            → Creatomate_Render         ← NEW
+            → Wait_Render               ← NEW
+            → Creatomate_Status         ← NEW
+            → Switch_Status             ← NEW
                  succeeded → Save_Reel_URL → Sheets_Append_Reel
-                 processing → back to Wait_Render
+                 processing → Wait_Render
                  failed → Log_Render_Fail
 ```
 
 ---
 
-## FDA hard rules (unchanged)
+## Phase 2 — KEEP nodes one by one
 
-- Laboratory / in-vitro research only  
-- Not for human use  
-- Chemical names only (no KLOW / Wolverine / GLOW)  
-- Mandatory disclaimer on captions + on-screen end card  
-- No disease / structure-function / wellness claims  
-- `compliance_ok !== true` → **do not** call Creatomate  
+### Node 1 — Trigger
+**Action:** KEEP (+ optional rename to Manual for tests)  
+**After:** —  
+**Before:** Sheets read  
+**Check:** Workflow title = `PBVita — Reel Studio`. Live Buffer workflow still has its own Schedule.
 
----
-
-## Phase 0 — Outside n8n (do once before nodes)
-
-### 0A) Creatomate account
-1. Sign up at [creatomate.com](https://creatomate.com) (trial ~50 credits).
-2. Copy API key (API Integration / project settings).
-3. In n8n later: Credentials → **Header Auth**  
-   - Name: `Authorization`  
-   - Value: `Bearer YOUR_CREATOMATE_API_KEY`  
-   - Credential label: `Creatomate PBVita`
-
-### 0B) First template (9:16)
-1. Templates → **New** → size **9:16 Vertical** (1080×1920).
-2. Design to match brand card: deep navy, hex/grid, teal accents, chemical name dominant (`spotlight-card.html` look).
-3. Create elements and mark **dynamic** (exact names matter for n8n):
-
-| Dynamic name | Content |
-|---|---|
-| `Headline` | chemical name |
-| `Subhead` | biochemical class |
-| `Bullet-1` | research note 1 |
-| `Bullet-2` | format note |
-| `Bullet-3` | research-use restriction |
-| `CTA` | View laboratory listing |
-| `Disclaimer` | For laboratory research use only. Not for human use or consumption. |
-| `Hook` (optional) | short top line |
-
-4. Save template → **Use Template → API Integration** → copy **template_id** and the **cURL**.
-5. Paste template_id into a note; we need it for `Prep_Compound` / `Map_Creatomate_Mods`.
-
-### 0C) Sheets tab
-1. Same spreadsheet as spotlights.
-2. New tab exactly: **`4-reel-queue`**
-3. Import headers from `marketing/sheets/4-reel-queue.csv` (or type the header row).
-
-| Columns |
-|---|
-| `compound_id` |
-| `compound_name` |
-| `reel_hook` |
-| `figma_headline` |
-| `figma_subhead` |
-| `bullet_1` |
-| `bullet_2` |
-| `bullet_3` |
-| `cta` |
-| `ig_caption_draft` |
-| `video_url` |
-| `template_id` |
-| `creatomate_render_id` |
-| `compliance_ok` |
-| `compliance_flags` |
-| `created_at` |
-| `used_in_buffer` |
-
----
-
-## Phase 1 — Duplicate + strip (one sitting)
-
-### DELETE from the Reel Studio copy
-
-Remove or disable these if present:
-
-- Anything named Buffer / Create a post  
-- `Figma_export` / Figma HTTP / Save Figma Image  
-- `Grok_Imagine` / Save_Image_URL / Sheets_Update_Image (Figma path)  
-- `Sheets_Save_Queue` that writes to **`3-figma-content-queue`** (we replace with reel queue later)  
-- Any Slack/email leftovers you don’t want  
-
-### KEEP (do not delete)
-
-- `Manual_Trigger` (or Schedule)  
-- `Sheets_Read_Compounds`  
-- `Filter_Active`  
-- `Limit_1`  
-- `Prep_Compound` (we TWEAK next)  
-- `Build_Grok_Body` (if present)  
-- `Grok`  
-- `Parse_Grok`  
-- `IF_Compliance`  
-- `Log_Flags` (false branch)  
-
-**Stop here.** Message: “Phase 1 done — duplicate + strip complete.”  
-Then we go node-by-node from Phase 2.
-
----
-
-## Phase 2 — Confirm KEEP nodes (one by one)
-
-For each: open node → Execute step (or run to here) → confirm → next.
-
-### Node 1 — `Manual_Trigger`
+### Node 2 — Sheets read
 **Action:** KEEP  
-**After:** (start)  
-**Before:** `Sheets_Read_Compounds`  
-**Check:** Trigger exists; workflow name is `PBVita — Reel Studio`.
+**After:** Trigger  
+**Before:** `Filter Active`  
+**Check:** Sheet `1-compounds-pens`; rows return.
 
-### Node 2 — `Sheets_Read_Compounds`
+### Node 3 — `Filter Active`
 **Action:** KEEP  
-**After:** `Manual_Trigger`  
-**Before:** `Filter_Active`  
-**Check:** Document = spotlight spreadsheet; Sheet = `1-compounds-pens`; many rows return.
+**After:** Sheets read  
+**Before:** `Pick_week_compound` or `Limit`  
+**Check:** `status` = `Active`.
 
-### Node 3 — `Filter_Active`
+### Node 4 — `Pick_week_compound` (if present)
 **Action:** KEEP  
-**After:** `Sheets_Read_Compounds`  
-**Before:** `Limit_1`  
-**Check:** `status` equals `Active`.
+**After:** `Filter Active`  
+**Before:** `Prep_day_variant`  
+**Check:** One week’s compound logic still works (or bypass with a compound_id filter for smoke).
 
-### Node 4 — `Limit_1`
-**Action:** KEEP  
-**After:** `Filter_Active`  
-**Before:** `Prep_Compound`  
-**Check:** Max Items = `1`. Smoke tip: temporarily filter `compound_id` = your BPC-157 row.
-
-### Node 5 — `Prep_Compound`
+### Node 5 — `Prep_day_variant`
 **Action:** KEEP + TWEAK  
-**After:** `Limit_1`  
-**Before:** `Build_Grok_Body` or `Grok`  
+**After:** Pick / Filter  
+**Before:** `Limit` or `Grok`  
 **Include Other Input Fields:** ON  
 
-Add/update:
+Add:
 
 | Name | Value |
 |---|---|
-| `daily_angle` | `Reel / short-form catalog identity` (or keep day-angle expression) |
-| `daily_image_brief` | `9:16 navy hex-grid reel; compound name dominant; no lifestyle` |
-| `template_id` | `YOUR_CREATOMATE_TEMPLATE_ID` (fixed for v1) |
+| `template_id` | your Creatomate template UUID |
 | `output_format` | `reel_9x16` |
 
-**Check:** 1 item; `compound_name` + `template_id` present.
+Keep existing `daily_angle` / `daily_image_brief` if already set. Optional reel angle:
 
-### Node 6 — `Build_Grok_Body` (if you use Code body builder)
-**Action:** KEEP + small TWEAK  
-**After:** `Prep_Compound`  
+| Name | Value |
+|---|---|
+| `daily_angle` | `Reel / short-form catalog identity` (or leave weekday map) |
+
+**Check:** 1 item path still has `compound_name` + new `template_id`.
+
+### Node 6 — `Limit`
+**Action:** KEEP  
+**After:** `Prep_day_variant` (or Filter)  
 **Before:** `Grok`  
+**Check:** Max Items = **1**.
 
-Append to user content (or swap user prompt file later):
+### Node 7 — `Grok` (+ body builder if any)
+**Action:** KEEP  
+**After:** `Limit` / Prep  
+**Before:** `Parse_Grok`  
+**TWEAK (user prompt add-on only):**
 
 ```text
-This run is PBVita Reel Studio (Creatomate). Prioritize:
-- creative_brief for on-screen text (headline, subhead, 3 bullets, CTA)
-- platform_copy.tiktok.hook as short reel hook (chemical name + research compound)
-- platform_copy.tiktok.spoken_script as 12-20s catalog VO (science only)
-- Instagram + Facebook captions still require the mandatory disclaimer
-Not for Buffer yet. Not for Figma queue.
+This run is PBVita Reel Studio (Creatomate). Prioritize on-screen creative brief
+(headline, subhead, 3 bullets, CTA), a short reel hook, and 12-20s science-only VO.
+IG/FB captions still need the mandatory disclaimer. Not for Buffer.
 ```
 
-**Check:** `grok_request_body_string` starts with `{"model":"grok-3"`.
-
-### Node 7 — `Grok`
-**Action:** KEEP  
-**After:** `Prep_Compound` / `Build_Grok_Body`  
-**Before:** `Parse_Grok`  
-**Check:** Same xAI credential as Buffer; raw body `={{ $json.grok_request_body_string }}`; returns `choices[0].message.content`.
+**Check:** Same xAI credential as live Buffer; JSON content returns.
 
 ### Node 8 — `Parse_Grok`
-**Action:** KEEP + TWEAK (map reel helpers)  
+**Action:** KEEP  
 **After:** `Grok`  
-**Before:** `IF_Compliance`  
+**Before:** IF compliance  
+**Check:** Output shows `headline`, `subhead`, `bullet_1/2/3`, `cta`, `ig_caption_draft`, `compliance_ok` (your real keys). No nicknames. Disclaimer on captions.
 
-If using Code parse: KEEP existing FDA parse; ensure these fields exist (add if missing):
-
-| Field | Source |
-|---|---|
-| `figma_headline` / `bullet_1/2/3` / `cta` | creative_brief (already) |
-| `ig_caption_draft` / `fb_caption_draft` | platform_copy (already) |
-| `compliance_ok` / `compliance_flags` | compliance_check + disclaimer checks |
-| `reel_hook` | `platform_copy.tiktok.hook` (or headline fallback) |
-| `vo_script` | `platform_copy.tiktok.spoken_script` |
-| `template_id` | from `Prep_Compound` / prior |
-| `created_at` | `$now.toISO()` |
-| `used_in_buffer` | `no` |
-
-**Check:** Chemical names only; captions end with disclaimer; `compliance_ok` boolean.
-
-### Node 9 — `IF_Compliance`
+### Node 9 — IF `compliance_ok`
 **Action:** KEEP  
 **After:** `Parse_Grok`  
 **Before (true):** `Map_Creatomate_Mods`  
-**Before (false):** `Log_Flags`  
-**Check:** Condition `compliance_ok` is true.
+**Before (false):** stop/log  
+**Check:** True only when compliant.
 
-### Node 10 — `Log_Flags`
-**Action:** KEEP  
-**After:** `IF_Compliance` false  
-**Before:** end  
-**Check:** Shows `compliance_flags`; does **not** call Creatomate.
-
-**Stop after Node 10 confirmation.** Next phase = NEW Creatomate nodes.
+**Stop after Node 9.** Next = NEW Creatomate nodes.
 
 ---
 
-## Phase 3 — NEW Creatomate nodes (one by one)
+## Phase 3 — NEW Creatomate nodes
 
-### Node 11 — `Map_Creatomate_Mods`
+### Node 10 — `Map_Creatomate_Mods`
 **Action:** NEW  
-**After:** `IF_Compliance` (true)  
+**After:** IF true  
 **Before:** `Creatomate_Render`  
+Type: **Edit Fields** · Include Other Input Fields: **ON**
 
-Type: **Edit Fields**  
-Include Other Input Fields: ON  
-
-| Name | Value (fx) |
+| Name | Value |
 |---|---|
-| `mod_Headline` | `={{ $json.figma_headline || $json.compound_name }}` |
-| `mod_Subhead` | `={{ $json.figma_subhead }}` |
-| `mod_Bullet_1` | `={{ $json.bullet_1 \|\| $json.figma_bullet_1 }}` |
-| `mod_Bullet_2` | `={{ $json.bullet_2 \|\| $json.figma_bullet_2 }}` |
-| `mod_Bullet_3` | `={{ $json.bullet_3 \|\| $json.figma_bullet_3 }}` |
-| `mod_CTA` | `={{ $json.cta \|\| $json.figma_cta \|\| 'View laboratory listing' }}` |
+| `mod_Headline` | `={{ $json.headline \|\| $json.compound_name }}` |
+| `mod_Subhead` | `={{ $json.subhead }}` |
+| `mod_Bullet_1` | `={{ $json.bullet_1 }}` |
+| `mod_Bullet_2` | `={{ $json.bullet_2 }}` |
+| `mod_Bullet_3` | `={{ $json.bullet_3 }}` |
+| `mod_CTA` | `={{ $json.cta \|\| 'View laboratory listing' }}` |
 | `mod_Disclaimer` | `For laboratory research use only. Not for human use or consumption.` |
-| `mod_Hook` | `={{ $json.reel_hook \|\| $json.figma_headline }}` |
-| `template_id` | `={{ $json.template_id }}` |
+| `mod_Hook` | `={{ $json.reel_hook \|\| $json.tiktok_hook \|\| $json.headline }}` |
+| `template_id` | `={{ $json.template_id \|\| $('Prep_day_variant').item.json.template_id }}` |
 
-> Dynamic names must match Creatomate element names exactly (`Headline` vs `mod_Headline` is only our n8n helper — map in the HTTP body to `Headline`).
-
-**Check:** All mod_* strings filled; no nicknames.
+**Check:** mods filled; chemical names only.
 
 ---
 
-### Node 12 — `Creatomate_Render`
+### Node 11 — `Creatomate_Render`
 **Action:** NEW  
 **After:** `Map_Creatomate_Mods`  
 **Before:** `Wait_Render`  
-
 Type: **HTTP Request**
 
 | Setting | Value |
 |---|---|
 | Method | `POST` |
 | URL | `https://api.creatomate.com/v2/renders` |
-| Authentication | Header Auth → `Creatomate PBVita` |
-| Send Body | ON |
-| Body Content Type | JSON |
+| Auth | Header Auth → `Creatomate PBVita` |
+| Body | JSON |
 
-**Easiest setup:** Creatomate editor → Use Template → API Integration → **Import cURL** into this node, then switch modifications to expressions.
-
-Example body shape (fx / JSON expression):
+Import Creatomate **cURL**, then set modifications from mods:
 
 ```text
 ={{ JSON.stringify({
@@ -342,78 +294,61 @@ Example body shape (fx / JSON expression):
 }) }}
 ```
 
-**Check:** Response `status` is `planned` (or similar); note `id` and future `url`.
+**Check:** `status` ≈ `planned`; note `id`.
 
 ---
 
-### Node 13 — `Wait_Render`
+### Node 12 — `Wait_Render`
 **Action:** NEW  
-**After:** `Creatomate_Render` (first time) **or** `Switch_Status` processing loop  
+**After:** `Creatomate_Render` or processing loop  
 **Before:** `Creatomate_Status`  
-
-Type: **Wait**  
-Duration: start **70 seconds** (adjust to ~2× your template’s render time from Creatomate API Log).
-
-**Check:** Wait completes without error.
+Type: **Wait** · start **70s** (tune from Creatomate API Log).
 
 ---
 
-### Node 14 — `Creatomate_Status`
+### Node 13 — `Creatomate_Status`
 **Action:** NEW  
 **After:** `Wait_Render`  
 **Before:** `Switch_Status`  
+Type: **HTTP Request** · GET  
 
-Type: **HTTP Request**
+```text
+={{ 'https://api.creatomate.com/v1/renders/' + $('Creatomate_Render').item.json.id }}
+```
 
-| Setting | Value |
-|---|---|
-| Method | `GET` |
-| URL | `={{ 'https://api.creatomate.com/v1/renders/' + $('Creatomate_Render').item.json.id }}` |
-| Authentication | same Creatomate Header Auth |
+(If POST returned an array, use `$('Creatomate_Render').item.json[0].id`.)
 
-> If Creatomate returns an **array**, take `[0]` or use the id from the first render object. If Import cURL returned an array from POST, use `$json[0].id` consistently.
-
-**Check:** JSON includes `status` and (when done) `url`.
+Same Creatomate auth.
 
 ---
 
-### Node 15 — `Switch_Status`
+### Node 14 — `Switch_Status`
 **Action:** NEW  
 **After:** `Creatomate_Status`  
-**Before:** succeeded / processing / failed branches  
-
-Type: **Switch** on `status`:
 
 | Output | Rule |
 |---|---|
-| `succeeded` | equals `succeeded` |
-| `failed` | equals `failed` |
-| `processing` | matches regex `(planned\|transcribing\|waiting\|rendering)` |
+| `succeeded` | `status` equals `succeeded` |
+| `failed` | `status` equals `failed` |
+| `processing` | matches `(planned\|transcribing\|waiting\|rendering)` |
 
-Wiring:
-- **processing** → connect back to `Wait_Render`
-- **failed** → `Log_Render_Fail`
-- **succeeded** → `Save_Reel_URL`
-
-**Check:** Test run hits `succeeded` after 1–2 loops.
+- processing → `Wait_Render`  
+- failed → `Log_Render_Fail`  
+- succeeded → `Save_Reel_URL`
 
 ---
 
-### Node 16 — `Log_Render_Fail`
+### Node 15 — `Log_Render_Fail`
 **Action:** NEW  
-**After:** `Switch_Status` failed  
-**Before:** end  
-
-Edit Fields: `stopped=creatomate_failed`, `error={{ $json.errorMessage || $json.error \|\| JSON.stringify($json) }}`
+**After:** Switch failed  
+Fields: `stopped=creatomate_failed`, error message from response.
 
 ---
 
-### Node 17 — `Save_Reel_URL`
+### Node 16 — `Save_Reel_URL`
 **Action:** NEW  
-**After:** `Switch_Status` succeeded  
+**After:** Switch succeeded  
 **Before:** `Sheets_Append_Reel`  
-
-Edit Fields; Include Other Input Fields ON **or** pull from Parse:
 
 | Name | Value |
 |---|---|
@@ -421,95 +356,68 @@ Edit Fields; Include Other Input Fields ON **or** pull from Parse:
 | `creatomate_render_id` | `={{ $json.id }}` |
 | `compound_id` | `={{ $('Parse_Grok').item.json.compound_id }}` |
 | `compound_name` | `={{ $('Parse_Grok').item.json.compound_name }}` |
-| `reel_hook` | `={{ $('Parse_Grok').item.json.reel_hook \|\| $('Map_Creatomate_Mods').item.json.mod_Hook }}` |
-| `figma_headline` | `={{ $('Parse_Grok').item.json.figma_headline }}` |
-| `figma_subhead` | `={{ $('Parse_Grok').item.json.figma_subhead }}` |
-| `bullet_1` | `={{ $('Parse_Grok').item.json.bullet_1 \|\| $('Parse_Grok').item.json.figma_bullet_1 }}` |
-| `bullet_2` | `={{ $('Parse_Grok').item.json.bullet_2 \|\| $('Parse_Grok').item.json.figma_bullet_2 }}` |
-| `bullet_3` | `={{ $('Parse_Grok').item.json.bullet_3 \|\| $('Parse_Grok').item.json.figma_bullet_3 }}` |
-| `cta` | `={{ $('Parse_Grok').item.json.cta \|\| $('Parse_Grok').item.json.figma_cta }}` |
+| `reel_hook` | `={{ $('Map_Creatomate_Mods').item.json.mod_Hook }}` |
+| `headline` | `={{ $('Parse_Grok').item.json.headline }}` |
+| `subhead` | `={{ $('Parse_Grok').item.json.subhead }}` |
+| `bullet_1` | `={{ $('Parse_Grok').item.json.bullet_1 }}` |
+| `bullet_2` | `={{ $('Parse_Grok').item.json.bullet_2 }}` |
+| `bullet_3` | `={{ $('Parse_Grok').item.json.bullet_3 }}` |
+| `cta` | `={{ $('Parse_Grok').item.json.cta }}` |
 | `ig_caption_draft` | `={{ $('Parse_Grok').item.json.ig_caption_draft }}` |
 | `template_id` | `={{ $('Map_Creatomate_Mods').item.json.template_id }}` |
 | `compliance_ok` | `={{ $('Parse_Grok').item.json.compliance_ok }}` |
 | `compliance_flags` | `={{ $('Parse_Grok').item.json.compliance_flags }}` |
-| `created_at` | `={{ $('Parse_Grok').item.json.created_at \|\| $now.toISO() }}` |
+| `created_at` | `={{ $now.toISO() }}` |
 | `used_in_buffer` | `no` |
 
-**Check:** Open `video_url` in browser — MP4 plays; chemical name correct; disclaimer visible.
+**Check:** Open `video_url` — MP4 OK, chemical name, disclaimer on-screen.
 
 ---
 
-### Node 18 — `Sheets_Append_Reel`
+### Node 17 — `Sheets_Append_Reel`
 **Action:** NEW  
 **After:** `Save_Reel_URL`  
-**Before:** end  
-
-Google Sheets → **Append** row  
-Sheet: **`4-reel-queue`**  
-Map all columns from `Save_Reel_URL`.
-
-**Check:** New row appears; `video_url` filled; `used_in_buffer=no`.
+Google Sheets **Append** → tab **`4-reel-queue`** · map columns above.
 
 ---
 
-## Node cheat sheet
+## Cheat sheet
 
 | # | Node | Action | After | Before |
 |---|---|---|---|---|
-| 1 | Manual_Trigger | KEEP | — | Sheets_Read |
-| 2 | Sheets_Read_Compounds | KEEP | Manual | Filter_Active |
-| 3 | Filter_Active | KEEP | Sheets_Read | Limit_1 |
-| 4 | Limit_1 | KEEP | Filter_Active | Prep_Compound |
-| 5 | Prep_Compound | KEEP+TWEAK | Limit_1 | Grok / Build |
-| 6 | Build_Grok_Body | KEEP+TWEAK | Prep | Grok |
-| 7 | Grok | KEEP | Build/Prep | Parse_Grok |
-| 8 | Parse_Grok | KEEP+TWEAK | Grok | IF_Compliance |
-| 9 | IF_Compliance | KEEP | Parse | Map / Log_Flags |
-| 10 | Log_Flags | KEEP | IF false | end |
-| 11 | Map_Creatomate_Mods | NEW | IF true | Creatomate_Render |
-| 12 | Creatomate_Render | NEW | Map | Wait_Render |
-| 13 | Wait_Render | NEW | Render / loop | Creatomate_Status |
-| 14 | Creatomate_Status | NEW | Wait | Switch_Status |
-| 15 | Switch_Status | NEW | Status | Save / Wait / Fail |
-| 16 | Log_Render_Fail | NEW | Switch failed | end |
-| 17 | Save_Reel_URL | NEW | Switch succeeded | Sheets_Append_Reel |
-| 18 | Sheets_Append_Reel | NEW | Save_Reel_URL | end |
+| 1 | Trigger | KEEP | — | Sheets |
+| 2 | Sheets read | KEEP | Trigger | Filter Active |
+| 3 | Filter Active | KEEP | Sheets | Pick / Limit |
+| 4 | Pick_week_compound | KEEP | Filter | Prep_day_variant |
+| 5 | Prep_day_variant | KEEP+TWEAK | Pick/Filter | Limit |
+| 6 | Limit | KEEP | Prep | Grok |
+| 7 | Grok | KEEP | Limit | Parse_Grok |
+| 8 | Parse_Grok | KEEP | Grok | IF |
+| 9 | IF compliance_ok | KEEP | Parse_Grok | Map / stop |
+| 10 | Map_Creatomate_Mods | NEW | IF true | Creatomate_Render |
+| 11 | Creatomate_Render | NEW | Map | Wait_Render |
+| 12 | Wait_Render | NEW | Render/loop | Creatomate_Status |
+| 13 | Creatomate_Status | NEW | Wait | Switch_Status |
+| 14 | Switch_Status | NEW | Status | Save / Wait / Fail |
+| 15 | Log_Render_Fail | NEW | failed | end |
+| 16 | Save_Reel_URL | NEW | succeeded | Sheets_Append_Reel |
+| 17 | Sheets_Append_Reel | NEW | Save_Reel_URL | end |
 
 ---
 
 ## Smoke checklist
 
-- [ ] Live Buffer workflow untouched  
-- [ ] Reel Studio is a **duplicate**, not an edit-in-place  
-- [ ] KEEP nodes still run Limit=1 → Grok → compliance  
-- [ ] Creatomate template 9:16 with dynamic names matching HTTP mods  
-- [ ] `compliance_ok=false` never hits Creatomate  
-- [ ] Succeeded MP4 looks on-brand; chemical names only  
-- [ ] Row in `4-reel-queue` with `video_url`  
-- [ ] No Buffer node yet  
+- [ ] Live Buffer daily untouched (still has `Create a post` + `Render_spotlight`)  
+- [ ] Reel Studio is a **duplicate**  
+- [ ] No `Build_spotlight_html` / `Render_spotlight` / `Create a post` in Reel Studio  
+- [ ] No `figma_*` node names in Reel Studio  
+- [ ] Limit = 1 → Grok → compliance still works  
+- [ ] Creatomate MP4 on-brand; row in `4-reel-queue`  
 
 ---
 
-## Later (not now)
+## How we proceed
 
-- ElevenLabs VO inside Creatomate template  
-- Second template (3-bullet / FAQ reel)  
-- Buffer draft using `video_url` + `ig_caption_draft` (duplicate Buffer node only then)  
-- Runway B-roll as `BG-Video` modification  
-
----
-
-## Related docs
-
-- Figma queue (static): `marketing/n8n-figma-content-studio.md`  
-- Science system prompt: `marketing/n8n-system-prompt-fixed.txt`  
-- Grok HTTP pattern: `marketing/n8n-finish-grok-node.md`  
-- Brand visual: `marketing/spotlight-card.html`  
-- Official Creatomate×n8n pattern: https://creatomate.com/blog/how-to-automate-video-creation-with-n8n  
-
----
-
-## How we’ll work next
-
-**Start at Phase 1** (duplicate + strip).  
-When done, reply: **“Phase 1 done”** — then we do **Node 1** confirmation and walk forward one node at a time.
+1. **Phase 1** — duplicate Buffer daily → strip image/Buffer nodes  
+2. Reply **“Phase 1 done”** and paste your **exact KEEP node names** from the canvas (in order) if any differ  
+3. We confirm Node 1 → Node 9, then add Creatomate nodes one at a time
