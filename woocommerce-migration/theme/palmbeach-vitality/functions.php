@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.7');
+define('PBV_THEME_VERSION', '2.8.8');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -873,7 +873,7 @@ add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_heade
  */
 function pbv_peptide_pens_collection_header_html() {
     $img = esc_url(pbv_asset_uri('assets/images/peptide-pens-header.jpg'));
-    return '<section class="pbv-cat-banner pbv-cat-banner--pens" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Pens Collection">'
+    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Pens Collection">'
         . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
         . '<div class="pbv-cat-banner__content">'
         . '<p class="pbv-cat-banner__title">Peptide Pens <span>Collection</span></p>'
