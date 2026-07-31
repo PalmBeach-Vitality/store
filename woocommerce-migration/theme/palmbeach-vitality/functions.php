@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.9.7');
+define('PBV_THEME_VERSION', '2.9.8');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -975,15 +975,15 @@ function pbv_category_title_images() {
         ),
         'weight-loss' => array(
             'file'   => 'assets/images/weight-loss-card.png',
-            'alt'    => 'Weight Loss',
-            'width'  => 1091,
-            'height' => 328,
+            'alt'    => 'Metabolic Accelerator',
+            'width'  => 1528,
+            'height' => 298,
         ),
         'weight-loss-pens' => array(
             'file'   => 'assets/images/weight-loss-pens-card.png',
-            'alt'    => 'Weight Loss Pens',
-            'width'  => 1102,
-            'height' => 328,
+            'alt'    => 'Delivery Cartridge',
+            'width'  => 1528,
+            'height' => 303,
         ),
     );
 }
@@ -1005,7 +1005,7 @@ function pbv_category_title_banner_html($slug) {
             'peptides'         => '/wp-content/uploads/2026/07/peptides-card.png',
             'peptide-pens'     => '/wp-content/uploads/2026/07/weight-loss-pens-card.png',
             'weight-loss'      => '/wp-content/uploads/2026/07/weight-loss-card.png',
-            'weight-loss-pens' => '/wp-content/uploads/2026/07/weight-loss-pens-card.png',
+            'weight-loss-pens' => '/wp-content/uploads/2026/07/peptide-pens-card-1.png',
         );
         if (!isset($uploads[$slug])) {
             return '';
