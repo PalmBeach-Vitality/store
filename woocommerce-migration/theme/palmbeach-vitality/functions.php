@@ -963,7 +963,7 @@ function pbv_category_title_images() {
     return array(
         'peptides' => array(
             'file'   => 'assets/images/peptides-card.png',
-            'alt'    => 'Peptides',
+            'alt'    => 'Delivery Cartridge',
             'width'  => 1102,
             'height' => 328,
         ),

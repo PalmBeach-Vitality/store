@@ -573,12 +573,14 @@ a:hover { opacity: 0.7; }
   box-shadow: none;
 }
 
-/* Peptide Pens card — match Peptide Pens Collection banner width */
-.tax-product_cat.term-peptide-pens .pbv-cat-title-image {
+/* Peptide Pens / Peptides cards — match collection banner width */
+.tax-product_cat.term-peptide-pens .pbv-cat-title-image,
+.tax-product_cat.term-peptides .pbv-cat-title-image {
   width: min(100% - 1.5rem, 64rem);
 }
 
-.tax-product_cat.term-peptide-pens .pbv-cat-title-image img {
+.tax-product_cat.term-peptide-pens .pbv-cat-title-image img,
+.tax-product_cat.term-peptides .pbv-cat-title-image img {
   max-width: 64rem;
 }
 
