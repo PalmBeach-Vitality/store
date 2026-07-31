@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.5');
+define('PBV_THEME_VERSION', '2.8.6');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -876,10 +876,10 @@ function pbv_peptide_pens_collection_header_html() {
     return '<section class="pbv-cat-banner pbv-cat-banner--pens" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Pens Collection">'
         . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
         . '<div class="pbv-cat-banner__content">'
+        . '<p class="pbv-cat-banner__title">Peptide Pens <span>Collection</span></p>'
         . '<p>Discover our premium range of pre-mixed, ready-to-use peptide pens—no reconstitution or mixing required. Each sterile multi-dose research pen is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial for those who demand consistent and precise research protocols.</p>'
         . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends our pre-mixed pens are available in multiple strengths to perfectly match your protocol needs. For Research-use-only. Not evaluated by the FDA.</p>'
-        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass Spectrometery testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
-        . '<p>High-quality, hassle-free, and made for those who demand the best.</p>'
+        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass Spectrometery testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust. High-quality, hassle-free, and made for those who demand the best.</p>'
         . '<p>Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
         . '</div>'
         . '</section>';
