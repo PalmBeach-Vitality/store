@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.4');
+define('PBV_THEME_VERSION', '2.8.5');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -866,6 +866,35 @@ function pbv_render_peptides_archive_header() {
     echo pbv_peptides_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_header', 3);
+
+/**
+ * Peptide Pens category collection header (lab image + centered copy).
+ * Sits above the Peptide Pens card title image.
+ */
+function pbv_peptide_pens_collection_header_html() {
+    $img = esc_url(pbv_asset_uri('assets/images/peptide-pens-header.jpg'));
+    return '<section class="pbv-cat-banner pbv-cat-banner--pens" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Pens Collection">'
+        . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
+        . '<div class="pbv-cat-banner__content">'
+        . '<p>Discover our premium range of pre-mixed, ready-to-use peptide pens—no reconstitution or mixing required. Each sterile multi-dose research pen is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial for those who demand consistent and precise research protocols.</p>'
+        . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends our pre-mixed pens are available in multiple strengths to perfectly match your protocol needs. For Research-use-only. Not evaluated by the FDA.</p>'
+        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass Spectrometery testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
+        . '<p>High-quality, hassle-free, and made for those who demand the best.</p>'
+        . '<p>Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
+        . '</div>'
+        . '</section>';
+}
+
+/**
+ * Render Peptide Pens lab banner above the Peptide Pens card header.
+ */
+function pbv_render_peptide_pens_archive_header() {
+    if (!function_exists('is_product_category') || !is_product_category('peptide-pens')) {
+        return;
+    }
+    echo pbv_peptide_pens_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action('woocommerce_archive_description', 'pbv_render_peptide_pens_archive_header', 3);
 
 /**
  * Category header cards (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
