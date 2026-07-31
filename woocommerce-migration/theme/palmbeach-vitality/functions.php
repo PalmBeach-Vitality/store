@@ -839,6 +839,35 @@ function pbv_ensure_product_categories() {
 }
 
 /**
+ * Peptides category collection header (lab image + centered copy).
+ * Sits above the Peptides card title image.
+ */
+function pbv_peptides_collection_header_html() {
+    $img = esc_url(pbv_asset_uri('assets/images/peptides-header.jpg'));
+    return '<section class="pbv-cat-banner" style="--pbv-cat-banner-image:url(' . $img . ')" aria-label="Peptide Vials Collection">'
+        . '<div class="pbv-cat-banner__overlay" aria-hidden="true"></div>'
+        . '<div class="pbv-cat-banner__content">'
+        . '<p class="pbv-cat-banner__title">Peptide Vials <span>Collection</span></p>'
+        . '<p>Discover our premium range of pre-mixed, ready-to-use peptide vials — no reconstitution or mixing required. Each sterile multi-dose vial is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial.</p>'
+        . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends such as KLOW our pre-mixed vials are designed for precise dosing and reliable results. Available in multiple strengths to perfectly match your protocol needs.</p>'
+        . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
+        . '<p>High-quality, hassle-free, and made for those who demand the best. Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
+        . '</div>'
+        . '</section>';
+}
+
+/**
+ * Render Peptides lab banner above the Peptides card header.
+ */
+function pbv_render_peptides_archive_header() {
+    if (!function_exists('is_product_category') || !is_product_category('peptides')) {
+        return;
+    }
+    echo pbv_peptides_collection_header_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+add_action('woocommerce_archive_description', 'pbv_render_peptides_archive_header', 3);
+
+/**
  * Category header cards (Peptides, Peptide Pens, Weight Loss, Weight Loss Pens).
  *
  * @return array<string,array{file:string,alt:string,width:int,height:int}>
