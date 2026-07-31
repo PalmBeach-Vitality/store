@@ -964,14 +964,14 @@ function pbv_category_title_images() {
         'peptides' => array(
             'file'   => 'assets/images/peptides-card.png',
             'alt'    => 'Synthesis Module',
-            'width'  => 1102,
-            'height' => 328,
+            'width'  => 1528,
+            'height' => 298,
         ),
         'peptide-pens' => array(
             'file'   => 'assets/images/peptide-pens-card.png',
-            'alt'    => 'Peptide Pens',
-            'width'  => 1102,
-            'height' => 328,
+            'alt'    => 'Dosage Controller',
+            'width'  => 1528,
+            'height' => 304,
         ),
         'weight-loss' => array(
             'file'   => 'assets/images/weight-loss-card.png',
@@ -1003,7 +1003,7 @@ function pbv_category_title_banner_html($slug) {
         // Fallback to Media Library uploads if theme asset missing.
         $uploads = array(
             'peptides'         => '/wp-content/uploads/2026/07/peptides-card.png',
-            'peptide-pens'     => '/wp-content/uploads/2026/07/peptide-pens-card.png',
+            'peptide-pens'     => '/wp-content/uploads/2026/07/weight-loss-pens-card.png',
             'weight-loss'      => '/wp-content/uploads/2026/07/weight-loss-card.png',
             'weight-loss-pens' => '/wp-content/uploads/2026/07/weight-loss-pens-card.png',
         );
