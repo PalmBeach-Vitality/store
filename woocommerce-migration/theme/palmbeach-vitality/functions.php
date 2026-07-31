@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.9.5');
+define('PBV_THEME_VERSION', '2.9.6');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -963,7 +963,7 @@ function pbv_category_title_images() {
     return array(
         'peptides' => array(
             'file'   => 'assets/images/peptides-card.png',
-            'alt'    => 'Delivery Cartridge',
+            'alt'    => 'Synthesis Module',
             'width'  => 1102,
             'height' => 328,
         ),
