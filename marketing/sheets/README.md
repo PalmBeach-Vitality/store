@@ -21,3 +21,6 @@ Existing Grok video columns (live Buffer workflow): `reel_still_url`, `reel_vide
 
 ## Reel scenes
 Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene per Reel Studio run via `scene_id` / rotation.
+
+| `6-quality-variables.csv` | `6-quality-variables` (Grok Imagine quality tokens) |
+
