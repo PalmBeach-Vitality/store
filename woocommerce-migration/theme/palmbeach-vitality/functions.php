@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.8.3');
+define('PBV_THEME_VERSION', '2.8.4');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -849,7 +849,7 @@ function pbv_peptides_collection_header_html() {
         . '<div class="pbv-cat-banner__content">'
         . '<p class="pbv-cat-banner__title">Peptide Vials <span>Collection</span></p>'
         . '<p>Discover our premium range of pre-mixed, ready-to-use peptide vials — no reconstitution or mixing required. Each sterile multi-dose vial is third-party tested to 99.99% purity, delivering maximum convenience and potency straight from the vial.</p>'
-        . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends such as KLOW our pre-mixed vials are designed for precise dosing and reliable results. Available in multiple strengths to perfectly match your protocol needs.</p>'
+        . '<p>Whether you\'re looking for single peptides like BPC-157, GHK-Cu, or advanced blends our pre-mixed vials are designed for precise dosing and reliable research results. Available in multiple strengths to perfectly match your protocol needs. For Research-use-only. Not evaluated by the FDA.</p>'
         . '<p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>'
         . '<p>High-quality, hassle-free, and made for those who demand the best. Shop our full collection of pre-mixed peptide vials and elevate your research today.</p>'
         . '</div>'
