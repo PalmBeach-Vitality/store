@@ -16,3 +16,8 @@ Use on `1-compounds-all-daily`:
 - `last_reel_at`
 
 Existing Grok video columns (live Buffer workflow): `reel_still_url`, `reel_video_url`, `buffer_ig_reel_id`, `buffer_fb_reel_id`.
+
+| `5-reel-scenes.csv` | `5-reel-scenes` (630 Creatomate/Grok visual scene briefs) |
+
+## Reel scenes
+Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene per Reel Studio run via `scene_id` / rotation.
