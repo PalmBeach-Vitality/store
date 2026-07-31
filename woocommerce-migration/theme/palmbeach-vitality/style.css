@@ -573,6 +573,15 @@ a:hover { opacity: 0.7; }
   box-shadow: none;
 }
 
+/* Peptide Pens card — match Peptide Pens Collection banner width */
+.tax-product_cat.term-peptide-pens .pbv-cat-title-image {
+  width: min(100% - 1.5rem, 64rem);
+}
+
+.tax-product_cat.term-peptide-pens .pbv-cat-title-image img {
+  max-width: 64rem;
+}
+
 /* Peptides category — lab image banner with centered collection copy */
 .pbv-cat-banner {
   position: relative;
