@@ -53,9 +53,16 @@ pick_creation (500 lab items)
 - Text overlays present (Intro + Facts)  
 - Sheets updated (`video_url`, creation `times_used`)  
 
+## Distribution (next week)
+
+- Run this workflow **once per day**
+- Post final reel via **Buffer** to Facebook, Instagram, TikTok, and Twitter/X
+- Do not wire Buffer until the daily Grok + Creatomate MP4 is reliable
+
 ## Out of scope until the 45–60s reel works
 
-- Buffer auto-posting  
+- Buffer auto-posting (scheduled for following week once render path is stable)  
+
 
 ## Canonical how-tos
 
