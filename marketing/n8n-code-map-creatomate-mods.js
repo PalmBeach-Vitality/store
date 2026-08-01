@@ -44,6 +44,24 @@ function fact(key, fallback) {
   return v || fallback;
 }
 
+// Product name for Intro-Text (not lab_item / vial description)
+function productName() {
+  const src = { ...input, ...pick };
+  const raw = String(
+    src.compound_name ||
+      src.product_name ||
+      src.display_name ||
+      src.figma_headline ||
+      ''
+  ).trim();
+  if (!raw) return lab_item || 'Palm Beach Vitality';
+  // "5-Amino-1MQ Research-use clarification FAQ" → "5-Amino-1MQ"
+  const m = raw.match(/^(\S+(?:-\S+)*)\s+Research\b/i);
+  if (m) return m[1];
+  const first = raw.split(/\s+[—–|:]\s+/)[0].trim();
+  return first.length <= 48 ? first : raw;
+}
+
 if (!grok_video_url) {
   throw new Error(
     'grok_video_url missing. Run through save_extend_1_url first. ' +
@@ -60,7 +78,7 @@ return [
       ...input,
       ...pick,
       grok_video_url,
-      mod_intro: lab_item || fact('mod_intro', 'Palm Beach Vitality research listing'),
+      mod_intro: productName(),
       mod_fact_1: fact('mod_fact_1', 'Listed as research material for laboratory documentation only'),
       mod_fact_2: fact('mod_fact_2', 'Supplied in research-appropriate sealed packaging'),
       mod_fact_3: fact('mod_fact_3', 'Intended for in-vitro assay preparation contexts'),
