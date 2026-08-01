@@ -93,20 +93,26 @@ Reply **`node 2 ok`**.
 | Authentication | same xAI Header Auth |
 | Send Body | ON · JSON |
 
-**Body** (Expression):
+**Body settings (important):**
+- Send Body: **ON**
+- Body Content Type: **JSON**
+- Specify Body: **Using JSON**
+- Do **not** wrap with `JSON.stringify` (that makes xAI see an empty/missing `prompt`)
+
+**JSON body** (Expression / fx ON) — paste exactly:
 
 ```text
-={{ JSON.stringify({
+={{ {
   model: 'grok-imagine-video-1.5',
-  prompt: 'Animate this Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion matching the scene, keep product identity and research typography sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption. Scene motion: ' + ($json.scene_brief || ''),
+  prompt: 'Slow cinematic camera motion around this Palm Beach Vitality laboratory research catalog product, photoreal, keep the subject sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',
   image: { url: $json.still_url },
   duration: 8,
   aspect_ratio: '9:16',
-  resolution: '1080p'
-}) }}
+  resolution: '720p'
+} }}
 ```
 
-If the API rejects `1080p` for image-to-video, fall back to `720p` and note it — still use model `grok-imagine-video-1.5`.
+If `720p` works, you can try `1080p` later. Always keep model `grok-imagine-video-1.5`.
 
 **Check:** response includes `request_id` (async job id). Status is not a finished URL yet.
 
