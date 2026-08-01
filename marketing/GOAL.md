@@ -7,7 +7,7 @@
 Produce a **45–60 second** Instagram-ready reel **every day** that is:
 
 1. **Visually unique** — Grok Imagine (still `2k` + video) from the **500 lab-item** variables  
-2. **Text on reel** — Creatomate burns research copy (Intro / Facts) onto that unique footage  
+2. **Text on reel** — Creatomate burns **daily-unique** research copy (`mod_intro` + `mod_fact_1`…`5` from the 500-row text library; not static Parse bullets) onto that unique footage  
 3. **Highest quality** — `grok-imagine-image-quality` + `2k`; video `grok-imagine-video-1.5` / extension at max allowed resolution  
 4. **FDA-safe** — laboratory research catalog only; no people/hands/injection/lifestyle/wellness/nicknames  
 

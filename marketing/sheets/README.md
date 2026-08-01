@@ -26,6 +26,7 @@ Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene pe
 
 | `7-unique-reel-creations-500.csv` | `7-unique-reel-creations-500` (legacy abstract scenes — **do not use for Imagine**) |
 | `8-lab-items-500.csv` | `8-lab-items-500` (500 real lab-item subject variables) |
-| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** unique daily Imagine/video prompts) |
+| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** unique daily Imagine/video + Creatomate text) |
+| `10-creatomate-text-500.csv` | `10-creatomate-text-500` (500 unique mod_intro + mod_fact_1…5 sets) |
 | `8-lab-items-250.csv` / `9-lab-item-creations-250.csv` | Compat copies of the **500** rows (legacy filenames) |
 
