@@ -5,7 +5,7 @@
 **Wire after:** `pick_creation`  
 **Auth:** same xAI Header Auth as `GROK_API` (`Authorization: Bearer …`)
 
-**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-250`** (250 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-250.md`.
+**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (500 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
 
 All new n8n field names: **lowercase**.
 
