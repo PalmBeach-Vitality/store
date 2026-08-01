@@ -1,5 +1,7 @@
 # PBVita — Unique reel every run (required path)
 
+> **NORTH STAR (Salvatore):** The **only** goal of this workflow is a **unique video every day**, using the variables provided (500 creations → `video_prompt` + scene + 12 quality vars). See `marketing/GOAL.md`.
+
 **Goal:** A **different video** every workflow run (500 unique scenes).  
 **Creatomate alone cannot do this.** It only burns text onto the same `5 Facts Story` template footage.
 

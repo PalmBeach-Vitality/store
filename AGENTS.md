@@ -2,6 +2,10 @@
 
 A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanilla JS) for the `www.palmbeach-vitality.store` domain. Intended to live in its own repository and deploy via GitHub Pages (see `CNAME`).
 
+## Marketing / n8n (Reel Studio)
+
+**Only goal:** unique video **every day** from Salvatore’s variables (500 creations / `video_prompt` / scene + quality). Canonical: `marketing/GOAL.md` + `marketing/n8n-unique-reel-video.md`. Creatomate text-on-template is not sufficient.
+
 ## Cursor Cloud specific instructions
 
 - This is a **pure static site**. There is no build step, no package manager, no `package.json`, and no dependencies to install. Tailwind is loaded from a CDN at runtime.
