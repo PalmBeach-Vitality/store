@@ -204,6 +204,55 @@ Reuse your working update nodes:
 
 ---
 
-## Disconnect for now
+## Step 2 — Extend to ~45–60s (smooth)
 
-Leave Creatomate chain disconnected from this path so runs don’t burn credits on template text MP4s.
+After `save_video_url` has a ~15s `video_url`, add **3 extend blocks** (optional 4th).
+
+Each block:
+```text
+grok_video_extend_N → wait_extend_N → grok_video_poll_extend_N → if_extend_N_ready
+  true  → next extend or save_extended_url
+  false → wait_extend_N
+```
+
+### `grok_video_extend_1` (HTTP Request)
+
+| Setting | Value |
+|---|---|
+| Method | `POST` |
+| URL | `https://api.x.ai/v1/videos/extensions` |
+| Auth | same xAI Header Auth |
+| Send Body | ON |
+| Body Content Type | **Raw** |
+| Content Type | `application/json` |
+
+Body (fx ON — one line, same style as video start):
+
+```text
+{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',video:{url:$json.video_url},duration:10}) }}
+```
+
+**Check:** `request_id` returned.
+
+> Extend model is `grok-imagine-video` (not `1.5`). Duration `10` = **added** seconds (~15+10 ≈ 25s total after first extend).
+
+### Poll / IF (reuse pattern)
+
+- Wait: **60s**, enabled  
+- Poll GET: `{{ 'https://api.x.ai/v1/videos/' + $('grok_video_extend_1').first().json.request_id }}`  
+- IF: `$json.status` equals `done`  
+- On true → Edit Fields `save_extend_1_url`:  
+  `video_url` = `{{ $json.video.url || $json.url }}`  
+  (carry `creation_id`, `compound_id`, `still_url` with `.first()`)
+
+### Repeat
+
+- `grok_video_extend_2` uses `$json.video_url` from `save_extend_1_url`  
+- `grok_video_extend_3` from extend 2 → ~45s  
+- optional extend 4 → ~55s  
+
+Then `save_extended_url` (final) → Creatomate later.
+
+## Disconnect Creatomate until extended URL works
+
+Leave Creatomate disconnected until you have one ~45–60s `vidgen.x.ai` URL.
