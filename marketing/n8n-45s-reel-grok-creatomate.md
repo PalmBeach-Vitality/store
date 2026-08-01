@@ -65,12 +65,15 @@ Poll with the returned `request_id` like video generate.
 
 > Note: some docs say extension uses model `grok-imagine-video` (not `1.5`). If `1.5` errors on extend, switch model for **extend nodes only**.
 
-## Order of work
+## Order of work (adjusted)
 
-1. Finish Grok generate at **15s** + save URL (you’re here)  
-2. Add extend loop to ~45–60s (smooth)  
-3. Reconnect Creatomate with **Grok URL as media source** + text mods  
-4. Verify final MP4 is unique footage + readable facts  
+1. **Grok 15s** working ✓ → `save_video_url` with `video_url`  
+2. **Extend** 2–4× for ~45–60s smooth (same scene) → one final Grok URL  
+3. **Creatomate template check** — dynamic **video source** element required (not text-only `5 Facts Story` unless you add a video layer)  
+4. Wire `creatomate_render` **after** extended Grok URL; pass video source + text mods  
+5. Final Backblaze URL should play **your** lab footage + facts text  
+
+Do **not** run Creatomate in parallel off only text mods — that reproduces the old reel.
 
 ## PBVita’s job in this
 
