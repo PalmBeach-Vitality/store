@@ -13,11 +13,28 @@ Daily **45–60 second** reel: unique lab-item video (Grok) + text info (Creatom
 
 **Use extension** (same subject, continue motion) to grow 15s → ~45–60s, then hand **one** MP4 to Creatomate.
 
-Rough length math (approx):
-- Generate **15s** → extend **+10s** → extend **+10s** → extend **+10s** ≈ **45s**
-- One more extend ≈ **55–60s**
+### Grok length limit (hard)
 
-(Extension `duration` is the **added** segment only; confirm model/endpoint accepts your source URL.)
+xAI reject: **`Input video must not exceed 15 seconds`** for `/videos/extensions`.
+
+So you **cannot** chain extend on a 25s file.
+
+| Step | In | Out | Next extend OK? |
+|---|---|---|---|
+| Generate | still | **15s** | yes |
+| Extend 1 | 15s | **~25s** (15+10) | **no** |
+
+**Max smooth continuous Grok clip ≈ 25s** (one generate + one extend).
+
+### How we still hit 45–60s
+
+Creatomate owns the **45–60s timeline** + text. Grok supplies the **unique** bed (15s or 25s):
+
+- Template length 45–60s  
+- Dynamic video source = Grok `video_url` (loop / fit / hold per template)  
+- Text mods = Intro + Facts across the timeline  
+
+Do **not** plan extend_2 / extend_3 on a 25s source — the API will fail.
 
 ## Pipeline
 
@@ -46,6 +63,47 @@ pick_creation
   - **Video/image source** = extended Grok `video_url` (exact element name from your template — inspect in Creatomate)
   - **Text** = `Intro-Text.text`, `Fact-1.text` … `Fact-5.text` (lowercase n8n fields `mod_intro`, `mod_fact_*`)
 - Creatomate must **not** be the only visual; if source mod is empty you get the old default reel look
+
+### “Wrong” Creatomate URL (Backblaze)
+
+Output like:
+
+`https://f002.backblazeb2.com/file/creatomate-c8xg3hsxdu/<id>.mp4`
+
+is **normal** — that’s Creatomate’s CDN host. It is **not** a Grok `vidgen.x.ai` URL.
+
+What feels “wrong” is the **content**: if you never pass the Grok MP4 into a dynamic video element, Creatomate re-renders the **built-in template footage** (old reel look) every time.
+
+| URL host | Meaning |
+|---|---|
+| `vidgen.x.ai` / `imgen.x.ai` | Grok unique still/video |
+| `f002.backblazeb2.com/.../creatomate-...` | Creatomate final package (should *contain* your Grok footage if sourced correctly) |
+
+**Fix:** In Creatomate editor → open template → find the main **Video** layer → mark **source** as dynamic → note the element name (e.g. `Video`, `Background-Video`).
+
+`5 Facts Story` may only expose text keys (`Intro-Text`, `Fact-*`). If there is **no** dynamic video element, create/duplicate a template that has one, timeline 45–60s.
+
+Example render body (Raw JSON), after Grok URL exists:
+
+```text
+={{ JSON.stringify({
+  template_id: $json.template_id,
+  render_scale: 1,
+  modifications: {
+    'Background-Video': $('save_video_url').first().json.video_url,
+    'Intro-Text.text': $json.mod_intro,
+    'Fact-1.text': $json.mod_fact_1,
+    'Fact-2.text': $json.mod_fact_2,
+    'Fact-3.text': $json.mod_fact_3,
+    'Fact-4.text': $json.mod_fact_4,
+    'Fact-5.text': $json.mod_fact_5
+  }
+}) }}
+```
+
+Replace `Background-Video` with **your** dynamic element name from Creatomate → Use Template → API Integration.
+
+**Check:** status `modifications` must include that video key with a `https://vidgen.x.ai/...` (or extended Grok) URL — not missing/empty.
 
 ## Extension request shape (n8n Raw JSON)
 

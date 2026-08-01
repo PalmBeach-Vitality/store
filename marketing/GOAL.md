@@ -19,24 +19,26 @@ If the reel is unique Grok footage with **no** text package, it’s incomplete f
 ```text
 pick_creation (500 lab items)
   → grok_imagine_reel_still          (unique 9:16 still, 2k)
-  → grok_video_start                 (~15s unique motion)
-  → extend × N                       (continue from last frame → ~45–60s smooth)
+  → grok_video_start                 (15s unique motion)
+  → grok_video_extend_1              (+10s → ~25s; source must be ≤15s)
   → map_creatomate_mods              (Intro + Fact text from Parse_Grok)
-  → creatomate_render                (unique video as source + text overlays, 45–60s)
+  → creatomate_render                (45–60s timeline; Grok URL as video source + text)
   → save + sheets
 ```
+
+**Grok hard limit:** extend input ≤ **15s**. After one extend (~25s), further extends fail.  
+**45–60s** = Creatomate template timeline (loop/fit the Grok bed) + text — not extend_2/3/4.
 
 | Engine | Job |
 |---|---|
 | **Sheets / PBVita-Lab-*** | Which unique lab subject today |
-| **Grok Imagine + video (+ extend)** | Unique moving footage, ideally one continuous scene |
-| **Creatomate** | Duration/timeline + on-screen text (not the visual identity) |
+| **Grok Imagine + video (+ 1 extend)** | Unique moving footage (~15–25s) |
+| **Creatomate** | 45–60s package + on-screen text |
 
 ## Smoothness
 
-- **Grok video extension** continues from the **last frame** → one continuous clip (not scene-to-scene jumps).  
-- **Do not** stitch unrelated Grok generations back-to-back if you want smooth.  
-- Creatomate should use **one** extended Grok MP4 as the bed, then overlay text.
+- One generate + **one** extend = longest smooth unique Grok clip (~25s).  
+- Creatomate uses that single clip as the bed across 45–60s (loop/fit on the video element) + text overlays.
 
 ## Subjects + quality (non-negotiable)
 
