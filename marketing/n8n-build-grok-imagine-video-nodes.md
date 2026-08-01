@@ -5,6 +5,8 @@
 **Wire after:** `pick_creation`  
 **Auth:** same xAI Header Auth as `GROK_API` (`Authorization: Bearer …`)
 
+**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-250`** (250 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-250.md`.
+
 All new n8n field names: **lowercase**.
 
 ```text
@@ -100,9 +102,11 @@ Reply **`node 2 ok`**.
   image: { url: $json.still_url },
   duration: 8,
   aspect_ratio: '9:16',
-  resolution: '720p'
+  resolution: '1080p'
 }) }}
 ```
+
+If the API rejects `1080p` for image-to-video, fall back to `720p` and note it — still use model `grok-imagine-video-1.5`.
 
 **Check:** response includes `request_id` (async job id). Status is not a finished URL yet.
 

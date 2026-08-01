@@ -8,6 +8,8 @@ Create a **unique video every single day**, driven by the variables Salvatore pr
 
 **Quality (non-negotiable):** always the **highest** Grok Imagine quality available — model `grok-imagine-image-quality`, image `resolution: "2k"`, video model `grok-imagine-video-1.5` at the highest resolution the API allows for 9:16 (prefer `1080p` when supported; otherwise `720p`). Never use the fast/cheap image model for production reels.
 
+**Subjects (non-negotiable):** image/video variables may use **only** the **250 real lab items** in `sheets/8-lab-items-250.csv` / creations `sheets/9-lab-item-creations-250.csv`. No abstract orbs, surreal glass, CGI spheres, or non-lab fantasy props. See `n8n-lab-items-250.md`.
+
 - 500 unique creations (`7-unique-reel-creations-500`)
 - each with unique `scene_id` / `scene_brief`
 - 12 quality variables (`quality_suffix`)

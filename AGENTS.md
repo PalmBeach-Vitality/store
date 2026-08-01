@@ -4,7 +4,7 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 ## Marketing / n8n (Reel Studio)
 
-**Only goal:** unique video **every day** from Salvatore’s variables (500 creations / `video_prompt` / scene + quality). Canonical: `marketing/GOAL.md` + `marketing/n8n-unique-reel-video.md`. Creatomate text-on-template is not sufficient.
+**Only goal:** unique video **every day** from Salvatore’s variables. Production Imagine subjects = **250 real lab items** only (`marketing/sheets/9-lab-item-creations-250.csv`). Canonical: `marketing/GOAL.md` + `marketing/n8n-lab-items-250.md` + `marketing/n8n-unique-reel-video.md`. Creatomate text-on-template is not sufficient.
 
 ## Cursor Cloud specific instructions
 
