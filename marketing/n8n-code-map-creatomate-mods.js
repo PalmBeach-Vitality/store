@@ -2,6 +2,9 @@
 // Type: Code | Mode: Run Once for All Items
 // After: save_extend_1_url (and pick_creation earlier in the same run)
 // Before: creatomate_render
+//
+// Intro-Text = PRODUCT NAME only (e.g. 5-Amino-1MQ)
+// Never use business name "Palm Beach Vitality" or lab_item for Intro.
 
 function firstJson(name) {
   try {
@@ -29,37 +32,61 @@ function pickUrl(...objs) {
   return '';
 }
 
+/** Pull a clean product/compound name from messy headline/caption strings. */
+function extractProductName(raw) {
+  const s = String(raw || '').trim();
+  if (!s) return '';
+  // Reject business name
+  if (/^palm\s*beach\s*vitality$/i.test(s)) return '';
+  // "5-Amino-1MQ Research-use clarification FAQ" → "5-Amino-1MQ"
+  let m = s.match(/^([0-9A-Za-z][0-9A-Za-z./+-]*(?:-[0-9A-Za-z./+-]+)*)\s+Research\b/i);
+  if (m) return m[1];
+  // Caption: "…FAQ: 5-Amino-1MQ is provided…"
+  m = s.match(/\b([0-9]+-[A-Za-z0-9-]+|[A-Z]{2,}-?\d{2,4}[A-Za-z]?)\b/);
+  if (m) return m[1];
+  // Short clean token / phrase
+  const first = s.split(/\s+[—–|:]\s+/)[0].trim();
+  if (first && first.length <= 40 && !/palm\s*beach/i.test(first)) return first;
+  return '';
+}
+
+function productName(srcList) {
+  const preferredKeys = [
+    'compound_name',
+    'product_name',
+    'display_name',
+    'figma_headline',
+    'ig_caption_draft',
+    'fb_caption_draft',
+  ];
+  for (const src of srcList) {
+    if (!src || typeof src !== 'object') continue;
+    for (const k of preferredKeys) {
+      const name = extractProductName(src[k]);
+      if (name) return name;
+    }
+  }
+  throw new Error(
+    'PRODUCT NAME missing for Intro-Text. Need compound_name / display_name / figma_headline ' +
+      '(e.g. 5-Amino-1MQ). Do not use Palm Beach Vitality or lab_item. ' +
+      'Keys on input: ' +
+      Object.keys(srcList[0] || {}).join(', ')
+  );
+}
+
 const pick = firstJson('pick_creation');
+const parse = firstJson('Parse_Grok');
 const extend1 = firstJson('save_extend_1_url');
 const saveVideo = firstJson('save_video_url');
 const input = $input.first()?.json || {};
 
 const grok_video_url = pickUrl(extend1, saveVideo, input, pick);
-
-const lab_item = String(pick.lab_item || input.lab_item || '').trim();
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
+const mod_intro = productName([parse, input, pick]);
 
 function fact(key, fallback) {
   const v = String(pick[key] || input[key] || '').trim();
   return v || fallback;
-}
-
-// Product name for Intro-Text (not lab_item / vial description)
-function productName() {
-  const src = { ...input, ...pick };
-  const raw = String(
-    src.compound_name ||
-      src.product_name ||
-      src.display_name ||
-      src.figma_headline ||
-      ''
-  ).trim();
-  if (!raw) return lab_item || 'Palm Beach Vitality';
-  // "5-Amino-1MQ Research-use clarification FAQ" → "5-Amino-1MQ"
-  const m = raw.match(/^(\S+(?:-\S+)*)\s+Research\b/i);
-  if (m) return m[1];
-  const first = raw.split(/\s+[—–|:]\s+/)[0].trim();
-  return first.length <= 48 ? first : raw;
 }
 
 if (!grok_video_url) {
@@ -78,7 +105,7 @@ return [
       ...input,
       ...pick,
       grok_video_url,
-      mod_intro: productName(),
+      mod_intro,
       mod_fact_1: fact('mod_fact_1', 'Listed as research material for laboratory documentation only'),
       mod_fact_2: fact('mod_fact_2', 'Supplied in research-appropriate sealed packaging'),
       mod_fact_3: fact('mod_fact_3', 'Intended for in-vitro assay preparation contexts'),
