@@ -42,6 +42,8 @@ const scored = creations
       raw: c,
       creation_id,
       rank: rankNum,
+      lab_item_id: val(c, ['lab_item_id', 'labItemId']),
+      lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
       scene_id: val(c, ['scene_id', 'sceneId']),
       category: val(c, ['category', 'scene_category']),
       scene_brief: val(c, ['scene_brief', 'sceneBrief']),
@@ -100,6 +102,8 @@ return [
       // chosen creation (these MUST appear in output)
       creation_id: pick.creation_id,
       creation_rank: pick.rank,
+      lab_item_id: pick.lab_item_id,
+      lab_item: pick.lab_item,
       scene_id: pick.scene_id,
       scene_category: pick.category,
       scene_brief: pick.scene_brief,
