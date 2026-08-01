@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.9.8');
+define('PBV_THEME_VERSION', '2.9.9');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -1235,10 +1235,13 @@ HTML;
 
 function pbv_policy_shipping_html() {
     return <<<HTML
-<p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and shipped with full insurance included at no extra cost to you. We proudly cover all standard shipping fees within the United States.</p>
+<p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and fully insured for transit.</p>
+
+<h3>Cold Pack Shipping</h3>
+<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout.</p>
 
 <h3>Shipping &amp; Delivery</h3>
-<p>Most orders ship within 1–2 business days. Delivery times typically range from 3–7 business days depending on your location. You will receive a tracking number via email once your order has shipped.</p>
+<p>Most orders ship within 1–2 business days via next-day air cold pack service. You will receive a tracking number via email once your order has shipped.</p>
 
 <h3>Damaged, Lost, or Stolen Packages</h3>
 <p>All shipments are fully insured. In the rare event that your package arrives damaged, is lost, or is stolen, please contact us immediately with a report from the shipping carrier (USPS, UPS, FedEx, etc.). Upon receiving the required documentation, we will gladly replace your order at no additional charge.</p>
@@ -1478,4 +1481,197 @@ function pbv_dedupe_menu_items($menu_id, $titles) {
         }
     }
 }
+
+/**
+ * Checkout: professional Next-Day Air Cold Pack shipping label.
+ */
+function pbv_cold_pack_shipping_label() {
+    return __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality');
+}
+
+/**
+ * Replace available shipping rates with a $35 flat cold-pack rate.
+ *
+ * @param array $rates   Package rates.
+ * @param array $package Package data.
+ * @return array
+ */
+function pbv_force_cold_pack_shipping_rates($rates, $package) {
+    if (!class_exists('WC_Shipping_Rate')) {
+        return $rates;
+    }
+
+    $id = 'pbv_cold_pack_flat';
+    return array(
+        $id => new WC_Shipping_Rate(
+            $id,
+            pbv_cold_pack_shipping_label(),
+            35.00,
+            array(),
+            'flat_rate'
+        ),
+    );
+}
+add_filter('woocommerce_package_rates', 'pbv_force_cold_pack_shipping_rates', 100, 2);
+
+/**
+ * Fallback: if no shipping methods apply, still charge the $35 cold-pack fee.
+ */
+function pbv_cold_pack_shipping_fee_fallback() {
+    if (is_admin() && !defined('DOING_AJAX')) {
+        return;
+    }
+    if (!function_exists('WC') || !WC()->cart || WC()->cart->is_empty()) {
+        return;
+    }
+    if (!WC()->cart->needs_shipping()) {
+        return;
+    }
+
+    $packages = WC()->shipping() ? WC()->shipping()->get_packages() : array();
+    $has_rate = false;
+    foreach ($packages as $package) {
+        if (!empty($package['rates'])) {
+            $has_rate = true;
+            break;
+        }
+    }
+    if ($has_rate) {
+        return;
+    }
+
+    foreach (WC()->cart->get_fees() as $fee) {
+        if (isset($fee->id) && $fee->id === 'pbv-cold-pack-shipping') {
+            return;
+        }
+        if (isset($fee->name) && $fee->name === pbv_cold_pack_shipping_label()) {
+            return;
+        }
+    }
+
+    WC()->cart->add_fee(pbv_cold_pack_shipping_label(), 35.00, false);
+}
+add_action('woocommerce_cart_calculate_fees', 'pbv_cold_pack_shipping_fee_fallback', 20);
+
+/**
+ * Checkout note explaining cold-pack shipping.
+ */
+function pbv_checkout_shipping_note() {
+    static $printed = false;
+    if ($printed) {
+        return;
+    }
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return;
+    }
+    $printed = true;
+    echo '<p class="pbv-checkout-shipping-note">'
+        . esc_html__(
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00.',
+            'palmbeach-vitality'
+        )
+        . '</p>';
+}
+add_action('woocommerce_checkout_before_order_review', 'pbv_checkout_shipping_note', 5);
+
+/**
+ * Use custom policy checkboxes instead of the default single Terms box.
+ */
+add_filter('woocommerce_checkout_show_terms', '__return_false');
+
+/**
+ * Checkout: required Terms and Conditions + Refund Policy checkboxes.
+ */
+function pbv_checkout_policy_checkboxes() {
+    $terms_url  = home_url('/terms/#terms-of-service');
+    $refund_url = home_url('/terms/#refund');
+    ?>
+    <div class="pbv-checkout-policies">
+      <p class="form-row pbv-checkout-policy validate-required">
+        <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox" for="pbv_accept_terms">
+          <input
+            type="checkbox"
+            class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox"
+            name="pbv_accept_terms"
+            id="pbv_accept_terms"
+            value="1"
+          />
+          <span>
+            <?php
+            echo wp_kses_post(
+                sprintf(
+                    /* translators: %s: Terms and Conditions URL */
+                    __('I have read and agree to the <a href="%s" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>.', 'palmbeach-vitality'),
+                    esc_url($terms_url)
+                )
+            );
+            ?>
+            <abbr class="required" title="<?php esc_attr_e('required', 'palmbeach-vitality'); ?>">*</abbr>
+          </span>
+        </label>
+      </p>
+      <p class="form-row pbv-checkout-policy validate-required">
+        <label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox" for="pbv_accept_refund">
+          <input
+            type="checkbox"
+            class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox"
+            name="pbv_accept_refund"
+            id="pbv_accept_refund"
+            value="1"
+          />
+          <span>
+            <?php
+            echo wp_kses_post(
+                sprintf(
+                    /* translators: %s: Refund Policy URL */
+                    __('I have read and agree to the <a href="%s" target="_blank" rel="noopener noreferrer">Refund Policy</a>.', 'palmbeach-vitality'),
+                    esc_url($refund_url)
+                )
+            );
+            ?>
+            <abbr class="required" title="<?php esc_attr_e('required', 'palmbeach-vitality'); ?>">*</abbr>
+          </span>
+        </label>
+      </p>
+    </div>
+    <?php
+}
+add_action('woocommerce_review_order_before_submit', 'pbv_checkout_policy_checkboxes', 9);
+
+/**
+ * Validate checkout policy checkboxes.
+ */
+function pbv_validate_checkout_policy_checkboxes() {
+    if (empty($_POST['pbv_accept_terms'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        wc_add_notice(
+            __('Please accept the Terms and Conditions to continue.', 'palmbeach-vitality'),
+            'error'
+        );
+    }
+    if (empty($_POST['pbv_accept_refund'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        wc_add_notice(
+            __('Please accept the Refund Policy to continue.', 'palmbeach-vitality'),
+            'error'
+        );
+    }
+}
+add_action('woocommerce_checkout_process', 'pbv_validate_checkout_policy_checkboxes');
+
+/**
+ * Persist policy acceptance on the order.
+ *
+ * @param WC_Order $order Order object.
+ */
+function pbv_save_checkout_policy_acceptance($order) {
+    if (!is_a($order, 'WC_Order')) {
+        return;
+    }
+    if (!empty($_POST['pbv_accept_terms'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $order->update_meta_data('_pbv_accepted_terms', 'yes');
+    }
+    if (!empty($_POST['pbv_accept_refund'])) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+        $order->update_meta_data('_pbv_accepted_refund_policy', 'yes');
+    }
+}
+add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
 
