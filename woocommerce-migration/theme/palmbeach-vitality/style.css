@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.9.9
+Version: 2.10.0
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1651,26 +1651,27 @@ body.pbv-lead-popup-open {
   cursor: wait;
 }
 
-/* Checkout — shipping note + required policy checkboxes */
-.pbv-checkout-shipping-note {
-  margin: 0 0 1rem;
-  padding: 0.85rem 1rem;
-  border: 1px solid #e5e7eb;
-  border-left: 3px solid #1a6b7a;
-  background: #f8fafb;
-  color: #1f2937;
-  font-size: 0.92rem;
-  line-height: 1.5;
+/* Checkout — required policy checkboxes + expandable policy dropdowns */
+.pbv-checkout-page .pbv-container,
+.pbv-cart-page .pbv-container {
+  width: min(100% - 2rem, 64rem);
+  margin-inline: auto;
 }
 
 .pbv-checkout-policies {
   margin: 1rem 0 1.25rem;
   padding: 0.85rem 0 0;
   border-top: 1px solid #eee;
+  text-align: left;
 }
 
 .pbv-checkout-policy {
-  margin: 0 0 0.75rem !important;
+  margin: 0 0 1rem;
+}
+
+.pbv-checkout-policy .form-row {
+  margin: 0 0 0.45rem !important;
+  padding: 0 !important;
 }
 
 .pbv-checkout-policy label {
@@ -1688,13 +1689,76 @@ body.pbv-lead-popup-open {
   flex: 0 0 auto;
 }
 
-.pbv-checkout-policy a {
-  color: #1a6b7a;
-  text-decoration: underline;
-}
-
 .pbv-checkout-policy .required {
   color: #b91c1c;
   text-decoration: none;
   border: 0;
+}
+
+.pbv-checkout-policy__dropdown {
+  margin: 0 0 0.25rem 1.7rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.55rem;
+  background: #f8fafb;
+  overflow: hidden;
+}
+
+.pbv-checkout-policy__summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #12304a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.pbv-checkout-policy__summary::-webkit-details-marker {
+  display: none;
+}
+
+.pbv-checkout-policy__summary::after {
+  content: "+";
+  font-weight: 700;
+  color: #1a6b7a;
+}
+
+.pbv-checkout-policy__dropdown[open] .pbv-checkout-policy__summary::after {
+  content: "–";
+}
+
+.pbv-checkout-policy__body {
+  padding: 0 0.9rem 0.9rem;
+  border-top: 1px solid #e5e7eb;
+  max-height: 16rem;
+  overflow: auto;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #1f2937;
+  background: #fff;
+}
+
+.pbv-checkout-policy__body h3 {
+  margin: 0.85rem 0 0.55rem;
+  font-size: 1rem;
+}
+
+.pbv-checkout-policy__body p,
+.pbv-checkout-policy__body ul {
+  margin: 0 0 0.7rem;
+}
+
+.pbv-checkout-policy__page-link {
+  margin: 0.85rem 0 0 !important;
+  padding-top: 0.65rem;
+  border-top: 1px solid #eee;
+}
+
+.pbv-checkout-policy__page-link a {
+  color: #1a6b7a;
+  font-weight: 600;
+  text-decoration: underline;
 }

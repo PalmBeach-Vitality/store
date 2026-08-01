@@ -328,4 +328,16 @@
         });
     });
   }
+
+  // Checkout policy dropdowns: only one open at a time.
+  var policyRoot = document.querySelector(".pbv-checkout-policies");
+  if (policyRoot) {
+    policyRoot.addEventListener("toggle", function (event) {
+      var target = event.target;
+      if (!target || target.tagName !== "DETAILS" || !target.open) return;
+      policyRoot.querySelectorAll("details.pbv-checkout-policy__dropdown").forEach(function (panel) {
+        if (panel !== target) panel.open = false;
+      });
+    }, true);
+  }
 })();
