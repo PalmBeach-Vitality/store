@@ -61,8 +61,11 @@ Manual Execute ────┴─→ Get row(s) in sheet
 
 | Live workflow (keep running) | Reel Studio duplicate |
 |---|---|
-| Grok Imagine stills + `grok_video_*` + Buffer posts | Optional **template** MP4 path via Creatomate |
-| Posts IG/FB reels + feed + stories | Writes to Sheets `4-reel-queue` first — **no Buffer** until you approve |
+| Grok Imagine stills + `grok_video_*` + Buffer posts | **Unique video** = restore Imagine/video on `video_prompt` (see `n8n-unique-reel-video.md`) |
+| Posts IG/FB reels + feed + stories | Creatomate = **optional text overlay only** — same template footage every time if used alone |
+| | Writes to Sheets first — **no Buffer** until you approve |
+
+**Important:** Creatomate `5 Facts Story` alone will never produce a different video bed per run. For 500 unique scenes, follow **`marketing/n8n-unique-reel-video.md`**.
 
 Same FDA rules. Same `Parse_Grok` science fields.
 

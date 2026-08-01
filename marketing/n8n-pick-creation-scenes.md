@@ -3,7 +3,7 @@
 **Workflow:** `PBVita — Reel Studio`  
 **Library:** Sheets tab `7-unique-reel-creations-500` (from `marketing/sheets/7-unique-reel-creations-500.csv`)
 
-Each run picks **1** least-used Active creation (unique scene + 12 quality vars + full `video_prompt`), merges it with your compliant compound from `Parse_Grok`, then continues to Creatomate / Imagine.
+Each run picks **1** least-used Active creation (unique scene + 12 quality vars + full `video_prompt`), merges it with your compliant compound from `Parse_Grok`, then must go to **Grok Imagine / video** (`video_prompt`) for a unique MP4. Creatomate text-on-template is optional and is **not** unique footage — see `n8n-unique-reel-video.md`.
 
 ---
 
