@@ -38,6 +38,8 @@ Do **not** put Creatomate on this path until unique Grok MP4s work.
 | Authentication | Header Auth → same xAI credential as `GROK_API` |
 | Send Body | ON · JSON |
 
+**Quality (required):** always highest — model `grok-imagine-image-quality` + `resolution: '2k'`. Never `grok-imagine-image` (fast) or `1k` for production.
+
 **Body** (fx / Expression):
 
 ```text
@@ -46,7 +48,7 @@ Do **not** put Creatomate on this path until unique Grok MP4s work.
   prompt: $json.video_prompt,
   n: 1,
   aspect_ratio: '9:16',
-  resolution: '1k'
+  resolution: '2k'
 }) }}
 ```
 

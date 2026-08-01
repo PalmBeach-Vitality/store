@@ -6,6 +6,8 @@
 
 Create a **unique video every single day**, driven by the variables Salvatore provided:
 
+**Quality (non-negotiable):** always the **highest** Grok Imagine quality available — model `grok-imagine-image-quality`, image `resolution: "2k"`, video model `grok-imagine-video-1.5` at the highest resolution the API allows for 9:16 (prefer `1080p` when supported; otherwise `720p`). Never use the fast/cheap image model for production reels.
+
 - 500 unique creations (`7-unique-reel-creations-500`)
 - each with unique `scene_id` / `scene_brief`
 - 12 quality variables (`quality_suffix`)
