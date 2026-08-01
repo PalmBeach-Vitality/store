@@ -93,26 +93,25 @@ Reply **`node 2 ok`**.
 | Authentication | same xAI Header Auth |
 | Send Body | ON · JSON |
 
-**Body settings (important):**
-- Send Body: **ON**
-- Body Content Type: **JSON**
-- Specify Body: **Using JSON**
-- Do **not** wrap with `JSON.stringify` (that makes xAI see an empty/missing `prompt`)
-
-**JSON body** (Expression / fx ON) — paste exactly:
+**Body settings (critical — avoid empty `{ "": "" }` body):**
+1. Send Body: **ON**
+2. Body Content Type: **Raw**
+3. Content Type: `application/json`
+4. Delete any leftover Body Parameter rows (empty name/value causes `{ "": "" }`)
+5. Body (fx ON):
 
 ```text
-={{ {
+={{ JSON.stringify({
   model: 'grok-imagine-video-1.5',
   prompt: 'Slow cinematic camera motion around this Palm Beach Vitality laboratory research catalog product, photoreal, keep the subject sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',
   image: { url: $json.still_url },
   duration: 8,
   aspect_ratio: '9:16',
   resolution: '720p'
-} }}
+}) }}
 ```
 
-If `720p` works, you can try `1080p` later. Always keep model `grok-imagine-video-1.5`.
+In the node’s request preview, body must show `"prompt": "Slow cinematic..."` — not `{ "": "" }`.
 
 **Check:** response includes `request_id` (async job id). Status is not a finished URL yet.
 
