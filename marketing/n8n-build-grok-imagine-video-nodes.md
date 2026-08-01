@@ -215,7 +215,45 @@ grok_video_extend_N → wait_extend_N → grok_video_poll_extend_N → if_extend
   false → wait_extend_N
 ```
 
+### `prep_extend_1` (Code) — required before extend
+
+**After:** `save_video_url` (or `grok_video_poll` if IF is bypassed)  
+Mode: **Run Once for Each Item**
+
+```javascript
+const fromSave = $('save_video_url').first()?.json || {};
+const fromPoll = $('grok_video_poll').first()?.json || {};
+const url =
+  $json.video_url ||
+  $json.video?.url ||
+  fromSave.video_url ||
+  fromPoll.video?.url ||
+  '';
+
+if (!url || !String(url).startsWith('http')) {
+  throw new Error(
+    'prep_extend_1: missing video url. save_video_url keys=' +
+      Object.keys(fromSave).join(',') +
+      ' poll keys=' +
+      Object.keys(fromPoll).join(',')
+  );
+}
+
+return [{
+  json: {
+    video_url: url,
+    creation_id: fromSave.creation_id || $json.creation_id || '',
+    compound_id: fromSave.compound_id || $json.compound_id || '',
+    still_url: fromSave.still_url || $json.still_url || '',
+  },
+}];
+```
+
+**Check:** output `video_url` is a real `https://vidgen.x.ai/...` link before you call extend.
+
 ### `grok_video_extend_1` (HTTP Request)
+
+**After:** `prep_extend_1`
 
 | Setting | Value |
 |---|---|
@@ -226,13 +264,13 @@ grok_video_extend_N → wait_extend_N → grok_video_poll_extend_N → if_extend
 | Body Content Type | **Raw** |
 | Content Type | `application/json` |
 
-Body (fx ON — one line, same style as video start):
+Body (fx ON — one line):
 
 ```text
-{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',video:{url:$json.video_url},duration:10}) }}
+{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no fade out, no dissolve, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',video:{url:$json.video_url},duration:10}) }}
 ```
 
-**Check:** `request_id` returned.
+**Check:** request preview includes `"url":"https://vidgen..."` and response has `request_id`.
 
 > Extend model is `grok-imagine-video` (not `1.5`). Duration `10` = **added** seconds (~15+10 ≈ 25s total after first extend).
 
