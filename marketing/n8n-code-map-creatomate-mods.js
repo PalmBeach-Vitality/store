@@ -84,8 +84,16 @@ const grok_video_url = pickUrl(extend1, saveVideo, input, pick);
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
 const mod_intro = productName([parse, input, pick]);
 
+/** Strip catalog suffixes: "· ref 0001", "· motif 0001", "· card 0001", "· line 0001", "· CTA 0001" */
+function cleanFact(text) {
+  return String(text || '')
+    .replace(/\s*[·•|-]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
+    .replace(/\s*\((ref|motif|card|line|cta)\s*\d+\)\s*$/i, '')
+    .trim();
+}
+
 function fact(key, fallback) {
-  const v = String(pick[key] || input[key] || '').trim();
+  const v = cleanFact(pick[key] || input[key] || '');
   return v || fallback;
 }
 
