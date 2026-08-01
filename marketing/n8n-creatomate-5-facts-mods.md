@@ -8,18 +8,21 @@
 
 ---
 
+**Convention:** all n8n field / parameter names are **lowercase** (`mod_intro`, `mod_fact_1`, …).  
+Creatomate template keys stay exactly as Creatomate defines them (`Intro-Text.text`, `Fact-1.text`) — those are case-sensitive API keys.
+
 ## 1) `map_creatomate_mods` (Edit Fields)
 
 Include Other Input Fields: **ON**
 
 | Name | Value |
 |---|---|
-| `mod_Intro` | `={{ $json.figma_headline \|\| $json.compound_name \|\| $json.display_name }}` |
-| `mod_Fact_1` | `={{ $json.figma_subhead \|\| $json.subhead \|\| $json.short_tagline }}` |
-| `mod_Fact_2` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
-| `mod_Fact_3` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
-| `mod_Fact_4` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
-| `mod_Fact_5` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
+| `mod_intro` | `={{ $json.figma_headline \|\| $json.compound_name \|\| $json.display_name }}` |
+| `mod_fact_1` | `={{ $json.figma_subhead \|\| $json.subhead \|\| $json.short_tagline }}` |
+| `mod_fact_2` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
+| `mod_fact_3` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
+| `mod_fact_4` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
+| `mod_fact_5` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
 | `template_id` | `={{ $json.template_id \|\| $('Prep_day_variant').first().json.template_id }}` |
 
 Execute this node. All six `mod_*` must be filled before you render.
@@ -38,12 +41,12 @@ Body (expression):
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'Intro-Text.text': $json.mod_Intro,
-    'Fact-1.text': $json.mod_Fact_1,
-    'Fact-2.text': $json.mod_Fact_2,
-    'Fact-3.text': $json.mod_Fact_3,
-    'Fact-4.text': $json.mod_Fact_4,
-    'Fact-5.text': $json.mod_Fact_5
+    'Intro-Text.text': $json.mod_intro,
+    'Fact-1.text': $json.mod_fact_1,
+    'Fact-2.text': $json.mod_fact_2,
+    'Fact-3.text': $json.mod_fact_3,
+    'Fact-4.text': $json.mod_fact_4,
+    'Fact-5.text': $json.mod_fact_5
   }
 }) }}
 ```

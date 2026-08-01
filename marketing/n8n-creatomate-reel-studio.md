@@ -246,14 +246,16 @@ Template **5 Facts Story** uses these Creatomate keys (not Headline/Bullet-1):
 
 If those are empty in the render response, every MP4 looks like the same default video.
 
+n8n parameter names are **lowercase**. Creatomate API keys (`Intro-Text.text`, etc.) stay as Creatomate defines them.
+
 | Name | Value |
 |---|---|
-| `mod_Intro` | `={{ $json.figma_headline \|\| $json.compound_name \|\| $json.display_name }}` |
-| `mod_Fact_1` | `={{ $json.figma_subhead \|\| $json.subhead \|\| $json.short_tagline }}` |
-| `mod_Fact_2` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
-| `mod_Fact_3` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
-| `mod_Fact_4` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
-| `mod_Fact_5` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
+| `mod_intro` | `={{ $json.figma_headline \|\| $json.compound_name \|\| $json.display_name }}` |
+| `mod_fact_1` | `={{ $json.figma_subhead \|\| $json.subhead \|\| $json.short_tagline }}` |
+| `mod_fact_2` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
+| `mod_fact_3` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
+| `mod_fact_4` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
+| `mod_fact_5` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
 | `template_id` | `={{ $json.template_id \|\| $('Prep_day_variant').first().json.template_id }}` |
 
 **Check before render:** every `mod_*` is a non-empty string. If red/empty, open `pick_creation` / `Parse_Grok` and use the real key names you see.
@@ -277,12 +279,12 @@ Type: **HTTP Request**
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'Intro-Text.text': $json.mod_Intro,
-    'Fact-1.text': $json.mod_Fact_1,
-    'Fact-2.text': $json.mod_Fact_2,
-    'Fact-3.text': $json.mod_Fact_3,
-    'Fact-4.text': $json.mod_Fact_4,
-    'Fact-5.text': $json.mod_Fact_5
+    'Intro-Text.text': $json.mod_intro,
+    'Fact-1.text': $json.mod_fact_1,
+    'Fact-2.text': $json.mod_fact_2,
+    'Fact-3.text': $json.mod_fact_3,
+    'Fact-4.text': $json.mod_fact_4,
+    'Fact-5.text': $json.mod_fact_5
   }
 }) }}
 ```
