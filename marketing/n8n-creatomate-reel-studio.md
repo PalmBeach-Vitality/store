@@ -236,22 +236,27 @@ If you already enforce compliance inside `Parse_Grok` only, you can skip — but
 ---
 
 ### Node 11 — `map_creatomate_mods` (NEW)
-**After:** `if_compliance` true (or `Parse_Grok`)  
+**After:** `pick_creation` (or `if_compliance` true)  
 **Before:** `creatomate_render`  
 Type: **Edit Fields** · Include Other Input Fields ON  
 
-Use your real Parse keys (fallback both styles):
+Template **5 Facts Story** uses these Creatomate keys (not Headline/Bullet-1):
+
+`Intro-Text.text`, `Fact-1.text` … `Fact-5.text`
+
+If those are empty in the render response, every MP4 looks like the same default video.
 
 | Name | Value |
 |---|---|
-| `mod_Headline` | `={{ $json.figma_headline \|\| $json.headline \|\| $json.display_name \|\| $json.compound_name }}` |
-| `mod_Subhead` | `={{ $json.figma_subhead \|\| $json.subhead }}` |
-| `mod_Bullet_1` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
-| `mod_Bullet_2` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
-| `mod_Bullet_3` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
-| `mod_CTA` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
-| `mod_Disclaimer` | `For laboratory research use only. Not for human use or consumption.` |
-| `template_id` | `={{ $('Prep_day_variant').item.json.template_id }}` |
+| `mod_Intro` | `={{ $json.figma_headline \|\| $json.compound_name \|\| $json.display_name }}` |
+| `mod_Fact_1` | `={{ $json.figma_subhead \|\| $json.subhead \|\| $json.short_tagline }}` |
+| `mod_Fact_2` | `={{ $json.figma_bullet_1 \|\| $json.bullet_1 }}` |
+| `mod_Fact_3` | `={{ $json.figma_bullet_2 \|\| $json.bullet_2 }}` |
+| `mod_Fact_4` | `={{ $json.figma_bullet_3 \|\| $json.bullet_3 }}` |
+| `mod_Fact_5` | `={{ $json.figma_cta \|\| $json.cta \|\| 'View laboratory listing' }}` |
+| `template_id` | `={{ $json.template_id \|\| $('Prep_day_variant').first().json.template_id }}` |
+
+**Check before render:** every `mod_*` is a non-empty string. If red/empty, open `pick_creation` / `Parse_Grok` and use the real key names you see.
 
 ---
 
@@ -270,21 +275,19 @@ Type: **HTTP Request**
 ```text
 ={{ JSON.stringify({
   template_id: $json.template_id,
+  render_scale: 1,
   modifications: {
-    'Headline': $json.mod_Headline,
-    'Subhead': $json.mod_Subhead,
-    'Bullet-1': $json.mod_Bullet_1,
-    'Bullet-2': $json.mod_Bullet_2,
-    'Bullet-3': $json.mod_Bullet_3,
-    'CTA': $json.mod_CTA,
-    'Disclaimer': $json.mod_Disclaimer
+    'Intro-Text.text': $json.mod_Intro,
+    'Fact-1.text': $json.mod_Fact_1,
+    'Fact-2.text': $json.mod_Fact_2,
+    'Fact-3.text': $json.mod_Fact_3,
+    'Fact-4.text': $json.mod_Fact_4,
+    'Fact-5.text': $json.mod_Fact_5
   }
 }) }}
 ```
 
-Or Import cURL from Creatomate, then swap mods to expressions.
-
-**Check:** `id` + `status` planned.
+**Check:** New render `id` each run. Status response `modifications` must show real text (not `""`). If mods are empty, you will keep seeing the “old” default MP4 look.
 
 ---
 
