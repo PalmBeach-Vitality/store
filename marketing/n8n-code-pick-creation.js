@@ -77,6 +77,7 @@ const scored = creations
       raw: c,
       creation_id,
       rank: rankNum,
+      row_number: Number(val(c, ['row_number', 'rowNumber'], 0)) || 0,
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
@@ -178,6 +179,7 @@ return [
 
       creation_id: pick.creation_id,
       creation_rank: pick.rank,
+      row_number: pick.row_number,
       lab_item_id: pick.lab_item_id,
       lab_item: pick.lab_item,
       // Real catalog compound for on-product labels (BPC-157, NAD+, …). Overrides Parse spread.
