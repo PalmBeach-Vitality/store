@@ -37,19 +37,25 @@ URL: `https://api.creatomate.com/v2/renders`
 Body (expression):
 
 ```text
-={{ JSON.stringify({
+={{
+{
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
+    'video_loop_source.source': $json.grok_video_url,
     'Intro-Text.text': $json.mod_intro,
-    'Fact-1.text': $json.mod_fact_1,
-    'Fact-2.text': $json.mod_fact_2,
-    'Fact-3.text': $json.mod_fact_3,
-    'Fact-4.text': $json.mod_fact_4,
-    'Fact-5.text': $json.mod_fact_5
+    'Fact-1-text.text': $json.mod_fact_1,
+    'Fact-2-text.text': $json.mod_fact_2,
+    'Fact-3-text.text': $json.mod_fact_3,
+    'Fact-4-text.text': $json.mod_fact_4,
+    'Fact-5-text.text': $json.mod_fact_5
   }
-}) }}
+}
+}}
 ```
+
+**Must include `video_loop_source.source`.** If omitted, Creatomate keeps the default template footage.  
+**URL must be publicly downloadable** — Drive `uc?export=download&id=…`, not `vidgen.x.ai` (Creatomate often cannot fetch vidgen).
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA` — this template ignores them.
 

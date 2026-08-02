@@ -103,7 +103,21 @@ Example render body (Raw JSON), after Grok URL exists:
 
 Replace `Background-Video` with **your** dynamic element name from Creatomate → Use Template → API Integration.
 
-**Check:** status `modifications` must include that video key with a `https://vidgen.x.ai/...` (or extended Grok) URL — not missing/empty.
+**Check:** status `modifications` must include `video_loop_source.source` with a **public direct MP4 URL**.
+
+### Creatomate cannot fetch `vidgen.x.ai` (common failure)
+
+If `grok_video_url` is `https://vidgen.x.ai/...`, Creatomate often **cannot download it** and silently keeps the **template bed** (text updates, footage does not).
+
+**Fix for today:**
+1. Download the Grok MP4 from the vidgen URL
+2. Upload to Google Drive → share Anyone with the link
+3. Use: `https://drive.google.com/uc?export=download&id=FILE_ID`  
+   (not `/view?usp=sharing`)
+4. Put that URL in `map_creatomate_mods` as `FORCE_PUBLIC_VIDEO`, or on `save_video_url.public_video_url`
+5. Re-run map → creatomate_render
+
+Element name for this template: **`video_loop_source.source`**
 
 ## Extension request shape (n8n Raw JSON)
 
