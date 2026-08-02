@@ -191,8 +191,8 @@ Include Other Input Fields: **ON**
 | Operation | Update |
 | Document | **By ID** (same as `get_reel_creations`) |
 | Sheet | `9-lab-item-creations-500` |
-| Column to Match On | `row_number` (preferred) or `creation_id` |
-| Value to Match | `={{ $('pick_creation').first().json.row_number }}` or `.creation_id` |
+| Column to Match On | **`creation_id`** (not `row_number`) |
+| Value to Match | `={{ $('pick_creation').first().json.creation_id }}` |
 | `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
 | `last_used_at` | `={{ $now.toISO() }}` |
 

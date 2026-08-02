@@ -77,7 +77,11 @@ const scored = creations
       raw: c,
       creation_id,
       rank: rankNum,
-      row_number: Number(val(c, ['row_number', 'rowNumber'], 0)) || 0,
+      // n8n Sheets "Get rows" usually includes row_number; if missing, rank+1
+      // (header is row 1) only when the Sheet is in rank order — prefer creation_id for updates.
+      row_number:
+        Number(val(c, ['row_number', 'rowNumber'], 0)) ||
+        (rankNum > 0 ? rankNum + 1 : 0),
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),

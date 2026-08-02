@@ -40,7 +40,7 @@ If `get_reel_creations` and `sheets_update_creation` point at **different** Docu
 | Document | By ID (lab workbook) |
 | Sheet | `9-lab-item-creations-500` |
 | Mapping Column Mode | Map Each Column Manually |
-| Column to Match On | `creation_id` |
+| Column to Match On | **`creation_id`** (do **not** use `row_number` — often missing/wrong after Code nodes) |
 | Value to Match On | `={{ $('pick_creation').first().json.creation_id }}` |
 
 ### Columns to set (only these two required)
@@ -49,6 +49,8 @@ If `get_reel_creations` and `sheets_update_creation` point at **different** Docu
 |---|---|
 | `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
 | `last_used_at` | `={{ $now.toISO() }}` |
+
+**Match value must look like** `PBVita-Lab-206` (same string as column A in the Sheet).
 
 Do **not** remap `video_prompt` / `creation_id` / whole rows unless you intend to overwrite them.
 
