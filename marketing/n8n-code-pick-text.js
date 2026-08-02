@@ -104,7 +104,19 @@ if (!scored.length) {
   );
 }
 
-const pick = scored[0];
+// Temporary: force a different set so Fact lines visibly change.
+// Set to 0 to use normal least-used picking.
+const FORCE_TEXT_RANK = 2;
+
+let pick = scored[0];
+if (FORCE_TEXT_RANK > 0) {
+  const forced =
+    scored.find((r) => Number(r.rank) === FORCE_TEXT_RANK) ||
+    scored.find((r) => r.text_id === `PBVita-Text-${String(FORCE_TEXT_RANK).padStart(4, '0')}`) ||
+    scored[FORCE_TEXT_RANK - 1];
+  if (forced) pick = forced;
+}
+
 return [
   {
     json: {
@@ -122,4 +134,4 @@ return [
     },
   },
 ];
-]
+
