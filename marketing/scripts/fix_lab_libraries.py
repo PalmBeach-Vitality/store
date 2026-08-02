@@ -350,12 +350,67 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
         "laboratory infusion pump chassis empty",
         "one benchtop pump instrument, empty clamp bay, no needle, no consumable loaded",
     ),
+    "laboratory infusion pump chassis empty": (
+        "laboratory infusion pump chassis empty",
+        "one benchtop pump instrument, empty clamp bay, no needle, no consumable loaded",
+    ),
+    # --- lyophilized / "beside" scenes that cause stacked dual-chamber vials ---
+    "single-chamber lyophilized research vial": (
+        "clear liquid-filled research vial with crimp seal",
+        "one clear single-chamber vial, liquid fill with sharp meniscus, aluminum crimp, rubber stopper, NOT lyophilized cake, NOT dual-chamber",
+    ),
+    "clear vial with lyophilized white cake": (
+        "clear research vial with colorless liquid fill",
+        "one single-chamber vial, clear liquid only, no cake, no powder plug, no dual chamber",
+    ),
+    "lyo vial with cake cracked texture visible": (
+        "amber research vial with clear liquid fill",
+        "one amber single-chamber vial, liquid fill, one crimp cap, no lyophilized cake, no stacked chambers",
+    ),
+    "research vial beside matching empty carton": (
+        "research vial catalog hero alone",
+        "exactly one sealed research vial centered, no carton, no second object",
+    ),
+    "glass vial with desiccant canister beside it": (
+        "glass research vial sealed alone",
+        "exactly one sealed glass vial, no desiccant tin, no second object",
+    ),
+    "research vial next to calibrated weight set": (
+        "research vial standing alone on bench",
+        "exactly one sealed vial, no weight set in frame",
+    ),
+    "amber vial beside silica canister mini": (
+        "amber research vial sealed alone",
+        "exactly one amber vial, no silica canister",
+    ),
+    "amber vial next to calibrated pipette tip": (
+        "amber research vial sealed alone",
+        "exactly one amber vial, no pipette tip in frame",
+    ),
+    "vial rack aluminum 5x10 empty slots with one vial": (
+        "single research vial standing alone on bench",
+        "one vial only, no rack, no other slots or vials",
+    ),
+    "HPLC sample vial with insert": (
+        "HPLC autosampler vial sealed",
+        "one 2ml vial with septum cap, single chamber, no nested insert that looks like a second vial",
+    ),
+    "single research vial seated in cardboard tray well": (
+        "single research vial standing on matte bench",
+        "one vial only, no tray, no other wells",
+    ),
+    "research vial in individual carton window": (
+        "research vial standing free on white surface",
+        "one vial only, no carton window framing",
+    ),
 }
 
 SINGLE_SUBJECT = (
     "SINGLE SUBJECT ONLY: exactly one primary laboratory object, sharp and centered. "
-    "No second vial, no dual-chamber stack, no twin pack, no product collage, "
-    "no overlapping duplicate subjects, no vial-on-vial, no paired props that read as two products."
+    "If the subject is a vial: ONE continuous glass body, ONE chamber, ONE cap/stopper only. "
+    "FORBIDDEN: dual-chamber vials, vial stacked on another vial, two vials fused, "
+    "lyophilized cake that looks like a second vial underneath, twin packs, "
+    "extra vials in frame, product collage, reflections that read as a second product."
 )
 
 AVOID = (
