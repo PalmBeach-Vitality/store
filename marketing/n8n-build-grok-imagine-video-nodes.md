@@ -130,13 +130,15 @@ Reply **`node 3 ok`** + `request_id`.
 ## Node 4 — `wait_video`
 
 **Type:** Wait  
-**After:** `grok_video_start` **or** false from `if_video_ready`  
+**After:** `grok_video_start`  
 **Before:** `grok_video_poll`  
 
-Duration: **60** seconds (tune later).  
+Duration: **200** seconds (15s @ 1080p often needs this; no IF poll-loop required).  
 **Must be enabled** (not deactivated).
 
-Reply **`node 4 ok`**.
+```text
+grok_video_start → wait_video (200s) → grok_video_poll → save_video_url → sheets_update_creation
+```
 
 ---
 
@@ -144,7 +146,7 @@ Reply **`node 4 ok`**.
 
 **Type:** HTTP Request  
 **After:** `wait_video`  
-**Before:** `if_video_ready`
+**Before:** `save_video_url`
 
 | Setting | Value |
 |---|---|
@@ -155,37 +157,15 @@ Reply **`node 4 ok`**.
 
 Preview URL must start with `https://` (no leading `=`).
 
-**Check:** JSON has `status` (`pending` / `done` / `failed`, naming may vary — use whatever you see).
-
-Reply **`node 5 ok`** + the `status` value you see.
-
----
-
-## Node 6 — `if_video_ready`
-
-**Type:** IF  
-**After:** `grok_video_poll`
-
-**String condition:**
-- Value 1: `={{ $json.status }}`
-- is equal to
-- Value 2: `done`
-
-(If your API returns `succeeded` instead, use that exact string.)
-
-| Branch | Wire to |
-|---|---|
-| true | `save_video_url` |
-| false | `wait_video` (loop) |
-
-Reply **`node 6 ok`** when true fires once.
+**Check:** JSON has `status` = `done` (or `succeeded`) and a video URL under `video.url` or `url`.  
+If still `pending`, increase wait (e.g. 240s) and re-run — do not save yet.
 
 ---
 
-## Node 7 — `save_video_url`
+## Node 6 — `save_video_url`
 
 **Type:** Edit Fields  
-**After:** `if_video_ready` true  
+**After:** `grok_video_poll`  
 Include Other Input Fields: **ON**
 
 | Name | Value |
@@ -193,26 +173,30 @@ Include Other Input Fields: **ON**
 | `video_url` | `={{ $json.video.url \|\| $json.url }}` |
 | `grok_video_request_id` | `={{ $json.request_id \|\| $('grok_video_start').first().json.request_id }}` |
 | `still_url` | `={{ $('save_still_url').first().json.still_url }}` |
-| `creation_id` | `={{ $('save_still_url').first().json.creation_id }}` |
-| `compound_id` | `={{ $('save_still_url').first().json.compound_id }}` |
+| `creation_id` | `={{ $('pick_creation').first().json.creation_id }}` |
+| `row_number` | `={{ $('pick_creation').first().json.row_number }}` |
+| `creation_times_used` | `={{ $('pick_creation').first().json.creation_times_used }}` |
 | `created_at` | `={{ $now.toISO() }}` |
 
-**Check:** open `video_url` — unique scene video for this creation.
-
-Reply **`node 7 ok`**.
+**Check:** `video_url` is a real `https://vidgen...` link. If empty, poll was still pending — raise wait.
 
 ---
 
-## Node 8 — Sheets (after video works)
+## Node 7 — Sheets (after `save_video_url` has a URL)
 
-Reuse your working update nodes:
+`sheets_update_creation` → lab tab `9-lab-item-creations-500`:
 
-- `sheets_update_reel` → compounds `video_url` match `compound_id`
-- `sheets_update_creation` → lab tab `9-lab-item-creations-500`, match `creation_id`, set:
-  - `times_used` = `={{ Number($('pick_creation').first().json.creation_times_used || 0) + 1 }}`
-  - `last_used_at` = `={{ $now.toISO() }}`
+| Setting | Value |
+|---|---|
+| Operation | Update |
+| Document | **By ID** (same as `get_reel_creations`) |
+| Sheet | `9-lab-item-creations-500` |
+| Column to Match On | `row_number` (preferred) or `creation_id` |
+| Value to Match | `={{ $('pick_creation').first().json.row_number }}` or `.creation_id` |
+| `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
+| `last_used_at` | `={{ $now.toISO() }}` |
 
-Without this writeback, `pick_creation` always returns the same least-used row (same as when the product sheet isn’t updated).
+Without this writeback, `pick_creation` always returns the same least-used row.
 
 ---
 
