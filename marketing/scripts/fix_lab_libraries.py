@@ -185,25 +185,21 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
 
     out: list[dict] = []
     prev = None
-    cursor = 0
 
     while any(buckets.values()):
-        placed = False
-        for step in range(len(cat_order)):
-            idx = (cursor + step) % len(cat_order)
-            cat = cat_order[idx]
-            if not buckets[cat] or cat == prev:
+        progress = False
+        for cat in cat_order:
+            if not buckets[cat]:
+                continue
+            if cat == prev:
                 continue
             out.append(buckets[cat].popleft())
             prev = cat
-            cursor = (idx + 1) % len(cat_order)
-            placed = True
-            break
-
-        if placed:
+            progress = True
+        if progress:
             continue
 
-        # Only one category left — insert into an earlier safe gap
+        # Only `prev` still has items — tuck into an earlier gap
         cat = next(c for c, q in buckets.items() if q)
         item = buckets[cat].popleft()
         inserted = False
