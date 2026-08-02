@@ -25,11 +25,18 @@ Compat copies (same 500 rows): `8-lab-items-250.csv`, `9-lab-item-creations-250.
 
 Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — categories are interleaved so **no two adjacent ranks share a category** (no vial→vial in the sheet order).
 
-Rebuild / re-interleave:
+Rebuild / re-interleave / realism pass:
 
 ```bash
 python3 marketing/scripts/fix_lab_libraries.py
 ```
+
+**Realism rules baked into the CSVs + prompts**
+- Exactly **one** primary subject (no dual-chamber, twin packs, pairs, stacks of products)
+- No extra vials/pens in non-vial categories (empty tray/box instead)
+- No injection/needle context; filter cartridges and pumps only when needed
+- Every `video_prompt` includes `SINGLE SUBJECT ONLY` + FDA-safe avoid list
+- Category rank order never repeats adjacent categories
 
 ## Quality
 

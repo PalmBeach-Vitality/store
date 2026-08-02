@@ -20,8 +20,14 @@ ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
 
 # Problematic lab_item → (new_name, new_detail)
+# Rule: ONE clear primary subject; no extra vials/pens; no stacks that read as many products.
 REPLACEMENTS: dict[str, tuple[str, str]] = {
+    # --- prior multi-subject fixes ---
     "dual-chamber lyophilized research vial": (
+        "single-chamber lyophilized research vial",
+        "one clear glass vial, single chamber only, white lyophilized cake, sealed septum, aluminum crimp",
+    ),
+    "single-chamber lyophilized research vial": (
         "single-chamber lyophilized research vial",
         "one clear glass vial, single chamber only, white lyophilized cake, sealed septum, aluminum crimp",
     ),
@@ -53,6 +59,10 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
         "single unused nitrile glove laid flat",
         "exactly one glove, flat, unused, no pair visible",
     ),
+    "single unused nitrile glove laid flat": (
+        "single unused nitrile glove laid flat",
+        "exactly one glove, flat, unused, no second glove",
+    ),
     "twin-pack vials in clear clamshell": (
         "single vial in clear clamshell well",
         "exactly one vial in open clamshell, second well empty",
@@ -68,6 +78,10 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
     "serological pipette individually wrapped bundle": (
         "single serological pipette individually wrapped",
         "exactly one wrapped pipette, no bundle stack",
+    ),
+    "single serological pipette individually wrapped": (
+        "single serological pipette individually wrapped",
+        "exactly one wrapped pipette, paper/plastic wrap intact",
     ),
     "LN2 glove pair boxed": (
         "single cryogenic glove on box lid",
@@ -93,11 +107,238 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
         "single sterile glove individually wrapped",
         "exactly one wrapped sterile glove",
     ),
+    # --- cross-category vials (confuses Grok into dual subjects) ---
+    "brushed stainless steel lab tray with vial": (
+        "empty brushed stainless steel lab tray",
+        "one empty rectangular stainless tray, clean mirror finish, no vials or products on it",
+    ),
+    "laboratory freezer box cardboard with vials": (
+        "empty cardboard laboratory freezer box",
+        "one closed cardboard freezer storage box, no vials visible",
+    ),
+    "open carton revealing foam-cradled vial": (
+        "open research carton with empty foam insert",
+        "one open white carton, empty foam well, no vial inside",
+    ),
+    "autosampler tray with vials partial": (
+        "empty HPLC autosampler tray",
+        "one empty plastic autosampler tray, vacant wells only, no vials",
+    ),
+    "foil pouch resealable with vial silhouette": (
+        "resealable foil barrier pouch sealed flat",
+        "one flat sealed foil pouch, no vial silhouette, no product inside view",
+    ),
+    "corrugated mailer for vials": (
+        "corrugated laboratory mailer box closed",
+        "one small closed corrugated mailer, plain, no vials shown",
+    ),
+    "frosted ice pan with sealed vials": (
+        "empty stainless ice pan with crushed ice",
+        "one metal ice pan with ice only, no vials",
+    ),
+    "refrigerator shelf bin with labeled vials": (
+        "empty laboratory refrigerator shelf bin",
+        "one empty plastic fridge bin, no vials",
+    ),
+    "ceramic tile sample with amber vial": (
+        "cool gray ceramic lab tile sample square",
+        "one ceramic tile square only, no vial",
+    ),
+    "wire chrome basket with cleaned vials": (
+        "empty chrome wire laboratory basket",
+        "one empty wire basket, no glassware inside",
+    ),
+    "void fill kraft paper and vial box": (
+        "kraft void-fill paper roll",
+        "one kraft paper roll for packing, no vial box",
+    ),
+    "analytical balance with vial on pan": (
+        "analytical balance with empty weighing pan",
+        "one analytical balance, draft shield, empty pan, no vial on pan",
+    ),
+    "cryo cane with clip for vials": (
+        "empty aluminum cryogenic cane",
+        "one metal cryo cane with empty clips, no vials attached",
+    ),
+    "insulated vial sleeve neoprene": (
+        "neoprene insulated bottle sleeve empty",
+        "one empty neoprene sleeve standing open, no bottle or vial inside",
+    ),
+    "probe thermometer in vial sleeve": (
+        "digital probe thermometer alone",
+        "one digital probe thermometer on bench, no sleeve, no vial",
+    ),
+    "child-resistant research vial cap assortment": (
+        "single child-resistant research bottle cap",
+        "exactly one white CR cap, centered, no assortment pile",
+    ),
+    "calipers measuring a vial diameter": (
+        "digital calipers partially open empty",
+        "one digital caliper tool only, jaws open, nothing between jaws",
+    ),
+    "rigid plastic vial wallet": (
+        "rigid plastic sample card holder empty",
+        "one empty rigid plastic holder, no vials",
+    ),
+    "cryobox cardboard 10x10 with partial vials": (
+        "empty cardboard cryobox 10x10 grid",
+        "one open empty cryobox, all wells vacant, no vials",
+    ),
+    "bench linear organizer with vials pens": (
+        "empty bench linear organizer tray",
+        "one empty desk organizer for lab bench, no pens or vials",
+    ),
+    "drawer organizer custom vial wells": (
+        "empty foam drawer organizer insert",
+        "one empty foam insert with vacant wells, no vials",
+    ),
+    "autoclave tape roll and indicator vial": (
+        "autoclave indicator tape roll",
+        "one roll of autoclave tape only, no vial",
+    ),
+    "molded pulp egg-crate for vials": (
+        "empty molded pulp shipping tray",
+        "one empty molded pulp tray, vacant cells, no vials",
+    ),
+    "barcode scanner beside vial": (
+        "handheld laboratory barcode scanner",
+        "one barcode scanner only, no vial beside it",
+    ),
+    # --- stacks / multiples / weird props ---
+    "beaker nest set of three": (
+        "single borosilicate beaker 250ml",
+        "exactly one clear beaker, empty, graduation marks visible",
+    ),
+    "three-neck flask dry": (
+        "single-neck round bottom flask dry",
+        "one round-bottom flask, single neck, dry glass, no extra necks in use",
+    ),
+    "stack of Petri dishes": (
+        "single sterile Petri dish closed",
+        "exactly one closed Petri dish, clear lid, no stack",
+    ),
+    "sieve stack for powders": (
+        "single laboratory test sieve",
+        "exactly one metal test sieve, mesh visible, no stacked sieves",
+    ),
+    "multipack sleeve holding three cartons": (
+        "single research product carton closed",
+        "exactly one closed carton, no multipack sleeve",
+    ),
+    "unit dose blister of research cartridges five": (
+        "single research cartridge in blister cell",
+        "one blister card showing exactly one cartridge cell, others empty or cropped out",
+    ),
+    "stainless utility cart two shelf": (
+        "stainless laboratory utility cart",
+        "one stainless utility cart, empty shelves, no products on it",
+    ),
+    "cold brick stack of two": (
+        "single laboratory cold brick pack",
+        "exactly one cold pack brick, flat on bench",
+    ),
+    "research pen body disassembled halves": (
+        "research pen capped intact catalog hero",
+        "one intact capped research pen, not disassembled",
+    ),
+    "chemical absorbent pads stack": (
+        "single chemical absorbent pad",
+        "exactly one absorbent pad laid flat",
+    ),
+    "sterile gauze stack in tray": (
+        "single sterile gauze pack sealed",
+        "one sealed gauze pack in a tray, not a tall stack",
+    ),
+    "cuvette rack acrylic holding four": (
+        "empty acrylic cuvette rack",
+        "one empty cuvette rack, vacant slots, no cuvettes",
+    ),
+    "research pen on white infinity cyclorama": (
+        "research pen on matte white seamless paper",
+        "one capped research pen on plain white paper backdrop",
+    ),
+    "clear vial suspended in acrylic block embed mock": (
+        "clear research vial on acrylic display block",
+        "one vial standing on a solid acrylic block base, not embedded inside plastic",
+    ),
+    "serialized hologram sticker pack": (
+        "serialized tamper-evident sticker sheet",
+        "one flat sheet of tamper stickers, matte print, no hologram fantasy glow",
+    ),
+    "research pen clipped to lab coat pocket fabric still": (
+        "research pen on folded lab-coat fabric swatch",
+        "one pen resting on a fabric swatch only, no person, no body",
+    ),
+    "lab stool base only cropped": (
+        "laboratory stool with metal base",
+        "one lab stool, full object, empty seat, no person",
+    ),
+    "gowning bench empty": (
+        "empty cleanroom gowning bench",
+        "one empty wooden or laminate gowning bench, no people",
+    ),
+    "hands-free sensor trash can closed lab": (
+        "closed laboratory step-can waste container",
+        "one closed stainless or plastic lab waste can, no hands, no sensors emphasized",
+    ),
+    "hand sanitizer pump bottle lab brand-agnostic": (
+        "isopropyl alcohol wash bottle",
+        "one labeled IPA wash bottle, squeeze style, laboratory, no hands",
+    ),
+    "acrylic glove box exterior gloves hanging": (
+        "closed acrylic glove box exterior",
+        "one glove box chamber exterior, ports capped, no hanging glove shapes that look like hands in use",
+    ),
+    "cryogenic gloves folded beside cryobox": (
+        "single cryogenic glove folded",
+        "exactly one cryo glove folded, no cryobox, no second glove",
+    ),
+    "septum vial with needle-free research adapter nearby": (
+        "septum research vial with sealed crimp",
+        "one sealed septum vial only, no adapter, no needle hardware",
+    ),
+    "vial in vacuum skin-pack card": (
+        "research vial in simple blister card",
+        "one vial on a flat card blister, realistic retail lab pack, no vacuum skin distortion",
+    ),
+    "amber powder jar with scoop nested on lid": (
+        "amber powder jar sealed lid only",
+        "one amber jar, lid sealed, no scoop on lid",
+    ),
+    "box of nitrile gloves blue closed": (
+        "closed box of nitrile examination gloves",
+        "one closed glove dispenser box, blue, no gloves outside the box",
+    ),
+    "finger cots box": (
+        "closed box of laboratory finger cots",
+        "one closed small product box, catalog still, no fingers or skin",
+    ),
+    # --- injection-adjacent (realistic lab tools, but high Grok misfire risk) ---
+    "cold finger condenser": (
+        "glass cold-finger condenser apparatus",
+        "one glass condenser piece for lab distillation, clear borosilicate, no body parts",
+    ),
+    "glass Hamilton-style syringe pipette": (
+        "glass microliter pipette with metal plunger",
+        "one precision glass pipette tool, no hypodermic needle, research liquid handling only",
+    ),
+    "sterile syringe filter attached to syringe no needle": (
+        "sterile syringe-filter disc unit alone",
+        "one 0.22 micron filter unit only, no syringe body, no needle",
+    ),
+    "glass syringe without needle research only": (
+        "glass research barrel with Luer lock cap",
+        "one glass barrel capped, no needle, no injection context",
+    ),
+    "syringe pump bare with research syringe glass": (
+        "laboratory syringe pump instrument empty",
+        "one syringe pump chassis on bench, empty clamp, no needle, no skin context",
+    ),
+    "syringe filter unit 0.22 micron": (
+        "0.22 micron syringe-filter cartridge",
+        "one small filter cartridge only, packaged or bare, no needle",
+    ),
 }
-
-# multi-dose is fine (realistic) — leave it
-# stainless utility cart two shelf is fine (one cart)
-# research vial in individual carton window is fine (one vial)
 
 SINGLE_SUBJECT = (
     "SINGLE SUBJECT ONLY: exactly one primary laboratory object, sharp and centered. "
