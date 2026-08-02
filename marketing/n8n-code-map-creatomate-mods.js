@@ -36,12 +36,24 @@ function extractProductName(raw) {
   const s = String(raw || '').trim();
   if (!s) return '';
   if (/^palm\s*beach\s*vitality$/i.test(s)) return '';
+  // Reject ISO dates like 2026-08-02 (was incorrectly becoming Intro-Text)
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return '';
   let m = s.match(/^([0-9A-Za-z][0-9A-Za-z./+-]*(?:-[0-9A-Za-z./+-]+)*)\s+Research\b/i);
-  if (m) return m[1];
-  m = s.match(/\b([0-9]+-[A-Za-z0-9-]+|[A-Z]{2,}-?\d{2,4}[A-Za-z]?)\b/);
+  if (m && !/^\d{4}-\d{2}-\d{2}$/.test(m[1])) return m[1];
+  // Prefer real compound tokens; never match plain dates
+  m = s.match(/\b(\d+-[A-Za-z][A-Za-z0-9-]*)\b/);
+  if (m && !/^\d{4}-\d{2}-\d{2}$/.test(m[1])) return m[1];
+  m = s.match(/\b([A-Z]{2,}-?\d{2,4}[A-Za-z]?)\b/);
   if (m) return m[1];
   const first = s.split(/\s+[—–|:]\s+/)[0].trim();
-  if (first && first.length <= 40 && !/palm\s*beach/i.test(first)) return first;
+  if (
+    first &&
+    first.length <= 40 &&
+    !/palm\s*beach/i.test(first) &&
+    !/^\d{4}-\d{2}-\d{2}/.test(first)
+  ) {
+    return first;
+  }
   return '';
 }
 
@@ -51,9 +63,9 @@ function productName(srcList) {
     'product_name',
     'display_name',
     'figma_headline',
-    'ig_caption_draft',
-    'fb_caption_draft',
   ];
+  // Captions last — they often contain dates that used to leak into Intro
+  const fallbackKeys = ['ig_caption_draft', 'fb_caption_draft'];
   for (const src of srcList) {
     if (!src || typeof src !== 'object') continue;
     for (const k of preferredKeys) {
@@ -61,9 +73,16 @@ function productName(srcList) {
       if (name) return name;
     }
   }
+  for (const src of srcList) {
+    if (!src || typeof src !== 'object') continue;
+    for (const k of fallbackKeys) {
+      const name = extractProductName(src[k]);
+      if (name) return name;
+    }
+  }
   throw new Error(
     'PRODUCT NAME missing for Intro-Text. Need compound_name / display_name / figma_headline ' +
-      '(e.g. 5-Amino-1MQ). Do not use Palm Beach Vitality or lab_item. ' +
+      '(e.g. 5-Amino-1MQ). Do not use Palm Beach Vitality, lab_item, or a date. ' +
       'Keys on input: ' +
       Object.keys(srcList[0] || {}).join(', ')
   );
