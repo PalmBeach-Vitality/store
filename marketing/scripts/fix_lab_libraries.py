@@ -199,18 +199,31 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
         if progress:
             continue
 
-        # Only `prev` still has items — tuck into an earlier gap
+        # Only `prev` still has items — tuck into a safe gap (prefer near the end,
+        # never dump leftovers at rank 1).
         cat = next(c for c, q in buckets.items() if q)
         item = buckets[cat].popleft()
         inserted = False
-        for i in range(len(out) + 1):
+        for i in range(len(out), -1, -1):
             left = out[i - 1]["category"] if i > 0 else None
             right = out[i]["category"] if i < len(out) else None
             if left == item["category"] or right == item["category"]:
                 continue
+            # Keep the opening cycle clean — don't insert into the first 10 ranks
+            if i < min(10, len(out)):
+                continue
             out.insert(i, item)
             inserted = True
             break
+        if not inserted:
+            for i in range(len(out), -1, -1):
+                left = out[i - 1]["category"] if i > 0 else None
+                right = out[i]["category"] if i < len(out) else None
+                if left == item["category"] or right == item["category"]:
+                    continue
+                out.insert(i, item)
+                inserted = True
+                break
         if not inserted:
             raise SystemExit(
                 f"Cannot place leftover category without adjacency: {item['category']}"

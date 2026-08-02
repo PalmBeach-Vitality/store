@@ -2,21 +2,8 @@
   "count": 500,
   "items": [
     {
-      "lab_item_id": "LAB-397",
-      "rank": 1,
-      "category": "instruments",
-      "lab_item": "data acquisition module USB",
-      "material_detail": "DAQ module",
-      "surface": "white melamine cleanroom table",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
-      "status": "Active",
-      "times_used": "0",
-      "last_used_at": ""
-    },
-    {
       "lab_item_id": "LAB-181",
-      "rank": 2,
+      "rank": 1,
       "category": "surfaces_org",
       "lab_item": "brushed stainless steel lab tray with vial",
       "material_detail": "medical tray, single vial centered",
@@ -28,21 +15,8 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-398",
-      "rank": 3,
-      "category": "instruments",
-      "lab_item": "lab computer terminal blank screen cropped",
-      "material_detail": "terminal only blank",
-      "surface": "textured slate sample board",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
-      "status": "Active",
-      "times_used": "0",
-      "last_used_at": ""
-    },
-    {
       "lab_item_id": "LAB-206",
-      "rank": 4,
+      "rank": 2,
       "category": "packaging",
       "lab_item": "white research product carton closed",
       "material_detail": "matte white carton, minimal branding area",
@@ -54,21 +28,8 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-399",
-      "rank": 5,
-      "category": "instruments",
-      "lab_item": "balance anti-vibration table section",
-      "material_detail": "table surface",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
-      "status": "Active",
-      "times_used": "0",
-      "last_used_at": ""
-    },
-    {
       "lab_item_id": "LAB-231",
-      "rank": 6,
+      "rank": 3,
       "category": "ppe_sterile",
       "lab_item": "box of nitrile gloves blue closed",
       "material_detail": "glove box, no hands",
@@ -80,21 +41,8 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-400",
-      "rank": 7,
-      "category": "instruments",
-      "lab_item": "ionizer bar over weigh station",
-      "material_detail": "ionizer",
-      "surface": "anodized aluminum tray",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
-      "status": "Active",
-      "times_used": "0",
-      "last_used_at": ""
-    },
-    {
       "lab_item_id": "LAB-001",
-      "rank": 8,
+      "rank": 4,
       "category": "vials_containers",
       "lab_item": "amber glass research vial with rubber stopper",
       "material_detail": "amber glass, aluminum crimp seal, white rubber stopper, clear fill line",
@@ -106,21 +54,8 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-401",
-      "rank": 9,
-      "category": "instruments",
-      "lab_item": "static gun industrial lab",
-      "material_detail": "ionizing gun",
-      "surface": "polished black reflective acrylic",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
-      "status": "Active",
-      "times_used": "0",
-      "last_used_at": ""
-    },
-    {
       "lab_item_id": "LAB-041",
-      "rank": 10,
+      "rank": 5,
       "category": "research_pens",
       "lab_item": "pre-filled research pen on matte black acrylic",
       "material_detail": "clear barrel window, dial collar, capped tip cover on",
@@ -133,7 +68,7 @@
     },
     {
       "lab_item_id": "LAB-066",
-      "rank": 11,
+      "rank": 6,
       "category": "glassware",
       "lab_item": "borosilicate Erlenmeyer flask 250ml empty",
       "material_detail": "classic flask, frosted marking spot",
@@ -145,21 +80,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-402",
-      "rank": 12,
+      "lab_item_id": "LAB-397",
+      "rank": 7,
       "category": "instruments",
-      "lab_item": "particle-free pen for cleanroom labeling",
-      "material_detail": "cleanroom pen",
-      "surface": "matte pure white infinity surface",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "data acquisition module USB",
+      "material_detail": "DAQ module",
+      "surface": "white melamine cleanroom table",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-101",
-      "rank": 13,
+      "rank": 8,
       "category": "liquid_handling",
       "lab_item": "single-channel micropipette upright",
       "material_detail": "adjustable volume pipette, tip ejector, no tip attached",
@@ -172,7 +107,7 @@
     },
     {
       "lab_item_id": "LAB-126",
-      "rank": 14,
+      "rank": 9,
       "category": "cold_chain",
       "lab_item": "laboratory freezer box cardboard with vials",
       "material_detail": "cryobox with grid, few vials seated",
@@ -185,7 +120,7 @@
     },
     {
       "lab_item_id": "LAB-486",
-      "rank": 15,
+      "rank": 10,
       "category": "qc_analytical",
       "lab_item": "mass spectrometer inlet detail idle",
       "material_detail": "instrument detail idle",
@@ -198,7 +133,7 @@
     },
     {
       "lab_item_id": "LAB-182",
-      "rank": 16,
+      "rank": 11,
       "category": "surfaces_org",
       "lab_item": "black anodized aluminum instrument tray",
       "material_detail": "matte black metal tray",
@@ -211,7 +146,7 @@
     },
     {
       "lab_item_id": "LAB-207",
-      "rank": 17,
+      "rank": 12,
       "category": "packaging",
       "lab_item": "open carton revealing foam-cradled vial",
       "material_detail": "unboxing still, vial in foam",
@@ -224,7 +159,7 @@
     },
     {
       "lab_item_id": "LAB-232",
-      "rank": 18,
+      "rank": 13,
       "category": "ppe_sterile",
       "lab_item": "single unused nitrile glove laid flat",
       "material_detail": "exactly one glove, flat, unused, no pair visible",
@@ -237,7 +172,7 @@
     },
     {
       "lab_item_id": "LAB-002",
-      "rank": 19,
+      "rank": 14,
       "category": "vials_containers",
       "lab_item": "clear borosilicate peptide vial upright",
       "material_detail": "type I borosilicate, 10ml scale markings, sterile cap",
@@ -250,7 +185,7 @@
     },
     {
       "lab_item_id": "LAB-042",
-      "rank": 20,
+      "rank": 15,
       "category": "research_pens",
       "lab_item": "research pen with visible liquid barrel macro",
       "material_detail": "meniscus and glass barrel detail, cap beside pen",
@@ -263,7 +198,7 @@
     },
     {
       "lab_item_id": "LAB-067",
-      "rank": 21,
+      "rank": 16,
       "category": "glassware",
       "lab_item": "Erlenmeyer flask with clear buffer solution",
       "material_detail": "liquid to marked line, no foam overflow",
@@ -275,21 +210,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-403",
-      "rank": 22,
+      "lab_item_id": "LAB-398",
+      "rank": 17,
       "category": "instruments",
-      "lab_item": "cleanroom binder plastic",
-      "material_detail": "binder",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "lab computer terminal blank screen cropped",
+      "material_detail": "terminal only blank",
+      "surface": "textured slate sample board",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-102",
-      "rank": 23,
+      "rank": 18,
       "category": "liquid_handling",
       "lab_item": "micropipette with sterile filtered tip attached",
       "material_detail": "tip on, never touching skin",
@@ -302,7 +237,7 @@
     },
     {
       "lab_item_id": "LAB-127",
-      "rank": 24,
+      "rank": 19,
       "category": "cold_chain",
       "lab_item": "polycarbonate freezer box empty grid",
       "material_detail": "9x9 grid box open",
@@ -315,7 +250,7 @@
     },
     {
       "lab_item_id": "LAB-487",
-      "rank": 25,
+      "rank": 20,
       "category": "qc_analytical",
       "lab_item": "LC column oven door closed",
       "material_detail": "oven door",
@@ -328,7 +263,7 @@
     },
     {
       "lab_item_id": "LAB-183",
-      "rank": 26,
+      "rank": 21,
       "category": "surfaces_org",
       "lab_item": "white melamine lab bench section",
       "material_detail": "clean bench surface, product only",
@@ -341,7 +276,7 @@
     },
     {
       "lab_item_id": "LAB-208",
-      "rank": 27,
+      "rank": 22,
       "category": "packaging",
       "lab_item": "blister card of research cartridges",
       "material_detail": "retail-style research blister",
@@ -354,7 +289,7 @@
     },
     {
       "lab_item_id": "LAB-233",
-      "rank": 28,
+      "rank": 23,
       "category": "ppe_sterile",
       "lab_item": "sterile sleeve covers packaged",
       "material_detail": "PPE pack",
@@ -367,7 +302,7 @@
     },
     {
       "lab_item_id": "LAB-003",
-      "rank": 29,
+      "rank": 24,
       "category": "vials_containers",
       "lab_item": "frosted white research vial with matte label panel",
       "material_detail": "opaque white glass, flat label face, sealed top",
@@ -380,7 +315,7 @@
     },
     {
       "lab_item_id": "LAB-043",
-      "rank": 30,
+      "rank": 25,
       "category": "research_pens",
       "lab_item": "precision research pen standing upright",
       "material_detail": "vertical hero, soft reflection, cap on",
@@ -393,7 +328,7 @@
     },
     {
       "lab_item_id": "LAB-068",
-      "rank": 31,
+      "rank": 26,
       "category": "glassware",
       "lab_item": "volumetric flask with stopper",
       "material_detail": "class A volumetric flask, ground glass stopper",
@@ -405,21 +340,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-404",
-      "rank": 32,
+      "lab_item_id": "LAB-399",
+      "rank": 27,
       "category": "instruments",
-      "lab_item": "glove integrity tester unit",
-      "material_detail": "tester",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "balance anti-vibration table section",
+      "material_detail": "table surface",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-103",
-      "rank": 33,
+      "rank": 28,
       "category": "liquid_handling",
       "lab_item": "multicolor micropipette set in stand",
       "material_detail": "P20 P200 P1000 in carousel",
@@ -432,7 +367,7 @@
     },
     {
       "lab_item_id": "LAB-128",
-      "rank": 34,
+      "rank": 29,
       "category": "cold_chain",
       "lab_item": "cold packs flanking a research carton",
       "material_detail": "gel packs and white carton",
@@ -445,7 +380,7 @@
     },
     {
       "lab_item_id": "LAB-488",
-      "rank": 35,
+      "rank": 30,
       "category": "qc_analytical",
       "lab_item": "autosampler tray with vials partial",
       "material_detail": "tray",
@@ -458,7 +393,7 @@
     },
     {
       "lab_item_id": "LAB-184",
-      "rank": 36,
+      "rank": 31,
       "category": "surfaces_org",
       "lab_item": "epoxy resin lab countertop swatch with beaker",
       "material_detail": "chemical-resistant surface",
@@ -471,7 +406,7 @@
     },
     {
       "lab_item_id": "LAB-209",
-      "rank": 37,
+      "rank": 32,
       "category": "packaging",
       "lab_item": "foil pouch resealable with vial silhouette",
       "material_detail": "barrier pouch",
@@ -484,7 +419,7 @@
     },
     {
       "lab_item_id": "LAB-234",
-      "rank": 38,
+      "rank": 33,
       "category": "ppe_sterile",
       "lab_item": "bouffant cap package",
       "material_detail": "hair cover pack",
@@ -497,7 +432,7 @@
     },
     {
       "lab_item_id": "LAB-004",
-      "rank": 39,
+      "rank": 34,
       "category": "vials_containers",
       "lab_item": "single-chamber lyophilized research vial",
       "material_detail": "one clear glass vial, single chamber only, white lyophilized cake, sealed septum, aluminum crimp",
@@ -510,7 +445,7 @@
     },
     {
       "lab_item_id": "LAB-044",
-      "rank": 40,
+      "rank": 35,
       "category": "research_pens",
       "lab_item": "single research pen on slate",
       "material_detail": "exactly one capped research pen, centered on slate, no second pen",
@@ -523,7 +458,7 @@
     },
     {
       "lab_item_id": "LAB-069",
-      "rank": 41,
+      "rank": 36,
       "category": "glassware",
       "lab_item": "graduated cylinder 100ml on stand",
       "material_detail": "clear graduations facing camera",
@@ -535,21 +470,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-405",
-      "rank": 42,
+      "lab_item_id": "LAB-400",
+      "rank": 37,
       "category": "instruments",
-      "lab_item": "seal strength tester grips empty",
-      "material_detail": "tester grips",
-      "surface": "cool gray ceramic tile",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "ionizer bar over weigh station",
+      "material_detail": "ionizer",
+      "surface": "anodized aluminum tray",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-104",
-      "rank": 43,
+      "rank": 38,
       "category": "liquid_handling",
       "lab_item": "electronic pipette on charging stand",
       "material_detail": "modern electronic pipette docked",
@@ -562,7 +497,7 @@
     },
     {
       "lab_item_id": "LAB-129",
-      "rank": 44,
+      "rank": 39,
       "category": "cold_chain",
       "lab_item": "insulated shipper open showing foam insert",
       "material_detail": "cold-chain shipper, vial well empty or filled",
@@ -575,7 +510,7 @@
     },
     {
       "lab_item_id": "LAB-489",
-      "rank": 45,
+      "rank": 40,
       "category": "qc_analytical",
       "lab_item": "GC column box",
       "material_detail": "column box",
@@ -588,7 +523,7 @@
     },
     {
       "lab_item_id": "LAB-185",
-      "rank": 46,
+      "rank": 41,
       "category": "surfaces_org",
       "lab_item": "blue absorbent bench underpad with pen",
       "material_detail": "absorbent bench underpad, research pen",
@@ -601,7 +536,7 @@
     },
     {
       "lab_item_id": "LAB-210",
-      "rank": 47,
+      "rank": 42,
       "category": "packaging",
       "lab_item": "corrugated mailer for vials",
       "material_detail": "small shipper",
@@ -614,7 +549,7 @@
     },
     {
       "lab_item_id": "LAB-235",
-      "rank": 48,
+      "rank": 43,
       "category": "ppe_sterile",
       "lab_item": "safety glasses on lab tray",
       "material_detail": "clear safety glasses",
@@ -627,7 +562,7 @@
     },
     {
       "lab_item_id": "LAB-005",
-      "rank": 49,
+      "rank": 44,
       "category": "vials_containers",
       "lab_item": "screw-cap scintillation vial",
       "material_detail": "glass body, white screw cap, lab inventory barcode",
@@ -640,7 +575,7 @@
     },
     {
       "lab_item_id": "LAB-045",
-      "rank": 50,
+      "rank": 45,
       "category": "research_pens",
       "lab_item": "research pen cap removed resting beside barrel",
       "material_detail": "cap and pen as still life, no skin contact",
@@ -653,7 +588,7 @@
     },
     {
       "lab_item_id": "LAB-070",
-      "rank": 51,
+      "rank": 46,
       "category": "glassware",
       "lab_item": "beaker 600ml with pouring spout",
       "material_detail": "heavy wall beaker, spout detail",
@@ -665,21 +600,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-406",
-      "rank": 52,
+      "lab_item_id": "LAB-401",
+      "rank": 47,
       "category": "instruments",
-      "lab_item": "torque tester for caps",
-      "material_detail": "cap torque tool",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "static gun industrial lab",
+      "material_detail": "ionizing gun",
+      "surface": "polished black reflective acrylic",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-105",
-      "rank": 53,
+      "rank": 48,
       "category": "liquid_handling",
       "lab_item": "repeater pipette with tip comb",
       "material_detail": "combitip-style research pipette",
@@ -692,7 +627,7 @@
     },
     {
       "lab_item_id": "LAB-130",
-      "rank": 54,
+      "rank": 49,
       "category": "cold_chain",
       "lab_item": "mini cooler bag for research samples unzipped",
       "material_detail": "soft cooler, gel pack visible",
@@ -705,7 +640,7 @@
     },
     {
       "lab_item_id": "LAB-490",
-      "rank": 55,
+      "rank": 50,
       "category": "qc_analytical",
       "lab_item": "helium cylinder regulator detail",
       "material_detail": "regulator",
@@ -718,7 +653,7 @@
     },
     {
       "lab_item_id": "LAB-186",
-      "rank": 56,
+      "rank": 51,
       "category": "surfaces_org",
       "lab_item": "perforated stainless drying rack with glassware",
       "material_detail": "pegs holding flasks",
@@ -731,7 +666,7 @@
     },
     {
       "lab_item_id": "LAB-211",
-      "rank": 57,
+      "rank": 52,
       "category": "packaging",
       "lab_item": "tamper-evident label sheet",
       "material_detail": "void labels",
@@ -744,7 +679,7 @@
     },
     {
       "lab_item_id": "LAB-236",
-      "rank": 58,
+      "rank": 53,
       "category": "ppe_sterile",
       "lab_item": "face shield on stand",
       "material_detail": "shield alone",
@@ -757,7 +692,7 @@
     },
     {
       "lab_item_id": "LAB-006",
-      "rank": 59,
+      "rank": 54,
       "category": "vials_containers",
       "lab_item": "cryovial with silicone gasket cap",
       "material_detail": "polypropylene cryovial, external threads, color-coded cap insert",
@@ -770,7 +705,7 @@
     },
     {
       "lab_item_id": "LAB-046",
-      "rank": 60,
+      "rank": 55,
       "category": "research_pens",
       "lab_item": "research pen on mirrored chrome plate",
       "material_detail": "hard specular highlights, product catalog",
@@ -783,7 +718,7 @@
     },
     {
       "lab_item_id": "LAB-071",
-      "rank": 61,
+      "rank": 56,
       "category": "glassware",
       "lab_item": "beaker nest set of three",
       "material_detail": "stacked sizes, clinical arrangement",
@@ -795,12 +730,12 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-146",
-      "rank": 62,
+      "lab_item_id": "LAB-402",
+      "rank": 57,
       "category": "instruments",
-      "lab_item": "analytical balance with draft shield closed",
-      "material_detail": "four-point balance, doors shut, pan empty",
-      "surface": "mirrored chrome instrument tray",
+      "lab_item": "particle-free pen for cleanroom labeling",
+      "material_detail": "cleanroom pen",
+      "surface": "matte pure white infinity surface",
       "lighting": "cool clinical blue-white LED",
       "camera_move": "extreme macro push-in",
       "status": "Active",
@@ -809,7 +744,7 @@
     },
     {
       "lab_item_id": "LAB-106",
-      "rank": 63,
+      "rank": 58,
       "category": "liquid_handling",
       "lab_item": "serological pipette pump controller",
       "material_detail": "pipette controller device alone",
@@ -822,7 +757,7 @@
     },
     {
       "lab_item_id": "LAB-131",
-      "rank": 64,
+      "rank": 59,
       "category": "cold_chain",
       "lab_item": "temperature data logger on pack",
       "material_detail": "small logger device with display",
@@ -835,7 +770,7 @@
     },
     {
       "lab_item_id": "LAB-491",
-      "rank": 65,
+      "rank": 60,
       "category": "qc_analytical",
       "lab_item": "zero air generator compact",
       "material_detail": "generator",
@@ -848,7 +783,7 @@
     },
     {
       "lab_item_id": "LAB-187",
-      "rank": 66,
+      "rank": 61,
       "category": "surfaces_org",
       "lab_item": "acrylic glove box exterior gloves hanging",
       "material_detail": "box exterior, no person",
@@ -861,7 +796,7 @@
     },
     {
       "lab_item_id": "LAB-212",
-      "rank": 67,
+      "rank": 62,
       "category": "packaging",
       "lab_item": "roll of thermal lab labels",
       "material_detail": "label stock roll",
@@ -874,7 +809,7 @@
     },
     {
       "lab_item_id": "LAB-237",
-      "rank": 68,
+      "rank": 63,
       "category": "ppe_sterile",
       "lab_item": "lab coat on hanger cropped torso-less",
       "material_detail": "white coat garment only, no body",
@@ -887,7 +822,7 @@
     },
     {
       "lab_item_id": "LAB-007",
-      "rank": 69,
+      "rank": 64,
       "category": "vials_containers",
       "lab_item": "amber dropper-style research bottle sealed",
       "material_detail": "amber glass, child-resistant research cap, no lifestyle cues",
@@ -900,7 +835,7 @@
     },
     {
       "lab_item_id": "LAB-047",
-      "rank": 70,
+      "rank": 65,
       "category": "research_pens",
       "lab_item": "research pen with dose window close-up",
       "material_detail": "numeric window readable, shallow depth",
@@ -913,7 +848,7 @@
     },
     {
       "lab_item_id": "LAB-072",
-      "rank": 71,
+      "rank": 66,
       "category": "glassware",
       "lab_item": "round-bottom flask on cork ring",
       "material_detail": "flask seated in cork support ring",
@@ -925,21 +860,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-407",
-      "rank": 72,
+      "lab_item_id": "LAB-403",
+      "rank": 67,
       "category": "instruments",
-      "lab_item": "vision inspection camera enclosure",
-      "material_detail": "camera housing",
-      "surface": "white melamine cleanroom table",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "cleanroom binder plastic",
+      "material_detail": "binder",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-107",
-      "rank": 73,
+      "rank": 68,
       "category": "liquid_handling",
       "lab_item": "box of sterile pipette tips closed",
       "material_detail": "hinged tip box, rack visible through lid",
@@ -952,7 +887,7 @@
     },
     {
       "lab_item_id": "LAB-132",
-      "rank": 74,
+      "rank": 69,
       "category": "cold_chain",
       "lab_item": "cryogenic gloves folded beside cryobox",
       "material_detail": "PPE as object, no person wearing",
@@ -965,7 +900,7 @@
     },
     {
       "lab_item_id": "LAB-492",
-      "rank": 75,
+      "rank": 70,
       "category": "qc_analytical",
       "lab_item": "TOC analyzer exterior",
       "material_detail": "analyzer",
@@ -978,7 +913,7 @@
     },
     {
       "lab_item_id": "LAB-188",
-      "rank": 76,
+      "rank": 71,
       "category": "surfaces_org",
       "lab_item": "modular lab shelving with neat reagent bottles",
       "material_detail": "organized shelf hero",
@@ -991,7 +926,7 @@
     },
     {
       "lab_item_id": "LAB-213",
-      "rank": 77,
+      "rank": 72,
       "category": "packaging",
       "lab_item": "serialized hologram sticker pack",
       "material_detail": "anti-counterfeit stickers",
@@ -1004,7 +939,7 @@
     },
     {
       "lab_item_id": "LAB-238",
-      "rank": 78,
+      "rank": 73,
       "category": "ppe_sterile",
       "lab_item": "shoe covers packaged",
       "material_detail": "disposable covers",
@@ -1017,7 +952,7 @@
     },
     {
       "lab_item_id": "LAB-008",
-      "rank": 79,
+      "rank": 74,
       "category": "vials_containers",
       "lab_item": "HPLC sample vial with insert",
       "material_detail": "2ml autosampler vial, PTFE/silicone septum, glass insert",
@@ -1030,7 +965,7 @@
     },
     {
       "lab_item_id": "LAB-048",
-      "rank": 80,
+      "rank": 75,
       "category": "research_pens",
       "lab_item": "cartridge for research pen alone",
       "material_detail": "glass cartridge with plunger, no pen body",
@@ -1043,7 +978,7 @@
     },
     {
       "lab_item_id": "LAB-073",
-      "rank": 81,
+      "rank": 76,
       "category": "glassware",
       "lab_item": "three-neck flask dry",
       "material_detail": "complex glass joint geometry, product still",
@@ -1055,21 +990,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-408",
-      "rank": 82,
+      "lab_item_id": "LAB-404",
+      "rank": 77,
       "category": "instruments",
-      "lab_item": "label verification scanner tunnel",
-      "material_detail": "scan tunnel",
-      "surface": "textured slate sample board",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "glove integrity tester unit",
+      "material_detail": "tester",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-108",
-      "rank": 83,
+      "rank": 78,
       "category": "liquid_handling",
       "lab_item": "open pipette tip rack blue tips",
       "material_detail": "96 tips orderly grid",
@@ -1082,7 +1017,7 @@
     },
     {
       "lab_item_id": "LAB-133",
-      "rank": 84,
+      "rank": 79,
       "category": "cold_chain",
       "lab_item": "liquid nitrogen vapor shipper exterior",
       "material_detail": "dry shipper dewar exterior only",
@@ -1095,7 +1030,7 @@
     },
     {
       "lab_item_id": "LAB-493",
-      "rank": 85,
+      "rank": 80,
       "category": "qc_analytical",
       "lab_item": "dissolution apparatus basket idle",
       "material_detail": "basket apparatus",
@@ -1108,7 +1043,7 @@
     },
     {
       "lab_item_id": "LAB-189",
-      "rank": 86,
+      "rank": 81,
       "category": "surfaces_org",
       "lab_item": "pegboard with hanging clamps and rings",
       "material_detail": "tools arranged",
@@ -1121,7 +1056,7 @@
     },
     {
       "lab_item_id": "LAB-214",
-      "rank": 87,
+      "rank": 82,
       "category": "packaging",
       "lab_item": "insert card folded research use only",
       "material_detail": "paper insert, disclaimer visible briefly",
@@ -1134,7 +1069,7 @@
     },
     {
       "lab_item_id": "LAB-239",
-      "rank": 88,
+      "rank": 83,
       "category": "ppe_sterile",
       "lab_item": "sterile alcohol prep pads box",
       "material_detail": "pads box",
@@ -1147,7 +1082,7 @@
     },
     {
       "lab_item_id": "LAB-009",
-      "rank": 89,
+      "rank": 84,
       "category": "vials_containers",
       "lab_item": "headspace vial with crimp cap",
       "material_detail": "clear glass, aluminum crimp, blue septum",
@@ -1160,7 +1095,7 @@
     },
     {
       "lab_item_id": "LAB-049",
-      "rank": 90,
+      "rank": 85,
       "category": "research_pens",
       "lab_item": "research pen in open hard case insert",
       "material_detail": "foam-cut case, pen seated, lid open",
@@ -1173,7 +1108,7 @@
     },
     {
       "lab_item_id": "LAB-074",
-      "rank": 91,
+      "rank": 86,
       "category": "glassware",
       "lab_item": "condenser glass column horizontal",
       "material_detail": "Liebig-style condenser as object",
@@ -1185,21 +1120,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-409",
-      "rank": 92,
+      "lab_item_id": "LAB-405",
+      "rank": 87,
       "category": "instruments",
-      "lab_item": "metal detector aperture lab pack line",
-      "material_detail": "aperture only",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "seal strength tester grips empty",
+      "material_detail": "tester grips",
+      "surface": "cool gray ceramic tile",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-109",
-      "rank": 93,
+      "rank": 88,
       "category": "liquid_handling",
       "lab_item": "reservoir trough for multichannel",
       "material_detail": "reagent reservoir empty clean",
@@ -1212,7 +1147,7 @@
     },
     {
       "lab_item_id": "LAB-134",
-      "rank": 94,
+      "rank": 89,
       "category": "cold_chain",
       "lab_item": "frosted ice pan with sealed vials",
       "material_detail": "metal pan, light frost, vials upright",
@@ -1225,7 +1160,7 @@
     },
     {
       "lab_item_id": "LAB-494",
-      "rank": 95,
+      "rank": 90,
       "category": "qc_analytical",
       "lab_item": "hardness tester for solid research materials",
       "material_detail": "tester",
@@ -1238,7 +1173,7 @@
     },
     {
       "lab_item_id": "LAB-190",
-      "rank": 96,
+      "rank": 91,
       "category": "surfaces_org",
       "lab_item": "ESD mat with research carton",
       "material_detail": "static-dissipative mat",
@@ -1251,7 +1186,7 @@
     },
     {
       "lab_item_id": "LAB-215",
-      "rank": 97,
+      "rank": 92,
       "category": "packaging",
       "lab_item": "desiccant packets arranged",
       "material_detail": "silica gel packs",
@@ -1264,7 +1199,7 @@
     },
     {
       "lab_item_id": "LAB-240",
-      "rank": 98,
+      "rank": 93,
       "category": "ppe_sterile",
       "lab_item": "sterile gauze stack in tray",
       "material_detail": "gauze",
@@ -1277,7 +1212,7 @@
     },
     {
       "lab_item_id": "LAB-010",
-      "rank": 99,
+      "rank": 94,
       "category": "vials_containers",
       "lab_item": "amber serum vial lying on side",
       "material_detail": "20ml amber vial, rubber stopper, reflective glass",
@@ -1290,7 +1225,7 @@
     },
     {
       "lab_item_id": "LAB-050",
-      "rank": 100,
+      "rank": 95,
       "category": "research_pens",
       "lab_item": "research pen beside sealed cartridge blister",
       "material_detail": "blister pack and pen as kit components",
@@ -1303,7 +1238,7 @@
     },
     {
       "lab_item_id": "LAB-075",
-      "rank": 101,
+      "rank": 96,
       "category": "glassware",
       "lab_item": "separatory funnel closed stopcock",
       "material_detail": "pear-shaped funnel, PTFE stopcock",
@@ -1315,21 +1250,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-410",
-      "rank": 102,
+      "lab_item_id": "LAB-406",
+      "rank": 97,
       "category": "instruments",
-      "lab_item": "checkweigher conveyor section static",
-      "material_detail": "conveyor static product",
-      "surface": "anodized aluminum tray",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "torque tester for caps",
+      "material_detail": "cap torque tool",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-110",
-      "rank": 103,
+      "rank": 98,
       "category": "liquid_handling",
       "lab_item": "multichannel pipette 8-channel",
       "material_detail": "8-channel head, tips off",
@@ -1342,7 +1277,7 @@
     },
     {
       "lab_item_id": "LAB-135",
-      "rank": 104,
+      "rank": 99,
       "category": "cold_chain",
       "lab_item": "refrigerator shelf bin with labeled vials",
       "material_detail": "lab fridge organizing bin",
@@ -1355,7 +1290,7 @@
     },
     {
       "lab_item_id": "LAB-495",
-      "rank": 105,
+      "rank": 100,
       "category": "qc_analytical",
       "lab_item": "friability drum open empty",
       "material_detail": "drum",
@@ -1368,7 +1303,7 @@
     },
     {
       "lab_item_id": "LAB-191",
-      "rank": 106,
+      "rank": 101,
       "category": "surfaces_org",
       "lab_item": "ceramic tile sample with amber vial",
       "material_detail": "cool clinical tile",
@@ -1381,7 +1316,7 @@
     },
     {
       "lab_item_id": "LAB-216",
-      "rank": 107,
+      "rank": 102,
       "category": "packaging",
       "lab_item": "oxygen absorber packets",
       "material_detail": "packet still life",
@@ -1394,7 +1329,7 @@
     },
     {
       "lab_item_id": "LAB-241",
-      "rank": 108,
+      "rank": 103,
       "category": "ppe_sterile",
       "lab_item": "autoclaved instrument pouch sealed",
       "material_detail": "sterile pouch",
@@ -1407,7 +1342,7 @@
     },
     {
       "lab_item_id": "LAB-011",
-      "rank": 109,
+      "rank": 104,
       "category": "vials_containers",
       "lab_item": "single research vial seated in cardboard tray well",
       "material_detail": "exactly one clear vial in one die-cut well, other wells empty, no second vial",
@@ -1420,7 +1355,7 @@
     },
     {
       "lab_item_id": "LAB-051",
-      "rank": 110,
+      "rank": 105,
       "category": "research_pens",
       "lab_item": "frosted research pen body with metal clip",
       "material_detail": "matte body texture, metal pocket clip",
@@ -1433,7 +1368,7 @@
     },
     {
       "lab_item_id": "LAB-076",
-      "rank": 111,
+      "rank": 106,
       "category": "glassware",
       "lab_item": "Petri dish closed sterile",
       "material_detail": "clear dish, condensation-free",
@@ -1445,21 +1380,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-147",
-      "rank": 112,
+      "lab_item_id": "LAB-146",
+      "rank": 107,
       "category": "instruments",
-      "lab_item": "analytical balance with vial on pan",
-      "material_detail": "single vial being weighed concept, still",
-      "surface": "white melamine cleanroom table",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "analytical balance with draft shield closed",
+      "material_detail": "four-point balance, doors shut, pan empty",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-111",
-      "rank": 113,
+      "rank": 108,
       "category": "liquid_handling",
       "lab_item": "positive displacement pipette",
       "material_detail": "specialty pipette body",
@@ -1472,7 +1407,7 @@
     },
     {
       "lab_item_id": "LAB-136",
-      "rank": 114,
+      "rank": 109,
       "category": "cold_chain",
       "lab_item": "cold chain indicator sticker sheet",
       "material_detail": "time-temp indicator labels",
@@ -1485,7 +1420,7 @@
     },
     {
       "lab_item_id": "LAB-496",
-      "rank": 115,
+      "rank": 110,
       "category": "qc_analytical",
       "lab_item": "tap density tester",
       "material_detail": "tester",
@@ -1498,7 +1433,7 @@
     },
     {
       "lab_item_id": "LAB-192",
-      "rank": 116,
+      "rank": 111,
       "category": "surfaces_org",
       "lab_item": "marble pass-through shelf with sealed box",
       "material_detail": "cleanroom pass aesthetic",
@@ -1511,7 +1446,7 @@
     },
     {
       "lab_item_id": "LAB-217",
-      "rank": 117,
+      "rank": 112,
       "category": "packaging",
       "lab_item": "bubble wrap coil beside carton",
       "material_detail": "pack materials",
@@ -1524,7 +1459,7 @@
     },
     {
       "lab_item_id": "LAB-242",
-      "rank": 118,
+      "rank": 113,
       "category": "ppe_sterile",
       "lab_item": "indicator tape on sterilized tray wrap",
       "material_detail": "wrapped tray",
@@ -1537,7 +1472,7 @@
     },
     {
       "lab_item_id": "LAB-012",
-      "rank": 119,
+      "rank": 114,
       "category": "vials_containers",
       "lab_item": "vacuum-sealed research vial in foil pouch open flap",
       "material_detail": "glass vial partially revealed from foil barrier pouch",
@@ -1550,7 +1485,7 @@
     },
     {
       "lab_item_id": "LAB-052",
-      "rank": 120,
+      "rank": 115,
       "category": "research_pens",
       "lab_item": "transparent research pen showing internal mechanism",
       "material_detail": "gears/dial visible through clear housing",
@@ -1563,7 +1498,7 @@
     },
     {
       "lab_item_id": "LAB-077",
-      "rank": 121,
+      "rank": 116,
       "category": "glassware",
       "lab_item": "stack of Petri dishes",
       "material_detail": "three dishes nested, label areas blank",
@@ -1575,21 +1510,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-148",
-      "rank": 122,
+      "lab_item_id": "LAB-407",
+      "rank": 117,
       "category": "instruments",
-      "lab_item": "pH meter with electrode in holder",
-      "material_detail": "benchtop pH meter, probe parked",
-      "surface": "textured slate sample board",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "vision inspection camera enclosure",
+      "material_detail": "camera housing",
+      "surface": "white melamine cleanroom table",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-112",
-      "rank": 123,
+      "rank": 118,
       "category": "liquid_handling",
       "lab_item": "glass Hamilton-style syringe pipette",
       "material_detail": "precision metal/glass syringe for lab, no needle tip",
@@ -1602,7 +1537,7 @@
     },
     {
       "lab_item_id": "LAB-137",
-      "rank": 124,
+      "rank": 119,
       "category": "cold_chain",
       "lab_item": "phase-change pack brick",
       "material_detail": "PCM pack alone",
@@ -1615,7 +1550,7 @@
     },
     {
       "lab_item_id": "LAB-497",
-      "rank": 125,
+      "rank": 120,
       "category": "qc_analytical",
       "lab_item": "sieve stack for powders",
       "material_detail": "sieves",
@@ -1628,7 +1563,7 @@
     },
     {
       "lab_item_id": "LAB-193",
-      "rank": 126,
+      "rank": 121,
       "category": "surfaces_org",
       "lab_item": "wire chrome basket with cleaned vials",
       "material_detail": "basket of vials",
@@ -1641,7 +1576,7 @@
     },
     {
       "lab_item_id": "LAB-218",
-      "rank": 127,
+      "rank": 122,
       "category": "packaging",
       "lab_item": "void fill kraft paper and vial box",
       "material_detail": "sustainable pack",
@@ -1654,7 +1589,7 @@
     },
     {
       "lab_item_id": "LAB-243",
-      "rank": 128,
+      "rank": 123,
       "category": "ppe_sterile",
       "lab_item": "hand sanitizer pump bottle lab brand-agnostic",
       "material_detail": "pump bottle on bench",
@@ -1667,7 +1602,7 @@
     },
     {
       "lab_item_id": "LAB-013",
-      "rank": 129,
+      "rank": 124,
       "category": "vials_containers",
       "lab_item": "graduated media bottle 100ml",
       "material_detail": "borosilicate media bottle, blue GL45 cap, volume graduations",
@@ -1680,7 +1615,7 @@
     },
     {
       "lab_item_id": "LAB-053",
-      "rank": 130,
+      "rank": 125,
       "category": "research_pens",
       "lab_item": "research pen on folded sterile wrap paper",
       "material_detail": "medical-grade wrap texture, product only",
@@ -1693,7 +1628,7 @@
     },
     {
       "lab_item_id": "LAB-078",
-      "rank": 131,
+      "rank": 126,
       "category": "glassware",
       "lab_item": "watch glass covering a beaker",
       "material_detail": "classic cover glass still life",
@@ -1705,21 +1640,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-149",
-      "rank": 132,
+      "lab_item_id": "LAB-408",
+      "rank": 127,
       "category": "instruments",
-      "lab_item": "magnetic stir plate with stir bar in beaker",
-      "material_detail": "plate off, beaker centered",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "label verification scanner tunnel",
+      "material_detail": "scan tunnel",
+      "surface": "textured slate sample board",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-113",
-      "rank": 133,
+      "rank": 128,
       "category": "liquid_handling",
       "lab_item": "dispense bottle with pump top",
       "material_detail": "lab wash bottle adjacent optional",
@@ -1732,7 +1667,7 @@
     },
     {
       "lab_item_id": "LAB-138",
-      "rank": 134,
+      "rank": 129,
       "category": "cold_chain",
       "lab_item": "styrofoam cold box lid ajar",
       "material_detail": "EPS shipper interior view",
@@ -1745,7 +1680,7 @@
     },
     {
       "lab_item_id": "LAB-498",
-      "rank": 135,
+      "rank": 130,
       "category": "qc_analytical",
       "lab_item": "laser diffraction sample cell",
       "material_detail": "cell",
@@ -1758,7 +1693,7 @@
     },
     {
       "lab_item_id": "LAB-194",
-      "rank": 136,
+      "rank": 131,
       "category": "surfaces_org",
       "lab_item": "parts bin drawer open showing caps",
       "material_detail": "inventory of vial caps",
@@ -1771,7 +1706,7 @@
     },
     {
       "lab_item_id": "LAB-219",
-      "rank": 137,
+      "rank": 132,
       "category": "packaging",
       "lab_item": "unit carton with window showing pen",
       "material_detail": "window box",
@@ -1784,7 +1719,7 @@
     },
     {
       "lab_item_id": "LAB-244",
-      "rank": 138,
+      "rank": 133,
       "category": "ppe_sterile",
       "lab_item": "eye wash bottle sealed",
       "material_detail": "emergency eyewash bottle object",
@@ -1797,7 +1732,7 @@
     },
     {
       "lab_item_id": "LAB-014",
-      "rank": 139,
+      "rank": 134,
       "category": "vials_containers",
       "lab_item": "amber reagent bottle with pour ring",
       "material_detail": "amber glass reagent bottle, white polypropylene cap",
@@ -1810,7 +1745,7 @@
     },
     {
       "lab_item_id": "LAB-054",
-      "rank": 140,
+      "rank": 135,
       "category": "research_pens",
       "lab_item": "research pen low-angle hero on concrete lab bench",
       "material_detail": "premium American lab aesthetic",
@@ -1823,7 +1758,7 @@
     },
     {
       "lab_item_id": "LAB-079",
-      "rank": 141,
+      "rank": 136,
       "category": "glassware",
       "lab_item": "glass stirring rod on ceramic tile",
       "material_detail": "solid rod, fire-polished ends",
@@ -1835,21 +1770,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-150",
-      "rank": 142,
+      "lab_item_id": "LAB-409",
+      "rank": 137,
       "category": "instruments",
-      "lab_item": "vortex mixer alone",
-      "material_detail": "classic vortexer",
-      "surface": "anodized aluminum tray",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "metal detector aperture lab pack line",
+      "material_detail": "aperture only",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-114",
-      "rank": 143,
+      "rank": 138,
       "category": "liquid_handling",
       "lab_item": "squeeze wash bottle distilled water labeled",
       "material_detail": "classic wash bottle bent neck",
@@ -1862,7 +1797,7 @@
     },
     {
       "lab_item_id": "LAB-139",
-      "rank": 144,
+      "rank": 139,
       "category": "cold_chain",
       "lab_item": "validated shipping carton with UN marks research",
       "material_detail": "outer carton only",
@@ -1875,7 +1810,7 @@
     },
     {
       "lab_item_id": "LAB-499",
-      "rank": 145,
+      "rank": 140,
       "category": "qc_analytical",
       "lab_item": "zeta potential cuvette",
       "material_detail": "cuvette",
@@ -1888,7 +1823,7 @@
     },
     {
       "lab_item_id": "LAB-195",
-      "rank": 146,
+      "rank": 141,
       "category": "surfaces_org",
       "lab_item": "kanban bin with pipette tip boxes",
       "material_detail": "lean lab storage",
@@ -1901,7 +1836,7 @@
     },
     {
       "lab_item_id": "LAB-220",
-      "rank": 147,
+      "rank": 142,
       "category": "packaging",
       "lab_item": "multipack sleeve holding three cartons",
       "material_detail": "sleeve packaging",
@@ -1914,7 +1849,7 @@
     },
     {
       "lab_item_id": "LAB-245",
-      "rank": 148,
+      "rank": 143,
       "category": "ppe_sterile",
       "lab_item": "biohazard sharps container closed unused",
       "material_detail": "closed container, not in use scene",
@@ -1927,7 +1862,7 @@
     },
     {
       "lab_item_id": "LAB-015",
-      "rank": 149,
+      "rank": 144,
       "category": "vials_containers",
       "lab_item": "sterile water for research bottle",
       "material_detail": "clear plastic research bottle, tamper band intact",
@@ -1940,7 +1875,7 @@
     },
     {
       "lab_item_id": "LAB-055",
-      "rank": 150,
+      "rank": 145,
       "category": "research_pens",
       "lab_item": "research pen next to empty packaging tray",
       "material_detail": "thermoformed tray and pen",
@@ -1953,7 +1888,7 @@
     },
     {
       "lab_item_id": "LAB-080",
-      "rank": 151,
+      "rank": 146,
       "category": "glassware",
       "lab_item": "reagent bottle with glass stopper",
       "material_detail": "ground-glass stopper bottle",
@@ -1965,21 +1900,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-151",
-      "rank": 152,
+      "lab_item_id": "LAB-410",
+      "rank": 147,
       "category": "instruments",
-      "lab_item": "microcentrifuge closed lid",
-      "material_detail": "benchtop centrifuge",
-      "surface": "polished black reflective acrylic",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "checkweigher conveyor section static",
+      "material_detail": "conveyor static product",
+      "surface": "anodized aluminum tray",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-115",
-      "rank": 153,
+      "rank": 148,
       "category": "liquid_handling",
       "lab_item": "bottle-top dispenser on reagent bottle",
       "material_detail": "dispenser unit mounted, primed closed",
@@ -1992,7 +1927,7 @@
     },
     {
       "lab_item_id": "LAB-140",
-      "rank": 154,
+      "rank": 149,
       "category": "cold_chain",
       "lab_item": "thermal probe in calibration bath beaker",
       "material_detail": "probe and beaker still",
@@ -2005,7 +1940,7 @@
     },
     {
       "lab_item_id": "LAB-500",
-      "rank": 155,
+      "rank": 150,
       "category": "qc_analytical",
       "lab_item": "rheometer geometry plate",
       "material_detail": "plate",
@@ -2018,7 +1953,7 @@
     },
     {
       "lab_item_id": "LAB-196",
-      "rank": 156,
+      "rank": 151,
       "category": "surfaces_org",
       "lab_item": "magnetic tool strip with metal spatulas",
       "material_detail": "spatulas hanging",
@@ -2031,7 +1966,7 @@
     },
     {
       "lab_item_id": "LAB-221",
-      "rank": 157,
+      "rank": 152,
       "category": "packaging",
       "lab_item": "shipping label pouch on carton",
       "material_detail": "document pouch",
@@ -2044,7 +1979,7 @@
     },
     {
       "lab_item_id": "LAB-246",
-      "rank": 158,
+      "rank": 153,
       "category": "ppe_sterile",
       "lab_item": "specimen transport bag with pouch",
       "material_detail": "bio bag empty",
@@ -2057,7 +1992,7 @@
     },
     {
       "lab_item_id": "LAB-016",
-      "rank": 159,
+      "rank": 154,
       "category": "vials_containers",
       "lab_item": "glass ampule scored neck sealed",
       "material_detail": "clear ampule, scored neck ring, liquid fill visible",
@@ -2070,7 +2005,7 @@
     },
     {
       "lab_item_id": "LAB-056",
-      "rank": 160,
+      "rank": 155,
       "category": "research_pens",
       "lab_item": "single research pen angled catalog pose",
       "material_detail": "exactly one research pen at a slight angle, cap on, no second pen",
@@ -2083,7 +2018,7 @@
     },
     {
       "lab_item_id": "LAB-081",
-      "rank": 161,
+      "rank": 156,
       "category": "glassware",
       "lab_item": "Buchner flask side arm",
       "material_detail": "vacuum flask, thick glass",
@@ -2095,21 +2030,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-152",
-      "rank": 162,
+      "lab_item_id": "LAB-147",
+      "rank": 157,
       "category": "instruments",
-      "lab_item": "open microcentrifuge showing rotor empty",
-      "material_detail": "rotor wells empty",
-      "surface": "matte pure white infinity surface",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "analytical balance with vial on pan",
+      "material_detail": "single vial being weighed concept, still",
+      "surface": "white melamine cleanroom table",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-116",
-      "rank": 163,
+      "rank": 158,
       "category": "liquid_handling",
       "lab_item": "peristaltic pump head with tubing",
       "material_detail": "pump as object, tubing looped neatly",
@@ -2122,7 +2057,7 @@
     },
     {
       "lab_item_id": "LAB-141",
-      "rank": 164,
+      "rank": 159,
       "category": "cold_chain",
       "lab_item": "freezer rack drawer pulled slightly",
       "material_detail": "stainless freezer rack",
@@ -2135,7 +2070,7 @@
     },
     {
       "lab_item_id": "LAB-197",
-      "rank": 165,
+      "rank": 160,
       "category": "surfaces_org",
       "lab_item": "weighing paper book open",
       "material_detail": "glassine weighing papers",
@@ -2148,7 +2083,7 @@
     },
     {
       "lab_item_id": "LAB-222",
-      "rank": 166,
+      "rank": 161,
       "category": "packaging",
       "lab_item": "pallet of identical research cartons cropped",
       "material_detail": "warehouse catalog crop, tidy",
@@ -2161,7 +2096,7 @@
     },
     {
       "lab_item_id": "LAB-247",
-      "rank": 167,
+      "rank": 162,
       "category": "ppe_sterile",
       "lab_item": "cleanroom sticky mat sheet roll",
       "material_detail": "tacky mat",
@@ -2174,7 +2109,7 @@
     },
     {
       "lab_item_id": "LAB-017",
-      "rank": 168,
+      "rank": 163,
       "category": "vials_containers",
       "lab_item": "amber ampule on reflective tray",
       "material_detail": "brown ampule, precise fill, clinical reflection",
@@ -2187,7 +2122,7 @@
     },
     {
       "lab_item_id": "LAB-057",
-      "rank": 169,
+      "rank": 164,
       "category": "research_pens",
       "lab_item": "research pen with color-coded ring marker",
       "material_detail": "ring marker as inventory ID only",
@@ -2200,7 +2135,7 @@
     },
     {
       "lab_item_id": "LAB-082",
-      "rank": 170,
+      "rank": 165,
       "category": "glassware",
       "lab_item": "filter funnel in ring stand clamp",
       "material_detail": "funnel clamped, no liquid pour in progress",
@@ -2212,21 +2147,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-153",
-      "rank": 171,
+      "lab_item_id": "LAB-148",
+      "rank": 166,
       "category": "instruments",
-      "lab_item": "tube rotator wheel with clips",
-      "material_detail": "rotator with empty clips",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "pH meter with electrode in holder",
+      "material_detail": "benchtop pH meter, probe parked",
+      "surface": "textured slate sample board",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-117",
-      "rank": 172,
+      "rank": 167,
       "category": "liquid_handling",
       "lab_item": "syringe filter unit 0.22 micron",
       "material_detail": "disc filter in packaging blister",
@@ -2239,7 +2174,7 @@
     },
     {
       "lab_item_id": "LAB-142",
-      "rank": 173,
+      "rank": 168,
       "category": "cold_chain",
       "lab_item": "cryo cane with clip for vials",
       "material_detail": "aluminum cane holding vials",
@@ -2252,7 +2187,7 @@
     },
     {
       "lab_item_id": "LAB-198",
-      "rank": 174,
+      "rank": 169,
       "category": "surfaces_org",
       "lab_item": "lab notebook closed with pen on top research",
       "material_detail": "bound notebook, no handwriting readable claims",
@@ -2265,7 +2200,7 @@
     },
     {
       "lab_item_id": "LAB-223",
-      "rank": 175,
+      "rank": 170,
       "category": "packaging",
       "lab_item": "retail shelf strip with one facing carton",
       "material_detail": "facing product",
@@ -2278,7 +2213,7 @@
     },
     {
       "lab_item_id": "LAB-248",
-      "rank": 176,
+      "rank": 171,
       "category": "ppe_sterile",
       "lab_item": "IPA spray bottle 70 percent labeled research",
       "material_detail": "solvent bottle",
@@ -2291,7 +2226,7 @@
     },
     {
       "lab_item_id": "LAB-018",
-      "rank": 177,
+      "rank": 172,
       "category": "vials_containers",
       "lab_item": "multi-dose research vial with intact seal",
       "material_detail": "crimp seal unbroken, lot stub area blank",
@@ -2304,7 +2239,7 @@
     },
     {
       "lab_item_id": "LAB-058",
-      "rank": 178,
+      "rank": 173,
       "category": "research_pens",
       "lab_item": "research pen barrel filled with clear solution",
       "material_detail": "optical clarity of liquid emphasized",
@@ -2317,7 +2252,7 @@
     },
     {
       "lab_item_id": "LAB-083",
-      "rank": 179,
+      "rank": 174,
       "category": "glassware",
       "lab_item": "test tube rack with six empty tubes",
       "material_detail": "wooden or polypropylene rack filled",
@@ -2329,21 +2264,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-154",
-      "rank": 180,
+      "lab_item_id": "LAB-149",
+      "rank": 175,
       "category": "instruments",
-      "lab_item": "benchtop orbital-platform shaker empty",
-      "material_detail": "shaker deck clear",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "magnetic stir plate with stir bar in beaker",
+      "material_detail": "plate off, beaker centered",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-118",
-      "rank": 181,
+      "rank": 176,
       "category": "liquid_handling",
       "lab_item": "sterile syringe filter attached to syringe no needle",
       "material_detail": "filter on luer, no hypodermic",
@@ -2356,7 +2291,7 @@
     },
     {
       "lab_item_id": "LAB-143",
-      "rank": 182,
+      "rank": 177,
       "category": "cold_chain",
       "lab_item": "ice bucket with closed tube floating pack",
       "material_detail": "lab ice bucket prop",
@@ -2369,7 +2304,7 @@
     },
     {
       "lab_item_id": "LAB-199",
-      "rank": 183,
+      "rank": 178,
       "category": "surfaces_org",
       "lab_item": "clipboard with blank COA template",
       "material_detail": "certificate layout blank, no medical claims",
@@ -2382,7 +2317,7 @@
     },
     {
       "lab_item_id": "LAB-224",
-      "rank": 184,
+      "rank": 179,
       "category": "packaging",
       "lab_item": "gift-unrelated plain kraft research mailer",
       "material_detail": "plain mailer",
@@ -2395,7 +2330,7 @@
     },
     {
       "lab_item_id": "LAB-249",
-      "rank": 185,
+      "rank": 180,
       "category": "ppe_sterile",
       "lab_item": "lint-free wipes canister",
       "material_detail": "wipes",
@@ -2408,7 +2343,7 @@
     },
     {
       "lab_item_id": "LAB-019",
-      "rank": 186,
+      "rank": 181,
       "category": "vials_containers",
       "lab_item": "clear vial with lyophilized white cake",
       "material_detail": "freeze-dried plug visible through glass",
@@ -2421,7 +2356,7 @@
     },
     {
       "lab_item_id": "LAB-059",
-      "rank": 187,
+      "rank": 182,
       "category": "research_pens",
       "lab_item": "research pen on white infinity cyclorama",
       "material_detail": "pure catalog seamless background",
@@ -2434,7 +2369,7 @@
     },
     {
       "lab_item_id": "LAB-084",
-      "rank": 188,
+      "rank": 183,
       "category": "glassware",
       "lab_item": "single test tube with clear solution",
       "material_detail": "tube upright in single well",
@@ -2446,21 +2381,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-155",
-      "rank": 189,
+      "lab_item_id": "LAB-150",
+      "rank": 184,
       "category": "instruments",
-      "lab_item": "hot plate stirrer ceramic top",
-      "material_detail": "ceramic top clean",
-      "surface": "cool gray ceramic tile",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "vortex mixer alone",
+      "material_detail": "classic vortexer",
+      "surface": "anodized aluminum tray",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-119",
-      "rank": 190,
+      "rank": 185,
       "category": "liquid_handling",
       "lab_item": "pipette tip waste container empty",
       "material_detail": "bench-top tip disposal jar",
@@ -2473,7 +2408,7 @@
     },
     {
       "lab_item_id": "LAB-144",
-      "rank": 191,
+      "rank": 186,
       "category": "cold_chain",
       "lab_item": "coolant bottle for centrifuge",
       "material_detail": "pre-chill bottle",
@@ -2486,7 +2421,7 @@
     },
     {
       "lab_item_id": "LAB-200",
-      "rank": 192,
+      "rank": 187,
       "category": "surfaces_org",
       "lab_item": "sample log binder spine",
       "material_detail": "lab records binder",
@@ -2499,7 +2434,7 @@
     },
     {
       "lab_item_id": "LAB-225",
-      "rank": 193,
+      "rank": 188,
       "category": "packaging",
       "lab_item": "plastic clamshell for research pen",
       "material_detail": "clear clamshell",
@@ -2512,7 +2447,7 @@
     },
     {
       "lab_item_id": "LAB-250",
-      "rank": 194,
+      "rank": 189,
       "category": "ppe_sterile",
       "lab_item": "sterile field wrap unfolded empty",
       "material_detail": "blue sterile wrap",
@@ -2525,7 +2460,7 @@
     },
     {
       "lab_item_id": "LAB-020",
-      "rank": 195,
+      "rank": 190,
       "category": "vials_containers",
       "lab_item": "tall chromatography collection vial",
       "material_detail": "narrow clear vial, labeled rack slot",
@@ -2538,7 +2473,7 @@
     },
     {
       "lab_item_id": "LAB-060",
-      "rank": 196,
+      "rank": 191,
       "category": "research_pens",
       "lab_item": "research pen silhouette edge-lit",
       "material_detail": "rim light outlining form, dark field",
@@ -2551,7 +2486,7 @@
     },
     {
       "lab_item_id": "LAB-085",
-      "rank": 197,
+      "rank": 192,
       "category": "glassware",
       "lab_item": "culture tube with screw cap",
       "material_detail": "threaded culture tube",
@@ -2563,21 +2498,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-156",
-      "rank": 198,
+      "lab_item_id": "LAB-151",
+      "rank": 193,
       "category": "instruments",
-      "lab_item": "lab jack raised under flask",
-      "material_detail": "support jack",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "microcentrifuge closed lid",
+      "material_detail": "benchtop centrifuge",
+      "surface": "polished black reflective acrylic",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-120",
-      "rank": 199,
+      "rank": 194,
       "category": "liquid_handling",
       "lab_item": "calibration balance weight next to pipette",
       "material_detail": "pipette accuracy still life",
@@ -2590,7 +2525,7 @@
     },
     {
       "lab_item_id": "LAB-145",
-      "rank": 200,
+      "rank": 195,
       "category": "cold_chain",
       "lab_item": "insulated vial sleeve neoprene",
       "material_detail": "single-vial insulator sleeve",
@@ -2603,7 +2538,7 @@
     },
     {
       "lab_item_id": "LAB-201",
-      "rank": 201,
+      "rank": 196,
       "category": "surfaces_org",
       "lab_item": "color-coded tape rolls for lab labeling",
       "material_detail": "tape assortment",
@@ -2616,7 +2551,7 @@
     },
     {
       "lab_item_id": "LAB-226",
-      "rank": 202,
+      "rank": 197,
       "category": "packaging",
       "lab_item": "tubular glassine sleeve for labels",
       "material_detail": "protective sleeve",
@@ -2629,7 +2564,7 @@
     },
     {
       "lab_item_id": "LAB-461",
-      "rank": 203,
+      "rank": 198,
       "category": "ppe_sterile",
       "lab_item": "sterile gown packaged barrier fabric",
       "material_detail": "gown pack",
@@ -2642,7 +2577,7 @@
     },
     {
       "lab_item_id": "LAB-021",
-      "rank": 204,
+      "rank": 199,
       "category": "vials_containers",
       "lab_item": "short stubby sample vial with red cap",
       "material_detail": "wide-mouth sample vial, red screw cap",
@@ -2655,7 +2590,7 @@
     },
     {
       "lab_item_id": "LAB-061",
-      "rank": 205,
+      "rank": 200,
       "category": "research_pens",
       "lab_item": "compact travel research pen shorter body",
       "material_detail": "shorter form factor, capped",
@@ -2668,7 +2603,7 @@
     },
     {
       "lab_item_id": "LAB-086",
-      "rank": 206,
+      "rank": 201,
       "category": "glassware",
       "lab_item": "NMR tube in foam carrier",
       "material_detail": "long thin tube, specialty glass",
@@ -2680,21 +2615,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-157",
-      "rank": 207,
+      "lab_item_id": "LAB-152",
+      "rank": 202,
       "category": "instruments",
-      "lab_item": "ring stand with clamps bare",
-      "material_detail": "retort stand geometry",
-      "surface": "white melamine cleanroom table",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "open microcentrifuge showing rotor empty",
+      "material_detail": "rotor wells empty",
+      "surface": "matte pure white infinity surface",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-121",
-      "rank": 208,
+      "rank": 203,
       "category": "liquid_handling",
       "lab_item": "PCR plate with sealed film",
       "material_detail": "96-well plate, clear seal",
@@ -2707,7 +2642,7 @@
     },
     {
       "lab_item_id": "LAB-351",
-      "rank": 209,
+      "rank": 204,
       "category": "cold_chain",
       "lab_item": "validated cold chain tote rigid",
       "material_detail": "rigid tote",
@@ -2720,7 +2655,7 @@
     },
     {
       "lab_item_id": "LAB-202",
-      "rank": 210,
+      "rank": 205,
       "category": "surfaces_org",
       "lab_item": "sharpies and lab markers in cup",
       "material_detail": "marking tools only",
@@ -2733,7 +2668,7 @@
     },
     {
       "lab_item_id": "LAB-227",
-      "rank": 211,
+      "rank": 206,
       "category": "packaging",
       "lab_item": "cap assortment in compartment box",
       "material_detail": "caps sorted",
@@ -2746,7 +2681,7 @@
     },
     {
       "lab_item_id": "LAB-462",
-      "rank": 212,
+      "rank": 207,
       "category": "ppe_sterile",
       "lab_item": "single sleeve protector packaged",
       "material_detail": "one packaged sleeve protector only",
@@ -2759,7 +2694,7 @@
     },
     {
       "lab_item_id": "LAB-022",
-      "rank": 213,
+      "rank": 208,
       "category": "vials_containers",
       "lab_item": "UV-protective amber vial in foam well",
       "material_detail": "amber vial nested in black foam insert",
@@ -2772,7 +2707,7 @@
     },
     {
       "lab_item_id": "LAB-062",
-      "rank": 214,
+      "rank": 209,
       "category": "research_pens",
       "lab_item": "assembled research pen sealed catalog hero",
       "material_detail": "one complete capped research pen only, not disassembled components",
@@ -2785,7 +2720,7 @@
     },
     {
       "lab_item_id": "LAB-087",
-      "rank": 215,
+      "rank": 210,
       "category": "glassware",
       "lab_item": "glass pipette graduated",
       "material_detail": "serological pipette, graduation marks",
@@ -2797,21 +2732,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-158",
-      "rank": 216,
+      "lab_item_id": "LAB-153",
+      "rank": 211,
       "category": "instruments",
-      "lab_item": "digital timer on bench",
-      "material_detail": "lab timer device",
-      "surface": "textured slate sample board",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "tube rotator wheel with clips",
+      "material_detail": "rotator with empty clips",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-122",
-      "rank": 217,
+      "rank": 212,
       "category": "liquid_handling",
       "lab_item": "deep-well plate empty",
       "material_detail": "2ml deep well plate",
@@ -2824,7 +2759,7 @@
     },
     {
       "lab_item_id": "LAB-352",
-      "rank": 218,
+      "rank": 213,
       "category": "cold_chain",
       "lab_item": "probe thermometer in vial sleeve",
       "material_detail": "probe + sleeve",
@@ -2837,7 +2772,7 @@
     },
     {
       "lab_item_id": "LAB-203",
-      "rank": 219,
+      "rank": 214,
       "category": "surfaces_org",
       "lab_item": "kimwipe box and glass cleaner bottle",
       "material_detail": "cleaning station still",
@@ -2850,7 +2785,7 @@
     },
     {
       "lab_item_id": "LAB-228",
-      "rank": 220,
+      "rank": 215,
       "category": "packaging",
       "lab_item": "induction seal wad samples",
       "material_detail": "seal liners",
@@ -2863,7 +2798,7 @@
     },
     {
       "lab_item_id": "LAB-463",
-      "rank": 221,
+      "rank": 216,
       "category": "ppe_sterile",
       "lab_item": "cleanroom goggles sealed bag",
       "material_detail": "goggles",
@@ -2876,7 +2811,7 @@
     },
     {
       "lab_item_id": "LAB-023",
-      "rank": 222,
+      "rank": 217,
       "category": "vials_containers",
       "lab_item": "glass vial with PTFE-lined cap",
       "material_detail": "clear vial, white PTFE liner visible under cap",
@@ -2889,7 +2824,7 @@
     },
     {
       "lab_item_id": "LAB-063",
-      "rank": 223,
+      "rank": 218,
       "category": "research_pens",
       "lab_item": "research pen clipped to lab coat pocket fabric still",
       "material_detail": "fabric swatch only, no person",
@@ -2902,7 +2837,7 @@
     },
     {
       "lab_item_id": "LAB-088",
-      "rank": 224,
+      "rank": 219,
       "category": "glassware",
       "lab_item": "Pasteur pipette in glass jar holder",
       "material_detail": "disposable-style glass pipettes standing",
@@ -2914,21 +2849,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-159",
-      "rank": 225,
+      "lab_item_id": "LAB-154",
+      "rank": 220,
       "category": "instruments",
-      "lab_item": "calipers measuring a vial diameter",
-      "material_detail": "calipers and vial still life",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "benchtop orbital-platform shaker empty",
+      "material_detail": "shaker deck clear",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-123",
-      "rank": 226,
+      "rank": 221,
       "category": "liquid_handling",
       "lab_item": "microcentrifuge tube rack full",
       "material_detail": "colored tubes in rack",
@@ -2941,7 +2876,7 @@
     },
     {
       "lab_item_id": "LAB-353",
-      "rank": 227,
+      "rank": 222,
       "category": "cold_chain",
       "lab_item": "USB temperature logger blister",
       "material_detail": "logger packaging",
@@ -2954,7 +2889,7 @@
     },
     {
       "lab_item_id": "LAB-204",
-      "rank": 228,
+      "rank": 223,
       "category": "surfaces_org",
       "lab_item": "spill kit tray sealed",
       "material_detail": "chemical spill kit closed",
@@ -2967,7 +2902,7 @@
     },
     {
       "lab_item_id": "LAB-229",
-      "rank": 229,
+      "rank": 224,
       "category": "packaging",
       "lab_item": "carton die-cut flat unfolded",
       "material_detail": "packaging flat",
@@ -2980,7 +2915,7 @@
     },
     {
       "lab_item_id": "LAB-464",
-      "rank": 230,
+      "rank": 225,
       "category": "ppe_sterile",
       "lab_item": "ear plugs dispenser bottle",
       "material_detail": "dispenser",
@@ -2993,7 +2928,7 @@
     },
     {
       "lab_item_id": "LAB-024",
-      "rank": 231,
+      "rank": 226,
       "category": "vials_containers",
       "lab_item": "research vial beside matching empty carton",
       "material_detail": "vial and small white product carton, catalog style",
@@ -3006,7 +2941,7 @@
     },
     {
       "lab_item_id": "LAB-064",
-      "rank": 232,
+      "rank": 227,
       "category": "research_pens",
       "lab_item": "research pen on brushed aluminum tray",
       "material_detail": "anodized tray, clinical metal",
@@ -3019,7 +2954,7 @@
     },
     {
       "lab_item_id": "LAB-089",
-      "rank": 233,
+      "rank": 228,
       "category": "glassware",
       "lab_item": "burette clamped vertically",
       "material_detail": "precision burette, stopcock closed",
@@ -3031,21 +2966,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-160",
-      "rank": 234,
+      "lab_item_id": "LAB-155",
+      "rank": 229,
       "category": "instruments",
-      "lab_item": "USB laboratory camera on boom arm",
-      "material_detail": "inspection camera aimed at product",
-      "surface": "anodized aluminum tray",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "hot plate stirrer ceramic top",
+      "material_detail": "ceramic top clean",
+      "surface": "cool gray ceramic tile",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-124",
-      "rank": 235,
+      "rank": 230,
       "category": "liquid_handling",
       "lab_item": "single microcentrifuge tube 1.5ml closed",
       "material_detail": "snap-cap tube hero",
@@ -3058,7 +2993,7 @@
     },
     {
       "lab_item_id": "LAB-354",
-      "rank": 236,
+      "rank": 231,
       "category": "cold_chain",
       "lab_item": "freeze indicator labels roll",
       "material_detail": "freeze labels",
@@ -3071,7 +3006,7 @@
     },
     {
       "lab_item_id": "LAB-205",
-      "rank": 237,
+      "rank": 232,
       "category": "surfaces_org",
       "lab_item": "first-aid cabinet closed wall mount",
       "material_detail": "cabinet only, not injury scene",
@@ -3084,7 +3019,7 @@
     },
     {
       "lab_item_id": "LAB-230",
-      "rank": 238,
+      "rank": 233,
       "category": "packaging",
       "lab_item": "brand stamp block and ink pad unused",
       "material_detail": "print shop still for labels",
@@ -3097,7 +3032,7 @@
     },
     {
       "lab_item_id": "LAB-465",
-      "rank": 239,
+      "rank": 234,
       "category": "ppe_sterile",
       "lab_item": "single cut-resistant glove folded",
       "material_detail": "exactly one glove, folded, unused",
@@ -3110,7 +3045,7 @@
     },
     {
       "lab_item_id": "LAB-025",
-      "rank": 240,
+      "rank": 235,
       "category": "vials_containers",
       "lab_item": "single peptide vial catalog hero",
       "material_detail": "exactly one clear peptide vial, centered, sealed cap, no second vial",
@@ -3123,7 +3058,7 @@
     },
     {
       "lab_item_id": "LAB-065",
-      "rank": 241,
+      "rank": 236,
       "category": "research_pens",
       "lab_item": "research pen with protective tip shield locked",
       "material_detail": "safety shield engaged, product-safe",
@@ -3136,7 +3071,7 @@
     },
     {
       "lab_item_id": "LAB-090",
-      "rank": 242,
+      "rank": 237,
       "category": "glassware",
       "lab_item": "desiccator jar with plate",
       "material_detail": "glass desiccator, lid sealed",
@@ -3148,21 +3083,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-161",
-      "rank": 243,
+      "lab_item_id": "LAB-156",
+      "rank": 238,
       "category": "instruments",
-      "lab_item": "stereo microscope head over stage",
-      "material_detail": "scope over empty stage",
-      "surface": "polished black reflective acrylic",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "lab jack raised under flask",
+      "material_detail": "support jack",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-125",
-      "rank": 244,
+      "rank": 239,
       "category": "liquid_handling",
       "lab_item": "strip of PCR tubes",
       "material_detail": "8-strip tubes",
@@ -3175,7 +3110,7 @@
     },
     {
       "lab_item_id": "LAB-355",
-      "rank": 245,
+      "rank": 240,
       "category": "cold_chain",
       "lab_item": "warm indicator labels pack",
       "material_detail": "heat exposure labels",
@@ -3188,7 +3123,7 @@
     },
     {
       "lab_item_id": "LAB-411",
-      "rank": 246,
+      "rank": 241,
       "category": "surfaces_org",
       "lab_item": "pass-through chamber closed doors",
       "material_detail": "pass box",
@@ -3201,7 +3136,7 @@
     },
     {
       "lab_item_id": "LAB-436",
-      "rank": 247,
+      "rank": 242,
       "category": "packaging",
       "lab_item": "unit dose blister of research cartridges five",
       "material_detail": "five-count blister",
@@ -3214,7 +3149,7 @@
     },
     {
       "lab_item_id": "LAB-466",
-      "rank": 248,
+      "rank": 243,
       "category": "ppe_sterile",
       "lab_item": "cryo apron folded",
       "material_detail": "apron",
@@ -3227,7 +3162,7 @@
     },
     {
       "lab_item_id": "LAB-026",
-      "rank": 249,
+      "rank": 244,
       "category": "vials_containers",
       "lab_item": "vial with shrink-band tamper evidence",
       "material_detail": "clear shrink band over cap and neck",
@@ -3240,7 +3175,7 @@
     },
     {
       "lab_item_id": "LAB-276",
-      "rank": 250,
+      "rank": 245,
       "category": "research_pens",
       "lab_item": "research pen with metal nose cone",
       "material_detail": "metal tip housing, cap on",
@@ -3253,7 +3188,7 @@
     },
     {
       "lab_item_id": "LAB-091",
-      "rank": 251,
+      "rank": 246,
       "category": "glassware",
       "lab_item": "crystallizing dish",
       "material_detail": "low wide dish, clear glass",
@@ -3265,21 +3200,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-162",
-      "rank": 252,
+      "lab_item_id": "LAB-157",
+      "rank": 247,
       "category": "instruments",
-      "lab_item": "compound microscope side profile",
-      "material_detail": "classic lab microscope",
-      "surface": "matte pure white infinity surface",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "ring stand with clamps bare",
+      "material_detail": "retort stand geometry",
+      "surface": "white melamine cleanroom table",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-326",
-      "rank": 253,
+      "rank": 248,
       "category": "liquid_handling",
       "lab_item": "positive displacement capillary tip pack",
       "material_detail": "capillary tips box",
@@ -3292,7 +3227,7 @@
     },
     {
       "lab_item_id": "LAB-356",
-      "rank": 254,
+      "rank": 249,
       "category": "cold_chain",
       "lab_item": "gel pack honeycomb style",
       "material_detail": "textured gel pack",
@@ -3305,7 +3240,7 @@
     },
     {
       "lab_item_id": "LAB-412",
-      "rank": 255,
+      "rank": 250,
       "category": "surfaces_org",
       "lab_item": "cleanroom cart with sealed bins",
       "material_detail": "cart",
@@ -3318,7 +3253,7 @@
     },
     {
       "lab_item_id": "LAB-437",
-      "rank": 256,
+      "rank": 251,
       "category": "packaging",
       "lab_item": "child-resistant research vial cap assortment",
       "material_detail": "CR caps",
@@ -3331,7 +3266,7 @@
     },
     {
       "lab_item_id": "LAB-467",
-      "rank": 257,
+      "rank": 252,
       "category": "ppe_sterile",
       "lab_item": "chemical apron neoprene folded",
       "material_detail": "apron",
@@ -3344,7 +3279,7 @@
     },
     {
       "lab_item_id": "LAB-027",
-      "rank": 258,
+      "rank": 253,
       "category": "vials_containers",
       "lab_item": "cold-labeled vial with frost on glass",
       "material_detail": "light frost on exterior, cold-chain implication",
@@ -3357,7 +3292,7 @@
     },
     {
       "lab_item_id": "LAB-277",
-      "rank": 259,
+      "rank": 254,
       "category": "research_pens",
       "lab_item": "slim research pen graphite gray body",
       "material_detail": "matte gray finish",
@@ -3370,7 +3305,7 @@
     },
     {
       "lab_item_id": "LAB-092",
-      "rank": 260,
+      "rank": 255,
       "category": "glassware",
       "lab_item": "evaporating dish porcelain",
       "material_detail": "white porcelain, pouring lip",
@@ -3382,21 +3317,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-163",
-      "rank": 261,
+      "lab_item_id": "LAB-158",
+      "rank": 256,
       "category": "instruments",
-      "lab_item": "spectrophotometer closed sample door",
-      "material_detail": "UV-Vis instrument",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "digital timer on bench",
+      "material_detail": "lab timer device",
+      "surface": "textured slate sample board",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-327",
-      "rank": 262,
+      "rank": 257,
       "category": "liquid_handling",
       "lab_item": "gel-loading pipette tips rack",
       "material_detail": "thin tips",
@@ -3409,7 +3344,7 @@
     },
     {
       "lab_item_id": "LAB-357",
-      "rank": 263,
+      "rank": 258,
       "category": "cold_chain",
       "lab_item": "PCM panel flat pack",
       "material_detail": "phase change panel",
@@ -3422,7 +3357,7 @@
     },
     {
       "lab_item_id": "LAB-413",
-      "rank": 264,
+      "rank": 259,
       "category": "surfaces_org",
       "lab_item": "stainless utility cart two shelf",
       "material_detail": "cart shelves",
@@ -3435,7 +3370,7 @@
     },
     {
       "lab_item_id": "LAB-438",
-      "rank": 265,
+      "rank": 260,
       "category": "packaging",
       "lab_item": "induction-sealed bottle mouth macro",
       "material_detail": "seal wad macro",
@@ -3448,7 +3383,7 @@
     },
     {
       "lab_item_id": "LAB-468",
-      "rank": 266,
+      "rank": 261,
       "category": "ppe_sterile",
       "lab_item": "respirator cartridges in pack unused",
       "material_detail": "cartridges sealed",
@@ -3461,7 +3396,7 @@
     },
     {
       "lab_item_id": "LAB-028",
-      "rank": 267,
+      "rank": 262,
       "category": "vials_containers",
       "lab_item": "vial standing in stainless steel vial block",
       "material_detail": "precision machined block holding one vial",
@@ -3474,7 +3409,7 @@
     },
     {
       "lab_item_id": "LAB-278",
-      "rank": 268,
+      "rank": 263,
       "category": "research_pens",
       "lab_item": "research pen with translucent smoke barrel",
       "material_detail": "smoke tint showing liquid",
@@ -3487,7 +3422,7 @@
     },
     {
       "lab_item_id": "LAB-093",
-      "rank": 269,
+      "rank": 264,
       "category": "glassware",
       "lab_item": "mortar and pestle porcelain clean",
       "material_detail": "lab porcelain set, unused clean",
@@ -3499,21 +3434,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-164",
-      "rank": 270,
+      "lab_item_id": "LAB-159",
+      "rank": 265,
       "category": "instruments",
-      "lab_item": "single quartz cuvette in foam well",
-      "material_detail": "exactly one clear cuvette seated in foam, adjacent wells empty",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "calipers measuring a vial diameter",
+      "material_detail": "calipers and vial still life",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-328",
-      "rank": 271,
+      "rank": 266,
       "category": "liquid_handling",
       "lab_item": "wide-bore pipette tips for viscous samples",
       "material_detail": "wide orifice tips",
@@ -3526,7 +3461,7 @@
     },
     {
       "lab_item_id": "LAB-358",
-      "rank": 272,
+      "rank": 267,
       "category": "cold_chain",
       "lab_item": "dry ice chest exterior closed labeled research",
       "material_detail": "chest exterior",
@@ -3539,7 +3474,7 @@
     },
     {
       "lab_item_id": "LAB-414",
-      "rank": 273,
+      "rank": 268,
       "category": "surfaces_org",
       "lab_item": "lab stool base only cropped",
       "material_detail": "base, no person",
@@ -3552,7 +3487,7 @@
     },
     {
       "lab_item_id": "LAB-439",
-      "rank": 274,
+      "rank": 269,
       "category": "packaging",
       "lab_item": "carton with perforation tear strip",
       "material_detail": "tear strip",
@@ -3565,7 +3500,7 @@
     },
     {
       "lab_item_id": "LAB-469",
-      "rank": 275,
+      "rank": 270,
       "category": "ppe_sterile",
       "lab_item": "half-mask respirator unused on tray",
       "material_detail": "mask object no wearing",
@@ -3578,7 +3513,7 @@
     },
     {
       "lab_item_id": "LAB-029",
-      "rank": 276,
+      "rank": 271,
       "category": "vials_containers",
       "lab_item": "amber vial backlit to show liquid meniscus",
       "material_detail": "meniscus sharp, liquid clarity visible",
@@ -3591,7 +3526,7 @@
     },
     {
       "lab_item_id": "LAB-279",
-      "rank": 277,
+      "rank": 272,
       "category": "research_pens",
       "lab_item": "research pen docked in display stand prop",
       "material_detail": "stand is display only",
@@ -3604,7 +3539,7 @@
     },
     {
       "lab_item_id": "LAB-094",
-      "rank": 278,
+      "rank": 273,
       "category": "glassware",
       "lab_item": "glass stirring mantle flask setup dry",
       "material_detail": "flask in heating mantle, power off, still",
@@ -3616,21 +3551,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-165",
-      "rank": 279,
+      "lab_item_id": "LAB-160",
+      "rank": 274,
       "category": "instruments",
-      "lab_item": "HPLC system front panel detail",
-      "material_detail": "instrument face, status idle",
-      "surface": "cool gray ceramic tile",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "USB laboratory camera on boom arm",
+      "material_detail": "inspection camera aimed at product",
+      "surface": "anodized aluminum tray",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-329",
-      "rank": 280,
+      "rank": 275,
       "category": "liquid_handling",
       "lab_item": "filtered pipette tips sterile rack purple",
       "material_detail": "purple filter tips",
@@ -3643,7 +3578,7 @@
     },
     {
       "lab_item_id": "LAB-359",
-      "rank": 281,
+      "rank": 276,
       "category": "cold_chain",
       "lab_item": "cryo label kit freezer-grade",
       "material_detail": "cryo labels",
@@ -3656,7 +3591,7 @@
     },
     {
       "lab_item_id": "LAB-415",
-      "rank": 282,
+      "rank": 277,
       "category": "surfaces_org",
       "lab_item": "anti-fatigue mat section with tray",
       "material_detail": "mat + tray",
@@ -3669,7 +3604,7 @@
     },
     {
       "lab_item_id": "LAB-440",
-      "rank": 283,
+      "rank": 278,
       "category": "packaging",
       "lab_item": "mailer with foam corners kit",
       "material_detail": "protective corners",
@@ -3682,7 +3617,7 @@
     },
     {
       "lab_item_id": "LAB-470",
-      "rank": 284,
+      "rank": 279,
       "category": "ppe_sterile",
       "lab_item": "safety glasses anti-fog cloth kit",
       "material_detail": "cloth kit",
@@ -3695,7 +3630,7 @@
     },
     {
       "lab_item_id": "LAB-030",
-      "rank": 285,
+      "rank": 280,
       "category": "vials_containers",
       "lab_item": "clear vial with colored cap insert blue",
       "material_detail": "blue cap insert, inventory coding",
@@ -3708,7 +3643,7 @@
     },
     {
       "lab_item_id": "LAB-280",
-      "rank": 286,
+      "rank": 281,
       "category": "research_pens",
       "lab_item": "research pen beside torque-test fixture",
       "material_detail": "QA fixture and pen",
@@ -3721,7 +3656,7 @@
     },
     {
       "lab_item_id": "LAB-095",
-      "rank": 287,
+      "rank": 282,
       "category": "glassware",
       "lab_item": "Kjeldahl flask",
       "material_detail": "long-neck flask silhouette",
@@ -3733,21 +3668,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-166",
-      "rank": 288,
+      "lab_item_id": "LAB-161",
+      "rank": 283,
       "category": "instruments",
-      "lab_item": "fraction collector carousel",
-      "material_detail": "carousel empty tubes",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "stereo microscope head over stage",
+      "material_detail": "scope over empty stage",
+      "surface": "polished black reflective acrylic",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-330",
-      "rank": 289,
+      "rank": 284,
       "category": "liquid_handling",
       "lab_item": "pipette calibration balance kit case",
       "material_detail": "calibration kit",
@@ -3760,7 +3695,7 @@
     },
     {
       "lab_item_id": "LAB-360",
-      "rank": 290,
+      "rank": 285,
       "category": "cold_chain",
       "lab_item": "freezer tape roll white",
       "material_detail": "freezer tape",
@@ -3773,7 +3708,7 @@
     },
     {
       "lab_item_id": "LAB-416",
-      "rank": 291,
+      "rank": 286,
       "category": "surfaces_org",
       "lab_item": "chemical storage cabinet closed flammable",
       "material_detail": "yellow cabinet closed",
@@ -3786,7 +3721,7 @@
     },
     {
       "lab_item_id": "LAB-441",
-      "rank": 292,
+      "rank": 287,
       "category": "packaging",
       "lab_item": "rigid plastic vial wallet",
       "material_detail": "wallet case",
@@ -3799,7 +3734,7 @@
     },
     {
       "lab_item_id": "LAB-471",
-      "rank": 293,
+      "rank": 288,
       "category": "ppe_sterile",
       "lab_item": "finger cots box",
       "material_detail": "finger cots",
@@ -3812,7 +3747,7 @@
     },
     {
       "lab_item_id": "LAB-031",
-      "rank": 294,
+      "rank": 289,
       "category": "vials_containers",
       "lab_item": "research vial on anti-vibration pad",
       "material_detail": "small black lab pad under vial base",
@@ -3825,7 +3760,7 @@
     },
     {
       "lab_item_id": "LAB-281",
-      "rank": 295,
+      "rank": 290,
       "category": "research_pens",
       "lab_item": "research pen clip detail macro",
       "material_detail": "metal clip extreme macro",
@@ -3838,7 +3773,7 @@
     },
     {
       "lab_item_id": "LAB-096",
-      "rank": 296,
+      "rank": 291,
       "category": "glassware",
       "lab_item": "gas washing bottle",
       "material_detail": "Drechsel bottle form",
@@ -3850,21 +3785,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-167",
-      "rank": 297,
+      "lab_item_id": "LAB-162",
+      "rank": 292,
       "category": "instruments",
-      "lab_item": "gel electrophoresis tank empty",
-      "material_detail": "tank and lid beside",
-      "surface": "white melamine cleanroom table",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "compound microscope side profile",
+      "material_detail": "classic lab microscope",
+      "surface": "matte pure white infinity surface",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-331",
-      "rank": 298,
+      "rank": 293,
       "category": "liquid_handling",
       "lab_item": "bottle-top aspirator",
       "material_detail": "aspirator unit",
@@ -3877,7 +3812,7 @@
     },
     {
       "lab_item_id": "LAB-361",
-      "rank": 299,
+      "rank": 294,
       "category": "cold_chain",
       "lab_item": "cryobox cardboard 10x10 with partial vials",
       "material_detail": "partially filled",
@@ -3890,7 +3825,7 @@
     },
     {
       "lab_item_id": "LAB-417",
-      "rank": 300,
+      "rank": 295,
       "category": "surfaces_org",
       "lab_item": "acid cabinet blue closed",
       "material_detail": "blue cabinet",
@@ -3903,7 +3838,7 @@
     },
     {
       "lab_item_id": "LAB-442",
-      "rank": 301,
+      "rank": 296,
       "category": "packaging",
       "lab_item": "aluminum bottle for light-sensitive reagent",
       "material_detail": "alu bottle",
@@ -3916,7 +3851,7 @@
     },
     {
       "lab_item_id": "LAB-472",
-      "rank": 302,
+      "rank": 297,
       "category": "ppe_sterile",
       "lab_item": "single sterile glove individually wrapped",
       "material_detail": "exactly one wrapped sterile glove",
@@ -3929,7 +3864,7 @@
     },
     {
       "lab_item_id": "LAB-032",
-      "rank": 303,
+      "rank": 298,
       "category": "vials_containers",
       "lab_item": "septum vial with needle-free research adapter nearby",
       "material_detail": "adapter as object only, no injection into skin",
@@ -3942,7 +3877,7 @@
     },
     {
       "lab_item_id": "LAB-282",
-      "rank": 304,
+      "rank": 299,
       "category": "research_pens",
       "lab_item": "research pen rubber grip section macro",
       "material_detail": "grip texture",
@@ -3955,7 +3890,7 @@
     },
     {
       "lab_item_id": "LAB-097",
-      "rank": 305,
+      "rank": 300,
       "category": "glassware",
       "lab_item": "glass syringe without needle research only",
       "material_detail": "glass barrel and plunger only, NO needle attached",
@@ -3967,21 +3902,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-168",
-      "rank": 306,
+      "lab_item_id": "LAB-163",
+      "rank": 301,
       "category": "instruments",
-      "lab_item": "power supply for electrophoresis",
-      "material_detail": "compact power supply unit",
-      "surface": "textured slate sample board",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "spectrophotometer closed sample door",
+      "material_detail": "UV-Vis instrument",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-332",
-      "rank": 307,
+      "rank": 302,
       "category": "liquid_handling",
       "lab_item": "vacuum aspiration pipette controller",
       "material_detail": "aspiration tool",
@@ -3994,7 +3929,7 @@
     },
     {
       "lab_item_id": "LAB-362",
-      "rank": 308,
+      "rank": 303,
       "category": "cold_chain",
       "lab_item": "polycarbonate cryobox latch closed",
       "material_detail": "latched box",
@@ -4007,7 +3942,7 @@
     },
     {
       "lab_item_id": "LAB-418",
-      "rank": 309,
+      "rank": 304,
       "category": "surfaces_org",
       "lab_item": "gas cylinder restraint chain detail",
       "material_detail": "restraint hardware, no hazard scene",
@@ -4020,7 +3955,7 @@
     },
     {
       "lab_item_id": "LAB-443",
-      "rank": 310,
+      "rank": 305,
       "category": "packaging",
       "lab_item": "pump spray research solvent bottle empty",
       "material_detail": "spray bottle",
@@ -4033,7 +3968,7 @@
     },
     {
       "lab_item_id": "LAB-473",
-      "rank": 311,
+      "rank": 306,
       "category": "ppe_sterile",
       "lab_item": "cleanroom paper ream",
       "material_detail": "paper",
@@ -4046,7 +3981,7 @@
     },
     {
       "lab_item_id": "LAB-033",
-      "rank": 312,
+      "rank": 307,
       "category": "vials_containers",
       "lab_item": "glass vial with desiccant canister beside it",
       "material_detail": "small desiccant tin next to sealed vial",
@@ -4059,7 +3994,7 @@
     },
     {
       "lab_item_id": "LAB-283",
-      "rank": 313,
+      "rank": 308,
       "category": "research_pens",
       "lab_item": "research pen dial click collar engraved",
       "material_detail": "collar engraving",
@@ -4072,7 +4007,7 @@
     },
     {
       "lab_item_id": "LAB-098",
-      "rank": 314,
+      "rank": 309,
       "category": "glassware",
       "lab_item": "Luer-lock glass barrel capped",
       "material_detail": "capped research barrel, no needle",
@@ -4084,21 +4019,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-169",
-      "rank": 315,
+      "lab_item_id": "LAB-164",
+      "rank": 310,
       "category": "instruments",
-      "lab_item": "laminar flow hood interior empty product tray",
-      "material_detail": "hood interior, stainless work tray with vial",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "single quartz cuvette in foam well",
+      "material_detail": "exactly one clear cuvette seated in foam, adjacent wells empty",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-333",
-      "rank": 316,
+      "rank": 311,
       "category": "liquid_handling",
       "lab_item": "single serological pipette individually wrapped",
       "material_detail": "exactly one wrapped pipette, no bundle stack",
@@ -4111,7 +4046,7 @@
     },
     {
       "lab_item_id": "LAB-363",
-      "rank": 317,
+      "rank": 312,
       "category": "cold_chain",
       "lab_item": "cold brick stack of two",
       "material_detail": "stacked bricks",
@@ -4124,7 +4059,7 @@
     },
     {
       "lab_item_id": "LAB-419",
-      "rank": 318,
+      "rank": 313,
       "category": "surfaces_org",
       "lab_item": "cylinder cap and valve cover",
       "material_detail": "cap hardware",
@@ -4137,7 +4072,7 @@
     },
     {
       "lab_item_id": "LAB-444",
-      "rank": 319,
+      "rank": 314,
       "category": "packaging",
       "lab_item": "assembled research dropper bottle sealed",
       "material_detail": "one complete sealed dropper bottle only",
@@ -4150,7 +4085,7 @@
     },
     {
       "lab_item_id": "LAB-474",
-      "rank": 320,
+      "rank": 315,
       "category": "ppe_sterile",
       "lab_item": "cleanroom notebooks pack",
       "material_detail": "notebooks",
@@ -4163,7 +4098,7 @@
     },
     {
       "lab_item_id": "LAB-034",
-      "rank": 321,
+      "rank": 316,
       "category": "vials_containers",
       "lab_item": "amber vial wrapped in light-protective sleeve",
       "material_detail": "black sleeve partially covering amber glass",
@@ -4176,7 +4111,7 @@
     },
     {
       "lab_item_id": "LAB-284",
-      "rank": 322,
+      "rank": 317,
       "category": "research_pens",
       "lab_item": "research pen in vertical acrylic tower",
       "material_detail": "tower display",
@@ -4189,7 +4124,7 @@
     },
     {
       "lab_item_id": "LAB-099",
-      "rank": 323,
+      "rank": 318,
       "category": "glassware",
       "lab_item": "microscope slide box open showing slides",
       "material_detail": "box of blank slides",
@@ -4201,21 +4136,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-170",
-      "rank": 324,
+      "lab_item_id": "LAB-165",
+      "rank": 319,
       "category": "instruments",
-      "lab_item": "biosafety cabinet sash closed exterior",
-      "material_detail": "cabinet exterior only",
-      "surface": "anodized aluminum tray",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "HPLC system front panel detail",
+      "material_detail": "instrument face, status idle",
+      "surface": "cool gray ceramic tile",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-334",
-      "rank": 325,
+      "rank": 320,
       "category": "liquid_handling",
       "lab_item": "bulb pipette filler classic",
       "material_detail": "rubber bulb filler",
@@ -4228,7 +4163,7 @@
     },
     {
       "lab_item_id": "LAB-364",
-      "rank": 326,
+      "rank": 321,
       "category": "cold_chain",
       "lab_item": "insulated bottle carrier for reagents",
       "material_detail": "carrier",
@@ -4241,7 +4176,7 @@
     },
     {
       "lab_item_id": "LAB-420",
-      "rank": 327,
+      "rank": 322,
       "category": "surfaces_org",
       "lab_item": "bench linear organizer with vials pens",
       "material_detail": "organizer loaded",
@@ -4254,7 +4189,7 @@
     },
     {
       "lab_item_id": "LAB-445",
-      "rank": 328,
+      "rank": 323,
       "category": "packaging",
       "lab_item": "measuring scoop nested sizes",
       "material_detail": "scoops",
@@ -4267,7 +4202,7 @@
     },
     {
       "lab_item_id": "LAB-475",
-      "rank": 329,
+      "rank": 324,
       "category": "ppe_sterile",
       "lab_item": "sticky roller for garments",
       "material_detail": "lint roller",
@@ -4280,7 +4215,7 @@
     },
     {
       "lab_item_id": "LAB-035",
-      "rank": 330,
+      "rank": 325,
       "category": "vials_containers",
       "lab_item": "clear vial with batch tag string tie",
       "material_detail": "small paper tag tied to neck, catalog prop",
@@ -4293,7 +4228,7 @@
     },
     {
       "lab_item_id": "LAB-285",
-      "rank": 331,
+      "rank": 326,
       "category": "research_pens",
       "lab_item": "research pen kit tin open",
       "material_detail": "metal tin packaging",
@@ -4306,7 +4241,7 @@
     },
     {
       "lab_item_id": "LAB-100",
-      "rank": 332,
+      "rank": 327,
       "category": "glassware",
       "lab_item": "cover slips in plastic dispenser",
       "material_detail": "square cover glass pack",
@@ -4318,21 +4253,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-171",
-      "rank": 333,
+      "lab_item_id": "LAB-166",
+      "rank": 328,
       "category": "instruments",
-      "lab_item": "autoclave tape roll and indicator vial",
-      "material_detail": "sterility indicators as objects",
-      "surface": "polished black reflective acrylic",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "fraction collector carousel",
+      "material_detail": "carousel empty tubes",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-335",
-      "rank": 334,
+      "rank": 329,
       "category": "liquid_handling",
       "lab_item": "motorized pipette filler",
       "material_detail": "electronic filler",
@@ -4345,7 +4280,7 @@
     },
     {
       "lab_item_id": "LAB-365",
-      "rank": 335,
+      "rank": 330,
       "category": "cold_chain",
       "lab_item": "refrigerated centrifuge rotor lid",
       "material_detail": "rotor lid object",
@@ -4358,7 +4293,7 @@
     },
     {
       "lab_item_id": "LAB-421",
-      "rank": 336,
+      "rank": 331,
       "category": "surfaces_org",
       "lab_item": "drawer organizer custom vial wells",
       "material_detail": "custom wells",
@@ -4371,7 +4306,7 @@
     },
     {
       "lab_item_id": "LAB-446",
-      "rank": 337,
+      "rank": 332,
       "category": "packaging",
       "lab_item": "desiccant canister indicating unused",
       "material_detail": "indicator desiccant",
@@ -4384,7 +4319,7 @@
     },
     {
       "lab_item_id": "LAB-476",
-      "rank": 338,
+      "rank": 333,
       "category": "ppe_sterile",
       "lab_item": "garment bag hanging empty",
       "material_detail": "bag",
@@ -4397,7 +4332,7 @@
     },
     {
       "lab_item_id": "LAB-036",
-      "rank": 339,
+      "rank": 334,
       "category": "vials_containers",
       "lab_item": "vial in clear acrylic display stand",
       "material_detail": "angled acrylic stand, product-hero pose",
@@ -4410,7 +4345,7 @@
     },
     {
       "lab_item_id": "LAB-286",
-      "rank": 340,
+      "rank": 335,
       "category": "research_pens",
       "lab_item": "research pen with one spare cartridge",
       "material_detail": "one pen and one cartridge only, no duplicate pens",
@@ -4423,7 +4358,7 @@
     },
     {
       "lab_item_id": "LAB-301",
-      "rank": 341,
+      "rank": 336,
       "category": "glassware",
       "lab_item": "Schlenk flask with side arm stopcock",
       "material_detail": "airfree glassware",
@@ -4435,21 +4370,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-172",
-      "rank": 342,
+      "lab_item_id": "LAB-167",
+      "rank": 337,
       "category": "instruments",
-      "lab_item": "lab oven window view empty shelves",
-      "material_detail": "drying oven",
-      "surface": "matte pure white infinity surface",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "gel electrophoresis tank empty",
+      "material_detail": "tank and lid beside",
+      "surface": "white melamine cleanroom table",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-336",
-      "rank": 343,
+      "rank": 338,
       "category": "liquid_handling",
       "lab_item": "reagent reservoir 12-column",
       "material_detail": "divided reservoir",
@@ -4462,7 +4397,7 @@
     },
     {
       "lab_item_id": "LAB-366",
-      "rank": 344,
+      "rank": 339,
       "category": "cold_chain",
       "lab_item": "pre-chilled aluminum tube block",
       "material_detail": "cold block",
@@ -4475,7 +4410,7 @@
     },
     {
       "lab_item_id": "LAB-422",
-      "rank": 345,
+      "rank": 340,
       "category": "surfaces_org",
       "lab_item": "wall-mounted glove dispenser empty slots",
       "material_detail": "dispenser",
@@ -4488,7 +4423,7 @@
     },
     {
       "lab_item_id": "LAB-447",
-      "rank": 346,
+      "rank": 341,
       "category": "packaging",
       "lab_item": "humidity control pack for cabinets",
       "material_detail": "cabinet pack",
@@ -4501,7 +4436,7 @@
     },
     {
       "lab_item_id": "LAB-477",
-      "rank": 347,
+      "rank": 342,
       "category": "ppe_sterile",
       "lab_item": "laundry hamper closed cleanroom",
       "material_detail": "hamper",
@@ -4514,7 +4449,7 @@
     },
     {
       "lab_item_id": "LAB-037",
-      "rank": 348,
+      "rank": 343,
       "category": "vials_containers",
       "lab_item": "wide-mouth powder research jar sealed",
       "material_detail": "clear jar of lyophilized powder, sealed lid",
@@ -4527,7 +4462,7 @@
     },
     {
       "lab_item_id": "LAB-287",
-      "rank": 349,
+      "rank": 344,
       "category": "research_pens",
       "lab_item": "research pen under polarizing light tent",
       "material_detail": "soft tent lighting product",
@@ -4540,7 +4475,7 @@
     },
     {
       "lab_item_id": "LAB-302",
-      "rank": 350,
+      "rank": 345,
       "category": "glassware",
       "lab_item": "pear-shaped flask",
       "material_detail": "recovery flask shape",
@@ -4552,21 +4487,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-173",
-      "rank": 351,
+      "lab_item_id": "LAB-168",
+      "rank": 346,
       "category": "instruments",
-      "lab_item": "vacuum pump compact oil-free",
-      "material_detail": "bench vacuum pump",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "power supply for electrophoresis",
+      "material_detail": "compact power supply unit",
+      "surface": "textured slate sample board",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-337",
-      "rank": 352,
+      "rank": 347,
       "category": "liquid_handling",
       "lab_item": "trough for 16-channel pipette",
       "material_detail": "wide trough",
@@ -4579,7 +4514,7 @@
     },
     {
       "lab_item_id": "LAB-367",
-      "rank": 353,
+      "rank": 348,
       "category": "cold_chain",
       "lab_item": "cooling core for shipper",
       "material_detail": "replaceable core",
@@ -4592,7 +4527,7 @@
     },
     {
       "lab_item_id": "LAB-423",
-      "rank": 354,
+      "rank": 349,
       "category": "surfaces_org",
       "lab_item": "paper towel dispenser stainless lab",
       "material_detail": "dispenser",
@@ -4605,7 +4540,7 @@
     },
     {
       "lab_item_id": "LAB-448",
-      "rank": 355,
+      "rank": 350,
       "category": "packaging",
       "lab_item": "tamper sleeve on carton",
       "material_detail": "sleeve",
@@ -4618,7 +4553,7 @@
     },
     {
       "lab_item_id": "LAB-478",
-      "rank": 356,
+      "rank": 351,
       "category": "ppe_sterile",
       "lab_item": "PPE size placard stand",
       "material_detail": "placard",
@@ -4631,7 +4566,7 @@
     },
     {
       "lab_item_id": "LAB-038",
-      "rank": 357,
+      "rank": 352,
       "category": "vials_containers",
       "lab_item": "amber powder jar with scoop nested on lid",
       "material_detail": "lab scoop resting on sealed jar, no hands",
@@ -4644,7 +4579,7 @@
     },
     {
       "lab_item_id": "LAB-288",
-      "rank": 358,
+      "rank": 353,
       "category": "research_pens",
       "lab_item": "research pen on carbon-fiber sample plate",
       "material_detail": "tech plate surface",
@@ -4657,7 +4592,7 @@
     },
     {
       "lab_item_id": "LAB-303",
-      "rank": 359,
+      "rank": 354,
       "category": "glassware",
       "lab_item": "filter flask with ceramic Buchner funnel seated",
       "material_detail": "filtration assembly dry",
@@ -4669,21 +4604,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-174",
-      "rank": 360,
+      "lab_item_id": "LAB-169",
+      "rank": 355,
       "category": "instruments",
-      "lab_item": "diaphragm vacuum gauge",
-      "material_detail": "analog/digital gauge",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "laminar flow hood interior empty product tray",
+      "material_detail": "hood interior, stainless work tray with vial",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-338",
-      "rank": 361,
+      "rank": 356,
       "category": "liquid_handling",
       "lab_item": "disposable transfer pipette pack",
       "material_detail": "plastic transfer pipettes",
@@ -4696,7 +4631,7 @@
     },
     {
       "lab_item_id": "LAB-368",
-      "rank": 362,
+      "rank": 357,
       "category": "cold_chain",
       "lab_item": "thermal pallet cover folded",
       "material_detail": "cover fabric",
@@ -4709,7 +4644,7 @@
     },
     {
       "lab_item_id": "LAB-424",
-      "rank": 363,
+      "rank": 358,
       "category": "surfaces_org",
       "lab_item": "hands-free sensor trash can closed lab",
       "material_detail": "bin closed",
@@ -4722,7 +4657,7 @@
     },
     {
       "lab_item_id": "LAB-449",
-      "rank": 364,
+      "rank": 359,
       "category": "packaging",
       "lab_item": "security tape on shipper seam",
       "material_detail": "tape seam",
@@ -4735,7 +4670,7 @@
     },
     {
       "lab_item_id": "LAB-479",
-      "rank": 365,
+      "rank": 360,
       "category": "ppe_sterile",
       "lab_item": "eye wash sign placard only",
       "material_detail": "sign",
@@ -4748,7 +4683,7 @@
     },
     {
       "lab_item_id": "LAB-039",
-      "rank": 366,
+      "rank": 361,
       "category": "vials_containers",
       "lab_item": "micro-vial 0.5ml with tiny label",
       "material_detail": "very small vial, macroscopic detail",
@@ -4761,7 +4696,7 @@
     },
     {
       "lab_item_id": "LAB-289",
-      "rank": 367,
+      "rank": 362,
       "category": "research_pens",
       "lab_item": "research pen tip-cap forest green",
       "material_detail": "color-coded tip cap",
@@ -4774,7 +4709,7 @@
     },
     {
       "lab_item_id": "LAB-304",
-      "rank": 368,
+      "rank": 363,
       "category": "glassware",
       "lab_item": "addition funnel graduated",
       "material_detail": "dropping funnel",
@@ -4786,21 +4721,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-175",
-      "rank": 369,
+      "lab_item_id": "LAB-170",
+      "rank": 364,
       "category": "instruments",
-      "lab_item": "sonic bath lid closed",
-      "material_detail": "ultrasonic cleaner",
-      "surface": "cool gray ceramic tile",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "biosafety cabinet sash closed exterior",
+      "material_detail": "cabinet exterior only",
+      "surface": "anodized aluminum tray",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-339",
-      "rank": 370,
+      "rank": 365,
       "category": "liquid_handling",
       "lab_item": "Pasteur pipette rubber bulbs bag",
       "material_detail": "bulbs only",
@@ -4813,7 +4748,7 @@
     },
     {
       "lab_item_id": "LAB-369",
-      "rank": 371,
+      "rank": 366,
       "category": "cold_chain",
       "lab_item": "cold chain SOP binder spine only",
       "material_detail": "binder spine",
@@ -4826,7 +4761,7 @@
     },
     {
       "lab_item_id": "LAB-425",
-      "rank": 372,
+      "rank": 367,
       "category": "surfaces_org",
       "lab_item": "recycling bin for tip boxes labeled",
       "material_detail": "recycling",
@@ -4839,7 +4774,7 @@
     },
     {
       "lab_item_id": "LAB-450",
-      "rank": 373,
+      "rank": 368,
       "category": "packaging",
       "lab_item": "QR code label sheet blank destination",
       "material_detail": "QR labels",
@@ -4852,7 +4787,7 @@
     },
     {
       "lab_item_id": "LAB-480",
-      "rank": 374,
+      "rank": 369,
       "category": "ppe_sterile",
       "lab_item": "spill sock absorbent coiled",
       "material_detail": "sock",
@@ -4865,7 +4800,7 @@
     },
     {
       "lab_item_id": "LAB-040",
-      "rank": 375,
+      "rank": 370,
       "category": "vials_containers",
       "lab_item": "research vial next to calibrated weight set",
       "material_detail": "vial and stainless calibration weights",
@@ -4878,7 +4813,7 @@
     },
     {
       "lab_item_id": "LAB-290",
-      "rank": 376,
+      "rank": 371,
       "category": "research_pens",
       "lab_item": "research pen body disassembled halves",
       "material_detail": "two housing halves, no sharps",
@@ -4891,7 +4826,7 @@
     },
     {
       "lab_item_id": "LAB-305",
-      "rank": 377,
+      "rank": 372,
       "category": "glassware",
       "lab_item": "Claisen adapter glass",
       "material_detail": "distillation adapter",
@@ -4903,21 +4838,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-176",
-      "rank": 378,
+      "lab_item_id": "LAB-171",
+      "rank": 373,
       "category": "instruments",
-      "lab_item": "lab microwave digester exterior",
-      "material_detail": "closed unit",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "autoclave tape roll and indicator vial",
+      "material_detail": "sterility indicators as objects",
+      "surface": "polished black reflective acrylic",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-340",
-      "rank": 379,
+      "rank": 374,
       "category": "liquid_handling",
       "lab_item": "syringe pump bare with research syringe glass",
       "material_detail": "pump and glass syringe no needle",
@@ -4930,7 +4865,7 @@
     },
     {
       "lab_item_id": "LAB-370",
-      "rank": 380,
+      "rank": 375,
       "category": "cold_chain",
       "lab_item": "ice sleeve for single conical tube",
       "material_detail": "tube sleeve",
@@ -4943,7 +4878,7 @@
     },
     {
       "lab_item_id": "LAB-426",
-      "rank": 381,
+      "rank": 376,
       "category": "surfaces_org",
       "lab_item": "floor marked tape grid sample",
       "material_detail": "tape grid",
@@ -4956,7 +4891,7 @@
     },
     {
       "lab_item_id": "LAB-451",
-      "rank": 382,
+      "rank": 377,
       "category": "packaging",
       "lab_item": "lot sticker sheets color coded",
       "material_detail": "stickers",
@@ -4969,7 +4904,7 @@
     },
     {
       "lab_item_id": "LAB-481",
-      "rank": 383,
+      "rank": 378,
       "category": "ppe_sterile",
       "lab_item": "neutralizer powder bottle",
       "material_detail": "bottle",
@@ -4982,7 +4917,7 @@
     },
     {
       "lab_item_id": "LAB-251",
-      "rank": 384,
+      "rank": 379,
       "category": "vials_containers",
       "lab_item": "cobalt blue glass research vial sealed",
       "material_detail": "blue glass UV protection, crimp seal",
@@ -4995,7 +4930,7 @@
     },
     {
       "lab_item_id": "LAB-291",
-      "rank": 385,
+      "rank": 380,
       "category": "research_pens",
       "lab_item": "research pen with serialized sticker blank",
       "material_detail": "blank serial panel",
@@ -5008,7 +4943,7 @@
     },
     {
       "lab_item_id": "LAB-306",
-      "rank": 386,
+      "rank": 381,
       "category": "glassware",
       "lab_item": "Y-adapter vacuum",
       "material_detail": "glass adapter",
@@ -5020,21 +4955,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-177",
-      "rank": 387,
+      "lab_item_id": "LAB-172",
+      "rank": 382,
       "category": "instruments",
-      "lab_item": "fume hood sash partially open with empty clamp",
-      "material_detail": "hood as environment, product clamp empty",
-      "surface": "white melamine cleanroom table",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "lab oven window view empty shelves",
+      "material_detail": "drying oven",
+      "surface": "matte pure white infinity surface",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-341",
-      "rank": 388,
+      "rank": 383,
       "category": "liquid_handling",
       "lab_item": "microfluidic chip in petri carrier",
       "material_detail": "chip on dish",
@@ -5047,7 +4982,7 @@
     },
     {
       "lab_item_id": "LAB-371",
-      "rank": 389,
+      "rank": 384,
       "category": "cold_chain",
       "lab_item": "frost-free freezer shelf bin labeled research",
       "material_detail": "bin label research",
@@ -5060,7 +4995,7 @@
     },
     {
       "lab_item_id": "LAB-427",
-      "rank": 390,
+      "rank": 385,
       "category": "surfaces_org",
       "lab_item": "cleanroom light panel glow on products",
       "material_detail": "products under panel",
@@ -5073,7 +5008,7 @@
     },
     {
       "lab_item_id": "LAB-452",
-      "rank": 391,
+      "rank": 386,
       "category": "packaging",
       "lab_item": "pack insert accordion folded",
       "material_detail": "insert",
@@ -5086,7 +5021,7 @@
     },
     {
       "lab_item_id": "LAB-482",
-      "rank": 392,
+      "rank": 387,
       "category": "ppe_sterile",
       "lab_item": "chemical absorbent pads stack",
       "material_detail": "pads",
@@ -5099,7 +5034,7 @@
     },
     {
       "lab_item_id": "LAB-252",
-      "rank": 393,
+      "rank": 388,
       "category": "vials_containers",
       "lab_item": "clear vial with flip-off seal green",
       "material_detail": "plastic flip-off button over stopper",
@@ -5112,7 +5047,7 @@
     },
     {
       "lab_item_id": "LAB-292",
-      "rank": 394,
+      "rank": 389,
       "category": "research_pens",
       "lab_item": "research pen in velvet-lined evaluation box",
       "material_detail": "evaluation kit box",
@@ -5125,7 +5060,7 @@
     },
     {
       "lab_item_id": "LAB-307",
-      "rank": 395,
+      "rank": 390,
       "category": "glassware",
       "lab_item": "cold finger condenser",
       "material_detail": "cold finger form",
@@ -5137,21 +5072,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-178",
-      "rank": 396,
+      "lab_item_id": "LAB-173",
+      "rank": 391,
       "category": "instruments",
-      "lab_item": "anti-static bar on packaging station",
-      "material_detail": "pack desk tools",
-      "surface": "textured slate sample board",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "vacuum pump compact oil-free",
+      "material_detail": "bench vacuum pump",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-342",
-      "rank": 397,
+      "rank": 392,
       "category": "liquid_handling",
       "lab_item": "tubing kit silicone assorted diameters",
       "material_detail": "coiled tubing",
@@ -5164,7 +5099,7 @@
     },
     {
       "lab_item_id": "LAB-372",
-      "rank": 398,
+      "rank": 393,
       "category": "cold_chain",
       "lab_item": "single cryogenic glove on box lid",
       "material_detail": "exactly one cryo glove displayed, box as prop only",
@@ -5177,7 +5112,7 @@
     },
     {
       "lab_item_id": "LAB-428",
-      "rank": 399,
+      "rank": 394,
       "category": "surfaces_org",
       "lab_item": "HEPA filter grill exterior",
       "material_detail": "grill",
@@ -5190,7 +5125,7 @@
     },
     {
       "lab_item_id": "LAB-453",
-      "rank": 400,
+      "rank": 395,
       "category": "packaging",
       "lab_item": "silica gel pillow packs",
       "material_detail": "pillows",
@@ -5203,7 +5138,7 @@
     },
     {
       "lab_item_id": "LAB-483",
-      "rank": 401,
+      "rank": 396,
       "category": "ppe_sterile",
       "lab_item": "waste bag stand with labeled bag empty",
       "material_detail": "stand",
@@ -5216,7 +5151,7 @@
     },
     {
       "lab_item_id": "LAB-253",
-      "rank": 402,
+      "rank": 397,
       "category": "vials_containers",
       "lab_item": "amber vial with measured fill to shoulder",
       "material_detail": "fill line at shoulder, clinical clarity",
@@ -5229,7 +5164,7 @@
     },
     {
       "lab_item_id": "LAB-293",
-      "rank": 403,
+      "rank": 398,
       "category": "research_pens",
       "lab_item": "research pen silhouette against soft gradient gray",
       "material_detail": "catalog silhouette",
@@ -5242,7 +5177,7 @@
     },
     {
       "lab_item_id": "LAB-308",
-      "rank": 404,
+      "rank": 399,
       "category": "glassware",
       "lab_item": "jacketed beaker",
       "material_detail": "reaction beaker jacket",
@@ -5254,21 +5189,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-179",
-      "rank": 405,
+      "lab_item_id": "LAB-174",
+      "rank": 400,
       "category": "instruments",
-      "lab_item": "barcode scanner beside vial",
-      "material_detail": "scanner gun and vial",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "diaphragm vacuum gauge",
+      "material_detail": "analog/digital gauge",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-343",
-      "rank": 406,
+      "rank": 401,
       "category": "liquid_handling",
       "lab_item": "quick-connect luer fittings tray",
       "material_detail": "fittings assortment",
@@ -5281,7 +5216,7 @@
     },
     {
       "lab_item_id": "LAB-373",
-      "rank": 407,
+      "rank": 402,
       "category": "cold_chain",
       "lab_item": "face shield for cryo boxed",
       "material_detail": "shield packaging",
@@ -5294,7 +5229,7 @@
     },
     {
       "lab_item_id": "LAB-429",
-      "rank": 408,
+      "rank": 403,
       "category": "surfaces_org",
       "lab_item": "magnehelic gauge on wall",
       "material_detail": "pressure gauge",
@@ -5307,7 +5242,7 @@
     },
     {
       "lab_item_id": "LAB-454",
-      "rank": 409,
+      "rank": 404,
       "category": "packaging",
       "lab_item": "foam-in-place corner blocks",
       "material_detail": "corners",
@@ -5320,7 +5255,7 @@
     },
     {
       "lab_item_id": "LAB-484",
-      "rank": 410,
+      "rank": 405,
       "category": "ppe_sterile",
       "lab_item": "sharps container wall bracket empty mount",
       "material_detail": "bracket",
@@ -5333,7 +5268,7 @@
     },
     {
       "lab_item_id": "LAB-254",
-      "rank": 411,
+      "rank": 406,
       "category": "vials_containers",
       "lab_item": "single vial in clear clamshell well",
       "material_detail": "exactly one vial in open clamshell, second well empty",
@@ -5346,7 +5281,7 @@
     },
     {
       "lab_item_id": "LAB-294",
-      "rank": 412,
+      "rank": 407,
       "category": "research_pens",
       "lab_item": "research pen next to thickness gauge",
       "material_detail": "metrology still",
@@ -5359,7 +5294,7 @@
     },
     {
       "lab_item_id": "LAB-309",
-      "rank": 413,
+      "rank": 408,
       "category": "glassware",
       "lab_item": "crystallizer dish jacketed",
       "material_detail": "temp-controlled dish",
@@ -5371,21 +5306,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-180",
-      "rank": 414,
+      "lab_item_id": "LAB-175",
+      "rank": 409,
       "category": "instruments",
-      "lab_item": "label printer with research label stock",
-      "material_detail": "desktop lab printer",
-      "surface": "anodized aluminum tray",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "sonic bath lid closed",
+      "material_detail": "ultrasonic cleaner",
+      "surface": "cool gray ceramic tile",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-344",
-      "rank": 415,
+      "rank": 410,
       "category": "liquid_handling",
       "lab_item": "check valve luer set",
       "material_detail": "valves",
@@ -5398,7 +5333,7 @@
     },
     {
       "lab_item_id": "LAB-374",
-      "rank": 416,
+      "rank": 411,
       "category": "cold_chain",
       "lab_item": "cryo cane numbered tags",
       "material_detail": "tags",
@@ -5411,7 +5346,7 @@
     },
     {
       "lab_item_id": "LAB-430",
-      "rank": 417,
+      "rank": 412,
       "category": "surfaces_org",
       "lab_item": "room differential pressure display",
       "material_detail": "display",
@@ -5424,7 +5359,7 @@
     },
     {
       "lab_item_id": "LAB-455",
-      "rank": 418,
+      "rank": 413,
       "category": "packaging",
       "lab_item": "molded pulp egg-crate for vials",
       "material_detail": "pulp tray",
@@ -5437,7 +5372,7 @@
     },
     {
       "lab_item_id": "LAB-485",
-      "rank": 419,
+      "rank": 414,
       "category": "ppe_sterile",
       "lab_item": "biohazard label roll",
       "material_detail": "labels",
@@ -5450,7 +5385,7 @@
     },
     {
       "lab_item_id": "LAB-255",
-      "rank": 420,
+      "rank": 415,
       "category": "vials_containers",
       "lab_item": "vial with RFID collar ring installed",
       "material_detail": "inventory collar on neck",
@@ -5463,7 +5398,7 @@
     },
     {
       "lab_item_id": "LAB-295",
-      "rank": 421,
+      "rank": 416,
       "category": "research_pens",
       "lab_item": "research pen capped catalog hero",
       "material_detail": "exactly one capped research pen, no uncapped duplicate",
@@ -5476,7 +5411,7 @@
     },
     {
       "lab_item_id": "LAB-310",
-      "rank": 422,
+      "rank": 417,
       "category": "glassware",
       "lab_item": "glass reaction tube sealed",
       "material_detail": "pressure tube",
@@ -5488,11 +5423,11 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-376",
-      "rank": 423,
+      "lab_item_id": "LAB-176",
+      "rank": 418,
       "category": "instruments",
-      "lab_item": "microplate reader closed",
-      "material_detail": "plate reader instrument",
+      "lab_item": "lab microwave digester exterior",
+      "material_detail": "closed unit",
       "surface": "mirrored chrome instrument tray",
       "lighting": "low-key selective highlight on glass edges",
       "camera_move": "fast resolve into locked hero frame",
@@ -5502,7 +5437,7 @@
     },
     {
       "lab_item_id": "LAB-345",
-      "rank": 424,
+      "rank": 419,
       "category": "liquid_handling",
       "lab_item": "in-line filter capsule",
       "material_detail": "capsule filter",
@@ -5515,7 +5450,7 @@
     },
     {
       "lab_item_id": "LAB-375",
-      "rank": 425,
+      "rank": 420,
       "category": "cold_chain",
       "lab_item": "vapor plug for dry shipper",
       "material_detail": "plug component",
@@ -5528,7 +5463,7 @@
     },
     {
       "lab_item_id": "LAB-431",
-      "rank": 426,
+      "rank": 421,
       "category": "surfaces_org",
       "lab_item": "interlocking pass cart",
       "material_detail": "cart",
@@ -5541,7 +5476,7 @@
     },
     {
       "lab_item_id": "LAB-456",
-      "rank": 427,
+      "rank": 422,
       "category": "packaging",
       "lab_item": "PET clamshell with single research pen",
       "material_detail": "clamshell holding exactly one pen, second cavity empty",
@@ -5554,7 +5489,7 @@
     },
     {
       "lab_item_id": "LAB-256",
-      "rank": 428,
+      "rank": 423,
       "category": "vials_containers",
       "lab_item": "research vial in individual carton window",
       "material_detail": "window shows glass",
@@ -5567,7 +5502,7 @@
     },
     {
       "lab_item_id": "LAB-296",
-      "rank": 429,
+      "rank": 424,
       "category": "research_pens",
       "lab_item": "compact research pen titanium-look shell",
       "material_detail": "metallic shell",
@@ -5580,7 +5515,7 @@
     },
     {
       "lab_item_id": "LAB-311",
-      "rank": 430,
+      "rank": 425,
       "category": "glassware",
       "lab_item": "NMR spinner turbine with tube",
       "material_detail": "spinner and tube",
@@ -5592,11 +5527,11 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-377",
-      "rank": 431,
+      "lab_item_id": "LAB-177",
+      "rank": 426,
       "category": "instruments",
-      "lab_item": "qPCR machine lid closed",
-      "material_detail": "thermocycler exterior",
+      "lab_item": "fume hood sash partially open with empty clamp",
+      "material_detail": "hood as environment, product clamp empty",
       "surface": "white melamine cleanroom table",
       "lighting": "soft rim light from behind",
       "camera_move": "slow 360 degree orbit at eye level",
@@ -5606,7 +5541,7 @@
     },
     {
       "lab_item_id": "LAB-346",
-      "rank": 432,
+      "rank": 427,
       "category": "liquid_handling",
       "lab_item": "sterile media bag empty folded",
       "material_detail": "bioprocess bag folded",
@@ -5619,7 +5554,7 @@
     },
     {
       "lab_item_id": "LAB-432",
-      "rank": 433,
+      "rank": 428,
       "category": "surfaces_org",
       "lab_item": "gowning bench empty",
       "material_detail": "bench no person",
@@ -5632,7 +5567,7 @@
     },
     {
       "lab_item_id": "LAB-457",
-      "rank": 434,
+      "rank": 429,
       "category": "packaging",
       "lab_item": "kraft tube mailer for pen",
       "material_detail": "tube mailer",
@@ -5645,7 +5580,7 @@
     },
     {
       "lab_item_id": "LAB-257",
-      "rank": 435,
+      "rank": 430,
       "category": "vials_containers",
       "lab_item": "silicone-coated vial for sticky compounds",
       "material_detail": "special interior coating sheen",
@@ -5658,7 +5593,7 @@
     },
     {
       "lab_item_id": "LAB-297",
-      "rank": 436,
+      "rank": 431,
       "category": "research_pens",
       "lab_item": "research pen with soft-touch overmold",
       "material_detail": "overmold texture",
@@ -5671,7 +5606,7 @@
     },
     {
       "lab_item_id": "LAB-312",
-      "rank": 437,
+      "rank": 432,
       "category": "glassware",
       "lab_item": "cuvette rack acrylic holding four",
       "material_detail": "cuvette organizer",
@@ -5683,11 +5618,11 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-378",
-      "rank": 438,
+      "lab_item_id": "LAB-178",
+      "rank": 433,
       "category": "instruments",
-      "lab_item": "thermocycler block alone empty",
-      "material_detail": "metal block",
+      "lab_item": "anti-static bar on packaging station",
+      "material_detail": "pack desk tools",
       "surface": "textured slate sample board",
       "lighting": "cool clinical blue-white LED",
       "camera_move": "extreme macro push-in",
@@ -5697,7 +5632,7 @@
     },
     {
       "lab_item_id": "LAB-347",
-      "rank": 439,
+      "rank": 434,
       "category": "liquid_handling",
       "lab_item": "bag spike port cover set",
       "material_detail": "port covers",
@@ -5710,7 +5645,7 @@
     },
     {
       "lab_item_id": "LAB-433",
-      "rank": 440,
+      "rank": 435,
       "category": "surfaces_org",
       "lab_item": "bootie dispenser box",
       "material_detail": "dispenser box",
@@ -5723,7 +5658,7 @@
     },
     {
       "lab_item_id": "LAB-458",
-      "rank": 441,
+      "rank": 436,
       "category": "packaging",
       "lab_item": "windowless matte black carton research",
       "material_detail": "black carton",
@@ -5736,7 +5671,7 @@
     },
     {
       "lab_item_id": "LAB-258",
-      "rank": 442,
+      "rank": 437,
       "category": "vials_containers",
       "lab_item": "vial with colored break-ring neck",
       "material_detail": "score ring visible",
@@ -5749,7 +5684,7 @@
     },
     {
       "lab_item_id": "LAB-298",
-      "rank": 443,
+      "rank": 438,
       "category": "research_pens",
       "lab_item": "research pen window showing piston position",
       "material_detail": "piston visible",
@@ -5762,7 +5697,7 @@
     },
     {
       "lab_item_id": "LAB-313",
-      "rank": 444,
+      "rank": 439,
       "category": "glassware",
       "lab_item": "flow cell glass optical",
       "material_detail": "optical flow cell",
@@ -5774,11 +5709,11 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-379",
-      "rank": 445,
+      "lab_item_id": "LAB-179",
+      "rank": 440,
       "category": "instruments",
-      "lab_item": "gel imager darkroom unit closed",
-      "material_detail": "imager",
+      "lab_item": "barcode scanner beside vial",
+      "material_detail": "scanner gun and vial",
       "surface": "soft gray seamless paper backdrop",
       "lighting": "single hard key light with controlled fill",
       "camera_move": "gentle top-down descending move",
@@ -5788,7 +5723,7 @@
     },
     {
       "lab_item_id": "LAB-348",
-      "rank": 446,
+      "rank": 441,
       "category": "liquid_handling",
       "lab_item": "graduated conical tube 50ml rack",
       "material_detail": "conical tubes in rack",
@@ -5801,7 +5736,7 @@
     },
     {
       "lab_item_id": "LAB-434",
-      "rank": 447,
+      "rank": 442,
       "category": "surfaces_org",
       "lab_item": "gowning mirror frame empty soft reflection",
       "material_detail": "empty mirror area soft",
@@ -5814,7 +5749,7 @@
     },
     {
       "lab_item_id": "LAB-459",
-      "rank": 448,
+      "rank": 443,
       "category": "packaging",
       "lab_item": "soft-touch laminate carton",
       "material_detail": "soft touch pack",
@@ -5827,7 +5762,7 @@
     },
     {
       "lab_item_id": "LAB-259",
-      "rank": 449,
+      "rank": 444,
       "category": "vials_containers",
       "lab_item": "heavy-wall pressure vial",
       "material_detail": "thick glass research vial",
@@ -5840,7 +5775,7 @@
     },
     {
       "lab_item_id": "LAB-299",
-      "rank": 450,
+      "rank": 445,
       "category": "research_pens",
       "lab_item": "research pen on linen lab wipe folded",
       "material_detail": "wipe as surface",
@@ -5853,7 +5788,7 @@
     },
     {
       "lab_item_id": "LAB-314",
-      "rank": 451,
+      "rank": 446,
       "category": "glassware",
       "lab_item": "Soxhlet extractor assembled dry",
       "material_detail": "extractor glassware",
@@ -5865,11 +5800,11 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-380",
-      "rank": 452,
+      "lab_item_id": "LAB-180",
+      "rank": 447,
       "category": "instruments",
-      "lab_item": "western blot transfer tank",
-      "material_detail": "transfer tank",
+      "lab_item": "label printer with research label stock",
+      "material_detail": "desktop lab printer",
       "surface": "anodized aluminum tray",
       "lighting": "soft overhead softbox, even catalog lighting",
       "camera_move": "locked tripod hero frame with subtle push",
@@ -5879,7 +5814,7 @@
     },
     {
       "lab_item_id": "LAB-349",
-      "rank": 453,
+      "rank": 448,
       "category": "liquid_handling",
       "lab_item": "conical tube 15ml amber",
       "material_detail": "amber conical",
@@ -5892,7 +5827,7 @@
     },
     {
       "lab_item_id": "LAB-435",
-      "rank": 454,
+      "rank": 449,
       "category": "surfaces_org",
       "lab_item": "step-over bench cleanroom",
       "material_detail": "bench",
@@ -5905,7 +5840,7 @@
     },
     {
       "lab_item_id": "LAB-460",
-      "rank": 455,
+      "rank": 450,
       "category": "packaging",
       "lab_item": "carton with embossed logo blank area",
       "material_detail": "emboss panel",
@@ -5918,7 +5853,7 @@
     },
     {
       "lab_item_id": "LAB-260",
-      "rank": 456,
+      "rank": 451,
       "category": "vials_containers",
       "lab_item": "vial standing in CNC-machined aluminum puck",
       "material_detail": "precision puck holder",
@@ -5931,7 +5866,7 @@
     },
     {
       "lab_item_id": "LAB-300",
-      "rank": 457,
+      "rank": 452,
       "category": "research_pens",
       "lab_item": "research pen aligned to ruler for scale",
       "material_detail": "scale reference",
@@ -5944,7 +5879,7 @@
     },
     {
       "lab_item_id": "LAB-315",
-      "rank": 458,
+      "rank": 453,
       "category": "glassware",
       "lab_item": "Dean-Stark trap",
       "material_detail": "trap apparatus",
@@ -5956,21 +5891,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-381",
-      "rank": 459,
+      "lab_item_id": "LAB-376",
+      "rank": 454,
       "category": "instruments",
-      "lab_item": "rocking platform mixer",
-      "material_detail": "rocker",
-      "surface": "polished black reflective acrylic",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "microplate reader closed",
+      "material_detail": "plate reader instrument",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-350",
-      "rank": 460,
+      "rank": 455,
       "category": "liquid_handling",
       "lab_item": "screw-cap microtube amber 2ml",
       "material_detail": "amber microtube",
@@ -5983,7 +5918,7 @@
     },
     {
       "lab_item_id": "LAB-261",
-      "rank": 461,
+      "rank": 456,
       "category": "vials_containers",
       "lab_item": "clear vial with laser-etched lot panel blank",
       "material_detail": "etched frosted rectangle",
@@ -5996,7 +5931,7 @@
     },
     {
       "lab_item_id": "LAB-316",
-      "rank": 462,
+      "rank": 457,
       "category": "glassware",
       "lab_item": "gas burette",
       "material_detail": "gas measurement glass",
@@ -6008,21 +5943,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-382",
-      "rank": 463,
+      "lab_item_id": "LAB-377",
+      "rank": 458,
       "category": "instruments",
-      "lab_item": "3D nutating mixer",
-      "material_detail": "nutator",
-      "surface": "matte pure white infinity surface",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "lab_item": "qPCR machine lid closed",
+      "material_detail": "thermocycler exterior",
+      "surface": "white melamine cleanroom table",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-262",
-      "rank": 464,
+      "rank": 459,
       "category": "vials_containers",
       "lab_item": "amber vial beside silica canister mini",
       "material_detail": "desiccant neighbor",
@@ -6035,7 +5970,7 @@
     },
     {
       "lab_item_id": "LAB-317",
-      "rank": 465,
+      "rank": 460,
       "category": "glassware",
       "lab_item": "pycnometer bottle",
       "material_detail": "density bottle",
@@ -6047,21 +5982,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-383",
-      "rank": 466,
+      "lab_item_id": "LAB-378",
+      "rank": 461,
       "category": "instruments",
-      "lab_item": "overhead stirrer motor on stand",
-      "material_detail": "stirrer motor",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "thermocycler block alone empty",
+      "material_detail": "metal block",
+      "surface": "textured slate sample board",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-263",
-      "rank": 467,
+      "rank": 462,
       "category": "vials_containers",
       "lab_item": "vial rack aluminum 5x10 empty slots with one vial",
       "material_detail": "mostly empty rack hero",
@@ -6074,7 +6009,7 @@
     },
     {
       "lab_item_id": "LAB-318",
-      "rank": 468,
+      "rank": 463,
       "category": "glassware",
       "lab_item": "specific gravity bottle",
       "material_detail": "glass density ware",
@@ -6086,21 +6021,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-384",
-      "rank": 469,
+      "lab_item_id": "LAB-379",
+      "rank": 464,
       "category": "instruments",
-      "lab_item": "homogenizer probe parked in stand",
-      "material_detail": "probe stand",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "gel imager darkroom unit closed",
+      "material_detail": "imager",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-264",
-      "rank": 470,
+      "rank": 465,
       "category": "vials_containers",
       "lab_item": "crimped vial under magnifying dome lamp light",
       "material_detail": "inspection lighting",
@@ -6113,7 +6048,7 @@
     },
     {
       "lab_item_id": "LAB-319",
-      "rank": 471,
+      "rank": 466,
       "category": "glassware",
       "lab_item": "wide dilution bottle research",
       "material_detail": "wide dilution bottle",
@@ -6125,21 +6060,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-385",
-      "rank": 472,
+      "lab_item_id": "LAB-380",
+      "rank": 467,
       "category": "instruments",
-      "lab_item": "sonic probe tip set",
-      "material_detail": "probe tips",
-      "surface": "cool gray ceramic tile",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "western blot transfer tank",
+      "material_detail": "transfer tank",
+      "surface": "anodized aluminum tray",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-265",
-      "rank": 473,
+      "rank": 468,
       "category": "vials_containers",
       "lab_item": "research vial with heat-shrink neck band gold",
       "material_detail": "gold band aesthetic catalog",
@@ -6152,7 +6087,7 @@
     },
     {
       "lab_item_id": "LAB-320",
-      "rank": 474,
+      "rank": 469,
       "category": "glassware",
       "lab_item": "media Roux bottle flat",
       "material_detail": "flat culture bottle",
@@ -6164,21 +6099,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-386",
-      "rank": 475,
+      "lab_item_id": "LAB-381",
+      "rank": 470,
       "category": "instruments",
-      "lab_item": "lab homogenizer tube adapter",
-      "material_detail": "adapter",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "rocking platform mixer",
+      "material_detail": "rocker",
+      "surface": "polished black reflective acrylic",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-266",
-      "rank": 476,
+      "rank": 471,
       "category": "vials_containers",
       "lab_item": "glass vial with plastic overcap tethered",
       "material_detail": "tethered overcap",
@@ -6190,8 +6125,21 @@
       "last_used_at": ""
     },
     {
+      "lab_item_id": "LAB-396",
+      "rank": 472,
+      "category": "instruments",
+      "lab_item": "thermocouple wire spool",
+      "material_detail": "wire spool",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
+      "status": "Active",
+      "times_used": "0",
+      "last_used_at": ""
+    },
+    {
       "lab_item_id": "LAB-321",
-      "rank": 477,
+      "rank": 473,
       "category": "glassware",
       "lab_item": "roller bottle cell culture empty",
       "material_detail": "roller bottle",
@@ -6203,21 +6151,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-387",
-      "rank": 478,
+      "lab_item_id": "LAB-382",
+      "rank": 474,
       "category": "instruments",
-      "lab_item": "vacuum concentrator closed",
-      "material_detail": "concentrator exterior",
-      "surface": "white melamine cleanroom table",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "3D nutating mixer",
+      "material_detail": "nutator",
+      "surface": "matte pure white infinity surface",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-267",
-      "rank": 479,
+      "rank": 475,
       "category": "vials_containers",
       "lab_item": "microbarcoded vial close-up label area",
       "material_detail": "tiny barcode zone",
@@ -6229,8 +6177,21 @@
       "last_used_at": ""
     },
     {
+      "lab_item_id": "LAB-395",
+      "rank": 476,
+      "category": "instruments",
+      "lab_item": "PID temperature controller box",
+      "material_detail": "controller",
+      "surface": "cool gray ceramic tile",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
+      "status": "Active",
+      "times_used": "0",
+      "last_used_at": ""
+    },
+    {
       "lab_item_id": "LAB-322",
-      "rank": 480,
+      "rank": 477,
       "category": "glassware",
       "lab_item": "spinner flask with impeller",
       "material_detail": "impeller flask",
@@ -6242,21 +6203,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-388",
-      "rank": 481,
+      "lab_item_id": "LAB-383",
+      "rank": 478,
       "category": "instruments",
-      "lab_item": "lyophilizer chamber exterior",
-      "material_detail": "freeze dryer exterior",
-      "surface": "textured slate sample board",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "overhead stirrer motor on stand",
+      "material_detail": "stirrer motor",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-268",
-      "rank": 482,
+      "rank": 479,
       "category": "vials_containers",
       "lab_item": "vial in vacuum skin-pack card",
       "material_detail": "carded vacuum pack",
@@ -6268,8 +6229,21 @@
       "last_used_at": ""
     },
     {
+      "lab_item_id": "LAB-394",
+      "rank": 480,
+      "category": "instruments",
+      "lab_item": "heating mantle nested sizes",
+      "material_detail": "mantles",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
+      "status": "Active",
+      "times_used": "0",
+      "last_used_at": ""
+    },
+    {
       "lab_item_id": "LAB-323",
-      "rank": 483,
+      "rank": 481,
       "category": "glassware",
       "lab_item": "glass desiccator plate alone",
       "material_detail": "perforated plate",
@@ -6281,21 +6255,21 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-389",
-      "rank": 484,
+      "lab_item_id": "LAB-384",
+      "rank": 482,
       "category": "instruments",
-      "lab_item": "manifold freeze dryer ports capped",
-      "material_detail": "ports capped",
-      "surface": "soft gray seamless paper backdrop",
-      "lighting": "warm neutral side light, still clinical",
-      "camera_move": "low angle tracking slide",
+      "lab_item": "homogenizer probe parked in stand",
+      "material_detail": "probe stand",
+      "surface": "dark charcoal epoxy resin countertop",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
     },
     {
       "lab_item_id": "LAB-269",
-      "rank": 485,
+      "rank": 483,
       "category": "vials_containers",
       "lab_item": "clear vial suspended in acrylic block embed mock",
       "material_detail": "acrylic block display prop",
@@ -6307,8 +6281,21 @@
       "last_used_at": ""
     },
     {
+      "lab_item_id": "LAB-393",
+      "rank": 484,
+      "category": "instruments",
+      "lab_item": "oil bath pot empty clean",
+      "material_detail": "oil bath vessel",
+      "surface": "brushed stainless steel lab bench",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
+      "status": "Active",
+      "times_used": "0",
+      "last_used_at": ""
+    },
+    {
       "lab_item_id": "LAB-324",
-      "rank": 486,
+      "rank": 485,
       "category": "glassware",
       "lab_item": "weighing bottle tall form",
       "material_detail": "glass weighing bottle",
@@ -6320,11 +6307,24 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-390",
-      "rank": 487,
+      "lab_item_id": "LAB-385",
+      "rank": 486,
       "category": "instruments",
-      "lab_item": "rotary evaporator glassware dry assembled",
-      "material_detail": "rotovap glass",
+      "lab_item": "sonic probe tip set",
+      "material_detail": "probe tips",
+      "surface": "cool gray ceramic tile",
+      "lighting": "soft rim light from behind",
+      "camera_move": "slow 360 degree orbit at eye level",
+      "status": "Active",
+      "times_used": "0",
+      "last_used_at": ""
+    },
+    {
+      "lab_item_id": "LAB-270",
+      "rank": 487,
+      "category": "vials_containers",
+      "lab_item": "amber vial next to calibrated pipette tip",
+      "material_detail": "scale reference still",
       "surface": "anodized aluminum tray",
       "lighting": "split soft key and gentle bounce",
       "camera_move": "circular arc that never fully completes",
@@ -6333,14 +6333,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-270",
+      "lab_item_id": "LAB-392",
       "rank": 488,
-      "category": "vials_containers",
-      "lab_item": "amber vial next to calibrated pipette tip",
-      "material_detail": "scale reference still",
-      "surface": "anodized aluminum tray",
-      "lighting": "split soft key and gentle bounce",
-      "camera_move": "circular arc that never fully completes",
+      "category": "instruments",
+      "lab_item": "lab water bath lid on",
+      "material_detail": "water bath",
+      "surface": "matte pure white infinity surface",
+      "lighting": "low-key selective highlight on glass edges",
+      "camera_move": "fast resolve into locked hero frame",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6359,14 +6359,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-391",
+      "lab_item_id": "LAB-386",
       "rank": 490,
       "category": "instruments",
-      "lab_item": "chiller recirculator compact",
-      "material_detail": "chiller unit",
-      "surface": "polished black reflective acrylic",
-      "lighting": "high-key seamless catalog lighting",
-      "camera_move": "vertical rise from base to label",
+      "lab_item": "lab homogenizer tube adapter",
+      "material_detail": "adapter",
+      "surface": "mirrored chrome instrument tray",
+      "lighting": "cool clinical blue-white LED",
+      "camera_move": "extreme macro push-in",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6385,14 +6385,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-392",
+      "lab_item_id": "LAB-387",
       "rank": 492,
       "category": "instruments",
-      "lab_item": "lab water bath lid on",
-      "material_detail": "water bath",
-      "surface": "matte pure white infinity surface",
-      "lighting": "low-key selective highlight on glass edges",
-      "camera_move": "fast resolve into locked hero frame",
+      "lab_item": "vacuum concentrator closed",
+      "material_detail": "concentrator exterior",
+      "surface": "white melamine cleanroom table",
+      "lighting": "single hard key light with controlled fill",
+      "camera_move": "gentle top-down descending move",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6411,14 +6411,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-393",
+      "lab_item_id": "LAB-388",
       "rank": 494,
       "category": "instruments",
-      "lab_item": "oil bath pot empty clean",
-      "material_detail": "oil bath vessel",
-      "surface": "brushed stainless steel lab bench",
-      "lighting": "soft rim light from behind",
-      "camera_move": "slow 360 degree orbit at eye level",
+      "lab_item": "lyophilizer chamber exterior",
+      "material_detail": "freeze dryer exterior",
+      "surface": "textured slate sample board",
+      "lighting": "soft overhead softbox, even catalog lighting",
+      "camera_move": "locked tripod hero frame with subtle push",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6437,14 +6437,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-394",
+      "lab_item_id": "LAB-389",
       "rank": 496,
       "category": "instruments",
-      "lab_item": "heating mantle nested sizes",
-      "material_detail": "mantles",
-      "surface": "dark charcoal epoxy resin countertop",
-      "lighting": "cool clinical blue-white LED",
-      "camera_move": "extreme macro push-in",
+      "lab_item": "manifold freeze dryer ports capped",
+      "material_detail": "ports capped",
+      "surface": "soft gray seamless paper backdrop",
+      "lighting": "warm neutral side light, still clinical",
+      "camera_move": "low angle tracking slide",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6463,14 +6463,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-395",
+      "lab_item_id": "LAB-390",
       "rank": 498,
       "category": "instruments",
-      "lab_item": "PID temperature controller box",
-      "material_detail": "controller",
-      "surface": "cool gray ceramic tile",
-      "lighting": "single hard key light with controlled fill",
-      "camera_move": "gentle top-down descending move",
+      "lab_item": "rotary evaporator glassware dry assembled",
+      "material_detail": "rotovap glass",
+      "surface": "anodized aluminum tray",
+      "lighting": "split soft key and gentle bounce",
+      "camera_move": "circular arc that never fully completes",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
@@ -6489,14 +6489,14 @@
       "last_used_at": ""
     },
     {
-      "lab_item_id": "LAB-396",
+      "lab_item_id": "LAB-391",
       "rank": 500,
       "category": "instruments",
-      "lab_item": "thermocouple wire spool",
-      "material_detail": "wire spool",
-      "surface": "mirrored chrome instrument tray",
-      "lighting": "soft overhead softbox, even catalog lighting",
-      "camera_move": "locked tripod hero frame with subtle push",
+      "lab_item": "chiller recirculator compact",
+      "material_detail": "chiller unit",
+      "surface": "polished black reflective acrylic",
+      "lighting": "high-key seamless catalog lighting",
+      "camera_move": "vertical rise from base to label",
       "status": "Active",
       "times_used": "0",
       "last_used_at": ""
