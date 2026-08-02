@@ -910,6 +910,61 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
     return out
 
 
+# Subjects that typically carry a readable product label → must use a real compound name.
+LABEL_SUBJECT_RE = re.compile(
+    r"\b("
+    r"vial|ampule|ampoule|pen|cartridge|bottle|powder|lyophiliz|"
+    r"peptide|septum|crimp|stopper|dropper|reagent bottle"
+    r")\b",
+    re.I,
+)
+
+LABEL_CATEGORIES = {
+    "vials_containers",
+    "research_pens",
+}
+
+
+def load_compound_labels() -> list[str]:
+    """Active Palm Beach Vitality compounds for on-product labels (BPC-157, NAD+, …)."""
+    path = SHEETS / "1-compounds-all-daily.csv"
+    rows = list(csv.DictReader(path.open()))
+    labels: list[str] = []
+    seen: set[str] = set()
+    rows_sorted = sorted(rows, key=lambda r: int(r.get("rotation_order") or 9999))
+    for r in rows_sorted:
+        if str(r.get("status") or "").strip().lower() != "active":
+            continue
+        raw = str(r.get("compound_name") or "").strip()
+        if not raw:
+            continue
+        label = raw
+        label = label.replace("5 AMINO MQ", "5-Amino-1MQ")
+        label = re.sub(r"\s+Pen Program\s*$", "", label, flags=re.I).strip()
+        if "Wolverine" in label:
+            label = "BPC-157/TB-500"
+        # Normalize common casing
+        if label.upper() == "SEMAX":
+            label = "SEMAX"
+        if label.upper() == "NAD+":
+            label = "NAD+"
+        key = label.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        labels.append(label)
+    if len(labels) < 10:
+        raise SystemExit(f"Expected compound labels from {path}, got {len(labels)}")
+    return labels
+
+
+def subject_needs_compound_label(name: str, category: str) -> bool:
+    cat = (category or "").strip().lower()
+    if cat in LABEL_CATEGORIES:
+        return True
+    return bool(LABEL_SUBJECT_RE.search(name or ""))
+
+
 def rebuild_prompt(
     idx: int,
     lab_item_id: str,
@@ -920,8 +975,22 @@ def rebuild_prompt(
     camera: str,
     color_grade: str,
     hero_style: str,
+    compound_name: str = "",
 ) -> str:
     # Intentionally omit creation_id / motif / 000/500 — Grok prints those on products.
+    if compound_name:
+        label_rule = (
+            f"LABEL REQUIREMENT: if any label, sticker, carton panel, or printed text appears on the subject, "
+            f"it MUST read exactly '{compound_name}' as the product name (Palm Beach Vitality research compound), "
+            f"optionally with a small 'For Laboratory Research Use Only' line. "
+            f"Do NOT invent other compound names. Do NOT print LAB codes, creation motifs, or 000/500 counters."
+        )
+    else:
+        label_rule = (
+            "LABEL REQUIREMENT: this equipment/scene should have NO product compound label. "
+            "Keep manufacturer panels minimal/illegible/blank. "
+            "Do NOT print compound names, LAB codes, creation motifs, or 000/500 counters on the subject."
+        )
     return (
         f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog still/film, "
         f"exciting premium science equipment photography, chemical research material only. "
@@ -932,6 +1001,7 @@ def rebuild_prompt(
         f"Setting surface: {surface}. Lighting: {lighting}. "
         f"Intended camera motion for the follow-on film: {camera}. "
         f"Color grade: {color_grade}. "
+        f"{label_rule} "
         f"Make the frame feel expensive, cinematic, and scientifically compelling — not a flat boring snapshot. "
         f"{SINGLE_SUBJECT} "
         f"{AVOID}. "
@@ -947,8 +1017,18 @@ def rebuild_motion_prompt(
     surface: str,
     idx: int,
     lab_item_id: str,
+    compound_name: str = "",
 ) -> str:
     """Unique prompt for grok_video_start — must differ every creation (like product rotation)."""
+    if compound_name:
+        label_rule = (
+            f"Keep any on-subject label unchanged and readable as '{compound_name}' only "
+            f"(Palm Beach Vitality research compound). No motif/LAB/counter text."
+        )
+    else:
+        label_rule = (
+            "Do not add product compound labels, creation motifs, LAB codes, or counters onto the subject."
+        )
     return (
         f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of {name}. "
         f"CAMERA MOTION (follow exactly; do not invent a different move): {camera}. "
@@ -956,7 +1036,7 @@ def rebuild_motion_prompt(
         f"Keep the subject sharp, recognizable, centered, and unchanged from the still. "
         f"Do not default to spinning, orbiting, or rotating around the product unless the "
         f"camera motion above explicitly requests a short arc. "
-        f"Do not add text, labels, creation motifs, LAB codes, or counters onto the subject. "
+        f"{label_rule} "
         f"No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. "
         f"For laboratory research use only. Not for human use or consumption."
     )
@@ -1015,6 +1095,7 @@ CREATION_FIELD_ORDER = [
     "category",
     "lab_item",
     "material_detail",
+    "compound_name",
     "scene_brief",
     "quality_var_count",
     "quality_suffix",
@@ -1103,7 +1184,21 @@ def fix_lab_libraries() -> None:
         # So: keep existing lab_item_id / creation_id, only change rank for pick order.
         pass
 
+    compound_labels = load_compound_labels()
+    # Write a small reference file for n8n / designers
+    (ROOT / "compound-labels.json").write_text(
+        json.dumps(
+            {
+                "count": len(compound_labels),
+                "labels": compound_labels,
+                "rule": "Any subject with a readable product label must use one of these compound names.",
+            },
+            indent=2,
+        )
+    )
+
     # Safer: keep IDs stable; only rewrite rank for interleaved order
+    labeled_count = 0
     for idx, (it, cr) in enumerate(zip(items, creations), 1):
         it["rank"] = idx
         cr["rank"] = idx
@@ -1116,6 +1211,12 @@ def fix_lab_libraries() -> None:
         camera = CAMERA[(idx * 5) % len(CAMERA)]
         color_grade = COLOR_GRADE[(idx * 7) % len(COLOR_GRADE)]
         hero_style = HERO_STYLE[(idx * 11) % len(HERO_STYLE)]
+        needs_label = subject_needs_compound_label(it["lab_item"], it["category"])
+        compound_name = compound_labels[(idx - 1) % len(compound_labels)] if needs_label else ""
+        if needs_label:
+            labeled_count += 1
+        it["compound_name"] = compound_name
+        cr["compound_name"] = compound_name
         it["surface"] = surface
         it["lighting"] = lighting
         it["camera_move"] = camera
@@ -1126,9 +1227,17 @@ def fix_lab_libraries() -> None:
         cr["camera_move"] = camera
         cr["color_grade"] = color_grade
         cr["hero_style"] = hero_style
-        cr["scene_brief"] = (
-            f"{it['lab_item']} · {hero_style} · {surface} · {lighting} · {camera} · {color_grade}"
-        )
+        brief_bits = [
+            it["lab_item"],
+            hero_style,
+            surface,
+            lighting,
+            camera,
+            color_grade,
+        ]
+        if compound_name:
+            brief_bits.insert(1, f"label:{compound_name}")
+        cr["scene_brief"] = " · ".join(brief_bits)
         cr["video_prompt"] = rebuild_prompt(
             idx,
             it["lab_item_id"],
@@ -1139,6 +1248,7 @@ def fix_lab_libraries() -> None:
             camera,
             color_grade,
             hero_style,
+            compound_name=compound_name,
         )
         cr["video_motion_prompt"] = rebuild_motion_prompt(
             it["lab_item"],
@@ -1147,6 +1257,7 @@ def fix_lab_libraries() -> None:
             surface,
             idx,
             it["lab_item_id"],
+            compound_name=compound_name,
         )
         # Ensure status Active + rotation counters present (like compounds sheet)
         it["status"] = it.get("status") or "Active"
@@ -1225,15 +1336,37 @@ def fix_lab_libraries() -> None:
         else:
             vial_streak = 1
 
+    labeled_ok = sum(
+        1
+        for c in creations
+        if subject_needs_compound_label(c["lab_item"], c["category"])
+        and (c.get("compound_name") or "").strip()
+    )
+    labeled_missing = [
+        c["lab_item"]
+        for c in creations
+        if subject_needs_compound_label(c["lab_item"], c["category"])
+        and not (c.get("compound_name") or "").strip()
+    ]
     print(f"Replaced {replaced} multi-subject items")
     print(f"Purged boxes/trays/packaging → premium: {purged}")
+    print(f"Labeled subjects with compound_name: {labeled_ok} (missing {len(labeled_missing)})")
+    print(f"Compound label set size: {len(compound_labels)} → {compound_labels[:8]}…")
     print(f"Max consecutive vials_containers by new rank order: {max_vial}")
     print(f"First 15 categories: {cats[:15]}")
     print(f"Category counts: { {k: cats.count(k) for k in sorted(set(cats))} }")
     print(f"Remaining bad names: {bad or 'none'}")
     print(f"Remaining boring box/tray names: {boring_left[:10] or 'none'}")
     print(f"Prompts still leaking motif/LAB codes: {motif_leaks}")
-    print(f"Sample rank1: {items[0]['lab_item_id']} {items[0]['category']} {items[0]['lab_item'][:50]}")
+    print(
+        f"Sample rank1: {items[0]['lab_item_id']} {items[0]['category']} "
+        f"{items[0]['lab_item'][:40]} label={items[0].get('compound_name')!r}"
+    )
+    # show a labeled vial sample
+    for c in creations:
+        if c.get("compound_name") and "vial" in c["lab_item"].lower():
+            print(f"Sample labeled vial: {c['lab_item'][:40]} → {c['compound_name']}")
+            break
 
 
 def clean_fact(text: str) -> str:

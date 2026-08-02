@@ -48,6 +48,10 @@ function buildMotionPrompt(row) {
   ).trim();
   const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
   const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
+  const compound = String(val(row, ['compound_name', 'compoundName', 'label_compound'], '')).trim();
+  const labelRule = compound
+    ? `Keep any on-subject label unchanged and readable as '${compound}' only (Palm Beach Vitality research compound). No motif/LAB/counter text. `
+    : `Do not add product compound labels, creation motifs, LAB codes, or counters onto the subject. `;
   return (
     `Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of ${name}. ` +
     `CAMERA MOTION (follow exactly; do not invent a different move): ${camera}. ` +
@@ -55,7 +59,7 @@ function buildMotionPrompt(row) {
     `Keep the subject sharp, recognizable, centered, and unchanged from the still. ` +
     `Do not default to spinning, orbiting, or rotating around the product unless the ` +
     `camera motion above explicitly requests a short arc. ` +
-    `Do not add text, labels, creation motifs, LAB codes, or counters onto the subject. ` +
+    labelRule +
     `No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. ` +
     `For laboratory research use only. Not for human use or consumption.`
   );
@@ -75,6 +79,7 @@ const scored = creations
       rank: rankNum,
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
+      compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
       scene_id: val(c, ['scene_id', 'sceneId']),
       category: val(c, ['category', 'scene_category']),
       scene_brief: val(c, ['scene_brief', 'sceneBrief']),
@@ -175,6 +180,8 @@ return [
       creation_rank: pick.rank,
       lab_item_id: pick.lab_item_id,
       lab_item: pick.lab_item,
+      // Real catalog compound for on-product labels (BPC-157, NAD+, …). Overrides Parse spread.
+      compound_name: pick.compound_name || '',
       scene_id: pick.scene_id,
       scene_category: pick.category,
       scene_brief: pick.scene_brief,

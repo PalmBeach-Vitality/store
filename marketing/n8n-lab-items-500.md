@@ -40,6 +40,7 @@ python3 marketing/scripts/fix_lab_libraries.py
 - Exactly **one** primary subject (no dual-chamber, twin packs, pairs, stacks of products)
 - **No cardboard boxes, cartons, mailers, or trays as the hero** — prefer premium equipment, vials, powders, sterile lab environments, microscopes
 - **Never** bake `creation motif`, `LAB-###`, or `000/500` into prompts (Grok prints that text onto products)
+- **Labels:** any vial / pen / powder / bottle that shows a label must use a real catalog `compound_name` (BPC-157, NAD+, Semaglutide, … from `1-compounds-all-daily`). See `compound-labels.json`. Equipment without a product label stays unlabeled.
 - No injection/needle context; filter cartridges and pumps only when needed
 - Every `video_prompt` includes `SINGLE SUBJECT ONLY` + FDA-safe avoid list
 - Category rank order never repeats adjacent categories

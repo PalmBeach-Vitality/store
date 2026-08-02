@@ -46,6 +46,7 @@ pick_creation (500 lab items — least-used + unique camera_move)
 - Subjects: premium lab equipment, vials, powders, sterile environments, microscopes — **no boxes/trays**  
 - Still: `grok-imagine-image-quality`, `resolution: "2k"`, `9:16`  
 - Video: `grok-imagine-video-1.5`, `resolution: "1080p"`, `9:16`  
+- On-product labels (when present) = real catalog compounds only (BPC-157, NAD+, …)  
 - No on-product motif/LAB/counter text; no abstract orbs / surreal CGI  
 
 ## What counts as done
