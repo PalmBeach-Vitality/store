@@ -80,7 +80,9 @@ const extend1 = firstJson('save_extend_1_url');
 const saveVideo = firstJson('save_video_url');
 const input = $input.first()?.json || {};
 
-const grok_video_url = pickUrl(extend1, saveVideo, input, pick);
+// Prefer the node this Code is wired from ($input), then fresh 15s video,
+// then extend. Old bug: stale save_extend_1_url (pen) overwrote new save_video_url (vial).
+const grok_video_url = pickUrl(input, saveVideo, extend1, pick);
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
 const mod_intro = productName([parse, input, pick]);
 
