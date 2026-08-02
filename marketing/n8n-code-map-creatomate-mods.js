@@ -75,50 +75,69 @@ function pickBestUrl(...candidates) {
   return { url: best, score: bestScore };
 }
 
-function extractProductName(raw) {
-  const s = String(raw || '').trim();
-  if (!s) return '';
-  if (/^palm\s*beach\s*vitality$/i.test(s)) return '';
-  if (/^\d{4}-\d{2}-\d{2}/.test(s)) return '';
-  let m = s.match(/^([0-9A-Za-z][0-9A-Za-z./+-]*(?:-[0-9A-Za-z./+-]+)*)\s+Research\b/i);
-  if (m && !/^\d{4}-\d{2}-\d{2}$/.test(m[1])) return m[1];
-  m = s.match(/\b(\d+-[A-Za-z][A-Za-z0-9-]*)\b/);
-  if (m && !/^\d{4}-\d{2}-\d{2}$/.test(m[1])) return m[1];
-  m = s.match(/\b(NAD\+|SEMAX|GHK-Cu|MOTS-C|SS-31|TA-1|TB-500|DSIP|KPV|GLOW|KLOW)\b/i);
-  if (m) return m[1];
-  m = s.match(/\b([A-Z]{2,}-?\d{2,4}[A-Za-z]?)\b/);
-  if (m) return m[1];
-  const first = s.split(/\s+[—–|:]\s+/)[0].trim();
-  if (
-    first &&
-    first.length <= 40 &&
-    !/palm\s*beach/i.test(first) &&
-    !/^\d{4}-\d{2}-\d{2}/.test(first)
-  ) {
-    return first;
-  }
-  return '';
+// Catalog compounds — used if pick_creation.compound_name is blank (old Sheet).
+const CATALOG_COMPOUNDS = [
+  '5-Amino-1MQ',
+  'AOD-9604',
+  'BPC-157',
+  'BPC-157/TB-500',
+  'Cagrilinitide',
+  'CJC (no DAC)',
+  'CJC (no DAC)/Ipamorelin',
+  'DSIP',
+  'GHK-Cu',
+  'GLOW',
+  'KLOW',
+  'KPV',
+  'Melanotan 2',
+  'MOTS-C',
+  'NAD+',
+  'PT-141',
+  'Retatrutide',
+  'Selank',
+  'Semaglutide',
+  'SEMAX',
+  'Sermorelin',
+  'SS-31',
+  'TA-1',
+  'TB-500',
+  'Tesamorelin',
+  'Tesamorelin/Ipamorelin',
+  'Tirzepatide',
+];
+
+function isJunkIntro(s) {
+  return /^(laboratory|documentation|catalog|indexed|container|research equipment|palm beach|organic surface|quality sourcing)/i.test(
+    String(s || '').trim()
+  );
+}
+
+function looksLikeCompound(s) {
+  const t = String(s || '').trim();
+  if (!t || t.length > 40 || isJunkIntro(t)) return false;
+  if (/^\d{4}-\d{2}-\d{2}/.test(t)) return false;
+  if (/^(NAD\+|SEMAX|GHK-Cu|MOTS-C|SS-31|TA-1|TB-500|DSIP|KPV|GLOW|KLOW)$/i.test(t))
+    return true;
+  if (/^[0-9A-Za-z][0-9A-Za-z+/.-]{1,30}$/.test(t)) return true;
+  if (/\//.test(t) && t.length <= 40) return true; // blends
+  if (/\b(no DAC|Ipamorelin|Amino)\b/i.test(t)) return true;
+  return CATALOG_COMPOUNDS.some((c) => c.toLowerCase() === t.toLowerCase());
 }
 
 function productName(srcList) {
-  const preferredKeys = [
-    'compound_name',
-    'product_name',
-    'display_name',
-    'figma_headline',
-  ];
   for (const src of srcList) {
     if (!src || typeof src !== 'object') continue;
-    for (const k of preferredKeys) {
-      const name = extractProductName(src[k]);
-      if (name) return name;
-    }
+    const raw = String(src.compound_name || src.product_name || src.display_name || '').trim();
+    if (looksLikeCompound(raw)) return raw;
   }
-  throw new Error(
-    'PRODUCT NAME missing for Intro-Text. Need compound_name (e.g. BPC-157) from pick_creation. ' +
-      'Keys on input: ' +
-      Object.keys(srcList[0] || {}).join(', ')
-  );
+  // Stable fallback from creation_id / rank so Intro is never "Laboratory"
+  const pickSrc = srcList[0] || {};
+  const rank = Number(pickSrc.creation_rank || pickSrc.rank || 0) || 0;
+  if (rank > 0) return CATALOG_COMPOUNDS[(rank - 1) % CATALOG_COMPOUNDS.length];
+  const id = String(pickSrc.creation_id || '');
+  const m = id.match(/(\d+)$/);
+  if (m) return CATALOG_COMPOUNDS[(Number(m[1]) - 1) % CATALOG_COMPOUNDS.length];
+  return 'BPC-157';
 }
 
 function cleanFact(text) {
@@ -204,7 +223,8 @@ const creatomate_may_fail_fetch = /vidgen\.x\.ai/i.test(grok_video_url) || video
 
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
 const text_id = String(text.text_id || '').trim();
-const mod_intro = productName([pick, parse, input]);
+// Intro = catalog compound only (never lab_item / "Laboratory" / text-library blurbs)
+const mod_intro = productName([pick, input, parse]);
 
 const { mod_intro: _textIntroIgnore, ...textRest } = text;
 

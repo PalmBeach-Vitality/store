@@ -1211,8 +1211,11 @@ def fix_lab_libraries() -> None:
         camera = CAMERA[(idx * 5) % len(CAMERA)]
         color_grade = COLOR_GRADE[(idx * 7) % len(COLOR_GRADE)]
         hero_style = HERO_STYLE[(idx * 11) % len(HERO_STYLE)]
+        # Always assign a catalog compound for Creatomate Intro-Text (BPC-157, NAD+, …).
+        # On-product LABEL in the Grok still only when the subject is a vial/pen/etc.
+        compound_name = compound_labels[(idx - 1) % len(compound_labels)]
         needs_label = subject_needs_compound_label(it["lab_item"], it["category"])
-        compound_name = compound_labels[(idx - 1) % len(compound_labels)] if needs_label else ""
+        label_for_prompt = compound_name if needs_label else ""
         if needs_label:
             labeled_count += 1
         it["compound_name"] = compound_name
@@ -1235,8 +1238,9 @@ def fix_lab_libraries() -> None:
             camera,
             color_grade,
         ]
-        if compound_name:
-            brief_bits.insert(1, f"label:{compound_name}")
+        brief_bits.insert(1, f"intro:{compound_name}")
+        if needs_label:
+            brief_bits.insert(2, f"label:{compound_name}")
         cr["scene_brief"] = " · ".join(brief_bits)
         cr["video_prompt"] = rebuild_prompt(
             idx,
@@ -1248,7 +1252,7 @@ def fix_lab_libraries() -> None:
             camera,
             color_grade,
             hero_style,
-            compound_name=compound_name,
+            compound_name=label_for_prompt,
         )
         cr["video_motion_prompt"] = rebuild_motion_prompt(
             it["lab_item"],
@@ -1257,7 +1261,7 @@ def fix_lab_libraries() -> None:
             surface,
             idx,
             it["lab_item_id"],
-            compound_name=compound_name,
+            compound_name=label_for_prompt,
         )
         # Grok video length — 15s minimum for a proper Creatomate loop bed
         cr["duration_seconds"] = "15"
