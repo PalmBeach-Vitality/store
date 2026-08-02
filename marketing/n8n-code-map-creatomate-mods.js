@@ -88,26 +88,45 @@ function factFrom(sources, key, fallback) {
 const pick = firstJson('pick_creation');
 const text = firstJson('pick_text');
 const parse = firstJson('Parse_Grok');
-const extend1 = firstJson('save_extend_1_url');
-const saveVideo = firstJson('save_video_url');
-const pollVideo = firstJson('grok_video_poll');
 const input = $input.first()?.json || {};
+
+// Try common node names — n8n $() is exact/case-sensitive.
+const videoNodeNames = [
+  'save_video_url',
+  'Save_video_url',
+  'Save Video URL',
+  'save video url',
+  'grok_video_poll',
+  'Grok_video_poll',
+  'if_video_ready',
+  'save_extend_1_url',
+  'Save_extend_1_url',
+  'prep_creatomate',
+];
+
+const videoSources = videoNodeNames.map((n) => ({ name: n, json: firstJson(n) }));
 
 if (!text.text_id || !text.mod_fact_1) {
   throw new Error(
-    'pick_text missing or empty. Add get_reel_text → pick_text (sheet 10-creatomate-text-1000), ' +
-      'execute pick_text, then re-run map_creatomate_mods. Node name must be exactly pick_text.'
+    'pick_text missing or empty. Run get_reel_text → pick_text first. Node name must be exactly pick_text.'
   );
 }
 
 // Never trust input.grok_video_url (stale from prior map).
-// Prefer fresh save_video_url, then poll, then extend.
-const grok_video_url =
-  pickUrl(saveVideo) ||
-  pickUrl(pollVideo) ||
-  pickUrl(extend1) ||
-  pickUrl(input, { allowGrokField: false }) ||
-  pickUrl(pick, { allowGrokField: false });
+let grok_video_url = '';
+let videoFrom = '';
+for (const src of videoSources) {
+  const u = pickUrl(src.json, { allowGrokField: src.name !== 'prep_creatomate' });
+  if (u) {
+    grok_video_url = u;
+    videoFrom = src.name;
+    break;
+  }
+}
+if (!grok_video_url) {
+  grok_video_url = pickUrl(input, { allowGrokField: false }) || '';
+  if (grok_video_url) videoFrom = '$input';
+}
 
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
 const text_id = String(text.text_id || '').trim();
@@ -117,12 +136,16 @@ const mod_intro = productName([parse, input, pick]);
 const factSources = [text];
 
 if (!grok_video_url) {
+  const tried = videoSources
+    .map((s) => s.name + '[' + Object.keys(s.json).join(',') + ']')
+    .join(' | ');
   throw new Error(
-    'grok_video_url missing. Run save_video_url (or extend) first. ' +
-      'save_video_url keys=' +
-      Object.keys(saveVideo).join(', ') +
-      ' | save_extend_1_url keys=' +
-      Object.keys(extend1).join(', ')
+    'grok_video_url missing. Finish Grok video first, then map. ' +
+      'Need a node with video.url / video_url / url = https://vidgen...mp4. ' +
+      'Tried: ' +
+      tried +
+      ' | $input keys=' +
+      Object.keys(input).join(',')
   );
 }
 
@@ -136,6 +159,7 @@ return [
       ...pick,
       ...textRest,
       grok_video_url,
+      grok_video_from: videoFrom,
       // PRODUCT NAME only — never pick_text catalog line / (0001/1000)
       mod_intro,
       mod_fact_1: factFrom(
