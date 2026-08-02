@@ -21,9 +21,14 @@ Compat copies (same 500 rows): `8-lab-items-250.csv`, `9-lab-item-creations-250.
 3. Point `get_reel_creations` at tab **`9-lab-item-creations-500`**
 4. Set **Return All** / limit ≥ 500
 5. Filter `status = Active`
-6. `pick_creation` picks least-used → `video_prompt`, and **skips the same category as the last used row**
+6. `pick_creation` picks **least-used** (same as compounds sheet): lowest `times_used` → oldest `last_used_at` → lowest `rank`
+7. It also skips the **same category** and **same camera_move** as the most recently used row
+8. After each successful reel, `sheets_update_creation` must bump that row’s `times_used` + `last_used_at` or the next run repeats the same scene
+9. `grok_video_start` must use **`video_motion_prompt`** from the picked row — never a hardcoded “orbit around” sentence
 
 Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — categories are interleaved so **no two adjacent ranks share a category** (no vial→vial in the sheet order).
+
+Each row has a unique **`video_motion_prompt`** (push-in, rise, lateral slide, tilt-up, pull-back, etc.) so vidgen motion changes every run.
 
 Rebuild / re-interleave / realism pass:
 

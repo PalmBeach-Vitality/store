@@ -1,10 +1,12 @@
 // n8n Code node: pick_creation
 // Type: Code | Mode: Run Once for All Items
-// After: filter_creations_active
-// Before: map_creatomate_mods
+// After: filter_creations_active (or get_reel_creations Return All on 9-lab-item-creations-500)
+// Before: grok_imagine_reel_still / save_still_url
 //
-// Input: ~500 creation rows from spreadsheet "7-unique-reel-creations-500"
-// Output: 1 item = Parse_Grok compound fields + chosen creation
+// Same rotation pattern as the compounds / product spreadsheet:
+// least times_used → oldest last_used_at → lowest rank.
+// Also skip same category AND same camera_move as the most recently used row
+// so every vidgen run gets a visibly different scene + motion.
 
 const creations = $input.all().map((i) => i.json);
 
@@ -20,7 +22,6 @@ function val(obj, names, fallback = '') {
       return obj[n];
     }
   }
-  // case-insensitive / space-insensitive fallback
   const keys = Object.keys(obj || {});
   for (const want of names) {
     const normWant = want.toLowerCase().replace(/\s+/g, '_');
@@ -30,13 +31,46 @@ function val(obj, names, fallback = '') {
   return fallback;
 }
 
+function isActive(status) {
+  const s = String(status || '').trim().toLowerCase();
+  return !s || s === 'active' || s === 'true' || s === '1' || s === 'yes';
+}
+
+function buildMotionPrompt(row) {
+  const fromSheet = String(
+    val(row, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'], '')
+  ).trim();
+  if (fromSheet) return fromSheet;
+
+  const name = String(val(row, ['lab_item', 'labItem', 'item_name'], 'laboratory research item')).trim();
+  const camera = String(
+    val(row, ['camera_move', 'cameraMove', 'camera'], 'slow push-in, no orbit')
+  ).trim();
+  const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
+  const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
+  const creation_id = String(val(row, ['creation_id', 'creationId'], '')).trim();
+  const lab_item_id = String(val(row, ['lab_item_id', 'labItemId'], '')).trim();
+
+  return (
+    `Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of ${name}. ` +
+    `CAMERA MOTION (follow exactly; do not invent a different move): ${camera}. ` +
+    `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
+    `Keep the subject sharp, recognizable, centered, and unchanged from the still. ` +
+    `Do not default to spinning, orbiting, or rotating around the product unless the ` +
+    `camera motion above explicitly requests a short arc. ` +
+    `No people, no hands, no faces, no needles, no injection, no lifestyle. ` +
+    `${creation_id || lab_item_id}. ` +
+    `For laboratory research use only. Not for human use or consumption.`
+  );
+}
+
 const scored = creations
   .map((c) => {
     const rankNum = Number(val(c, ['rank', 'creation_rank'], 0));
     const fromSheet = String(val(c, ['creation_id', 'creationId', 'Creation_ID'], '')).trim();
     const creation_id =
       fromSheet ||
-      (rankNum > 0 ? `PBVita-Reel-${String(rankNum).padStart(3, '0')}` : '');
+      (rankNum > 0 ? `PBVita-Lab-${String(rankNum).padStart(3, '0')}` : '');
 
     return {
       raw: c,
@@ -50,15 +84,24 @@ const scored = creations
       quality_suffix: val(c, ['quality_suffix', 'qualitySuffix']),
       quality_var_count: val(c, ['quality_var_count', 'qualityVarCount'], 12),
       video_prompt: val(c, ['video_prompt', 'videoPrompt']),
+      video_motion_prompt: buildMotionPrompt(c),
+      surface: val(c, ['surface']),
+      lighting: val(c, ['lighting']),
+      camera_move: val(c, ['camera_move', 'cameraMove', 'camera']),
+      color_grade: val(c, ['color_grade', 'colorGrade']),
+      hero_style: val(c, ['hero_style', 'heroStyle']),
       status: val(c, ['status', 'creation_status'], 'Active'),
-      times_used: Number(val(c, ['times_used', 'creation_times_used'], 0)),
+      times_used: Number(val(c, ['times_used', 'creation_times_used'], 0)) || 0,
       last_used_at: String(val(c, ['last_used_at', 'lastUsedAt', 'last_reel_at'], '')),
     };
   })
   .filter((c) => c.creation_id && c.video_prompt)
+  .filter((c) => isActive(c.status))
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
-    if (a.last_used_at !== b.last_used_at) return a.last_used_at.localeCompare(b.last_used_at);
+    if (a.last_used_at !== b.last_used_at) {
+      return String(a.last_used_at).localeCompare(String(b.last_used_at));
+    }
     return Number(a.rank) - Number(b.rank);
   });
 
@@ -69,21 +112,39 @@ if (!scored.length) {
   );
 }
 
-// Do not repeat the same category as the most recently used creation (e.g. vial → vial).
-let lastCategory = '';
+// Most recently used row (by last_used_at) — skip its category + camera_move + id.
 const previouslyUsed = scored
   .filter((c) => c.times_used > 0 || (c.last_used_at && c.last_used_at.trim()))
   .slice()
   .sort((a, b) => String(b.last_used_at).localeCompare(String(a.last_used_at)));
-if (previouslyUsed.length) {
-  lastCategory = previouslyUsed[0].category || '';
+
+const last = previouslyUsed[0] || null;
+const lastCategory = last?.category || '';
+const lastCamera = last?.camera_move || '';
+const lastId = last?.creation_id || '';
+
+function scorePick(c) {
+  let penalty = 0;
+  if (lastId && c.creation_id === lastId) penalty += 1000;
+  if (lastCategory && c.category === lastCategory) penalty += 100;
+  if (lastCamera && c.camera_move && c.camera_move === lastCamera) penalty += 50;
+  return penalty;
 }
 
 let pick = scored[0];
-if (lastCategory) {
-  const different = scored.find((c) => c.category && c.category !== lastCategory);
-  if (different) pick = different;
-}
+const diversified = scored
+  .slice()
+  .sort((a, b) => {
+    const pa = scorePick(a);
+    const pb = scorePick(b);
+    if (pa !== pb) return pa - pb;
+    if (a.times_used !== b.times_used) return a.times_used - b.times_used;
+    if (a.last_used_at !== b.last_used_at) {
+      return String(a.last_used_at).localeCompare(String(b.last_used_at));
+    }
+    return Number(a.rank) - Number(b.rank);
+  });
+pick = diversified[0];
 
 let compound = {};
 try {
@@ -111,10 +172,8 @@ if (!template_id) {
 return [
   {
     json: {
-      // compound / Parse fields first
       ...compound,
 
-      // chosen creation (these MUST appear in output)
       creation_id: pick.creation_id,
       creation_rank: pick.rank,
       lab_item_id: pick.lab_item_id,
@@ -125,11 +184,17 @@ return [
       quality_suffix: pick.quality_suffix,
       quality_var_count: pick.quality_var_count,
       video_prompt: pick.video_prompt,
+      video_motion_prompt: pick.video_motion_prompt,
+      surface: pick.surface,
+      lighting: pick.lighting,
+      camera_move: pick.camera_move,
+      color_grade: pick.color_grade,
+      hero_style: pick.hero_style,
       creation_status: pick.status,
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
 
-      // Creatomate on-screen copy (unique per creation / day)
+      // Creatomate on-screen copy (prefer pick_text library over these stubs)
       mod_intro: val(pick.raw, ['mod_intro']),
       mod_fact_1: val(pick.raw, ['mod_fact_1']),
       mod_fact_2: val(pick.raw, ['mod_fact_2']),

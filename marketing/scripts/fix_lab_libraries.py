@@ -538,16 +538,25 @@ LIGHTING = [
     "backlit translucent glow through glass or polymer only when physically real",
     "macro ring-light even field for scientific detail",
 ]
+# Distinct CAMERA MOTIONS for Grok video — one per creation, rotated.
+# Avoid defaulting every row to orbit/rotate (that made every vidgen look the same).
 CAMERA = [
-    "extreme macro hero with razor shallow depth of field",
-    "low-angle power pose pushing upward at the instrument",
-    "slow orbital reveal at eye level",
-    "locked tripod editorial frame with subtle push-in",
-    "top-down geometric catalog composition",
-    "three-quarter luxury product angle",
-    "vertical rise from base detail to label typography",
-    "parallax slide past specular highlights",
-    "tight detail crop then pull wide to full hero",
+    "slow push-in from medium hero to macro label detail, no orbit",
+    "gentle vertical rise from base to top of subject, locked center, no orbit",
+    "lateral parallax slide left-to-right past specular highlights, no orbit",
+    "locked tripod editorial hold with subtle breathing push-in only, no orbit",
+    "top-down descend into geometric catalog composition, no orbit",
+    "low-angle tilt-up power reveal from underside to eye level, no orbit",
+    "start extreme macro on material texture then pull back to full hero, no orbit",
+    "diagonal dolly past the subject with focus locked on center, no orbit",
+    "crane-down from high three-quarter to eye-level hero settle, no orbit",
+    "static catalog hold with micro focus rack only, camera body does not orbit",
+    "side-profile track then settle on three-quarter facing angle, no full circle",
+    "soft pedestal up while light wrap shifts on metal edges, no orbit",
+    "slow push-out from tight crop to full product in frame, no orbit",
+    "arc of at most 30 degrees then hold — never a full rotation",
+    "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
+    "rise-and-settle: short vertical lift then lock off on the label plane, no orbit",
 ]
 COLOR_GRADE = [
     "cool steel and ice-blue science grade",
@@ -668,7 +677,8 @@ def rebuild_prompt(
         f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory object, sharp and centered, visually striking): {name}. "
         f"Physical detail: {detail}. "
         f"Hero style: {hero_style}. "
-        f"Setting surface: {surface}. Lighting: {lighting}. Camera: {camera}. "
+        f"Setting surface: {surface}. Lighting: {lighting}. "
+        f"Intended camera motion for the follow-on film: {camera}. "
         f"Color grade: {color_grade}. "
         f"Make the frame feel expensive, cinematic, and scientifically compelling — not a flat boring snapshot. "
         f"{SINGLE_SUBJECT} "
@@ -678,6 +688,64 @@ def rebuild_prompt(
         f"Keep product identity and any on-screen research typography sharp and unchanged. "
         f"For laboratory research use only. Not for human use or consumption."
     )
+
+
+def rebuild_motion_prompt(
+    name: str,
+    camera: str,
+    lighting: str,
+    surface: str,
+    idx: int,
+    lab_item_id: str,
+) -> str:
+    """Unique prompt for grok_video_start — must differ every creation (like product rotation)."""
+    return (
+        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of {name}. "
+        f"CAMERA MOTION (follow exactly; do not invent a different move): {camera}. "
+        f"Lighting continuity: {lighting}. Surface continuity: {surface}. "
+        f"Keep the subject sharp, recognizable, centered, and unchanged from the still. "
+        f"Do not default to spinning, orbiting, or rotating around the product unless the "
+        f"camera motion above explicitly requests a short arc. "
+        f"No people, no hands, no faces, no needles, no injection, no lifestyle. "
+        f"creation motif {idx:03d}/500 · {lab_item_id}. "
+        f"For laboratory research use only. Not for human use or consumption."
+    )
+
+
+CREATION_FIELD_ORDER = [
+    "creation_id",
+    "rank",
+    "lab_item_id",
+    "category",
+    "lab_item",
+    "material_detail",
+    "scene_brief",
+    "quality_var_count",
+    "quality_suffix",
+    "aspect_ratio",
+    "duration_seconds",
+    "resolution",
+    "model_still",
+    "model_video",
+    "still_resolution",
+    "video_prompt",
+    "video_motion_prompt",
+    "status",
+    "times_used",
+    "last_used_at",
+    "mod_intro",
+    "mod_fact_1",
+    "mod_fact_2",
+    "mod_fact_3",
+    "mod_fact_4",
+    "mod_fact_5",
+    "mod_disclaimer",
+    "surface",
+    "lighting",
+    "camera_move",
+    "color_grade",
+    "hero_style",
+]
 
 
 def fix_lab_libraries() -> None:
@@ -766,19 +834,42 @@ def fix_lab_libraries() -> None:
             color_grade,
             hero_style,
         )
-        # Ensure status Active
+        cr["video_motion_prompt"] = rebuild_motion_prompt(
+            it["lab_item"],
+            camera,
+            lighting,
+            surface,
+            idx,
+            it["lab_item_id"],
+        )
+        # Ensure status Active + rotation counters present (like compounds sheet)
         it["status"] = it.get("status") or "Active"
         cr["status"] = cr.get("status") or "Active"
+        if not str(cr.get("times_used") or "").strip():
+            cr["times_used"] = "0"
+        if cr.get("last_used_at") is None:
+            cr["last_used_at"] = ""
+        if not str(it.get("times_used") or "").strip():
+            it["times_used"] = "0"
+        if it.get("last_used_at") is None:
+            it["last_used_at"] = ""
 
     # Write
     for path, rows in [
         (SHEETS / "8-lab-items-500.csv", items),
         (SHEETS / "8-lab-items-250.csv", items),
+    ]:
+        with path.open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()), extrasaction="ignore")
+            w.writeheader()
+            w.writerows(rows)
+
+    for path, rows in [
         (SHEETS / "9-lab-item-creations-500.csv", creations),
         (SHEETS / "9-lab-item-creations-250.csv", creations),
     ]:
         with path.open("w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+            w = csv.DictWriter(f, fieldnames=CREATION_FIELD_ORDER, extrasaction="ignore")
             w.writeheader()
             w.writerows(rows)
 

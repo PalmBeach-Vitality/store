@@ -508,14 +508,22 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
         "low-key selective highlight on glass edges",
     ]
     camera_pool = [
-        "slow 360 degree orbit at eye level",
-        "extreme macro push-in",
-        "gentle top-down descending move",
-        "locked tripod hero frame with subtle push",
-        "low angle tracking slide",
-        "circular arc that never fully completes",
-        "vertical rise from base to label",
-        "fast resolve into locked hero frame",
+        "slow push-in from medium hero to macro label detail, no orbit",
+        "gentle vertical rise from base to top of subject, locked center, no orbit",
+        "lateral parallax slide left-to-right past specular highlights, no orbit",
+        "locked tripod editorial hold with subtle breathing push-in only, no orbit",
+        "top-down descend into geometric catalog composition, no orbit",
+        "low-angle tilt-up power reveal from underside to eye level, no orbit",
+        "start extreme macro on material texture then pull back to full hero, no orbit",
+        "diagonal dolly past the subject with focus locked on center, no orbit",
+        "crane-down from high three-quarter to eye-level hero settle, no orbit",
+        "static catalog hold with micro focus rack only, camera body does not orbit",
+        "side-profile track then settle on three-quarter facing angle, no full circle",
+        "soft pedestal up while light wrap shifts on metal edges, no orbit",
+        "slow push-out from tight crop to full product in frame, no orbit",
+        "arc of at most 30 degrees then hold — never a full rotation",
+        "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
+        "rise-and-settle: short vertical lift then lock off on the label plane, no orbit",
     ]
     quality = (
         "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
@@ -556,11 +564,23 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
             f"chemical research material only, premium American research aesthetic. "
             f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory object, sharp and centered): {name}. "
             f"Physical detail: {detail}. "
-            f"Setting surface: {surface}. Lighting: {lighting}. Camera: {camera}. "
+            f"Setting surface: {surface}. Lighting: {lighting}. "
+            f"Intended camera motion for the follow-on film: {camera}. "
             f"{avoid}. "
             f"Quality: {quality}. "
             f"creation motif {idx:03d}/500 · {lab_item_id}. "
             f"Keep product identity and any on-screen research typography sharp and unchanged. "
+            f"For laboratory research use only. Not for human use or consumption."
+        )
+        video_motion_prompt = (
+            f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of {name}. "
+            f"CAMERA MOTION (follow exactly; do not invent a different move): {camera}. "
+            f"Lighting continuity: {lighting}. Surface continuity: {surface}. "
+            f"Keep the subject sharp, recognizable, centered, and unchanged from the still. "
+            f"Do not default to spinning, orbiting, or rotating around the product unless the "
+            f"camera motion above explicitly requests a short arc. "
+            f"No people, no hands, no faces, no needles, no injection, no lifestyle. "
+            f"creation motif {idx:03d}/500 · {lab_item_id}. "
             f"For laboratory research use only. Not for human use or consumption."
         )
         creations.append(
@@ -581,6 +601,7 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
                 "model_video": "grok-imagine-video-1.5",
                 "still_resolution": "2k",
                 "video_prompt": video_prompt,
+                "video_motion_prompt": video_motion_prompt,
                 "status": "Active",
                 "times_used": 0,
                 "last_used_at": "",

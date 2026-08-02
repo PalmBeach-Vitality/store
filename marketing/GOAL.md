@@ -17,9 +17,9 @@ If the reel is unique Grok footage with **no** text package, it’s incomplete f
 ## Architecture (Grok + Creatomate)
 
 ```text
-pick_creation (500 lab items)
-  → grok_imagine_reel_still          (unique 9:16 still, 2k)
-  → grok_video_start                 (15s unique motion)
+pick_creation (500 lab items — least-used + unique camera_move)
+  → grok_imagine_reel_still          (unique 9:16 still from video_prompt, 2k)
+  → grok_video_start                 (unique motion from video_motion_prompt — never hardcoded orbit)
   → grok_video_extend_1              (+10s → ~25s; source must be ≤15s)
   → map_creatomate_mods              (Intro + Fact text from Parse_Grok)
   → creatomate_render                (45–60s timeline; Grok URL as video source + text)

@@ -71,6 +71,8 @@ Include Other Input Fields: **ON**
 | `still_url` | `={{ $json.data[0].url }}` |
 | `creation_id` | `={{ $('pick_creation').first().json.creation_id }}` |
 | `video_prompt` | `={{ $('pick_creation').first().json.video_prompt }}` |
+| `video_motion_prompt` | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
+| `camera_move` | `={{ $('pick_creation').first().json.camera_move }}` |
 | `scene_brief` | `={{ $('pick_creation').first().json.scene_brief }}` |
 | `compound_id` | `={{ $('Get row(s) in sheet').first().json.compound_id }}` |
 
@@ -103,7 +105,7 @@ Reply **`node 2 ok`**.
 ```text
 ={{ JSON.stringify({
   model: 'grok-imagine-video-1.5',
-  prompt: 'Slow cinematic camera motion around this Palm Beach Vitality laboratory research catalog product, photoreal, keep the subject sharp and unchanged, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',
+  prompt: $('pick_creation').first().json.video_motion_prompt,
   image: { url: $json.still_url },
   duration: 8,
   aspect_ratio: '9:16',
@@ -111,7 +113,10 @@ Reply **`node 2 ok`**.
 }) }}
 ```
 
-In the node’s request preview, body must show `"prompt": "Slow cinematic..."` — not `{ "": "" }`.
+**Critical:** do **not** hardcode “slow cinematic camera motion around…”. That made every run orbit the same way.  
+Each creation row has a unique `video_motion_prompt` (from `camera_move` in `9-lab-item-creations-500`).
+
+In the node’s request preview, body must show a long unique `"prompt"` starting with `Photoreal vertical…` — not `{ "": "" }` and not a fixed orbit sentence.
 
 **Check:** response includes `request_id` (async job id). Status is not a finished URL yet.
 
@@ -200,7 +205,11 @@ Reply **`node 7 ok`**.
 Reuse your working update nodes:
 
 - `sheets_update_reel` → compounds `video_url` match `compound_id`
-- `sheets_update_creation` → `times_used` + `last_used_at` match `creation_id`
+- `sheets_update_creation` → lab tab `9-lab-item-creations-500`, match `creation_id`, set:
+  - `times_used` = `={{ Number($('pick_creation').first().json.creation_times_used || 0) + 1 }}`
+  - `last_used_at` = `={{ $now.toISO() }}`
+
+Without this writeback, `pick_creation` always returns the same least-used row (same as when the product sheet isn’t updated).
 
 ---
 
