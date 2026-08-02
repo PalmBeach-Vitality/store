@@ -7,69 +7,66 @@
 Produce a **45–60 second** Instagram-ready reel **every day** that is:
 
 1. **Visually unique** — Grok Imagine (still `2k` + video) from the **500 lab-item** variables  
-2. **Text on reel** — Creatomate burns **daily-unique** research copy (`mod_intro` + `mod_fact_1`…`5` from the **1000-row** text library; not static Parse bullets) onto that unique footage  
-3. **Highest quality** — still: `grok-imagine-image-quality` + `2k`; video: `grok-imagine-video-1.5` at **`1080p`** (never `720p`)  
+2. **Text on reel** — Creatomate burns **daily-unique** research copy onto that unique footage  
+3. **Highest quality** — still: `grok-imagine-image-quality` + `2k`; video: `grok-imagine-video-1.5` at **`15s` / `1080p`**  
 4. **FDA-safe** — laboratory research catalog only; no people/hands/injection/lifestyle/wellness/nicknames  
 
-If the reel is only Creatomate’s default template bed with new text, **the goal is not met.**  
-If the reel is unique Grok footage with **no** text package, it’s incomplete for this goal.
+If the reel is only Creatomate’s default template bed with new text, **the goal is not met.**
 
-## Architecture (Grok + Creatomate)
+## Architecture — two workflows (do not combine for now)
+
+Creatomate often **cannot fetch** `vidgen.x.ai` URLs. Keep packaging separate so the daily Grok run always succeeds.
+
+### Workflow A — `PBVita — Grok Daily` (run every day)
 
 ```text
-pick_creation (500 lab items — least-used + unique camera_move)
-  → grok_imagine_reel_still          (unique 9:16 still from video_prompt, 2k)
-  → grok_video_start                 (15s @ 1080p from video_motion_prompt — never 8s / never hardcoded orbit)
-  → grok_video_extend_1              (+10s → ~25s; source must be ≤15s)
-  → map_creatomate_mods              (Intro + Fact text from Parse_Grok)
-  → creatomate_render                (45–60s timeline; Grok URL as video source + text)
-  → save + sheets
+get_reel_creations → filter Active → pick_creation
+  → grok_imagine_reel_still          (2k, video_prompt)
+  → save_still_url
+  → grok_video_start                 (15s, 1080p, video_motion_prompt)
+  → wait_video → grok_video_poll → save_video_url
+  → sheets_update_creation           (times_used + last_used_at)  ← REQUIRED
 ```
 
-**Grok hard limit:** extend input ≤ **15s**. After one extend (~25s), further extends fail.  
-**45–60s** = Creatomate template timeline (loop/fit the Grok bed) + text — not extend_2/3/4.
+**Done when:** unique 15s MP4 exists + lab Sheet row bumped so tomorrow’s pick differs.
+
+### Workflow B — `PBVita — Creatomate Package` (separate)
+
+```text
+input: public MP4 URL (not vidgen) + pick_text / compound_name
+  → map_creatomate_mods
+  → creatomate_render (video_loop_source.source + Intro + Facts)
+  → wait → save_creatomate_url → sheets_update_text (optional)
+```
+
+Wire Buffer only after B reliably packages A’s footage.
 
 | Engine | Job |
 |---|---|
 | **Sheets / PBVita-Lab-*** | Which unique lab subject today |
-| **Grok Imagine + video (+ 1 extend)** | Unique moving footage (~15–25s) |
-| **Creatomate** | 45–60s package + on-screen text |
-
-## Smoothness
-
-- One generate + **one** extend = longest smooth unique Grok clip (~25s).  
-- Creatomate uses that single clip as the bed across 45–60s (loop/fit on the video element) + text overlays.
+| **Grok** | Unique 15s @ 1080p |
+| **Creatomate (separate WF)** | 45–60s loop + text |
 
 ## Subjects + quality (non-negotiable)
 
-- Lab items only: `sheets/9-lab-item-creations-500.csv` (`n8n-lab-items-500.md`)  
-- Subjects: premium lab equipment, vials, powders, sterile environments, microscopes — **no boxes/trays**  
-- Still: `grok-imagine-image-quality`, `resolution: "2k"`, `9:16`  
-- Video: `grok-imagine-video-1.5`, `resolution: "1080p"`, `9:16`  
-- On-product labels (when present) = real catalog compounds only (BPC-157, NAD+, …)  
-- No on-product motif/LAB/counter text; no abstract orbs / surreal CGI  
+- Lab items: `sheets/9-lab-item-creations-500.csv`  
+- Premium equipment / vials / powders / sterile labs — **no boxes/trays**  
+- Labels (when present) = real compounds (BPC-157, NAD+, …)  
+- No motif / LAB-### / 000/500 on-product text  
 
-## What counts as done
+## What counts as done (Workflow A)
 
-- One run → one **45–60s** MP4  
-- Footage unique to that day’s `creation_id` / lab item  
-- Text overlays present (Intro + Facts)  
-- Sheets updated (`video_url`, creation `times_used`)  
+- Unique still + 15s video for that `creation_id`  
+- `sheets_update_creation` wrote `times_used` + `last_used_at`  
+- Next run picks a **different** creation  
 
 ## Distribution (next week)
 
-- Run this workflow **once per day**
-- Post final reel via **Buffer** to Facebook, Instagram, TikTok, and Twitter/X
-- Do not wire Buffer until the daily Grok + Creatomate MP4 is reliable
-
-## Out of scope until the 45–60s reel works
-
-- Buffer auto-posting (scheduled for following week once render path is stable)  
-
+- Buffer → Facebook, Instagram, TikTok, X — after Creatomate package is reliable  
 
 ## Canonical how-tos
 
-- Unique Grok path: `n8n-unique-reel-video.md` / `n8n-build-grok-imagine-video-nodes.md`  
+- Grok nodes: `n8n-build-grok-imagine-video-nodes.md`  
+- Sheets writeback: `n8n-sheets-update-creation.md`  
 - Lab items: `n8n-lab-items-500.md`  
-- Creatomate text: `n8n-creatomate-5-facts-mods.md`  
-- Combined 45–60s plan: `n8n-45s-reel-grok-creatomate.md`
+- Creatomate (WF B): `n8n-creatomate-5-facts-mods.md` / `n8n-45s-reel-grok-creatomate.md`  
