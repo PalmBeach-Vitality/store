@@ -93,6 +93,13 @@ const saveVideo = firstJson('save_video_url');
 const pollVideo = firstJson('grok_video_poll');
 const input = $input.first()?.json || {};
 
+if (!text.text_id || !text.mod_fact_1) {
+  throw new Error(
+    'pick_text missing or empty. Add get_reel_text → pick_text (sheet 10-creatomate-text-1000), ' +
+      'execute pick_text, then re-run map_creatomate_mods. Node name must be exactly pick_text.'
+  );
+}
+
 // Set this ONLY to unblock a specific clip; leave '' in normal runs.
 const FORCE_GROK_VIDEO_URL =
   'https://vidgen.x.ai/xai-vidgen-bucket/xai-video-b1503378-2de8-90f4-be1c-9a2244a26ec6.mp4';
@@ -107,11 +114,11 @@ const grok_video_url =
   pickUrl(pick, { allowGrokField: false });
 
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
-const text_id = String(text.text_id || creation_id || '').trim();
+const text_id = String(text.text_id || '').trim();
 const mod_intro = productName([parse, input, pick]);
 
-// Prefer pick_text (1000 unique sets); fall back to pick_creation facts.
-const factSources = [text, pick, input];
+// Facts ONLY from pick_text (1000 unique sets) — not pick_creation duplicates.
+const factSources = [text];
 
 if (!grok_video_url) {
   throw new Error(
