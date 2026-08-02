@@ -8,7 +8,7 @@ Produce a **45–60 second** Instagram-ready reel **every day** that is:
 
 1. **Visually unique** — Grok Imagine (still `2k` + video) from the **500 lab-item** variables  
 2. **Text on reel** — Creatomate burns **daily-unique** research copy (`mod_intro` + `mod_fact_1`…`5` from the **1000-row** text library; not static Parse bullets) onto that unique footage  
-3. **Highest quality** — `grok-imagine-image-quality` + `2k`; video `grok-imagine-video-1.5` / extension at max allowed resolution  
+3. **Highest quality** — still: `grok-imagine-image-quality` + `2k`; video: `grok-imagine-video-1.5` at **`1080p`** (never `720p`)  
 4. **FDA-safe** — laboratory research catalog only; no people/hands/injection/lifestyle/wellness/nicknames  
 
 If the reel is only Creatomate’s default template bed with new text, **the goal is not met.**  
@@ -44,6 +44,7 @@ pick_creation (500 lab items — least-used + unique camera_move)
 
 - Lab items only: `sheets/9-lab-item-creations-500.csv` (`n8n-lab-items-500.md`)  
 - Still: `grok-imagine-image-quality`, `resolution: "2k"`, `9:16`  
+- Video: `grok-imagine-video-1.5`, `resolution: "1080p"`, `9:16`  
 - No abstract orbs / surreal CGI  
 
 ## What counts as done

@@ -109,9 +109,11 @@ Reply **`node 2 ok`**.
   image: { url: $json.still_url },
   duration: 8,
   aspect_ratio: '9:16',
-  resolution: '720p'
+  resolution: '1080p'
 }) }}
 ```
+
+**Resolution (required):** always **`1080p`** for `grok_video_start` (and extends). Never `720p` for production.
 
 **Critical:** do **not** hardcode “slow cinematic camera motion around…”. That made every run orbit the same way.  
 Each creation row has a unique `video_motion_prompt` (from `camera_move` in `9-lab-item-creations-500`).
