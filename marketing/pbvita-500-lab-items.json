@@ -6802,11 +6802,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-388",
+      "lab_item_id": "LAB-177",
       "rank": 426,
       "category": "instruments",
-      "lab_item": "lyophilizer chamber exterior",
-      "material_detail": "freeze dryer exterior",
+      "lab_item": "fume hood sash partially open with empty clamp",
+      "material_detail": "hood as environment, product clamp empty",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "lateral parallax slide left-to-right past specular highlights, no orbit",
@@ -6834,11 +6834,11 @@
       "compound_name": "SS-31"
     },
     {
-      "lab_item_id": "LAB-427",
+      "lab_item_id": "LAB-388",
       "rank": 428,
       "category": "instruments",
-      "lab_item": "lab oven forced-air stainless",
-      "material_detail": "one forced-air lab oven, door closed, digital controller",
+      "lab_item": "lyophilizer chamber exterior",
+      "material_detail": "freeze dryer exterior",
       "surface": "textured graphite slate sample board",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "slow push-out from tight crop to full product in frame, no orbit",
@@ -6866,11 +6866,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-372",
+      "lab_item_id": "LAB-387",
       "rank": 430,
       "category": "instruments",
-      "lab_item": "environmental test chamber",
-      "material_detail": "one benchtop environmental chamber, viewport, stability testing",
+      "lab_item": "vacuum concentrator closed",
+      "material_detail": "concentrator exterior",
       "surface": "frosted optical glass riser on black field",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "start extreme macro on material texture then pull back to full hero, no orbit",
@@ -6898,11 +6898,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-377",
+      "lab_item_id": "LAB-452",
       "rank": 432,
       "category": "instruments",
-      "lab_item": "qPCR machine lid closed",
-      "material_detail": "thermocycler exterior",
+      "lab_item": "vacuum oven with acrylic door",
+      "material_detail": "one vacuum oven, gauges, materials curing",
       "surface": "pearl quartz lab surface",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "slow push-in from medium hero to macro label detail, no orbit",
@@ -6930,11 +6930,11 @@
       "compound_name": "5-Amino-1MQ"
     },
     {
-      "lab_item_id": "LAB-180",
+      "lab_item_id": "LAB-427",
       "rank": 434,
       "category": "instruments",
-      "lab_item": "label printer with research label stock",
-      "material_detail": "desktop lab printer",
+      "lab_item": "lab oven forced-air stainless",
+      "material_detail": "one forced-air lab oven, door closed, digital controller",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "side-profile track then settle on three-quarter facing angle, no full circle",
@@ -6962,11 +6962,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-426",
+      "lab_item_id": "LAB-171",
       "rank": 436,
       "category": "instruments",
-      "lab_item": "laboratory plasma cleaner chamber",
-      "material_detail": "one plasma cleaner, quartz chamber, surface science",
+      "lab_item": "autoclave indicator tape roll",
+      "material_detail": "one roll of autoclave tape only, no vial",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "top-down descend into geometric catalog composition, no orbit",
@@ -6994,11 +6994,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-174",
+      "lab_item_id": "LAB-291",
       "rank": 438,
       "category": "instruments",
-      "lab_item": "diaphragm vacuum gauge",
-      "material_detail": "analog/digital gauge",
+      "lab_item": "critical point dryer",
+      "material_detail": "one CPD instrument, pressure chamber, EM prep",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
@@ -7026,11 +7026,11 @@
       "compound_name": "CJC (no DAC)/Ipamorelin"
     },
     {
-      "lab_item_id": "LAB-389",
+      "lab_item_id": "LAB-372",
       "rank": 440,
       "category": "instruments",
-      "lab_item": "manifold freeze dryer ports capped",
-      "material_detail": "ports capped",
+      "lab_item": "environmental test chamber",
+      "material_detail": "one benchtop environmental chamber, viewport, stability testing",
       "surface": "textured graphite slate sample board",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "crane-down from high three-quarter to eye-level hero settle, no orbit",
@@ -7058,11 +7058,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-378",
+      "lab_item_id": "LAB-383",
       "rank": 442,
       "category": "instruments",
-      "lab_item": "PCR thermocycler with colorful block and lit display",
-      "material_detail": "one thermocycler, lid open or closed, vivid block, sharp UI, no tubes",
+      "lab_item": "overhead stirrer motor on stand",
+      "material_detail": "stirrer motor",
       "surface": "frosted optical glass riser on black field",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "lateral parallax slide left-to-right past specular highlights, no orbit",
@@ -7090,11 +7090,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-376",
+      "lab_item_id": "LAB-385",
       "rank": 444,
       "category": "instruments",
-      "lab_item": "microplate reader closed",
-      "material_detail": "plate reader instrument",
+      "lab_item": "sonic probe tip set",
+      "material_detail": "probe tips",
       "surface": "pearl quartz lab surface",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "slow push-out from tight crop to full product in frame, no orbit",
@@ -7122,11 +7122,11 @@
       "compound_name": "Melanotan 2"
     },
     {
-      "lab_item_id": "LAB-391",
+      "lab_item_id": "LAB-377",
       "rank": 446,
       "category": "instruments",
-      "lab_item": "chiller recirculator compact",
-      "material_detail": "chiller unit",
+      "lab_item": "qPCR machine lid closed",
+      "material_detail": "thermocycler exterior",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "start extreme macro on material texture then pull back to full hero, no orbit",
@@ -7154,11 +7154,11 @@
       "compound_name": "NAD+"
     },
     {
-      "lab_item_id": "LAB-173",
+      "lab_item_id": "LAB-396",
       "rank": 448,
       "category": "instruments",
-      "lab_item": "vacuum pump compact oil-free",
-      "material_detail": "bench vacuum pump",
+      "lab_item": "thermocouple wire spool",
+      "material_detail": "wire spool",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "slow push-in from medium hero to macro label detail, no orbit",
@@ -7186,11 +7186,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-386",
+      "lab_item_id": "LAB-179",
       "rank": 450,
       "category": "instruments",
-      "lab_item": "lab homogenizer tube adapter",
-      "material_detail": "adapter",
+      "lab_item": "handheld laboratory barcode scanner",
+      "material_detail": "one barcode scanner only, no vial beside it",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "side-profile track then settle on three-quarter facing angle, no full circle",
@@ -7218,11 +7218,11 @@
       "compound_name": "Semaglutide"
     },
     {
-      "lab_item_id": "LAB-382",
+      "lab_item_id": "LAB-180",
       "rank": 452,
       "category": "instruments",
-      "lab_item": "3D nutating mixer",
-      "material_detail": "nutator",
+      "lab_item": "label printer with research label stock",
+      "material_detail": "desktop lab printer",
       "surface": "textured graphite slate sample board",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "top-down descend into geometric catalog composition, no orbit",
@@ -7250,11 +7250,11 @@
       "compound_name": "Sermorelin"
     },
     {
-      "lab_item_id": "LAB-384",
+      "lab_item_id": "LAB-176",
       "rank": 454,
       "category": "instruments",
-      "lab_item": "homogenizer probe parked in stand",
-      "material_detail": "probe stand",
+      "lab_item": "lab microwave digester exterior",
+      "material_detail": "closed unit",
       "surface": "frosted optical glass riser on black field",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
@@ -7282,11 +7282,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-175",
+      "lab_item_id": "LAB-394",
       "rank": 456,
       "category": "instruments",
-      "lab_item": "sonic bath lid closed",
-      "material_detail": "ultrasonic cleaner",
+      "lab_item": "heating mantle nested sizes",
+      "material_detail": "mantles",
       "surface": "pearl quartz lab surface",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "crane-down from high three-quarter to eye-level hero settle, no orbit",
@@ -7314,11 +7314,11 @@
       "compound_name": "Tesamorelin"
     },
     {
-      "lab_item_id": "LAB-172",
+      "lab_item_id": "LAB-426",
       "rank": 458,
       "category": "instruments",
-      "lab_item": "lab oven window view empty shelves",
-      "material_detail": "drying oven",
+      "lab_item": "laboratory plasma cleaner chamber",
+      "material_detail": "one plasma cleaner, quartz chamber, surface science",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "lateral parallax slide left-to-right past specular highlights, no orbit",
@@ -7346,11 +7346,11 @@
       "compound_name": "Tirzepatide"
     },
     {
-      "lab_item_id": "LAB-379",
+      "lab_item_id": "LAB-381",
       "rank": 460,
       "category": "instruments",
-      "lab_item": "gel imager darkroom unit closed",
-      "material_detail": "imager",
+      "lab_item": "rocking platform mixer",
+      "material_detail": "rocker",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "slow push-out from tight crop to full product in frame, no orbit",
@@ -7378,11 +7378,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-435",
+      "lab_item_id": "LAB-390",
       "rank": 462,
       "category": "instruments",
-      "lab_item": "pipette calibration workstation balance",
-      "material_detail": "one pipette calibration balance under draft cover, metrology lab",
+      "lab_item": "rotary evaporator glassware dry assembled",
+      "material_detail": "rotovap glass",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "start extreme macro on material texture then pull back to full hero, no orbit",
@@ -7410,11 +7410,11 @@
       "compound_name": "BPC-157/TB-500"
     },
     {
-      "lab_item_id": "LAB-393",
+      "lab_item_id": "LAB-174",
       "rank": 464,
       "category": "instruments",
-      "lab_item": "oil bath pot empty clean",
-      "material_detail": "oil bath vessel",
+      "lab_item": "diaphragm vacuum gauge",
+      "material_detail": "analog/digital gauge",
       "surface": "textured graphite slate sample board",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "slow push-in from medium hero to macro label detail, no orbit",
@@ -7442,11 +7442,11 @@
       "compound_name": "CJC (no DAC)"
     },
     {
-      "lab_item_id": "LAB-380",
+      "lab_item_id": "LAB-292",
       "rank": 466,
       "category": "instruments",
-      "lab_item": "western blot transfer tank",
-      "material_detail": "transfer tank",
+      "lab_item": "muffle furnace laboratory",
+      "material_detail": "one muffle furnace, ceramic chamber door, high-temp research",
       "surface": "frosted optical glass riser on black field",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "side-profile track then settle on three-quarter facing angle, no full circle",
@@ -7474,11 +7474,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-451",
+      "lab_item_id": "LAB-392",
       "rank": 468,
       "category": "instruments",
-      "lab_item": "sputter coater for SEM",
-      "material_detail": "one sputter coater, vacuum bell, materials prep",
+      "lab_item": "lab water bath lid on",
+      "material_detail": "water bath",
       "surface": "pearl quartz lab surface",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "top-down descend into geometric catalog composition, no orbit",
@@ -7506,11 +7506,11 @@
       "compound_name": "GLOW"
     },
     {
-      "lab_item_id": "LAB-459",
+      "lab_item_id": "LAB-389",
       "rank": 470,
       "category": "instruments",
-      "lab_item": "laboratory balance anti-vibration table",
-      "material_detail": "one granite anti-vibration table with microbalance seated, metrology",
+      "lab_item": "manifold freeze dryer ports capped",
+      "material_detail": "ports capped",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
@@ -7538,11 +7538,11 @@
       "compound_name": "KPV"
     },
     {
-      "lab_item_id": "LAB-392",
+      "lab_item_id": "LAB-459",
       "rank": 472,
       "category": "instruments",
-      "lab_item": "lab water bath lid on",
-      "material_detail": "water bath",
+      "lab_item": "laboratory balance anti-vibration table",
+      "material_detail": "one granite anti-vibration table with microbalance seated, metrology",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "crane-down from high three-quarter to eye-level hero settle, no orbit",
@@ -7570,11 +7570,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-292",
+      "lab_item_id": "LAB-451",
       "rank": 474,
       "category": "instruments",
-      "lab_item": "muffle furnace laboratory",
-      "material_detail": "one muffle furnace, ceramic chamber door, high-temp research",
+      "lab_item": "sputter coater for SEM",
+      "material_detail": "one sputter coater, vacuum bell, materials prep",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "lateral parallax slide left-to-right past specular highlights, no orbit",
@@ -7602,11 +7602,11 @@
       "compound_name": "PT-141"
     },
     {
-      "lab_item_id": "LAB-390",
+      "lab_item_id": "LAB-378",
       "rank": 476,
       "category": "instruments",
-      "lab_item": "rotary evaporator glassware dry assembled",
-      "material_detail": "rotovap glass",
+      "lab_item": "PCR thermocycler with colorful block and lit display",
+      "material_detail": "one thermocycler, lid open or closed, vivid block, sharp UI, no tubes",
       "surface": "textured graphite slate sample board",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "slow push-out from tight crop to full product in frame, no orbit",
@@ -7634,11 +7634,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-381",
+      "lab_item_id": "LAB-380",
       "rank": 478,
       "category": "instruments",
-      "lab_item": "rocking platform mixer",
-      "material_detail": "rocker",
+      "lab_item": "western blot transfer tank",
+      "material_detail": "transfer tank",
       "surface": "frosted optical glass riser on black field",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "start extreme macro on material texture then pull back to full hero, no orbit",
@@ -7666,11 +7666,11 @@
       "compound_name": "SEMAX"
     },
     {
-      "lab_item_id": "LAB-394",
+      "lab_item_id": "LAB-376",
       "rank": 480,
       "category": "instruments",
-      "lab_item": "heating mantle nested sizes",
-      "material_detail": "mantles",
+      "lab_item": "microplate reader closed",
+      "material_detail": "plate reader instrument",
       "surface": "pearl quartz lab surface",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "slow push-in from medium hero to macro label detail, no orbit",
@@ -7698,11 +7698,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-176",
+      "lab_item_id": "LAB-393",
       "rank": 482,
       "category": "instruments",
-      "lab_item": "lab microwave digester exterior",
-      "material_detail": "closed unit",
+      "lab_item": "oil bath pot empty clean",
+      "material_detail": "oil bath vessel",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "side-profile track then settle on three-quarter facing angle, no full circle",
@@ -7730,11 +7730,11 @@
       "compound_name": "TB-500"
     },
     {
-      "lab_item_id": "LAB-179",
+      "lab_item_id": "LAB-391",
       "rank": 484,
       "category": "instruments",
-      "lab_item": "handheld laboratory barcode scanner",
-      "material_detail": "one barcode scanner only, no vial beside it",
+      "lab_item": "chiller recirculator compact",
+      "material_detail": "chiller unit",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "top-down descend into geometric catalog composition, no orbit",
@@ -7762,11 +7762,11 @@
       "compound_name": "Tesamorelin/Ipamorelin"
     },
     {
-      "lab_item_id": "LAB-396",
+      "lab_item_id": "LAB-435",
       "rank": 486,
       "category": "instruments",
-      "lab_item": "thermocouple wire spool",
-      "material_detail": "wire spool",
+      "lab_item": "pipette calibration workstation balance",
+      "material_detail": "one pipette calibration balance under draft cover, metrology lab",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
@@ -7794,11 +7794,11 @@
       "compound_name": "5-Amino-1MQ"
     },
     {
-      "lab_item_id": "LAB-385",
+      "lab_item_id": "LAB-173",
       "rank": 488,
       "category": "instruments",
-      "lab_item": "sonic probe tip set",
-      "material_detail": "probe tips",
+      "lab_item": "vacuum pump compact oil-free",
+      "material_detail": "bench vacuum pump",
       "surface": "textured graphite slate sample board",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "crane-down from high three-quarter to eye-level hero settle, no orbit",
@@ -7826,11 +7826,11 @@
       "compound_name": ""
     },
     {
-      "lab_item_id": "LAB-383",
+      "lab_item_id": "LAB-379",
       "rank": 490,
       "category": "instruments",
-      "lab_item": "overhead stirrer motor on stand",
-      "material_detail": "stirrer motor",
+      "lab_item": "gel imager darkroom unit closed",
+      "material_detail": "imager",
       "surface": "frosted optical glass riser on black field",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "lateral parallax slide left-to-right past specular highlights, no orbit",
@@ -7858,11 +7858,11 @@
       "compound_name": "Cagrilinitide"
     },
     {
-      "lab_item_id": "LAB-291",
+      "lab_item_id": "LAB-386",
       "rank": 492,
       "category": "instruments",
-      "lab_item": "critical point dryer",
-      "material_detail": "one CPD instrument, pressure chamber, EM prep",
+      "lab_item": "lab homogenizer tube adapter",
+      "material_detail": "adapter",
       "surface": "pearl quartz lab surface",
       "lighting": "split complementary lab lighting, teal and amber accents",
       "camera_move": "slow push-out from tight crop to full product in frame, no orbit",
@@ -7890,11 +7890,11 @@
       "compound_name": "CJC (no DAC)/Ipamorelin"
     },
     {
-      "lab_item_id": "LAB-171",
+      "lab_item_id": "LAB-382",
       "rank": 494,
       "category": "instruments",
-      "lab_item": "autoclave indicator tape roll",
-      "material_detail": "one roll of autoclave tape only, no vial",
+      "lab_item": "3D nutating mixer",
+      "material_detail": "nutator",
       "surface": "matte pure white cyclorama with soft contact shadow",
       "lighting": "cool clinical blue-white LED with specular glass caustics",
       "camera_move": "start extreme macro on material texture then pull back to full hero, no orbit",
@@ -7922,11 +7922,11 @@
       "compound_name": "GHK-Cu"
     },
     {
-      "lab_item_id": "LAB-452",
+      "lab_item_id": "LAB-384",
       "rank": 496,
       "category": "instruments",
-      "lab_item": "vacuum oven with acrylic door",
-      "material_detail": "one vacuum oven, gauges, materials curing",
+      "lab_item": "homogenizer probe parked in stand",
+      "material_detail": "probe stand",
       "surface": "dark charcoal epoxy resin countertop with subtle sparkle",
       "lighting": "backlit translucent glow through glass or polymer only when physically real",
       "camera_move": "slow push-in from medium hero to macro label detail, no orbit",
@@ -7954,11 +7954,11 @@
       "compound_name": "KLOW"
     },
     {
-      "lab_item_id": "LAB-387",
+      "lab_item_id": "LAB-175",
       "rank": 498,
       "category": "instruments",
-      "lab_item": "vacuum concentrator closed",
-      "material_detail": "concentrator exterior",
+      "lab_item": "sonic bath lid closed",
+      "material_detail": "ultrasonic cleaner",
       "surface": "mirrored chrome instrument deck catching rim light",
       "lighting": "high-gloss catalog cross-light showing material microtexture",
       "camera_move": "side-profile track then settle on three-quarter facing angle, no full circle",
@@ -7986,11 +7986,11 @@
       "compound_name": "Melanotan 2"
     },
     {
-      "lab_item_id": "LAB-177",
+      "lab_item_id": "LAB-172",
       "rank": 500,
       "category": "instruments",
-      "lab_item": "fume hood sash partially open with empty clamp",
-      "material_detail": "hood as environment, product clamp empty",
+      "lab_item": "lab oven window view empty shelves",
+      "material_detail": "drying oven",
       "surface": "textured graphite slate sample board",
       "lighting": "dramatic dual rim lights with cool cyan edge and warm key",
       "camera_move": "top-down descend into geometric catalog composition, no orbit",
