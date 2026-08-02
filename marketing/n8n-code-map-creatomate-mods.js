@@ -8,11 +8,8 @@
 // Rehost the Grok MP4 to a public direct URL (Google Drive uc?export=download) and
 // put that in save_video_url.public_video_url OR set FORCE_PUBLIC_VIDEO below.
 
-// TEMP test override — paste a Drive download URL, or leave '' to use node output.
-const FORCE_PUBLIC_VIDEO = '';
-// Example:
-// const FORCE_PUBLIC_VIDEO =
-//   'https://drive.google.com/uc?export=download&id=YOUR_FILE_ID';
+// TEMP test override — public direct .mp4 (catbox / R2 / B2). Leave '' to use node output.
+const FORCE_PUBLIC_VIDEO = 'https://files.catbox.moe/ehh2x2.mp4';
 
 function firstJson(name) {
   try {
