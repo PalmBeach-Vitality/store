@@ -100,13 +100,9 @@ if (!text.text_id || !text.mod_fact_1) {
   );
 }
 
-// Set this ONLY to unblock a specific clip; leave '' in normal runs.
-const FORCE_GROK_VIDEO_URL =
-  'https://vidgen.x.ai/xai-vidgen-bucket/xai-video-b1503378-2de8-90f4-be1c-9a2244a26ec6.mp4';
-
 // Never trust input.grok_video_url (stale from prior map).
+// Prefer fresh save_video_url, then poll, then extend.
 const grok_video_url =
-  FORCE_GROK_VIDEO_URL ||
   pickUrl(saveVideo) ||
   pickUrl(pollVideo) ||
   pickUrl(extend1) ||
