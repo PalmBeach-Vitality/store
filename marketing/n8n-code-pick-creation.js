@@ -48,9 +48,6 @@ function buildMotionPrompt(row) {
   ).trim();
   const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
   const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
-  const creation_id = String(val(row, ['creation_id', 'creationId'], '')).trim();
-  const lab_item_id = String(val(row, ['lab_item_id', 'labItemId'], '')).trim();
-
   return (
     `Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of ${name}. ` +
     `CAMERA MOTION (follow exactly; do not invent a different move): ${camera}. ` +
@@ -58,8 +55,8 @@ function buildMotionPrompt(row) {
     `Keep the subject sharp, recognizable, centered, and unchanged from the still. ` +
     `Do not default to spinning, orbiting, or rotating around the product unless the ` +
     `camera motion above explicitly requests a short arc. ` +
-    `No people, no hands, no faces, no needles, no injection, no lifestyle. ` +
-    `${creation_id || lab_item_id}. ` +
+    `Do not add text, labels, creation motifs, LAB codes, or counters onto the subject. ` +
+    `No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. ` +
     `For laboratory research use only. Not for human use or consumption.`
   );
 }

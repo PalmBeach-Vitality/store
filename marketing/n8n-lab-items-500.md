@@ -38,7 +38,8 @@ python3 marketing/scripts/fix_lab_libraries.py
 
 **Realism rules baked into the CSVs + prompts**
 - Exactly **one** primary subject (no dual-chamber, twin packs, pairs, stacks of products)
-- No extra vials/pens in non-vial categories (empty tray/box instead)
+- **No cardboard boxes, cartons, mailers, or trays as the hero** — prefer premium equipment, vials, powders, sterile lab environments, microscopes
+- **Never** bake `creation motif`, `LAB-###`, or `000/500` into prompts (Grok prints that text onto products)
 - No injection/needle context; filter cartridges and pumps only when needed
 - Every `video_prompt` includes `SINGLE SUBJECT ONLY` + FDA-safe avoid list
 - Category rank order never repeats adjacent categories

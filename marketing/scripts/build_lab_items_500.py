@@ -568,8 +568,7 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
             f"Intended camera motion for the follow-on film: {camera}. "
             f"{avoid}. "
             f"Quality: {quality}. "
-            f"creation motif {idx:03d}/500 · {lab_item_id}. "
-            f"Keep product identity and any on-screen research typography sharp and unchanged. "
+            f"No invented on-product text, no creation motifs, no LAB codes, no counters on the subject. "
             f"For laboratory research use only. Not for human use or consumption."
         )
         video_motion_prompt = (
@@ -579,8 +578,8 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
             f"Keep the subject sharp, recognizable, centered, and unchanged from the still. "
             f"Do not default to spinning, orbiting, or rotating around the product unless the "
             f"camera motion above explicitly requests a short arc. "
-            f"No people, no hands, no faces, no needles, no injection, no lifestyle. "
-            f"creation motif {idx:03d}/500 · {lab_item_id}. "
+            f"Do not add text, labels, creation motifs, LAB codes, or counters onto the subject. "
+            f"No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. "
             f"For laboratory research use only. Not for human use or consumption."
         )
         creations.append(
