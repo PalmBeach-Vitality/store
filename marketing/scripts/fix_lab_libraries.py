@@ -335,8 +335,20 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
         "one syringe pump chassis on bench, empty clamp, no needle, no skin context",
     ),
     "syringe filter unit 0.22 micron": (
-        "0.22 micron syringe-filter cartridge",
-        "one small filter cartridge only, packaged or bare, no needle",
+        "0.22 micron membrane filter cartridge",
+        "one small disc filter cartridge only, packaged or bare, no needle, no syringe body",
+    ),
+    "0.22 micron syringe-filter cartridge": (
+        "0.22 micron membrane filter cartridge",
+        "one small disc filter cartridge only, no needle, no syringe body",
+    ),
+    "sterile syringe-filter disc unit alone": (
+        "sterile 0.22 micron membrane filter unit",
+        "one sterile filter disc unit only, no syringe, no needle",
+    ),
+    "laboratory syringe pump instrument empty": (
+        "laboratory infusion pump chassis empty",
+        "one benchtop pump instrument, empty clamp bay, no needle, no consumable loaded",
     ),
 }
 
