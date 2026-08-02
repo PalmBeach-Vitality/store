@@ -14,20 +14,18 @@ function firstJson(name) {
   }
 }
 
-function pickUrl(...objs) {
-  for (const o of objs) {
-    if (!o || typeof o !== 'object') continue;
-    const candidates = [
-      o.video_url,
-      o.grok_video_url,
-      o.url,
-      o.video?.url,
-      o.data?.video?.url,
-      o.data?.url,
-    ];
-    for (const u of candidates) {
-      if (typeof u === 'string' && u.startsWith('http')) return u;
-    }
+function pickUrl(o, { allowGrokField = true } = {}) {
+  if (!o || typeof o !== 'object') return '';
+  const candidates = [
+    o.video_url,
+    allowGrokField ? o.grok_video_url : null,
+    o.url,
+    o.video?.url,
+    o.data?.video?.url,
+    o.data?.url,
+  ];
+  for (const u of candidates) {
+    if (typeof u === 'string' && u.startsWith('http') && u.includes('vidgen')) return u;
   }
   return '';
 }
@@ -78,11 +76,22 @@ const pick = firstJson('pick_creation');
 const parse = firstJson('Parse_Grok');
 const extend1 = firstJson('save_extend_1_url');
 const saveVideo = firstJson('save_video_url');
+const pollVideo = firstJson('grok_video_poll');
 const input = $input.first()?.json || {};
 
-// Prefer the node this Code is wired from ($input), then fresh 15s video,
-// then extend. Old bug: stale save_extend_1_url (pen) overwrote new save_video_url (vial).
-const grok_video_url = pickUrl(input, saveVideo, extend1, pick);
+// FORCE latest vial clip for this run (remove after pipeline is stable).
+// Old pen URL was sticking via input.grok_video_url / stale save_extend_1_url.
+const FORCE_GROK_VIDEO_URL =
+  'https://vidgen.x.ai/xai-vidgen-bucket/xai-video-b1503378-2de8-90f4-be1c-9a2244a26ec6.mp4';
+
+// NEVER trust input.grok_video_url — it sticks from the previous map run (old pen clip).
+const grok_video_url =
+  FORCE_GROK_VIDEO_URL ||
+  pickUrl(saveVideo) ||
+  pickUrl(pollVideo) ||
+  pickUrl(extend1) ||
+  pickUrl(input, { allowGrokField: false }) ||
+  pickUrl(pick, { allowGrokField: false });
 const creation_id = String(pick.creation_id || input.creation_id || '').trim();
 const mod_intro = productName([parse, input, pick]);
 
