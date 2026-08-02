@@ -48,7 +48,7 @@ python3 marketing/scripts/fix_lab_libraries.py
 ## Quality
 
 - Still: `grok-imagine-image-quality` + `resolution: 2k` + `9:16`
-- Video: `grok-imagine-video-1.5` + **`resolution: 1080p`** + `9:16` (never `720p`)
+- Video: `grok-imagine-video-1.5` + **`duration: 15`** + **`resolution: 1080p`** + `9:16` (never `8`s / never `720p`)
 
 ## Rebuild
 

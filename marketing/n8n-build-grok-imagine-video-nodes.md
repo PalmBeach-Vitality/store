@@ -107,12 +107,13 @@ Reply **`node 2 ok`**.
   model: 'grok-imagine-video-1.5',
   prompt: $('pick_creation').first().json.video_motion_prompt,
   image: { url: $json.still_url },
-  duration: 8,
+  duration: 15,
   aspect_ratio: '9:16',
   resolution: '1080p'
 }) }}
 ```
 
+**Duration (required):** always **`15`** seconds for `grok_video_start` (minimum for a proper Creatomate loop bed). Never `8` for production.  
 **Resolution (required):** always **`1080p`** for `grok_video_start` (and extends). Never `720p` for production.
 
 **Critical:** do **not** hardcode “slow cinematic camera motion around…”. That made every run orbit the same way.  

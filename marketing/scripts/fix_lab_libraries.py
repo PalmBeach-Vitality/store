@@ -1259,6 +1259,8 @@ def fix_lab_libraries() -> None:
             it["lab_item_id"],
             compound_name=compound_name,
         )
+        # Grok video length — 15s minimum for a proper Creatomate loop bed
+        cr["duration_seconds"] = "15"
         # Ensure status Active + rotation counters present (like compounds sheet)
         it["status"] = it.get("status") or "Active"
         cr["status"] = cr.get("status") or "Active"
