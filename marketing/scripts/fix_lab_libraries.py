@@ -164,15 +164,31 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
     for r in rows:
         buckets[r["category"]].append(r)
 
-    # Stable rotation order: largest categories first, then name
-    cat_order = sorted(buckets.keys(), key=lambda c: (-len(buckets[c]), c))
+    # Fixed daily rotation — never the same category on adjacent ranks.
+    # Example: surfaces_org → packaging → ppe_sterile → vials_containers → …
+    cat_order = [
+        "surfaces_org",
+        "packaging",
+        "ppe_sterile",
+        "vials_containers",
+        "research_pens",
+        "glassware",
+        "instruments",
+        "liquid_handling",
+        "cold_chain",
+        "qc_analytical",
+    ]
+    # Include any unexpected categories at the end
+    for c in sorted(buckets.keys()):
+        if c not in cat_order:
+            cat_order.append(c)
+
     out: list[dict] = []
     prev = None
     cursor = 0
 
     while any(buckets.values()):
         placed = False
-        # Try a full cycle of categories starting at cursor
         for step in range(len(cat_order)):
             idx = (cursor + step) % len(cat_order)
             cat = cat_order[idx]
@@ -187,7 +203,7 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
         if placed:
             continue
 
-        # Only `prev` left with items — insert into an earlier safe gap
+        # Only one category left — insert into an earlier safe gap
         cat = next(c for c, q in buckets.items() if q)
         item = buckets[cat].popleft()
         inserted = False
