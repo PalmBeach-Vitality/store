@@ -130,13 +130,17 @@ if (!grok_video_url) {
   );
 }
 
+// Do not let pick_text.mod_intro (catalog blurb) overwrite the product name.
+const { mod_intro: _textIntroIgnore, ...textRest } = text;
+
 return [
   {
     json: {
       ...input,
       ...pick,
-      ...text,
+      ...textRest,
       grok_video_url,
+      // PRODUCT NAME only — never pick_text catalog line / (0001/1000)
       mod_intro,
       mod_fact_1: factFrom(
         factSources,

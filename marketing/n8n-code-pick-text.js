@@ -26,12 +26,20 @@ function cleanFact(text) {
     .trim();
 }
 
+/** Strip library counters like (0001/1000) from catalog intros */
+function cleanIntro(text) {
+  return String(text || '')
+    .replace(/\s*\(\s*\d+\s*\/\s*\d+\s*\)\s*$/g, '')
+    .replace(/\s*[·•]\s*\d+\s*\/\s*\d+\s*$/g, '')
+    .trim();
+}
+
 const scored = rows
   .map((r) => ({
     raw: r,
     text_id: String(val(r, ['text_id', 'Text_ID'], '')).trim(),
     rank: Number(val(r, ['rank'], 0)),
-    mod_intro: val(r, ['mod_intro']),
+    mod_intro: cleanIntro(val(r, ['mod_intro'])),
     mod_fact_1: cleanFact(val(r, ['mod_fact_1'])),
     mod_fact_2: cleanFact(val(r, ['mod_fact_2'])),
     mod_fact_3: cleanFact(val(r, ['mod_fact_3'])),
@@ -75,4 +83,4 @@ return [
     },
   },
 ];
-]
+
