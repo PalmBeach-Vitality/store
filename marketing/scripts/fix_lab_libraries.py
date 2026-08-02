@@ -403,6 +403,91 @@ REPLACEMENTS: dict[str, tuple[str, str]] = {
         "research vial standing free on white surface",
         "one vial only, no carton window framing",
     ),
+    # --- boring "empty" props → exciting single science heroes ---
+    "empty brushed stainless steel lab tray": (
+        "precision analytical microbalance under glass draft shield",
+        "one closed draft-shield balance, brushed steel, glowing blue status LED, ultra sharp hero product shot",
+    ),
+    "empty cardboard laboratory freezer box": (
+        "ultra-low temperature freezer door with frost-edged window port",
+        "one closed ULT freezer door detail, frost texture, clinical cold-chain drama, no vials visible",
+    ),
+    "open research carton with empty foam insert": (
+        "premium research carton with embossed lot panel",
+        "one closed white research carton, crisp edges, soft shadow, catalog hero",
+    ),
+    "empty HPLC autosampler tray": (
+        "HPLC system front panel with solvent lines idle",
+        "one instrument face, metal and polymer, status lights, no sample vials in frame",
+    ),
+    "empty stainless ice pan with crushed ice": (
+        "laboratory recirculating chiller unit",
+        "one compact chiller, hose couplings, cool blue indicator light, industrial science aesthetic",
+    ),
+    "empty laboratory refrigerator shelf bin": (
+        "pharmacy-grade laboratory refrigerator with glass door closed",
+        "one fridge unit hero, glass door reflections, cold LED interior glow, shelves empty",
+    ),
+    "empty chrome wire laboratory basket": (
+        "stainless laboratory ultrasonic cleaner bath",
+        "one ultrasonic cleaner, brushed lid, control dial, water-ready basin closed or empty",
+    ),
+    "empty aluminum cryogenic cane": (
+        "liquid nitrogen dewar with vented cap",
+        "one LN2 dewar, frost on shoulder, vapor hint at vent only, no people, no vials",
+    ),
+    "empty cardboard cryobox 10x10 grid": (
+        "cryogenic storage dewar neck with locking lid",
+        "one dewar lid assembly macro, cold metal, scientific drama",
+    ),
+    "empty bench linear organizer tray": (
+        "RGB-illuminated laboratory vortex mixer",
+        "one vortex mixer, rubber cup empty, accent LED ring, dynamic catalog pose",
+    ),
+    "empty foam drawer organizer insert": (
+        "modular laboratory hotplate stirrer",
+        "one hotplate-stirrer, ceramic top, digital display lit, no glassware on plate",
+    ),
+    "empty acrylic cuvette rack": (
+        "UV-Vis spectrophotometer sample compartment open",
+        "one spectrophotometer, open bay empty, optical bench detail, premium instrument hero",
+    ),
+    "empty molded pulp shipping tray": (
+        "tamper-evident research shipper with humidity indicator card",
+        "one sealed shipper box, humidity card window, logistics-science aesthetic",
+    ),
+    "borosilicate Erlenmeyer flask 250ml empty": (
+        "borosilicate Erlenmeyer flask with vivid blue copper sulfate solution",
+        "one flask, bright blue liquid, sharp meniscus, dramatic side light through glass, no other glassware",
+    ),
+    "analytical balance with empty weighing pan": (
+        "analytical microbalance with illuminated draft chamber",
+        "one balance hero, internal light on empty pan, mirrored steel, luxury lab catalog",
+    ),
+    "open microcentrifuge showing rotor empty": (
+        "refrigerated microcentrifuge with lid open showing empty rotor",
+        "one centrifuge, empty rotor only, teal interior accent, no tubes",
+    ),
+    "gel electrophoresis tank empty": (
+        "gel electrophoresis tank with buffer fill and empty gel tray",
+        "one tank, clear buffer, electrodes visible, electric-science mood, no samples loaded",
+    ),
+    "thermocycler block alone empty": (
+        "PCR thermocycler with colorful block and lit display",
+        "one thermocycler, lid open or closed, vivid block, sharp UI, no tubes",
+    ),
+    "deep-well plate empty": (
+        "96-well PCR plate clear on black acrylic",
+        "one empty plate, geometric well grid, specular highlights, macro catalog",
+    ),
+    "laboratory infusion pump chassis empty": (
+        "programmable syringe-free laboratory metering pump",
+        "one metering pump instrument, digital panel lit, industrial science hero",
+    ),
+    "research pen next to empty packaging tray": (
+        "research pen low-angle hero on mirrored black acrylic",
+        "one capped research pen, dramatic reflection, rim light, no tray",
+    ),
 }
 
 SINGLE_SUBJECT = (
@@ -423,40 +508,62 @@ AVOID = (
 
 QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
-    "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR"
+    "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
+    "cinematic product photography, premium science catalog, museum-quality still"
 )
 
 SURFACES = [
-    "polished black reflective acrylic",
-    "matte pure white infinity surface",
-    "brushed stainless steel lab bench",
-    "dark charcoal epoxy resin countertop",
-    "cool gray ceramic tile",
-    "mirrored chrome instrument tray",
-    "white melamine cleanroom table",
-    "textured slate sample board",
-    "soft gray seamless paper backdrop",
-    "anodized aluminum tray",
+    "polished black reflective acrylic with crisp mirror reflection",
+    "matte pure white cyclorama with soft contact shadow",
+    "brushed stainless steel lab bench with linear grain highlights",
+    "dark charcoal epoxy resin countertop with subtle sparkle",
+    "obsidian glass plate with deep reflection",
+    "mirrored chrome instrument tray catching rim light",
+    "white melamine cleanroom table with clinical clarity",
+    "textured graphite slate sample board",
+    "anodized navy aluminum deck plate",
+    "frosted optical glass riser on black field",
+    "wet-look black porcelain tile",
+    "pearl quartz lab surface",
 ]
 LIGHTING = [
-    "soft rim light from behind",
-    "cool clinical blue-white LED",
-    "single hard key light with controlled fill",
-    "soft overhead softbox, even catalog lighting",
-    "warm neutral side light, still clinical",
-    "split soft key and gentle bounce",
-    "high-key seamless catalog lighting",
-    "low-key selective highlight on glass edges",
+    "dramatic dual rim lights with cool cyan edge and warm key",
+    "hard beauty dish key with deep controlled shadows",
+    "cool clinical blue-white LED with specular glass caustics",
+    "low-key cinematic spotlight on subject, velvet falloff",
+    "high-gloss catalog cross-light showing material microtexture",
+    "soft overhead softbox plus razor rim separation",
+    "split complementary lab lighting, teal and amber accents",
+    "fiber-optic accent kiss on metal edges",
+    "backlit translucent glow through glass or polymer only when physically real",
+    "macro ring-light even field for scientific detail",
 ]
 CAMERA = [
-    "slow 360 degree orbit at eye level",
-    "extreme macro push-in",
-    "gentle top-down descending move",
-    "locked tripod hero frame with subtle push",
-    "low angle tracking slide",
-    "circular arc that never fully completes",
-    "vertical rise from base to label",
-    "fast resolve into locked hero frame",
+    "extreme macro hero with razor shallow depth of field",
+    "low-angle power pose pushing upward at the instrument",
+    "slow orbital reveal at eye level",
+    "locked tripod editorial frame with subtle push-in",
+    "top-down geometric catalog composition",
+    "three-quarter luxury product angle",
+    "vertical rise from base detail to label typography",
+    "parallax slide past specular highlights",
+    "tight detail crop then pull wide to full hero",
+]
+COLOR_GRADE = [
+    "cool steel and ice-blue science grade",
+    "high-contrast black and silver premium grade",
+    "crisp white clinical high-key grade",
+    "teal-and-amber cinematic lab grade",
+    "warm tungsten accents on cold metal grade",
+    "neutral color-true pharmaceutical catalog grade",
+]
+HERO_STYLE = [
+    "Apple-keynote product intensity, still fully laboratory-real",
+    "Vogue-still life precision for a scientific object",
+    "NASA hardware documentary sharpness",
+    "luxury watch-ad lighting adapted to lab equipment",
+    "museum exhibit spotlight on a single artifact",
+    "editorial science magazine cover energy",
 ]
 
 
@@ -544,13 +651,26 @@ def interleave_by_category(rows: list[dict]) -> list[dict]:
     return out
 
 
-def rebuild_prompt(idx: int, lab_item_id: str, name: str, detail: str, surface: str, lighting: str, camera: str) -> str:
+def rebuild_prompt(
+    idx: int,
+    lab_item_id: str,
+    name: str,
+    detail: str,
+    surface: str,
+    lighting: str,
+    camera: str,
+    color_grade: str,
+    hero_style: str,
+) -> str:
     return (
-        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film, "
-        f"chemical research material only, premium American research aesthetic. "
-        f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory object, sharp and centered): {name}. "
+        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog still/film, "
+        f"exciting premium science product photography, chemical research material only. "
+        f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory object, sharp and centered, visually striking): {name}. "
         f"Physical detail: {detail}. "
+        f"Hero style: {hero_style}. "
         f"Setting surface: {surface}. Lighting: {lighting}. Camera: {camera}. "
+        f"Color grade: {color_grade}. "
+        f"Make the frame feel expensive, cinematic, and scientifically compelling — not a flat boring snapshot. "
         f"{SINGLE_SUBJECT} "
         f"{AVOID}. "
         f"Quality: {QUALITY}. "
@@ -616,15 +736,35 @@ def fix_lab_libraries() -> None:
         cr["lab_item"] = it["lab_item"]
         cr["material_detail"] = it["material_detail"]
         cr["category"] = it["category"]
-        surface = it.get("surface") or SURFACES[(idx - 1) % len(SURFACES)]
-        lighting = it.get("lighting") or LIGHTING[(idx - 1) % len(LIGHTING)]
-        camera = it.get("camera_move") or CAMERA[(idx - 1) % len(CAMERA)]
+        # Always refresh visual variables so stills stay exciting
+        surface = SURFACES[(idx - 1) % len(SURFACES)]
+        lighting = LIGHTING[(idx * 3) % len(LIGHTING)]
+        camera = CAMERA[(idx * 5) % len(CAMERA)]
+        color_grade = COLOR_GRADE[(idx * 7) % len(COLOR_GRADE)]
+        hero_style = HERO_STYLE[(idx * 11) % len(HERO_STYLE)]
         it["surface"] = surface
         it["lighting"] = lighting
         it["camera_move"] = camera
-        cr["scene_brief"] = f"{it['lab_item']} on {surface}, {lighting}, {camera}"
+        it["color_grade"] = color_grade
+        it["hero_style"] = hero_style
+        cr["surface"] = surface
+        cr["lighting"] = lighting
+        cr["camera_move"] = camera
+        cr["color_grade"] = color_grade
+        cr["hero_style"] = hero_style
+        cr["scene_brief"] = (
+            f"{it['lab_item']} · {hero_style} · {surface} · {lighting} · {camera} · {color_grade}"
+        )
         cr["video_prompt"] = rebuild_prompt(
-            idx, it["lab_item_id"], it["lab_item"], it["material_detail"], surface, lighting, camera
+            idx,
+            it["lab_item_id"],
+            it["lab_item"],
+            it["material_detail"],
+            surface,
+            lighting,
+            camera,
+            color_grade,
+            hero_style,
         )
         # Ensure status Active
         it["status"] = it.get("status") or "Active"
