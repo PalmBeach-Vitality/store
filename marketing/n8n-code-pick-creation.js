@@ -58,7 +58,8 @@ const scored = creations
   .filter((c) => c.creation_id && c.video_prompt)
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
-    return a.last_used_at.localeCompare(b.last_used_at);
+    if (a.last_used_at !== b.last_used_at) return a.last_used_at.localeCompare(b.last_used_at);
+    return Number(a.rank) - Number(b.rank);
   });
 
 if (!scored.length) {
@@ -68,7 +69,21 @@ if (!scored.length) {
   );
 }
 
-const pick = scored[0];
+// Do not repeat the same category as the most recently used creation (e.g. vial → vial).
+let lastCategory = '';
+const previouslyUsed = scored
+  .filter((c) => c.times_used > 0 || (c.last_used_at && c.last_used_at.trim()))
+  .slice()
+  .sort((a, b) => String(b.last_used_at).localeCompare(String(a.last_used_at)));
+if (previouslyUsed.length) {
+  lastCategory = previouslyUsed[0].category || '';
+}
+
+let pick = scored[0];
+if (lastCategory) {
+  const different = scored.find((c) => c.category && c.category !== lastCategory);
+  if (different) pick = different;
+}
 
 let compound = {};
 try {

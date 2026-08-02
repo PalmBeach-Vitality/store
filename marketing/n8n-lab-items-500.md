@@ -16,14 +16,20 @@ Compat copies (same 500 rows): `8-lab-items-250.csv`, `9-lab-item-creations-250.
 
 ## Import (Sheets)
 
-1. Import `9-lab-item-creations-500.csv` → tab **`9-lab-item-creations-500`**
+1. **Replace** tab **`9-lab-item-creations-500`** with `9-lab-item-creations-500.csv` (do not append)
 2. Optional reference: `8-lab-items-500.csv` → `8-lab-items-500`
 3. Point `get_reel_creations` at tab **`9-lab-item-creations-500`**
 4. Set **Return All** / limit ≥ 500
 5. Filter `status = Active`
-6. `pick_creation` picks least-used → `video_prompt`
+6. `pick_creation` picks least-used → `video_prompt`, and **skips the same category as the last used row**
 
-Creation ids: `PBVita-Lab-001` … `PBVita-Lab-500`.
+Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — categories are interleaved so **no two adjacent ranks share a category** (no vial→vial in the sheet order).
+
+Rebuild / re-interleave:
+
+```bash
+python3 marketing/scripts/fix_lab_libraries.py
+```
 
 ## Quality
 
