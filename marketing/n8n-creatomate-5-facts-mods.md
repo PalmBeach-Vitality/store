@@ -42,7 +42,7 @@ Body (expression):
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'video_loop_source.source': $json.grok_video_url,
+    'main_video': $json.grok_video_url,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -54,8 +54,9 @@ Body (expression):
 }}
 ```
 
-**Must include `video_loop_source.source`.** If omitted, Creatomate keeps the default template footage.  
-**URL must be publicly downloadable** — Drive `uc?export=download&id=…`, not `vidgen.x.ai` (Creatomate often cannot fetch vidgen).
+**Must include `main_video`** (the dynamic video element name — not `video_loop_source`).  
+If footage still doesn’t swap, try `'main_video.source': $json.grok_video_url`.  
+**URL must be a public direct `.mp4`** (catbox / R2 / B2) — not `vidgen.x.ai`, not Drive `/view`.
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA` — this template ignores them.
 
