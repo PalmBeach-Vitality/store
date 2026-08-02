@@ -1,9 +1,10 @@
 // n8n Code node: map_creatomate_mods
 // Type: Code | Mode: Run Once for All Items
-// After: save_extend_1_url (and pick_creation earlier in the same run)
+// After: save_video_url or save_extend_1_url (+ pick_creation, optional pick_text)
 // Before: creatomate_render
 //
 // Intro-Text = PRODUCT NAME only (e.g. 5-Amino-1MQ)
+// Facts = pick_text (1000 library) when present, else pick_creation
 // Never use business name "Palm Beach Vitality" or lab_item for Intro.
 
 function firstJson(name) {
@@ -34,15 +35,11 @@ function pickUrl(o, { allowGrokField = true } = {}) {
 function extractProductName(raw) {
   const s = String(raw || '').trim();
   if (!s) return '';
-  // Reject business name
   if (/^palm\s*beach\s*vitality$/i.test(s)) return '';
-  // "5-Amino-1MQ Research-use clarification FAQ" → "5-Amino-1MQ"
   let m = s.match(/^([0-9A-Za-z][0-9A-Za-z./+-]*(?:-[0-9A-Za-z./+-]+)*)\s+Research\b/i);
   if (m) return m[1];
-  // Caption: "…FAQ: 5-Amino-1MQ is provided…"
   m = s.match(/\b([0-9]+-[A-Za-z0-9-]+|[A-Z]{2,}-?\d{2,4}[A-Za-z]?)\b/);
   if (m) return m[1];
-  // Short clean token / phrase
   const first = s.split(/\s+[—–|:]\s+/)[0].trim();
   if (first && first.length <= 40 && !/palm\s*beach/i.test(first)) return first;
   return '';
@@ -72,30 +69,7 @@ function productName(srcList) {
   );
 }
 
-const pick = firstJson('pick_creation');
-const parse = firstJson('Parse_Grok');
-const extend1 = firstJson('save_extend_1_url');
-const saveVideo = firstJson('save_video_url');
-const pollVideo = firstJson('grok_video_poll');
-const input = $input.first()?.json || {};
-
-// FORCE latest vial clip for this run (remove after pipeline is stable).
-// Old pen URL was sticking via input.grok_video_url / stale save_extend_1_url.
-const FORCE_GROK_VIDEO_URL =
-  'https://vidgen.x.ai/xai-vidgen-bucket/xai-video-b1503378-2de8-90f4-be1c-9a2244a26ec6.mp4';
-
-// NEVER trust input.grok_video_url — it sticks from the previous map run (old pen clip).
-const grok_video_url =
-  FORCE_GROK_VIDEO_URL ||
-  pickUrl(saveVideo) ||
-  pickUrl(pollVideo) ||
-  pickUrl(extend1) ||
-  pickUrl(input, { allowGrokField: false }) ||
-  pickUrl(pick, { allowGrokField: false });
-const creation_id = String(pick.creation_id || input.creation_id || '').trim();
-const mod_intro = productName([parse, input, pick]);
-
-/** Strip catalog suffixes: "· ref 0001", "· motif 0001", "· card 0001", "· line 0001", "· CTA 0001" */
+/** Strip catalog suffixes: "· ref 0001", "· motif 0001", etc. */
 function cleanFact(text) {
   return String(text || '')
     .replace(/\s*[·•|-]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
@@ -103,18 +77,49 @@ function cleanFact(text) {
     .trim();
 }
 
-function fact(key, fallback) {
-  const v = cleanFact(pick[key] || input[key] || '');
-  return v || fallback;
+function factFrom(sources, key, fallback) {
+  for (const src of sources) {
+    const v = cleanFact(src?.[key] || '');
+    if (v) return v;
+  }
+  return fallback;
 }
+
+const pick = firstJson('pick_creation');
+const text = firstJson('pick_text');
+const parse = firstJson('Parse_Grok');
+const extend1 = firstJson('save_extend_1_url');
+const saveVideo = firstJson('save_video_url');
+const pollVideo = firstJson('grok_video_poll');
+const input = $input.first()?.json || {};
+
+// Set this ONLY to unblock a specific clip; leave '' in normal runs.
+const FORCE_GROK_VIDEO_URL =
+  'https://vidgen.x.ai/xai-vidgen-bucket/xai-video-b1503378-2de8-90f4-be1c-9a2244a26ec6.mp4';
+
+// Never trust input.grok_video_url (stale from prior map).
+const grok_video_url =
+  FORCE_GROK_VIDEO_URL ||
+  pickUrl(saveVideo) ||
+  pickUrl(pollVideo) ||
+  pickUrl(extend1) ||
+  pickUrl(input, { allowGrokField: false }) ||
+  pickUrl(pick, { allowGrokField: false });
+
+const creation_id = String(pick.creation_id || input.creation_id || '').trim();
+const text_id = String(text.text_id || creation_id || '').trim();
+const mod_intro = productName([parse, input, pick]);
+
+// Prefer pick_text (1000 unique sets); fall back to pick_creation facts.
+const factSources = [text, pick, input];
 
 if (!grok_video_url) {
   throw new Error(
-    'grok_video_url missing. Run through save_extend_1_url first. ' +
-      'save_extend_1_url keys=' +
-      Object.keys(extend1).join(', ') +
-      ' | save_video_url keys=' +
-      Object.keys(saveVideo).join(', ')
+    'grok_video_url missing. Run save_video_url (or extend) first. ' +
+      'save_video_url keys=' +
+      Object.keys(saveVideo).join(', ') +
+      ' | save_extend_1_url keys=' +
+      Object.keys(extend1).join(', ')
   );
 }
 
@@ -123,18 +128,40 @@ return [
     json: {
       ...input,
       ...pick,
+      ...text,
       grok_video_url,
       mod_intro,
-      mod_fact_1: fact('mod_fact_1', 'Listed as research material for laboratory documentation only'),
-      mod_fact_2: fact('mod_fact_2', 'Supplied in research-appropriate sealed packaging'),
-      mod_fact_3: fact('mod_fact_3', 'Intended for in-vitro assay preparation contexts'),
-      mod_fact_4: fact('mod_fact_4', 'Explicit research-use only — not for clinical application'),
-      mod_fact_5: fact('mod_fact_5', 'View laboratory listing for full documentation'),
-      mod_disclaimer: fact(
+      mod_fact_1: factFrom(
+        factSources,
+        'mod_fact_1',
+        'Listed as research material for laboratory documentation only'
+      ),
+      mod_fact_2: factFrom(
+        factSources,
+        'mod_fact_2',
+        'Supplied in research-appropriate sealed packaging'
+      ),
+      mod_fact_3: factFrom(
+        factSources,
+        'mod_fact_3',
+        'Intended for in-vitro assay preparation contexts'
+      ),
+      mod_fact_4: factFrom(
+        factSources,
+        'mod_fact_4',
+        'Explicit research-use only — not for clinical application'
+      ),
+      mod_fact_5: factFrom(
+        factSources,
+        'mod_fact_5',
+        'View laboratory listing for full documentation'
+      ),
+      mod_disclaimer: factFrom(
+        factSources,
         'mod_disclaimer',
         'For laboratory research use only. Not for human use or consumption.'
       ),
-      text_id: creation_id,
+      text_id,
       creation_id,
       template_id: '06cd4ffd-906c-45ed-bf33-e8d2bed4312b',
     },
