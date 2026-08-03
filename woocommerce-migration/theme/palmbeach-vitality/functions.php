@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.0');
+define('PBV_THEME_VERSION', '2.10.1');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -586,8 +586,18 @@ function pbv_strip_embedded_research_disclaimer($html) {
     return trim((string) $html);
 }
 
+/**
+ * Selank-reference Research Use Only warning (fixed copy + size via CSS).
+ */
 function pbv_research_use_banner() {
-    echo '<aside class="pbv-ruo-banner" role="note">';
+    static $printed = false;
+    // Guard against duplicate renders in the same request.
+    if ($printed) {
+        return;
+    }
+    $printed = true;
+
+    echo '<aside class="pbv-ruo-banner" role="note" aria-label="Research use only warning">';
     echo '<p class="pbv-ruo-banner__title"><span class="pbv-ruo-banner__icon" aria-hidden="true">⚠</span> Research use only</p>';
     echo '<p class="pbv-ruo-banner__body">Not for human consumption. This product is sold exclusively for research and educational purposes. It is not intended to diagnose, treat, cure, or prevent any disease.</p>';
     echo '</aside>';
