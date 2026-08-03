@@ -24,11 +24,12 @@ pick_creation (least-used + new shot_family)
 ### B — `PBVita — Creatomate Package` (separate)
 
 Copy `get_reel_text` → `save_creatomate_url` (+ any `sheets_append_reel`) into a new workflow.  
-Each run: paste the **NEW** Grok/vidgen URL into Set node `video_url_input`. Sheets keep updating.
+Each run: paste the **NEW** Grok/vidgen URL + `product_name` into `video_url_input`.  
+`pick_text` pulls Facts 1–3 for that product from Sheet 10. Sheets keep updating.
 
 ```text
 Manual Trigger
-  → video_url_input            (paste NEW vidgen URL)
+  → video_url_input            (NEW vidgen URL + product_name)
   → get_reel_text → pick_text → sheets_update_text
   → map_creatomate_from_url
   → creatomate_render (main_video + muted)

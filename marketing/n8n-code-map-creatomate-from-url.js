@@ -4,8 +4,9 @@
 // After: pick_text (+ video_url_input Set node)
 // Before: creatomate_render
 //
-// Each run: paste the NEW Grok/vidgen .mp4 URL into Set node video_url_input.
-// Sheets text rotation stays the same (pick_text + sheets_update_text).
+// Each run: paste NEW Grok/vidgen URL + product_name into video_url_input.
+// pick_text already filtered facts 1–3 for that product.
+// Keep sheet mod_intro + mod_fact_4 + mod_fact_5 as-is.
 // Element: main_video. Muted — add music manually later.
 
 function firstJson(name) {
@@ -23,42 +24,6 @@ function cleanFact(text) {
     .trim();
 }
 
-const CATALOG = [
-  '5-Amino-1MQ',
-  'AOD-9604',
-  'BPC-157',
-  'BPC-157/TB-500',
-  'Cagrilinitide',
-  'CJC (no DAC)',
-  'CJC (no DAC)/Ipamorelin',
-  'DSIP',
-  'GHK-Cu',
-  'GLOW',
-  'KLOW',
-  'KPV',
-  'Melanotan 2',
-  'MOTS-C',
-  'NAD+',
-  'PT-141',
-  'Retatrutide',
-  'Selank',
-  'Semaglutide',
-  'SEMAX',
-  'Sermorelin',
-  'SS-31',
-  'TA-1',
-  'TB-500',
-  'Tesamorelin',
-  'Tesamorelin/Ipamorelin',
-  'Tirzepatide',
-];
-
-function isJunk(s) {
-  return /^(laboratory|documentation|catalog|indexed|container|research equipment|palm beach)/i.test(
-    String(s || '').trim()
-  );
-}
-
 const urlInput = firstJson('video_url_input');
 const text = firstJson('pick_text');
 const input = $input.first()?.json || {};
@@ -73,30 +38,32 @@ const public_video_url = String(
 
 if (!/^https?:\/\//i.test(public_video_url)) {
   throw new Error(
-    'Paste the NEW Grok/vidgen .mp4 URL into Set node video_url_input → field public_video_url (or video_url), then re-run.'
+    'Paste the NEW Grok/vidgen .mp4 URL into Set node video_url_input → field public_video_url, then re-run.'
   );
 }
 
 if (!text.text_id || !text.mod_fact_1) {
-  throw new Error('pick_text missing. Keep get_reel_text → pick_text → sheets_update_text before this node.');
+  throw new Error(
+    'pick_text missing. Keep get_reel_text → pick_text → sheets_update_text before this node.'
+  );
 }
 
-let mod_intro = String(urlInput.compound_name || input.compound_name || '').trim();
-if (!mod_intro || isJunk(mod_intro)) {
-  const rank = Number(text.text_rank || urlInput.rank || 1) || 1;
-  mod_intro = CATALOG[(rank - 1) % CATALOG.length];
-}
+const product_name = String(
+  urlInput.product_name || text.product_name || urlInput.compound_name || ''
+).trim();
 
-const { mod_intro: _ignore, ...textRest } = text;
+// Keep mod_intro from the sheet row (unchanged library). Do not overwrite with product.
+const mod_intro = cleanFact(text.mod_intro) || product_name;
 
 return [
   {
     json: {
       ...input,
       ...urlInput,
-      ...textRest,
+      ...text,
       grok_video_url: public_video_url,
       public_video_url,
+      product_name,
       mod_intro,
       mod_fact_1: cleanFact(text.mod_fact_1),
       mod_fact_2: cleanFact(text.mod_fact_2),

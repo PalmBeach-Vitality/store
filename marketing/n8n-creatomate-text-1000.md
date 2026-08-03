@@ -1,50 +1,44 @@
-# 1000 unique Creatomate text sets (daily-changing facts)
+# 1000 Creatomate text sets (product-filtered facts)
 
-Each reel’s on-screen copy must change. Library size: **1000** unique sets.
+Each reel’s Facts 1–3 are **product-specific science/study lines** (FDA research-only framing).  
+`mod_intro`, `mod_fact_4`, and `mod_fact_5` stay as the existing catalog/disclaimer/CTA style.
 
 ## Files
 
 | File | Role |
 |---|---|
-| `sheets/10-creatomate-text-1000.csv` | **Canonical** — 1000 rows |
-| `n8n-code-pick-text.js` | Code: pick least-used Active text set |
+| `sheets/10-creatomate-text-1000.csv` | **Canonical** — 1000 rows + `product_name` |
+| `n8n-code-pick-text.js` | Filter by `video_url_input.product_name`, pick least-used |
+| `scripts/rebuild_creatomate_text_by_product.py` | Rebuild facts 1–3 by product |
 | `pbvita-1000-creatomate-text.json` | JSON dump |
 
-Each of `mod_intro`, `mod_fact_1` … `mod_fact_5` is **unique across all 1000 rows**.  
+~37 Active rows per catalog product (27 products).  
 IDs: `PBVita-Text-0001` … `PBVita-Text-1000`.
 
-## n8n insert
+## Columns
+
+| Column | Behavior |
+|---|---|
+| `product_name` | Exact catalog name (BPC-157, NAD+, Semaglutide, …) |
+| `mod_intro` | Unchanged library intros |
+| `mod_fact_1` … `mod_fact_3` | Science / study facts for that product |
+| `mod_fact_4` | Unchanged research-use disclaimer lines |
+| `mod_fact_5` | Unchanged “view listing / catalog” CTAs |
+
+## n8n (Workflow B)
 
 ```text
-… → save_extend_1_url (Grok ~25s)
-  → get_reel_text              (Sheets read tab 10-creatomate-text-1000, Return All)
-  → filter_text_active         (status = Active)  [optional if pick filters]
-  → pick_text                  (Code from n8n-code-pick-text.js)
-  → map_creatomate_mods        (merge Grok URL + picked text)
+video_url_input            (public_video_url + product_name)
+  → get_reel_text          (Sheets · 10-creatomate-text-1000 · Return All)
+  → pick_text              (filters to product_name, least-used)
+  → sheets_update_text
+  → map_creatomate_from_url
   → creatomate_render
 ```
 
-`pick_text` is independent from `pick_creation` (lab video) so text rotates across 1000 even if video library is 500.
-
 ## Import
 
-1. Import `10-creatomate-text-1000.csv` → tab **`10-creatomate-text-1000`**
-2. Return All / limit ≥ 1000
-3. After each successful reel, Sheets **Update** that `text_id`: `times_used + 1`, `last_used_at = now`
-
-## `map_creatomate_mods`
-
-| Name | Value |
-|---|---|
-| `grok_video_url` | `={{ $('save_extend_1_url').first().json.video_url \|\| $('save_extend_1_url').first().json.video.url }}` |
-| `mod_intro` | `={{ $('pick_text').first().json.mod_intro }}` |
-| `mod_fact_1` | `={{ $('pick_text').first().json.mod_fact_1 }}` |
-| `mod_fact_2` | `={{ $('pick_text').first().json.mod_fact_2 }}` |
-| `mod_fact_3` | `={{ $('pick_text').first().json.mod_fact_3 }}` |
-| `mod_fact_4` | `={{ $('pick_text').first().json.mod_fact_4 }}` |
-| `mod_fact_5` | `={{ $('pick_text').first().json.mod_fact_5 }}` |
-| `mod_disclaimer` | `={{ $('pick_text').first().json.mod_disclaimer }}` |
-| `text_id` | `={{ $('pick_text').first().json.text_id }}` |
-| `template_id` | your 60s template UUID (trimmed) |
-
-Remove `mod_bullet_*`. Do not use static Parse_Grok bullets for these five facts.
+1. Replace-import `10-creatomate-text-1000.csv` → tab **`10-creatomate-text-1000`**
+2. Confirm header includes **`product_name`**
+3. Paste updated `n8n-code-pick-text.js`
+4. On `video_url_input`, enter `product_name` exactly as in the sheet (e.g. `BPC-157`)

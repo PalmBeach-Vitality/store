@@ -1,13 +1,22 @@
 // n8n Code node: pick_text
 // Type: Code | Mode: Run Once for All Items
 // After: get_reel_text (Return All on 10-creatomate-text-1000)
-// Before: map_creatomate_mods / prep_creatomate
+// Before: map_creatomate_from_url
 //
-// Note: some Sheet copies have blank text_id cells — we rebuild from rank.
+// Filters by product_name from Set node video_url_input, then picks least-used
+// Active row. Facts 1–3 are product-specific science lines; intro / 4 / 5 unchanged.
 
 const rows = $input.all().map((i) => i.json);
 if (!rows.length) {
   throw new Error('No text rows. Import sheets/10-creatomate-text-1000.csv and Return All.');
+}
+
+function firstJson(name) {
+  try {
+    return $(name).first()?.json || {};
+  } catch (e) {
+    return {};
+  }
 }
 
 function val(obj, names, fallback = '') {
@@ -50,10 +59,32 @@ function buildTextId(r) {
   const rank = Number(val(r, ['rank', 'text_rank'], 0));
   if (rank > 0) return `PBVita-Text-${String(rank).padStart(4, '0')}`;
   const rowNum = Number(val(r, ['row_number', 'rowNumber'], 0));
-  // header is row 1 → data starts row 2 → Text-0001
   if (rowNum >= 2) return `PBVita-Text-${String(rowNum - 1).padStart(4, '0')}`;
   return '';
 }
+
+/** Normalize for matching: lowercase, collapse spaces, strip punctuation noise */
+function normName(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/\+/g, ' plus ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+const urlInput = firstJson('video_url_input');
+const wantedRaw = String(
+  urlInput.product_name || urlInput.compound_name || urlInput.Product_Name || ''
+).trim();
+
+if (!wantedRaw) {
+  throw new Error(
+    'Enter product_name on Set node video_url_input (e.g. BPC-157, NAD+, Semaglutide).'
+  );
+}
+
+const wanted = normName(wantedRaw);
 
 const scored = rows
   .map((r) => {
@@ -61,6 +92,7 @@ const scored = rows
     return {
       text_id: buildTextId(r),
       rank,
+      product_name: String(val(r, ['product_name', 'Product_Name', 'compound_name'], '')).trim(),
       mod_intro: cleanIntro(val(r, ['mod_intro'])),
       mod_fact_1: cleanFact(val(r, ['mod_fact_1'])),
       mod_fact_2: cleanFact(val(r, ['mod_fact_2'])),
@@ -79,28 +111,29 @@ const scored = rows
   })
   .filter((r) => r.text_id && r.mod_fact_1)
   .filter((r) => isActive(r.status))
+  .filter((r) => {
+    const p = normName(r.product_name);
+    if (!p) return false;
+    return p === wanted || p.includes(wanted) || wanted.includes(p);
+  })
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
     return String(a.last_used_at).localeCompare(String(b.last_used_at));
   });
 
 if (!scored.length) {
-  const sample = rows[0] || {};
+  const products = [
+    ...new Set(
+      rows
+        .map((r) => String(val(r, ['product_name', 'Product_Name'], '')).trim())
+        .filter(Boolean)
+    ),
+  ].sort();
   throw new Error(
-    'No valid Active text rows. rows=' +
-      rows.length +
-      ' | keys=' +
-      Object.keys(sample).join(', ') +
-      ' | text_id_raw=' +
-      JSON.stringify(sample.text_id) +
-      ' | rank=' +
-      JSON.stringify(sample.rank) +
-      ' | row_number=' +
-      JSON.stringify(sample.row_number) +
-      ' | status=' +
-      val(sample, ['status'], '(missing)') +
-      ' | mod_fact_1=' +
-      String(val(sample, ['mod_fact_1'], '(missing)')).slice(0, 80)
+    'No Active text rows for product_name="' +
+      wantedRaw +
+      '". Available product_name values: ' +
+      (products.slice(0, 40).join(', ') || '(none — re-import CSV with product_name column)')
   );
 }
 
@@ -111,6 +144,7 @@ return [
     json: {
       text_id: pick.text_id,
       text_rank: pick.rank,
+      product_name: pick.product_name,
       mod_intro: pick.mod_intro,
       mod_fact_1: pick.mod_fact_1,
       mod_fact_2: pick.mod_fact_2,
@@ -120,7 +154,7 @@ return [
       mod_disclaimer: pick.mod_disclaimer,
       text_times_used: pick.times_used,
       text_last_used_at: pick.last_used_at,
+      requested_product_name: wantedRaw,
     },
   },
 ];
-

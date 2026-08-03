@@ -68,11 +68,14 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 
 | Field | Each run |
 |---|---|
-| `public_video_url` | Paste the **new** `https://vidgen.x.ai/...` (or whatever Grok returned) |
-| `compound_name` | Optional Intro override (e.g. `BPC-157`) |
+| `public_video_url` | Paste the **new** Grok/vidgen `.mp4` URL |
+| `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
 | `creation_id` | Optional tracking |
 
 Then Execute workflow.
+
+`pick_text` filters `10-creatomate-text-1000` to matching `product_name`, then picks the least-used row.  
+`mod_intro` / `mod_fact_4` / `mod_fact_5` stay as sheet values; Facts 1–3 are product science lines.
 
 ---
 
