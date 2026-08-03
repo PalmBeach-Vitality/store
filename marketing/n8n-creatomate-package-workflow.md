@@ -50,6 +50,7 @@ Manual Trigger
   → creatomate_status
   → save_creatomate_url
   → sheets_append_reel           (Append → tab 4-reel-queue)
+  → buffer_ig_reel / Buffer_post_*   (copy from other WF — see n8n-buffer-from-creatomate.md)
 ```
 
 **Sheets that still update**
@@ -57,6 +58,8 @@ Manual Trigger
 |---|---|
 | `10-creatomate-text-1000` via `sheets_update_text` | rotate text rows (`times_used`, `last_used_at`) |
 | `4-reel-queue` via `sheets_append_reel` | log finished Creatomate package URL + product/facts |
+
+**Buffer:** copy nodes from the other workflow; remap video → `save_creatomate_url.video_url`. Details: `n8n-buffer-from-creatomate.md`.
 
 Workflow A still owns `sheets_update_creation` on the lab library. Do not remove that from A.
 
