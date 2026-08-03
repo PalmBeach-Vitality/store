@@ -23,20 +23,20 @@ pick_creation (least-used + new shot_family)
 
 ### B — `PBVita — Creatomate Package` (separate)
 
-Copy `get_reel_text` → `save_creatomate_url` into a new workflow, then put a Set node in front:
+Copy `get_reel_text` → `save_creatomate_url` (+ any `sheets_append_reel`) into a new workflow.  
+Each run: paste the **NEW** Grok/vidgen URL into Set node `video_url_input`. Sheets keep updating.
 
 ```text
 Manual Trigger
-  → video_url_input            (paste public_video_url here)
+  → video_url_input            (paste NEW vidgen URL)
   → get_reel_text → pick_text → sheets_update_text
   → map_creatomate_from_url
   → creatomate_render (main_video + muted)
   → wait → status → save_creatomate_url
+  → sheets_append_reel         (keep if you have it)
 ```
 
 See `n8n-creatomate-package-workflow.md`.
-
-**Why separate:** Creatomate cannot reliably fetch `vidgen.x.ai`. You paste one working direct `.mp4` URL into `video_url_input` and run.
 
 **No music in renders** — mute `main_video`; add soundtrack manually later.
 

@@ -4,7 +4,8 @@
 // After: pick_text (+ video_url_input Set node)
 // Before: creatomate_render
 //
-// Reads the MP4 URL you pasted into the Set node named exactly: video_url_input
+// Each run: paste the NEW Grok/vidgen .mp4 URL into Set node video_url_input.
+// Sheets text rotation stays the same (pick_text + sheets_update_text).
 // Element: main_video. Muted — add music manually later.
 
 function firstJson(name) {
@@ -63,25 +64,21 @@ const text = firstJson('pick_text');
 const input = $input.first()?.json || {};
 
 const public_video_url = String(
-  urlInput.public_video_url || urlInput.video_url || input.public_video_url || ''
+  urlInput.public_video_url ||
+    urlInput.video_url ||
+    urlInput.grok_video_url ||
+    input.public_video_url ||
+    ''
 ).trim();
 
 if (!/^https?:\/\//i.test(public_video_url)) {
   throw new Error(
-    'Paste the direct .mp4 URL into Set node video_url_input → field public_video_url, then re-run.'
+    'Paste the NEW Grok/vidgen .mp4 URL into Set node video_url_input → field public_video_url (or video_url), then re-run.'
   );
-}
-if (/vidgen\.x\.ai/i.test(public_video_url)) {
-  throw new Error(
-    'vidgen.x.ai usually fails in Creatomate. Paste a host Creatomate can fetch (catbox / R2 / B2 direct .mp4).'
-  );
-}
-if (/drive\.google\.com\/file\/d\//i.test(public_video_url)) {
-  throw new Error('Use a direct .mp4 URL, not a Google Drive /view page.');
 }
 
 if (!text.text_id || !text.mod_fact_1) {
-  throw new Error('pick_text missing. Keep get_reel_text → pick_text before this node.');
+  throw new Error('pick_text missing. Keep get_reel_text → pick_text → sheets_update_text before this node.');
 }
 
 let mod_intro = String(urlInput.compound_name || input.compound_name || '').trim();

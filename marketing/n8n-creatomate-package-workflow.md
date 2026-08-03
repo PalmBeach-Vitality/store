@@ -1,56 +1,38 @@
 # Workflow B — Creatomate Package (separate)
 
 **Name in n8n:** `PBVita — Creatomate Package`  
-**Goal:** Paste one working `.mp4` URL into a Set node → Creatomate builds the muted 60s package with Intro + Facts.
 
-Grok stays in Workflow A. No Sheet queue. No hunting for public links mid-run.
-
-**No music** — muted render; add soundtrack manually later.
+**What you do each run:** paste the **NEW** Grok/vidgen `.mp4` URL into one Set node.  
+**Everything else stays the same** — text library pick, Sheets writebacks, Creatomate mods, mute render.
 
 ---
 
-## How to build (copy from existing workflow)
+## Build (copy from combined workflow)
 
-In the current combined workflow, **select + copy** this chain:
+Select + copy this chain from the old workflow:
 
 ```text
 get_reel_text
   → pick_text
   → sheets_update_text
-  → map_creatomate_*          (replace Code — see below)
+  → map_creatomate_*
   → creatomate_render
   → wait_creatomate
   → creatomate_status
-  → if_creatomate_ready       (optional; or fixed wait only)
+  → if_creatomate_ready          (if you have it)
   → save_creatomate_url
+  → sheets_append_reel           (if you have it — keep it)
 ```
 
-Paste into a **new** workflow. Then add the two nodes in front:
+Paste into a **new** workflow. Add in front:
 
 ```text
 Manual Trigger
-  → video_url_input           ← NEW Set / Edit Fields (paste URL here each run)
-  → get_reel_text             ← copied
-  → …
-  → save_creatomate_url
+  → video_url_input              ← ONLY daily edit: paste NEW vidgen URL
+  → get_reel_text → …
 ```
 
-Delete any leftover wires to Grok / `pick_creation` / `save_video_url` / `Parse_Grok`.
-
----
-
-## Node: `video_url_input` (the only thing you edit daily)
-
-Type: **Edit Fields** (Set)  
-Name must be exactly: **`video_url_input`**
-
-| Field | Example | Notes |
-|---|---|---|
-| `public_video_url` | `https://files.catbox.moe/xxxx.mp4` | **Required.** Direct `.mp4` Creatomate can fetch |
-| `compound_name` | `BPC-157` | Optional Intro override |
-| `creation_id` | `PBVita-Lab-206` | Optional note / tracking |
-
-Each run: paste the URL → Execute workflow.
+Remove any wires to Grok / `pick_creation` / `save_video_url` / `Parse_Grok`.
 
 ---
 
@@ -58,40 +40,58 @@ Each run: paste the URL → Execute workflow.
 
 ```text
 Manual Trigger
-  → video_url_input
-  → get_reel_text              (Sheets Get Many · tab 10-creatomate-text-1000 · Return All)
-  → pick_text                  (Code — n8n-code-pick-text.js)
-  → sheets_update_text         (bump times_used on text row)
-  → map_creatomate_from_url    (Code — n8n-code-map-creatomate-from-url.js)
+  → video_url_input              (Edit Fields — paste NEW URL)
+  → get_reel_text                (Sheets Get Many · 10-creatomate-text-1000 · Return All)
+  → pick_text                    (Code — n8n-code-pick-text.js)
+  → sheets_update_text           (bump text times_used / last_used_at)  ← KEEP
+  → map_creatomate_from_url      (Code — n8n-code-map-creatomate-from-url.js)
   → creatomate_render
-  → wait_creatomate            (90–180s)
+  → wait_creatomate
   → creatomate_status
   → save_creatomate_url
+  → sheets_append_reel           (optional log — KEEP if you already have it)
 ```
+
+**Sheets that still update**
+| Sheet / node | Purpose |
+|---|---|
+| `10-creatomate-text-1000` via `sheets_update_text` | rotate text rows (`times_used`, `last_used_at`) |
+| reels log via `sheets_append_reel` | store final Creatomate URL (if present) |
+
+Workflow A still owns `sheets_update_creation` on the lab library. Do not remove that from A.
 
 ---
 
-## Replace the map Code
+## Node: `video_url_input`
 
-On the copied `map_creatomate_*` node:
+Type: **Edit Fields** · name exactly **`video_url_input`**
 
-1. Rename to **`map_creatomate_from_url`**
-2. Paste `marketing/n8n-code-map-creatomate-from-url.js`
-3. Mode: **Run Once for All Items**
+| Field | Each run |
+|---|---|
+| `public_video_url` | Paste the **new** `https://vidgen.x.ai/...` (or whatever Grok returned) |
+| `compound_name` | Optional Intro override (e.g. `BPC-157`) |
+| `creation_id` | Optional tracking |
 
-It reads `$('video_url_input')` + `$('pick_text')` only — no Grok nodes.
+Then Execute workflow.
+
+---
+
+## Map Code
+
+Rename copied map node → **`map_creatomate_from_url`**  
+Paste: `marketing/n8n-code-map-creatomate-from-url.js`  
+Mode: **Run Once for All Items**
+
+Reads `$('video_url_input')` + `$('pick_text')` only.
 
 ---
 
 ## Fix expressions after copy
 
-Anything that still references Grok must change:
-
-| Old (combined WF) | New (Workflow B) |
+| Old | New |
 |---|---|
-| `$('save_video_url')…` / `$('Parse_Grok')…` for video | `$('video_url_input').item.json.public_video_url` |
+| `$('save_video_url')` / `$('Parse_Grok')` for video | `$('video_url_input').item.json.public_video_url` |
 | `$('map_creatomate_mods')` | `$('map_creatomate_from_url')` |
-| Intro from Parse / lab_item | comes from `compound_name` on Set, or catalog fallback in map Code |
 
 ### `creatomate_render` body
 
@@ -115,16 +115,7 @@ Anything that still references Grok must change:
 }}
 ```
 
-Auth: same Creatomate Header Auth credential.  
-POST `https://api.creatomate.com/v2/renders`
-
-### `creatomate_status`
-
-```text
-={{ 'https://api.creatomate.com/v1/renders/' + $('creatomate_render').item.json.id }}
-```
-
-### `save_creatomate_url` (Edit Fields)
+### `save_creatomate_url`
 
 | Name | Value |
 |---|---|
@@ -137,28 +128,21 @@ POST `https://api.creatomate.com/v2/renders`
 | `text_id` | `={{ $('pick_text').item.json.text_id }}` |
 | `created_at` | `={{ $now.toISO() }}` |
 
-Optional: append to a reels log Sheet after this — not required to finish a package.
+Keep your existing `sheets_append_reel` / text update column mappings — only swap node name refs if they pointed at Grok nodes.
 
 ---
 
 ## Daily habit
 
-1. Run **Workflow A** (Grok) → download / copy a hostable MP4  
-2. Host once if needed (catbox / R2) so Creatomate can fetch it  
-3. Paste that URL into **`video_url_input.public_video_url`**  
-4. Optional: set `compound_name`  
-5. Run **Workflow B** → muted 60s package at `save_creatomate_url.video_url`
+1. Run **Workflow A** → get new Grok `video_url`  
+2. Copy that URL  
+3. Paste into **`video_url_input.public_video_url`**  
+4. Run **Workflow B** → text Sheet updates → muted Creatomate package  
 
 ---
 
-## Template checklist
+## Template
 
-- Dynamic video element named **`main_video`** (source marked dynamic)
-- **No music** track in the template
+- Dynamic element **`main_video`**
+- No music track (or muted)
 - Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`
-
----
-
-## Why this works
-
-Creatomate needs a URL **it** can download. You paste that URL into one Set node; the copied text → render chain does the rest. Workflow A never talks to Creatomate.

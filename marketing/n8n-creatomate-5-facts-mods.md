@@ -58,8 +58,7 @@ Body (expression):
 
 **Must include `main_video`** (dynamic video element — not `video_loop_source`).  
 **Muted** — no music in the render; add soundtrack manually later.  
-**URL must be a public direct `.mp4`** (catbox / R2 / B2) — not `vidgen.x.ai`, not Drive `/view`.  
-Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` (paste URL into Set node `video_url_input`).
+Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste the **NEW** Grok/vidgen URL into Set node `video_url_input`. Keep `sheets_update_text` (and `sheets_append_reel` if present).
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA` — this template ignores them.
 
