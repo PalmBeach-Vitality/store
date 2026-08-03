@@ -34,10 +34,11 @@ Manual Trigger
   → map_creatomate_from_url
   → creatomate_render (main_video + muted)
   → wait → status → save_creatomate_url
-  → sheets_append_reel         (keep if you have it)
+  → sheets_append_reel
+  → Buffer nodes (copy from other WF; video = Creatomate URL)
 ```
 
-See `n8n-creatomate-package-workflow.md`.
+See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 
 **No music in renders** — mute `main_video`; add soundtrack manually later.
 
