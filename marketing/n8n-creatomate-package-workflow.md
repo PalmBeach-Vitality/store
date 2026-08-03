@@ -49,14 +49,14 @@ Manual Trigger
   → wait_creatomate
   → creatomate_status
   → save_creatomate_url
-  → sheets_append_reel           (optional log — KEEP if you already have it)
+  → sheets_append_reel           (Append → tab 4-reel-queue)
 ```
 
 **Sheets that still update**
 | Sheet / node | Purpose |
 |---|---|
 | `10-creatomate-text-1000` via `sheets_update_text` | rotate text rows (`times_used`, `last_used_at`) |
-| reels log via `sheets_append_reel` | store final Creatomate URL (if present) |
+| `4-reel-queue` via `sheets_append_reel` | log finished Creatomate package URL + product/facts |
 
 Workflow A still owns `sheets_update_creation` on the lab library. Do not remove that from A.
 
