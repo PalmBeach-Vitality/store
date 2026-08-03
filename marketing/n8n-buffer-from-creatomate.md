@@ -9,28 +9,29 @@
 ```text
 … → save_creatomate_url
   → sheets_append_reel
-  → Buffer_post_IG          ← paste copied _post / _story nodes here
-  → Buffer_post_FB          (if you use FB)
+  → buffer_ig_reel          ← paste copied nodes here
+  → buffer_fb_reel          (if you use FB)
+  → Buffer_post_IG
+  → Buffer_post_FB
   → Buffer_IG_story         (optional)
   → Buffer_FB_story         (optional)
   → sheets_update_buffer    ← mark used_in_buffer = yes (optional)
 ```
 
-You do **not** have separate `_reel` nodes — only **`_post`** and **`_story`**. That’s fine; Reels go through the post nodes when the channel/type is set for video/reel.
-
 ---
 
 ## What to copy
 
-From the **other / live** workflow, select + copy:
+From the **other / live** workflow, select + copy the Buffer chain:
 
+- `buffer_ig_reel`
+- `buffer_fb_reel` (if used)
 - `Buffer_post_IG`
 - `Buffer_post_FB` (if used)
 - `Buffer_IG_story` / `Buffer_FB_story` (optional)
 
 Paste into **`PBVita — Creatomate Package`**.  
-Keep the same Buffer credentials / channel IDs.  
-Skip any `buffer_*_reel` nodes if they don’t exist in your canvas.
+Keep the same Buffer credentials / channel IDs.
 
 ---
 
