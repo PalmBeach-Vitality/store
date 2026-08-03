@@ -28,7 +28,7 @@ Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene pe
 | `8-lab-items-500.csv` | `8-lab-items-500` (500 real lab-item subject variables) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** unique daily Imagine/video + Creatomate text) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (**1000** unique mod_intro + mod_fact_1…5 sets) |
-| `11-creatomate-render-queue.csv` | `11-creatomate-render-queue` (paste public `.mp4` URL → Creatomate WF B) |
+| `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
 | `10-creatomate-text-500.csv` | first 500 rows only (legacy; use 1000) |
 | `8-lab-items-250.csv` / `9-lab-item-creations-250.csv` | Compat copies of the **500** rows (legacy filenames) |
 

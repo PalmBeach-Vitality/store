@@ -23,16 +23,20 @@ pick_creation (least-used + new shot_family)
 
 ### B — `PBVita — Creatomate Package` (separate)
 
+Copy `get_reel_text` → `save_creatomate_url` into a new workflow, then put a Set node in front:
+
 ```text
-Paste public .mp4 URL into Sheet 11-creatomate-render-queue
-  → pick_queue_row → pick_text → map_creatomate_from_queue
+Manual Trigger
+  → video_url_input            (paste public_video_url here)
+  → get_reel_text → pick_text → sheets_update_text
+  → map_creatomate_from_url
   → creatomate_render (main_video + muted)
-  → wait → save → sheets_update_queue
+  → wait → status → save_creatomate_url
 ```
 
-See `n8n-creatomate-queue-workflow.md`.
+See `n8n-creatomate-package-workflow.md`.
 
-**Why separate:** Creatomate cannot reliably fetch `vidgen.x.ai`. You rehost once (catbox/R2) and paste the public URL.
+**Why separate:** Creatomate cannot reliably fetch `vidgen.x.ai`. You paste one working direct `.mp4` URL into `video_url_input` and run.
 
 **No music in renders** — mute `main_video`; add soundtrack manually later.
 
@@ -51,5 +55,5 @@ Stills + motion prompts follow that family. Pick skips same family as last used.
 
 - Grok: `n8n-build-grok-imagine-video-nodes.md`  
 - Lab items: `n8n-lab-items-500.md`  
-- Creatomate queue: `n8n-creatomate-queue-workflow.md`  
+- Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
