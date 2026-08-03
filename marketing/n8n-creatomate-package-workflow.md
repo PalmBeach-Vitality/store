@@ -118,20 +118,50 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
 }}
 ```
 
-### `save_creatomate_url`
+### `normalize_creatomate` (optional Edit Fields — before save)
+
+Use if `creatomate_status` sometimes returns an array. Mode: **Manual Mapping**.
+
+| Name | Value |
+|---|---|
+| `id` | `={{ $json.id \|\| $json[0].id }}` |
+| `status` | `={{ $json.status \|\| $json[0].status }}` |
+| `url` | `={{ $json.url \|\| $json[0].url }}` |
+| `snapshot_url` | `={{ $json.snapshot_url \|\| $json[0].snapshot_url }}` |
+
+Only continue to save when `status` is `succeeded`.
+
+### `save_creatomate_url` (Edit Fields — start fresh)
+
+**Type:** Edit Fields (Set)  
+**Name:** exactly `save_creatomate_url`  
+**Mode:** Manual Mapping  
+**Include Other Input Fields:** OFF  
+
+Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 | Name | Value |
 |---|---|
 | `video_url` | `={{ $json.url }}` |
 | `creatomate_render_id` | `={{ $json.id }}` |
 | `creatomate_snapshot_url` | `={{ $json.snapshot_url }}` |
+| `status` | `={{ $json.status }}` |
 | `public_video_url` | `={{ $('video_url_input').item.json.public_video_url }}` |
-| `compound_name` | `={{ $('map_creatomate_from_url').item.json.mod_intro }}` |
-| `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
+| `product_name` | `={{ $('video_url_input').item.json.product_name }}` |
+| `mod_intro` | `={{ $('map_creatomate_from_url').item.json.mod_intro }}` |
+| `mod_fact_1` | `={{ $('map_creatomate_from_url').item.json.mod_fact_1 }}` |
+| `mod_fact_2` | `={{ $('map_creatomate_from_url').item.json.mod_fact_2 }}` |
+| `mod_fact_3` | `={{ $('map_creatomate_from_url').item.json.mod_fact_3 }}` |
+| `mod_fact_4` | `={{ $('map_creatomate_from_url').item.json.mod_fact_4 }}` |
+| `mod_fact_5` | `={{ $('map_creatomate_from_url').item.json.mod_fact_5 }}` |
 | `text_id` | `={{ $('pick_text').item.json.text_id }}` |
+| `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
 | `created_at` | `={{ $now.toISO() }}` |
+| `used_in_buffer` | `no` |
 
-Keep your existing `sheets_append_reel` / text update column mappings — only swap node name refs if they pointed at Grok nodes.
+**Do not** reference `Parse_Grok`, `save_video_url`, `map_creatomate_mods`, or `pick_creation` — those nodes are not in Workflow B.
+
+**Check:** `video_url` opens the finished Creatomate MP4; `product_name` matches what you typed; `status` is `succeeded`.
 
 ---
 
