@@ -181,27 +181,26 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 | Sheet column | Value |
 |---|---|
-| `product_name` | `={{ $json.product_name }}` |
-| `text_id` | `={{ $json.text_id }}` |
-| `mod_intro` | `={{ $json.mod_intro }}` |
-| `mod_fact_1` | `={{ $json.mod_fact_1 }}` |
-| `mod_fact_2` | `={{ $json.mod_fact_2 }}` |
-| `mod_fact_3` | `={{ $json.mod_fact_3 }}` |
-| `mod_fact_4` | `={{ $json.mod_fact_4 }}` |
-| `mod_fact_5` | `={{ $json.mod_fact_5 }}` |
-| `public_video_url` | `={{ $json.public_video_url }}` |
-| `video_url` | `={{ $json.video_url }}` |
-| `creatomate_snapshot_url` | `={{ $json.creatomate_snapshot_url }}` |
-| `template_id` | `={{ $json.template_id }}` |
-| `creatomate_render_id` | `={{ $json.creatomate_render_id }}` |
-| `ig_caption_draft` | `={{ $json.product_name + ' — For laboratory research use only. Not for human use or consumption. www.palmbeach-vitality.store' }}` |
+| `product_name` | `={{ $('video_url_input').item.json.product_name }}` |
+| `text_id` | `={{ $('pick_text').item.json.text_id }}` |
+| `mod_intro` | `={{ $('map_creatomate_from_url').item.json.mod_intro }}` |
+| `mod_fact_1` | `={{ $('map_creatomate_from_url').item.json.mod_fact_1 }}` |
+| `mod_fact_2` | `={{ $('map_creatomate_from_url').item.json.mod_fact_2 }}` |
+| `mod_fact_3` | `={{ $('map_creatomate_from_url').item.json.mod_fact_3 }}` |
+| `mod_fact_4` | `={{ $('map_creatomate_from_url').item.json.mod_fact_4 }}` |
+| `mod_fact_5` | `={{ $('map_creatomate_from_url').item.json.mod_fact_5 }}` |
+| `public_video_url` | `={{ $('video_url_input').item.json.public_video_url }}` |
+| `video_url` | `={{ $('save_creatomate_url').item.json.video_url }}` |
+| `creatomate_snapshot_url` | `={{ $('save_creatomate_url').item.json.creatomate_snapshot_url }}` |
+| `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
+| `creatomate_render_id` | `={{ $('save_creatomate_url').item.json.creatomate_render_id }}` |
+| `ig_caption_draft` | `={{ $('video_url_input').item.json.product_name + ' — For laboratory research use only. Not for human use or consumption. www.palmbeach-vitality.store' }}` |
 | `compliance_ok` | `yes` |
-| `created_at` | `={{ $json.created_at }}` |
+| `created_at` | `={{ $('save_creatomate_url').item.json.created_at \|\| $now.toISO() }}` |
 | `used_in_buffer` | `no` |
 
-If a field is empty on `$json`, use the node refs instead, e.g.  
-`={{ $('video_url_input').item.json.product_name }}`  
-`={{ $('save_creatomate_url').item.json.video_url }}`
+**Important:** use **`mod_intro`** (not `mod_into`).  
+`public_video_url` and `mod_intro` must come from `video_url_input` / `map_creatomate_from_url` — they are often missing on `$json` after `save_creatomate_url`.
 
 **Check:** after a successful run, a new row appears in `4-reel-queue` with the Creatomate MP4 URL.
 
