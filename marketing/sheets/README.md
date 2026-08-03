@@ -5,7 +5,7 @@
 | `1-compounds-all-daily.csv` | `1-compounds-all-daily` (live daily queue — pens+vials) |
 | `1-compounds-pens.csv` | `1-compounds-pens` |
 | `1-compounds-vials.csv` | `1-compounds-vials` |
-| `4-reel-queue.csv` | optional separate reel log |
+| `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
 
 ## Live daily tab columns (Creatomate writeback)
 Use on `1-compounds-all-daily`:

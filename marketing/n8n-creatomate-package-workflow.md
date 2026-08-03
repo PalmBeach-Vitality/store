@@ -163,6 +163,48 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 **Check:** `video_url` opens the finished Creatomate MP4; `product_name` matches what you typed; `status` is `succeeded`.
 
+### `sheets_append_reel` (Google Sheets Append)
+
+**After:** `save_creatomate_url`  
+**Type:** Google Sheets → **Append Row in Sheet**  
+**Name:** exactly `sheets_append_reel`
+
+| Setting | Value |
+|---|---|
+| Credential | same Google Sheets account as `get_reel_text` |
+| Document | By ID (same workbook) |
+| Sheet | `4-reel-queue` |
+| Mapping Column Mode | Map Each Column Manually |
+| Data Mode / Mapping | map columns below |
+
+**Import once:** `marketing/sheets/4-reel-queue.csv` → tab name exactly **`4-reel-queue`** (header row only is fine).
+
+| Sheet column | Value |
+|---|---|
+| `product_name` | `={{ $json.product_name }}` |
+| `text_id` | `={{ $json.text_id }}` |
+| `mod_intro` | `={{ $json.mod_intro }}` |
+| `mod_fact_1` | `={{ $json.mod_fact_1 }}` |
+| `mod_fact_2` | `={{ $json.mod_fact_2 }}` |
+| `mod_fact_3` | `={{ $json.mod_fact_3 }}` |
+| `mod_fact_4` | `={{ $json.mod_fact_4 }}` |
+| `mod_fact_5` | `={{ $json.mod_fact_5 }}` |
+| `public_video_url` | `={{ $json.public_video_url }}` |
+| `video_url` | `={{ $json.video_url }}` |
+| `creatomate_snapshot_url` | `={{ $json.creatomate_snapshot_url }}` |
+| `template_id` | `={{ $json.template_id }}` |
+| `creatomate_render_id` | `={{ $json.creatomate_render_id }}` |
+| `ig_caption_draft` | `={{ $json.product_name + ' — For laboratory research use only. Not for human use or consumption. www.palmbeach-vitality.store' }}` |
+| `compliance_ok` | `yes` |
+| `created_at` | `={{ $json.created_at }}` |
+| `used_in_buffer` | `no` |
+
+If a field is empty on `$json`, use the node refs instead, e.g.  
+`={{ $('video_url_input').item.json.product_name }}`  
+`={{ $('save_creatomate_url').item.json.video_url }}`
+
+**Check:** after a successful run, a new row appears in `4-reel-queue` with the Creatomate MP4 URL.
+
 ---
 
 ## Daily habit
