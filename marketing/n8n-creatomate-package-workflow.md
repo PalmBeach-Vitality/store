@@ -50,7 +50,7 @@ Manual Trigger
   → creatomate_status
   → save_creatomate_url
   → sheets_append_reel           (Append → tab 4-reel-queue)
-  → buffer_ig_reel / Buffer_post_*   (copy from other WF — see n8n-buffer-from-creatomate.md)
+  → Buffer_post_IG / Buffer_post_FB / Buffer_*_story   (copy from other WF — no _reel nodes)
 ```
 
 **Sheets that still update**
