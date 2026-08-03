@@ -42,7 +42,9 @@ Body (expression):
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'main_video': $json.grok_video_url,
+    'main_video': $json.public_video_url || $json.grok_video_url,
+    'main_video.muted': true,
+    'main_video.volume': '0%',
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -54,9 +56,10 @@ Body (expression):
 }}
 ```
 
-**Must include `main_video`** (the dynamic video element name — not `video_loop_source`).  
-If footage still doesn’t swap, try `'main_video.source': $json.grok_video_url`.  
-**URL must be a public direct `.mp4`** (catbox / R2 / B2) — not `vidgen.x.ai`, not Drive `/view`.
+**Must include `main_video`** (dynamic video element — not `video_loop_source`).  
+**Muted** — no music in the render; add soundtrack manually later.  
+**URL must be a public direct `.mp4`** (catbox / R2 / B2) — not `vidgen.x.ai`, not Drive `/view`.  
+Prefer the separate queue workflow: `n8n-creatomate-queue-workflow.md`.
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA` — this template ignores them.
 

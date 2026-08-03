@@ -1,12 +1,9 @@
 // n8n Code node: pick_creation
 // Type: Code | Mode: Run Once for All Items
-// After: filter_creations_active (or get_reel_creations Return All on 9-lab-item-creations-500)
-// Before: grok_imagine_reel_still / save_still_url
+// After: get_reel_creations / filter Active on 9-lab-item-creations-500
+// Before: grok_imagine_reel_still
 //
-// Same rotation pattern as the compounds / product spreadsheet:
-// least times_used → oldest last_used_at → lowest rank.
-// Also skip same category AND same camera_move as the most recently used row
-// so every vidgen run gets a visibly different scene + motion.
+// Least-used rotation + skip same category AND same shot_family as last used.
 
 const creations = $input.all().map((i) => i.json);
 
@@ -44,23 +41,24 @@ function buildMotionPrompt(row) {
 
   const name = String(val(row, ['lab_item', 'labItem', 'item_name'], 'laboratory research item')).trim();
   const camera = String(
-    val(row, ['camera_move', 'cameraMove', 'camera'], 'slow push-in, no orbit')
+    val(row, ['camera_move', 'cameraMove', 'camera'], 'slow straight push-in, then hold')
   ).trim();
+  const family = String(val(row, ['shot_family', 'shotFamily'], 'push_in')).trim();
+  const framing = String(val(row, ['framing'], 'centered editorial hero')).trim();
   const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
   const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
-  const compound = String(val(row, ['compound_name', 'compoundName', 'label_compound'], '')).trim();
+  const compound = String(val(row, ['compound_name', 'compoundName'], '')).trim();
   const labelRule = compound
-    ? `Keep any on-subject label unchanged and readable as '${compound}' only (Palm Beach Vitality research compound). No motif/LAB/counter text. `
-    : `Do not add product compound labels, creation motifs, LAB codes, or counters onto the subject. `;
+    ? `Keep any on-subject label unchanged and readable as '${compound}' only. `
+    : `Do not add product compound labels onto the subject. `;
   return (
-    `Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of ${name}. ` +
-    `CAMERA MOTION (follow exactly; do not invent a different move): ${camera}. ` +
+    `Photoreal vertical 9:16 laboratory research catalog film of ${name}. ` +
+    `SHOT FAMILY: ${family}. FRAMING: ${framing}. CAMERA: ${camera}. ` +
+    `Path must be straight or a simple tilt/pedestal only — never travel around the subject. ` +
     `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
-    `Keep the subject sharp, recognizable, centered, and unchanged from the still. ` +
-    `Do not default to spinning, orbiting, or rotating around the product unless the ` +
-    `camera motion above explicitly requests a short arc. ` +
+    `Keep the subject sharp and unchanged from the still. ` +
     labelRule +
-    `No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. ` +
+    `No people, no hands, no needles, no lifestyle. ` +
     `For laboratory research use only. Not for human use or consumption.`
   );
 }
@@ -77,14 +75,14 @@ const scored = creations
       raw: c,
       creation_id,
       rank: rankNum,
-      // n8n Sheets "Get rows" usually includes row_number; if missing, rank+1
-      // (header is row 1) only when the Sheet is in rank order — prefer creation_id for updates.
       row_number:
         Number(val(c, ['row_number', 'rowNumber'], 0)) ||
         (rankNum > 0 ? rankNum + 1 : 0),
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
+      shot_family: val(c, ['shot_family', 'shotFamily']),
+      framing: val(c, ['framing']),
       scene_id: val(c, ['scene_id', 'sceneId']),
       category: val(c, ['category', 'scene_category']),
       scene_brief: val(c, ['scene_brief', 'sceneBrief']),
@@ -119,7 +117,6 @@ if (!scored.length) {
   );
 }
 
-// Most recently used row (by last_used_at) — skip its category + camera_move + id.
 const previouslyUsed = scored
   .filter((c) => c.times_used > 0 || (c.last_used_at && c.last_used_at.trim()))
   .slice()
@@ -127,6 +124,7 @@ const previouslyUsed = scored
 
 const last = previouslyUsed[0] || null;
 const lastCategory = last?.category || '';
+const lastFamily = last?.shot_family || '';
 const lastCamera = last?.camera_move || '';
 const lastId = last?.creation_id || '';
 
@@ -134,11 +132,11 @@ function scorePick(c) {
   let penalty = 0;
   if (lastId && c.creation_id === lastId) penalty += 1000;
   if (lastCategory && c.category === lastCategory) penalty += 100;
-  if (lastCamera && c.camera_move && c.camera_move === lastCamera) penalty += 50;
+  if (lastFamily && c.shot_family && c.shot_family === lastFamily) penalty += 80;
+  if (lastCamera && c.camera_move && c.camera_move === lastCamera) penalty += 40;
   return penalty;
 }
 
-let pick = scored[0];
 const diversified = scored
   .slice()
   .sort((a, b) => {
@@ -151,7 +149,7 @@ const diversified = scored
     }
     return Number(a.rank) - Number(b.rank);
   });
-pick = diversified[0];
+const pick = diversified[0];
 
 let compound = {};
 try {
@@ -186,8 +184,9 @@ return [
       row_number: pick.row_number,
       lab_item_id: pick.lab_item_id,
       lab_item: pick.lab_item,
-      // Real catalog compound for on-product labels (BPC-157, NAD+, …). Overrides Parse spread.
       compound_name: pick.compound_name || '',
+      shot_family: pick.shot_family,
+      framing: pick.framing,
       scene_id: pick.scene_id,
       scene_category: pick.category,
       scene_brief: pick.scene_brief,
@@ -204,7 +203,6 @@ return [
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
 
-      // Creatomate on-screen copy (prefer pick_text library over these stubs)
       mod_intro: val(pick.raw, ['mod_intro']),
       mod_fact_1: val(pick.raw, ['mod_fact_1']),
       mod_fact_2: val(pick.raw, ['mod_fact_2']),

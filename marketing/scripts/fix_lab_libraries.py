@@ -787,26 +787,108 @@ LIGHTING = [
     "backlit translucent glow through glass or polymer only when physically real",
     "macro ring-light even field for scientific detail",
 ]
-# Distinct CAMERA MOTIONS for Grok video — one per creation, rotated.
-# Avoid defaulting every row to orbit/rotate (that made every vidgen look the same).
-CAMERA = [
-    "slow push-in from medium hero to macro label detail, no orbit",
-    "gentle vertical rise from base to top of subject, locked center, no orbit",
-    "lateral parallax slide left-to-right past specular highlights, no orbit",
-    "locked tripod editorial hold with subtle breathing push-in only, no orbit",
-    "top-down descend into geometric catalog composition, no orbit",
-    "low-angle tilt-up power reveal from underside to eye level, no orbit",
-    "start extreme macro on material texture then pull back to full hero, no orbit",
-    "diagonal dolly past the subject with focus locked on center, no orbit",
-    "crane-down from high three-quarter to eye-level hero settle, no orbit",
-    "static catalog hold with micro focus rack only, camera body does not orbit",
-    "side-profile track then settle on three-quarter facing angle, no full circle",
-    "soft pedestal up while light wrap shifts on metal edges, no orbit",
-    "slow push-out from tight crop to full product in frame, no orbit",
-    "arc of at most 30 degrees then hold — never a full rotation",
-    "handheld-stable micro drift forward only, scientific documentary energy, no orbit",
-    "rise-and-settle: short vertical lift then lock off on the label plane, no orbit",
+# Shot recipes — distinct SCENE STYLES. Never use the word "orbit/spin/circle"
+# (models latch onto those tokens even in negations).
+SHOT_RECIPES: list[dict[str, str]] = [
+    {
+        "shot_family": "static_lock",
+        "framing": "centered editorial hero, tripod-locked, subject fills mid-frame",
+        "camera_move": "locked tripod hold with micro focus rack only — camera body does not travel",
+        "energy": "still, museum-calm",
+    },
+    {
+        "shot_family": "push_in",
+        "framing": "medium hero starting frame, label readable by end",
+        "camera_move": "slow straight push-in from medium shot to closer detail, then hold",
+        "energy": "gentle forward",
+    },
+    {
+        "shot_family": "pull_back",
+        "framing": "starts extreme close on material texture",
+        "camera_move": "start on macro texture then straight pull-back to full hero, then hold",
+        "energy": "reveal",
+    },
+    {
+        "shot_family": "vertical_rise",
+        "framing": "base of subject at bottom third, rises to top detail",
+        "camera_move": "gentle vertical rise from base to top of subject, path is a straight up-line, then hold",
+        "energy": "lift",
+    },
+    {
+        "shot_family": "lateral_slide",
+        "framing": "subject slightly off-center; specular highlights travel across form",
+        "camera_move": "lateral slide left-to-right past the subject, focus locked, straight horizontal path, then hold",
+        "energy": "parallax glide",
+    },
+    {
+        "shot_family": "top_down",
+        "framing": "overhead geometric catalog composition, subject centered in plan view",
+        "camera_move": "slow overhead descend straight down into top-down composition, then hold",
+        "energy": "architectural",
+    },
+    {
+        "shot_family": "tilt_reveal",
+        "framing": "low-angle power pose looking upward at instrument",
+        "camera_move": "low-angle tilt-up from underside to eye level, pivot only, no travel around subject, then hold",
+        "energy": "power reveal",
+    },
+    {
+        "shot_family": "macro_detail",
+        "framing": "tight crop on engraved/metal/glass microtexture",
+        "camera_move": "extreme macro with razor shallow depth of field; tiny forward drift only, then hold",
+        "energy": "scientific close-up",
+    },
+    {
+        "shot_family": "crane_settle",
+        "framing": "starts high three-quarter, settles to eye-level hero",
+        "camera_move": "crane-down from high three-quarter to eye-level hero on a straight descending path, then hold",
+        "energy": "premium settle",
+    },
+    {
+        "shot_family": "push_out",
+        "framing": "starts tight crop on badge/port/edge, ends full product in frame",
+        "camera_move": "slow straight push-out from tight crop to full product, then hold",
+        "energy": "expand",
+    },
+    {
+        "shot_family": "pedestal_light",
+        "framing": "eye-level catalog hero; light wrap changes on metal edges",
+        "camera_move": "soft pedestal up a few centimeters while lighting wrap shifts; no sideways travel, then hold",
+        "energy": "luxury light play",
+    },
+    {
+        "shot_family": "profile_track",
+        "framing": "true side profile then settles to three-quarter facing",
+        "camera_move": "short side-profile track then settle on three-quarter angle — brief lateral only, then hard hold",
+        "energy": "editorial track",
+    },
+    {
+        "shot_family": "doc_drift",
+        "framing": "documentary mid-shot, slightly imperfect handheld stability",
+        "camera_move": "handheld-stable micro drift forward only, scientific documentary energy, then hold",
+        "energy": "observational",
+    },
+    {
+        "shot_family": "label_rise",
+        "framing": "locked on label/typography plane by the end",
+        "camera_move": "short vertical lift then lock off on the label plane — straight rise, then hold",
+        "energy": "typography lock",
+    },
+    {
+        "shot_family": "wide_env",
+        "framing": "wider sterile environment context with subject still dominant",
+        "camera_move": "very slow push-in from wide sterile environment into subject-dominant frame, then hold",
+        "energy": "facility to product",
+    },
+    {
+        "shot_family": "offset_hero",
+        "framing": "subject placed on left or right third, negative space opposite",
+        "camera_move": "locked offset composition with subtle breathing push-in only, then hold",
+        "energy": "asymmetric editorial",
+    },
 ]
+# Back-compat alias used by older call sites
+CAMERA = [r["camera_move"] for r in SHOT_RECIPES]
 COLOR_GRADE = [
     "cool steel and ice-blue science grade",
     "high-contrast black and silver premium grade",
@@ -972,7 +1054,7 @@ def rebuild_prompt(
     detail: str,
     surface: str,
     lighting: str,
-    camera: str,
+    shot: dict[str, str],
     color_grade: str,
     hero_style: str,
     compound_name: str = "",
@@ -992,17 +1074,18 @@ def rebuild_prompt(
             "Do NOT print compound names, LAB codes, creation motifs, or 000/500 counters on the subject."
         )
     return (
-        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog still/film, "
+        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog still, "
         f"exciting premium science equipment photography, chemical research material only. "
         f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory equipment or research material, "
-        f"sharp and centered, visually striking, expensive): {name}. "
+        f"visually striking, expensive): {name}. "
         f"Physical detail: {detail}. "
+        f"SHOT FAMILY: {shot['shot_family']}. FRAMING: {shot['framing']}. "
         f"Hero style: {hero_style}. "
         f"Setting surface: {surface}. Lighting: {lighting}. "
-        f"Intended camera motion for the follow-on film: {camera}. "
+        f"Intended follow-on camera move: {shot['camera_move']}. Energy: {shot['energy']}. "
         f"Color grade: {color_grade}. "
         f"{label_rule} "
-        f"Make the frame feel expensive, cinematic, and scientifically compelling — not a flat boring snapshot. "
+        f"Compose this still to match the shot family — do not default every frame to the same centered luxury pose. "
         f"{SINGLE_SUBJECT} "
         f"{AVOID}. "
         f"Quality: {QUALITY}. "
@@ -1012,32 +1095,30 @@ def rebuild_prompt(
 
 def rebuild_motion_prompt(
     name: str,
-    camera: str,
+    shot: dict[str, str],
     lighting: str,
     surface: str,
-    idx: int,
-    lab_item_id: str,
     compound_name: str = "",
 ) -> str:
-    """Unique prompt for grok_video_start — must differ every creation (like product rotation)."""
+    """Unique prompt for grok_video_start — short, one shot family, no orbit tokens."""
     if compound_name:
         label_rule = (
-            f"Keep any on-subject label unchanged and readable as '{compound_name}' only "
-            f"(Palm Beach Vitality research compound). No motif/LAB/counter text."
+            f"Keep any on-subject label unchanged and readable as '{compound_name}' only. "
+            f"No motif/LAB/counter text."
         )
     else:
-        label_rule = (
-            "Do not add product compound labels, creation motifs, LAB codes, or counters onto the subject."
-        )
+        label_rule = "Do not add product compound labels or counters onto the subject."
     return (
-        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog film of {name}. "
-        f"CAMERA MOTION (follow exactly; do not invent a different move): {camera}. "
+        f"Photoreal vertical 9:16 laboratory research catalog film of {name}. "
+        f"SHOT FAMILY: {shot['shot_family']}. "
+        f"FRAMING: {shot['framing']}. "
+        f"CAMERA: {shot['camera_move']}. "
+        f"ENERGY: {shot['energy']}. "
+        f"Path must be straight or a simple tilt/pedestal only — never travel around the subject. "
         f"Lighting continuity: {lighting}. Surface continuity: {surface}. "
-        f"Keep the subject sharp, recognizable, centered, and unchanged from the still. "
-        f"Do not default to spinning, orbiting, or rotating around the product unless the "
-        f"camera motion above explicitly requests a short arc. "
+        f"Keep the subject sharp, recognizable, and unchanged from the still. "
         f"{label_rule} "
-        f"No cardboard boxes, no trays as hero, no people, no hands, no faces, no needles, no injection, no lifestyle. "
+        f"No people, no hands, no faces, no needles, no injection, no lifestyle, no cardboard boxes. "
         f"For laboratory research use only. Not for human use or consumption."
     )
 
@@ -1096,6 +1177,8 @@ CREATION_FIELD_ORDER = [
     "lab_item",
     "material_detail",
     "compound_name",
+    "shot_family",
+    "framing",
     "scene_brief",
     "quality_var_count",
     "quality_suffix",
@@ -1205,10 +1288,10 @@ def fix_lab_libraries() -> None:
         cr["lab_item"] = it["lab_item"]
         cr["material_detail"] = it["material_detail"]
         cr["category"] = it["category"]
-        # Always refresh visual variables so stills stay exciting
+        # Always refresh visual variables so stills + motion stay distinct
         surface = SURFACES[(idx - 1) % len(SURFACES)]
         lighting = LIGHTING[(idx * 3) % len(LIGHTING)]
-        camera = CAMERA[(idx * 5) % len(CAMERA)]
+        shot = SHOT_RECIPES[(idx * 5) % len(SHOT_RECIPES)]
         color_grade = COLOR_GRADE[(idx * 7) % len(COLOR_GRADE)]
         hero_style = HERO_STYLE[(idx * 11) % len(HERO_STYLE)]
         # Always assign a catalog compound for Creatomate Intro-Text (BPC-157, NAD+, …).
@@ -1222,25 +1305,31 @@ def fix_lab_libraries() -> None:
         cr["compound_name"] = compound_name
         it["surface"] = surface
         it["lighting"] = lighting
-        it["camera_move"] = camera
+        it["camera_move"] = shot["camera_move"]
+        it["shot_family"] = shot["shot_family"]
+        it["framing"] = shot["framing"]
         it["color_grade"] = color_grade
         it["hero_style"] = hero_style
         cr["surface"] = surface
         cr["lighting"] = lighting
-        cr["camera_move"] = camera
+        cr["camera_move"] = shot["camera_move"]
+        cr["shot_family"] = shot["shot_family"]
+        cr["framing"] = shot["framing"]
         cr["color_grade"] = color_grade
         cr["hero_style"] = hero_style
         brief_bits = [
             it["lab_item"],
+            f"shot:{shot['shot_family']}",
+            f"intro:{compound_name}",
+            shot["framing"],
             hero_style,
             surface,
             lighting,
-            camera,
+            shot["camera_move"],
             color_grade,
         ]
-        brief_bits.insert(1, f"intro:{compound_name}")
         if needs_label:
-            brief_bits.insert(2, f"label:{compound_name}")
+            brief_bits.insert(3, f"label:{compound_name}")
         cr["scene_brief"] = " · ".join(brief_bits)
         cr["video_prompt"] = rebuild_prompt(
             idx,
@@ -1249,18 +1338,16 @@ def fix_lab_libraries() -> None:
             it["material_detail"],
             surface,
             lighting,
-            camera,
+            shot,
             color_grade,
             hero_style,
             compound_name=label_for_prompt,
         )
         cr["video_motion_prompt"] = rebuild_motion_prompt(
             it["lab_item"],
-            camera,
+            shot,
             lighting,
             surface,
-            idx,
-            it["lab_item_id"],
             compound_name=label_for_prompt,
         )
         # Grok video length — 15s minimum for a proper Creatomate loop bed

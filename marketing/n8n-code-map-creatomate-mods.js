@@ -5,11 +5,13 @@
 //
 // CRITICAL: Creatomate often CANNOT fetch https://vidgen.x.ai/... MP4s.
 // If you pass a vidgen URL, text mods may apply but the template bed stays default.
-// Rehost the Grok MP4 to a public direct URL (Google Drive uc?export=download) and
+// Rehost the Grok MP4 to a public direct URL (catbox / R2 / B2) and
 // put that in save_video_url.public_video_url OR set FORCE_PUBLIC_VIDEO below.
+//
+// No music — render muted (main_video.muted / volume 0%). Add soundtrack manually.
 
 // TEMP test override — public direct .mp4 (catbox / R2 / B2). Leave '' to use node output.
-const FORCE_PUBLIC_VIDEO = 'https://files.catbox.moe/ehh2x2.mp4';
+const FORCE_PUBLIC_VIDEO = ''; // prefer Workflow B + Sheet 11 queue; or paste catbox URL here for tests
 
 function firstJson(name) {
   try {
@@ -275,6 +277,9 @@ return [
       text_id,
       creation_id,
       template_id: '06cd4ffd-906c-45ed-bf33-e8d2bed4312b',
+      // No music — mute source; add soundtrack manually later
+      mute_audio: true,
     },
   },
 ];
+

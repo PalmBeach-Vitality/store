@@ -2,71 +2,54 @@
 
 **Owner:** Salvatore  
 
-## The main goal (current)
+## The main goal
 
-Produce a **45–60 second** Instagram-ready reel **every day** that is:
+Daily **45–60s** Instagram-ready reel:
 
-1. **Visually unique** — Grok Imagine (still `2k` + video) from the **500 lab-item** variables  
-2. **Text on reel** — Creatomate burns **daily-unique** research copy onto that unique footage  
-3. **Highest quality** — still: `grok-imagine-image-quality` + `2k`; video: `grok-imagine-video-1.5` at **`15s` / `1080p`**  
-4. **FDA-safe** — laboratory research catalog only; no people/hands/injection/lifestyle/wellness/nicknames  
+1. **Unique Grok footage** — still `2k` + video `15s @ 1080p` from lab-item shot recipes  
+2. **Creatomate package** — 60s loop + Intro/Facts (muted — music added manually)  
+3. **FDA-safe** lab catalog only  
 
-If the reel is only Creatomate’s default template bed with new text, **the goal is not met.**
+## Two workflows
 
-## Architecture — two workflows (do not combine for now)
-
-Creatomate often **cannot fetch** `vidgen.x.ai` URLs. Keep packaging separate so the daily Grok run always succeeds.
-
-### Workflow A — `PBVita — Grok Daily` (run every day)
+### A — `PBVita — Grok Daily`
 
 ```text
-get_reel_creations → filter Active → pick_creation
-  → grok_imagine_reel_still          (2k, video_prompt)
-  → save_still_url
-  → grok_video_start                 (15s, 1080p, video_motion_prompt)
-  → wait_video → grok_video_poll → save_video_url
-  → sheets_update_creation           (times_used + last_used_at)  ← REQUIRED
+pick_creation (least-used + new shot_family)
+  → grok still (video_prompt) → grok_video_start (video_motion_prompt, 15s, 1080p)
+  → wait 200s → poll → save_video_url
+  → sheets_update_creation
 ```
 
-**Done when:** unique 15s MP4 exists + lab Sheet row bumped so tomorrow’s pick differs.
-
-### Workflow B — `PBVita — Creatomate Package` (separate)
+### B — `PBVita — Creatomate Package` (separate)
 
 ```text
-input: public MP4 URL (not vidgen) + pick_text / compound_name
-  → map_creatomate_mods
-  → creatomate_render (video_loop_source.source + Intro + Facts)
-  → wait → save_creatomate_url → sheets_update_text (optional)
+Paste public .mp4 URL into Sheet 11-creatomate-render-queue
+  → pick_queue_row → pick_text → map_creatomate_from_queue
+  → creatomate_render (main_video + muted)
+  → wait → save → sheets_update_queue
 ```
 
-Wire Buffer only after B reliably packages A’s footage.
+See `n8n-creatomate-queue-workflow.md`.
 
-| Engine | Job |
-|---|---|
-| **Sheets / PBVita-Lab-*** | Which unique lab subject today |
-| **Grok** | Unique 15s @ 1080p |
-| **Creatomate (separate WF)** | 45–60s loop + text |
+**Why separate:** Creatomate cannot reliably fetch `vidgen.x.ai`. You rehost once (catbox/R2) and paste the public URL.
 
-## Subjects + quality (non-negotiable)
+**No music in renders** — mute `main_video`; add soundtrack manually later.
 
-- Lab items: `sheets/9-lab-item-creations-500.csv`  
-- Premium equipment / vials / powders / sterile labs — **no boxes/trays**  
-- Labels (when present) = real compounds (BPC-157, NAD+, …)  
-- No motif / LAB-### / 000/500 on-product text  
+## Shot diversity
 
-## What counts as done (Workflow A)
+Each creation has `shot_family` (`static_lock`, `push_in`, `top_down`, `macro_detail`, …).  
+Stills + motion prompts follow that family. Pick skips same family as last used.
 
-- Unique still + 15s video for that `creation_id`  
-- `sheets_update_creation` wrote `times_used` + `last_used_at`  
-- Next run picks a **different** creation  
+## Subjects
 
-## Distribution (next week)
+- Premium equipment / vials / powders / sterile labs — no boxes/trays  
+- Labels (when present) = real compounds  
+- Still `2k` · Video `15s` `1080p`  
 
-- Buffer → Facebook, Instagram, TikTok, X — after Creatomate package is reliable  
+## Canonical docs
 
-## Canonical how-tos
-
-- Grok nodes: `n8n-build-grok-imagine-video-nodes.md`  
-- Sheets writeback: `n8n-sheets-update-creation.md`  
+- Grok: `n8n-build-grok-imagine-video-nodes.md`  
 - Lab items: `n8n-lab-items-500.md`  
-- Creatomate (WF B): `n8n-creatomate-5-facts-mods.md` / `n8n-45s-reel-grok-creatomate.md`  
+- Creatomate queue: `n8n-creatomate-queue-workflow.md`  
+- Sheets writeback: `n8n-sheets-update-creation.md`  
