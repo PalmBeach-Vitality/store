@@ -27,32 +27,17 @@
     });
   }
 
-  // Product pages: keep exactly one Research use only banner (the large theme one).
+  // Product pages: hide only the old Shopify disclaimer image + extra theme banners.
+  // NEVER remove product description text/nodes.
   var description = document.querySelector(".pbv-product-description");
   if (description) {
     description.querySelectorAll('img[src*="image_6.jpg"]').forEach(function (img) {
-      var wrap = img.closest("li, p, figure, div");
-      if (wrap && wrap !== description && !wrap.classList.contains("pbv-ruo-banner")) {
-        wrap.remove();
-      } else {
-        img.remove();
-      }
+      img.remove();
     });
 
     var banners = description.querySelectorAll(".pbv-ruo-banner");
     banners.forEach(function (banner, index) {
       if (index > 0) banner.remove();
-    });
-
-    Array.prototype.slice.call(description.children).forEach(function (node) {
-      if (node.classList && node.classList.contains("pbv-ruo-banner")) return;
-      var text = (node.textContent || "").toLowerCase();
-      if (
-        text.indexOf("research use only") !== -1 &&
-        text.indexOf("not for human consumption") !== -1
-      ) {
-        node.remove();
-      }
     });
   }
 
