@@ -63,12 +63,12 @@ function buildTextId(r) {
   return '';
 }
 
-/** Normalize for matching: lowercase, collapse spaces, strip punctuation noise */
+/** Normalize for matching: lowercase, keep + , collapse other punctuation to spaces */
 function normName(s) {
   return String(s || '')
     .toLowerCase()
-    .replace(/\+/g, ' plus ')
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/\+/g, '+')
+    .replace(/[^a-z0-9+]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -80,7 +80,7 @@ const wantedRaw = String(
 
 if (!wantedRaw) {
   throw new Error(
-    'Enter product_name on Set node video_url_input (e.g. BPC-157, NAD+, Semaglutide).'
+    'Enter product_name on Set node video_url_input (e.g. BPC-157, NAD+, Tesamorelin/Ipamorelin).'
   );
 }
 
@@ -111,11 +111,8 @@ const scored = rows
   })
   .filter((r) => r.text_id && r.mod_fact_1)
   .filter((r) => isActive(r.status))
-  .filter((r) => {
-    const p = normName(r.product_name);
-    if (!p) return false;
-    return p === wanted || p.includes(wanted) || wanted.includes(p);
-  })
+  // EXACT match only — never let "Tesamorelin" steal "Tesamorelin/Ipamorelin"
+  .filter((r) => normName(r.product_name) === wanted)
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
     return String(a.last_used_at).localeCompare(String(b.last_used_at));
@@ -132,7 +129,7 @@ if (!scored.length) {
   throw new Error(
     'No Active text rows for product_name="' +
       wantedRaw +
-      '". Available product_name values: ' +
+      '" (exact match required). Try exact sheet value. Available: ' +
       (products.slice(0, 40).join(', ') || '(none — re-import CSV with product_name column)')
   );
 }
