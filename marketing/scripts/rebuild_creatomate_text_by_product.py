@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Rebuild 10-creatomate-text-1000 with product_name + science facts 1–3.
+"""Rebuild 10-creatomate-text-1000 with product_name + plain-English ad facts 1–3.
 
-Keeps mod_intro, mod_fact_4, mod_fact_5, mod_disclaimer unchanged.
-mod_fact_1/2/3 become FDA research-only science/study lines for product_name.
+Keeps mod_fact_4, mod_fact_5, mod_disclaimer unchanged.
+mod_intro in sheet is unused for on-screen Intro (map uses product_name).
+mod_fact_1/2/3 = short ad-style lines, FDA research-only (no treatment claims).
 """
 
 from __future__ import annotations
@@ -17,466 +18,466 @@ CSV_OUT = CSV_IN
 JSON_OUT = ROOT / "pbvita-1000-creatomate-text.json"
 LABELS = json.loads((ROOT / "compound-labels.json").read_text())["labels"]
 
-# Research-safe fact banks per product.
-# Tone: laboratory / published research / mechanism study — never treatment/consumer claims.
+# Plain English, advertisement tone — still research-only / FDA-safe.
+# No cure/treat/dose-for-humans language.
 FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
     "5-Amino-1MQ": [
         (
-            "Studied in research models of nicotinamide N-methyltransferase (NNMT) pathways",
-            "Laboratory literature examines metabolic enzyme interaction profiles",
-            "Used in controlled assays exploring cellular energy-related signaling",
+            "A clean research compound for metabolism-focused lab work",
+            "Made for teams studying how cells handle energy",
+            "Premium research material — lab use only",
         ),
         (
-            "Investigated as a research tool for NNMT-related biochemical pathways",
-            "In-vitro studies document structure–activity observations under lab conditions",
-            "Catalogued for mechanistic research on methyltransferase biology",
+            "Built for serious metabolic research catalogs",
+            "Simple, focused compound for energy-pathway studies",
+            "Trusted listing for controlled laboratory projects",
         ),
         (
-            "Appears in peer-reviewed research contexts involving metabolic enzyme studies",
-            "Research protocols evaluate purity and assay reproducibility first",
-            "Referenced in laboratory work on NAD+-adjacent metabolic networks",
+            "Sharp research option for NAD+-related lab studies",
+            "Clear documentation. Research-grade quality.",
+            "Add it to your next research order list",
         ),
     ],
     "AOD-9604": [
         (
-            "Fragment derived from growth-hormone sequence regions studied in vitro",
-            "Laboratory papers examine lipolytic pathway markers in research models",
-            "Used in controlled studies of metabolic peptide fragment activity",
+            "A research peptide made for metabolism lab projects",
+            "Popular pick for fat-pathway research models",
+            "Clean, catalog-ready research material",
         ),
         (
-            "Investigated in research settings for adipose-related pathway signaling",
-            "Analytical labs document sequence identity and peptide integrity",
-            "Positioned for mechanistic assays, not clinical application",
+            "Lab-focused fragment for metabolic research teams",
+            "Built for clear, controlled study setups",
+            "Research use only — not for clinical use",
         ),
         (
-            "Research literature explores GH-fragment biochemistry under lab protocols",
-            "Studied for receptor-pathway observations in experimental systems",
-            "Supplied for laboratory documentation of peptide fragment research",
+            "Premium research listing for GH-fragment studies",
+            "Straightforward material for serious lab work",
+            "Order-ready for your research inventory",
         ),
     ],
     "BPC-157": [
         (
-            "Pentadecapeptide studied in laboratory models of tissue-response pathways",
-            "Research literature examines angiogenesis-related markers in vitro",
-            "Used in controlled assays exploring gut and soft-tissue research models",
+            "One of the most requested research peptides in the catalog",
+            "Made for labs studying recovery and tissue pathways",
+            "Clean research-grade material, ready for your bench",
         ),
         (
-            "Investigated for cytoprotective signaling observations in experimental systems",
-            "Peer-reviewed research contexts document peptide stability and handling",
-            "Catalogued for mechanistic studies of regenerative pathway markers",
+            "A standout peptide for regenerative research models",
+            "Simple to document. Built for serious lab work.",
+            "Research only — not for human use",
         ),
         (
-            "Appears in preclinical research on nitric-oxide and growth-factor pathways",
-            "Laboratory protocols emphasize research-only documentation standards",
-            "Referenced in assays studying endothelial and fibroblast model responses",
+            "Premium BPC-157 for controlled laboratory studies",
+            "Clear labeling. Reliable research quality.",
+            "Add this to your next lab order",
         ),
     ],
     "BPC-157/TB-500": [
         (
-            "Combination researched as paired peptides in laboratory pathway studies",
-            "Studies examine complementary tissue-response markers in experimental models",
-            "Used when dual-peptide research documentation is required",
+            "Two research favorites, listed together for lab convenience",
+            "Built for teams studying recovery pathways side by side",
+            "A clean dual listing for serious research catalogs",
         ),
         (
-            "Investigated together in controlled assays of cytoskeletal and repair markers",
-            "Analytical labs verify both peptide identities before research use",
-            "Positioned for comparative mechanism studies, research-only",
+            "Paired research peptides in one easy catalog entry",
+            "Made for labs that want both compounds on hand",
+            "Research-grade quality — lab use only",
         ),
         (
-            "Research protocols may evaluate synergistic pathway observations in vitro",
-            "Literature frames both compounds as investigational research materials",
-            "Catalogued for dual-listing laboratory documentation workflows",
+            "Dual-peptide research set for advanced lab projects",
+            "Clear docs. Straightforward research ordering.",
+            "Stock both in one research-ready listing",
         ),
     ],
     "Cagrilinitide": [
         (
-            "Amylin-analogue peptide studied in metabolic research models",
-            "Laboratory literature examines satiety-pathway receptor signaling in vitro",
-            "Used in controlled assays of amylin-related biochemical responses",
+            "A modern research peptide for metabolic lab studies",
+            "Made for teams exploring appetite-pathway models",
+            "Premium research material with clear catalog docs",
         ),
         (
-            "Investigated for long-acting amylin receptor research observations",
-            "Peer-reviewed contexts document peptide engineering and assay design",
-            "Referenced in laboratory work on metabolic peptide pharmacology",
+            "Clean amylin-analogue option for research inventories",
+            "Built for controlled laboratory study setups",
+            "Research use only — not for clinical use",
         ),
         (
-            "Research models explore gastric and energy-balance pathway markers",
-            "Supplied for mechanistic studies under research-only labeling",
-            "Analytical documentation prioritizes purity for reproducible assays",
+            "Sharp listing for next-gen metabolic research",
+            "Simple, focused, research-ready packaging",
+            "Order it for your lab catalog today",
         ),
     ],
     "CJC (no DAC)": [
         (
-            "GHRH-analogue peptide studied in growth-hormone axis research models",
-            "Laboratory literature examines pulsatile GH-related signaling in vitro",
-            "Used in controlled assays of hypothalamic–pituitary pathway markers",
+            "A research classic for growth-hormone pathway studies",
+            "Made for labs that want a clean GHRH-style compound",
+            "Clear labeling. Research-grade quality.",
         ),
         (
-            "Investigated without DAC modification for shorter-acting research profiles",
-            "Research protocols document receptor binding observations in lab systems",
-            "Catalogued for endocrine pathway mechanism studies, research-only",
+            "Trusted research peptide for endocrine lab work",
+            "Straightforward material for controlled studies",
+            "Lab use only — not for human use",
         ),
         (
-            "Appears in preclinical research on GHRH receptor pharmacology",
-            "Analytical labs confirm peptide sequence before experimental use",
-            "Positioned for laboratory documentation of GH-axis research materials",
+            "Premium CJC listing for serious research teams",
+            "Built for clean documentation and easy ordering",
+            "Add it to your research inventory",
         ),
     ],
     "CJC (no DAC)/Ipamorelin": [
         (
-            "Paired GHRH-analogue and ghrelin-mimetic studied in GH-axis research",
-            "Laboratory models examine complementary secretagogue pathway markers",
-            "Used in dual-peptide assays of pituitary signaling research",
+            "A popular research pair for GH-pathway lab work",
+            "Two complementary compounds in one catalog listing",
+            "Clean dual set for serious laboratory teams",
         ),
         (
-            "Investigated together for synergistic GH-related observations in vitro",
-            "Research literature frames both as investigational laboratory materials",
-            "Catalogued when dual secretagogue documentation is required",
+            "Research duo made for growth-hormone study models",
+            "Easy to order. Clear research documentation.",
+            "Research-grade quality — lab use only",
         ),
         (
-            "Controlled studies explore receptor-selective pathway interactions",
-            "Analytical verification covers both peptide identities pre-assay",
-            "Supplied for mechanistic endocrine research, not clinical use",
+            "Paired secretagogues for advanced research catalogs",
+            "Built for labs that want both on the shelf",
+            "Stock this dual listing for your next project",
         ),
     ],
     "DSIP": [
         (
-            "Delta sleep-inducing peptide studied in sleep-regulation research models",
-            "Laboratory literature examines neuromodulatory pathway markers",
-            "Used in controlled assays of CNS peptide signaling research",
+            "A research peptide for sleep and nervous-system lab models",
+            "Made for teams studying calm and recovery pathways",
+            "Clean research material with clear catalog notes",
         ),
         (
-            "Investigated for hypothalamic and sleep-architecture observations in vitro",
-            "Peer-reviewed contexts document peptide handling for neuro research",
-            "Referenced in laboratory work on neuropeptide mechanism studies",
+            "Simple, focused compound for neuro research labs",
+            "Built for controlled study setups and clean docs",
+            "Research use only — not for clinical use",
         ),
         (
-            "Research protocols evaluate purity for reproducible neuromodulatory assays",
-            "Appears in experimental systems studying stress-related pathway markers",
-            "Catalogued for research-only neurological peptide documentation",
+            "Premium DSIP listing for laboratory inventories",
+            "Straightforward research quality you can trust",
+            "Add it to your next research order",
         ),
     ],
     "GHK-Cu": [
         (
-            "Copper-binding tripeptide studied in extracellular matrix research models",
-            "Laboratory literature examines wound-model and collagen pathway markers",
-            "Used in controlled assays of skin and tissue biochemistry research",
+            "A copper peptide favorite for skin and tissue research",
+            "Made for labs studying repair and renewal pathways",
+            "Clean, research-ready catalog material",
         ),
         (
-            "Investigated for gene-expression observations in fibroblast research systems",
-            "Peer-reviewed contexts document copper–peptide complex stability",
-            "Referenced in laboratory work on regenerative pathway markers",
+            "Premium research peptide for matrix and skin lab work",
+            "Clear labeling. Reliable research quality.",
+            "Lab use only — not for human use",
         ),
         (
-            "Research models explore antioxidant and remodeling-related signaling",
-            "Analytical labs confirm peptide–copper stoichiometry for assays",
-            "Supplied for mechanistic cosmetic-science research, research-only labeling",
+            "Popular GHK-Cu listing for serious research teams",
+            "Built for clean documentation and easy ordering",
+            "Stock it for your next lab project",
         ),
     ],
     "GLOW": [
         (
-            "Multi-peptide research blend studied for complementary pathway documentation",
-            "Laboratory catalogs list GLOW for controlled research inventory tracking",
-            "Used when blend-level assay documentation is required",
+            "A research blend built for multi-pathway lab work",
+            "One listing. Multiple research-ready components.",
+            "Clean catalog option for busy laboratory teams",
         ),
         (
-            "Investigated as a research-material set for multi-pathway lab protocols",
-            "Analytical verification covers component identity before experimental use",
-            "Positioned for laboratory documentation, not consumer application",
+            "Convenient research set for advanced lab catalogs",
+            "Made for teams that want a complete research kit feel",
+            "Research-grade quality — lab use only",
         ),
         (
-            "Research workflows treat GLOW as investigational catalog material only",
-            "Studies emphasize component purity and handling under lab standards",
-            "Referenced in multi-peptide research receiving and QC files",
+            "Premium GLOW blend for controlled laboratory projects",
+            "Straightforward ordering. Clear research docs.",
+            "Add this blend to your research inventory",
         ),
     ],
     "KLOW": [
         (
-            "Research blend catalogued for laboratory multi-peptide documentation",
-            "Laboratory protocols examine component pathway markers separately",
-            "Used in controlled inventory and assay preparation workflows",
+            "A research blend made for multi-compound lab setups",
+            "Convenient listing for teams that need more than one tool",
+            "Clean, catalog-ready research material",
         ),
         (
-            "Investigated as a research-only multi-compound listing for labs",
-            "Analytical labs document each component identity pre-use",
-            "Positioned for experimental documentation, not clinical application",
+            "Practical research set for busy laboratory inventories",
+            "Built for clear docs and controlled study use",
+            "Research use only — not for clinical use",
         ),
         (
-            "Research catalogs frame KLOW as investigational laboratory material",
-            "Handling standards follow sealed research-packaging requirements",
-            "Referenced in blend-level QC and receiving checklists",
+            "Premium KLOW blend for serious research catalogs",
+            "Simple to order. Easy to document.",
+            "Stock it for your next lab project",
         ),
     ],
     "KPV": [
         (
-            "Tripeptide fragment studied in anti-inflammatory pathway research models",
-            "Laboratory literature examines melanocortin-related signaling in vitro",
-            "Used in controlled assays of epithelial and immune-model markers",
+            "A short research peptide for inflammation-pathway lab work",
+            "Made for teams studying gut and barrier models",
+            "Clean research-grade material, ready to catalog",
         ),
         (
-            "Investigated for gut and barrier-model observations in experimental systems",
-            "Peer-reviewed contexts document short-peptide stability for assays",
-            "Catalogued for mechanistic inflammation-pathway research, research-only",
+            "Focused research option with clear laboratory documentation",
+            "Built for controlled studies — not clinical use",
+            "Premium quality for serious research teams",
         ),
         (
-            "Appears in preclinical research on alpha-MSH fragment biochemistry",
-            "Research protocols prioritize purity for reproducible cell assays",
-            "Supplied for laboratory documentation of peptide fragment studies",
+            "Popular KPV listing for research inventories",
+            "Simple. Clean. Research-ready.",
+            "Add it to your next lab order",
         ),
     ],
     "Melanotan 2": [
         (
-            "Synthetic melanocortin analogue studied in pigmentation research models",
-            "Laboratory literature examines MC1R/MC4R pathway signaling in vitro",
-            "Used in controlled assays of melanocortin receptor pharmacology",
+            "A research peptide for melanocortin pathway lab studies",
+            "Made for teams exploring pigment and receptor models",
+            "Clean catalog material for controlled research",
         ),
         (
-            "Investigated for receptor-selective observations in experimental systems",
-            "Peer-reviewed contexts document peptide handling for receptor assays",
-            "Referenced in laboratory work on melanocortin mechanism studies",
+            "Focused research compound with clear lab documentation",
+            "Built for serious study setups — research only",
+            "Premium listing for laboratory inventories",
         ),
         (
-            "Research models explore appetite and pigmentation pathway markers",
-            "Analytical verification confirms peptide identity before lab use",
-            "Catalogued for research-only melanocortin documentation workflows",
+            "Research-ready Melanotan 2 for your catalog",
+            "Straightforward quality. Clear research labeling.",
+            "Order it for your next lab project",
         ),
     ],
     "MOTS-C": [
         (
-            "Mitochondrial-derived peptide studied in metabolic research models",
-            "Laboratory literature examines AMPK-related pathway markers in vitro",
-            "Used in controlled assays of cellular energy-sensing research",
+            "A mitochondrial research peptide for energy lab studies",
+            "Made for teams exploring cellular energy pathways",
+            "Clean, modern research material for your catalog",
         ),
         (
-            "Investigated for exercise-mimetic observations in experimental systems",
-            "Peer-reviewed contexts document mtDNA-encoded peptide biochemistry",
-            "Catalogued for mechanistic mitochondrial pathway studies, research-only",
+            "Premium research option for metabolism-focused labs",
+            "Clear docs. Research-grade quality.",
+            "Lab use only — not for human use",
         ),
         (
-            "Appears in preclinical research on metabolic homeostasis markers",
-            "Research protocols emphasize cold-chain handling for peptide assays",
-            "Supplied for laboratory documentation of mitochondrial peptide work",
+            "Sharp MOTS-C listing for serious research teams",
+            "Built for controlled laboratory projects",
+            "Add it to your research order list",
         ),
     ],
     "NAD+": [
         (
-            "Essential redox cofactor studied across cellular energy research models",
-            "Laboratory literature examines sirtuin and PARP pathway dependencies",
-            "Used in controlled assays of NAD+-consuming enzyme activity",
+            "Essential research material for cellular energy studies",
+            "A catalog staple for labs working on metabolism",
+            "Clean, research-ready NAD+ for your inventory",
         ),
         (
-            "Investigated for mitochondrial and DNA-repair related observations in vitro",
-            "Peer-reviewed contexts document cofactor stability in research buffers",
-            "Referenced in laboratory work on metabolic and aging-biology pathways",
+            "Premium cofactor listing for serious laboratory work",
+            "Clear labeling. Trusted research quality.",
+            "Research use only — not for clinical use",
         ),
         (
-            "Research models explore NAD+ salvage and biosynthesis pathway markers",
-            "Analytical labs confirm identity and purity for reproducible assays",
-            "Catalogued for research-only cofactor documentation workflows",
+            "Must-have NAD+ for research catalogs",
+            "Simple to document. Easy to reorder.",
+            "Stock it for your next lab project",
         ),
     ],
     "PT-141": [
         (
-            "Melanocortin agonist peptide studied in receptor pharmacology research",
-            "Laboratory literature examines central melanocortin pathway markers",
-            "Used in controlled assays of MC3R/MC4R signaling research",
+            "A research peptide for melanocortin receptor lab work",
+            "Made for teams studying central pathway models",
+            "Clean research material with clear catalog docs",
         ),
         (
-            "Investigated for behavioral and receptor-response observations in models",
-            "Peer-reviewed contexts document peptide design for CNS research",
-            "Catalogued for mechanistic melanocortin studies, research-only",
+            "Focused research compound for controlled study setups",
+            "Built for laboratory documentation — not clinical use",
+            "Premium quality for serious research teams",
         ),
         (
-            "Appears in preclinical research on melanocortin agonist biochemistry",
-            "Research protocols require research-use labeling on all documentation",
-            "Supplied for laboratory receptor assay preparation workflows",
+            "Research-ready PT-141 for your catalog",
+            "Straightforward ordering. Clear research labels.",
+            "Add it to your next lab order",
         ),
     ],
     "Retatrutide": [
         (
-            "Triple agonist peptide studied in metabolic receptor research models",
-            "Laboratory literature examines GLP-1/GIP/glucagon pathway signaling",
-            "Used in controlled assays of multi-receptor pharmacology research",
+            "A next-gen research peptide for metabolic lab studies",
+            "Made for teams exploring multi-pathway models",
+            "Premium research listing with clear documentation",
         ),
         (
-            "Investigated for energy-balance pathway observations in experimental systems",
-            "Peer-reviewed contexts document engineered peptide receptor profiles",
-            "Catalogued for mechanistic metabolic peptide studies, research-only",
+            "Modern research compound for advanced lab catalogs",
+            "Clean quality. Built for controlled study use.",
+            "Research only — not for human use",
         ),
         (
-            "Research models explore multi-incretin pathway marker responses",
-            "Analytical verification confirms peptide identity before assay use",
-            "Positioned for laboratory documentation, not clinical application",
+            "Sharp Retatrutide option for serious research teams",
+            "Straightforward to order and document",
+            "Stock it for your next research project",
         ),
     ],
     "Selank": [
         (
-            "Synthetic tuftsin analogue studied in anxiolytic pathway research models",
-            "Laboratory literature examines GABA and immunomodulatory markers in vitro",
-            "Used in controlled assays of neuropeptide signaling research",
+            "A research peptide for calm and focus pathway studies",
+            "Made for labs exploring stress-related models",
+            "Clean research material for your catalog",
         ),
         (
-            "Investigated for cognitive and stress-pathway observations in lab systems",
-            "Peer-reviewed contexts document peptide stability for CNS research",
-            "Catalogued for mechanistic neuropeptide studies, research-only",
+            "Focused neuro research option with clear lab docs",
+            "Built for controlled studies — research only",
+            "Premium listing for laboratory inventories",
         ),
         (
-            "Appears in preclinical research on regulatory peptide biochemistry",
-            "Research protocols emphasize research-only handling and labeling",
-            "Supplied for laboratory documentation of neuropeptide assays",
+            "Research-ready Selank for serious lab teams",
+            "Simple quality. Clear research labeling.",
+            "Add it to your next research order",
         ),
     ],
     "Semaglutide": [
         (
-            "GLP-1 receptor agonist peptide studied in metabolic research models",
-            "Laboratory literature examines incretin pathway signaling in vitro",
-            "Used in controlled assays of GLP-1 receptor pharmacology research",
+            "A leading research peptide for metabolic lab studies",
+            "Made for teams working on incretin pathway models",
+            "Clean, premium research material for your catalog",
         ),
         (
-            "Investigated for glucose and appetite pathway observations in experimental systems",
-            "Peer-reviewed contexts document long-acting peptide engineering",
-            "Catalogued for mechanistic incretin studies, research-only labeling",
+            "High-demand research listing for serious lab inventories",
+            "Clear docs. Research-grade quality.",
+            "Lab use only — not for clinical use",
         ),
         (
-            "Research models explore GLP-1 related metabolic marker responses",
-            "Analytical labs confirm peptide identity and purity pre-assay",
-            "Positioned for laboratory documentation workflows only",
+            "Research-ready Semaglutide for controlled study setups",
+            "Straightforward ordering for laboratory teams",
+            "Stock it for your next research project",
         ),
     ],
     "SEMAX": [
         (
-            "Synthetic ACTH fragment analogue studied in cognitive research models",
-            "Laboratory literature examines neurotrophic and BDNF-related markers",
-            "Used in controlled assays of CNS peptide signaling research",
+            "A research peptide for focus and cognitive lab models",
+            "Made for teams studying brain pathway research",
+            "Clean catalog material for controlled studies",
         ),
         (
-            "Investigated for nootropic pathway observations in experimental systems",
-            "Peer-reviewed contexts document peptide fragment pharmacology",
-            "Catalogued for mechanistic neuro research, research-only",
+            "Focused neuro research option with clear documentation",
+            "Built for laboratory use — not clinical use",
+            "Premium quality for serious research teams",
         ),
         (
-            "Appears in preclinical research on ACTH(4-10) analogue biochemistry",
-            "Research protocols require sealed research packaging documentation",
-            "Supplied for laboratory neuropeptide assay preparation",
+            "Research-ready SEMAX for your inventory",
+            "Simple to order. Easy to document.",
+            "Add it to your next lab catalog order",
         ),
     ],
     "Sermorelin": [
         (
-            "GHRH(1-29) analogue studied in growth-hormone axis research models",
-            "Laboratory literature examines pituitary GH-release pathway markers",
-            "Used in controlled assays of GHRH receptor pharmacology",
+            "A research classic for growth-hormone pathway studies",
+            "Made for labs that want clean endocrine research material",
+            "Clear labeling. Trusted research quality.",
         ),
         (
-            "Investigated for endocrine axis observations in experimental systems",
-            "Peer-reviewed contexts document peptide sequence and assay design",
-            "Catalogued for mechanistic GH-axis studies, research-only",
+            "Premium Sermorelin listing for laboratory inventories",
+            "Built for controlled study setups",
+            "Research use only — not for human use",
         ),
         (
-            "Research models explore pulsatile GH-related signaling markers",
-            "Analytical verification confirms peptide identity before lab use",
-            "Positioned for laboratory endocrine documentation workflows",
+            "Research-ready Sermorelin for serious lab teams",
+            "Straightforward docs and easy reordering",
+            "Stock it for your next research project",
         ),
     ],
     "SS-31": [
         (
-            "Mitochondria-targeting peptide studied in bioenergetics research models",
-            "Laboratory literature examines cardiolipin and ETC pathway markers",
-            "Used in controlled assays of mitochondrial membrane research",
+            "A research peptide for mitochondrial energy lab studies",
+            "Made for teams exploring cellular powerhouse pathways",
+            "Clean, modern research material for your catalog",
         ),
         (
-            "Investigated for oxidative-stress observations in experimental systems",
-            "Peer-reviewed contexts document Szeto–Schiller peptide biochemistry",
-            "Catalogued for mechanistic mitochondrial studies, research-only",
+            "Premium bioenergetics option for serious research labs",
+            "Clear docs. Research-grade quality.",
+            "Lab use only — not for clinical use",
         ),
         (
-            "Appears in preclinical research on mitochondrial protective pathway markers",
-            "Research protocols emphasize cold storage for peptide integrity",
-            "Supplied for laboratory bioenergetics documentation workflows",
+            "Research-ready SS-31 for advanced lab catalogs",
+            "Built for controlled laboratory projects",
+            "Add it to your next research order",
         ),
     ],
     "TA-1": [
         (
-            "Thymosin alpha-1 studied in immune-modulation research models",
-            "Laboratory literature examines T-cell and innate pathway markers",
-            "Used in controlled assays of thymic peptide signaling research",
+            "A research peptide for immune-pathway lab studies",
+            "Made for teams exploring immune system models",
+            "Clean research material with clear catalog notes",
         ),
         (
-            "Investigated for immunomodulatory observations in experimental systems",
-            "Peer-reviewed contexts document peptide structure and assay use",
-            "Catalogued for mechanistic immune research, research-only labeling",
+            "Focused immunology research option for lab inventories",
+            "Built for controlled studies — research only",
+            "Premium quality for serious research teams",
         ),
         (
-            "Appears in preclinical research on thymic hormone fragment biochemistry",
-            "Research protocols require research-use only documentation language",
-            "Supplied for laboratory immunology assay preparation workflows",
+            "Research-ready TA-1 for your catalog",
+            "Simple ordering. Clear research labeling.",
+            "Stock it for your next lab project",
         ),
     ],
     "TB-500": [
         (
-            "Thymosin beta-4 fragment studied in actin and cell-migration research",
-            "Laboratory literature examines cytoskeletal pathway markers in vitro",
-            "Used in controlled assays of tissue-response model systems",
+            "A research favorite for recovery-pathway lab studies",
+            "Made for teams studying movement and repair models",
+            "Clean research-grade material, ready to catalog",
         ),
         (
-            "Investigated for regenerative pathway observations in experimental models",
-            "Peer-reviewed contexts document peptide fragment stability for assays",
-            "Catalogued for mechanistic cytoskeletal studies, research-only",
+            "Premium TB-500 listing for serious laboratory work",
+            "Clear docs. Built for controlled study use.",
+            "Research only — not for human use",
         ),
         (
-            "Appears in preclinical research on actin-sequestering peptide biochemistry",
-            "Research protocols emphasize research-only handling standards",
-            "Supplied for laboratory documentation of migration/repair markers",
+            "Research-ready TB-500 for your inventory",
+            "Straightforward quality for busy lab teams",
+            "Add it to your next research order",
         ),
     ],
     "Tesamorelin": [
         (
-            "Stabilized GHRH analogue studied in GH-axis and metabolic research models",
-            "Laboratory literature examines visceral and GH pathway markers",
-            "Used in controlled assays of GHRH receptor pharmacology research",
+            "A research peptide for growth-hormone pathway studies",
+            "Made for labs exploring metabolic and GH models",
+            "Clean, premium research material for your catalog",
         ),
         (
-            "Investigated for endocrine and body-composition observations in models",
-            "Peer-reviewed contexts document peptide stabilization strategies",
-            "Catalogued for mechanistic GH-axis studies, research-only",
+            "Trusted Tesamorelin listing for laboratory inventories",
+            "Clear labeling. Research-grade quality.",
+            "Lab use only — not for clinical use",
         ),
         (
-            "Research models explore GH-related metabolic marker responses",
-            "Analytical labs confirm peptide identity before experimental use",
-            "Positioned for laboratory documentation, not clinical application",
+            "Research-ready Tesamorelin for serious lab teams",
+            "Simple to order and document",
+            "Stock it for your next research project",
         ),
     ],
     "Tesamorelin/Ipamorelin": [
         (
-            "Paired GHRH analogue and ghrelin-mimetic studied in GH-axis research",
-            "Laboratory models examine complementary secretagogue pathway markers",
-            "Used in dual-peptide endocrine assay documentation workflows",
+            "A powerful research pair for GH-pathway lab work",
+            "Two complementary compounds in one easy listing",
+            "Clean dual set for serious laboratory catalogs",
         ),
         (
-            "Investigated together for synergistic GH-related observations in vitro",
-            "Research literature frames both as investigational laboratory materials",
-            "Catalogued when dual secretagogue research listing is required",
+            "Popular research duo — ready for your lab inventory",
+            "Built for teams that want both compounds on hand",
+            "Research-grade quality — lab use only",
         ),
         (
-            "Controlled studies explore receptor-pathway interaction markers",
-            "Analytical verification covers both peptide identities pre-assay",
-            "Supplied for mechanistic endocrine research, research-only labeling",
+            "Paired research peptides for advanced study setups",
+            "Clear docs. Straightforward dual ordering.",
+            "Stock this combo for your next lab project",
         ),
     ],
     "Tirzepatide": [
         (
-            "Dual GIP/GLP-1 agonist peptide studied in metabolic research models",
-            "Laboratory literature examines incretin dual-receptor signaling in vitro",
-            "Used in controlled assays of multi-incretin pharmacology research",
+            "A leading dual-pathway research peptide for metabolic labs",
+            "Made for teams studying modern incretin models",
+            "Premium research listing with clear documentation",
         ),
         (
-            "Investigated for glucose and energy-balance pathway observations in models",
-            "Peer-reviewed contexts document engineered dual-agonist peptide design",
-            "Catalogued for mechanistic metabolic peptide studies, research-only",
+            "High-demand research compound for serious lab catalogs",
+            "Clean quality. Built for controlled study use.",
+            "Research only — not for human use",
         ),
         (
-            "Research models explore GIP/GLP-1 related marker responses",
-            "Analytical verification confirms peptide identity before assay use",
-            "Positioned for laboratory documentation workflows only",
+            "Research-ready Tirzepatide for your inventory",
+            "Straightforward ordering for laboratory teams",
+            "Add it to your next research project list",
         ),
     ],
 }
@@ -489,14 +490,17 @@ def expand_bank(product: str, need: int) -> list[tuple[str, str, str]]:
     while len(out) < need:
         a, b, c = base[i % len(base)]
         n = len(out) + 1
-        # Light uniqueness suffix so rows differ while staying research-safe
-        out.append(
-            (
-                a if n <= len(base) else f"{a} (research note {n:02d})",
-                b if n <= len(base) else f"{b} · assay set {n:02d}",
-                c if n <= len(base) else f"{c} · lab card {n:02d}",
+        if n <= len(base):
+            out.append((a, b, c))
+        else:
+            # Rotate wording lightly so later rows stay unique but plain
+            out.append(
+                (
+                    a,
+                    f"{b} — research card {n:02d}",
+                    f"{c} · set {n:02d}",
+                )
             )
-        )
         i += 1
     return out
 
@@ -508,7 +512,6 @@ def main() -> None:
     n = len(rows)
     assert n == 1000, f"expected 1000 rows, got {n}"
 
-    # Even distribution across 27 products
     per = n // len(LABELS)
     rem = n % len(LABELS)
     assignment: list[str] = []
@@ -517,7 +520,6 @@ def main() -> None:
         assignment.extend([label] * count)
     assert len(assignment) == n
 
-    # Pre-expand fact banks per product
     counts = {p: assignment.count(p) for p in LABELS}
     banks = {p: expand_bank(p, counts[p]) for p in LABELS}
     cursors = {p: 0 for p in LABELS}
@@ -527,12 +529,14 @@ def main() -> None:
         idx = cursors[product]
         f1, f2, f3 = banks[product][idx]
         cursors[product] = idx + 1
+        # Keep existing product_name if already set and matches assignment order,
+        # but always write the assigned product for a clean rebuild.
         out_rows.append(
             {
                 "text_id": row["text_id"],
                 "rank": row["rank"],
                 "product_name": product,
-                "mod_intro": row["mod_intro"],
+                "mod_intro": product,  # sheet backup; map uses video_url_input.product_name
                 "mod_fact_1": f1,
                 "mod_fact_2": f2,
                 "mod_fact_3": f3,
@@ -567,7 +571,8 @@ def main() -> None:
 
     JSON_OUT.write_text(json.dumps(out_rows, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(out_rows)} rows → {CSV_OUT}")
-    print("Per product:", {p: counts[p] for p in LABELS})
+    sample = next(r for r in out_rows if r["product_name"] == "Tesamorelin/Ipamorelin")
+    print("Sample Tesamorelin/Ipamorelin:", sample["mod_intro"], "|", sample["mod_fact_1"])
 
 
 if __name__ == "__main__":

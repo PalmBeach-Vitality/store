@@ -75,7 +75,7 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 Then Execute workflow.
 
 `pick_text` filters `10-creatomate-text-1000` to matching `product_name`, then picks the least-used row.  
-`mod_intro` / `mod_fact_4` / `mod_fact_5` stay as sheet values; Facts 1–3 are product science lines.
+**Intro-Text** = `product_name`. Facts 1–3 = plain-English ad lines. Facts 4–5 = disclaimer/CTA.
 
 ---
 

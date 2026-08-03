@@ -1,7 +1,8 @@
 # 1000 Creatomate text sets (product-filtered facts)
 
-Each reel’s Facts 1–3 are **product-specific science/study lines** (FDA research-only framing).  
-`mod_intro`, `mod_fact_4`, and `mod_fact_5` stay as the existing catalog/disclaimer/CTA style.
+Each reel’s Facts 1–3 are **plain-English ad-style lines** (still FDA research-only).  
+On-screen **Intro** = `product_name` from `video_url_input` (not catalog blurbs).  
+`mod_fact_4` / `mod_fact_5` stay as disclaimer + listing CTA.
 
 ## Files
 

@@ -5,8 +5,8 @@
 // Before: creatomate_render
 //
 // Each run: paste NEW Grok/vidgen URL + product_name into video_url_input.
-// pick_text already filtered facts 1–3 for that product.
-// Keep sheet mod_intro + mod_fact_4 + mod_fact_5 as-is.
+// pick_text filters facts 1–3 for that product (plain-English ad tone).
+// Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
 // Element: main_video. Muted — add music manually later.
 
 function firstJson(name) {
@@ -52,8 +52,12 @@ const product_name = String(
   urlInput.product_name || text.product_name || urlInput.compound_name || ''
 ).trim();
 
-// Keep mod_intro from the sheet row (unchanged library). Do not overwrite with product.
-const mod_intro = cleanFact(text.mod_intro) || product_name;
+if (!product_name) {
+  throw new Error('Enter product_name on video_url_input (shown as Intro-Text).');
+}
+
+// On-screen Intro = product name only (not catalog blurbs)
+const mod_intro = product_name;
 
 return [
   {
