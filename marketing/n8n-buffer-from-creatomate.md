@@ -9,14 +9,34 @@
 ```text
 … → save_creatomate_url
   → sheets_append_reel
-  → buffer_ig_reel          ← paste copied nodes here
-  → buffer_fb_reel          (if you use FB)
+  → buffer_ig_reel
+  → buffer_fb_reel
+  → buffer_tiktok
+  → buffer_x
   → Buffer_post_IG
   → Buffer_post_FB
-  → Buffer_IG_story         (optional)
-  → Buffer_FB_story         (optional)
-  → sheets_update_buffer    ← mark used_in_buffer = yes (optional)
+  → Buffer_IG_story
+  → Buffer_FB_story
+  → sheets_update_buffer
 ```
+
+---
+
+## Full Buffer sequence (after `sheets_append_reel`)
+
+| # | Node name | Role |
+|---|---|---|
+| 1 | `buffer_ig_reel` | Instagram Reel |
+| 2 | `buffer_fb_reel` | Facebook Reel |
+| 3 | `buffer_tiktok` | TikTok video |
+| 4 | `buffer_x` | X (Twitter) video/post |
+| 5 | `Buffer_post_IG` | IG feed post (if used) |
+| 6 | `Buffer_post_FB` | FB feed post (if used) |
+| 7 | `Buffer_IG_story` | IG story |
+| 8 | `Buffer_FB_story` | FB story |
+| 9 | `sheets_update_buffer` | Mark `used_in_buffer = yes` + Buffer IDs |
+
+Copy from the other workflow when those nodes exist; otherwise duplicate an existing Buffer video node and switch the **channel** to TikTok / X.
 
 ---
 
@@ -25,9 +45,10 @@
 From the **other / live** workflow, select + copy the Buffer chain:
 
 - `buffer_ig_reel`
-- `buffer_fb_reel` (if used)
-- `Buffer_post_IG`
-- `Buffer_post_FB` (if used)
+- `buffer_fb_reel`
+- `buffer_tiktok` (or create from a Buffer video node → TikTok channel)
+- `buffer_x` (or create from a Buffer video/post node → X channel)
+- `Buffer_post_IG` / `Buffer_post_FB` (if used)
 - `Buffer_IG_story` / `Buffer_FB_story` (optional)
 
 Paste into **`PBVita — Creatomate Package`**.  
