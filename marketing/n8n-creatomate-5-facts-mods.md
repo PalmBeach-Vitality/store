@@ -46,6 +46,9 @@ Body (expression):
     'main_video.muted': true,
     'main_video.volume': '0%',
     'main_video.loop': false,
+    'video_loop_source': $json.video_loop_source,
+    'video_loop_source.muted': true,
+    'video_loop_source.volume': '0%',
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -57,7 +60,7 @@ Body (expression):
 }}
 ```
 
-**Must include `main_video`** (dynamic video element — not `video_loop_source`).  
+**Must include `main_video`** (Grok) **and `video_loop_source`** (fixed B2 loop MP4).  
 **Muted** — no music in the render; add soundtrack manually later.  
 Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste the **NEW** Grok/vidgen URL into Set node `video_url_input`. Keep `sheets_update_text` (and `sheets_append_reel` if present).
 

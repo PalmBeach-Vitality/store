@@ -112,6 +112,9 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
     'main_video.muted': true,
     'main_video.volume': '0%',
     'main_video.loop': false,
+    'video_loop_source': $json.video_loop_source,
+    'video_loop_source.muted': true,
+    'video_loop_source.volume': '0%',
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -222,7 +225,8 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 ## Template
 
-- Dynamic element **`main_video`**
+- Dynamic element **`main_video`** — Grok clip (once, loop off)
+- Dynamic element **`video_loop_source`** — fixed Backblaze loop MP4 (muted)
 - No music track (or muted)
 - Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`
 

@@ -7,7 +7,7 @@
 // Each run: paste NEW Grok/vidgen URL + product_name into video_url_input.
 // pick_text filters facts 1–3 for that product (plain-English ad tone).
 // Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
-// Element: main_video. Muted — add music manually later.
+// Elements: main_video (Grok, once) + video_loop_source (fixed B2 loop). Muted.
 
 function firstJson(name) {
   try {
