@@ -1,6 +1,8 @@
 # Buffer after Creatomate (Workflow B)
 
-**Goal:** Copy your working Buffer nodes from the other workflow, wire them after the Creatomate package is ready, and post the **finished** MP4 (not the Grok source).
+**Goal:** Wire Buffer after the Creatomate package is ready, and post the **finished** MP4 (not the Grok/catbox source).
+
+**Channels:** Instagram, Facebook, TikTok only — **no X / Twitter**.
 
 ---
 
@@ -12,7 +14,6 @@
   → buffer_ig_reel
   → buffer_fb_reel
   → buffer_tiktok
-  → buffer_x
   → Buffer_post_IG
   → Buffer_post_FB
   → Buffer_IG_story
@@ -29,30 +30,26 @@
 | 1 | `buffer_ig_reel` | Instagram Reel |
 | 2 | `buffer_fb_reel` | Facebook Reel |
 | 3 | `buffer_tiktok` | TikTok video |
-| 4 | `buffer_x` | X (Twitter) video/post |
-| 5 | `Buffer_post_IG` | IG feed post (if used) |
-| 6 | `Buffer_post_FB` | FB feed post (if used) |
-| 7 | `Buffer_IG_story` | IG story |
-| 8 | `Buffer_FB_story` | FB story |
-| 9 | `sheets_update_buffer` | Mark `used_in_buffer = yes` + Buffer IDs |
-
-Copy from the other workflow when those nodes exist; otherwise duplicate an existing Buffer video node and switch the **channel** to TikTok / X.
+| 4 | `Buffer_post_IG` | IG feed post (if used) |
+| 5 | `Buffer_post_FB` | FB feed post (if used) |
+| 6 | `Buffer_IG_story` | IG story |
+| 7 | `Buffer_FB_story` | FB story |
+| 8 | `sheets_update_buffer` | Mark `used_in_buffer = yes` + Buffer IDs |
 
 ---
 
 ## What to copy
 
-From the **other / live** workflow, select + copy the Buffer chain:
+From the **other / live** workflow, select + copy:
 
 - `buffer_ig_reel`
 - `buffer_fb_reel`
-- `buffer_tiktok` (or create from a Buffer video node → TikTok channel)
-- `buffer_x` (or create from a Buffer video/post node → X channel)
+- `buffer_tiktok`
 - `Buffer_post_IG` / `Buffer_post_FB` (if used)
 - `Buffer_IG_story` / `Buffer_FB_story` (optional)
 
 Paste into **`PBVita — Creatomate Package`**.  
-Keep the same Buffer credentials / channel IDs.
+Keep the same Buffer credentials / channel IDs. Do **not** add `buffer_x`.
 
 ---
 
@@ -86,7 +83,7 @@ For each Buffer / HTTP Buffer node:
 
 1. **Video URL** = `={{ $('save_creatomate_url').item.json.video_url }}`
 2. **Text / caption** = FDA-safe caption (product + research-only + site)
-3. **Channel** = same IG (and FB) channel as the other workflow
+3. **Channel** = correct `channelId` for that platform
 4. **Mode** = Add to Queue (safer) or Share Now (if you already do that)
 5. Instagram scheduling type = whatever already works on the other WF (Automatic vs Notification)
 
@@ -96,30 +93,13 @@ If a node expects binary upload: keep your existing pattern, but the source URL 
 
 That string is a **placeholder**, not a real Buffer channel. Replace it in every Buffer body.
 
-**Get real IDs (pick one):**
+**Get real IDs:** POST to `https://api.buffer.com` with your Bearer token → list orgs → list channels → match `service`.
 
-1. Open your **other / working** Buffer workflow → open `buffer_ig_reel` (or FB/TikTok/X) → copy the real `channelId` from the request body  
-2. Or in Buffer → open the channel → URL often contains the id  
-3. Or POST to `https://api.buffer.com` with your Bearer token:
-
-```graphql
-query {
-  channels {
-    id
-    name
-    service
-  }
-}
-```
-
-Paste each real id into the matching node:
-
-| Node | Replace placeholder with |
+| Node | `channelId` |
 |---|---|
 | `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
-| `buffer_fb_reel` / `Buffer_FB_story` | Facebook `channelId` (confirm via `channels` — usually ≠ IG) |
+| `buffer_fb_reel` / `Buffer_FB_story` | your Facebook id (`service: facebook`) |
 | `buffer_tiktok` | `6a642435bac606503d410801` |
-| `buffer_x` | X `channelId` (from working WF / `channels` query) |
 
 **Palm Beach Vitality — known IDs**
 
@@ -127,10 +107,7 @@ Paste each real id into the matching node:
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
 | TikTok | `6a642435bac606503d410801` |
-| Facebook | confirm separately (`service: facebook`) |
-| X | confirm separately (`service: twitter`) |
-
-In the Buffer HTTP body / GraphQL variables:
+| Facebook | entered in n8n (`service: facebook`) |
 
 ```js
 // buffer_ig_reel / Buffer_IG_story
@@ -140,9 +117,7 @@ channelId: '6a668d534b2d03035f478536'
 channelId: '6a642435bac606503d410801'
 ```
 
-Never leave the literal text `PASTE_YOUR_…`.  
-IG / FB / TikTok / X each need their own id from the `channels` query.
-
+IG / FB / TikTok each need their own id. **No X / Twitter.**
 
 ---
 
@@ -160,19 +135,20 @@ IG / FB / TikTok / X each need their own id from the `channels` query.
 | `buffer_ig_reel_id` | from `buffer_ig_reel` response id |
 | `buffer_fb_reel_id` | from `buffer_fb_reel` response id |
 | `buffer_tiktok_id` | from `buffer_tiktok` response id |
-| `buffer_x_id` | from `buffer_x` response id |
 
 If `4-reel-queue` doesn’t have Buffer ID columns yet, add:
 
-`buffer_ig_reel_id`, `buffer_fb_reel_id`, `buffer_tiktok_id`, `buffer_x_id`
+`buffer_ig_reel_id`, `buffer_fb_reel_id`, `buffer_tiktok_id`
+
+(No `buffer_x_id`.)
 
 ---
 
 ## Smoke test
 
 1. Run Workflow B through Creatomate → confirm `save_creatomate_url.video_url` opens  
-2. Execute only the Buffer nodes (or full run)  
-3. Check Buffer queue for IG Reel with the **packaged** video + caption  
+2. Execute Buffer nodes (or full run)  
+3. Check Buffer queue for IG / FB / TikTok with the **packaged** video + caption  
 4. Confirm Sheet `used_in_buffer` flips to `yes` if you added the update node  
 
 ---
@@ -181,4 +157,5 @@ If `4-reel-queue` doesn’t have Buffer ID columns yet, add:
 
 - Point Buffer at `vidgen.x.ai` or raw Grok URLs  
 - Post without the research-only disclaimer in the caption  
+- Add X / Twitter nodes  
 - Edit Buffer credentials on the **other** live workflow while testing — copy nodes, don’t break the source WF  
