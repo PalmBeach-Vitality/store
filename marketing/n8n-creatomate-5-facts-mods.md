@@ -62,7 +62,7 @@ Body (expression):
 
 **Must include `Video-8QW`** (Grok MP4). **`end_hold`** = still for freeze (optional; template default if empty).  
 **Muted** — no music in the render; add soundtrack manually later.  
-Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste the **NEW** Grok/vidgen URL into Set node `video_url_input`. Keep `sheets_update_text` (and `sheets_append_reel` if present).
+Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste a **catbox** `.mp4` URL into `video_url_input.public_video_url` (never `vidgen.x.ai`). Keep `sheets_update_text` (and `sheets_append_reel` if present).
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA`, `main_video`, or `video_loop_source` — this template ignores them.
 

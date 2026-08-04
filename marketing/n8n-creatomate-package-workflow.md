@@ -2,7 +2,8 @@
 
 **Name in n8n:** `PBVita — Creatomate Package`  
 
-**What you do each run:** paste the **NEW** Grok/vidgen `.mp4` URL into one Set node.  
+**What you do each run:** upload the Grok MP4 to **[catbox.moe](https://catbox.moe)**, then paste the **catbox** `.mp4` URL into one Set node.  
+**Do not paste `vidgen.x.ai` — Creatomate cannot fetch Grok URLs.**  
 **Everything else stays the same** — text library pick, Sheets writebacks, Creatomate mods, mute render.
 
 ---
@@ -28,7 +29,7 @@ Paste into a **new** workflow. Add in front:
 
 ```text
 Manual Trigger
-  → video_url_input              ← ONLY daily edit: paste NEW vidgen URL
+  → video_url_input              ← ONLY daily edit: paste NEW catbox .mp4 URL
   → get_reel_text → …
 ```
 
@@ -40,7 +41,7 @@ Remove any wires to Grok / `pick_creation` / `save_video_url` / `Parse_Grok`.
 
 ```text
 Manual Trigger
-  → video_url_input              (Edit Fields — paste NEW URL)
+  → video_url_input              (Edit Fields — paste NEW catbox .mp4 URL)
   → get_reel_text                (Sheets Get Many · 10-creatomate-text-1000 · Return All)
   → pick_text                    (Code — n8n-code-pick-text.js)
   → sheets_update_text           (bump text times_used / last_used_at)  ← KEEP
@@ -72,10 +73,12 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 
 | Field | Each run |
 |---|---|
-| `public_video_url` | Paste the **new** Grok/vidgen `.mp4` URL → **`Video-8QW`** |
+| `public_video_url` | **Catbox** direct `.mp4` (e.g. `https://files.catbox.moe/….mp4`) → **`Video-8QW`**. Not vidgen. |
 | `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
-| `still_url` | Optional. Grok still / last-frame URL → **`end_hold`** (15–30s freeze) |
+| `still_url` | Optional. Public still (catbox image) → **`end_hold`** (15–30s freeze). Not imgen.x.ai. |
 | `creation_id` | Optional tracking |
+
+**Daily habit:** Workflow A → download Grok MP4 → upload [catbox.moe](https://catbox.moe) → paste catbox URL here → Execute.
 
 Then Execute workflow.
 
@@ -221,10 +224,10 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 ## Daily habit
 
-1. Run **Workflow A** → get new Grok `video_url`  
-2. Copy that URL  
-3. Paste into **`video_url_input.public_video_url`**  
-4. Run **Workflow B** → text Sheet updates → muted Creatomate package  
+1. Run **Workflow A** → get new Grok `video_url` (`vidgen.x.ai`)  
+2. **Download** that MP4 → **upload to catbox.moe**  
+3. Paste the **catbox** URL into **`video_url_input.public_video_url`**  
+4. Run **Workflow B** → text Sheet updates → muted Creatomate package (`Video-8QW` = catbox)  
 
 ---
 
