@@ -292,7 +292,7 @@ return [{
 Body (fx ON — one line):
 
 ```text
-{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no fade out, no dissolve, no people, no hands, no needles. For laboratory research use only. Not for human use or consumption.',video:{url:$json.video_url},duration:10}) }}
+{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no fade out, no dissolve, no people, no hands, no needles, no on-screen disclaimer or caption text.',video:{url:$json.video_url},duration:10}) }}
 ```
 
 **Check:** request preview includes `"url":"https://vidgen..."` and response has `request_id`.

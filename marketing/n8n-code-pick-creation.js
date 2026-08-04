@@ -33,10 +33,31 @@ function isActive(status) {
   return !s || s === 'active' || s === 'true' || s === '1' || s === 'yes';
 }
 
+/** Disclaimers belong in Buffer captions only — never in Grok/Seedance prompts. */
+function stripVidDisclaimer(text) {
+  let t = String(text || '');
+  const patterns = [
+    /\s*For laboratory research use only\.?\s*/gi,
+    /\s*Not for human use or consumption\.?\s*/gi,
+    /\s*No treatment, cure, dosage-for-humans, or clinical outcome claims in the image\.?\s*/gi,
+    /\s*with a small ['']For Laboratory Research Use Only[''] line\s*[—–-]?\s*/gi,
+    /\s*,?\s*optionally with\s*['']For Laboratory Research Use Only['']\.?/gi,
+    /\s*['']For Laboratory Research Use Only['']\.?\s*/gi,
+    /\s*Explicit research[- ]use only[^.]*\.?\s*/gi,
+    /\s*Research use only\s*[—–-]\s*not for (?:human|clinical)[^.]*\.?\s*/gi,
+    /\s*Research only\s*[—–-]\s*not for human use\.?\s*/gi,
+    /\s*Lab use only\s*[—–-]\s*not for clinical use\.?\s*/gi,
+    /\s*[—–-]\s*lab use only\.?\s*/gi,
+    /\s*Documentation must retain research-only disclaimer\.?\s*/gi,
+  ];
+  for (const re of patterns) t = t.replace(re, ' ');
+  return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
+}
+
 function buildMotionPrompt(row) {
-  const fromSheet = String(
-    val(row, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'], '')
-  ).trim();
+  const fromSheet = stripVidDisclaimer(
+    String(val(row, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'], '')).trim()
+  );
   if (fromSheet) return fromSheet;
 
   const name = String(val(row, ['lab_item', 'labItem', 'item_name'], 'laboratory research item')).trim();
@@ -63,8 +84,7 @@ function buildMotionPrompt(row) {
     `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
     `Keep the subject sharp and unchanged from the still. ` +
     labelRule +
-    `No people, no hands, no needles, no lifestyle. ` +
-    `For laboratory research use only. Not for human use or consumption.`
+    `No people, no hands, no needles, no lifestyle. No burn-in text or watermarks.`
   );
 }
 
@@ -95,7 +115,7 @@ const scored = creations
       scene_brief: val(c, ['scene_brief', 'sceneBrief']),
       quality_suffix: val(c, ['quality_suffix', 'qualitySuffix']),
       quality_var_count: val(c, ['quality_var_count', 'qualityVarCount'], 12),
-      video_prompt: val(c, ['video_prompt', 'videoPrompt']),
+      video_prompt: stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt'])),
       video_motion_prompt: buildMotionPrompt(c),
       surface: val(c, ['surface']),
       lighting: val(c, ['lighting']),
@@ -227,8 +247,8 @@ return [
       scene_brief: pick.scene_brief,
       quality_suffix: pick.quality_suffix,
       quality_var_count: pick.quality_var_count,
-      video_prompt: withVialClosure(pick.video_prompt),
-      video_motion_prompt: pick.video_motion_prompt,
+      video_prompt: withVialClosure(stripVidDisclaimer(pick.video_prompt)),
+      video_motion_prompt: stripVidDisclaimer(pick.video_motion_prompt),
       surface: pick.surface,
       lighting: pick.lighting,
       camera_move: pick.camera_move,

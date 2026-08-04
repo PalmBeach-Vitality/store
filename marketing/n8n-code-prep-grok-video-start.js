@@ -76,7 +76,7 @@ let motion = asciiPrompt(
     `Keep the exact same laboratory research scene, materials, and lighting. ` +
     `No orbit. No new objects. No duplicate props. No repeated text or graphics. ` +
     `No people, hands, faces, needles, text watermarks, or burn-in. ` +
-    `For laboratory research use only.`
+    `No on-screen disclaimer or caption text.`
 );
 
 if (compound) {

@@ -259,15 +259,16 @@ return [
         'mod_fact_3',
         'Intended for in-vitro assay preparation contexts'
       ),
+      // On-screen Fact-4/5 = CTA only. Legal disclaimer is Buffer caption only.
       mod_fact_4: factFrom(
         [text],
         'mod_fact_4',
-        'Explicit research-use only — not for clinical application'
+        'Explore the full product listing online'
       ),
       mod_fact_5: factFrom(
         [text],
         'mod_fact_5',
-        'View laboratory listing for full documentation'
+        'Shop www.palmbeach-vitality.store'
       ),
       mod_disclaimer: factFrom(
         [text],

@@ -64,10 +64,24 @@ const camera_direction = asciiPrompt(val(pick, ['camera_direction'], 'forward'))
 const camera_move = asciiPrompt(val(pick, ['camera_move'], 'slow push-in')).slice(0, 180);
 const compound = asciiPrompt(val(pick, ['compound_name'], ''));
 
-const sheetMotion = asciiPrompt(
-  val(input, ['video_motion_prompt']) ||
-    val(stillNode, ['video_motion_prompt']) ||
-    val(pick, ['video_motion_prompt'], '')
+function stripVidDisclaimer(text) {
+  let t = String(text || '');
+  const patterns = [
+    /\s*For laboratory research use only\.?\s*/gi,
+    /\s*Not for human use or consumption\.?\s*/gi,
+    /\s*['']For Laboratory Research Use Only['']\.?\s*/gi,
+    /\s*Explicit research[- ]use only[^.]*\.?\s*/gi,
+  ];
+  for (const re of patterns) t = t.replace(re, ' ');
+  return t.replace(/\s+/g, ' ').trim();
+}
+
+const sheetMotion = stripVidDisclaimer(
+  asciiPrompt(
+    val(input, ['video_motion_prompt']) ||
+      val(stillNode, ['video_motion_prompt']) ||
+      val(pick, ['video_motion_prompt'], '')
+  )
 );
 
 let motion = sheetMotion;
@@ -78,13 +92,15 @@ if (!motion || motion.length > 700) {
       `Keep the exact same laboratory research scene, materials, and lighting. ` +
       `No orbit. No new objects. No duplicate props. No repeated text or graphics. ` +
       `No people, hands, faces, needles, text watermarks, or burn-in. ` +
-      `For laboratory research use only. Silent / no soundtrack.`
+      `Silent / no soundtrack. No on-screen disclaimer or caption text.`
   );
 }
 
 if (compound) {
   motion += ` Keep label '${compound}' unchanged if visible, printed once only.`;
 }
+
+motion = stripVidDisclaimer(motion);
 
 if (motion.length > 700) {
   motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';

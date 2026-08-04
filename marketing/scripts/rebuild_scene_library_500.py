@@ -55,9 +55,11 @@ AVOID = (
     "Do NOT render any prompt metadata as visible text in the image. "
     f"{NO_DOUBLES} {VIAL_CLOSURE}"
 )
+# Legal disclaimers belong in Buffer captions only — never in Grok/Seedance prompts
+# (they burn into stills / labels). Keep visual safety rules in AVOID instead.
 COMPLIANCE = (
-    "For laboratory research use only. Not for human use or consumption. "
-    "No treatment, cure, dosage-for-humans, or clinical outcome claims in the image."
+    "No treatment, cure, dosage-for-humans, or clinical outcome claims as readable text in the image. "
+    "Do not print research-use disclaimers, legal footnotes, or caption bars in the frame."
 )
 
 # ---------------------------------------------------------------------------
@@ -353,9 +355,9 @@ def build_scene(rank: int, compound: str) -> dict:
     if compound:
         label_sentence = (
             f" If any vial, pen, carton panel, or pedestal plaque shows a product name, "
-            f"it must read exactly '{compound}' with a small 'For Laboratory Research Use Only' line — "
-            f"never invent other compound names. "
-            f"Do not print scene titles, gallery names, hex codes, or captions anywhere in frame."
+            f"it must read exactly '{compound}' only — never invent other compound names, "
+            f"and never add research-use disclaimer lines on the label. "
+            f"Do not print scene titles, gallery names, hex codes, captions, or legal footnotes anywhere in frame."
         )
     else:
         label_sentence = (
@@ -443,8 +445,8 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
     if compound:
         label_rule = (
             f"LABEL REQUIREMENT: if any label appears, it MUST read exactly '{compound}' "
-            f"(Palm Beach Vitality research compound), printed ONCE only, optionally with "
-            f"'For Laboratory Research Use Only'. No LAB codes, motifs, counters, or repeated lettering."
+            f"(Palm Beach Vitality compound name only), printed ONCE only. "
+            f"No research-use disclaimer lines, LAB codes, motifs, counters, or repeated lettering."
         )
     else:
         label_rule = (
@@ -503,8 +505,7 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
         f"direction {ascii(shot.get('camera_direction') or 'forward')}. "
         f"Keep the exact same laboratory research scene, materials, and lighting. "
         f"No orbit. No new objects. No duplicate props. No repeated text or graphics. "
-        f"No people, hands, faces, needles, watermarks, or burn-in. "
-        f"For laboratory research use only."
+        f"No people, hands, faces, needles, watermarks, burn-in, or on-screen disclaimers."
     )
     if compound:
         prompt += f" Keep label '{compound}' unchanged if visible, once only."

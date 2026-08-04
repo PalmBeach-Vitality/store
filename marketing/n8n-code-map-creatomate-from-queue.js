@@ -101,11 +101,12 @@ return [
       grok_video_url: public_video_url,
       public_video_url,
       mod_intro,
+      // On-screen facts only — never put mod_disclaimer into Creatomate text mods
       mod_fact_1: cleanFact(text.mod_fact_1),
       mod_fact_2: cleanFact(text.mod_fact_2),
       mod_fact_3: cleanFact(text.mod_fact_3),
-      mod_fact_4: cleanFact(text.mod_fact_4),
-      mod_fact_5: cleanFact(text.mod_fact_5),
+      mod_fact_4: cleanFact(text.mod_fact_4) || 'Explore the full product listing online',
+      mod_fact_5: cleanFact(text.mod_fact_5) || 'Shop www.palmbeach-vitality.store',
       mod_disclaimer:
         cleanFact(text.mod_disclaimer) ||
         'For laboratory research use only. Not for human use or consumption.',

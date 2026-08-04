@@ -85,7 +85,7 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 Then Execute workflow.
 
 `pick_text` filters `10-creatomate-text-1000` to matching `product_name`, then picks the least-used row.  
-**Intro-Text** = `product_name`. Facts 1–3 = plain-English ad lines. Facts 4–5 = disclaimer/CTA.
+**Intro-Text** = `product_name`. Facts 1–5 = pitch/CTA only — **no** research-use disclaimers on screen. Legal disclaimer goes in **Buffer captions only**.
 
 ---
 

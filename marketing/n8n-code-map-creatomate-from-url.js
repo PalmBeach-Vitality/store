@@ -8,8 +8,8 @@
 // Creatomate CANNOT fetch vidgen.x.ai / Grok URLs — upload to catbox.moe first.
 // Optional: still_url / hold_image_url → end_hold (also prefer catbox / public HTTPS).
 // pick_text filters facts 1–3 for that product (plain-English ad tone).
-// Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
-// buffer_caption = unique per product/post (facts rotate) + 5 hashtags + discount CTA.
+// Intro-Text = product_name. On-screen Facts 1–5 = pitch/CTA only — NO disclaimers.
+// Legal disclaimer lives ONLY in buffer_caption (Buffer / Sheets), never Creatomate overlays.
 //
 // Template: c5d54774-b029-4786-af04-d5af345dc7f2
 // Elements: main_video (catbox MP4, once) + end_hold (still). Muted.
@@ -111,21 +111,43 @@ function fiveHashtags(productName) {
   return [...new Set(bank)].slice(0, 5);
 }
 
+function isDisclaimerCopy(text) {
+  return /research[- ]use only|not for human|not for clinical|research-only disclaimer|\blab use only\b/i.test(
+    String(text || '')
+  );
+}
+
+/** Strip disclaimer phrases from on-screen Creatomate text (caption keeps legal line). */
+function forOnScreen(text, fallback) {
+  let t = cleanFact(text);
+  if (!t || isDisclaimerCopy(t)) return fallback;
+  t = t
+    .replace(/\s*[—–-]\s*lab use only\.?$/i, '')
+    .replace(/\s*Research use only\s*[—–-]\s*not for (?:human|clinical)[^.]*\.?$/i, '')
+    .replace(/\s*Research only\s*[—–-]\s*not for human use\.?$/i, '')
+    .replace(/\s*Lab use only\s*[—–-]\s*not for clinical use\.?$/i, '')
+    .replace(/\s*Explicit research[- ]use only[^.]*\.?$/i, '')
+    .replace(/\s*Documentation must retain research-only disclaimer\.?$/i, '')
+    .trim();
+  return t || fallback;
+}
+
 /**
- * Upbeat, audience-friendly Buffer caption for viewers (4+ sentences).
- * Product-specific sales pitch/description; research-only disclaimer kept.
- * No human-use / medical outcome claims.
+ * Upbeat Buffer caption. Legal disclaimer belongs HERE only — never on Creatomate overlays.
  */
-function buildBufferCaption(productName, fact1, fact2, fact3) {
+function buildBufferCaption(productName, fact1, fact2, fact3, disclaimer) {
   const p = String(productName || '').trim();
   const f1 = cleanFact(fact1);
   const f2 = cleanFact(fact2);
   const f3 = cleanFact(fact3);
+  const legal =
+    cleanFact(disclaimer) ||
+    'For laboratory research use only. Not for human use or consumption.';
 
   const trimDot = (s) => String(s || '').replace(/\.$/, '').trim();
 
   const s1 = `Looking for ${p}? Palm Beach Vitality makes it easy to find a research listing that feels premium, clear, and ready for your next project.`;
-  const s2 = f1
+  const s2 = f1 && !isDisclaimerCopy(f1)
     ? `${trimDot(f1)} — a confident pick when you want material that fits real laboratory workflows.`
     : `${p} is a standout option for research teams who care about clarity, consistency, and quality.`;
   const lowerStart = (s) => {
@@ -133,13 +155,11 @@ function buildBufferCaption(productName, fact1, fact2, fact3) {
     return t ? t.charAt(0).toLowerCase() + t.slice(1) : t;
   };
 
-  const s3 = f2
+  const s3 = f2 && !isDisclaimerCopy(f2)
     ? `Here’s why teams keep coming back: ${lowerStart(f2)}.`
     : `It’s an upbeat, no-drama choice when you want research-grade supply without the guesswork.`;
   const s4 = `Ready to check it out? Explore ${p} and shop the full listing at www.palmbeach-vitality.store.`;
-  const s5 =
-    'For laboratory research use only. Not for human use or consumption.';
-  // Fixed closer on every caption
+  const s5 = legal;
   const s6 = 'For a 10% discount code drop Peptides in the comments!';
 
   const paragraph = [s1, s2, s3, s4, s5, s6].join(' ');
@@ -224,20 +244,38 @@ const end_hold_url = pickStillUrl(
 
 const end_text_link = 'www.palmbeach-vitality.store';
 
-const mod_fact_1 = cleanFact(text.mod_fact_1);
-const mod_fact_2 = cleanFact(text.mod_fact_2);
-const mod_fact_3 = cleanFact(text.mod_fact_3);
-const mod_fact_4 = cleanFact(text.mod_fact_4);
-const mod_fact_5 = cleanFact(text.mod_fact_5);
+// Caption may use raw sheet facts; on-screen Creatomate text is disclaimer-free.
+const raw_fact_1 = cleanFact(text.mod_fact_1);
+const raw_fact_2 = cleanFact(text.mod_fact_2);
+const raw_fact_3 = cleanFact(text.mod_fact_3);
 const mod_disclaimer =
   cleanFact(text.mod_disclaimer) ||
   'For laboratory research use only. Not for human use or consumption.';
 
+const mod_fact_1 = forOnScreen(
+  raw_fact_1,
+  `${product_name} — premium catalog listing for laboratory teams`
+);
+const mod_fact_2 = forOnScreen(
+  raw_fact_2,
+  'Clear documentation. Research-grade quality.'
+);
+const mod_fact_3 = forOnScreen(raw_fact_3, 'Add it to your next laboratory order list');
+const mod_fact_4 = forOnScreen(
+  text.mod_fact_4,
+  'Explore the full product listing online'
+);
+const mod_fact_5 = forOnScreen(
+  text.mod_fact_5,
+  'Shop www.palmbeach-vitality.store'
+);
+
 const buffer_caption = buildBufferCaption(
   product_name,
-  mod_fact_1,
-  mod_fact_2,
-  mod_fact_3
+  raw_fact_1,
+  raw_fact_2,
+  raw_fact_3,
+  mod_disclaimer
 );
 // Same caption for IG / FB / TikTok — separate draft keys for Sheets/Buffer clarity
 const ig_caption_draft = buffer_caption;

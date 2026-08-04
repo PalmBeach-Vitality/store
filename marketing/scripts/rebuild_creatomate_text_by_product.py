@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Rebuild 10-creatomate-text-1000 with product_name + plain-English ad facts 1–3.
 
-Keeps mod_fact_4, mod_fact_5, mod_disclaimer unchanged.
+On-screen Facts 1–5 = pitch/CTA only — NO legal disclaimers.
+mod_disclaimer column is kept for Buffer captions only (never Creatomate overlays).
 mod_intro in sheet is unused for on-screen Intro (map uses product_name).
-mod_fact_1/2/3 = short ad-style lines, FDA research-only (no treatment claims).
 """
 
 from __future__ import annotations
@@ -47,14 +47,28 @@ def clean_mod_text(text: str) -> str:
             break
     return t
 
-# Plain English, advertisement tone — still research-only / FDA-safe.
+# On-screen CTA lines for Fact-4 (never legal disclaimers).
+FACT4_CTAS = [
+    "Explore the full product listing online",
+    "Clear specs and packaging on the catalog page",
+    "Shop the Palm Beach Vitality catalog today",
+    "Open the product page for full details",
+    "See the full listing for packaging and notes",
+    "Continue to the catalog for complete SKU details",
+    "View the product page for ordering details",
+    "Check the catalog entry for full specifications",
+    "Browse the listing for lot and packaging fields",
+    "Find specs and notes on the product page",
+]
+
+# Plain English, advertisement tone for overlays — no legal disclaimer lines.
 # No cure/treat/dose-for-humans language.
 FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
     "5-Amino-1MQ": [
         (
             "A clean research compound for metabolism-focused lab work",
             "Made for teams studying how cells handle energy",
-            "Premium research material — lab use only",
+            "Premium research material for your catalog",
         ),
         (
             "Built for serious metabolic research catalogs",
@@ -76,7 +90,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Lab-focused fragment for metabolic research teams",
             "Built for clear, controlled study setups",
-            "Research use only — not for clinical use",
+            "Ready for your next laboratory order",
         ),
         (
             "Premium research listing for GH-fragment studies",
@@ -93,7 +107,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "A standout peptide for regenerative research models",
             "Simple to document. Built for serious lab work.",
-            "Research only — not for human use",
+            "A clean pick for serious laboratory teams",
         ),
         (
             "Premium BPC-157 for controlled laboratory studies",
@@ -110,7 +124,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Paired research peptides in one easy catalog entry",
             "Made for labs that want both compounds on hand",
-            "Research-grade quality — lab use only",
+            "Research-grade quality for your catalog",
         ),
         (
             "Dual-peptide research set for advanced lab projects",
@@ -127,7 +141,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Clean amylin-analogue option for research inventories",
             "Built for controlled laboratory study setups",
-            "Research use only — not for clinical use",
+            "Ready for your next laboratory order",
         ),
         (
             "Sharp listing for next-gen metabolic research",
@@ -135,7 +149,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
             "Order it for your lab catalog today",
         ),
     ],
-    "CJC (no DAC)": [
+    "CJC": [
         (
             "A research classic for growth-hormone pathway studies",
             "Made for labs that want a clean GHRH-style compound",
@@ -144,7 +158,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Trusted research peptide for endocrine lab work",
             "Straightforward material for controlled studies",
-            "Lab use only — not for human use",
+            "Clean listing for serious laboratory teams",
         ),
         (
             "Premium CJC listing for serious research teams",
@@ -161,7 +175,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Research duo made for growth-hormone study models",
             "Easy to order. Clear research documentation.",
-            "Research-grade quality — lab use only",
+            "Research-grade quality for your catalog",
         ),
         (
             "Paired secretagogues for advanced research catalogs",
@@ -178,7 +192,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Simple, focused compound for neuro research labs",
             "Built for controlled study setups and clean docs",
-            "Research use only — not for clinical use",
+            "Ready for your next laboratory order",
         ),
         (
             "Premium DSIP listing for laboratory inventories",
@@ -195,7 +209,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium research peptide for matrix and skin lab work",
             "Clear labeling. Reliable research quality.",
-            "Lab use only — not for human use",
+            "Clean listing for serious laboratory teams",
         ),
         (
             "Popular GHK-Cu listing for serious research teams",
@@ -212,7 +226,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Convenient research set for advanced lab catalogs",
             "Made for teams that want a complete research kit feel",
-            "Research-grade quality — lab use only",
+            "Research-grade quality for your catalog",
         ),
         (
             "Premium GLOW blend for controlled laboratory projects",
@@ -229,7 +243,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Practical research set for busy laboratory inventories",
             "Built for clear docs and controlled study use",
-            "Research use only — not for clinical use",
+            "Ready for your next laboratory order",
         ),
         (
             "Premium KLOW blend for serious research catalogs",
@@ -280,7 +294,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium research option for metabolism-focused labs",
             "Clear docs. Research-grade quality.",
-            "Lab use only — not for human use",
+            "Clean listing for serious laboratory teams",
         ),
         (
             "Sharp MOTS-C listing for serious research teams",
@@ -297,7 +311,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium cofactor listing for serious laboratory work",
             "Clear labeling. Trusted research quality.",
-            "Research use only — not for clinical use",
+            "Ready for your next laboratory order",
         ),
         (
             "Must-have NAD+ for research catalogs",
@@ -331,7 +345,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Modern research compound for advanced lab catalogs",
             "Clean quality. Built for controlled study use.",
-            "Research only — not for human use",
+            "A clean pick for serious laboratory teams",
         ),
         (
             "Sharp Retatrutide option for serious research teams",
@@ -347,7 +361,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         ),
         (
             "Focused neuro research option with clear lab docs",
-            "Built for controlled studies — research only",
+            "Built for controlled laboratory studies",
             "Premium listing for laboratory inventories",
         ),
         (
@@ -365,7 +379,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "High-demand research listing for serious lab inventories",
             "Clear docs. Research-grade quality.",
-            "Lab use only — not for clinical use",
+            "Built for controlled laboratory projects",
         ),
         (
             "Research-ready Semaglutide for controlled study setups",
@@ -399,7 +413,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium Sermorelin listing for laboratory inventories",
             "Built for controlled study setups",
-            "Research use only — not for human use",
+            "Ready for your next laboratory order",
         ),
         (
             "Research-ready Sermorelin for serious lab teams",
@@ -416,7 +430,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium bioenergetics option for serious research labs",
             "Clear docs. Research-grade quality.",
-            "Lab use only — not for clinical use",
+            "Built for controlled laboratory projects",
         ),
         (
             "Research-ready SS-31 for advanced lab catalogs",
@@ -432,7 +446,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         ),
         (
             "Focused immunology research option for lab inventories",
-            "Built for controlled studies — research only",
+            "Built for controlled laboratory studies",
             "Premium quality for serious research teams",
         ),
         (
@@ -450,7 +464,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Premium TB-500 listing for serious laboratory work",
             "Clear docs. Built for controlled study use.",
-            "Research only — not for human use",
+            "A clean pick for serious laboratory teams",
         ),
         (
             "Research-ready TB-500 for your inventory",
@@ -467,7 +481,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Trusted Tesamorelin listing for laboratory inventories",
             "Clear labeling. Research-grade quality.",
-            "Lab use only — not for clinical use",
+            "Built for controlled laboratory projects",
         ),
         (
             "Research-ready Tesamorelin for serious lab teams",
@@ -484,7 +498,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "Popular research duo — ready for your lab inventory",
             "Built for teams that want both compounds on hand",
-            "Research-grade quality — lab use only",
+            "Research-grade quality for your catalog",
         ),
         (
             "Paired research peptides for advanced study setups",
@@ -501,7 +515,7 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
         (
             "High-demand research compound for serious lab catalogs",
             "Clean quality. Built for controlled study use.",
-            "Research only — not for human use",
+            "A clean pick for serious laboratory teams",
         ),
         (
             "Research-ready Tirzepatide for your inventory",
@@ -549,6 +563,20 @@ def main() -> None:
         cursors[product] = idx + 1
         # Keep existing product_name if already set and matches assignment order,
         # but always write the assigned product for a clean rebuild.
+        rank_i = int(row.get("rank") or 0)
+        fact4 = FACT4_CTAS[(rank_i - 1) % len(FACT4_CTAS)]
+        # Keep fact_5 as shop/catalog CTA; strip if old sheet row was a disclaimer
+        fact5 = clean_mod_text(row.get("mod_fact_5") or "")
+        if re.search(
+            r"research[- ]use only|not for human|not for clinical|disclaimer|lab use only",
+            fact5,
+            re.I,
+        ):
+            fact5 = "Shop www.palmbeach-vitality.store"
+        disclaimer = (
+            row.get("mod_disclaimer")
+            or "For laboratory research use only. Not for human use or consumption."
+        )
         out_rows.append(
             {
                 "text_id": row["text_id"],
@@ -558,9 +586,10 @@ def main() -> None:
                 "mod_fact_1": clean_mod_text(f1),
                 "mod_fact_2": clean_mod_text(f2),
                 "mod_fact_3": clean_mod_text(f3),
-                "mod_fact_4": clean_mod_text(row["mod_fact_4"]),
-                "mod_fact_5": clean_mod_text(row["mod_fact_5"]),
-                "mod_disclaimer": row["mod_disclaimer"],
+                "mod_fact_4": clean_mod_text(fact4),
+                "mod_fact_5": fact5,
+                # Captions only — never map this into Creatomate Fact overlays
+                "mod_disclaimer": disclaimer,
                 "status": row["status"],
                 "times_used": row.get("times_used", "0") or "0",
                 "last_used_at": row.get("last_used_at", ""),
