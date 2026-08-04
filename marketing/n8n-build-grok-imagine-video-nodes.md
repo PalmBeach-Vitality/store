@@ -1,9 +1,9 @@
 # Build Grok Imagine → video nodes (new, one at a time)
 
-**Goal:** unique daily MP4 from `pick_creation.video_prompt`  
-**Workflow:** `PBVita — Reel Studio`  
+**Goal:** unique daily MP4 from enhanced `video_prompt` (DeepSeek → Grok)  
+**Workflow:** `PBVita — Grok Daily` / Reel Studio  
 **Wire after:** `pick_creation`  
-**Auth:** same xAI Header Auth as `GROK_API` (`Authorization: Bearer …`)
+**Auth:** DeepSeek Header Auth + same xAI Header Auth as `GROK_API` (`Authorization: Bearer …`)
 
 **Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (500 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
 
@@ -11,6 +11,8 @@ All new n8n field names: **lowercase**.
 
 ```text
 pick_creation
+  → deepseek_enhance_prompt      (see n8n-deepseek-vid-gen.md)
+  → parse_deepseek_prompt
   → grok_imagine_reel_still
   → save_still_url
   → prep_grok_video_start
@@ -28,10 +30,23 @@ Do **not** put Creatomate on this path until unique Grok MP4s work.
 
 ---
 
+## Node 0 — DeepSeek prompt enhance
+
+Insert **before** Grok still. Full paste: `n8n-deepseek-vid-gen.md` + `n8n-code-parse-deepseek-prompt.js`.
+
+| Node | Type | Role |
+|---|---|---|
+| `deepseek_enhance_prompt` | HTTP → `api.deepseek.com/chat/completions` | Rewrite still + short motion |
+| `parse_deepseek_prompt` | Code | Merge JSON → `video_prompt` / `video_motion_prompt` |
+
+**Check:** `parse_deepseek_prompt` has `deepseek_ok: true` and `video_prompt` mentions crimped / rubber septum.
+
+---
+
 ## Node 1 — `grok_imagine_reel_still`
 
 **Type:** HTTP Request  
-**After:** `pick_creation`  
+**After:** `parse_deepseek_prompt`  
 **Before:** `save_still_url`
 
 | Setting | Value |
@@ -71,8 +86,8 @@ Include Other Input Fields: **ON**
 |---|---|
 | `still_url` | `={{ $json.data[0].url }}` |
 | `creation_id` | `={{ $('pick_creation').first().json.creation_id }}` |
-| `video_prompt` | `={{ $('pick_creation').first().json.video_prompt }}` |
-| `video_motion_prompt` | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
+| `video_prompt` | `={{ $('parse_deepseek_prompt').first().json.video_prompt }}` |
+| `video_motion_prompt` | `={{ $('parse_deepseek_prompt').first().json.video_motion_prompt }}` |
 | `camera_move` | `={{ $('pick_creation').first().json.camera_move }}` |
 | `scene_brief` | `={{ $('pick_creation').first().json.scene_brief }}` |
 | `compound_id` | `={{ $('Get row(s) in sheet').first().json.compound_id }}` |

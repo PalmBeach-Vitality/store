@@ -268,8 +268,6 @@ JSON.stringify({
 
 #### 2) `buffer_fb_reel` — Facebook only
 
-Replace `YOUR_FB_CHANNEL_ID` with the Facebook id from your `channels` list (`service: facebook`).
-
 ```js
 ={{
 JSON.stringify({
@@ -284,7 +282,7 @@ JSON.stringify({
       text:
         $('save_creatomate_url').first().json.buffer_caption ||
         $('map_creatomate_from_url').first().json.buffer_caption,
-      channelId: 'YOUR_FB_CHANNEL_ID',
+      channelId: '6a668d6b4b2d03035f478575',
       schedulingType: 'automatic',
       mode: 'addToQueue',
       assets: [

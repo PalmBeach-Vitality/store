@@ -227,7 +227,7 @@ return [
       scene_brief: pick.scene_brief,
       quality_suffix: pick.quality_suffix,
       quality_var_count: pick.quality_var_count,
-      video_prompt: pick.video_prompt,
+      video_prompt: withVialClosure(pick.video_prompt),
       video_motion_prompt: pick.video_motion_prompt,
       surface: pick.surface,
       lighting: pick.lighting,
