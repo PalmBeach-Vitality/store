@@ -112,9 +112,24 @@ Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xA
 | Send Body | ON |
 | Body Content Type | **Raw** |
 | Content Type | `application/json` |
-| Body (fx ON) | `={{ $json.grok_video_body_json }}` |
+| Body (fx ON) | `={{ $('prep_grok_video_start').item.json.grok_video_body_json }}` |
 
-**Do not** use JSON-fields mode. **Do not** `JSON.stringify` again.  
+**Expression must start with `=`** — if you only type `{{ $json... }}` (no `=`), n8n shows **red**.
+
+Prefer the node-name form above (green once `prep_grok_video_start` has output).  
+Fallback if needed:
+
+```text
+={{ JSON.stringify({
+  model: 'grok-imagine-video-1.5',
+  prompt: $('prep_grok_video_start').item.json.video_motion_prompt,
+  image: { url: $('prep_grok_video_start').item.json.still_url },
+  duration: 15,
+  resolution: '1080p'
+}) }}
+```
+
+**Do not** use JSON-fields mode. **Do not** `JSON.stringify` again on top of `grok_video_body_json`.  
 **Do not** put `Bearer ` inside the Header Auth secret (n8n adds it).
 
 Request preview must show `model`, short `prompt`, `image.url` https, `duration: 15`, `resolution: "1080p"` — never `{ "": "" }`.
