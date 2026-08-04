@@ -121,20 +121,32 @@ IG / FB / TikTok each need their own id. **No X / Twitter.**
 
 ---
 
-## After Buffer succeeds (optional Sheets update)
+## After Buffer succeeds — `sheets_update_buffer`
 
 **Node:** `sheets_update_buffer`  
 **Type:** Google Sheets → Update Row  
 **Sheet:** `4-reel-queue`
 
+After Buffer HTTP nodes, **`$json` is the Buffer response** — not Creatomate.  
+Always pull match + IDs from **named nodes** with `$('…').first().json`.
+
 | Setting | Value |
 |---|---|
 | Column to Match On | `creatomate_render_id` |
-| Value to Match | `={{ $('save_creatomate_url').item.json.creatomate_render_id }}` |
+| Value to Match | `={{ $('save_creatomate_url').first().json.creatomate_render_id }}` |
 | `used_in_buffer` | `yes` |
-| `buffer_ig_reel_id` | from `buffer_ig_reel` response id |
-| `buffer_fb_reel_id` | from `buffer_fb_reel` response id |
-| `buffer_tiktok_id` | from `buffer_tiktok` response id |
+| `buffer_ig_reel_id` | `={{ $('buffer_ig_reel').first().json.data.createPost.post.id }}` |
+| `buffer_fb_reel_id` | `={{ $('buffer_fb_reel').first().json.data.createPost.post.id }}` |
+| `buffer_tiktok_id` | `={{ $('buffer_tiktok').first().json.data.createPost.post.id }}` |
+
+**Do not use** `$json.creatomate_render_id` here — it is usually `null` → warning *“The value of column to match is null or undefined”* and no row updates.
+
+### If Buffer ID columns stay `""`
+
+1. Open `buffer_ig_reel` output in the same execution  
+2. Confirm you see `data.createPost.post.id` (success)  
+3. If you see `MutationError` / `errors` instead — Buffer never created a post; fix that node first  
+4. If the path differs (e.g. array wrapper), adjust the expression to match the real JSON tree  
 
 If `4-reel-queue` doesn’t have Buffer ID columns yet, add:
 
