@@ -24,7 +24,10 @@ SINGLE_SUBJECT = (
 )
 AVOID = (
     "Avoid: people, hands, faces, needles, injection, lifestyle influencers, cardboard boxes "
-    "as hero, fake LAB codes, creation motifs, 000/500 counters, surreal CGI orbs."
+    "as hero, fake LAB codes, creation motifs, 000/500 counters, surreal CGI orbs, "
+    "watermarks, lower-third captions, hex IDs, continuity codes, burn-in text, "
+    "scene titles printed in frame, gallery name plaques. "
+    "Do NOT render prompt metadata as visible text."
 )
 QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "

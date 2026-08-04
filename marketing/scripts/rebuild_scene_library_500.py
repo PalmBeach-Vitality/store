@@ -35,7 +35,9 @@ QUALITY = (
 AVOID = (
     "Avoid: people, hands, faces, skin contact, needles, syringes, injection, medical procedures, "
     "lifestyle influencers, cardboard shipping boxes as hero, fake LAB codes, creation motifs, "
-    "000/500 counters, surreal CGI orbs, text overlays that are not product labels."
+    "000/500 counters, surreal CGI orbs, watermarks, lower-third captions, scene titles printed in frame, "
+    "hex IDs, continuity codes, gallery name plaques, burn-in text, subtitles, timecodes. "
+    "Do NOT render any prompt metadata as visible text in the image."
 )
 COMPLIANCE = (
     "For laboratory research use only. Not for human use or consumption. "
@@ -73,7 +75,7 @@ SETTINGS = [
     "a double-height atrium research atrium with floating mezzanine lab pods",
     "a coastal sunrise formulation suite catching warm Florida light on polished epoxy",
     "a blacked-out imaging core with a single illuminated stage as the hero light source",
-    "a glass-walled pilot plant gallery where visitors can see process skids beyond",
+    "a glass-walled pilot-scale process bay looking onto idle stainless skids",
     "a boutique wellness research boutique with museum pedestals and soft brass accents",
     "a high-throughput analytical bay lined with HPLC stacks and quiet solvent cabinets",
     "a peptide synthesis gallery with resin columns and nitrogen lines as architecture",
@@ -326,8 +328,8 @@ def build_scene(rank: int, compound: str) -> dict:
     color_grade = _pick(COLOR_GRADES, i, 8)
     hero_style = _pick(HERO_STYLES, i, 9)
 
-    # Extra uniqueness tokens so paragraphs never collapse
-    uniq = hashlib.sha1(f"{rank}:{theme_key}:{focal}:{setting}".encode()).hexdigest()[:6].upper()
+    # Uniqueness comes from combination of banks — never put hex/ID tokens in the prompt
+    # (Grok Imagine often burns "continuity code" / gallery names into the still).
     beat = BEATS[i % len(BEATS)]
     opener = OPENERS[i % len(OPENERS)]
 
@@ -336,56 +338,67 @@ def build_scene(rank: int, compound: str) -> dict:
         label_sentence = (
             f" If any vial, pen, carton panel, or pedestal plaque shows a product name, "
             f"it must read exactly '{compound}' with a small 'For Laboratory Research Use Only' line — "
-            f"never invent other compound names."
+            f"never invent other compound names. "
+            f"Do not print scene titles, gallery names, hex codes, or captions anywhere in frame."
         )
+    else:
+        label_sentence = (
+            " Do not print scene titles, gallery names, hex codes, watermarks, or captions anywhere in frame."
+        )
+
+    no_burn = (
+        " Absolutely no burn-in text, lower thirds, watermarks, or readable signage except an optional "
+        "exact research compound label."
+    )
 
     # Rotate paragraph structure by rank for cadence diversity
     structure = i % 4
     if structure == 0:
         paragraph = (
-            f"{opener} Scene {rank:03d} — {theme_title}. Inside {setting}, the frame discovers {focal}. "
+            f"{opener} {theme_title}. Inside {setting}, the frame discovers {focal}. "
             f"The mood is {mood}, carried by {beat}. {twist} "
             f"Everything sits on {surface} under {lighting}, materials behaving like physics not CGI. "
             f"{action} Palm Beach Vitality research-world storytelling for peptides, R&D, and the "
             f"health-and-wellness industry — exciting, premium, laboratory-true. "
-            f"Empty of people; no clinical procedure staging.{label_sentence} Continuity code {uniq}."
+            f"Empty of people; no clinical procedure staging.{label_sentence}{no_burn}"
         )
     elif structure == 1:
         paragraph = (
-            f"Scene {rank:03d} ({theme_title}). {opener} Inside {setting}, "
+            f"{theme_title}. {opener} Inside {setting}, "
             f"a vertical 9:16 world builds around {focal}. "
             f"{twist} Mood: {mood}. Emotional undercurrent: {beat}. "
             f"Ground the image on {surface} with {lighting}. {action} "
             f"This is not a single boring SKU — it is an industry scene spanning labs, peptide science, "
             f"and wellness innovation for Palm Beach Vitality. "
-            f"Keep the space unoccupied by people or procedure props.{label_sentence} Code {uniq}."
+            f"Keep the space unoccupied by people or procedure props.{label_sentence}{no_burn}"
         )
     elif structure == 2:
         paragraph = (
-            f"{opener} {theme_title} — rank {rank:03d}. Start with atmosphere: {mood}. "
+            f"{opener} {theme_title}. Start with atmosphere: {mood}. "
             f"Place the story inside {setting}, then lock focus on {focal}. "
             f"{twist} Surface language is {surface}; light language is {lighting}; "
             f"the room feels like {beat}. {action} "
             f"Sell the fantasy of serious peptide research and modern wellness infrastructure "
             f"without medical claims or human subjects. "
-            f"Photoreal only.{label_sentence} Continuity {uniq}."
+            f"Photoreal only.{label_sentence}{no_burn}"
         )
     else:
         paragraph = (
-            f"Scene {rank:03d}: a full {theme_title.lower()} experience. "
+            f"A full {theme_title.lower()} experience. "
             f"Location — {setting}. Hero cluster — {focal}. "
             f"Then layer {twist[:-1] if twist.endswith('.') else twist}, "
             f"because tiny specifics make Grok commit to a unique still. "
             f"Mood is {mood}; pacing is {beat}. Stage on {surface}, lit by {lighting}. "
             f"{action} Brand world: Palm Beach Vitality × labs × peptides × R&D × health & wellness. "
-            f"No occupants, no procedure theater.{label_sentence} ID {uniq}."
+            f"No occupants, no procedure theater.{label_sentence}{no_burn}"
         )
 
-    # Secondary detail channel for prompts
+    # Secondary detail channel for prompts — never include hex/ID tokens
     material_detail = (
         f"Environment cues: {theme_title.lower()}; focal — {focal}; "
         f"surface {surface}; lighting {lighting}; twist — {twist} "
-        f"Keep the scene photoreal and vertically composed. Continuity code {uniq}."
+        f"Keep the scene photoreal and vertically composed. "
+        f"No watermarks, captions, scene titles, or codes burned into the frame."
     )
 
     scene_brief = (
@@ -403,7 +416,6 @@ def build_scene(rank: int, compound: str) -> dict:
         "hero_style": hero_style,
         "scene_brief_seed": scene_brief,
         "theme_title": theme_title,
-        "uniq": uniq,
     }
 
 
