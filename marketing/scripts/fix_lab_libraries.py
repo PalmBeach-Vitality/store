@@ -1193,13 +1193,6 @@ CREATION_FIELD_ORDER = [
     "status",
     "times_used",
     "last_used_at",
-    "mod_intro",
-    "mod_fact_1",
-    "mod_fact_2",
-    "mod_fact_3",
-    "mod_fact_4",
-    "mod_fact_5",
-    "mod_disclaimer",
     "surface",
     "lighting",
     "camera_move",
@@ -1364,10 +1357,7 @@ def fix_lab_libraries() -> None:
         if it.get("last_used_at") is None:
             it["last_used_at"] = ""
 
-        # Never leave (N/500) / · ref|motif|card|line|cta N in overlay copy
-        cr["mod_intro"] = clean_intro(cr.get("mod_intro", ""))
-        for k in ("mod_fact_1", "mod_fact_2", "mod_fact_3", "mod_fact_4", "mod_fact_5"):
-            cr[k] = clean_fact(cr.get(k, ""))
+        # Overlay copy (mod_*) lives on Sheet 10 only — not on creations
 
     # Write
     for path, rows in [

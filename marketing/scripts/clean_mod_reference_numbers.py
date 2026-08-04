@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Strip reference-number junk from mod_intro–mod_fact_5 in Sheets 9 + 10.
+"""Strip reference-number junk from mod_intro–mod_fact_5 on Sheet 10 (Creatomate text).
+
+Sheet 9 (lab creations) no longer carries mod_* — overlays come from Sheet 10 only.
 
 Removes patterns like:
   (206/500)
@@ -83,11 +85,13 @@ def clean_csv(path: Path) -> int:
     if not rows:
         print(f"Skip empty {path.name}")
         return 0
+    present = [k for k in MOD_FIELDS if k in rows[0]]
+    if not present:
+        print(f"{path.name}: no mod_* columns (OK — Sheet 9 should not have them)")
+        return 0
     changed = 0
     for r in rows:
-        for k in MOD_FIELDS:
-            if k not in r:
-                continue
+        for k in present:
             before = r.get(k, "") or ""
             after = clean_mod_text(before)
             if after != before:
@@ -138,6 +142,9 @@ def clean_json(path: Path) -> int:
 
 def audit(path: Path) -> int:
     rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    if not rows or not any(k in rows[0] for k in MOD_FIELDS):
+        print(f"AUDIT {path.name}: no mod_* columns")
+        return 0
     hits = 0
     for r in rows:
         for k in MOD_FIELDS:
@@ -152,14 +159,10 @@ def audit(path: Path) -> int:
 
 def main() -> None:
     csvs = [
-        SHEETS / "9-lab-item-creations-500.csv",
-        SHEETS / "9-lab-item-creations-250.csv",
         SHEETS / "10-creatomate-text-1000.csv",
         SHEETS / "10-creatomate-text-500.csv",
     ]
     jsons = [
-        ROOT / "pbvita-500-lab-item-creations.json",
-        ROOT / "pbvita-250-lab-item-creations.json",
         ROOT / "pbvita-1000-creatomate-text.json",
         ROOT / "pbvita-500-creatomate-text.json",
     ]

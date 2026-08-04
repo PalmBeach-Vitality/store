@@ -8,7 +8,7 @@ No abstract orbs, surreal glass, CGI spheres, or non-lab fantasy props.
 | File | Role |
 |---|---|
 | `sheets/8-lab-items-500.csv` | Master list of 500 lab items |
-| `sheets/9-lab-item-creations-500.csv` | 500 ready creations (`video_prompt` locked to one lab item each) |
+| `sheets/9-lab-item-creations-500.csv` | 500 ready creations (`video_prompt` locked to one lab item each). **No `mod_*` text** — Creatomate overlays come from Sheet 10. |
 | `pbvita-500-lab-items.json` | Same items as JSON |
 | `pbvita-500-lab-item-creations.json` | Same creations as JSON |
 

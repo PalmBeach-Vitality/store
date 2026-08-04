@@ -224,17 +224,7 @@ return [
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
 
-      mod_intro: val(pick.raw, ['mod_intro']),
-      mod_fact_1: val(pick.raw, ['mod_fact_1']),
-      mod_fact_2: val(pick.raw, ['mod_fact_2']),
-      mod_fact_3: val(pick.raw, ['mod_fact_3']),
-      mod_fact_4: val(pick.raw, ['mod_fact_4']),
-      mod_fact_5: val(pick.raw, ['mod_fact_5']),
-      mod_disclaimer: val(
-        pick.raw,
-        ['mod_disclaimer'],
-        'For laboratory research use only. Not for human use or consumption.'
-      ),
+      // Creatomate overlay copy lives on Sheet 10 (pick_text) — not on Sheet 9
 
       template_id,
     },
