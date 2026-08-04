@@ -16,13 +16,13 @@ Daily **45–60s** Instagram-ready reel:
 
 ```text
 pick_creation (least-used + new shot_family)
-  → deepseek_enhance_prompt → parse_deepseek_prompt
-  → grok still (video_prompt) → grok_video_start (video_motion_prompt, 15s, 1080p)
-  → wait 200s → poll → save_video_url
+  → grok still (video_prompt, 2k, 9:16)
+  → prep_seedance_video_start → seedance_video_start (I2V, 15s, 1080p, muted)
+  → wait → poll → save_video_url
   → sheets_update_creation
 ```
 
-DeepSeek rewrites the still prompt (crimped vials, no doubles, cinematic lab) before Grok. See `n8n-deepseek-vid-gen.md`.
+**Video model:** ByteDance **Seedance** (newest = **2.5**; ship on **2.0 via fal** until 2.5 API is in your catalog). See `n8n-seedance-vid-gen.md`.
 
 ### B — `PBVita — Creatomate Package` (separate)
 
@@ -62,8 +62,8 @@ See `n8n-camera-diversity-plan.md`.
 
 ## Canonical docs
 
-- Grok: `n8n-build-grok-imagine-video-nodes.md`  
-- DeepSeek prompt enhance: `n8n-deepseek-vid-gen.md`  
+- Grok still: `n8n-build-grok-imagine-video-nodes.md`  
+- Seedance video: `n8n-seedance-vid-gen.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  

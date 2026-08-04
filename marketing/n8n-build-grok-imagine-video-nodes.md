@@ -1,9 +1,9 @@
 # Build Grok Imagine → video nodes (new, one at a time)
 
-**Goal:** unique daily MP4 from enhanced `video_prompt` (DeepSeek → Grok)  
+**Goal:** unique daily still (Grok) → MP4 via **Seedance** I2V  
 **Workflow:** `PBVita — Grok Daily` / Reel Studio  
 **Wire after:** `pick_creation`  
-**Auth:** DeepSeek Header Auth + same xAI Header Auth as `GROK_API` (`Authorization: Bearer …`)
+**Auth:** xAI Header Auth for still (`GROK_API`) + **Fal** / BytePlus for Seedance video
 
 **Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (500 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
 
@@ -11,42 +11,25 @@ All new n8n field names: **lowercase**.
 
 ```text
 pick_creation
-  → deepseek_enhance_prompt      (see n8n-deepseek-vid-gen.md)
-  → parse_deepseek_prompt
   → grok_imagine_reel_still
   → save_still_url
-  → prep_grok_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
-  → if_video_ready
-       false → wait_video
-       true  → save_video_url
-            → sheets_update_reel
-            → sheets_update_creation
+  → prep_seedance_video_start   (see n8n-seedance-vid-gen.md)
+  → seedance_video_start
+  → wait_seedance
+  → seedance_video_status → seedance_video_result
+  → save_video_url
+  → sheets_update_creation
 ```
 
-Do **not** put Creatomate on this path until unique Grok MP4s work.
-
----
-
-## Node 0 — DeepSeek prompt enhance
-
-Insert **before** Grok still. Full paste: `n8n-deepseek-vid-gen.md` + `n8n-code-parse-deepseek-prompt.js`.
-
-| Node | Type | Role |
-|---|---|---|
-| `deepseek_enhance_prompt` | HTTP → `api.deepseek.com/chat/completions` | Rewrite still + short motion |
-| `parse_deepseek_prompt` | Code | Merge JSON → `video_prompt` / `video_motion_prompt` |
-
-**Check:** `parse_deepseek_prompt` has `deepseek_ok: true` and `video_prompt` mentions crimped / rubber septum.
+Legacy Grok video nodes (`prep_grok_video_start` / `grok_video_start`) are optional fallback only.  
+Do **not** put Creatomate on this path until unique Seedance MP4s work.
 
 ---
 
 ## Node 1 — `grok_imagine_reel_still`
 
 **Type:** HTTP Request  
-**After:** `parse_deepseek_prompt`  
+**After:** `pick_creation`  
 **Before:** `save_still_url`
 
 | Setting | Value |
@@ -86,8 +69,8 @@ Include Other Input Fields: **ON**
 |---|---|
 | `still_url` | `={{ $json.data[0].url }}` |
 | `creation_id` | `={{ $('pick_creation').first().json.creation_id }}` |
-| `video_prompt` | `={{ $('parse_deepseek_prompt').first().json.video_prompt }}` |
-| `video_motion_prompt` | `={{ $('parse_deepseek_prompt').first().json.video_motion_prompt }}` |
+| `video_prompt` | `={{ $('pick_creation').first().json.video_prompt }}` |
+| `video_motion_prompt` | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
 | `camera_move` | `={{ $('pick_creation').first().json.camera_move }}` |
 | `scene_brief` | `={{ $('pick_creation').first().json.scene_brief }}` |
 | `compound_id` | `={{ $('Get row(s) in sheet').first().json.compound_id }}` |
@@ -98,7 +81,22 @@ Reply **`node 2 ok`**.
 
 ---
 
-## Node 3 — `prep_grok_video_start` (required)
+## Node 3 — Seedance video (preferred)
+
+Replace Grok video with Seedance I2V. Full paste: **`n8n-seedance-vid-gen.md`** + `n8n-code-prep-seedance-video-start.js`.
+
+| Node | Role |
+|---|---|
+| `prep_seedance_video_start` | Short motion + fal/Ark JSON bodies |
+| `seedance_video_start` | fal `bytedance/seedance-2.0/image-to-video` (→ 2.5 when listed) |
+| `wait_seedance` | ~180–300s |
+| `seedance_video_status` / `seedance_video_result` | Poll → `video.url` |
+
+Reply **`seedance ok`** + MP4 URL when green. Then skip legacy Nodes 3b–6 below.
+
+---
+
+## Node 3b — `prep_grok_video_start` (legacy fallback)
 
 **Type:** Code  
 **After:** `save_still_url`  
@@ -112,7 +110,7 @@ Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xA
 
 ---
 
-## Node 4 — `grok_video_start`
+## Node 4 — `grok_video_start` (legacy)
 
 **Type:** HTTP Request  
 **After:** `prep_grok_video_start` (or `save_still_url` if prep is skipped)  
