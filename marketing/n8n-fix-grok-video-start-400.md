@@ -33,42 +33,53 @@ Run that node alone. Confirm output has:
 
 ### 4) Rebuild `grok_video_start` HTTP node (clean)
 
-Delete the old node if the body is messy, then create fresh:
-
 | Setting | Value |
 |---|---|
 | Method | `POST` |
 | URL | `https://api.x.ai/v1/videos/generations` |
 | Authentication | **Header Auth** credential that works on the **still** node |
-| Send Headers | ON → `Content-Type` = `application/json` |
 | Send Body | **ON** |
-| Body Content Type | **Raw** |
-| Content Type | `application/json` |
-| Body (expression ON) | `={{ $('prep_grok_video_start').item.json.grok_video_body_json }}` |
-
-**Why the expression was red**
-- Must be `={{ ... }}` with a leading `=` (fx/expression mode). Plain `{{ $json... }}` shows **red**.
-- `$json.grok_video_body_json` is red until the previous node has run **and** is wired into this node.
-- Safer: reference by node name (above).
-
-**Critical**
-- Do **not** use “JSON / Using Fields Below” with empty name/value rows (that sends `{ "": "" }` → 400).
-- Do **not** wrap again in `JSON.stringify(...)` if you already use `grok_video_body_json`.
-- Header Auth value should be the **raw key only** (n8n adds `Bearer `). If you stored `Bearer xai-…` in the credential, you get `Bearer Bearer …` → fix credential.
-
-### Alternate body (also green)
-
-If the body_json field still looks red, use this Raw body instead:
+| Body Content Type | **JSON** |
+| Specify Body | **Using JSON** |
+| JSON (fx ON) | object expression below |
 
 ```text
-={{ JSON.stringify({
+={{
+{
   model: 'grok-imagine-video-1.5',
-  prompt: $('prep_grok_video_start').item.json.video_motion_prompt,
-  image: { url: $('prep_grok_video_start').item.json.still_url },
+  prompt: $json.video_motion_prompt,
+  image: { url: $json.still_url },
   duration: 15,
   resolution: '1080p'
-}) }}
+}
+}}
 ```
+
+**Duration max = 15** (xAI hard limit). Do not send 16+.
+
+**Why expressions show red**
+- fx toggle must be **ON**
+- Must start with `={{`
+- Previous node must be executed and wired in
+- Prefer `$json.still_url` / `$json.video_motion_prompt` from `prep_grok_video_start` (not Raw `grok_video_body_json` if that stays red)
+
+If `$json` is red, use:
+
+```text
+={{
+{
+  model: 'grok-imagine-video-1.5',
+  prompt: $('prep_grok_video_start').first().json.video_motion_prompt,
+  image: { url: $('prep_grok_video_start').first().json.still_url },
+  duration: 15,
+  resolution: '1080p'
+}
+}}
+```
+
+**Critical**
+- Do **not** use “Using Fields Below” with empty name/value rows.
+- Header Auth = **raw key only** (no `Bearer ` prefix in the credential).
 
 ### 5) Request preview must look like this
 
