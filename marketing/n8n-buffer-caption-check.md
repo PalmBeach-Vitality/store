@@ -67,9 +67,30 @@ Also:
 
 | Node | Check |
 |---|---|
-| `map_creatomate_from_url` | `buffer_caption` looks like full pitch |
-| `buffer_ig_reel` request | `variables.input.text` = that same long string |
+| `save_creatomate_url` | `buffer_caption` = full pitch (you already have this) |
+| `buffer_ig_reel` | Open **JSON** / request → `variables.input.text` must be that long string |
 | Buffer queue | post caption matches |
 
-If map has the good caption but Buffer queue does not → Buffer body `text` is still wrong.  
-If map caption is short/missing → re-paste the map Code file.
+### Caption on save, but empty in Buffer (your case)
+
+`save_creatomate_url` having `buffer_caption` does **nothing** until each Buffer HTTP body uses it.
+
+1. Open **`buffer_ig_reel`** → Body → find `text:`
+2. Replace with:
+
+```js
+text:
+  $('save_creatomate_url').first().json.buffer_caption ||
+  $('map_creatomate_from_url').first().json.buffer_caption,
+```
+
+3. Same line in **`buffer_fb_reel`** and **`buffer_tiktok`**
+4. Re-execute **only** `buffer_ig_reel`
+5. In that execution, expand the **outgoing request** (or pin Data) and confirm:
+
+```json
+"text": "Looking for CJC? Palm Beach Vitality..."
+```
+
+If request `text` is missing/short → body not updated.  
+If request `text` is full but Buffer UI shows none → open the **new** queue item (not an older post).
