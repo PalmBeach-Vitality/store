@@ -122,18 +122,26 @@ const previouslyUsed = scored
   .slice()
   .sort((a, b) => String(b.last_used_at).localeCompare(String(a.last_used_at)));
 
-const last = previouslyUsed[0] || null;
-const lastCategory = last?.category || '';
-const lastFamily = last?.shot_family || '';
-const lastCamera = last?.camera_move || '';
+// Diversify against the last N runs (not just the single previous row)
+const RECENT_N = 8;
+const recent = previouslyUsed.slice(0, RECENT_N);
+const last = recent[0] || null;
 const lastId = last?.creation_id || '';
+const recentFamilies = new Set(recent.map((c) => c.shot_family).filter(Boolean));
+const recentCameras = new Set(recent.map((c) => c.camera_move).filter(Boolean));
+const recentFramings = new Set(recent.map((c) => c.framing).filter(Boolean));
+const recentCategories = new Set(recent.map((c) => c.category).filter(Boolean));
 
 function scorePick(c) {
   let penalty = 0;
   if (lastId && c.creation_id === lastId) penalty += 1000;
-  if (lastCategory && c.category === lastCategory) penalty += 100;
-  if (lastFamily && c.shot_family && c.shot_family === lastFamily) penalty += 80;
-  if (lastCamera && c.camera_move && c.camera_move === lastCamera) penalty += 40;
+  if (c.shot_family && recentFamilies.has(c.shot_family)) penalty += 120;
+  if (c.camera_move && recentCameras.has(c.camera_move)) penalty += 100;
+  if (c.framing && recentFramings.has(c.framing)) penalty += 60;
+  if (c.category && recentCategories.has(c.category)) penalty += 40;
+  // Extra weight against the immediate previous family/camera
+  if (last?.shot_family && c.shot_family === last.shot_family) penalty += 40;
+  if (last?.camera_move && c.camera_move === last.camera_move) penalty += 40;
   return penalty;
 }
 
