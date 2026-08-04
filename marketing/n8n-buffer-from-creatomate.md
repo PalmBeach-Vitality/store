@@ -189,32 +189,58 @@ Use this on **all three** Buffer nodes:
 ={{ $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store' }}
 ```
 
-### C) Instagram Reel body (common miss)
+### C) Instagram Reel — required `type` (your error)
 
-IG often needs reel metadata + video asset. Example variables shape:
+**Error:** `Invalid post: Instagram posts require a type (post, story, or reel).`
+
+Add **`metadata.instagram.type: 'reel'`** inside the `createPost` **input** (not only in the GraphQL selection).
+
+Example full HTTP body (Raw JSON, expression on):
 
 ```js
-{
-  text: $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
-  channelId: '6a668d534b2d03035f478536',
-  schedulingType: 'automatic',
-  mode: 'addToQueue',
-  assets: [{
-    video: {
-      url: $('save_creatomate_url').first().json.video_url,
-      metadata: { thumbnailOffset: 1000 }
+={{
+JSON.stringify({
+  query: `mutation CreatePost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      ... on PostActionSuccess { post { id text dueAt } }
+      ... on MutationError { message }
     }
-  }],
-  metadata: {
-    instagram: {
-      type: 'reel',
-      shouldShareToFeed: true
+  }`,
+  variables: {
+    input: {
+      text:
+        $('video_url_input').first().json.product_name +
+        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      channelId: '6a668d534b2d03035f478536',
+      schedulingType: 'automatic',
+      mode: 'addToQueue',
+      assets: [
+        {
+          video: {
+            url: $('save_creatomate_url').first().json.video_url,
+            metadata: { thumbnailOffset: 1000 }
+          }
+        }
+      ],
+      metadata: {
+        instagram: {
+          type: 'reel',
+          shouldShareToFeed: true
+        }
+      }
     }
   }
-}
+})
+}}
 ```
 
-Stories use `type: 'story'` on the story nodes — different from reels.
+| Node | `metadata.instagram.type` |
+|---|---|
+| `buffer_ig_reel` | `'reel'` |
+| `Buffer_IG_story` | `'story'` |
+| `Buffer_post_IG` (feed) | `'post'` |
+
+Facebook does **not** need this Instagram block — that’s why FB queued and IG didn’t.
 
 ### D) TikTok body
 
