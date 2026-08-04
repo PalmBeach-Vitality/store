@@ -117,16 +117,18 @@ Paste each real id into the matching node:
 | Node | Replace placeholder with |
 |---|---|
 | `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
-| `buffer_fb_reel` / `Buffer_FB_story` | `6a668d534b2d03035f478536` |
-| `buffer_tiktok` | TikTok `channelId` (from working WF) |
-| `buffer_x` | X `channelId` (from working WF) |
+| `buffer_fb_reel` / `Buffer_FB_story` | Facebook `channelId` (confirm via `channels` — usually ≠ IG) |
+| `buffer_tiktok` | `6a642435bac606503d410801` |
+| `buffer_x` | X `channelId` (from working WF / `channels` query) |
 
 **Palm Beach Vitality — known IDs**
 
 | Channel | `channelId` |
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
-| Facebook | `6a668d534b2d03035f478536` |
+| TikTok | `6a642435bac606503d410801` |
+| Facebook | confirm separately (`service: facebook`) |
+| X | confirm separately (`service: twitter`) |
 
 In the Buffer HTTP body / GraphQL variables:
 
@@ -134,12 +136,12 @@ In the Buffer HTTP body / GraphQL variables:
 // buffer_ig_reel / Buffer_IG_story
 channelId: '6a668d534b2d03035f478536'
 
-// buffer_fb_reel / Buffer_FB_story
-channelId: '6a668d534b2d03035f478536'
+// buffer_tiktok
+channelId: '6a642435bac606503d410801'
 ```
 
 Never leave the literal text `PASTE_YOUR_…`.  
-If IG and FB should be different profiles, re-check with the `channels` query — Buffer usually gives each connected profile its own id.
+IG / FB / TikTok / X each need their own id from the `channels` query.
 
 
 ---
