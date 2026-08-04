@@ -189,13 +189,22 @@ Use this on **all three** Buffer nodes:
 ={{ $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store' }}
 ```
 
-### C) Instagram Reel — required `type` (your error)
+### C) Full Buffer bodies (paste per node)
 
-**Error:** `Invalid post: Instagram posts require a type (post, story, or reel).`
+All three: HTTP POST `https://api.buffer.com` · Auth Bearer · Body Content Type **Raw** · Content-Type `application/json` · expression **ON**.
 
-Add **`metadata.instagram.type: 'reel'`** inside the `createPost` **input** (not only in the GraphQL selection).
+**Do not** put `metadata.instagram` on TikTok or Facebook.  
+**Do not** put `metadata.facebook` on Instagram or TikTok.
 
-Example full HTTP body (Raw JSON, expression on):
+Shared caption helper (same in every body):
+
+```text
+product + research-only + site
+```
+
+---
+
+#### 1) `buffer_ig_reel` — Instagram only
 
 ```js
 ={{
@@ -234,30 +243,92 @@ JSON.stringify({
 }}
 ```
 
-| Node | `metadata.instagram.type` |
-|---|---|
-| `buffer_ig_reel` | `'reel'` |
-| `Buffer_IG_story` | `'story'` |
-| `Buffer_post_IG` (feed) | `'post'` |
+---
 
-Facebook does **not** need this Instagram block — that’s why FB queued and IG didn’t.
+#### 2) `buffer_fb_reel` — Facebook only
 
-### D) TikTok body
+Replace `YOUR_FB_CHANNEL_ID` with the Facebook id from your `channels` list (`service: facebook`).
 
 ```js
-{
-  text: /* same caption as above */,
-  channelId: '6a642435bac606503d410801',
-  schedulingType: 'automatic',
-  mode: 'addToQueue',
-  assets: [{
-    video: {
-      url: $('save_creatomate_url').first().json.video_url,
-      metadata: { thumbnailOffset: 1000 }
+={{
+JSON.stringify({
+  query: `mutation CreatePost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      ... on PostActionSuccess { post { id text dueAt } }
+      ... on MutationError { message }
     }
-  }]
-}
+  }`,
+  variables: {
+    input: {
+      text:
+        $('video_url_input').first().json.product_name +
+        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      channelId: 'YOUR_FB_CHANNEL_ID',
+      schedulingType: 'automatic',
+      mode: 'addToQueue',
+      assets: [
+        {
+          video: {
+            url: $('save_creatomate_url').first().json.video_url,
+            metadata: { thumbnailOffset: 1000 }
+          }
+        }
+      ],
+      metadata: {
+        facebook: {
+          type: 'reel'
+        }
+      }
+    }
+  }
+})
+}}
 ```
+
+---
+
+#### 3) `buffer_tiktok` — TikTok only (NO instagram block)
+
+```js
+={{
+JSON.stringify({
+  query: `mutation CreatePost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      ... on PostActionSuccess { post { id text dueAt } }
+      ... on MutationError { message }
+    }
+  }`,
+  variables: {
+    input: {
+      text:
+        $('video_url_input').first().json.product_name +
+        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      channelId: '6a642435bac606503d410801',
+      schedulingType: 'automatic',
+      mode: 'addToQueue',
+      assets: [
+        {
+          video: {
+            url: $('save_creatomate_url').first().json.video_url,
+            metadata: { thumbnailOffset: 1000 }
+          }
+        }
+      ]
+    }
+  }
+})
+}}
+```
+
+TikTok does **not** use `metadata.instagram`. If you paste the IG block here, Buffer returns the Instagram type error.
+
+| Node | Metadata |
+|---|---|
+| `buffer_ig_reel` | `metadata.instagram.type: 'reel'` |
+| `buffer_fb_reel` | `metadata.facebook.type: 'reel'` |
+| `buffer_tiktok` | **none** (video asset only) |
+| `Buffer_IG_story` | `metadata.instagram.type: 'story'` |
+| `Buffer_FB_story` | `metadata.facebook.type: 'story'` |
 
 Video URL must be **Creatomate** (`save_creatomate_url.video_url`), not catbox/Grok.
 
