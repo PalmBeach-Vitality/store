@@ -45,6 +45,7 @@ Body (expression):
     'main_video': $json.public_video_url || $json.grok_video_url,
     'main_video.muted': true,
     'main_video.volume': '0%',
+    'main_video.loop': false,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
