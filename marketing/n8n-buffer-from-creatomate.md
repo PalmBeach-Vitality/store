@@ -116,12 +116,24 @@ Paste each real id into the matching node:
 
 | Node | Replace placeholder with |
 |---|---|
-| `buffer_ig_reel` / stories | Instagram `channelId` |
-| `buffer_fb_reel` / stories | Facebook `channelId` |
-| `buffer_tiktok` | TikTok `channelId` |
-| `buffer_x` | X `channelId` |
+| `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
+| `buffer_fb_reel` / stories | Facebook `channelId` (from working WF) |
+| `buffer_tiktok` | TikTok `channelId` (from working WF) |
+| `buffer_x` | X `channelId` (from working WF) |
 
-Format is Buffer’s own id (often looks like a long alphanumeric / UUID-style string) — never the literal text `PASTE_YOUR_…`.
+**Palm Beach Vitality — known IDs**
+
+| Channel | `channelId` |
+|---|---|
+| Instagram | `6a668d534b2d03035f478536` |
+
+In the Buffer HTTP body / GraphQL variables, use:
+
+```js
+channelId: '6a668d534b2d03035f478536'
+```
+
+Never leave the literal text `PASTE_YOUR_…`.
 
 
 ---
