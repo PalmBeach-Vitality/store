@@ -110,16 +110,18 @@ function buildBufferCaption(productName, fact1, fact2, fact3) {
   const f2 = cleanFact(fact2);
   const f3 = cleanFact(fact3);
 
-  const s1 = `Meet ${p} — a standout research listing from Palm Beach Vitality that’s ready for teams who want quality they can trust.`;
+  const trimDot = (s) => String(s || '').replace(/\.$/, '').trim();
+
+  const s1 = `Looking for ${p}? Palm Beach Vitality makes it easy to find a research listing that feels premium, clear, and ready for your next project.`;
   const s2 = f1
-    ? `${f1.replace(/\.$/, '')}, so your lab workflow stays clear and confident from day one.`
-    : `${p} is built for serious research catalogs that care about clarity, consistency, and documentation.`;
+    ? `${trimDot(f1)} — a confident pick when you want material that fits real laboratory workflows.`
+    : `${p} is a standout option for research teams who care about clarity, consistency, and quality.`;
   const s3 = f2
-    ? `${f2.replace(/\.$/, '')} — exactly the kind of straightforward material busy research programs look for.`
-    : `It’s a simple, premium pick when you want research-grade material without the guesswork.`;
+    ? `Here’s why teams keep coming back: ${trimDot(f2).replace(/^([a-z])/, (m) => m.toLowerCase())}.`
+    : `It’s an upbeat, no-drama choice when you want research-grade supply without the guesswork.`;
   const s4 = f3
-    ? `${f3.replace(/\.$/, '')}. Explore the full ${p} listing and order with ease at www.palmbeach-vitality.store.`
-    : `Explore the full ${p} listing and place your research order at www.palmbeach-vitality.store.`;
+    ? `${trimDot(f3)}. Tap through to explore ${p} and shop the full listing at www.palmbeach-vitality.store.`
+    : `Tap through to explore ${p} and shop the full listing at www.palmbeach-vitality.store.`;
   const s5 =
     'For laboratory research use only. Not for human use or consumption.';
 
