@@ -274,22 +274,22 @@ Same caption text for all three platforms (one pitch). Draft fields are aliases 
 ## Template
 
 - **ID:** `c5d54774-b029-4786-af04-d5af345dc7f2`
-- Dynamic video **`Video-8QW`** — Grok clip (once, loop off, muted)
+- Dynamic video **`main_video`** — clip once, loop off, muted
 - Dynamic image **`end_hold`** — still for 15–30s hold (paste `still_url` on `video_url_input`)
 - Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`, `end-text-link`
 - Also in template (usually leave defaults): `end-text-bg`, `Image-WVC`
 
 ### Hold last frame 15–30s (do not loop)
 
-Grok clips are **15s**. If the template is longer and **`Video-8QW`** has **Loop = On**, the clip restarts — that is the bad loop.
+Clips are **15s**. If the template is longer and **`main_video`** has **Loop = On**, the clip restarts — that is the bad loop.
 
 Creatomate does **not** auto-freeze the last frame when the element is longer than the source. Turn loop off, then cover 15–30s with **`end_hold`**.
 
 **In the Creatomate template editor:**
 
-1. Select **`Video-8QW`**
-2. Set **Loop → Off** (also send `'Video-8QW.loop': false` in `creatomate_render`)
-3. Set **`Video-8QW` duration → Media** (or fixed **15**), so it only plays the real clip once
+1. Select **`main_video`**
+2. Set **Loop → Off** (also send `'main_video.loop': false` in `creatomate_render`)
+3. Set **`main_video` duration → Media** (or fixed **15**), so it only plays the real clip once
 4. Keep full-bleed **`end_hold`** under the text overlays
 5. Timeline for **`end_hold`**: **Time ≈ 15**, **Duration** fills to end (~15→30)
 6. Source for **`end_hold`**:
