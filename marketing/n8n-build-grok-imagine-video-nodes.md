@@ -107,51 +107,19 @@ Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xA
 |---|---|
 | Method | `POST` |
 | URL | `https://api.x.ai/v1/videos/generations` |
-| Authentication | Header Auth → same xAI credential (`Authorization: Bearer …`) |
+| Authentication | Header Auth → same xAI credential as the still node |
 | Send Headers | ON — `Content-Type` = `application/json` |
 | Send Body | ON |
 | Body Content Type | **Raw** |
 | Content Type | `application/json` |
+| Body (fx ON) | `={{ $json.grok_video_body_json }}` |
 
-**Body settings (critical — avoid empty `{ "": "" }` body):**
-1. Send Body: **ON**
-2. Body Content Type: **Raw**
-3. Content Type: `application/json`
-4. Delete any leftover Body Parameter rows (empty name/value causes `{ "": "" }`)
-5. Body (fx ON):
+**Do not** use JSON-fields mode. **Do not** `JSON.stringify` again.  
+**Do not** put `Bearer ` inside the Header Auth secret (n8n adds it).
 
-```text
-={{ JSON.stringify({
-  model: 'grok-imagine-video-1.5',
-  prompt: $json.video_motion_prompt,
-  image: { url: $json.still_url },
-  duration: 15,
-  aspect_ratio: '9:16',
-  resolution: '1080p'
-}) }}
-```
+Request preview must show `model`, short `prompt`, `image.url` https, `duration: 15`, `resolution: "1080p"` — never `{ "": "" }`.
 
-**Duration (required):** always **`15`**. Never `8` for production.  
-**Resolution (required):** always **`1080p`**. Never `720p` for production.
-
-**Critical:** `prompt` must be the **short** camera `video_motion_prompt` (~400–700 chars) — not the full scene paragraph. The still already has the world.
-
-In the node’s request preview, body must show:
-- `"prompt":"Animate this exact Palm Beach…"` (short)
-- `"image":{"url":"https://…"}` (real still URL)
-- not `{ "": "" }`
-
-**Check:** response includes `request_id`.
-
-### If you get HTTP 400 Bad Request
-
-| Cause | Fix |
-|---|---|
-| Prompt too long / re-pastes full scene | Use `prep_grok_video_start` + re-import shortened Sheet 9 motions |
-| Empty body `{ "": "" }` | Raw JSON body only; delete Body Parameter rows |
-| Missing / expired `still_url` | Confirm `save_still_url.still_url` is `https://…` from image gen |
-| Wrong model string | Use `grok-imagine-video-1.5` |
-| Auth problem | Would be **401**, not 400 — re-check Header Auth Bearer token |
+**If 400:** follow `n8n-fix-grok-video-start-400.md` (isolate with a literal body + pasted still URL).
 
 Reply **`node 4 ok`** + `request_id`.
 

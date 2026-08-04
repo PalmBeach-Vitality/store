@@ -3,9 +3,12 @@
 // After: save_still_url
 // Before: grok_video_start
 //
-// Validates still_url + builds a short I2V-safe motion prompt.
-// Long scene paragraphs in video_motion_prompt cause xAI HTTP 400 Bad Request.
-// Auth failures are 401 — if you see 400, it is almost never the API key.
+// Builds a MINIMAL, validated xAI I2V body. Most "Bad request - please check
+// your parameters" errors are:
+//   1) still_url empty / undefined / not https
+//   2) n8n body sent as { "": "" } (JSON params mode with empty rows)
+//   3) prompt still the long full-scene paragraph
+// Auth problems are HTTP 401 — not 400.
 
 function firstJson(name) {
   try {
@@ -17,91 +20,101 @@ function firstJson(name) {
 
 function val(obj, names, fallback = '') {
   for (const n of names) {
-    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
+    if (obj && obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
       return obj[n];
     }
   }
   return fallback;
 }
 
+function asciiPrompt(s) {
+  return String(s || '')
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .replace(/[\u2013\u2014\u2212]/g, '-')
+    .replace(/\u2026/g, '...')
+    .replace(/\u00d7/g, 'x')
+    .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 const input = $input.first()?.json || {};
 const stillNode = firstJson('save_still_url');
 const pick = firstJson('pick_creation');
+const imagine = firstJson('grok_imagine_reel_still');
 
 const stillResolved = String(
   val(input, ['still_url']) ||
     val(stillNode, ['still_url']) ||
     input?.data?.[0]?.url ||
+    stillNode?.data?.[0]?.url ||
+    imagine?.data?.[0]?.url ||
     ''
 ).trim();
 
-if (!/^https?:\/\//i.test(stillResolved)) {
+if (!/^https:\/\//i.test(stillResolved)) {
   throw new Error(
-    'prep_grok_video_start: still_url missing/invalid. ' +
-      'Fix save_still_url → still_url = {{ $json.data[0].url }} from grok_imagine_reel_still. ' +
+    'prep_grok_video_start: still_url must be a public https URL. ' +
+      'In save_still_url set still_url = {{ $json.data[0].url }} from grok_imagine_reel_still. ' +
       'Got: ' +
-      JSON.stringify(stillResolved).slice(0, 120)
+      JSON.stringify(stillResolved).slice(0, 160)
   );
 }
 
-const sheetMotion = String(
-  val(pick, ['video_motion_prompt']) ||
-    val(stillNode, ['video_motion_prompt']) ||
-    val(input, ['video_motion_prompt']) ||
-    ''
-).trim();
+const shot_family = asciiPrompt(val(pick, ['shot_family'], 'push_in'));
+const camera_angle = asciiPrompt(val(pick, ['camera_angle'], 'eye-level'));
+const camera_direction = asciiPrompt(val(pick, ['camera_direction'], 'forward'));
+const camera_move = asciiPrompt(val(pick, ['camera_move'], 'slow push-in')).slice(0, 180);
+const compound = asciiPrompt(val(pick, ['compound_name'], ''));
 
-const shot_family = String(val(pick, ['shot_family'], 'push_in'));
-const camera_angle = String(val(pick, ['camera_angle'], 'eye-level'));
-const camera_direction = String(val(pick, ['camera_direction'], 'forward'));
-const camera_move = String(val(pick, ['camera_move'], 'slow push-in'));
-const framing = String(val(pick, ['framing'], 'medium product framing'));
-const lighting = String(val(pick, ['lighting'], 'clinical catalog lighting'));
-const surface = String(val(pick, ['surface'], 'clean laboratory surface'));
-const compound = String(val(pick, ['compound_name'], '')).trim();
+// SHORT motion prompt only — image already has the scene.
+// Official xAI I2V examples use ~1 sentence of camera direction.
+let motion = asciiPrompt(
+  `Slow cinematic camera: ${camera_move}. ` +
+    `Shot ${shot_family}, angle ${camera_angle}, direction ${camera_direction}. ` +
+    `Keep the exact same laboratory research scene, materials, and lighting. ` +
+    `No orbit. No new objects. No people, hands, faces, needles, text, or watermarks. ` +
+    `For laboratory research use only.`
+);
 
-// Prefer sheet motion if already short; otherwise rebuild a safe camera prompt
-let motion = sheetMotion;
-if (
-  !motion ||
-  motion.length > 1200 ||
-  /FULL SCENE BRIEF|continuing this exact scene:/i.test(motion)
-) {
-  const label = compound
-    ? `Keep any visible product label as '${compound}' only.`
-    : 'Do not add new product labels or counters.';
-  motion =
-    `Animate this exact Palm Beach Vitality laboratory research still in vertical 9:16. ` +
-    `SHOT: ${shot_family}. ANGLE: ${camera_angle}. DIRECTION: ${camera_direction}. ` +
-    `CAMERA MOVE: ${camera_move}. FRAMING: ${framing}. ` +
-    `Keep lighting (${lighting}) and surface (${surface}) unchanged. ` +
-    `Preserve every object, material, and depth cue from the still — no morphing, no new props. ` +
-    `Motion path is straight or a simple tilt/pedestal/truck only — never orbit. ` +
-    `${label} ` +
-    `No people, hands, faces, needles, injection, watermarks, captions, or burn-in text. ` +
-    `For laboratory research use only. Not for human use or consumption.`;
+if (compound) {
+  motion += ` Keep label '${compound}' unchanged if visible.`;
 }
 
-if (motion.length > 1200) {
-  motion = motion.slice(0, 1199).replace(/\s+\S*$/, '') + '.';
+if (motion.length > 700) {
+  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
 }
+
+// Minimal body matching official xAI I2V curl (plus resolution).
+// Omit aspect_ratio so output follows the 9:16 still (avoids stretch conflicts).
+const body = {
+  model: 'grok-imagine-video-1.5',
+  prompt: motion,
+  image: { url: stillResolved },
+  duration: 15,
+  resolution: '1080p',
+};
+
+const grok_video_body_json = JSON.stringify(body);
 
 return [
   {
     json: {
-      ...input,
-      ...stillNode,
       still_url: stillResolved,
       video_motion_prompt: motion,
-      creation_id: val(pick, ['creation_id']) || val(stillNode, ['creation_id'], ''),
+      creation_id: String(val(pick, ['creation_id']) || val(stillNode, ['creation_id'], '')),
       camera_move,
       shot_family,
       camera_angle,
       camera_direction,
-      grok_video_model: 'grok-imagine-video-1.5',
-      grok_video_duration: 15,
-      grok_video_aspect_ratio: '9:16',
-      grok_video_resolution: '1080p',
+      compound_name: compound,
+      // Use THIS string as the Raw body of grok_video_start
+      grok_video_body_json,
+      // Debug mirrors (open in n8n output to verify before HTTP call)
+      _debug_prompt_len: motion.length,
+      _debug_still_host: stillResolved.split('/')[2] || '',
+      _debug_body_preview: grok_video_body_json.slice(0, 240),
     },
   },
 ];
