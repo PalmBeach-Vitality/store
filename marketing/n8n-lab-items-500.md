@@ -22,19 +22,27 @@ Compat copies (same 500 rows): `8-lab-items-250.csv`, `9-lab-item-creations-250.
 4. Set **Return All** / limit ≥ 500
 5. Filter `status = Active`
 6. `pick_creation` picks **least-used**: lowest `times_used` → oldest `last_used_at` → lowest `rank`
-7. Skips same **category** and same **shot_family** as the last used row
-8. Each row has `shot_family` + `framing` + `video_motion_prompt` (no orbit-token priming)
+7. Skips last **8** categories / shot families / camera moves / angles / directions
+8. Each row has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` + `video_motion_prompt`
 9. After Grok succeeds, `sheets_update_creation` bumps `times_used` + `last_used_at`
 10. `grok_video_start` must use **`video_motion_prompt`** — never a hardcoded orbit sentence
 
 Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — categories are interleaved so **no two adjacent ranks share a category** (no vial→vial in the sheet order).
 
-Each row has a unique **`video_motion_prompt`** (push-in, rise, lateral slide, tilt-up, pull-back, etc.) so vidgen motion changes every run.
+**Phase C:** all **500** `camera_move` values are unique (24 shot families, 41 angles, 24 directions).
 
-Rebuild / re-interleave / realism pass:
+Rebuild cameras only:
 
 ```bash
-python3 marketing/scripts/fix_lab_libraries.py
+python3 marketing/scripts/apply_unique_camera_recipes.py
+python3 marketing/scripts/audit_camera_diversity.py
+```
+
+Full library rebuild / re-interleave / realism pass:
+
+```bash
+python3 marketing/scripts/rebuild_lab_libraries.py
+python3 marketing/scripts/apply_unique_camera_recipes.py
 ```
 
 **Realism rules baked into the CSVs + prompts**
