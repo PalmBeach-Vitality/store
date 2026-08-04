@@ -2,30 +2,11 @@
 
 | File | Tab name |
 |---|---|
-| `1-compounds-all-daily.csv` | `1-compounds-all-daily` (compound catalog / weekly lock — pens+vials) |
-| `1-compounds-pens.csv` | `1-compounds-pens` |
-| `1-compounds-vials.csv` | `1-compounds-vials` |
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
-
-## Live daily tab columns (Creatomate writeback)
-Use on `1-compounds-all-daily`:
-
-- `video_url` — Creatomate MP4 URL
-- `creatomate_render_id`
-- `creatomate_snapshot_url`
-- `last_reel_at`
-
-Existing Grok video columns (live Buffer workflow): `reel_still_url`, `reel_video_url`, `buffer_ig_reel_id`, `buffer_fb_reel_id`.
-
 | `5-reel-scenes.csv` | `5-reel-scenes` (630 Creatomate/Grok visual scene briefs) |
-
-## Reel scenes
-Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene per Reel Studio run via `scene_id` / rotation.
-
 | `6-quality-variables.csv` | `6-quality-variables` (Grok Imagine quality tokens) |
-
 | `7-unique-reel-creations-500.csv` | `7-unique-reel-creations-500` (legacy abstract scenes — **do not use for Imagine**) |
 | `8-lab-items-500.csv` | `8-lab-items-500` (500 real lab-item subject variables) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — full-paragraph cinematic scenes; no Creatomate `mod_*`). **Vials:** aluminum crimp + rubber septum injection vials only — **no twist tops** (`enforce_crimped_vial_closures.py`) |
@@ -34,3 +15,14 @@ Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene pe
 | `10-creatomate-text-500.csv` | first 500 rows only (legacy; use 1000) |
 | `8-lab-items-250.csv` / `9-lab-item-creations-250.csv` | Compat copies of the **500** rows (legacy filenames) |
 
+## Image scenes (`3-image-scenes-150`)
+
+Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`.
+
+Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
+
+## Reel Studio / Creatomate
+
+- Grok still/video library: tab **`9-lab-item-creations-500`**
+- Creatomate text: tab **`10-creatomate-text-1000`**
+- Finished packages log: tab **`4-reel-queue`**

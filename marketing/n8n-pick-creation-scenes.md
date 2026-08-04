@@ -26,7 +26,7 @@ Each run picks **1** least-used Active creation (unique scene + 12 quality vars 
 
 ## Phase 0 — Import Sheets tab (once)
 
-1. Open your Google Spreadsheet (same as `1-compounds-all-daily`)
+1. Open your Google Spreadsheet (PB Vitality sheets workbook)
 2. **File → Import → Upload** `marketing/sheets/7-unique-reel-creations-500.csv`
 3. Import location: **Insert new sheet**
 4. Rename tab exactly: **`7-unique-reel-creations-500`**

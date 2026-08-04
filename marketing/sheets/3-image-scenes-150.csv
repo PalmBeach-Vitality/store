@@ -1,1 +1,1 @@
-scene_id,scene_category,scene_name,lab_environment,status,times_used,last_date_used,feed_image_url,story_image_url,ig_caption_draft,fb_caption_draft,tiktok_script_draft,buffer_ig_post_id,buffer_fb_post_id,buffer_tiktok_post_id,notes
+scene_id,scene_category,scene_name,lab_environment,camera,lighting,product_hero,product_form_detail,compound_id,compound_name,canonical_url,scene_brief,caption_lock,status,rotation_order,last_used_date

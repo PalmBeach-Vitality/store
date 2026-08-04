@@ -188,7 +188,7 @@ For smoke test: optionally add a second Filter before Limit: `compound_id` equal
 
 | Name | Mode | Value |
 |---|---|---|
-| `daily_angle` | Fixed / Expression | `Identity / catalog listing` or the Mon–Sun expression from `n8n-weekly-sheets-rotation.md` |
+| `daily_angle` | Fixed | `Identity / catalog listing` |
 | `daily_image_brief` | Fixed | `Hero compound name dominant; premium navy hex-grid brand card` |
 | `figma_template_type` | Expression | `={{ $json.figma_template_type || 'Hero Spotlight' }}` |
 
@@ -461,6 +461,6 @@ That avoids a second Sheets write.
 
 ## Related
 
-- Buffer daily path (leave alone): `marketing/n8n-weekly-sheets-rotation.md`, `marketing/n8n-buffer-finish.md`
+- Buffer daily path: `marketing/n8n-save-render-url.md`, `marketing/n8n-buffer-finish.md`
 - Visual system: `marketing/spotlight-card.html`, `marketing/n8n-grok-imagine-visual-prompt.md`
 - Figma frame build: `marketing/figma-beginner-walkthrough.md`

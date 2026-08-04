@@ -1009,13 +1009,13 @@ LABEL_CATEGORIES = {
 
 def load_compound_labels() -> list[str]:
     """Active Palm Beach Vitality compounds for on-product labels (BPC-157, NAD+, …)."""
-    path = SHEETS / "1-compounds-all-daily.csv"
+    path = SHEETS / "9-lab-item-creations-500.csv"
     rows = list(csv.DictReader(path.open()))
     labels: list[str] = []
     seen: set[str] = set()
-    rows_sorted = sorted(rows, key=lambda r: int(r.get("rotation_order") or 9999))
+    rows_sorted = sorted(rows, key=lambda r: int(r.get("rank") or 9999))
     for r in rows_sorted:
-        if str(r.get("status") or "").strip().lower() != "active":
+        if str(r.get("status") or "").strip().lower() not in ("", "active"):
             continue
         raw = str(r.get("compound_name") or "").strip()
         if not raw:
