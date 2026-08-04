@@ -1,100 +1,104 @@
 # Fix `Save_render_URL` — IG/FB image workflow
 
 **Workflow:** live spotlight / Buffer daily (IG feed + FB feed + stories)  
-**Node:** Edit Fields · name exactly **`Save_render_URL`**  
-**Wire:** after all three Imagine nodes, before Buffer image posts / `grok_video_start`
+**Node:** Edit Fields · name exactly **`Save_render_URL`**
 
 ```text
-GROK_Imagine              (1:1 feed)
-  → Grok_imagine_story    (9:16 story)
-  → grok_imagine_reel_still (9:16 photoreal still for video)
-  → Save_render_URL       ← fix fields here
+GROK_Imagine                 (1:1 feed)
+  → Grok_imagine_story       (9:16 story)
+  → grok_imagine_reel_still  (9:16 photoreal — only if video path exists)
+  → Save_render_URL
   → Buffer_post_IG / Buffer_post_FB / stories
-  → (optional) grok_video_start …
 ```
 
 ---
 
 ## What’s broken
 
-After `grok_imagine_reel_still` was inserted **before** `Save_render_URL`, bare `$json.data[0].url` points at the **reel still**, not the feed or story graphic.
-
-| Bad field | Why it’s wrong |
+| Bad pattern | Why |
 |---|---|
-| `story_image_url` = `$json.data[0].url` | Gets reel still (wrong for Stories) |
-| `spotlight_image_url` / `feed_image_url` = `$json.data[0].url` | Same — feed posts get reel still |
-| Stale `figma_image_url` | HCTI/Figma era — Buffer expects `spotlight_image_url` / `feed_image_url` |
-| Wrong node casing | n8n `$('…')` is case-sensitive — use exact canvas names below |
+| Feed/story = `$json.data[0].url` after reel still was inserted | `$json` is the **reel still** → wrong image on IG/FB feed & stories |
+| `reel_still_url` = `$('grok_imagine_reel_still')…` | Fails if that node name differs / isn’t paired — shows as a **bad field** in Edit Fields |
+| Keeping `reel_still_url` on a pure image run with **no** reel-still node | Expression errors and can break the whole Set node |
+| `posts_this_week` on `Save_render_URL` using `$json.posts_this_week` | After Imagine, `$json` has **no** sheet count → bad field / always `1` |
+
+**Rule:**  
+- Feed + story → **named** Imagine nodes  
+- Reel still → **`$json`** (Save is wired directly after that node)  
+- No reel-still node → **delete** the `reel_still_url` field  
+- `posts_this_week` → **Sheets writeback only** (not Save_render_URL)
 
 ---
 
-## Correct fields (paste these)
+## A) Image + video canvas (reel still exists)
 
-Type: **Edit Fields** · Include Other Input Fields: **OFF** (cleaner) or ON if you need upstream keys.
+Wire: `… → grok_imagine_reel_still → Save_render_URL`
 
 | Name | Value (fx ON) |
 |---|---|
 | `spotlight_image_url` | `={{ $('GROK_Imagine').item.json.data[0].url }}` |
 | `feed_image_url` | `={{ $('GROK_Imagine').item.json.data[0].url }}` |
 | `story_image_url` | `={{ $('Grok_imagine_story').item.json.data[0].url }}` |
-| `reel_still_url` | `={{ $('grok_imagine_reel_still').item.json.data[0].url }}` |
+| `reel_still_url` | `={{ $json.data[0].url \|\| $json.url }}` |
+| `still_url` | `={{ $json.data[0].url \|\| $json.url }}` |
 | `ig_caption_draft` | `={{ String($('Parse_Grok').item.json.ig_caption_draft \|\| '').replaceAll('\\n', '\n') }}` |
 | `fb_caption_draft` | `={{ String($('Parse_Grok').item.json.fb_caption_draft \|\| '').replaceAll('\\n', '\n') }}` |
 | `compound_id` | `={{ $('Parse_Grok').item.json.compound_id }}` |
 | `compound_name` | `={{ $('Parse_Grok').item.json.compound_name \|\| $('Parse_Grok').item.json.display_name }}` |
 
-**Never** use bare `$json.data[0].url` for feed or story once reel still is in the chain.
+**`reel_still_url` must be `$json…`**, not `$('grok_imagine_reel_still')…`.  
+`still_url` is the same URL (alias for `prep_grok_video_start` / Seedance).
 
-`feed_image_url` aliases `spotlight_image_url` for Sheets writeback (`1-compounds-all-daily` columns).
+If your reel-still node has a different name, either rename it to match the wire above, **or** keep `reel_still_url` on `$json` and don’t reference the old name.
+
+---
+
+## B) Image-only canvas (no reel still / no video)
+
+Wire: `… → Grok_imagine_story → Save_render_URL → Buffer_post_IG …`
+
+| Name | Value (fx ON) |
+|---|---|
+| `spotlight_image_url` | `={{ $('GROK_Imagine').item.json.data[0].url }}` |
+| `feed_image_url` | `={{ $('GROK_Imagine').item.json.data[0].url }}` |
+| `story_image_url` | `={{ $json.data[0].url \|\| $json.url }}` |
+| `ig_caption_draft` | `={{ String($('Parse_Grok').item.json.ig_caption_draft \|\| '').replaceAll('\\n', '\n') }}` |
+| `fb_caption_draft` | `={{ String($('Parse_Grok').item.json.fb_caption_draft \|\| '').replaceAll('\\n', '\n') }}` |
+| `compound_id` | `={{ $('Parse_Grok').item.json.compound_id }}` |
+| `compound_name` | `={{ $('Parse_Grok').item.json.compound_name \|\| $('Parse_Grok').item.json.display_name }}` |
+
+**Delete** `reel_still_url` and `still_url` from this node — they are the bad fields on image-only.
 
 ---
 
 ## Downstream Buffer (image posts)
 
-| Node | Image URL field | Caption |
+| Node | Image | Caption |
 |---|---|---|
-| `Buffer_post_IG` | `$('Save_render_URL').item.json.spotlight_image_url` | `ig_caption_draft` |
-| `Buffer_post_FB` | `$('Save_render_URL').item.json.spotlight_image_url` | `fb_caption_draft` |
-| `Buffer_IG_story` | `$('Save_render_URL').item.json.story_image_url` | `ig_caption_draft` + `metadata.instagram.type: 'story'` |
-| `Buffer_FB_story` | `$('Save_render_URL').item.json.story_image_url` | `fb_caption_draft` + `metadata.facebook.type: 'story'` |
-
-Channel IDs:
+| `Buffer_post_IG` | `spotlight_image_url` | `ig_caption_draft` |
+| `Buffer_post_FB` | `spotlight_image_url` | `fb_caption_draft` |
+| `Buffer_IG_story` | `story_image_url` | `ig_caption_draft` + IG `type: 'story'` |
+| `Buffer_FB_story` | `story_image_url` | `fb_caption_draft` + FB `type: 'story'` |
 
 | Channel | channelId |
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
 | Facebook | `6a668d6b4b2d03035f478575` |
 
----
-
-## Video path (if present)
-
-`grok_video_start` / prep must use:
+Video start (if present) uses:
 
 ```text
-still / image url = $('Save_render_URL').item.json.reel_still_url
+image / still = $('Save_render_URL').item.json.still_url
+             || $('Save_render_URL').item.json.reel_still_url
 ```
-
-Not `spotlight_image_url` (1:1 feed) and not `$json.data[0].url` from the wrong node.
 
 ---
 
 ## Smoke test
 
-1. Execute through `Save_render_URL`
-2. Open output — all three URLs must be different https links:
-   - feed / spotlight → square brand graphic  
-   - story → 9:16 brand graphic  
-   - reel_still → photoreal lab still  
-3. Captions show real line breaks (not literal `\n`)
-4. Run `Buffer_post_IG` — preview uses **spotlight** image, not the reel still
+1. Execute `Save_render_URL` — no red / “bad field” expressions  
+2. `spotlight_image_url` ≠ `story_image_url`  
+3. If video path: `reel_still_url` / `still_url` is https and looks photoreal (not the feed graphic)  
+4. Buffer IG feed preview uses **spotlight**, not reel still  
 
-Reply **`save_render ok`** with the three URLs when green.
-
----
-
-## Related
-
-- Stories bodies: pep `n8n-buffer-stories.md` (same channel IDs)
-- Live canvas names: `n8n-creatomate-reel-studio.md`
-- Sheet columns: `sheets/1-compounds-all-daily.csv` (`feed_image_url`, `story_image_url`, `reel_still_url`)
+Reply **`save_render ok`** when green.
