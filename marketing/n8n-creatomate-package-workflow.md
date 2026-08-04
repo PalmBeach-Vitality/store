@@ -166,24 +166,28 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 | Name | Value |
 |---|---|
-| `video_url` | `={{ $json.url }}` |
-| `creatomate_render_id` | `={{ $json.id }}` |
-| `creatomate_snapshot_url` | `={{ $json.snapshot_url }}` |
-| `status` | `={{ $json.status }}` |
-| `public_video_url` | `={{ $('video_url_input').item.json.public_video_url }}` |
-| `product_name` | `={{ $('video_url_input').item.json.product_name }}` |
-| `mod_intro` | `={{ $('map_creatomate_from_url').item.json.mod_intro }}` |
-| `mod_fact_1` | `={{ $('map_creatomate_from_url').item.json.mod_fact_1 }}` |
-| `mod_fact_2` | `={{ $('map_creatomate_from_url').item.json.mod_fact_2 }}` |
-| `mod_fact_3` | `={{ $('map_creatomate_from_url').item.json.mod_fact_3 }}` |
-| `mod_fact_4` | `={{ $('map_creatomate_from_url').item.json.mod_fact_4 }}` |
-| `mod_fact_5` | `={{ $('map_creatomate_from_url').item.json.mod_fact_5 }}` |
-| `text_id` | `={{ $('pick_text').item.json.text_id }}` |
-| `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
+| `video_url` | `={{ $('creatomate_status').first().json.url \|\| $json.url }}` |
+| `creatomate_render_id` | `={{ $('creatomate_status').first().json.id \|\| $json.id }}` |
+| `creatomate_snapshot_url` | `={{ $('creatomate_status').first().json.snapshot_url \|\| $json.snapshot_url }}` |
+| `status` | `={{ $('creatomate_status').first().json.status \|\| $json.status }}` |
+| `public_video_url` | `={{ $('video_url_input').first().json.public_video_url }}` |
+| `product_name` | `={{ $('map_creatomate_from_url').first().json.product_name }}` |
+| `mod_intro` | `={{ $('map_creatomate_from_url').first().json.mod_intro }}` |
+| `mod_fact_1` | `={{ $('map_creatomate_from_url').first().json.mod_fact_1 }}` |
+| `mod_fact_2` | `={{ $('map_creatomate_from_url').first().json.mod_fact_2 }}` |
+| `mod_fact_3` | `={{ $('map_creatomate_from_url').first().json.mod_fact_3 }}` |
+| `mod_fact_4` | `={{ $('map_creatomate_from_url').first().json.mod_fact_4 }}` |
+| `mod_fact_5` | `={{ $('map_creatomate_from_url').first().json.mod_fact_5 }}` |
+| `text_id` | `={{ $('pick_text').first().json.text_id }}` |
+| `template_id` | `={{ $('map_creatomate_from_url').first().json.template_id }}` |
 | `created_at` | `={{ $now.toISO() }}` |
 | `used_in_buffer` | `no` |
-| `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 | `buffer_caption` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+
+**Required for Buffer captions:** `buffer_caption` must be on this node (or Buffer must read the map node directly).  
+**status:** expression must be turned **ON** (`=` / fx) — your output showed the raw `{{ … }}` string, meaning fx was off.  
+**Remove duplicate** `template_id` fields. Prefer **one** from `map_creatomate_from_url`.
 
 **Do not** reference `Parse_Grok`, `save_video_url`, `map_creatomate_mods`, or `pick_creation` — those nodes are not in Workflow B.
 

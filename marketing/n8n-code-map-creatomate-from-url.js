@@ -9,7 +9,7 @@
 // Optional: still_url / hold_image_url → end_hold (also prefer catbox / public HTTPS).
 // pick_text filters facts 1–3 for that product (plain-English ad tone).
 // Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
-// buffer_caption = 1-paragraph product sales pitch + 5 hashtags (research-only).
+// buffer_caption = unique per product/post (facts rotate) + 5 hashtags + discount CTA.
 //
 // Template: c5d54774-b029-4786-af04-d5af345dc7f2
 // Elements: Video-8QW (catbox MP4, once) + end_hold (still). Muted.
@@ -23,10 +23,21 @@ function firstJson(name) {
 }
 
 function cleanFact(text) {
-  return String(text || '')
-    .replace(/\s*[·•|-]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
-    .replace(/\s*\((ref|motif|card|line|cta)\s*\d+\)\s*$/i, '')
-    .trim();
+  let t = String(text || '').trim();
+  const rules = [
+    /\s*[·•⋅∙.\u00b7]?\s*set\s*\d+\s*$/i,
+    /\s*[—–-]?\s*research card\s*\d+\s*$/i,
+    /\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i,
+    /\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i,
+    /\s*\(\s*\d+\s*\/\s*\d+\s*\)\s*$/,
+    /\s+[—–-]\s*research\s*$/i,
+  ];
+  let prev;
+  do {
+    prev = t;
+    for (const re of rules) t = t.replace(re, '').trim();
+  } while (t !== prev);
+  return t;
 }
 
 /** Creatomate cannot pull these hosts — reject before render. */

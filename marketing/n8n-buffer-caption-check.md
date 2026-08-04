@@ -41,13 +41,21 @@ text: $json.ig_caption_draft   // often empty after later nodes
 
 ---
 
-## 3) Optional: save node
+## 3) `save_creatomate_url` — add these fields
 
-On **`save_creatomate_url`** add:
+Your current save node is **missing** `buffer_caption`. Add:
 
 | Name | Value |
 |---|---|
 | `buffer_caption` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `product_name` | `={{ $('map_creatomate_from_url').first().json.product_name }}` |
+| `status` | `={{ $('creatomate_status').first().json.status }}` ← fx **ON** |
+
+Also:
+1. Re-paste **`map_creatomate_from_url`** from repo (builds `buffer_caption`)
+2. Re-paste **`pick_text`** (aliases `CJC` → `CJC (no DAC)`, strips `· set 05`)
+3. Delete duplicate `template_id` rows on the Set node
 
 ---
 
