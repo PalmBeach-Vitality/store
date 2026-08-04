@@ -71,8 +71,9 @@ Do **not** send `public_video_url` (Grok/catbox source) to Buffer.
 
 Built in **`map_creatomate_from_url`** as `buffer_caption` / `ig_caption_draft`:
 
-- 1 paragraph specific to the sheet `product_name` (uses Facts 1–3)
-- Research-catalog sales tone + site CTA + research-only disclaimer
+- **4+ sentences**, upbeat, audience-friendly sales pitch for viewers
+- Specific to sheet `product_name` (weaves Facts 1–3)
+- Site CTA + research-only disclaimer (required)
 - Exactly **5** product-specific hashtags
 
 Use on every Buffer node `text` field:
@@ -90,7 +91,7 @@ Or after save:
 Example shape:
 
 ```text
-Stock CJC (no DAC) for your next research order — …fact lines… Shop the CJC (no DAC) research listing at www.palmbeach-vitality.store. For laboratory research use only. Not for human use or consumption.
+Meet CJC (no DAC) — a standout research listing from Palm Beach Vitality that’s ready for teams who want quality they can trust. Trusted research peptide for endocrine lab work, so your lab workflow stays clear and confident from day one. Straightforward material for controlled studies — exactly the kind of straightforward material busy research programs look for. Lab use only — not for human use. Explore the full CJC (no DAC) listing and order with ease at www.palmbeach-vitality.store. For laboratory research use only. Not for human use or consumption.
 
 #CJCResearch #EndocrineLab #LabGradePeptides #PalmBeachVitality #ResearchOnly
 ```

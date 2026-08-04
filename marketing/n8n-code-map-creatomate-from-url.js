@@ -100,25 +100,30 @@ function fiveHashtags(productName) {
 }
 
 /**
- * One-paragraph Buffer sales pitch for the exact product.
- * Research-catalog tone — not for human use / medical claims.
+ * Upbeat, audience-friendly Buffer caption for viewers (4+ sentences).
+ * Product-specific sales pitch/description; research-only disclaimer kept.
+ * No human-use / medical outcome claims.
  */
 function buildBufferCaption(productName, fact1, fact2, fact3) {
   const p = String(productName || '').trim();
   const f1 = cleanFact(fact1);
   const f2 = cleanFact(fact2);
   const f3 = cleanFact(fact3);
-  const hooks = [f1, f2, f3].filter(Boolean);
-  const pitchCore =
-    hooks.length > 0
-      ? hooks.join(' ')
-      : `${p} is listed for controlled laboratory research programs that need clear documentation and research-grade material.`;
 
-  const paragraph =
-    `Stock ${p} for your next research order — ${pitchCore} ` +
-    `Shop the ${p} research listing at www.palmbeach-vitality.store. ` +
-    `For laboratory research use only. Not for human use or consumption.`;
+  const s1 = `Meet ${p} — a standout research listing from Palm Beach Vitality that’s ready for teams who want quality they can trust.`;
+  const s2 = f1
+    ? `${f1.replace(/\.$/, '')}, so your lab workflow stays clear and confident from day one.`
+    : `${p} is built for serious research catalogs that care about clarity, consistency, and documentation.`;
+  const s3 = f2
+    ? `${f2.replace(/\.$/, '')} — exactly the kind of straightforward material busy research programs look for.`
+    : `It’s a simple, premium pick when you want research-grade material without the guesswork.`;
+  const s4 = f3
+    ? `${f3.replace(/\.$/, '')}. Explore the full ${p} listing and order with ease at www.palmbeach-vitality.store.`
+    : `Explore the full ${p} listing and place your research order at www.palmbeach-vitality.store.`;
+  const s5 =
+    'For laboratory research use only. Not for human use or consumption.';
 
+  const paragraph = [s1, s2, s3, s4, s5].join(' ');
   const tags = fiveHashtags(p).join(' ');
   return `${paragraph}\n\n${tags}`;
 }
