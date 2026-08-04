@@ -128,7 +128,7 @@ That string is a **placeholder**, not a real Buffer channel. Replace it in every
 | Channel | `channelId` |
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
-| TikTok | re-confirm (`service: tiktok`) — prior id returned `Channel not found` |
+| TikTok | `6a6d64814b2d03035f7bddef` |
 | Facebook | entered in n8n (`service: facebook`) |
 
 ```js
@@ -315,7 +315,7 @@ JSON.stringify({
   variables: {
     input: {
       text: $('map_creatomate_from_url').first().json.buffer_caption,
-      channelId: 'YOUR_TIKTOK_CHANNEL_ID',
+      channelId: '6a6d64814b2d03035f7bddef',
       schedulingType: 'automatic',
       mode: 'addToQueue',
       assets: [
