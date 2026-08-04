@@ -121,7 +121,7 @@ That string is a **placeholder**, not a real Buffer channel. Replace it in every
 |---|---|
 | `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
 | `buffer_fb_reel` / `Buffer_FB_story` | your Facebook id (`service: facebook`) |
-| `buffer_tiktok` | confirm via `channels` (`service: tiktok`) — `Channel not found` = wrong/disconnected id |
+| `buffer_tiktok` | `6a6d64814b2d03035f7bddef` |
 
 **Palm Beach Vitality — known IDs**
 
