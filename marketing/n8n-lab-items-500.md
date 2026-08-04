@@ -53,6 +53,13 @@ python3 marketing/scripts/apply_unique_camera_recipes.py
 - No injection/needle context; filter cartridges and pumps only when needed
 - Every `video_prompt` includes `SINGLE SUBJECT ONLY` + FDA-safe avoid list
 - Category rank order never repeats adjacent categories
+- Every `lab_item` is **≥2 sentences** of visual description (not a short noun stub); `material_detail` is also ≥2 sentences. Both feed Grok still + motion prompts.
+
+Enrich descriptions only (keeps cameras):
+
+```bash
+python3 marketing/scripts/enrich_lab_item_descriptions.py
+```
 
 ## Quality
 

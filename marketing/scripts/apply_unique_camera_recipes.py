@@ -78,6 +78,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
 
 def rebuild_motion_prompt(row: dict, shot: dict) -> str:
     name = row["lab_item"]
+    detail = (row.get("material_detail") or "").strip()
     compound = (row.get("compound_name") or "").strip()
     surface = row.get("surface") or "clean laboratory surface"
     lighting = row.get("lighting") or "clinical catalog lighting"
@@ -88,8 +89,10 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
         )
     else:
         label_rule = "Do not add product compound labels or counters onto the subject."
+    detail_clause = f" Physical detail continuity: {detail}." if detail else ""
     return (
-        f"Photoreal vertical 9:16 laboratory research catalog film of {name}. "
+        f"Photoreal vertical 9:16 laboratory research catalog film of {name}."
+        f"{detail_clause} "
         f"SHOT FAMILY: {shot['shot_family']}. "
         f"CAMERA ANGLE: {shot['camera_angle']}. "
         f"CAMERA DIRECTION: {shot['camera_direction']}. "
@@ -106,8 +109,18 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
 
 
 def rebuild_scene_brief(row: dict, shot: dict) -> str:
+    # Prefer a short title so scene_brief stays scannable when lab_item is multi-sentence
+    title = (row.get("lab_item") or "").strip()
+    first = re.split(r"(?<=[.!?])\s+", title)[0].strip().rstrip(".")
+    if first.lower().startswith("the primary subject is "):
+        rest = first[len("The primary subject is ") :]
+        m = re.match(r"(.+?)(?:,| staged as)\b", rest, flags=re.I)
+        if m:
+            first = m.group(1).strip()
+    if len(first) > 90:
+        first = first[:87].rstrip() + "…"
     parts = [
-        row["lab_item"],
+        first,
         f"shot:{shot['shot_family']}",
         f"angle:{shot['camera_angle']}",
         f"dir:{shot['camera_direction']}",
