@@ -111,9 +111,11 @@ const wanted = normName(wantedRaw);
 
 /** Short aliases → sheet-canonical product_name (exact catalog value) */
 const PRODUCT_ALIASES = {
-  cjc: 'CJC (no DAC)',
-  'cjc no dac': 'CJC (no DAC)',
+  // CJC is the sheet name now (was "CJC (no DAC)")
+  'cjc no dac': 'CJC',
+  'cjc (no dac)': 'CJC',
   'cjc ipamorelin': 'CJC (no DAC)/Ipamorelin',
+  'cjc (no dac)/ipamorelin': 'CJC (no DAC)/Ipamorelin',
   bpc: 'BPC-157',
   'bpc 157': 'BPC-157',
   'tb 500': 'TB-500',
@@ -162,7 +164,7 @@ const scored = rows
   })
   .filter((r) => r.text_id && r.mod_fact_1)
   .filter((r) => isActive(r.status))
-  // Exact match on sheet name, or alias → canonical (e.g. CJC → CJC (no DAC))
+  // Exact match on sheet name, or alias → canonical (e.g. cjc no dac → CJC)
   // Still never let bare "Tesamorelin" match "Tesamorelin/Ipamorelin"
   .filter((r) => normName(r.product_name) === wantedResolved)
   .sort((a, b) => {

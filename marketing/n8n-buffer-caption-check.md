@@ -58,7 +58,7 @@ Your current save node is **missing** `buffer_caption`. Add:
 
 Also:
 1. Re-paste **`map_creatomate_from_url`** from repo (builds `buffer_caption`)
-2. Re-paste **`pick_text`** (aliases `CJC` → `CJC (no DAC)`, strips `· set 05`)
+2. Re-paste **`pick_text`** (sheet product is **`CJC`**; strips `· set 05`)
 3. Delete duplicate `template_id` rows on the Set node
 
 ---

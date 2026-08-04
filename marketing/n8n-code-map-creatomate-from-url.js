@@ -71,7 +71,7 @@ const PRODUCT_TAGS = {
   'AOD-9604': ['#AOD9604Research', '#MetabolicScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
   'BPC-157': ['#BPC157Research', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
   'BPC-157/TB-500': ['#BPC157', '#TB500Research', '#PeptideScience', '#PalmBeachVitality', '#ResearchOnly'],
-  'CJC (no DAC)': ['#CJCResearch', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  CJC: ['#CJC', '#CJCResearch', '#EndocrineLab', '#PalmBeachVitality', '#ResearchOnly'],
   'CJC (no DAC)/Ipamorelin': ['#CJCIpamorelin', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
   Cagrilinitide: ['#Cagrilinitide', '#MetabolicResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
   DSIP: ['#DSIPResearch', '#NeuropeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
@@ -184,7 +184,7 @@ if (!text.text_id || !text.mod_fact_1) {
   );
 }
 
-// Sheet-canonical name from pick_text (e.g. CJC → CJC (no DAC)). Do not prefer short alias.
+// Sheet-canonical name from pick_text (exact product_name, e.g. CJC).
 const product_name = String(
   text.product_name || urlInput.product_name || urlInput.compound_name || ''
 ).trim();

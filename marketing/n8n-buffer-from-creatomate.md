@@ -92,9 +92,9 @@ Or after save:
 Example shape:
 
 ```text
-Looking for CJC (no DAC)? Palm Beach Vitality makes it easy to find a research listing that feels premium, clear, and ready for your next project. Trusted research peptide for endocrine lab work — a confident pick when you want material that fits real laboratory workflows. Here’s why teams keep coming back: straightforward material for controlled studies. Ready to check it out? Explore CJC (no DAC) and shop the full listing at www.palmbeach-vitality.store. For laboratory research use only. Not for human use or consumption. For a 10% discount code drop Peptides in the comments!
+Looking for CJC? Palm Beach Vitality makes it easy to find a research listing that feels premium, clear, and ready for your next project. Trusted research peptide for endocrine lab work — a confident pick when you want material that fits real laboratory workflows. Here’s why teams keep coming back: straightforward material for controlled studies. Ready to check it out? Explore CJC and shop the full listing at www.palmbeach-vitality.store. For laboratory research use only. Not for human use or consumption. For a 10% discount code drop Peptides in the comments!
 
-#CJCResearch #EndocrineLab #LabGradePeptides #PalmBeachVitality #ResearchOnly
+#CJC #CJCResearch #EndocrineLab #PalmBeachVitality #ResearchOnly
 ```
 
 ---
@@ -352,7 +352,7 @@ If the **MP4** has no Intro/Facts:
 
 1. Open render `modifications` — `Intro-Text.text` / `Fact-*-text.text` must be non-empty  
 2. In the template, confirm those text layers are **visible** on the timeline for the full length (not duration 0 / off-canvas / under a cover)  
-3. `product_name` must match Sheet 10 exactly enough for `pick_text` (e.g. `CJC` vs `CJC (no DAC)/Ipamorelin`)
+3. `product_name` must match Sheet 10 exactly (`CJC`, or `CJC (no DAC)/Ipamorelin` for the blend)
 
 ---
 

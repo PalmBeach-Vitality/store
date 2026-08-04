@@ -84,7 +84,7 @@ const CATALOG_COMPOUNDS = [
   'BPC-157',
   'BPC-157/TB-500',
   'Cagrilinitide',
-  'CJC (no DAC)',
+  'CJC',
   'CJC (no DAC)/Ipamorelin',
   'DSIP',
   'GHK-Cu',
