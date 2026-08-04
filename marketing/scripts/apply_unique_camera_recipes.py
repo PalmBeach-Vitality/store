@@ -19,12 +19,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from camera_recipes import build_unique_camera_sequence  # noqa: E402
 
 SINGLE_SUBJECT = (
-    "SINGLE SUBJECT ONLY: exactly one primary subject in frame. "
-    "No pairs, twins, stacks, dual chambers, or matching sets."
+    "ENVIRONMENT-FORWARD SCENE: build a full research / wellness / R&D world, "
+    "not a boring single-SKU cutout. Depth, architecture, and atmosphere matter."
 )
 AVOID = (
-    "Avoid: people, hands, faces, needles, injection, lifestyle props, cardboard boxes, "
-    "cartons, mailers, shipping trays as hero, fake LAB codes, creation motifs, 000/500 counters."
+    "Avoid: people, hands, faces, needles, injection, lifestyle influencers, cardboard boxes "
+    "as hero, fake LAB codes, creation motifs, 000/500 counters, surreal CGI orbs."
 )
 QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
@@ -54,11 +54,10 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
             "Do NOT print compound names, LAB codes, creation motifs, or 000/500 counters on the subject."
         )
     return (
-        f"Photoreal vertical 9:16 Palm Beach Vitality laboratory research catalog still, "
-        f"exciting premium science equipment photography, chemical research material only. "
-        f"PRIMARY SUBJECT (must be clearly recognizable, real laboratory equipment or research material, "
-        f"visually striking, expensive): {name}. "
-        f"Physical detail: {detail}. "
+        f"Photoreal vertical 9:16 Palm Beach Vitality cinematic research still. "
+        f"Create an exciting unique laboratory / peptide R&D / health-and-wellness industry scene. "
+        f"FULL SCENE BRIEF: {name} "
+        f"Supporting notes: {detail} "
         f"SHOT FAMILY: {shot['shot_family']}. "
         f"CAMERA ANGLE: {shot['camera_angle']}. "
         f"CAMERA DIRECTION: {shot['camera_direction']}. "
@@ -68,7 +67,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
         f"Intended follow-on camera move: {shot['camera_move']}. Energy: {shot['energy']}. "
         f"Color grade: {color_grade}. "
         f"{label_rule} "
-        f"Compose this still to match the shot family and angle — do not default every frame to the same centered luxury pose. "
+        f"Compose for spectacle and depth — environment-forward storytelling. "
         f"{SINGLE_SUBJECT} "
         f"{AVOID}. "
         f"Quality: {QUALITY}. "
@@ -89,9 +88,9 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
         )
     else:
         label_rule = "Do not add product compound labels or counters onto the subject."
-    detail_clause = f" Physical detail continuity: {detail}." if detail else ""
+    detail_clause = f" Continuity notes: {detail}." if detail else ""
     return (
-        f"Photoreal vertical 9:16 laboratory research catalog film of {name}."
+        f"Photoreal vertical 9:16 cinematic laboratory research film continuing this exact scene: {name}."
         f"{detail_clause} "
         f"SHOT FAMILY: {shot['shot_family']}. "
         f"CAMERA ANGLE: {shot['camera_angle']}. "
@@ -99,26 +98,24 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
         f"FRAMING: {shot['framing']}. "
         f"CAMERA: {shot['camera_move']}. "
         f"ENERGY: {shot['energy']}. "
-        f"Path must be straight or a simple tilt/pedestal only — never travel around the subject. "
+        f"Path must be straight or a simple tilt/pedestal/truck only — never travel around the subject. "
         f"Lighting continuity: {lighting}. Surface continuity: {surface}. "
-        f"Keep the subject sharp, recognizable, and unchanged from the still. "
+        f"Keep the world sharp, recognizable, and unchanged from the still — exciting depth, not a SKU spin. "
         f"{label_rule} "
-        f"No people, no hands, no faces, no needles, no injection, no lifestyle, no cardboard boxes. "
+        f"No people, no hands, no faces, no needles, no injection, no lifestyle influencers, no cardboard box heroes. "
         f"For laboratory research use only. Not for human use or consumption."
     )
 
 
 def rebuild_scene_brief(row: dict, shot: dict) -> str:
-    # Prefer a short title so scene_brief stays scannable when lab_item is multi-sentence
+    # Prefer a short title so scene_brief stays scannable when lab_item is a full paragraph
     title = (row.get("lab_item") or "").strip()
-    first = re.split(r"(?<=[.!?])\s+", title)[0].strip().rstrip(".")
-    if first.lower().startswith("the primary subject is "):
-        rest = first[len("The primary subject is ") :]
-        m = re.match(r"(.+?)(?:,| staged as)\b", rest, flags=re.I)
-        if m:
-            first = m.group(1).strip()
-    if len(first) > 90:
-        first = first[:87].rstrip() + "…"
+    # Grab theme fragment if present: "Scene 001 — Theme" or "Scene 001 (Theme)"
+    m = re.search(r"Scene\s+\d+\s*[—\-:(]+\s*([^).\n]+)", title)
+    if m:
+        first = m.group(1).strip()[:90]
+    else:
+        first = title.split(".")[0].strip()[:90]
     parts = [
         first,
         f"shot:{shot['shot_family']}",

@@ -50,9 +50,11 @@ See `n8n-camera-diversity-plan.md`.
 
 ## Subjects
 
-- Premium equipment / vials / powders / sterile labs — no boxes/trays  
+- **Full cinematic scenes** (not single boring SKUs): labs, peptide R&D, sterile suites, longevity/wellness industry worlds  
+- Each `lab_item` is a **full paragraph**; `video_prompt` + `video_motion_prompt` embed that scene  
 - Labels (when present) = real compounds  
 - Still `2k` · Video `15s` `1080p`  
+- Rebuild scenes: `python3 marketing/scripts/rebuild_scene_library_500.py`  
 
 ## Canonical docs
 

@@ -26,7 +26,7 @@ Import `5-reel-scenes.csv` as tab `5-reel-scenes`. n8n picks one Active scene pe
 
 | `7-unique-reel-creations-500.csv` | `7-unique-reel-creations-500` (legacy abstract scenes — **do not use for Imagine**) |
 | `8-lab-items-500.csv` | `8-lab-items-500` (500 real lab-item subject variables) |
-| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video subjects — no Creatomate `mod_*` columns) |
+| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — full-paragraph cinematic scenes; no Creatomate `mod_*`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
 | `10-creatomate-text-500.csv` | first 500 rows only (legacy; use 1000) |

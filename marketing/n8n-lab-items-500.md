@@ -1,14 +1,13 @@
-# 500 lab-item variables (ONLY subjects for image/video)
+# 500 cinematic research scenes (Grok still + video)
 
-**Rule:** Image + video generation may use **only** these **500** real laboratory items as subject variables.  
-No abstract orbs, surreal glass, CGI spheres, or non-lab fantasy props.
+**Rule:** Image + video generation uses **500 unique full-paragraph scenes** spanning laboratories, peptide science, R&D, and the health & wellness industry — not single boring product cutouts.
 
 ## Files
 
 | File | Role |
 |---|---|
-| `sheets/8-lab-items-500.csv` | Master list of 500 lab items |
-| `sheets/9-lab-item-creations-500.csv` | 500 ready creations (`video_prompt` locked to one lab item each). **No `mod_*` text** — Creatomate overlays come from Sheet 10. |
+| `sheets/8-lab-items-500.csv` | Master list synced from creations |
+| `sheets/9-lab-item-creations-500.csv` | 500 ready creations. **No `mod_*` text** — Creatomate overlays come from Sheet 10. Each `lab_item` is a full scene paragraph; still/motion prompts match. |
 | `pbvita-500-lab-items.json` | Same items as JSON |
 | `pbvita-500-lab-item-creations.json` | Same creations as JSON |
 
@@ -27,39 +26,35 @@ Compat copies (same 500 rows): `8-lab-items-250.csv`, `9-lab-item-creations-250.
 9. After Grok succeeds, `sheets_update_creation` bumps `times_used` + `last_used_at`
 10. `grok_video_start` must use **`video_motion_prompt`** — never a hardcoded orbit sentence
 
-Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — categories are interleaved so **no two adjacent ranks share a category** (no vial→vial in the sheet order).
+Creation ids stay `PBVita-Lab-*` / `LAB-*` (stable). **`rank` is the daily rotation order** — scene categories are interleaved so adjacent ranks differ.
 
 **Phase C:** all **500** `camera_move` values are unique (24 shot families, 41 angles, 24 directions).
 
-Rebuild cameras only:
+Rebuild **full scene library** (paragraphs + prompts + cameras):
+
+```bash
+python3 marketing/scripts/rebuild_scene_library_500.py
+python3 marketing/scripts/audit_camera_diversity.py
+```
+
+Rebuild cameras only (keeps current `lab_item` paragraphs):
 
 ```bash
 python3 marketing/scripts/apply_unique_camera_recipes.py
 python3 marketing/scripts/audit_camera_diversity.py
 ```
 
-Full library rebuild / re-interleave / realism pass:
-
-```bash
-python3 marketing/scripts/rebuild_lab_libraries.py
-python3 marketing/scripts/apply_unique_camera_recipes.py
-```
-
-**Realism rules baked into the CSVs + prompts**
-- Exactly **one** primary subject (no dual-chamber, twin packs, pairs, stacks of products)
-- **No cardboard boxes, cartons, mailers, or trays as the hero** — prefer premium equipment, vials, powders, sterile lab environments, microscopes
-- **Never** bake `creation motif`, `LAB-###`, or `000/500` into prompts (Grok prints that text onto products)
-- **Labels:** any vial / pen / powder / bottle that shows a label must use a real catalog `compound_name` (BPC-157, NAD+, Semaglutide, … from `1-compounds-all-daily`). See `compound-labels.json`. Equipment without a product label stays unlabeled.
-- No injection/needle context; filter cartridges and pumps only when needed
-- Every `video_prompt` includes `SINGLE SUBJECT ONLY` + FDA-safe avoid list
+**Realism / creative rules baked into the CSVs + prompts**
+- Environment-forward scenes: labs, peptide synthesis, cleanrooms, cryo, biotech campuses, longevity suites, wellness innovation, formulation, sports science, Palm Beach showrooms, etc.
+- Each `lab_item` is a **full paragraph** (~800–1200 chars) for Grok Imagine
+- `video_prompt` and `video_motion_prompt` embed that same scene
+- Empty of people / hands / faces; no needles, injection, or clinical procedure theater
+- **Never** bake `creation motif`, `LAB-###`, or `000/500` into prompts
+- **Labels:** when present, use real catalog `compound_name` + research-only line
+- FDA-safe: laboratory research use only — no treatment/cure claims
 - Category rank order never repeats adjacent categories
-- Every `lab_item` is **≥2 sentences** of visual description (not a short noun stub); `material_detail` is also ≥2 sentences. Both feed Grok still + motion prompts.
 
-Enrich descriptions only (keeps cameras):
-
-```bash
-python3 marketing/scripts/enrich_lab_item_descriptions.py
-```
+Enrich/legacy single-item describer (`enrich_lab_item_descriptions.py`) is superseded by `rebuild_scene_library_500.py`.
 
 ## Quality
 
