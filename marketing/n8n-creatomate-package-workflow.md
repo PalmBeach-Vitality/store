@@ -111,6 +111,7 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
     'main_video': $json.public_video_url,
     'main_video.muted': true,
     'main_video.volume': '0%',
+    'main_video.loop': false,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -224,3 +225,26 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 - Dynamic element **`main_video`**
 - No music track (or muted)
 - Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`
+
+### Hold last frame 15–30s (do not loop)
+
+Grok clips are **15s**. If the template is ~30s and `main_video` has **Loop = On**, the clip restarts — that is the bad loop.
+
+Creatomate does **not** auto-freeze the last frame when the element is longer than the source. Turn loop off, then cover 15–30s with a still.
+
+**In the Creatomate template editor:**
+
+1. Select **`main_video`**
+2. Set **Loop → Off** (also send `'main_video.loop': false` in `creatomate_render`)
+3. Set **`main_video` duration → Media** (or fixed **15**), so it only plays the real clip once
+4. Add a full-bleed **Image** element on the same visual stack (under the text overlays), name it e.g. **`end_hold`**
+5. Timeline for **`end_hold`**: **Time = 15**, **Duration = 15** (fills ~15→30)
+6. Source for **`end_hold`**:
+   - Best: Grok **still** from Workflow A (`still_url`) — same scene as the video end
+   - Or: export / screenshot the last frame of the 15s MP4 once and use that URL
+7. Keep text / logo tracks on top for the full 30s as they already are
+8. Save the template, then re-run Workflow B
+
+**Optional n8n later:** add `hold_image_url` on `video_url_input` and map `'end_hold': $json.hold_image_url` (or `'end_hold.source'`) so each render gets that run’s still.
+
+Do **not** rely on Loop to stretch a 15s file to 30s.
