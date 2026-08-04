@@ -74,7 +74,7 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 
 | Field | Each run |
 |---|---|
-| `input_video_url` | **Preferred.** Catbox direct `.mp4` (e.g. `https://files.catbox.moe/….mp4`) → **`Video-8QW`**. Alias: `public_video_url`. Not vidgen / fal temp. |
+| `input_video_url` | **Preferred.** Catbox direct `.mp4` (e.g. `https://files.catbox.moe/….mp4`) → element **`main_video`**. Alias: `public_video_url`. Not vidgen / fal temp. |
 | `public_video_url` | Same as `input_video_url` (older name — either works) |
 | `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
 | `still_url` | Optional. Public still (catbox image) → **`end_hold`** (15–30s freeze). Not imgen.x.ai. |
@@ -109,10 +109,10 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
 ### `creatomate_render` body
 
 Template: **`c5d54774-b029-4786-af04-d5af345dc7f2`**  
-Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / `video_loop_source` / `input_video_url` as a modification key.
+Clip → **`main_video`**. Hold still → **`end_hold`**. Do **not** use `Video-8QW` / `video_loop_source` / `input_video_url` as the modification key.
 
-**Critical:** the Creatomate property is the **element name** `Video-8QW`, not `input_video_url`.  
-`input_video_url` lives on `video_url_input` / map output — the render body must map it onto `Video-8QW`.
+**Critical:** the Creatomate property is the **element name** `main_video`, not `input_video_url`.  
+`input_video_url` lives on `video_url_input` / map output — the render body must map it onto `main_video`.
 
 ```js
 ={{
@@ -130,11 +130,11 @@ Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / 
     );
   }
   const mods = {
-    'Video-8QW': video,
-    'Video-8QW.source': video,
-    'Video-8QW.muted': true,
-    'Video-8QW.volume': '0%',
-    'Video-8QW.loop': false,
+    'main_video': video,
+    'main_video.source': video,
+    'main_video.muted': true,
+    'main_video.volume': '0%',
+    'main_video.loop': false,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -154,7 +154,7 @@ Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / 
 }}
 ```
 
-**If the package still shows the template placeholder video:** open the HTTP request that was sent — `modifications["Video-8QW"]` must be your catbox `https://…mp4`. If it is `undefined` / empty, the render body was reading the wrong field (use the body above).
+**If the package still shows the template placeholder video:** open the HTTP request — `modifications["main_video"]` must be your catbox `https://…mp4`. If it is `undefined` / empty, the render body was reading the wrong field (use the body above).
 
 **`end_hold` bug:** if modifications show `"end_hold": "end_hold"`, the render body used the element name instead of a URL. Fix:
 
@@ -267,7 +267,7 @@ Same caption text for all three platforms (one pitch). Draft fields are aliases 
 1. Run **Workflow A** → get new Grok `video_url` (`vidgen.x.ai`)  
 2. **Download** that MP4 → **upload to catbox.moe**  
 3. Paste the **catbox** URL into **`video_url_input.public_video_url`**  
-4. Run **Workflow B** → text Sheet updates → muted Creatomate package (`Video-8QW` = catbox)  
+4. Run **Workflow B** → text Sheet updates → muted Creatomate package (`main_video` = catbox)  
 
 ---
 

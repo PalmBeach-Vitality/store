@@ -12,7 +12,7 @@
 // buffer_caption = unique per product/post (facts rotate) + 5 hashtags + discount CTA.
 //
 // Template: c5d54774-b029-4786-af04-d5af345dc7f2
-// Elements: Video-8QW (catbox MP4, once) + end_hold (still). Muted.
+// Elements: main_video (catbox MP4, once) + end_hold (still). Muted.
 
 function firstJson(name) {
   try {

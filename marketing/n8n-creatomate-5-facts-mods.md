@@ -5,7 +5,7 @@
 
 **Template:** `5 Facts Story` (updated)  
 **template_id:** `c5d54774-b029-4786-af04-d5af345dc7f2`  
-**Video element:** `Video-8QW` · **Hold image:** `end_hold`
+**Video element:** `main_video` · **Hold image:** `end_hold`
 
 ---
 
@@ -43,11 +43,11 @@ Body (expression):
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'Video-8QW': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
-    'Video-8QW.source': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
-    'Video-8QW.muted': true,
-    'Video-8QW.volume': '0%',
-    'Video-8QW.loop': false,
+    'main_video': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
+    'main_video.source': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
+    'main_video.muted': true,
+    'main_video.volume': '0%',
+    'main_video.loop': false,
     'end_hold': $json.end_hold_url || $json.still_url,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
@@ -61,11 +61,11 @@ Body (expression):
 }}
 ```
 
-**Must include `Video-8QW`** (Grok MP4). **`end_hold`** = still for freeze (optional; template default if empty).  
+**Must include `main_video`** (catbox MP4). **`end_hold`** = still for freeze (optional; template default if empty).  
 **Muted** — no music in the render; add soundtrack manually later.  
-Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste a **catbox** `.mp4` URL into `video_url_input.public_video_url` (never `vidgen.x.ai`). Keep `sheets_update_text` (and `sheets_append_reel` if present).
+Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste a **catbox** `.mp4` URL into `video_url_input.input_video_url` (never `vidgen.x.ai`). Keep `sheets_update_text` (and `sheets_append_reel` if present).
 
-Do **not** use keys like `Headline`, `Bullet-1`, `CTA`, `main_video`, or `video_loop_source` — this template ignores them.
+Do **not** use keys like `Headline`, `Bullet-1`, `CTA`, `Video-8QW`, or `video_loop_source` — this template ignores them.
 
 ---
 
@@ -75,7 +75,7 @@ After POST (or status GET), `modifications` must look like:
 
 ```json
 {
-  "Video-8QW": "https://…mp4",
+  "main_video": "https://…mp4",
   "Intro-Text.text": "5-Amino-1MQ",
   "Fact-1-text.text": "Research material listing",
   "Fact-2-text.text": "...",

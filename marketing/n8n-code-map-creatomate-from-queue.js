@@ -5,7 +5,7 @@
 // Before: creatomate_render
 //
 // Reads public_video_url from the queue Sheet (you paste the catbox/R2 .mp4).
-// Element name: Video-8QW. Audio muted — add music manually later.
+// Element name: main_video. Audio muted — add music manually later.
 
 function firstJson(name) {
   try {
