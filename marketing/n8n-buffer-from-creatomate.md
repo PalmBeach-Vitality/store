@@ -235,7 +235,9 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text: $('map_creatomate_from_url').first().json.buffer_caption,
+      text:
+        $('save_creatomate_url').first().json.buffer_caption ||
+        $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: '6a668d534b2d03035f478536',
       schedulingType: 'automatic',
       mode: 'addToQueue',
@@ -276,7 +278,9 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text: $('map_creatomate_from_url').first().json.buffer_caption,
+      text:
+        $('save_creatomate_url').first().json.buffer_caption ||
+        $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: 'YOUR_FB_CHANNEL_ID',
       schedulingType: 'automatic',
       mode: 'addToQueue',
@@ -314,7 +318,9 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text: $('map_creatomate_from_url').first().json.buffer_caption,
+      text:
+        $('save_creatomate_url').first().json.buffer_caption ||
+        $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: '6a6d64814b2d03035f7bddef',
       schedulingType: 'automatic',
       mode: 'addToQueue',
