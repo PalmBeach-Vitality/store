@@ -100,7 +100,7 @@ Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xA
 ## Node 4 — `grok_video_start`
 
 **Type:** HTTP Request  
-**After:** `prep_grok_video_start`  
+**After:** `prep_grok_video_start` (or `save_still_url` if prep is skipped)  
 **Before:** `wait_video`
 
 | Setting | Value |
@@ -109,47 +109,33 @@ Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xA
 | URL | `https://api.x.ai/v1/videos/generations` |
 | Authentication | Header Auth → same xAI credential as the still node |
 | Send Body | **ON** |
-| Body Content Type | **JSON** |
-| Specify Body | **Using JSON** |
+| Body Content Type | **Raw** |
+| Content Type | `application/json` |
+| Body | expression below (fx ON) |
 
-**JSON body** (turn **fx ON**, paste all of this):
+**Do not use “Using JSON”** — n8n validates it as literal JSON and shows *“not valid JSON”* for `={{ { ... } }}`.
 
-```text
-={{
-{
-  model: 'grok-imagine-video-1.5',
-  prompt: $json.video_motion_prompt,
-  image: { url: $json.still_url },
-  duration: 15,
-  resolution: '1080p'
-}
-}}
-```
-
-**Duration max = 15** (xAI hard limit). Always use `15` for production — never higher.
-
-### Expression still red?
-
-1. Wire directly: `prep_grok_video_start` → `grok_video_start`
-2. Run `prep_grok_video_start` once (so `still_url` + `video_motion_prompt` exist)
-3. fx toggle must be **ON** on the JSON field
-4. If `$json` stays red, use `.first()`:
+**Body (fx ON) — paste exactly:**
 
 ```text
-={{
-{
-  model: 'grok-imagine-video-1.5',
-  prompt: $('prep_grok_video_start').first().json.video_motion_prompt,
-  image: { url: $('prep_grok_video_start').first().json.still_url },
-  duration: 15,
-  resolution: '1080p'
-}
-}}
+={{ JSON.stringify({ model: 'grok-imagine-video-1.5', prompt: $json.video_motion_prompt, image: { url: $json.still_url }, duration: 15, resolution: '1080p' }) }}
 ```
 
-5. Skip Raw / `grok_video_body_json` — use the JSON object form above  
-6. Do **not** use “Using Fields Below” with empty rows  
-7. Header Auth = raw key only (no `Bearer ` in the credential)
+If `$json` is empty, use:
+
+```text
+={{ JSON.stringify({ model: 'grok-imagine-video-1.5', prompt: $('prep_grok_video_start').first().json.video_motion_prompt, image: { url: $('prep_grok_video_start').first().json.still_url }, duration: 15, resolution: '1080p' }) }}
+```
+
+Or without prep:
+
+```text
+={{ JSON.stringify({ model: 'grok-imagine-video-1.5', prompt: $('pick_creation').first().json.video_motion_prompt, image: { url: $('save_still_url').first().json.still_url }, duration: 15, resolution: '1080p' }) }}
+```
+
+**Duration max = 15.** Delete any leftover Body Parameter rows.
+
+**Do not** put `Bearer ` inside the Header Auth secret.
 
 **If 400:** see `n8n-fix-grok-video-start-400.md`.
 
