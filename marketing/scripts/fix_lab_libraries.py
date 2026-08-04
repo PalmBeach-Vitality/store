@@ -1364,6 +1364,11 @@ def fix_lab_libraries() -> None:
         if it.get("last_used_at") is None:
             it["last_used_at"] = ""
 
+        # Never leave (N/500) / · ref|motif|card|line|cta N in overlay copy
+        cr["mod_intro"] = clean_intro(cr.get("mod_intro", ""))
+        for k in ("mod_fact_1", "mod_fact_2", "mod_fact_3", "mod_fact_4", "mod_fact_5"):
+            cr[k] = clean_fact(cr.get(k, ""))
+
     # Write
     for path, rows in [
         (SHEETS / "8-lab-items-500.csv", items),
@@ -1463,15 +1468,35 @@ def fix_lab_libraries() -> None:
 
 
 def clean_fact(text: str) -> str:
-    t = str(text or "")
-    t = re.sub(r"\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$", "", t, flags=re.I)
-    t = re.sub(r"\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$", "", t, flags=re.I)
-    t = re.sub(r"\s+(ref|motif|card|line|cta)\s*\d+\s*$", "", t, flags=re.I)
-    return t.strip()
+    """One highest-priority strip per loop so 'research card N' wins over bare 'card N'."""
+    t = str(text or "").strip()
+    rules = (
+        (r"\s*[—–-]?\s*research card\s*\d+\s*$", re.I),
+        (r"\s*[·•⋅∙.\u00b7]?\s*set\s*\d+\s*$", re.I),
+        (r"\s*\(\s*\d+\s*/\s*\d+\s*\)\s*$", 0),
+        (r"\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+        (r"\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+        (r"\s+(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+    )
+    while True:
+        progressed = False
+        for pat, flags in rules:
+            nxt = re.sub(pat, "", t, flags=flags).strip()
+            if nxt != t:
+                t = nxt
+                progressed = True
+                break
+        if not progressed:
+            nxt = re.sub(r"\s*[—–-]\s*research\s*$", "", t, flags=re.I).strip()
+            if nxt != t:
+                t = nxt
+                continue
+            break
+    return t
 
 
 def clean_intro(text: str) -> str:
-    return re.sub(r"\s*\(\s*\d+\s*/\s*\d+\s*\)\s*$", "", str(text or "")).strip()
+    return clean_fact(text)
 
 
 def fix_text_library() -> None:

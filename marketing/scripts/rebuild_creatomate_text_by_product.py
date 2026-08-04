@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,34 @@ CSV_IN = ROOT / "sheets" / "10-creatomate-text-1000.csv"
 CSV_OUT = CSV_IN
 JSON_OUT = ROOT / "pbvita-1000-creatomate-text.json"
 LABELS = json.loads((ROOT / "compound-labels.json").read_text())["labels"]
+
+
+def clean_mod_text(text: str) -> str:
+    """One highest-priority strip per loop so 'research card N' wins over bare 'card N'."""
+    t = str(text or "").strip()
+    rules = (
+        (r"\s*[—–-]?\s*research card\s*\d+\s*$", re.I),
+        (r"\s*[·•⋅∙.\u00b7]?\s*set\s*\d+\s*$", re.I),
+        (r"\s*\(\s*\d+\s*/\s*\d+\s*\)\s*$", 0),
+        (r"\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+        (r"\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+        (r"\s+(ref|motif|card|line|cta)\s*\d+\s*$", re.I),
+    )
+    while True:
+        progressed = False
+        for pat, flags in rules:
+            nxt = re.sub(pat, "", t, flags=flags).strip()
+            if nxt != t:
+                t = nxt
+                progressed = True
+                break
+        if not progressed:
+            nxt = re.sub(r"\s*[—–-]\s*research\s*$", "", t, flags=re.I).strip()
+            if nxt != t:
+                t = nxt
+                continue
+            break
+    return t
 
 # Plain English, advertisement tone — still research-only / FDA-safe.
 # No cure/treat/dose-for-humans language.
@@ -484,23 +513,12 @@ FACT_BANKS: dict[str, list[tuple[str, str, str]]] = {
 
 
 def expand_bank(product: str, need: int) -> list[tuple[str, str, str]]:
+    """Cycle the base bank. Never append reference numbers / card / set counters."""
     base = FACT_BANKS[product]
     out: list[tuple[str, str, str]] = []
     i = 0
     while len(out) < need:
-        a, b, c = base[i % len(base)]
-        n = len(out) + 1
-        if n <= len(base):
-            out.append((a, b, c))
-        else:
-            # Rotate wording lightly so later rows stay unique but plain
-            out.append(
-                (
-                    a,
-                    f"{b} — research card {n:02d}",
-                    f"{c} · set {n:02d}",
-                )
-            )
+        out.append(base[i % len(base)])
         i += 1
     return out
 
@@ -537,11 +555,11 @@ def main() -> None:
                 "rank": row["rank"],
                 "product_name": product,
                 "mod_intro": product,  # sheet backup; map uses video_url_input.product_name
-                "mod_fact_1": f1,
-                "mod_fact_2": f2,
-                "mod_fact_3": f3,
-                "mod_fact_4": row["mod_fact_4"],
-                "mod_fact_5": row["mod_fact_5"],
+                "mod_fact_1": clean_mod_text(f1),
+                "mod_fact_2": clean_mod_text(f2),
+                "mod_fact_3": clean_mod_text(f3),
+                "mod_fact_4": clean_mod_text(row["mod_fact_4"]),
+                "mod_fact_5": clean_mod_text(row["mod_fact_5"]),
                 "mod_disclaimer": row["mod_disclaimer"],
                 "status": row["status"],
                 "times_used": row.get("times_used", "0") or "0",

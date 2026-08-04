@@ -35,17 +35,40 @@ function val(obj, names, fallback = '') {
 }
 
 function cleanFact(text) {
-  return String(text || '')
-    .replace(/\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
-    .replace(/\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
-    .replace(/\s+(ref|motif|card|line|cta)\s*\d+\s*$/i, '')
-    .trim();
+  // One highest-priority strip per loop so 'research card N' wins over bare 'card N'
+  let t = String(text || '').trim();
+  const rules = [
+    /\s*[—–-]?\s*research card\s*\d+\s*$/i,
+    /\s*[·•⋅∙.\u00b7]?\s*set\s*\d+\s*$/i,
+    /\s*\(\s*\d+\s*\/\s*\d+\s*\)\s*$/,
+    /\s*[·•⋅∙.\u00b7]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i,
+    /\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i,
+    /\s+(ref|motif|card|line|cta)\s*\d+\s*$/i,
+  ];
+  while (true) {
+    let progressed = false;
+    for (const re of rules) {
+      const nxt = t.replace(re, '').trim();
+      if (nxt !== t) {
+        t = nxt;
+        progressed = true;
+        break;
+      }
+    }
+    if (!progressed) {
+      const nxt = t.replace(/\s*[—–-]\s*research\s*$/i, '').trim();
+      if (nxt !== t) {
+        t = nxt;
+        continue;
+      }
+      break;
+    }
+  }
+  return t;
 }
 
 function cleanIntro(text) {
-  return String(text || '')
-    .replace(/\s*\(\s*\d+\s*\/\s*\d+\s*\)\s*$/g, '')
-    .trim();
+  return cleanFact(text);
 }
 
 function isActive(status) {

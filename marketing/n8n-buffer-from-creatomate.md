@@ -105,12 +105,14 @@ If a node expects binary upload: keep your existing pattern, but the source URL 
 | Column to Match On | `creatomate_render_id` |
 | Value to Match | `={{ $('save_creatomate_url').item.json.creatomate_render_id }}` |
 | `used_in_buffer` | `yes` |
-| `buffer_ig_reel_id` | `={{ $json.id }}` (adjust to your Buffer response path) |
-| `buffer_fb_reel_id` | from FB Buffer node if used |
+| `buffer_ig_reel_id` | from `buffer_ig_reel` response id |
+| `buffer_fb_reel_id` | from `buffer_fb_reel` response id |
+| `buffer_tiktok_id` | from `buffer_tiktok` response id |
+| `buffer_x_id` | from `buffer_x` response id |
 
 If `4-reel-queue` doesn’t have Buffer ID columns yet, add:
 
-`buffer_ig_reel_id`, `buffer_fb_reel_id`
+`buffer_ig_reel_id`, `buffer_fb_reel_id`, `buffer_tiktok_id`, `buffer_x_id`
 
 ---
 
