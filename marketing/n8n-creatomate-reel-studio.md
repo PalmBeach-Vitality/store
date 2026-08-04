@@ -37,7 +37,7 @@ Manual Execute ────┴─→ Get row(s) in sheet
   → GROK_Imagine
   → Grok_imagine_story
   → grok_imagine_reel_still
-  → Save_render_URL
+  → Save_render_URL          ← field map: n8n-save-render-url.md
   → grok_video_start
   → wait_video
   → grok_video_poll
