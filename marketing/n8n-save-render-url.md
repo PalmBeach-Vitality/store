@@ -79,48 +79,27 @@ Wire: `… → Grok_imagine_story → Save_render_URL → Buffer_post_IG …`
 
 ### Target tab (image workflow)
 
+**Columns on `3-image-scenes-150` (only these):**  
+`scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`
+
 | Setting | Value |
 |---|---|
-| Document | PB Vitality spreadsheet that **contains** the tab (not `1-compounds-all-daily`) |
+| Document | PB Vitality spreadsheet that **contains** the tab |
 | Sheet | **`3-image-scenes-150`** |
 | Operation | Update Row |
 | Mapping Column Mode | Map Each Column Manually |
 | Column to match on | `scene_id` |
 
-### Values to Update — paste these
-
-**Match (required — currently empty in your node):**
+### Values to Update — only these two
 
 | Field | fx | Value |
 |---|---|---|
-| `scene_id` | ON | `={{ $('Limit').item.json.scene_id \|\| $('Get row(s) in sheet').item.json.scene_id }}` |
+| `scene_id` (match) | ON | `={{ $('Limit').item.json.scene_id \|\| $('Get row(s) in sheet').item.json.scene_id }}` |
+| `last_used_date` | ON | `={{ $now.toISODate() }}` |
 
-**Leave blank** (do not overwrite scene content):  
-`scene_category`, `scene_name`, `lab_environment`, and any other creative/description columns.
+**Leave every other column blank** — do not write `scene_category`, `scene_name`, `lab_environment`, Buffer ids, image URLs, captions, etc. into this tab.
 
-**Scroll down and set only these writeback fields:**
-
-| Field | fx | Value |
-|---|---|---|
-| `times_used` | ON | `={{ Number($('Limit').item.json.times_used \|\| $('Get row(s) in sheet').item.json.times_used \|\| 0) + 1 }}` |
-| `last_date_used` | ON | `={{ $now.toISODate() }}` |
-| `feed_image_url` | ON | `={{ $('Save_render_URL').item.json.feed_image_url \|\| $('Save_render_URL').item.json.spotlight_image_url }}` |
-| `story_image_url` | ON | `={{ $('Save_render_URL').item.json.story_image_url }}` |
-| `ig_caption_draft` | ON | `={{ $('Save_render_URL').item.json.ig_caption_draft }}` |
-| `fb_caption_draft` | ON | `={{ $('Save_render_URL').item.json.fb_caption_draft }}` |
-| `buffer_ig_post_id` | ON | `={{ $('Buffer_post_IG').item.json.data.createPost.post.id }}` |
-| `buffer_fb_post_id` | ON | `={{ $('Buffer_post_FB').item.json.data.createPost.post.id }}` |
-| `buffer_tiktok_post_id` | ON | `={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id }}` |
-
-If TikTok node is named `buffer_tiktok`:
-
-```text
-={{ $('buffer_tiktok').item.json.data.createPost.post.id }}
-```
-
-If a column name in the dropdown differs slightly (e.g. `last_used_date`), use the sheet’s exact header.
-
-**Do not** put `posts_this_week` here — that belongs on `1-compounds-all-daily` only if you still run compound-week locking.
+Buffer post ids / image URLs / captions live on `Save_render_URL` + Buffer nodes (and optionally a separate compounds writeback), **not** on `3-image-scenes-150`.
 
 ---
 
