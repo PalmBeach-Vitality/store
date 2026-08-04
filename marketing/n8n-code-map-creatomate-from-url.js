@@ -9,6 +9,7 @@
 // Optional: still_url / hold_image_url → end_hold (also prefer catbox / public HTTPS).
 // pick_text filters facts 1–3 for that product (plain-English ad tone).
 // Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
+// buffer_caption = 1-paragraph product sales pitch + 5 hashtags (research-only).
 //
 // Template: c5d54774-b029-4786-af04-d5af345dc7f2
 // Elements: Video-8QW (catbox MP4, once) + end_hold (still). Muted.
@@ -42,6 +43,86 @@ function assertCreatomateFetchable(url, fieldLabel) {
   return u;
 }
 
+/** #Hashtag from product name — letters/numbers only */
+function toHashtag(name) {
+  const raw = String(name || '')
+    .replace(/\+/g, 'Plus')
+    .replace(/[^a-zA-Z0-9]+/g, '');
+  return raw ? `#${raw}` : '#PeptideResearch';
+}
+
+/**
+ * Product-specific research pitch tags (exactly 5 total with product + brand).
+ * Keep research / lab framing — no human-use or medical outcome claims.
+ */
+const PRODUCT_TAGS = {
+  '5-Amino-1MQ': ['#MetabolicResearch', '#CellularEnergy', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'AOD-9604': ['#AOD9604Research', '#MetabolicScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'BPC-157': ['#BPC157Research', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'BPC-157/TB-500': ['#BPC157', '#TB500Research', '#PeptideScience', '#PalmBeachVitality', '#ResearchOnly'],
+  'CJC (no DAC)': ['#CJCResearch', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'CJC (no DAC)/Ipamorelin': ['#CJCIpamorelin', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Cagrilinitide: ['#Cagrilinitide', '#MetabolicResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  DSIP: ['#DSIPResearch', '#NeuropeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'GHK-Cu': ['#GHKCu', '#CopperPeptide', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  GLOW: ['#GLOWBlend', '#PeptideResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  KLOW: ['#KLOWBlend', '#PeptideResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  KPV: ['#KPVResearch', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'MOTS-C': ['#MOTSC', '#MitochondrialResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'Melanotan 2': ['#Melanotan2', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'NAD+': ['#NADPlus', '#CellularResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'PT-141': ['#PT141', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Retatrutide: ['#Retatrutide', '#MetabolicResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  SEMAX: ['#SEMAX', '#NeuropeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'SS-31': ['#SS31', '#MitochondrialResearch', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Selank: ['#Selank', '#NeuropeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Semaglutide: ['#SemaglutideResearch', '#MetabolicScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Sermorelin: ['#Sermorelin', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'TA-1': ['#TA1', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'TB-500': ['#TB500', '#PeptideScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Tesamorelin: ['#Tesamorelin', '#EndocrineLab', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  'Tesamorelin/Ipamorelin': ['#Tesamorelin', '#Ipamorelin', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+  Tirzepatide: ['#TirzepatideResearch', '#MetabolicScience', '#LabGradePeptides', '#PalmBeachVitality', '#ResearchOnly'],
+};
+
+function fiveHashtags(productName) {
+  const mapped = PRODUCT_TAGS[productName];
+  if (mapped && mapped.length >= 5) return mapped.slice(0, 5);
+  // Fallback: product tag + research bank
+  const bank = [
+    toHashtag(productName),
+    '#PeptideResearch',
+    '#LabGradePeptides',
+    '#PalmBeachVitality',
+    '#ResearchOnly',
+  ];
+  return [...new Set(bank)].slice(0, 5);
+}
+
+/**
+ * One-paragraph Buffer sales pitch for the exact product.
+ * Research-catalog tone — not for human use / medical claims.
+ */
+function buildBufferCaption(productName, fact1, fact2, fact3) {
+  const p = String(productName || '').trim();
+  const f1 = cleanFact(fact1);
+  const f2 = cleanFact(fact2);
+  const f3 = cleanFact(fact3);
+  const hooks = [f1, f2, f3].filter(Boolean);
+  const pitchCore =
+    hooks.length > 0
+      ? hooks.join(' ')
+      : `${p} is listed for controlled laboratory research programs that need clear documentation and research-grade material.`;
+
+  const paragraph =
+    `Stock ${p} for your next research order — ${pitchCore} ` +
+    `Shop the ${p} research listing at www.palmbeach-vitality.store. ` +
+    `For laboratory research use only. Not for human use or consumption.`;
+
+  const tags = fiveHashtags(p).join(' ');
+  return `${paragraph}\n\n${tags}`;
+}
+
 const urlInput = firstJson('video_url_input');
 const text = firstJson('pick_text');
 const input = $input.first()?.json || {};
@@ -67,7 +148,6 @@ if (!/^https?:\/\//i.test(public_video_url)) {
 }
 
 if (!/\.mp4(\?|$)/i.test(public_video_url) && !/catbox\.moe/i.test(public_video_url)) {
-  // Soft warn via throw only for known-bad hosts; allow other public CDNs with .mp4
   if (!/\.mp4(\?|$)/i.test(public_video_url)) {
     throw new Error(
       'public_video_url should be a direct .mp4 link (catbox: https://files.catbox.moe/….mp4).'
@@ -81,8 +161,9 @@ if (!text.text_id || !text.mod_fact_1) {
   );
 }
 
+// Prefer sheet-canonical name from pick_text so caption matches the library product
 const product_name = String(
-  urlInput.product_name || text.product_name || urlInput.compound_name || ''
+  text.product_name || urlInput.product_name || urlInput.compound_name || ''
 ).trim();
 
 if (!product_name) {
@@ -97,7 +178,7 @@ function pickStillUrl(...candidates) {
   for (const c of candidates) {
     const u = String(c || '').trim();
     if (!u) continue;
-    if (/^end_hold$/i.test(u)) continue; // common mistake: element name as value
+    if (/^end_hold$/i.test(u)) continue;
     if (!/^https?:\/\//i.test(u)) continue;
     return assertCreatomateFetchable(u, 'still_url / end_hold');
   }
@@ -115,30 +196,45 @@ const end_hold_url = pickStillUrl(
 
 const end_text_link = 'www.palmbeach-vitality.store';
 
+const mod_fact_1 = cleanFact(text.mod_fact_1);
+const mod_fact_2 = cleanFact(text.mod_fact_2);
+const mod_fact_3 = cleanFact(text.mod_fact_3);
+const mod_fact_4 = cleanFact(text.mod_fact_4);
+const mod_fact_5 = cleanFact(text.mod_fact_5);
+const mod_disclaimer =
+  cleanFact(text.mod_disclaimer) ||
+  'For laboratory research use only. Not for human use or consumption.';
+
+const buffer_caption = buildBufferCaption(
+  product_name,
+  mod_fact_1,
+  mod_fact_2,
+  mod_fact_3
+);
+const ig_caption_draft = buffer_caption;
+
 return [
   {
     json: {
       ...input,
       ...urlInput,
       ...text,
-      // Keep grok_video_url alias empty of xAI — creatomate uses catbox only
       grok_video_url: public_video_url,
       public_video_url,
       catbox_video_url: public_video_url,
       end_hold_url,
-      // Prevent creatomate_render from reading element-name junk via $json.end_hold
       end_hold: end_hold_url || undefined,
       end_text_link,
       product_name,
       mod_intro,
-      mod_fact_1: cleanFact(text.mod_fact_1),
-      mod_fact_2: cleanFact(text.mod_fact_2),
-      mod_fact_3: cleanFact(text.mod_fact_3),
-      mod_fact_4: cleanFact(text.mod_fact_4),
-      mod_fact_5: cleanFact(text.mod_fact_5),
-      mod_disclaimer:
-        cleanFact(text.mod_disclaimer) ||
-        'For laboratory research use only. Not for human use or consumption.',
+      mod_fact_1,
+      mod_fact_2,
+      mod_fact_3,
+      mod_fact_4,
+      mod_fact_5,
+      mod_disclaimer,
+      buffer_caption,
+      ig_caption_draft,
       text_id: text.text_id,
       creation_id: String(urlInput.creation_id || '').trim(),
       template_id: 'c5d54774-b029-4786-af04-d5af345dc7f2',

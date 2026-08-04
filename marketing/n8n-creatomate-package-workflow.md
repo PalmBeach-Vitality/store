@@ -182,6 +182,8 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 | `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
 | `created_at` | `={{ $now.toISO() }}` |
 | `used_in_buffer` | `no` |
+| `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `buffer_caption` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 
 **Do not** reference `Parse_Grok`, `save_video_url`, `map_creatomate_mods`, or `pick_creation` — those nodes are not in Workflow B.
 
@@ -218,7 +220,7 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 | `creatomate_snapshot_url` | `={{ $('save_creatomate_url').item.json.creatomate_snapshot_url }}` |
 | `template_id` | `={{ $('map_creatomate_from_url').item.json.template_id }}` |
 | `creatomate_render_id` | `={{ $('save_creatomate_url').item.json.creatomate_render_id }}` |
-| `ig_caption_draft` | `={{ $('video_url_input').item.json.product_name + ' — For laboratory research use only. Not for human use or consumption. www.palmbeach-vitality.store' }}` |
+| `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 | `compliance_ok` | `yes` |
 | `created_at` | `={{ $('save_creatomate_url').item.json.created_at \|\| $now.toISO() }}` |
 | `used_in_buffer` | `no` |

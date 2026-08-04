@@ -67,12 +67,32 @@ Every expression that used to point at Grok / `save_video_url` / `Parse_Grok` mu
 **Use the Creatomate Backblaze URL** (`video_url`).  
 Do **not** send `public_video_url` (Grok/catbox source) to Buffer.
 
-### Caption if missing on save
+### Buffer caption (product sales pitch + 5 hashtags)
 
-Add to `save_creatomate_url` (or set on the Buffer text field):
+Built in **`map_creatomate_from_url`** as `buffer_caption` / `ig_caption_draft`:
+
+- 1 paragraph specific to the sheet `product_name` (uses Facts 1–3)
+- Research-catalog sales tone + site CTA + research-only disclaimer
+- Exactly **5** product-specific hashtags
+
+Use on every Buffer node `text` field:
 
 ```text
-={{ $('video_url_input').item.json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store' }}
+={{ $('map_creatomate_from_url').first().json.buffer_caption }}
+```
+
+Or after save:
+
+```text
+={{ $('save_creatomate_url').first().json.buffer_caption || $('map_creatomate_from_url').first().json.buffer_caption }}
+```
+
+Example shape:
+
+```text
+Stock CJC (no DAC) for your next research order — …fact lines… Shop the CJC (no DAC) research listing at www.palmbeach-vitality.store. For laboratory research use only. Not for human use or consumption.
+
+#CJCResearch #EndocrineLab #LabGradePeptides #PalmBeachVitality #ResearchOnly
 ```
 
 ---
@@ -181,13 +201,13 @@ FB can succeed while IG/TikTok fail silently if **Continue On Fail** is ON.
 
 ### B) Caption empty on Buffer posts
 
-Every Buffer body needs a non-empty **`text`** field. Do **not** use `$json.ig_caption_draft` after Buffer/Sheets (often missing).
-
-Use this on **all three** Buffer nodes:
+Every Buffer body needs non-empty **`text`** = product pitch from the map node:
 
 ```text
-={{ $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store' }}
+={{ $('map_creatomate_from_url').first().json.buffer_caption }}
 ```
+
+Do **not** use bare `$json.ig_caption_draft` after later nodes (often missing).
 
 ### C) Full Buffer bodies (paste per node)
 
@@ -196,11 +216,7 @@ All three: HTTP POST `https://api.buffer.com` · Auth Bearer · Body Content Typ
 **Do not** put `metadata.instagram` on TikTok or Facebook.  
 **Do not** put `metadata.facebook` on Instagram or TikTok.
 
-Shared caption helper (same in every body):
-
-```text
-product + research-only + site
-```
+Caption on all three = `buffer_caption` (1 paragraph + 5 hashtags, product-specific).
 
 ---
 
@@ -217,9 +233,7 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text:
-        $('video_url_input').first().json.product_name +
-        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      text: $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: '6a668d534b2d03035f478536',
       schedulingType: 'automatic',
       mode: 'addToQueue',
@@ -260,9 +274,7 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text:
-        $('video_url_input').first().json.product_name +
-        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      text: $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: 'YOUR_FB_CHANNEL_ID',
       schedulingType: 'automatic',
       mode: 'addToQueue',
@@ -300,9 +312,7 @@ JSON.stringify({
   }`,
   variables: {
     input: {
-      text:
-        $('video_url_input').first().json.product_name +
-        ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+      text: $('map_creatomate_from_url').first().json.buffer_caption,
       channelId: '6a642435bac606503d410801',
       schedulingType: 'automatic',
       mode: 'addToQueue',

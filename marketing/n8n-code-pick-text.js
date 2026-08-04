@@ -109,6 +109,34 @@ if (!wantedRaw) {
 
 const wanted = normName(wantedRaw);
 
+/** Short aliases → sheet-canonical product_name (exact catalog value) */
+const PRODUCT_ALIASES = {
+  cjc: 'CJC (no DAC)',
+  'cjc no dac': 'CJC (no DAC)',
+  'cjc ipamorelin': 'CJC (no DAC)/Ipamorelin',
+  bpc: 'BPC-157',
+  'bpc 157': 'BPC-157',
+  'tb 500': 'TB-500',
+  tb500: 'TB-500',
+  nad: 'NAD+',
+  'nad plus': 'NAD+',
+  ghk: 'GHK-Cu',
+  'ghk cu': 'GHK-Cu',
+  mt2: 'Melanotan 2',
+  melanotan: 'Melanotan 2',
+  'mots c': 'MOTS-C',
+  motsc: 'MOTS-C',
+  ss31: 'SS-31',
+  'ss 31': 'SS-31',
+  ta1: 'TA-1',
+  'ta 1': 'TA-1',
+  '5 amino 1mq': '5-Amino-1MQ',
+  'amino 1mq': '5-Amino-1MQ',
+};
+
+const aliasTarget = PRODUCT_ALIASES[wanted] || '';
+const wantedResolved = aliasTarget ? normName(aliasTarget) : wanted;
+
 const scored = rows
   .map((r) => {
     const rank = Number(val(r, ['rank', 'text_rank'], 0));
@@ -134,8 +162,9 @@ const scored = rows
   })
   .filter((r) => r.text_id && r.mod_fact_1)
   .filter((r) => isActive(r.status))
-  // EXACT match only — never let "Tesamorelin" steal "Tesamorelin/Ipamorelin"
-  .filter((r) => normName(r.product_name) === wanted)
+  // Exact match on sheet name, or alias → canonical (e.g. CJC → CJC (no DAC))
+  // Still never let bare "Tesamorelin" match "Tesamorelin/Ipamorelin"
+  .filter((r) => normName(r.product_name) === wantedResolved)
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
     return String(a.last_used_at).localeCompare(String(b.last_used_at));
