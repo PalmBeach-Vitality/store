@@ -127,8 +127,10 @@ function buildBufferCaption(productName, fact1, fact2, fact3) {
   const s4 = `Ready to check it out? Explore ${p} and shop the full listing at www.palmbeach-vitality.store.`;
   const s5 =
     'For laboratory research use only. Not for human use or consumption.';
+  // Fixed closer on every caption
+  const s6 = 'For a 10% discount code drop Peptides in the comments!';
 
-  const paragraph = [s1, s2, s3, s4, s5].join(' ');
+  const paragraph = [s1, s2, s3, s4, s5, s6].join(' ');
   const tags = fiveHashtags(p).join(' ');
   return `${paragraph}\n\n${tags}`;
 }
