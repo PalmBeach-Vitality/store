@@ -80,7 +80,7 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 | `still_url` | Optional. Public still (catbox image) → **`end_hold`** (15–30s freeze). Not imgen.x.ai. |
 | `creation_id` | Optional tracking |
 
-**Daily habit:** Workflow A → download Grok MP4 → upload [catbox.moe](https://catbox.moe) → paste catbox URL here → Execute.
+**Daily habit:** Workflow A → download MP4 → upload [catbox.moe](https://catbox.moe) → paste into **`input_video_url`** → Execute.
 
 Then Execute workflow.
 
@@ -103,7 +103,7 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
 
 | Old | New |
 |---|---|
-| `$('save_video_url')` / `$('Parse_Grok')` for video | `$('video_url_input').item.json.public_video_url` |
+| `$('save_video_url')` / `$('Parse_Grok')` for video | `$('video_url_input').item.json.input_video_url` (or `public_video_url`) |
 | `$('map_creatomate_mods')` | `$('map_creatomate_from_url')` |
 
 ### `creatomate_render` body
