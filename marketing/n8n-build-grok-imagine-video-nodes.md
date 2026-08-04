@@ -13,11 +13,12 @@ All new n8n field names: **lowercase**.
 pick_creation
   → grok_imagine_reel_still
   → save_still_url
+  → prep_grok_video_start
   → grok_video_start
   → wait_video
   → grok_video_poll
   → if_video_ready
-       false → wait_video
+    20|       false → wait_video
        true  → save_video_url
             → sheets_update_reel
             → sheets_update_creation
@@ -82,18 +83,35 @@ Reply **`node 2 ok`**.
 
 ---
 
-## Node 3 — `grok_video_start`
+## Node 3 — `prep_grok_video_start` (required)
+
+**Type:** Code  
+**After:** `save_still_url`  
+**Before:** `grok_video_start`  
+**Mode:** Run Once for All Items  
+
+Paste: `marketing/n8n-code-prep-grok-video-start.js`
+
+Validates `still_url` and keeps `video_motion_prompt` **short** (camera-only).  
+Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xAI — that is **not** an API-key failure (keys fail as **401**).
+
+---
+
+## Node 4 — `grok_video_start`
 
 **Type:** HTTP Request  
-**After:** `save_still_url`  
+**After:** `prep_grok_video_start`  
 **Before:** `wait_video`
 
 | Setting | Value |
 |---|---|
 | Method | `POST` |
 | URL | `https://api.x.ai/v1/videos/generations` |
-| Authentication | same xAI Header Auth |
-| Send Body | ON · JSON |
+| Authentication | Header Auth → same xAI credential (`Authorization: Bearer …`) |
+| Send Headers | ON — `Content-Type` = `application/json` |
+| Send Body | ON |
+| Body Content Type | **Raw** |
+| Content Type | `application/json` |
 
 **Body settings (critical — avoid empty `{ "": "" }` body):**
 1. Send Body: **ON**
@@ -105,7 +123,7 @@ Reply **`node 2 ok`**.
 ```text
 ={{ JSON.stringify({
   model: 'grok-imagine-video-1.5',
-  prompt: $('pick_creation').first().json.video_motion_prompt,
+  prompt: $json.video_motion_prompt,
   image: { url: $json.still_url },
   duration: 15,
   aspect_ratio: '9:16',
@@ -113,21 +131,33 @@ Reply **`node 2 ok`**.
 }) }}
 ```
 
-**Duration (required):** always **`15`** seconds for `grok_video_start` (minimum for a proper Creatomate loop bed). Never `8` for production.  
-**Resolution (required):** always **`1080p`** for `grok_video_start` (and extends). Never `720p` for production.
+**Duration (required):** always **`15`**. Never `8` for production.  
+**Resolution (required):** always **`1080p`**. Never `720p` for production.
 
-**Critical:** do **not** hardcode “slow cinematic camera motion around…”. That made every run orbit the same way.  
-Each creation row has a unique `video_motion_prompt` (from `camera_move` in `9-lab-item-creations-500`).
+**Critical:** `prompt` must be the **short** camera `video_motion_prompt` (~400–700 chars) — not the full scene paragraph. The still already has the world.
 
-In the node’s request preview, body must show a long unique `"prompt"` starting with `Photoreal vertical…` — not `{ "": "" }` and not a fixed orbit sentence.
+In the node’s request preview, body must show:
+- `"prompt":"Animate this exact Palm Beach…"` (short)
+- `"image":{"url":"https://…"}` (real still URL)
+- not `{ "": "" }`
 
-**Check:** response includes `request_id` (async job id). Status is not a finished URL yet.
+**Check:** response includes `request_id`.
 
-Reply **`node 3 ok`** + `request_id`.
+### If you get HTTP 400 Bad Request
+
+| Cause | Fix |
+|---|---|
+| Prompt too long / re-pastes full scene | Use `prep_grok_video_start` + re-import shortened Sheet 9 motions |
+| Empty body `{ "": "" }` | Raw JSON body only; delete Body Parameter rows |
+| Missing / expired `still_url` | Confirm `save_still_url.still_url` is `https://…` from image gen |
+| Wrong model string | Use `grok-imagine-video-1.5` |
+| Auth problem | Would be **401**, not 400 — re-check Header Auth Bearer token |
+
+Reply **`node 4 ok`** + `request_id`.
 
 ---
 
-## Node 4 — `wait_video`
+## Node 5 — `wait_video`
 
 **Type:** Wait  
 **After:** `grok_video_start`  
@@ -142,7 +172,7 @@ grok_video_start → wait_video (200s) → grok_video_poll → save_video_url �
 
 ---
 
-## Node 5 — `grok_video_poll`
+## Node 6 — `grok_video_poll`
 
 **Type:** HTTP Request  
 **After:** `wait_video`  

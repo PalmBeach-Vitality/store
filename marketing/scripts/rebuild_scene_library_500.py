@@ -457,30 +457,30 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
 
 
 def rebuild_motion_prompt(row: dict, shot: dict) -> str:
-    scene = row["lab_item"]
-    detail = row.get("material_detail") or ""
+    """Short I2V motion prompt — full scene lives in the still, not here.
+
+    Long prompts (~3k chars) that re-paste lab_item cause xAI HTTP 400 Bad Request.
+    """
     compound = (row.get("compound_name") or "").strip()
-    if compound:
-        label_rule = (
-            f"Keep any on-subject label unchanged as '{compound}' only. No motif/LAB/counter text."
-        )
-    else:
-        label_rule = "Do not add product compound labels or counters during motion."
+    label = (
+        f"Keep any visible product label as '{compound}' only."
+        if compound
+        else "Do not add new product labels or counters."
+    )
     return (
-        f"Photoreal vertical 9:16 cinematic laboratory research film continuing this exact scene: {scene} "
-        f"Continuity notes: {detail} "
-        f"SHOT FAMILY: {shot['shot_family']}. "
-        f"CAMERA ANGLE: {shot['camera_angle']}. "
-        f"CAMERA DIRECTION: {shot['camera_direction']}. "
+        f"Animate this exact Palm Beach Vitality laboratory research still in vertical 9:16. "
+        f"SHOT: {shot['shot_family']}. "
+        f"ANGLE: {shot['camera_angle']}. "
+        f"DIRECTION: {shot['camera_direction']}. "
+        f"CAMERA MOVE: {shot['camera_move']}. "
         f"FRAMING: {shot['framing']}. "
-        f"CAMERA: {shot['camera_move']}. "
-        f"ENERGY: {shot.get('energy', 'controlled premium cinematic motion')}. "
-        f"Path must be straight or a simple tilt/pedestal/truck — never orbit around the subject. "
-        f"Lighting continuity: {row.get('lighting')}. Surface continuity: {row.get('surface')}. "
-        f"Keep the world sharp, recognizable, and unchanged from the still — exciting depth, not a SKU spin. "
-        f"{label_rule} "
-        f"{AVOID} "
-        f"{COMPLIANCE}"
+        f"Keep lighting ({row.get('lighting') or 'clinical catalog lighting'}) and "
+        f"surface ({row.get('surface') or 'clean laboratory surface'}) unchanged. "
+        f"Preserve every object, material, and depth cue from the still — no morphing, no new props. "
+        f"Motion path is straight or a simple tilt/pedestal/truck only — never orbit. "
+        f"{label} "
+        f"No people, hands, faces, needles, injection, watermarks, captions, or burn-in text. "
+        f"For laboratory research use only. Not for human use or consumption."
     )
 
 
