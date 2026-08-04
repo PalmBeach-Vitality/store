@@ -2,13 +2,14 @@
 """Rewrite video_motion_prompt to short I2V-safe camera prompts (fixes xAI 400 Bad Request).
 
 Grok video (image-to-video) already has the still — do NOT re-paste the full scene paragraph.
-Long prompts (~3k chars) frequently return HTTP 400 invalid_argument.
+Includes NO DOUBLES rule for motion continuity.
 """
 
 from __future__ import annotations
 
 import csv
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,34 +18,44 @@ CSV9 = SHEETS / "9-lab-item-creations-500.csv"
 CSV9_250 = SHEETS / "9-lab-item-creations-250.csv"
 JSON9 = ROOT / "pbvita-500-lab-item-creations.json"
 
-MAX_MOTION = 1200  # well under xAI ~4096; keeps I2V reliable
+MAX_MOTION = 700
+
+
+def ascii(s: str) -> str:
+    s = str(s or "")
+    s = (
+        s.replace("‘", "'")
+        .replace("’", "'")
+        .replace("“", '"')
+        .replace("”", '"')
+        .replace("–", "-")
+        .replace("—", "-")
+        .replace("−", "-")
+        .replace("…", "...")
+        .replace("×", "x")
+    )
+    s = re.sub(r"[^\x09\x0A\x0D\x20-\x7E]", " ", s)
+    return re.sub(r"\s+", " ", s).strip()
 
 
 def build_motion_prompt(row: dict) -> str:
-    compound = (row.get("compound_name") or "").strip()
-    label = (
-        f"Keep any visible product label as '{compound}' only."
-        if compound
-        else "Do not add new product labels or counters."
-    )
+    compound = ascii(row.get("compound_name") or "")
+    move = ascii(row.get("camera_move") or "slow push-in")[:160]
     prompt = (
-        f"Animate this exact Palm Beach Vitality laboratory research still in vertical 9:16. "
-        f"SHOT: {row.get('shot_family') or 'push_in'}. "
-        f"ANGLE: {row.get('camera_angle') or 'eye-level'}. "
-        f"DIRECTION: {row.get('camera_direction') or 'forward'}. "
-        f"CAMERA MOVE: {row.get('camera_move') or 'slow push-in'}. "
-        f"FRAMING: {row.get('framing') or 'medium product framing'}. "
-        f"Keep lighting ({row.get('lighting') or 'clinical catalog lighting'}) and "
-        f"surface ({row.get('surface') or 'clean laboratory surface'}) unchanged. "
-        f"Preserve every object, material, and depth cue from the still — no morphing, no new props. "
-        f"Motion path is straight or a simple tilt/pedestal/truck only — never orbit. "
-        f"{label} "
-        f"No people, hands, faces, needles, injection, watermarks, captions, or burn-in text. "
-        f"For laboratory research use only. Not for human use or consumption."
+        f"Slow cinematic camera: {move}. "
+        f"Shot {ascii(row.get('shot_family') or 'push_in')}, "
+        f"angle {ascii(row.get('camera_angle') or 'eye-level')}, "
+        f"direction {ascii(row.get('camera_direction') or 'forward')}. "
+        f"Keep the exact same laboratory research scene, materials, and lighting. "
+        f"No orbit. No new objects. No duplicate props. No repeated text or graphics. "
+        f"No people, hands, faces, needles, watermarks, or burn-in. "
+        f"For laboratory research use only."
     )
+    if compound:
+        prompt += f" Keep label '{compound}' unchanged if visible, once only."
+    prompt = ascii(prompt)
     if len(prompt) > MAX_MOTION:
-        # Keep camera clause; trim framing if needed
-        prompt = prompt[: MAX_MOTION - 1].rstrip() + "."
+        prompt = prompt[: MAX_MOTION - 1].rsplit(" ", 1)[0] + "."
     return prompt
 
 
@@ -60,11 +71,6 @@ def main() -> None:
     lens = [len(r["video_motion_prompt"]) for r in rows]
     if max(lens) > MAX_MOTION:
         raise SystemExit(f"motion still too long: {max(lens)}")
-    if len({r["video_motion_prompt"] for r in rows}) < 400:
-        # cameras are unique so prompts should be nearly unique
-        print(
-            f"WARN: only {len({r['video_motion_prompt'] for r in rows})} unique motion prompts"
-        )
 
     fields = list(rows[0].keys())
     for path in (CSV9, CSV9_250):
@@ -76,9 +82,7 @@ def main() -> None:
 
     JSON9.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {JSON9}")
-    print(
-        f"PASS: motion prompts min/avg/max = {min(lens)}/{sum(lens)//500}/{max(lens)}"
-    )
+    print(f"PASS: motion min/avg/max = {min(lens)}/{sum(lens)//500}/{max(lens)}")
     print("sample:", rows[0]["video_motion_prompt"])
 
 

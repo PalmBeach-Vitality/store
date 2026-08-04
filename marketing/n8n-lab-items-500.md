@@ -49,8 +49,9 @@ python3 marketing/scripts/audit_camera_diversity.py
 - Each `lab_item` is a **full paragraph** (~800–1200 chars) for Grok Imagine
 - `video_prompt` and `video_motion_prompt` embed that same scene
 - Empty of people / hands / faces; no needles, injection, or clinical procedure theater
+- **NO DOUBLES:** never tile/repeat text, amino sequences, wall graphics, or clone props in still or video
 - **Never** bake `creation motif`, `LAB-###`, or `000/500` into prompts
-- **Labels:** when present, use real catalog `compound_name` + research-only line
+- **Labels:** when present, use real catalog `compound_name` **once only** + research-only line
 - FDA-safe: laboratory research use only — no treatment/cure claims
 - Category rank order never repeats adjacent categories
 

@@ -22,12 +22,20 @@ SINGLE_SUBJECT = (
     "ENVIRONMENT-FORWARD SCENE: build a full research / wellness / R&D world, "
     "not a boring single-SKU cutout. Depth, architecture, and atmosphere matter."
 )
+NO_DOUBLES = (
+    "ABSOLUTE RULE — NO DOUBLES ANYWHERE: never duplicate any object, prop, vial, bottle, "
+    "instrument, notebook, or furniture. Never repeat, tile, stack, or stencil the same text, "
+    "label, amino-acid sequence, wall graphic, logo, or diagram more than once. "
+    "Any text appears exactly once. No patterned repeating murals. No twin props."
+)
 AVOID = (
     "Avoid: people, hands, faces, needles, injection, lifestyle influencers, cardboard boxes "
     "as hero, fake LAB codes, creation motifs, 000/500 counters, surreal CGI orbs, "
     "watermarks, lower-third captions, hex IDs, continuity codes, burn-in text, "
-    "scene titles printed in frame, gallery name plaques. "
-    "Do NOT render prompt metadata as visible text."
+    "scene titles printed in frame, gallery name plaques, duplicated text, tiled wall lettering, "
+    "repeated peptide sequences, cloned props. "
+    "Do NOT render prompt metadata as visible text. "
+    f"{NO_DOUBLES}"
 )
 QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
@@ -70,6 +78,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
         f"Intended follow-on camera move: {shot['camera_move']}. Energy: {shot['energy']}. "
         f"Color grade: {color_grade}. "
         f"{label_rule} "
+        f"{NO_DOUBLES} "
         f"Compose for spectacle and depth — environment-forward storytelling. "
         f"{SINGLE_SUBJECT} "
         f"{AVOID}. "
@@ -98,6 +107,7 @@ def rebuild_motion_prompt(row: dict, shot: dict) -> str:
         f"Preserve every object, material, and depth cue from the still — no morphing, no new props. "
         f"Motion path is straight or a simple tilt/pedestal/truck only — never orbit. "
         f"{label} "
+        f"NO DOUBLES in motion: do not spawn duplicate objects or repeat any text/graphics. "
         f"No people, hands, faces, needles, injection, watermarks, captions, or burn-in text. "
         f"For laboratory research use only. Not for human use or consumption."
     )

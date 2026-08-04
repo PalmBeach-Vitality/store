@@ -32,12 +32,21 @@ QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
     "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR"
 )
+NO_DOUBLES = (
+    "ABSOLUTE RULE — NO DOUBLES ANYWHERE: never duplicate any object, prop, vial, bottle, instrument, "
+    "notebook, glass, light fixture, or furniture. Never repeat, tile, stack, mirror-clone, or stencil "
+    "the same text, label, amino-acid sequence, wall graphic, logo, diagram, or caption more than once. "
+    "If text appears, it appears exactly once. No patterned repeating murals. No twin props. "
+    "Reflections may exist but must not create a second readable copy of a label or a second hero object."
+)
 AVOID = (
     "Avoid: people, hands, faces, skin contact, needles, syringes, injection, medical procedures, "
     "lifestyle influencers, cardboard shipping boxes as hero, fake LAB codes, creation motifs, "
     "000/500 counters, surreal CGI orbs, watermarks, lower-third captions, scene titles printed in frame, "
-    "hex IDs, continuity codes, gallery name plaques, burn-in text, subtitles, timecodes. "
-    "Do NOT render any prompt metadata as visible text in the image."
+    "hex IDs, continuity codes, gallery name plaques, burn-in text, subtitles, timecodes, "
+    "duplicated text, tiled wall lettering, repeated peptide sequences, cloned props. "
+    "Do NOT render any prompt metadata as visible text in the image. "
+    f"{NO_DOUBLES}"
 )
 COMPLIANCE = (
     "For laboratory research use only. Not for human use or consumption. "
@@ -122,7 +131,7 @@ FOCALS = [
     "stacked chromatography columns with jewel-toned solvent reservoirs in soft focus behind",
     "a mass-spec inlet detail with polished steel and quiet cable management",
     "a sterile pass-through window with UV indicator strips and interlocking door lights",
-    "a mural-scale peptide sequence graphic behind a physical vial hero on a pedestal",
+    "a single sealed research vial on a clear acrylic pedestal as the quiet hero",
     "a wellness recovery lounge vignette: cold plunge edge in bokeh, research fridge in focus",
     "a formulation homogenizer mid-idle with a single beaker of pearlescent research emulsion",
     "an ultra-low freezer door cracked just enough to show frost lace on the gasket",
@@ -189,9 +198,9 @@ TWISTS = [
     "Instrument LEDs pulse out of sync like a living heartbeat of the lab.",
     "A single shaft of sunrise cuts a diagonal across otherwise clinical white.",
     "Vapor from a dewar curls into a soft ribbon then vanishes.",
-    "Polished black acrylic doubles the hero props like a dark mirror lake.",
+    "Polished black acrylic gives a soft reflection without cloning a second hero object.",
     "HEPA airflow is implied by a barely visible tissue-stream indicator.",
-    "A wall graphic shows abstract amino-acid tessellation without readable medical claims.",
+    "A soft abstract wall wash with no readable lettering or repeated motifs.",
     "Brass and stainless share the frame — wellness luxury meeting laboratory steel.",
     "Color-blocked solvent bottles create a deliberate Pantone story behind the hero.",
     "Frost blooms into fern-like crystals on a freezer window port.",
@@ -348,7 +357,8 @@ def build_scene(rank: int, compound: str) -> dict:
 
     no_burn = (
         " Absolutely no burn-in text, lower thirds, watermarks, or readable signage except an optional "
-        "exact research compound label."
+        "exact research compound label printed once only. "
+        "NO DOUBLES: never tile, stack, or repeat any text, amino sequence, diagram, or prop."
     )
 
     # Rotate paragraph structure by rank for cadence diversity
@@ -426,13 +436,13 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
     if compound:
         label_rule = (
             f"LABEL REQUIREMENT: if any label appears, it MUST read exactly '{compound}' "
-            f"(Palm Beach Vitality research compound), optionally with "
-            f"'For Laboratory Research Use Only'. No LAB codes, motifs, or counters."
+            f"(Palm Beach Vitality research compound), printed ONCE only, optionally with "
+            f"'For Laboratory Research Use Only'. No LAB codes, motifs, counters, or repeated lettering."
         )
     else:
         label_rule = (
             "LABEL REQUIREMENT: keep any printed panels minimal/illegible/blank; "
-            "do not invent compound names, LAB codes, motifs, or counters."
+            "do not invent compound names, LAB codes, motifs, counters, or repeated wall text."
         )
     return (
         f"Photoreal vertical 9:16 Palm Beach Vitality cinematic research still. "
@@ -449,6 +459,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
         f"Intended follow-on camera move: {shot['camera_move']}. Energy: {shot.get('energy', 'cinematic')}. "
         f"Color grade: {row.get('color_grade')}. "
         f"{label_rule} "
+        f"{NO_DOUBLES} "
         f"Compose for spectacle and depth — environment-forward storytelling. "
         f"{AVOID} "
         f"Quality: {QUALITY}. "
@@ -457,31 +468,39 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
 
 
 def rebuild_motion_prompt(row: dict, shot: dict) -> str:
-    """Short I2V motion prompt — full scene lives in the still, not here.
+    """Short I2V motion prompt — full scene lives in the still, not here."""
+    import re
 
-    Long prompts (~3k chars) that re-paste lab_item cause xAI HTTP 400 Bad Request.
-    """
-    compound = (row.get("compound_name") or "").strip()
-    label = (
-        f"Keep any visible product label as '{compound}' only."
-        if compound
-        else "Do not add new product labels or counters."
+    def ascii(s: str) -> str:
+        s = str(s or "")
+        s = (
+            s.replace("‘", "'")
+            .replace("’", "'")
+            .replace("“", '"')
+            .replace("”", '"')
+            .replace("–", "-")
+            .replace("—", "-")
+            .replace("…", "...")
+            .replace("×", "x")
+        )
+        s = re.sub(r"[^\x09\x0A\x0D\x20-\x7E]", " ", s)
+        return re.sub(r"\s+", " ", s).strip()
+
+    compound = ascii(row.get("compound_name") or "")
+    move = ascii(shot.get("camera_move") or "slow push-in")[:160]
+    prompt = (
+        f"Slow cinematic camera: {move}. "
+        f"Shot {ascii(shot.get('shot_family') or 'push_in')}, "
+        f"angle {ascii(shot.get('camera_angle') or 'eye-level')}, "
+        f"direction {ascii(shot.get('camera_direction') or 'forward')}. "
+        f"Keep the exact same laboratory research scene, materials, and lighting. "
+        f"No orbit. No new objects. No duplicate props. No repeated text or graphics. "
+        f"No people, hands, faces, needles, watermarks, or burn-in. "
+        f"For laboratory research use only."
     )
-    return (
-        f"Animate this exact Palm Beach Vitality laboratory research still in vertical 9:16. "
-        f"SHOT: {shot['shot_family']}. "
-        f"ANGLE: {shot['camera_angle']}. "
-        f"DIRECTION: {shot['camera_direction']}. "
-        f"CAMERA MOVE: {shot['camera_move']}. "
-        f"FRAMING: {shot['framing']}. "
-        f"Keep lighting ({row.get('lighting') or 'clinical catalog lighting'}) and "
-        f"surface ({row.get('surface') or 'clean laboratory surface'}) unchanged. "
-        f"Preserve every object, material, and depth cue from the still — no morphing, no new props. "
-        f"Motion path is straight or a simple tilt/pedestal/truck only — never orbit. "
-        f"{label} "
-        f"No people, hands, faces, needles, injection, watermarks, captions, or burn-in text. "
-        f"For laboratory research use only. Not for human use or consumption."
-    )
+    if compound:
+        prompt += f" Keep label '{compound}' unchanged if visible, once only."
+    return ascii(prompt)
 
 
 def rebuild_scene_brief(row: dict, shot: dict) -> str:

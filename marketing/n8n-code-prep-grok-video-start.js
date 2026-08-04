@@ -74,12 +74,13 @@ let motion = asciiPrompt(
   `Slow cinematic camera: ${camera_move}. ` +
     `Shot ${shot_family}, angle ${camera_angle}, direction ${camera_direction}. ` +
     `Keep the exact same laboratory research scene, materials, and lighting. ` +
-    `No orbit. No new objects. No people, hands, faces, needles, text, or watermarks. ` +
+    `No orbit. No new objects. No duplicate props. No repeated text or graphics. ` +
+    `No people, hands, faces, needles, text watermarks, or burn-in. ` +
     `For laboratory research use only.`
 );
 
 if (compound) {
-  motion += ` Keep label '${compound}' unchanged if visible.`;
+  motion += ` Keep label '${compound}' unchanged if visible, printed once only.`;
 }
 
 if (motion.length > 700) {
