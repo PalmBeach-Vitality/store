@@ -117,7 +117,7 @@ Paste each real id into the matching node:
 | Node | Replace placeholder with |
 |---|---|
 | `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
-| `buffer_fb_reel` / stories | Facebook `channelId` (from working WF) |
+| `buffer_fb_reel` / `Buffer_FB_story` | `6a668d534b2d03035f478536` |
 | `buffer_tiktok` | TikTok `channelId` (from working WF) |
 | `buffer_x` | X `channelId` (from working WF) |
 
@@ -126,14 +126,20 @@ Paste each real id into the matching node:
 | Channel | `channelId` |
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
+| Facebook | `6a668d534b2d03035f478536` |
 
-In the Buffer HTTP body / GraphQL variables, use:
+In the Buffer HTTP body / GraphQL variables:
 
 ```js
+// buffer_ig_reel / Buffer_IG_story
+channelId: '6a668d534b2d03035f478536'
+
+// buffer_fb_reel / Buffer_FB_story
 channelId: '6a668d534b2d03035f478536'
 ```
 
-Never leave the literal text `PASTE_YOUR_…`.
+Never leave the literal text `PASTE_YOUR_…`.  
+If IG and FB should be different profiles, re-check with the `channels` query — Buffer usually gives each connected profile its own id.
 
 
 ---
