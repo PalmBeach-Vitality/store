@@ -134,7 +134,13 @@ Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / 
 }}
 ```
 
-If `end_hold_url` is empty, either omit `'end_hold'` or leave the template’s default still. Prefer pasting Grok **`still_url`** (or last-frame URL) on `video_url_input`.
+**`end_hold` bug:** if modifications show `"end_hold": "end_hold"`, the render body used the element name instead of a URL. Fix:
+
+1. On `video_url_input`, set **`still_url`** = catbox/public image URL (last frame or Grok still uploaded to catbox)  
+2. In `creatomate_render`, use **`'end_hold': $json.end_hold_url`** — not `$json.end_hold`  
+3. Re-paste `map_creatomate_from_url` from the repo (strips the literal `"end_hold"` value)  
+
+If `end_hold_url` is empty, omit the `'end_hold'` key so Creatomate keeps the template default still.
 
 ### `normalize_creatomate` (optional Edit Fields — before save)
 

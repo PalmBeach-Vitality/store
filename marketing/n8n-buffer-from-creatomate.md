@@ -165,6 +165,86 @@ If `4-reel-queue` doesn’t have Buffer ID columns yet, add:
 
 ---
 
+## Troubleshooting: only Facebook in queue / no captions
+
+### A) Check each Buffer node output (same execution)
+
+Open **`buffer_ig_reel`**, **`buffer_fb_reel`**, **`buffer_tiktok`** one by one.
+
+| Response | Meaning |
+|---|---|
+| `data.createPost.post.id` | Success — look in that channel’s **Queue** (and **Drafts**) |
+| `MutationError` / `errors[].message` | Failed — that platform never queued |
+| Node red / skipped | Fix channelId, auth, or wire order |
+
+FB can succeed while IG/TikTok fail silently if **Continue On Fail** is ON.
+
+### B) Caption empty on Buffer posts
+
+Every Buffer body needs a non-empty **`text`** field. Do **not** use `$json.ig_caption_draft` after Buffer/Sheets (often missing).
+
+Use this on **all three** Buffer nodes:
+
+```text
+={{ $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store' }}
+```
+
+### C) Instagram Reel body (common miss)
+
+IG often needs reel metadata + video asset. Example variables shape:
+
+```js
+{
+  text: $('video_url_input').first().json.product_name + ' — For laboratory research use only. Not for human use or consumption.\n\nwww.palmbeach-vitality.store',
+  channelId: '6a668d534b2d03035f478536',
+  schedulingType: 'automatic',
+  mode: 'addToQueue',
+  assets: [{
+    video: {
+      url: $('save_creatomate_url').first().json.video_url,
+      metadata: { thumbnailOffset: 1000 }
+    }
+  }],
+  metadata: {
+    instagram: {
+      type: 'reel',
+      shouldShareToFeed: true
+    }
+  }
+}
+```
+
+Stories use `type: 'story'` on the story nodes — different from reels.
+
+### D) TikTok body
+
+```js
+{
+  text: /* same caption as above */,
+  channelId: '6a642435bac606503d410801',
+  schedulingType: 'automatic',
+  mode: 'addToQueue',
+  assets: [{
+    video: {
+      url: $('save_creatomate_url').first().json.video_url,
+      metadata: { thumbnailOffset: 1000 }
+    }
+  }]
+}
+```
+
+Video URL must be **Creatomate** (`save_creatomate_url.video_url`), not catbox/Grok.
+
+### E) On-video Creatomate captions missing
+
+If the **MP4** has no Intro/Facts:
+
+1. Open render `modifications` — `Intro-Text.text` / `Fact-*-text.text` must be non-empty  
+2. In the template, confirm those text layers are **visible** on the timeline for the full length (not duration 0 / off-canvas / under a cover)  
+3. `product_name` must match Sheet 10 exactly enough for `pick_text` (e.g. `CJC` vs `CJC (no DAC)/Ipamorelin`)
+
+---
+
 ## Do not
 
 - Point Buffer at `vidgen.x.ai` or raw Grok URLs  
