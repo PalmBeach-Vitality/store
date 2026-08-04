@@ -94,7 +94,8 @@ Wire: `… → Grok_imagine_story → Save_render_URL → Buffer_post_IG …`
 | Column | Value (fx ON) |
 |---|---|
 | `times_used` | `={{ Number($('Limit').item.json.times_used \|\| $('Get row(s) in sheet').item.json.times_used \|\| 0) + 1 }}` |
-| `last_used_at` | `={{ $now.toISO() }}` |
+| `last_date_used` | `={{ $now.toISODate() }}` |
+| `last_used_at` | `={{ $now.toISO() }}` *(only if your sheet has this column instead of / in addition to `last_date_used`)* |
 | `feed_image_url` | `={{ $('Save_render_URL').item.json.feed_image_url \|\| $('Save_render_URL').item.json.spotlight_image_url }}` |
 | `story_image_url` | `={{ $('Save_render_URL').item.json.story_image_url }}` |
 | `ig_caption_draft` | `={{ $('Save_render_URL').item.json.ig_caption_draft }}` |
