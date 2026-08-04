@@ -44,6 +44,10 @@ function buildMotionPrompt(row) {
     val(row, ['camera_move', 'cameraMove', 'camera'], 'slow straight push-in, then hold')
   ).trim();
   const family = String(val(row, ['shot_family', 'shotFamily'], 'push_in')).trim();
+  const angle = String(val(row, ['camera_angle', 'cameraAngle'], 'eye-level')).trim();
+  const direction = String(
+    val(row, ['camera_direction', 'cameraDirection'], 'straight forward')
+  ).trim();
   const framing = String(val(row, ['framing'], 'centered editorial hero')).trim();
   const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
   const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
@@ -53,7 +57,8 @@ function buildMotionPrompt(row) {
     : `Do not add product compound labels onto the subject. `;
   return (
     `Photoreal vertical 9:16 laboratory research catalog film of ${name}. ` +
-    `SHOT FAMILY: ${family}. FRAMING: ${framing}. CAMERA: ${camera}. ` +
+    `SHOT FAMILY: ${family}. CAMERA ANGLE: ${angle}. CAMERA DIRECTION: ${direction}. ` +
+    `FRAMING: ${framing}. CAMERA: ${camera}. ` +
     `Path must be straight or a simple tilt/pedestal only — never travel around the subject. ` +
     `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
     `Keep the subject sharp and unchanged from the still. ` +
@@ -82,6 +87,8 @@ const scored = creations
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
       shot_family: val(c, ['shot_family', 'shotFamily']),
+      camera_angle: val(c, ['camera_angle', 'cameraAngle']),
+      camera_direction: val(c, ['camera_direction', 'cameraDirection']),
       framing: val(c, ['framing']),
       scene_id: val(c, ['scene_id', 'sceneId']),
       category: val(c, ['category', 'scene_category']),
@@ -129,6 +136,8 @@ const last = recent[0] || null;
 const lastId = last?.creation_id || '';
 const recentFamilies = new Set(recent.map((c) => c.shot_family).filter(Boolean));
 const recentCameras = new Set(recent.map((c) => c.camera_move).filter(Boolean));
+const recentAngles = new Set(recent.map((c) => c.camera_angle).filter(Boolean));
+const recentDirections = new Set(recent.map((c) => c.camera_direction).filter(Boolean));
 const recentFramings = new Set(recent.map((c) => c.framing).filter(Boolean));
 const recentCategories = new Set(recent.map((c) => c.category).filter(Boolean));
 
@@ -136,7 +145,9 @@ function scorePick(c) {
   let penalty = 0;
   if (lastId && c.creation_id === lastId) penalty += 1000;
   if (c.shot_family && recentFamilies.has(c.shot_family)) penalty += 120;
-  if (c.camera_move && recentCameras.has(c.camera_move)) penalty += 100;
+  if (c.camera_move && recentCameras.has(c.camera_move)) penalty += 140;
+  if (c.camera_angle && recentAngles.has(c.camera_angle)) penalty += 50;
+  if (c.camera_direction && recentDirections.has(c.camera_direction)) penalty += 50;
   if (c.framing && recentFramings.has(c.framing)) penalty += 60;
   if (c.category && recentCategories.has(c.category)) penalty += 40;
   // Extra weight against the immediate previous family/camera
@@ -194,6 +205,8 @@ return [
       lab_item: pick.lab_item,
       compound_name: pick.compound_name || '',
       shot_family: pick.shot_family,
+      camera_angle: pick.camera_angle,
+      camera_direction: pick.camera_direction,
       framing: pick.framing,
       scene_id: pick.scene_id,
       scene_category: pick.category,

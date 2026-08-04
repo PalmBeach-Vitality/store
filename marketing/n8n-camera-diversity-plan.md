@@ -16,10 +16,11 @@ Audited `sheets/9-lab-item-creations-500.csv` + `n8n-code-pick-creation.js` + `n
 | Adjacent ranks same `shot_family` | **0** | Pass |
 | Hardcoded orbit sentence in pick/map | None | Pass |
 | `grok_video_start` docs use `video_motion_prompt` | Yes (`prompt: …video_motion_prompt`, 15s, 1080p) | Pass if n8n matches docs |
-| Unique `shot_family` values | **16** | Gap |
-| Unique `camera_move` recipes | **16** | **Gap — critical** |
-| Unique `(shot_family, framing, camera_move)` triples | **16** | **Gap — critical** |
-| Variants of `camera_move` inside one family | **1 each** | **Gap — critical** |
+| Unique `shot_family` values | **24** (was 16) | **Phase C done** |
+| Unique `camera_move` recipes | **500 / 500** (was 16) | **Phase C done** |
+| Unique `camera_angle` | **41** | **Phase C done** |
+| Unique `camera_direction` | **24** | **Phase C done** |
+| Adjacent ranks same `shot_family` | **0** | Pass |
 | Word `orbit` in motion prompts | 3 hits — all from **lab item names** (orbitrap / orbital shaker), not camera instructions | OK |
 | Phrase “around the subject” | In all 500 as **“never travel around the subject”** (anti-orbit guard) | OK |
 | `pick_creation` diversification | Skips only **last 1** category + shot_family + camera_move | Partial |

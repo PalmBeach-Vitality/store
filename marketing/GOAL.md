@@ -44,8 +44,9 @@ See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 
 ## Shot diversity
 
-Each creation has `shot_family` (`static_lock`, `push_in`, `top_down`, `macro_detail`, …).  
-Stills + motion prompts follow that family. Pick skips same family as last used.
+Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
+Stills + `video_motion_prompt` carry those fields. Pick skips last 8 families/cameras.  
+See `n8n-camera-diversity-plan.md`.
 
 ## Subjects
 
