@@ -32,7 +32,7 @@ Manual Trigger
   → video_url_input            (NEW vidgen URL + product_name)
   → get_reel_text → pick_text → sheets_update_text
   → map_creatomate_from_url
-  → creatomate_render (main_video + muted)
+  → creatomate_render (Video-8QW + muted)
   → wait → status → save_creatomate_url
   → sheets_append_reel
   → Buffer nodes (copy from other WF; video = Creatomate URL)
@@ -40,7 +40,8 @@ Manual Trigger
 
 See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 
-**No music in renders** — mute `main_video`; add soundtrack manually later.
+**No music in renders** — mute `Video-8QW`; add soundtrack manually later.  
+**Template:** `c5d54774-b029-4786-af04-d5af345dc7f2` (`Video-8QW` + `end_hold`).
 
 ## Shot diversity
 

@@ -61,7 +61,7 @@ return [
       times_used: pick.times_used,
       last_used_at: pick.last_used_at,
       row_number: pick.row_number,
-      template_id: '06cd4ffd-906c-45ed-bf33-e8d2bed4312b',
+      template_id: 'c5d54774-b029-4786-af04-d5af345dc7f2',
     },
   },
 ];

@@ -5,9 +5,12 @@
 // Before: creatomate_render
 //
 // Each run: paste NEW Grok/vidgen URL + product_name into video_url_input.
+// Optional: still_url / hold_image_url → end_hold (15–30s freeze).
 // pick_text filters facts 1–3 for that product (plain-English ad tone).
 // Intro-Text = product_name. Facts 4–5 stay sheet disclaimer/CTA.
-// Elements: main_video (Grok, once) + video_loop_source (fixed B2 loop). Muted.
+//
+// Template: c5d54774-b029-4786-af04-d5af345dc7f2
+// Elements: Video-8QW (Grok, once) + end_hold (still). Muted.
 
 function firstJson(name) {
   try {
@@ -59,6 +62,17 @@ if (!product_name) {
 // On-screen Intro = product name only (not catalog blurbs)
 const mod_intro = product_name;
 
+// end_hold still — prefer last-frame / Grok still (not required; template default used if empty)
+const end_hold_url = String(
+  urlInput.still_url ||
+    urlInput.hold_image_url ||
+    urlInput.end_hold ||
+    input.still_url ||
+    ''
+).trim();
+
+const end_text_link = 'www.palmbeach-vitality.store';
+
 return [
   {
     json: {
@@ -67,6 +81,8 @@ return [
       ...text,
       grok_video_url: public_video_url,
       public_video_url,
+      end_hold_url,
+      end_text_link,
       product_name,
       mod_intro,
       mod_fact_1: cleanFact(text.mod_fact_1),
@@ -79,7 +95,7 @@ return [
         'For laboratory research use only. Not for human use or consumption.',
       text_id: text.text_id,
       creation_id: String(urlInput.creation_id || '').trim(),
-      template_id: '06cd4ffd-906c-45ed-bf33-e8d2bed4312b',
+      template_id: 'c5d54774-b029-4786-af04-d5af345dc7f2',
       mute_audio: true,
     },
   },

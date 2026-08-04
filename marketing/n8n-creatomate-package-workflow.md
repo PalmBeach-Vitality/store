@@ -72,8 +72,9 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 
 | Field | Each run |
 |---|---|
-| `public_video_url` | Paste the **new** Grok/vidgen `.mp4` URL |
+| `public_video_url` | Paste the **new** Grok/vidgen `.mp4` URL → **`Video-8QW`** |
 | `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
+| `still_url` | Optional. Grok still / last-frame URL → **`end_hold`** (15–30s freeze) |
 | `creation_id` | Optional tracking |
 
 Then Execute workflow.
@@ -102,29 +103,33 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
 
 ### `creatomate_render` body
 
+Template: **`c5d54774-b029-4786-af04-d5af345dc7f2`**  
+Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / `video_loop_source` on this template.
+
 ```js
 ={{
 {
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'main_video': $json.public_video_url,
-    'main_video.muted': true,
-    'main_video.volume': '0%',
-    'main_video.loop': false,
-    'video_loop_source': $json.video_loop_source,
-    'video_loop_source.muted': true,
-    'video_loop_source.volume': '0%',
+    'Video-8QW': $json.public_video_url,
+    'Video-8QW.muted': true,
+    'Video-8QW.volume': '0%',
+    'Video-8QW.loop': false,
+    'end_hold': $json.end_hold_url,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
     'Fact-3-text.text': $json.mod_fact_3,
     'Fact-4-text.text': $json.mod_fact_4,
-    'Fact-5-text.text': $json.mod_fact_5
+    'Fact-5-text.text': $json.mod_fact_5,
+    'end-text-link.text': $json.end_text_link
   }
 }
 }}
 ```
+
+If `end_hold_url` is empty, either omit `'end_hold'` or leave the template’s default still. Prefer pasting Grok **`still_url`** (or last-frame URL) on `video_url_input`.
 
 ### `normalize_creatomate` (optional Edit Fields — before save)
 
@@ -225,30 +230,29 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 
 ## Template
 
-- Dynamic element **`main_video`** — Grok clip (once, loop off)
-- Dynamic element **`video_loop_source`** — fixed Backblaze loop MP4 (muted)
-- No music track (or muted)
-- Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`
+- **ID:** `c5d54774-b029-4786-af04-d5af345dc7f2`
+- Dynamic video **`Video-8QW`** — Grok clip (once, loop off, muted)
+- Dynamic image **`end_hold`** — still for 15–30s hold (paste `still_url` on `video_url_input`)
+- Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`, `end-text-link`
+- Also in template (usually leave defaults): `end-text-bg`, `Image-WVC`
 
 ### Hold last frame 15–30s (do not loop)
 
-Grok clips are **15s**. If the template is ~30s and `main_video` has **Loop = On**, the clip restarts — that is the bad loop.
+Grok clips are **15s**. If the template is longer and **`Video-8QW`** has **Loop = On**, the clip restarts — that is the bad loop.
 
-Creatomate does **not** auto-freeze the last frame when the element is longer than the source. Turn loop off, then cover 15–30s with a still.
+Creatomate does **not** auto-freeze the last frame when the element is longer than the source. Turn loop off, then cover 15–30s with **`end_hold`**.
 
 **In the Creatomate template editor:**
 
-1. Select **`main_video`**
-2. Set **Loop → Off** (also send `'main_video.loop': false` in `creatomate_render`)
-3. Set **`main_video` duration → Media** (or fixed **15**), so it only plays the real clip once
-4. Add a full-bleed **Image** element on the same visual stack (under the text overlays), name it e.g. **`end_hold`**
-5. Timeline for **`end_hold`**: **Time = 15**, **Duration = 15** (fills ~15→30)
+1. Select **`Video-8QW`**
+2. Set **Loop → Off** (also send `'Video-8QW.loop': false` in `creatomate_render`)
+3. Set **`Video-8QW` duration → Media** (or fixed **15**), so it only plays the real clip once
+4. Keep full-bleed **`end_hold`** under the text overlays
+5. Timeline for **`end_hold`**: **Time ≈ 15**, **Duration** fills to end (~15→30)
 6. Source for **`end_hold`**:
-   - Best: Grok **still** from Workflow A (`still_url`) — same scene as the video end
-   - Or: export / screenshot the last frame of the 15s MP4 once and use that URL
-7. Keep text / logo tracks on top for the full 30s as they already are
+   - Best: Grok **still** / last frame — paste as `still_url` on `video_url_input`
+   - Or: leave template default still for testing
+7. No fade-out on the video (fade darkens via black background). Optional: fade **in** on `end_hold` only, on a track **above** the video
 8. Save the template, then re-run Workflow B
-
-**Optional n8n later:** add `hold_image_url` on `video_url_input` and map `'end_hold': $json.hold_image_url` (or `'end_hold.source'`) so each render gets that run’s still.
 
 Do **not** rely on Loop to stretch a 15s file to 30s.
