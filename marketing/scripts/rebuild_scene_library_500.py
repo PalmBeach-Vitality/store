@@ -39,14 +39,21 @@ NO_DOUBLES = (
     "If text appears, it appears exactly once. No patterned repeating murals. No twin props. "
     "Reflections may exist but must not create a second readable copy of a label or a second hero object."
 )
+VIAL_CLOSURE = (
+    "VIAL CLOSURE RULE (MANDATORY): Every vial must be a pharmaceutical injection vial with an "
+    "aluminum crimped seal over a rubber septum stopper. Show the crimped metal collar and rubber "
+    "center clearly when a vial is visible. NO twist-off caps, NO screw-top vials, NO child-resistant "
+    "twist lids, NO plastic twist closures — crimped metal + rubber only."
+)
 AVOID = (
     "Avoid: people, hands, faces, skin contact, needles, syringes, injection, medical procedures, "
     "lifestyle influencers, cardboard shipping boxes as hero, fake LAB codes, creation motifs, "
     "000/500 counters, surreal CGI orbs, watermarks, lower-third captions, scene titles printed in frame, "
     "hex IDs, continuity codes, gallery name plaques, burn-in text, subtitles, timecodes, "
-    "duplicated text, tiled wall lettering, repeated peptide sequences, cloned props. "
+    "duplicated text, tiled wall lettering, repeated peptide sequences, cloned props, "
+    "twist-top vials, screw-cap vials, plastic twist closures. "
     "Do NOT render any prompt metadata as visible text in the image. "
-    f"{NO_DOUBLES}"
+    f"{NO_DOUBLES} {VIAL_CLOSURE}"
 )
 COMPLIANCE = (
     "For laboratory research use only. Not for human use or consumption. "
@@ -119,7 +126,7 @@ SETTINGS = [
 ]
 
 FOCALS = [
-    "a constellation of sealed research vials catching rim light on a reflective black plinth",
+    "a constellation of crimped-seal rubber-septum injection research vials catching rim light on a reflective black plinth",
     "an open lyophilizer chamber revealing frost-kissed shelves with empty product trays",
     "a confocal microscope under a soft spotlight with fluorescence filters staged beside it",
     "a bank of peptide synthesizer modules with glowing status strips and tidy solvent lines",
@@ -131,7 +138,7 @@ FOCALS = [
     "stacked chromatography columns with jewel-toned solvent reservoirs in soft focus behind",
     "a mass-spec inlet detail with polished steel and quiet cable management",
     "a sterile pass-through window with UV indicator strips and interlocking door lights",
-    "a single sealed research vial on a clear acrylic pedestal as the quiet hero",
+    "a single crimped-seal rubber-septum injection research vial on a clear acrylic pedestal as the quiet hero",
     "a wellness recovery lounge vignette: cold plunge edge in bokeh, research fridge in focus",
     "a formulation homogenizer mid-idle with a single beaker of pearlescent research emulsion",
     "an ultra-low freezer door cracked just enough to show frost lace on the gasket",
@@ -140,18 +147,18 @@ FOCALS = [
     "a cleanroom garmenting antechamber with hanging coveralls and lit shoe racks — empty of people",
     "a glow of incubator windows stacked like a city skyline of cellular research",
     "a HPLC system face with solvent lines as intentional graphic design",
-    "a marble console holding one premium research carton silhouette plus a clear vial hero",
+    "a marble console holding one premium research carton silhouette plus a clear crimped-seal rubber-septum injection vial hero",
     "a bioreactor sight-glass catching caustic highlights from a side practical light",
     "a wall of reference standards binders and sealed ampoules in museum-like niches",
     "a sports-science motion-capture volume empty, with calibration wand and peptide fridge aside",
     "a copper-peptide research tray with aqua solution under macro side light",
     "a NAD+ research display: luminous yellow-green solution in a sealed vessel on slate",
-    "a dual-chamber metaphor avoided — instead one elegant multi-vial storyboard on a rail",
+    "a dual-chamber metaphor avoided — instead one elegant multi-vial storyboard of crimped-seal rubber-septum injection vials on a rail",
     "a palm-shadow silhouette projected across a sterile bench at late afternoon",
     "a floating glass shelf of research powders in sealed jars, labeled for laboratory use only",
     "a helix-inspired shelving sculpture holding sealed research ampoules",
     "a glowing -80 freezer bank as a skyline of cold blue seals",
-    "a single gold-capped vial under a museum pin spot on travertine",
+    "a single aluminum-crimped rubber-septum injection vial under a museum pin spot on travertine",
     "an open autoclave chamber with still-steaming empty racks",
     "a robotic liquid handler idle mid-deck with tips staged like a skyline",
     "a wall of nitrogen generators with braided stainless lines as art",
@@ -460,6 +467,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
         f"Color grade: {row.get('color_grade')}. "
         f"{label_rule} "
         f"{NO_DOUBLES} "
+        f"{VIAL_CLOSURE} "
         f"Compose for spectacle and depth — environment-forward storytelling. "
         f"{AVOID} "
         f"Quality: {QUALITY}. "

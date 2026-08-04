@@ -170,6 +170,20 @@ const diversified = scored
   });
 const pick = diversified[0];
 
+/** Hard rule for Grok: injection vials = aluminum crimp + rubber septum only */
+const VIAL_CLOSURE_RULE =
+  "VIAL CLOSURE RULE (MANDATORY): Every vial must be a pharmaceutical injection vial with an " +
+  "aluminum crimped seal over a rubber septum stopper. Show the crimped metal collar and rubber " +
+  "center clearly when a vial is visible. NO twist-off caps, NO screw-top vials, NO child-resistant " +
+  "twist lids, NO plastic twist closures — crimped metal + rubber only.";
+
+function withVialClosure(prompt) {
+  const p = String(prompt || '').trim();
+  if (!p) return p;
+  if (/VIAL CLOSURE RULE/i.test(p)) return p;
+  return `${p} ${VIAL_CLOSURE_RULE}`;
+}
+
 let compound = {};
 try {
   compound = $('Parse_Grok').item?.json || {};
