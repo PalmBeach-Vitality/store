@@ -94,6 +94,19 @@ Optional Buffer ids:
 |---|---|
 | `buffer_ig_post_id` | `={{ $('Buffer_post_IG').item.json.data.createPost.post.id }}` |
 | `buffer_fb_post_id` | `={{ $('Buffer_post_FB').item.json.data.createPost.post.id }}` |
+| `buffer_tiktok_post_id` | `={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id \|\| $('buffer_tiktok').item.json.data.createPost.post.id }}` |
+
+If your TikTok node name is exact (check canvas), prefer the single match — e.g. only:
+
+```text
+={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id }}
+```
+
+or only:
+
+```text
+={{ $('buffer_tiktok').item.json.data.createPost.post.id }}
+```
 
 **Do not** use `$json.posts_this_week` on writeback if `$json` is a Buffer response — that is also a bad field.
 
