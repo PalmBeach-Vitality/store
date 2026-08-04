@@ -73,44 +73,43 @@ Wire: `… → Grok_imagine_story → Save_render_URL → Buffer_post_IG …`
 
 ---
 
-## `posts_this_week` — Sheets writeback (not Save)
+## Sheets writeback — `Update row in sheet`
 
-**Node:** `Update row in sheet` (end of IG/FB image workflow)  
 **After:** Buffer posts succeed  
-**Match on:** `compound_id`
+
+### Target tab (image workflow)
+
+| Setting | Value |
+|---|---|
+| Document | same PB Vitality spreadsheet |
+| Sheet / tab | **`3-image-scenes-150`** ← not `1-compounds-all-daily` |
+| Operation | Update row |
+| Column to match on | `scene_id` (or your sheet’s id column — same as Get rows) |
+| Value to match | `={{ $('Limit').item.json.scene_id \|\| $('Get row(s) in sheet').item.json.scene_id \|\| $('Prep_day_variant').item.json.scene_id }}` |
+
+`1-compounds-all-daily` is the **compound catalog / weekly lock** tab. The image scene rotation writeback is **`3-image-scenes-150`**.
+
+### Columns to write (image scene row)
 
 | Column | Value (fx ON) |
 |---|---|
-| `posts_this_week` | `={{ Number($('Prep_day_variant').item.json.posts_this_week \|\| $('Limit').item.json.posts_this_week \|\| $('Get row(s) in sheet').item.json.posts_this_week \|\| 0) + 1 }}` |
-| `last_spotlight_date` | `={{ $now.toISODate() }}` |
+| `times_used` | `={{ Number($('Limit').item.json.times_used \|\| $('Get row(s) in sheet').item.json.times_used \|\| 0) + 1 }}` |
+| `last_used_at` | `={{ $now.toISO() }}` |
 | `feed_image_url` | `={{ $('Save_render_URL').item.json.feed_image_url \|\| $('Save_render_URL').item.json.spotlight_image_url }}` |
 | `story_image_url` | `={{ $('Save_render_URL').item.json.story_image_url }}` |
 | `ig_caption_draft` | `={{ $('Save_render_URL').item.json.ig_caption_draft }}` |
 | `fb_caption_draft` | `={{ $('Save_render_URL').item.json.fb_caption_draft }}` |
-
-Optional Buffer ids:
-
-| Column | Value |
-|---|---|
 | `buffer_ig_post_id` | `={{ $('Buffer_post_IG').item.json.data.createPost.post.id }}` |
 | `buffer_fb_post_id` | `={{ $('Buffer_post_FB').item.json.data.createPost.post.id }}` |
-| `buffer_tiktok_post_id` | `={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id \|\| $('buffer_tiktok').item.json.data.createPost.post.id }}` |
+| `buffer_tiktok_post_id` | `={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id }}` |
 
-If your TikTok node name is exact (check canvas), prefer the single match — e.g. only:
-
-```text
-={{ $('Buffer_post_TikTok').item.json.data.createPost.post.id }}
-```
-
-or only:
+If TikTok node is named `buffer_tiktok`:
 
 ```text
 ={{ $('buffer_tiktok').item.json.data.createPost.post.id }}
 ```
 
-**Do not** use `$json.posts_this_week` on writeback if `$json` is a Buffer response — that is also a bad field.
-
-Sheet columns: `week_start_date`, `posts_this_week` on `1-compounds-all-daily` (see `n8n-weekly-sheets-rotation.md`).
+**Do not** put `posts_this_week` on this node unless you intentionally keep a **second** writeback to `1-compounds-all-daily` for compound-week locking (see `n8n-weekly-sheets-rotation.md`).
 
 ---
 

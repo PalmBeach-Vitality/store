@@ -2,9 +2,11 @@
 
 | File | Tab name |
 |---|---|
-| `1-compounds-all-daily.csv` | `1-compounds-all-daily` (live daily queue — pens+vials) |
+| `1-compounds-all-daily.csv` | `1-compounds-all-daily` (compound catalog / weekly lock — pens+vials) |
 | `1-compounds-pens.csv` | `1-compounds-pens` |
 | `1-compounds-vials.csv` | `1-compounds-vials` |
+| `3-image-scenes-150.csv` | `3-image-scenes-150` (**IG/FB image workflow** Get rows + `Update row in sheet`) |
+| `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
 
 ## Live daily tab columns (Creatomate writeback)
