@@ -92,6 +92,38 @@ For each Buffer / HTTP Buffer node:
 
 If a node expects binary upload: keep your existing pattern, but the source URL for download must be `save_creatomate_url.video_url`.
 
+### Fix: `Invalid ChannelId` / `PASTE_YOUR_EXISTING_IG_CHANNEL_ID`
+
+That string is a **placeholder**, not a real Buffer channel. Replace it in every Buffer body.
+
+**Get real IDs (pick one):**
+
+1. Open your **other / working** Buffer workflow → open `buffer_ig_reel` (or FB/TikTok/X) → copy the real `channelId` from the request body  
+2. Or in Buffer → open the channel → URL often contains the id  
+3. Or POST to `https://api.buffer.com` with your Bearer token:
+
+```graphql
+query {
+  channels {
+    id
+    name
+    service
+  }
+}
+```
+
+Paste each real id into the matching node:
+
+| Node | Replace placeholder with |
+|---|---|
+| `buffer_ig_reel` / stories | Instagram `channelId` |
+| `buffer_fb_reel` / stories | Facebook `channelId` |
+| `buffer_tiktok` | TikTok `channelId` |
+| `buffer_x` | X `channelId` |
+
+Format is Buffer’s own id (often looks like a long alphanumeric / UUID-style string) — never the literal text `PASTE_YOUR_…`.
+
+
 ---
 
 ## After Buffer succeeds (optional Sheets update)
