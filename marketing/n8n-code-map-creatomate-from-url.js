@@ -151,23 +151,27 @@ const urlInput = firstJson('video_url_input');
 const text = firstJson('pick_text');
 const input = $input.first()?.json || {};
 
-// Prefer explicit catbox field, then public_video_url (must be catbox / public CDN)
+// Prefer catbox / public CDN. Accept aliases: input_video_url, public_video_url, video_url.
 const public_video_url = assertCreatomateFetchable(
   String(
-    urlInput.catbox_video_url ||
+    urlInput.input_video_url ||
+      urlInput.catbox_video_url ||
       urlInput.public_video_url ||
       urlInput.video_url ||
+      input.input_video_url ||
       input.catbox_video_url ||
       input.public_video_url ||
+      input.video_url ||
       ''
   ).trim(),
-  'public_video_url'
+  'input_video_url / public_video_url'
 );
 
 if (!/^https?:\/\//i.test(public_video_url)) {
   throw new Error(
-    'Paste the CATBOX .mp4 URL into video_url_input → public_video_url ' +
-      '(https://files.catbox.moe/….mp4). Do not use vidgen.x.ai.'
+    'Paste the CATBOX .mp4 URL into video_url_input → input_video_url ' +
+      '(or public_video_url). Example: https://files.catbox.moe/….mp4. ' +
+      'Do not use vidgen.x.ai / fal temp URLs.'
   );
 }
 
@@ -248,6 +252,7 @@ return [
       ...text,
       grok_video_url: public_video_url,
       public_video_url,
+      input_video_url: public_video_url,
       catbox_video_url: public_video_url,
       end_hold_url,
       end_hold: end_hold_url || undefined,

@@ -43,7 +43,8 @@ Body (expression):
   template_id: $json.template_id,
   render_scale: 1,
   modifications: {
-    'Video-8QW': $json.public_video_url || $json.grok_video_url,
+    'Video-8QW': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
+    'Video-8QW.source': $json.input_video_url || $json.public_video_url || $json.grok_video_url,
     'Video-8QW.muted': true,
     'Video-8QW.volume': '0%',
     'Video-8QW.loop': false,

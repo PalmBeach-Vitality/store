@@ -74,7 +74,8 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 
 | Field | Each run |
 |---|---|
-| `public_video_url` | **Catbox** direct `.mp4` (e.g. `https://files.catbox.moe/….mp4`) → **`Video-8QW`**. Not vidgen. |
+| `input_video_url` | **Preferred.** Catbox direct `.mp4` (e.g. `https://files.catbox.moe/….mp4`) → **`Video-8QW`**. Alias: `public_video_url`. Not vidgen / fal temp. |
+| `public_video_url` | Same as `input_video_url` (older name — either works) |
 | `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
 | `still_url` | Optional. Public still (catbox image) → **`end_hold`** (15–30s freeze). Not imgen.x.ai. |
 | `creation_id` | Optional tracking |
@@ -108,20 +109,32 @@ Reads `$('video_url_input')` + `$('pick_text')` only.
 ### `creatomate_render` body
 
 Template: **`c5d54774-b029-4786-af04-d5af345dc7f2`**  
-Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / `video_loop_source` on this template.
+Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / `video_loop_source` / `input_video_url` as a modification key.
+
+**Critical:** the Creatomate property is the **element name** `Video-8QW`, not `input_video_url`.  
+`input_video_url` lives on `video_url_input` / map output — the render body must map it onto `Video-8QW`.
 
 ```js
 ={{
-{
-  template_id: $json.template_id,
-  render_scale: 1,
-  modifications: {
-    'Video-8QW': $json.public_video_url,
+(() => {
+  const video =
+    $json.input_video_url ||
+    $json.public_video_url ||
+    $json.catbox_video_url ||
+    $json.grok_video_url ||
+    '';
+  if (!/^https?:\/\//i.test(String(video))) {
+    throw new Error(
+      'creatomate_render: no video URL. Set video_url_input.input_video_url (catbox .mp4) and re-run map_creatomate_from_url. Got: ' +
+        JSON.stringify(video).slice(0, 120)
+    );
+  }
+  const mods = {
+    'Video-8QW': video,
+    'Video-8QW.source': video,
     'Video-8QW.muted': true,
     'Video-8QW.volume': '0%',
     'Video-8QW.loop': false,
-    // MUST be a public image URL — never the string "end_hold"
-    'end_hold': $json.end_hold_url,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,
     'Fact-2-text.text': $json.mod_fact_2,
@@ -129,10 +142,19 @@ Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / 
     'Fact-4-text.text': $json.mod_fact_4,
     'Fact-5-text.text': $json.mod_fact_5,
     'end-text-link.text': $json.end_text_link
-  }
-}
+  };
+  // MUST be a public image URL — never the string "end_hold"
+  if ($json.end_hold_url) mods['end_hold'] = $json.end_hold_url;
+  return {
+    template_id: $json.template_id || 'c5d54774-b029-4786-af04-d5af345dc7f2',
+    render_scale: 1,
+    modifications: mods
+  };
+})()
 }}
 ```
+
+**If the package still shows the template placeholder video:** open the HTTP request that was sent — `modifications["Video-8QW"]` must be your catbox `https://…mp4`. If it is `undefined` / empty, the render body was reading the wrong field (use the body above).
 
 **`end_hold` bug:** if modifications show `"end_hold": "end_hold"`, the render body used the element name instead of a URL. Fix:
 
