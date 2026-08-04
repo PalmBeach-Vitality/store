@@ -136,7 +136,7 @@ That string is a **placeholder**, not a real Buffer channel. Replace it in every
 channelId: '6a668d534b2d03035f478536'
 
 // buffer_tiktok
-channelId: '6a642435bac606503d410801'
+channelId: '6a6d64814b2d03035f7bddef'
 ```
 
 IG / FB / TikTok each need their own id. **No X / Twitter.**

@@ -49,8 +49,12 @@ Your current save node is **missing** `buffer_caption`. Add:
 |---|---|
 | `buffer_caption` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 | `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `fb_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `tiktok_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 | `product_name` | `={{ $('map_creatomate_from_url').first().json.product_name }}` |
 | `status` | `={{ $('creatomate_status').first().json.status }}` ← fx **ON** |
+
+`ig` / `fb` / `tiktok` draft fields are the **same** caption (one sales pitch for all channels).
 
 Also:
 1. Re-paste **`map_creatomate_from_url`** from repo (builds `buffer_caption`)

@@ -184,7 +184,7 @@ if (!text.text_id || !text.mod_fact_1) {
   );
 }
 
-// Prefer sheet-canonical name from pick_text so caption matches the library product
+// Sheet-canonical name from pick_text (e.g. CJC → CJC (no DAC)). Do not prefer short alias.
 const product_name = String(
   text.product_name || urlInput.product_name || urlInput.compound_name || ''
 ).trim();
@@ -193,7 +193,7 @@ if (!product_name) {
   throw new Error('Enter product_name on video_url_input (shown as Intro-Text).');
 }
 
-// On-screen Intro = product name only (not catalog blurbs)
+// On-screen Intro + captions use canonical sheet product name
 const mod_intro = product_name;
 
 // end_hold still — must be a real https image URL (catbox). Never the element name "end_hold".
@@ -234,7 +234,10 @@ const buffer_caption = buildBufferCaption(
   mod_fact_2,
   mod_fact_3
 );
+// Same caption for IG / FB / TikTok — separate draft keys for Sheets/Buffer clarity
 const ig_caption_draft = buffer_caption;
+const fb_caption_draft = buffer_caption;
+const tiktok_caption_draft = buffer_caption;
 
 return [
   {
@@ -258,6 +261,8 @@ return [
       mod_disclaimer,
       buffer_caption,
       ig_caption_draft,
+      fb_caption_draft,
+      tiktok_caption_draft,
       text_id: text.text_id,
       creation_id: String(urlInput.creation_id || '').trim(),
       template_id: 'c5d54774-b029-4786-af04-d5af345dc7f2',

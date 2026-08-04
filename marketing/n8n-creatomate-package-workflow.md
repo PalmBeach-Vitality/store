@@ -184,6 +184,10 @@ Wire: `creatomate_status` → (`normalize_creatomate` →) `save_creatomate_url`
 | `used_in_buffer` | `no` |
 | `buffer_caption` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
 | `ig_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `fb_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+| `tiktok_caption_draft` | `={{ $('map_creatomate_from_url').first().json.buffer_caption }}` |
+
+Same caption text for all three platforms (one pitch). Draft fields are aliases for logging / Buffer convenience.
 
 **Required for Buffer captions:** `buffer_caption` must be on this node (or Buffer must read the map node directly).  
 **status:** expression must be turned **ON** (`=` / fx) — your output showed the raw `{{ … }}` string, meaning fx was off.  
