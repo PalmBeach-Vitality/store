@@ -71,9 +71,10 @@ Do **not** send `public_video_url` (Grok/catbox source) to Buffer.
 
 Built in **`map_creatomate_from_url`** as `buffer_caption` / `ig_caption_draft`:
 
+- **Unique per post + product** — uses that run’s `product_name` + rotating Facts 1–3 from `pick_text`
 - **4+ sentences**, upbeat, audience-friendly sales pitch for viewers
-- Specific to sheet `product_name` (weaves Facts 1–3)
 - Site CTA + research-only disclaimer (required)
+- **Every caption ends with:** `For a 10% discount code drop Peptides in the comments!`
 - Exactly **5** product-specific hashtags
 
 Use on every Buffer node `text` field:
@@ -120,14 +121,14 @@ That string is a **placeholder**, not a real Buffer channel. Replace it in every
 |---|---|
 | `buffer_ig_reel` / `Buffer_IG_story` | `6a668d534b2d03035f478536` |
 | `buffer_fb_reel` / `Buffer_FB_story` | your Facebook id (`service: facebook`) |
-| `buffer_tiktok` | `6a642435bac606503d410801` |
+| `buffer_tiktok` | confirm via `channels` (`service: tiktok`) — `Channel not found` = wrong/disconnected id |
 
 **Palm Beach Vitality — known IDs**
 
 | Channel | `channelId` |
 |---|---|
 | Instagram | `6a668d534b2d03035f478536` |
-| TikTok | `6a642435bac606503d410801` |
+| TikTok | re-confirm (`service: tiktok`) — prior id returned `Channel not found` |
 | Facebook | entered in n8n (`service: facebook`) |
 
 ```js
@@ -314,7 +315,7 @@ JSON.stringify({
   variables: {
     input: {
       text: $('map_creatomate_from_url').first().json.buffer_caption,
-      channelId: '6a642435bac606503d410801',
+      channelId: 'YOUR_TIKTOK_CHANNEL_ID',
       schedulingType: 'automatic',
       mode: 'addToQueue',
       assets: [
@@ -330,6 +331,8 @@ JSON.stringify({
 })
 }}
 ```
+
+**`Channel not found` on TikTok:** the `channelId` is wrong or the TikTok profile was disconnected. Re-list channels (below) and paste the id where `service` is `tiktok`. Do not reuse the IG/FB id. Same Buffer API key/org as the other nodes.
 
 TikTok does **not** use `metadata.instagram`. If you paste the IG block here, Buffer returns the Instagram type error.
 
