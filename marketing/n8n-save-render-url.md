@@ -69,6 +69,36 @@ Wire: `… → Grok_imagine_story → Save_render_URL → Buffer_post_IG …`
 
 **Delete** `reel_still_url` and `still_url` from this node — they are the bad fields on image-only.
 
+**Also delete from `Save_render_URL`:** `posts_this_week`, `week_start_date`, `last_spotlight_date` — those belong on **`Update row in sheet`** after Buffer succeeds.
+
+---
+
+## `posts_this_week` — Sheets writeback (not Save)
+
+**Node:** `Update row in sheet` (end of IG/FB image workflow)  
+**After:** Buffer posts succeed  
+**Match on:** `compound_id`
+
+| Column | Value (fx ON) |
+|---|---|
+| `posts_this_week` | `={{ Number($('Prep_day_variant').item.json.posts_this_week \|\| $('Limit').item.json.posts_this_week \|\| $('Get row(s) in sheet').item.json.posts_this_week \|\| 0) + 1 }}` |
+| `last_spotlight_date` | `={{ $now.toISODate() }}` |
+| `feed_image_url` | `={{ $('Save_render_URL').item.json.feed_image_url \|\| $('Save_render_URL').item.json.spotlight_image_url }}` |
+| `story_image_url` | `={{ $('Save_render_URL').item.json.story_image_url }}` |
+| `ig_caption_draft` | `={{ $('Save_render_URL').item.json.ig_caption_draft }}` |
+| `fb_caption_draft` | `={{ $('Save_render_URL').item.json.fb_caption_draft }}` |
+
+Optional Buffer ids:
+
+| Column | Value |
+|---|---|
+| `buffer_ig_post_id` | `={{ $('Buffer_post_IG').item.json.data.createPost.post.id }}` |
+| `buffer_fb_post_id` | `={{ $('Buffer_post_FB').item.json.data.createPost.post.id }}` |
+
+**Do not** use `$json.posts_this_week` on writeback if `$json` is a Buffer response — that is also a bad field.
+
+Sheet columns: `week_start_date`, `posts_this_week` on `1-compounds-all-daily` (see `n8n-weekly-sheets-rotation.md`).
+
 ---
 
 ## Downstream Buffer (image posts)
@@ -96,9 +126,10 @@ image / still = $('Save_render_URL').item.json.still_url
 
 ## Smoke test
 
-1. Execute `Save_render_URL` — no red / “bad field” expressions  
+1. Execute `Save_render_URL` — no red / “bad field” expressions (`reel_still_url` + no `posts_this_week` here)  
 2. `spotlight_image_url` ≠ `story_image_url`  
 3. If video path: `reel_still_url` / `still_url` is https and looks photoreal (not the feed graphic)  
 4. Buffer IG feed preview uses **spotlight**, not reel still  
+5. After Buffer → writeback: `posts_this_week` increments from the sheet value (not stuck at `1` / undefined)  
 
 Reply **`save_render ok`** when green.
