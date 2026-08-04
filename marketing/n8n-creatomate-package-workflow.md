@@ -120,6 +120,7 @@ Grok clip → **`Video-8QW`**. Hold still → **`end_hold`**. No `main_video` / 
     'Video-8QW.muted': true,
     'Video-8QW.volume': '0%',
     'Video-8QW.loop': false,
+    // MUST be a public image URL — never the string "end_hold"
     'end_hold': $json.end_hold_url,
     'Intro-Text.text': $json.mod_intro,
     'Fact-1-text.text': $json.mod_fact_1,

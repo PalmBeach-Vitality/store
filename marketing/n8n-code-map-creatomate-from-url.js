@@ -92,17 +92,25 @@ if (!product_name) {
 // On-screen Intro = product name only (not catalog blurbs)
 const mod_intro = product_name;
 
-// end_hold still — public HTTPS (catbox image OK); reject xAI hosts
-const end_hold_url = assertCreatomateFetchable(
-  String(
-    urlInput.still_url ||
-      urlInput.hold_image_url ||
-      urlInput.end_hold ||
-      urlInput.catbox_still_url ||
-      input.still_url ||
-      ''
-  ).trim(),
-  'still_url / end_hold'
+// end_hold still — must be a real https image URL (catbox). Never the element name "end_hold".
+function pickStillUrl(...candidates) {
+  for (const c of candidates) {
+    const u = String(c || '').trim();
+    if (!u) continue;
+    if (/^end_hold$/i.test(u)) continue; // common mistake: element name as value
+    if (!/^https?:\/\//i.test(u)) continue;
+    return assertCreatomateFetchable(u, 'still_url / end_hold');
+  }
+  return '';
+}
+
+const end_hold_url = pickStillUrl(
+  urlInput.still_url,
+  urlInput.hold_image_url,
+  urlInput.catbox_still_url,
+  urlInput.end_hold,
+  input.still_url,
+  input.end_hold_url
 );
 
 const end_text_link = 'www.palmbeach-vitality.store';
@@ -118,6 +126,8 @@ return [
       public_video_url,
       catbox_video_url: public_video_url,
       end_hold_url,
+      // Prevent creatomate_render from reading element-name junk via $json.end_hold
+      end_hold: end_hold_url || undefined,
       end_text_link,
       product_name,
       mod_intro,
