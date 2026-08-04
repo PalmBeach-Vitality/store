@@ -31,6 +31,7 @@ function cleanFact(text) {
     /\s*[-–—|]\s*(ref|motif|card|line|cta)\s*\d+\s*$/i,
     /\s*\(\s*\d+\s*\/\s*\d+\s*\)\s*$/,
     /\s+[—–-]\s*research\s*$/i,
+    /\s+—\s*research\s*$/i,
   ];
   let prev;
   do {
