@@ -72,24 +72,19 @@ Update `pick_creation` to:
 
 Result: consecutive days won’t reuse the same 16-recipe too soon.
 
-### Phase C — Expand camera library (real uniqueness)
+### Phase C — Expand camera library (DONE)
 
-Rebuild `9-lab-item-creations-500` so **each row** gets a distinct camera recipe, not 1 of 16:
+Applied via:
+- `marketing/scripts/camera_recipes.py` (723 unique recipes available; 24 families)
+- `marketing/scripts/apply_unique_camera_recipes.py`
 
-1. Keep 16 `shot_family` buckets (or expand to ~24).  
-2. Add per-row variants inside each family, e.g.:
-   - direction flip (L→R vs R→L)
-   - start distance (wide / medium / tight)
-   - angle offset (slight low / eye / slight high)
-   - speed (creep / slow / measured)
-   - end hold length cue  
-3. New columns (optional but clear):
-   - `camera_angle`
-   - `camera_direction`
-   - `camera_move` (already exists — make **row-unique**)
-4. Regenerate `video_motion_prompt` from those fields; keep anti-orbit line.  
-5. Guarantee: **500 unique `camera_move` strings** (or ≥200 if we cluster carefully).  
-6. Re-import Sheet; paste updated pick code.
+Results in Sheet 9:
+- **500 unique `camera_move`**
+- New columns: `camera_angle`, `camera_direction`
+- Motion prompts include `CAMERA ANGLE` + `CAMERA DIRECTION` + unique `CAMERA:`
+- Adjacent ranks never share `shot_family`
+
+**n8n action:** replace-import `9-lab-item-creations-500.csv` + paste updated `n8n-code-pick-creation.js`.
 
 ### Phase D — Guardrails + verify script
 
