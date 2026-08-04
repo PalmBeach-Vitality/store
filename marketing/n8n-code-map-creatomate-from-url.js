@@ -116,12 +116,15 @@ function buildBufferCaption(productName, fact1, fact2, fact3) {
   const s2 = f1
     ? `${trimDot(f1)} — a confident pick when you want material that fits real laboratory workflows.`
     : `${p} is a standout option for research teams who care about clarity, consistency, and quality.`;
+  const lowerStart = (s) => {
+    const t = trimDot(s);
+    return t ? t.charAt(0).toLowerCase() + t.slice(1) : t;
+  };
+
   const s3 = f2
-    ? `Here’s why teams keep coming back: ${trimDot(f2).replace(/^([a-z])/, (m) => m.toLowerCase())}.`
+    ? `Here’s why teams keep coming back: ${lowerStart(f2)}.`
     : `It’s an upbeat, no-drama choice when you want research-grade supply without the guesswork.`;
-  const s4 = f3
-    ? `${trimDot(f3)}. Tap through to explore ${p} and shop the full listing at www.palmbeach-vitality.store.`
-    : `Tap through to explore ${p} and shop the full listing at www.palmbeach-vitality.store.`;
+  const s4 = `Ready to check it out? Explore ${p} and shop the full listing at www.palmbeach-vitality.store.`;
   const s5 =
     'For laboratory research use only. Not for human use or consumption.';
 
