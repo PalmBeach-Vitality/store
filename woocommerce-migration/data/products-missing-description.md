@@ -1,35 +1,48 @@
-# Peptide vials & pens — products missing a description
+# Product description audit (palmbeach-vitality.store)
 
-Audited **42** products in WooCommerce categories `peptides` (vials) and `peptide-pens`.
+**Date:** 2026-08-05  
+**Source:** WooCommerce Store API (`/wp-json/wc/store/v1/products`)
 
-Reference format page: https://palmbeach-vitality.store/product/selank-vial/
+## Result
+- **Total products:** 66
+- **Missing full descriptions:** 0
+- **Empty short descriptions (filled in archive):** 29
 
-## Warning label status
+Every product currently has a full description on the live store.
 
-Every audited peptide vial and peptide pen product page already renders the theme **Research use only** warning banner at the bottom of the product details block. Theme **2.10.1** locks that banner to the same Selank Vial size (`max-width: 34rem`, fixed padding/type).
+Short descriptions were empty on these products and were generated into `products.html` / CSV for re-import:
 
-## Missing description (11)
+- `ghk-cu-pen` (ID 151)
+- `5-amino-mq-pen` (ID 153)
+- `cjc-ipamorelin-pen` (ID 147)
+- `dsip-pen` (ID 149)
+- `glow-pen` (ID 155)
+- `klow-pen` (ID 123)
+- `kpv-pen` (ID 159)
+- `mots-c-pen` (ID 125)
+- `nad-pen-1000mg` (ID 127)
+- `nad-pen-500mg` (ID 208)
+- `pt-141-pen` (ID 129)
+- `ss-31-pen` (ID 157)
+- `selank-pen` (ID 133)
+- `semax-pen` (ID 131)
+- `sermorelin-pen` (ID 135)
+- `ta-1-2` (ID 137)
+- `tesamorelin-10mg-pen` (ID 139)
+- `tesamorelin-30mg-pen` (ID 141)
+- `tesamorelin-ipamorelin-pen` (ID 143)
+- `wolverine-pen` (ID 145)
+- `retatrutride-16mg-pen` (ID 199)
+- `retatrutride-24mg-pen` (ID 201)
+- `retatrutride-32mg-pen` (ID 203)
+- `retatrutride-40mg-pen` (ID 204)
+- `retatrutride-8mg-pen` (ID 197)
+- `tirzepatide-30mg-pen` (ID 185)
+- `tirzepatide-40mg-pen` (ID 187)
+- `tirzepatide-50mg-pen` (ID 195)
+- `tirzepatide-60mg-pen` (ID 191)
 
-These product pages have **no product description body** (only the RUO warning shows):
-
-### Peptides (vials)
-
-1. **Cargrilinitide Vial** — https://palmbeach-vitality.store/product/cargrilinitide-vial/
-2. **CJC Ipamorelin Vial** — https://palmbeach-vitality.store/product/cjc-ipamorelin-vial/
-3. **CJC Vial** — https://palmbeach-vitality.store/product/cjc-vial/
-4. **GHK-cu Vial** — https://palmbeach-vitality.store/product/ghk-cu-vial/
-5. **GLOW Vial** — https://palmbeach-vitality.store/product/glow-vial/
-6. **KLOW Vial** — https://palmbeach-vitality.store/product/klow-vial/
-7. **MOTS-C Vial** — https://palmbeach-vitality.store/product/mots-c-vial/
-8. **Semax Vial** — https://palmbeach-vitality.store/product/semax-vial/
-9. **SS-31 Vial** — https://palmbeach-vitality.store/product/ss-31-vial/
-10. **TB-500 Vial** — https://palmbeach-vitality.store/product/tb-500-vial/
-11. **Tesamorelin Vial** — https://palmbeach-vitality.store/product/tesamorelin-vial/
-
-### Peptide pens
-
-None missing. All peptide pen products (including NAD+ Pen 1000mg) have a Selank-style description.
-
-## Complete / matching format (31)
-
-All remaining peptide vial + peptide pen products include the Selank-style sections (**The Science, Simplified**, **Product Specifications**, **Key Research Focus**, etc.) plus the RUO warning.
+## Saved files
+- `/products.html` — human-readable archive of every product description
+- `woocommerce-migration/data/products-descriptions-archive.json`
+- `woocommerce-migration/data/products-short-descriptions-update.csv` — use for WooCommerce CSV update of short descriptions
