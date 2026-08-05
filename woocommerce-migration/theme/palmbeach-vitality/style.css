@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.5
+Version: 2.10.6
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -138,11 +138,19 @@ a:hover { opacity: 0.7; }
   display: block;
 }
 
-.mobile-nav .menu {
+.mobile-nav .menu,
+.mobile-nav .sub-menu {
   list-style: none;
   margin: 0 auto;
   padding: 0;
   width: min(100%, 28rem);
+}
+
+.mobile-nav .sub-menu {
+  margin: 0;
+  width: 100%;
+  padding: 0 0 0.15rem 0.85rem;
+  border-left: 2px solid #e8e8e8;
 }
 
 .mobile-nav a {
@@ -154,8 +162,32 @@ a:hover { opacity: 0.7; }
   color: #111;
 }
 
-.mobile-nav .menu > li:last-child a {
+.mobile-nav .menu-item-has-children > a {
+  font-weight: 600;
+}
+
+.mobile-nav .sub-menu a {
+  padding: 0.55rem 0.15rem;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #333;
+}
+
+.mobile-nav .menu > li:last-child > a,
+.mobile-nav .menu > li:last-child .sub-menu a:last-child {
   border-bottom: 0;
+}
+
+/* Parent rows with children: show a subtle affordance in the hamburger menu */
+.mobile-nav .menu-item-has-children > a::after {
+  content: "";
+  float: right;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-top: 0.45rem;
+  border-right: 1.5px solid #999;
+  border-bottom: 1.5px solid #999;
+  transform: rotate(45deg);
 }
 
 @media (min-width: 980px) {

@@ -69,7 +69,8 @@
           'theme_location' => 'primary',
           'container'      => false,
           'fallback_cb'    => 'pbv_fallback_menu',
-          'depth'          => 1,
+          // Allow Appearance → Menus parent/child (submenu) nesting.
+          'depth'          => 3,
       ));
       ?>
     </nav>
