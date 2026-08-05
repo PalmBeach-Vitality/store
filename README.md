@@ -1,5 +1,6 @@
-# Palm Beach Vitality Store
+# Palm Beach Vitality .COM
 
+B2b Brand (wholesale)
 
 ## Brand
 **Palm Beach Vitality** — Precision. Purity. Palm Beach Made.
