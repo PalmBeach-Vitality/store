@@ -1,7 +1,7 @@
 // n8n Code node: prep_grok_video_start
 // Type: Code | Mode: Run Once for All Items
-// After: save_still_url
-// Before: grok_video_start
+// After: save_edited_still_url (preferred) or save_still_url
+// Before: grok_video_start  (model: grok-imagine-video-1.5)
 //
 // Builds a MINIMAL, validated xAI I2V body. Most "Bad request - please check
 // your parameters" errors are:
@@ -9,6 +9,8 @@
 //   2) n8n body sent as { "": "" } (JSON params mode with empty rows)
 //   3) prompt still the long full-scene paragraph
 // Auth problems are HTTP 401 — not 400.
+//
+// Prefer edited still from save_edited_still_url when that node exists.
 
 function firstJson(name) {
   try {
@@ -40,14 +42,17 @@ function asciiPrompt(s) {
 }
 
 const input = $input.first()?.json || {};
+const editedStill = firstJson('save_edited_still_url');
 const stillNode = firstJson('save_still_url');
 const pick = firstJson('pick_creation');
 const imagine = firstJson('grok_imagine_reel_still');
 
 const stillResolved = String(
   val(input, ['still_url']) ||
+    val(editedStill, ['still_url']) ||
     val(stillNode, ['still_url']) ||
     input?.data?.[0]?.url ||
+    editedStill?.data?.[0]?.url ||
     stillNode?.data?.[0]?.url ||
     imagine?.data?.[0]?.url ||
     ''
@@ -56,7 +61,7 @@ const stillResolved = String(
 if (!/^https:\/\//i.test(stillResolved)) {
   throw new Error(
     'prep_grok_video_start: still_url must be a public https URL. ' +
-      'In save_still_url set still_url = {{ $json.data[0].url }} from grok_imagine_reel_still. ' +
+      'Prefer save_edited_still_url.still_url (after optional edit), else save_still_url. ' +
       'Got: ' +
       JSON.stringify(stillResolved).slice(0, 160)
   );
@@ -104,12 +109,18 @@ return [
     json: {
       still_url: stillResolved,
       video_motion_prompt: motion,
-      creation_id: String(val(pick, ['creation_id']) || val(stillNode, ['creation_id'], '')),
+      creation_id: String(
+        val(pick, ['creation_id']) ||
+          val(editedStill, ['creation_id']) ||
+          val(stillNode, ['creation_id'], '')
+      ),
       camera_move,
       shot_family,
       camera_angle,
       camera_direction,
       compound_name: compound,
+      still_was_edited: Boolean(val(editedStill, ['still_was_edited'], false)),
+      original_still_url: String(val(editedStill, ['original_still_url']) || val(stillNode, ['still_url'], '')),
       // Use THIS string as the Raw body of grok_video_start
       grok_video_body_json,
       // Debug mirrors (open in n8n output to verify before HTTP call)

@@ -1,11 +1,11 @@
 # Build Grok Imagine → video nodes (new, one at a time)
 
-**Goal:** unique daily still (Grok) → MP4 via **Seedance** I2V  
+**Goal:** unique daily still (Grok) → optional still edit → MP4 via **`grok-imagine-video-1.5`**  
 **Workflow:** `PBVita — Grok Daily` / Reel Studio  
 **Wire after:** `pick_creation`  
-**Auth:** xAI Header Auth for still (`GROK_API`) + **Fal** / BytePlus for Seedance video
+**Auth:** xAI Header Auth (`GROK_API`) for still, edit, and video
 
-**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (**100 wellness scene settings**). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
+**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`**. Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
 
 All new n8n field names: **lowercase**.
 
@@ -13,16 +13,16 @@ All new n8n field names: **lowercase**.
 pick_creation
   → grok_imagine_reel_still
   → save_still_url
-  → prep_seedance_video_start   (see n8n-seedance-vid-gen.md)
-  → seedance_video_start
-  → wait_seedance
-  → seedance_video_status → seedance_video_result
+  → still_edit_instructions → if_still_edit → (optional edit) → save_edited_still_url
+  → prep_grok_video_start
+  → grok_video_start            (grok-imagine-video-1.5)
+  → wait_video → grok_video_poll
   → save_video_url
   → sheets_update_creation
 ```
 
-Legacy Grok video nodes (`prep_grok_video_start` / `grok_video_start`) are optional fallback only.  
-Do **not** put Creatomate on this path until unique Seedance MP4s work.
+**Optional still edit (add/remove parts before video):** see `n8n-still-edit-before-video.md`.  
+Seedance docs remain available but are **not** required for this path.
 
 ---
 
@@ -81,39 +81,40 @@ Reply **`node 2 ok`**.
 
 ---
 
-## Node 3 — Seedance video (preferred)
+## Node 3 — optional still edit (add / remove)
 
-Replace Grok video with Seedance I2V. Full paste: **`n8n-seedance-vid-gen.md`** + `n8n-code-prep-seedance-video-start.js`.
+Insert between `save_still_url` and `prep_grok_video_start`.  
+Full paste: **`n8n-still-edit-before-video.md`** + `n8n-code-prep-still-edit.js`.
 
 | Node | Role |
 |---|---|
-| `prep_seedance_video_start` | Short motion + fal/Ark JSON bodies |
-| `seedance_video_start` | fal `bytedance/seedance-2.0/image-to-video` (→ 2.5 when listed) |
-| `wait_seedance` | ~180–300s |
-| `seedance_video_status` / `seedance_video_result` | Poll → `video.url` |
+| `still_edit_instructions` | You type what to add/remove |
+| `if_still_edit` | Skip edit when prompt is blank |
+| `prep_still_edit` / `grok_imagine_edit_still` | xAI `/v1/images/edits` |
+| `save_edited_still_url` | Final `still_url` for video |
 
-Reply **`seedance ok`** + MP4 URL when green. Then skip legacy Nodes 3b–6 below.
+Reply **`still edit ok`** when green, or skip this block if you don’t need edits yet.
 
 ---
 
-## Node 3b — `prep_grok_video_start` (legacy fallback)
+## Node 3b — `prep_grok_video_start`
 
 **Type:** Code  
-**After:** `save_still_url`  
+**After:** `save_edited_still_url` (or `save_still_url` if no edit path)  
 **Before:** `grok_video_start`  
 **Mode:** Run Once for All Items  
 
 Paste: `marketing/n8n-code-prep-grok-video-start.js`
 
-Validates `still_url` and keeps `video_motion_prompt` **short** (camera-only).  
+Validates `still_url` (prefers edited still) and keeps `video_motion_prompt` **short** (camera-only).  
 Long scene paragraphs in the video prompt cause **HTTP 400 Bad Request** from xAI — that is **not** an API-key failure (keys fail as **401**).
 
 ---
 
-## Node 4 — `grok_video_start` (legacy)
+## Node 4 — `grok_video_start` (`grok-imagine-video-1.5`)
 
 **Type:** HTTP Request  
-**After:** `prep_grok_video_start` (or `save_still_url` if prep is skipped)  
+**After:** `prep_grok_video_start`  
 **Before:** `wait_video`
 
 | Setting | Value |
