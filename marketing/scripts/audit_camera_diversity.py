@@ -20,8 +20,8 @@ def main() -> int:
     rows = list(csv.DictReader(CSV_PATH.open(newline="", encoding="utf-8")))
     errors: list[str] = []
 
-    if len(rows) != 100:
-        errors.append(f"expected 100 wellness scene rows, got {len(rows)}")
+    if len(rows) != 500:
+        errors.append(f"expected 500 rows, got {len(rows)}")
 
     motions = [(r.get("video_motion_prompt") or "").strip() for r in rows]
     cameras = [(r.get("camera_move") or "").strip() for r in rows]
