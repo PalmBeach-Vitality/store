@@ -1,143 +1,136 @@
-# Import / sheet-pull path (separate from daily)
+# Import path — same fields as daily vid gen (Sheet 9 shape)
 
-**Separate branch** — does **not** go through `pick_creation` or `grok_imagine_reel_still`.
+Import pulls **the same creative columns** as `get_reel_creations` / Sheet **`9-lab-item-creations-500`**, plus:
 
-```text
-Manual_Trigger_Import
-  → import_still_url                 (Sheets Get: 12-import-still-queue)
-  → filter_import_active → limit_import_1
-  → save_still_url                   (maps sheet still_url + fields for writeback)
-  → map_sheet_fields                 (optional normalize; or fold into save_still_url)
-  → still_edit_instructions          (joins daily path here)
-  → if_still_edit → … → prep_grok_video_start → grok_video_start → …
-  → sheets_update_import             (writeback times_used / last_used_at on Sheet 12)
-```
+| Extra column | Why |
+|---|---|
+| `still_url` | Public image already exists (skip Grok still) |
+| `import_id` | Writeback key on Sheet 12 |
 
-Minimal wire you described:
-
-```text
-import_still_url → save_still_url → map_sheet_fields → still_edit_instructions → …
-```
-
-Daily path stays:
-
-```text
-pick_creation → grok_imagine_reel_still → save_still_url → still_edit_instructions → …
-```
-
-> If both paths use the **same** node name `save_still_url`, give import its own name **`save_import_still_url`** OR use one shared Set with two inbound wires. Expressions below use `$json` from the previous node so either works.
+CSV: `marketing/sheets/12-import-still-queue.csv`  
+Tab: **`12-import-still-queue`**
 
 ---
 
-## Sheet tab
+## Wire
 
-**`12-import-still-queue`**  
-CSV: `marketing/sheets/12-import-still-queue.csv`
+```text
+Manual Trigger
+  → get_import_still_rows     (copy of get_reel_creations → Sheet 12)
+  → filter Active → Limit 1
+  → import_still_url          (Edit Fields — map same fields as daily)
+  → save_still_url
+  → still_edit_instructions → … → grok_video_start → …
+  → sheets_update_import
+```
+
+Daily stays:
+
+```text
+get_reel_creations → … → pick_creation → grok_imagine_reel_still → save_still_url → …
+```
 
 ---
 
-## `import_still_url` (sheet pull)
+## Sheets Get (copy of `get_reel_creations`)
 
 ```text
-Manual_Trigger_Import → **import_still_url** → save_still_url
+Manual Trigger → **get_import_still_rows** → import_still_url
 ```
 
 | Setting | Value |
 |---|---|
-| Type | Google Sheets → **Get Row(s)** |
-| Name | `import_still_url` |
+| Type | Google Sheets → Get Row(s) *(duplicate `get_reel_creations`)* |
+| Name | `get_import_still_rows` (or your Sheets node name) |
+| Document | same workbook |
 | Sheet | **`12-import-still-queue`** |
 | Return All | **ON** |
 
-Then Filter `status = Active` + Limit `1` before `save_still_url` if needed.
-
 ---
 
-## `save_still_url` (after import — for writeback)
+## `import_still_url` (Edit Fields — same payload as daily)
 
 ```text
-import_still_url (or limit_import_1) → **save_still_url** → map_sheet_fields
+get_import_still_rows → **import_still_url** → save_still_url
 ```
 
-**Important:** on import, `still_url` comes from the **sheet column**, not `$json.data[0].url` (that’s Grok still only).
+Include Other Input Fields: **ON** · all fx **ON**
 
-| Setting | Value |
-|---|---|
-| Type | **Edit Fields** |
-| Include Other Input Fields | **ON** |
-
-| Name | fx | Value |
-|---|---|---|
-| `still_url` | ON | `={{ $json.still_url }}` |
-| `creation_id` | ON | `={{ $json.creation_id \|\| $json.import_id }}` |
-| `import_id` | ON | `={{ $json.import_id \|\| $json.creation_id }}` |
-| `still_edit_prompt` | ON | `={{ $json.still_edit_prompt \|\| '' }}` |
-| `video_motion_prompt` | ON | `={{ $json.video_motion_prompt }}` |
-| `model_still` | ON | `={{ $json.model_still }}` |
-| `model_video` | ON | `={{ $json.model_video }}` |
-| `duration_seconds` | ON | `={{ Number($json.duration_seconds) }}` |
-| `resolution` | ON | `={{ $json.resolution }}` |
-| `aspect_ratio` | ON | `={{ $json.aspect_ratio }}` |
-| `camera_move` | ON | `={{ $json.camera_move \|\| '' }}` |
-| `times_used` | ON | `={{ Number($json.times_used \|\| 0) }}` |
-| `source` | ON | `={{ 'import_sheet' }}` |
-
-**Check:** `still_url` is public https; `import_id` / `creation_id` present for writeback match.
-
----
-
-## `map_sheet_fields`
-
-```text
-save_still_url → **map_sheet_fields** → still_edit_instructions
-```
-
-Pass-through / normalize (all fx ON). Include Other Input Fields **ON**.
+Map **every** field the daily path uses after `pick_creation` / `save_still_url`:
 
 | Name | Value |
 |---|---|
 | `still_url` | `={{ $json.still_url }}` |
+| `import_id` | `={{ $json.import_id }}` |
 | `creation_id` | `={{ $json.creation_id }}` |
-| `import_id` | `={{ $json.import_id \|\| $json.creation_id }}` |
-| `still_edit_prompt` | `={{ $json.still_edit_prompt \|\| '' }}` |
-| `video_motion_prompt` | `={{ $json.video_motion_prompt }}` |
-| `model_video` | `={{ $json.model_video }}` |
-| `model_still` | `={{ $json.model_still }}` |
+| `rank` | `={{ $json.rank }}` |
+| `lab_item_id` | `={{ $json.lab_item_id }}` |
+| `category` | `={{ $json.category }}` |
+| `lab_item` | `={{ $json.lab_item }}` |
+| `material_detail` | `={{ $json.material_detail }}` |
+| `compound_name` | `={{ $json.compound_name }}` |
+| `shot_family` | `={{ $json.shot_family }}` |
+| `camera_angle` | `={{ $json.camera_angle }}` |
+| `camera_direction` | `={{ $json.camera_direction }}` |
+| `framing` | `={{ $json.framing }}` |
+| `scene_brief` | `={{ $json.scene_brief }}` |
+| `quality_var_count` | `={{ $json.quality_var_count }}` |
+| `quality_suffix` | `={{ $json.quality_suffix }}` |
+| `aspect_ratio` | `={{ $json.aspect_ratio }}` |
 | `duration_seconds` | `={{ Number($json.duration_seconds) }}` |
 | `resolution` | `={{ $json.resolution }}` |
-| `aspect_ratio` | `={{ $json.aspect_ratio }}` |
+| `model_still` | `={{ $json.model_still }}` |
+| `model_video` | `={{ $json.model_video }}` |
+| `still_resolution` | `={{ $json.still_resolution }}` |
+| `video_prompt` | `={{ $json.video_prompt }}` |
+| `video_motion_prompt` | `={{ $json.video_motion_prompt }}` |
+| `still_edit_prompt` | `={{ $json.still_edit_prompt \|\| '' }}` |
+| `status` | `={{ $json.status }}` |
 | `times_used` | `={{ Number($json.times_used \|\| 0) }}` |
+| `last_used_at` | `={{ $json.last_used_at \|\| '' }}` |
+| `surface` | `={{ $json.surface }}` |
+| `lighting` | `={{ $json.lighting }}` |
+| `camera_move` | `={{ $json.camera_move }}` |
+| `color_grade` | `={{ $json.color_grade }}` |
+| `hero_style` | `={{ $json.hero_style }}` |
+| `source` | `={{ 'import_sheet' }}` |
+
+From here, **`save_still_url` / `still_edit_instructions` / `prep_grok_video_start`** should read `$json.<field>` the same way as the daily path (motion, model_video, duration, resolution, still_edit_prompt, cameras).
+
+Import skips `grok_imagine_reel_still` — `still_url` is already on the sheet.
 
 ---
 
-## `sheets_update_import` (writeback)
+## `save_still_url` (shared merge)
 
 ```text
-save_video_url (or end of import success path) → **sheets_update_import** → end
+import_still_url → **save_still_url** → still_edit_instructions
+grok_imagine_reel_still → **save_still_url** → still_edit_instructions
 ```
 
-| Setting | Value |
-|---|---|
-| Type | Google Sheets → **Update Row** |
-| Name | `sheets_update_import` |
-| Sheet | **`12-import-still-queue`** |
-| Column to Match On | `import_id` (or `creation_id` if that’s your key) |
-| Value to Match | `={{ $('save_still_url').item.json.import_id \|\| $('save_still_url').item.json.creation_id \|\| $('map_sheet_fields').item.json.import_id }}` |
+For import inbound, keep sheet fields (Include Other Input Fields **ON**) and set:
 
-| Column | Value (fx ON) |
-|---|---|
-| `times_used` | `={{ Number($('save_still_url').item.json.times_used \|\| 0) + 1 }}` |
-| `last_used_at` | `={{ $now.toISO() }}` |
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | ON | `={{ $json.still_url \|\| $json.data?.[0]?.url }}` |
 
-Leave other columns blank so they are not overwritten.
-
-Only run this node on the **import** branch (not daily Sheet 9 writeback). Daily still uses `sheets_update_creation` on `9-lab-item-creations-500`.
+That supports both import (`still_url`) and daily (Grok `data[0].url`).
 
 ---
 
-## Daily vs import writeback
+## Writeback
 
-| Path | Update sheet | Match key | Node |
+| Path | Node | Sheet | Match |
 |---|---|---|---|
-| Daily | `9-lab-item-creations-500` | `creation_id` | `sheets_update_creation` |
-| Import | `12-import-still-queue` | `import_id` | `sheets_update_import` |
+| Daily | `sheets_update_creation` | `9-lab-item-creations-500` | `creation_id` |
+| Import | `sheets_update_import` | `12-import-still-queue` | `import_id` |
+
+```text
+save_video_url → sheets_update_import → end
+```
+
+| Column | Value |
+|---|---|
+| Match `import_id` | `={{ $('import_still_url').item.json.import_id \|\| $('save_still_url').item.json.import_id }}` |
+| `times_used` | `={{ Number($('import_still_url').item.json.times_used \|\| 0) + 1 }}` |
+| `last_used_at` | `={{ $now.toISO() }}` |
