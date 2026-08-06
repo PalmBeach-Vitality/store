@@ -2,11 +2,10 @@
 """Rebuild Sheet 9 as 100 health/wellness scene settings (no lab sets).
 
 Source: marketing/sheets/health_wellness_scene_settings_100.csv
-Outputs:
+Output (only):
   - sheets/9-lab-item-creations-500.csv  (100 rows; tab name kept for n8n)
-  - sheets/9-lab-item-creations-250.csv  (compat copy)
-  - sheets/8-lab-items-500.csv / 250.csv (synced subject list)
-  - pbvita-500-lab-item-creations.json / pbvita-500-lab-items.json
+
+Does NOT touch 8-lab-items-*, 9-*-250, or JSON mirrors.
 
 Rank order is staggered by environment bucket so adjacent daily ranks never
 share the same setting or the same coarse bucket.
@@ -26,11 +25,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
 SRC = SHEETS / "health_wellness_scene_settings_100.csv"
 CSV9 = SHEETS / "9-lab-item-creations-500.csv"
-CSV9_250 = SHEETS / "9-lab-item-creations-250.csv"
-CSV8 = SHEETS / "8-lab-items-500.csv"
-CSV8_250 = SHEETS / "8-lab-items-250.csv"
-JSON9 = ROOT / "pbvita-500-lab-item-creations.json"
-JSON8 = ROOT / "pbvita-500-lab-items.json"
 LABELS = json.loads((ROOT / "compound-labels.json").read_text())["labels"]
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -608,40 +602,9 @@ def main() -> None:
         "hero_style",
     ]
 
-    for path in (CSV9, CSV9_250):
-        write_csv(path, rows, fieldnames)
+    write_csv(CSV9, rows, fieldnames)
 
-    # Sheet 8 subject sync (lighter columns)
-    sheet8_fields = [
-        "lab_item_id",
-        "rank",
-        "category",
-        "scene_setting",
-        "environment_bucket",
-        "lab_item",
-        "material_detail",
-        "surface",
-        "lighting",
-        "camera_move",
-        "status",
-        "times_used",
-        "last_used_at",
-        "color_grade",
-        "hero_style",
-        "compound_name",
-        "shot_family",
-        "framing",
-    ]
-    for path in (CSV8, CSV8_250):
-        write_csv(path, rows, sheet8_fields)
-
-    JSON9.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")
-    JSON8.write_text(
-        json.dumps([{k: r[k] for k in sheet8_fields if k in r} for r in rows], indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    print(f"Wrote {len(rows)} wellness scenes → {CSV9.name}")
+    print(f"Wrote {len(rows)} wellness scenes → {CSV9.name} only")
     print(f"Adjacent same-bucket pairs: {same_bucket_adj}")
     print("First 8 daily ranks:")
     for r in rows[:8]:

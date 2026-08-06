@@ -8,13 +8,13 @@
 | `5-reel-scenes.csv` | `5-reel-scenes` (630 Creatomate/Grok visual scene briefs) |
 | `6-quality-variables.csv` | `6-quality-variables` (Grok Imagine quality tokens) |
 | `7-unique-reel-creations-500.csv` | `7-unique-reel-creations-500` (legacy abstract scenes — **do not use for Imagine**) |
-| `health_wellness_scene_settings_100.csv` | Source list of **100** lifestyle scene settings (no labs) |
-| `8-lab-items-500.csv` | `8-lab-items-500` (synced subject list from Sheet 9) |
-| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — **100 wellness scene settings**, tab name kept; no Creatomate `mod_*`). Optional vial: aluminum crimp + rubber septum only |
+| `health_wellness_scene_settings_100.csv` | Source list of **100** lifestyle scene settings (input only) |
+| `8-lab-items-500.csv` | `8-lab-items-500` (legacy subject list — not auto-synced from wellness rebuild) |
+| `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — **100 wellness scene settings**, tab name kept; no Creatomate `mod_*`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
 | `10-creatomate-text-500.csv` | first 500 rows only (legacy; use 1000) |
-| `8-lab-items-250.csv` / `9-lab-item-creations-250.csv` | Compat copies of Sheet 9 (legacy filenames) |
+| `8-lab-items-250.csv` / `9-lab-item-creations-250.csv` | Legacy compat copies (not updated by wellness rebuild) |
 
 ## Image scenes (`3-image-scenes-150`)
 

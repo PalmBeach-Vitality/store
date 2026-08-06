@@ -8,13 +8,10 @@ Sheet tab name stays **`9-lab-item-creations-500`** so existing n8n nodes keep w
 
 | File | Role |
 |---|---|
-| `sheets/health_wellness_scene_settings_100.csv` | Source list of 100 scene settings |
-| `sheets/9-lab-item-creations-500.csv` | Production creations (100 rows). **No `mod_*` text** — Creatomate overlays come from Sheet 10. |
-| `sheets/8-lab-items-500.csv` | Subject list synced from creations |
-| `pbvita-500-lab-item-creations.json` | Same creations as JSON |
-| `pbvita-500-lab-items.json` | Same items as JSON |
+| `sheets/health_wellness_scene_settings_100.csv` | Source list of 100 scene settings (input only) |
+| `sheets/9-lab-item-creations-500.csv` | **Only production file updated** — 100 wellness creations. **No `mod_*` text** — Creatomate overlays come from Sheet 10. |
 
-Compat copies: `8-lab-items-250.csv`, `9-lab-item-creations-250.csv` (same 100 rows).
+Do not sync this rebuild into `8-lab-items-*`, `9-*-250`, or JSON mirrors unless asked.
 
 ## Import (Sheets)
 
