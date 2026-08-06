@@ -1,16 +1,9 @@
 // n8n Code node: prep_grok_video_start
 // Type: Code | Mode: Run Once for All Items
-// After: save_edited_still_url (preferred) or save_still_url
+// After: save_edited_still_url (preferred) | still_edit_instructions | import_still_url | save_still_url
 // Before: grok_video_start  (model: grok-imagine-video-1.5)
 //
-// Builds a MINIMAL, validated xAI I2V body. Most "Bad request - please check
-// your parameters" errors are:
-//   1) still_url empty / undefined / not https
-//   2) n8n body sent as { "": "" } (JSON params mode with empty rows)
-//   3) prompt still the long full-scene paragraph
-// Auth problems are HTTP 401 — not 400.
-//
-// Prefer edited still from save_edited_still_url when that node exists.
+// Resolves still_url from import path, edit path, or daily Grok still path.
 
 function firstJson(name) {
   try {
@@ -41,29 +34,52 @@ function asciiPrompt(s) {
     .trim();
 }
 
+function pickHttpsUrl(...candidates) {
+  for (const c of candidates) {
+    const s = String(c || '').trim();
+    if (/^https:\/\//i.test(s)) return s;
+  }
+  return '';
+}
+
 const input = $input.first()?.json || {};
 const editedStill = firstJson('save_edited_still_url');
+const editInstructions = firstJson('still_edit_instructions');
+const importStill = firstJson('import_still_url');
 const stillNode = firstJson('save_still_url');
 const pick = firstJson('pick_creation');
 const imagine = firstJson('grok_imagine_reel_still');
+const editHttp = firstJson('grok_imagine_edit_still');
 
-const stillResolved = String(
-  val(input, ['still_url']) ||
-    val(editedStill, ['still_url']) ||
-    val(stillNode, ['still_url']) ||
-    input?.data?.[0]?.url ||
-    editedStill?.data?.[0]?.url ||
-    stillNode?.data?.[0]?.url ||
-    imagine?.data?.[0]?.url ||
-    ''
-).trim();
+const stillResolved = pickHttpsUrl(
+  val(input, ['still_url', 'source_still_url', 'edited_still_url']),
+  input?.data?.[0]?.url,
+  input?.url,
+  val(editedStill, ['still_url']),
+  editedStill?.data?.[0]?.url,
+  val(editInstructions, ['still_url']),
+  val(importStill, ['still_url']),
+  val(stillNode, ['still_url']),
+  stillNode?.data?.[0]?.url,
+  editHttp?.data?.[0]?.url,
+  imagine?.data?.[0]?.url
+);
 
-if (!/^https:\/\//i.test(stillResolved)) {
+if (!stillResolved) {
   throw new Error(
-    'prep_grok_video_start: still_url must be a public https URL. ' +
-      'Prefer save_edited_still_url.still_url (after optional edit), else save_still_url. ' +
-      'Got: ' +
-      JSON.stringify(stillResolved).slice(0, 160)
+    'prep_grok_video_start: still_url must be https. ' +
+      'Wire: save_edited_still_url → prep_grok_video_start (or import_still_url / save_still_url upstream). ' +
+      'Debug sources — ' +
+      'input.still_url=' +
+      JSON.stringify(input?.still_url || '') +
+      ' | save_edited_still_url=' +
+      JSON.stringify(editedStill?.still_url || '') +
+      ' | still_edit_instructions=' +
+      JSON.stringify(editInstructions?.still_url || '') +
+      ' | import_still_url=' +
+      JSON.stringify(importStill?.still_url || '') +
+      ' | save_still_url=' +
+      JSON.stringify(stillNode?.still_url || '')
   );
 }
 
@@ -74,11 +90,10 @@ const camera_move = asciiPrompt(val(pick, ['camera_move'], 'slow push-in')).slic
 const compound = asciiPrompt(val(pick, ['compound_name'], ''));
 
 // SHORT motion prompt only — image already has the scene.
-// Official xAI I2V examples use ~1 sentence of camera direction.
 let motion = asciiPrompt(
   `Slow cinematic camera: ${camera_move}. ` +
     `Shot ${shot_family}, angle ${camera_angle}, direction ${camera_direction}. ` +
-    `Keep the exact same laboratory research scene, materials, and lighting. ` +
+    `Keep the exact same scene, materials, and lighting from the still. ` +
     `No orbit. No new objects. No duplicate props. No repeated text or graphics. ` +
     `No people, hands, faces, needles, text watermarks, or burn-in. ` +
     `No on-screen disclaimer or caption text.`
@@ -92,8 +107,6 @@ if (motion.length > 700) {
   motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
 }
 
-// Minimal body matching official xAI I2V curl (plus resolution).
-// Omit aspect_ratio so output follows the 9:16 still (avoids stretch conflicts).
 const body = {
   model: 'grok-imagine-video-1.5',
   prompt: motion,
@@ -110,8 +123,10 @@ return [
       still_url: stillResolved,
       video_motion_prompt: motion,
       creation_id: String(
-        val(pick, ['creation_id']) ||
+        val(input, ['creation_id']) ||
           val(editedStill, ['creation_id']) ||
+          val(importStill, ['creation_id']) ||
+          val(pick, ['creation_id']) ||
           val(stillNode, ['creation_id'], '')
       ),
       camera_move,
@@ -120,10 +135,12 @@ return [
       camera_direction,
       compound_name: compound,
       still_was_edited: Boolean(val(editedStill, ['still_was_edited'], false)),
-      original_still_url: String(val(editedStill, ['original_still_url']) || val(stillNode, ['still_url'], '')),
-      // Use THIS string as the Raw body of grok_video_start
+      original_still_url: String(
+        val(editedStill, ['original_still_url']) ||
+          val(importStill, ['still_url']) ||
+          val(stillNode, ['still_url'], '')
+      ),
       grok_video_body_json,
-      // Debug mirrors (open in n8n output to verify before HTTP call)
       _debug_prompt_len: motion.length,
       _debug_still_host: stillResolved.split('/')[2] || '',
       _debug_body_preview: grok_video_body_json.slice(0, 240),
