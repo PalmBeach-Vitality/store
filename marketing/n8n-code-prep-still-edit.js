@@ -3,7 +3,8 @@
 // After: if_still_edit (true)
 // Before: grok_imagine_edit_still
 //
-// Builds minimal JSON for POST https://api.x.ai/v1/images/edits
+// SHEETS-ONLY: edit prompt + model come from Sheet 9 via pick_creation / map_sheet_fields.
+// still_url is the runtime URL from the prior still node (API output).
 
 function firstJson(name) {
   try {
@@ -25,6 +26,9 @@ function val(obj, names, fallback) {
 }
 
 var input = ($input.first() && $input.first().json) || {};
+var sheet = firstJson('map_sheet_fields');
+if (!Object.keys(sheet).length) sheet = firstJson('pick_creation');
+if (!Object.keys(sheet).length) sheet = firstJson('import_still_from_sheet');
 var instructions = firstJson('still_edit_instructions');
 var importStill = firstJson('import_still_url');
 var saveStill = firstJson('save_still_url');
@@ -42,48 +46,70 @@ var sourceStill = String(
 
 var editPrompt = String(
   val(input, ['still_edit_prompt', 'edit_prompt']) ||
-    val(instructions, ['still_edit_prompt', 'edit_prompt'], '')
+    val(instructions, ['still_edit_prompt', 'edit_prompt']) ||
+    val(sheet, ['still_edit_prompt', 'edit_prompt']) ||
+    val(importStill, ['still_edit_prompt'], '')
+).trim();
+
+var modelStill = String(
+  val(input, ['model_still']) ||
+    val(instructions, ['model_still']) ||
+    val(sheet, ['model_still']) ||
+    val(importStill, ['model_still'], '')
+).trim();
+
+var aspectRatio = String(
+  val(input, ['aspect_ratio']) ||
+    val(instructions, ['aspect_ratio']) ||
+    val(sheet, ['aspect_ratio']) ||
+    val(importStill, ['aspect_ratio'], '')
 ).trim();
 
 if (!/^https:\/\//i.test(sourceStill)) {
   throw new Error(
-    'prep_still_edit: still_url must be https. Got: ' + JSON.stringify(sourceStill).slice(0, 160)
+    'prep_still_edit: still_url must be https (runtime from still node). Got: ' +
+      JSON.stringify(sourceStill).slice(0, 160)
   );
 }
 
 if (!editPrompt) {
-  throw new Error('prep_still_edit: still_edit_prompt is empty.');
+  throw new Error(
+    'prep_still_edit: still_edit_prompt missing from Sheet (pick_creation / import sheet row).'
+  );
 }
 
-var fullPrompt =
-  editPrompt +
-  ' Keep the same camera angle, framing, lighting, color grade, and overall composition. ' +
-  'Photoreal only. No people, hands, faces, needles, syringes, watermarks, burn-in text, ' +
-  'or on-screen disclaimers. Vertical 9:16.';
+if (!modelStill) {
+  throw new Error('prep_still_edit: model_still missing from Sheet.');
+}
 
-// Minimal body matching xAI docs (no extra fields that can 404)
 var body = {
-  model: 'grok-imagine-image-quality',
-  prompt: fullPrompt,
+  model: modelStill,
+  prompt: editPrompt,
   image: {
     url: sourceStill,
   },
 };
+
+if (aspectRatio) {
+  body.aspect_ratio = aspectRatio;
+}
 
 return [
   {
     json: {
       source_still_url: sourceStill,
       still_edit_prompt: editPrompt,
+      model_still: modelStill,
+      aspect_ratio: aspectRatio,
       still_edit_body: body,
       still_edit_body_json: JSON.stringify(body),
       creation_id: String(
         val(input, ['creation_id']) ||
           val(instructions, ['creation_id']) ||
+          val(sheet, ['creation_id']) ||
           val(importStill, ['creation_id']) ||
           val(saveStill, ['creation_id'], '')
       ),
-      _debug_edit_preview: fullPrompt.slice(0, 240),
     },
   },
 ];

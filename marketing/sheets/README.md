@@ -24,7 +24,8 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 
 ## Reel Studio / Creatomate
 
-- Grok still/video library: tab **`9-lab-item-creations-500`** (**100** wellness `scene_setting` rows; rebuild via `scripts/rebuild_wellness_scenes_100.py`)
-- Daily stagger: adjacent `rank` values never share the same `scene_setting` or `environment_bucket`; `pick_creation` also hard-skips yesterday’s setting
+- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
+- Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
+- Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**

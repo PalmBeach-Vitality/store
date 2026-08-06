@@ -3,14 +3,15 @@
 // After: get_reel_creations / filter Active on 9-lab-item-creations-500
 // Before: grok_imagine_reel_still
 //
-// Least-used rotation + skip same scene_setting / category / shot_family as recent runs.
+// SHEETS-ONLY: all creative fields come from the Sheet 9 row.
+// No hardcoded prompts, cameras, models, or edit text.
 
-const creations = $input.all().map((i) => i.json);
-
-if (!creations.length) {
-  throw new Error(
-    'No reel creations returned. Check get_reel_creations Document/Sheet and filter status=Active.'
-  );
+function firstJson(name) {
+  try {
+    return $(name).first()?.json || {};
+  } catch (e) {
+    return {};
+  }
 }
 
 function val(obj, names, fallback = '') {
@@ -33,7 +34,7 @@ function isActive(status) {
   return !s || s === 'active' || s === 'true' || s === '1' || s === 'yes';
 }
 
-/** Disclaimers belong in Buffer captions only — never in Grok/Seedance prompts. */
+/** Disclaimers belong in Buffer captions only — never in Grok prompts. */
 function stripVidDisclaimer(text) {
   let t = String(text || '');
   const patterns = [
@@ -54,39 +55,11 @@ function stripVidDisclaimer(text) {
   return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
 }
 
-function buildMotionPrompt(row) {
-  const fromSheet = stripVidDisclaimer(
-    String(val(row, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'], '')).trim()
-  );
-  if (fromSheet) return fromSheet;
+const creations = $input.all().map((i) => i.json);
 
-  const name = String(val(row, ['lab_item', 'labItem', 'item_name'], 'laboratory research item')).trim();
-  const camera = String(
-    val(row, ['camera_move', 'cameraMove', 'camera'], 'slow straight push-in, then hold')
-  ).trim();
-  const family = String(val(row, ['shot_family', 'shotFamily'], 'push_in')).trim();
-  const angle = String(val(row, ['camera_angle', 'cameraAngle'], 'eye-level')).trim();
-  const direction = String(
-    val(row, ['camera_direction', 'cameraDirection'], 'straight forward')
-  ).trim();
-  const framing = String(val(row, ['framing'], 'centered editorial hero')).trim();
-  const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
-  const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
-  const compound = String(val(row, ['compound_name', 'compoundName'], '')).trim();
-  const setting = String(val(row, ['scene_setting', 'sceneSetting'], '')).trim();
-  const labelRule = compound
-    ? `Keep any on-subject label unchanged and readable as '${compound}' only. `
-    : `Do not add product compound labels onto the subject. `;
-  const place = setting || name || 'wellness lifestyle setting';
-  return (
-    `Photoreal vertical 9:16 wellness lifestyle catalog film in ${place}. ` +
-    `SHOT FAMILY: ${family}. CAMERA ANGLE: ${angle}. CAMERA DIRECTION: ${direction}. ` +
-    `FRAMING: ${framing}. CAMERA: ${camera}. ` +
-    `Path must be straight or a simple tilt/pedestal only — never travel around the subject. ` +
-    `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
-    `Keep the scene sharp and unchanged from the still. ` +
-    labelRule +
-    `No people, no hands, no needles, no laboratory sets. No burn-in text or watermarks.`
+if (!creations.length) {
+  throw new Error(
+    'No reel creations returned. Check get_reel_creations Document/Sheet and filter status=Active.'
   );
 }
 
@@ -96,7 +69,12 @@ const scored = creations
     const fromSheet = String(val(c, ['creation_id', 'creationId', 'Creation_ID'], '')).trim();
     const creation_id =
       fromSheet ||
-      (rankNum > 0 ? `PBVita-Scene-${String(rankNum).padStart(3, '0')}` : '');
+      (rankNum > 0 ? `PBVita-Lab-${String(rankNum).padStart(3, '0')}` : '');
+
+    const video_prompt = stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt']));
+    const video_motion_prompt = stripVidDisclaimer(
+      val(c, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'])
+    );
 
     return {
       raw: c,
@@ -107,6 +85,7 @@ const scored = creations
         (rankNum > 0 ? rankNum + 1 : 0),
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
+      material_detail: val(c, ['material_detail', 'materialDetail']),
       scene_setting: val(c, ['scene_setting', 'sceneSetting']),
       environment_bucket: val(c, ['environment_bucket', 'environmentBucket', 'bucket']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
@@ -118,9 +97,16 @@ const scored = creations
       category: val(c, ['category', 'scene_category']),
       scene_brief: val(c, ['scene_brief', 'sceneBrief']),
       quality_suffix: val(c, ['quality_suffix', 'qualitySuffix']),
-      quality_var_count: val(c, ['quality_var_count', 'qualityVarCount'], 12),
-      video_prompt: stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt'])),
-      video_motion_prompt: buildMotionPrompt(c),
+      quality_var_count: val(c, ['quality_var_count', 'qualityVarCount'], ''),
+      aspect_ratio: val(c, ['aspect_ratio', 'aspectRatio']),
+      duration_seconds: val(c, ['duration_seconds', 'durationSeconds', 'duration']),
+      resolution: val(c, ['resolution']),
+      model_still: val(c, ['model_still', 'modelStill']),
+      model_video: val(c, ['model_video', 'modelVideo']),
+      still_resolution: val(c, ['still_resolution', 'stillResolution']),
+      video_prompt,
+      video_motion_prompt,
+      still_edit_prompt: String(val(c, ['still_edit_prompt', 'stillEditPrompt'], '')).trim(),
       surface: val(c, ['surface']),
       lighting: val(c, ['lighting']),
       camera_move: val(c, ['camera_move', 'cameraMove', 'camera']),
@@ -131,7 +117,7 @@ const scored = creations
       last_used_at: String(val(c, ['last_used_at', 'lastUsedAt', 'last_reel_at'], '')),
     };
   })
-  .filter((c) => c.creation_id && c.video_prompt)
+  .filter((c) => c.creation_id && c.video_prompt && c.video_motion_prompt)
   .filter((c) => isActive(c.status))
   .sort((a, b) => {
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
@@ -144,7 +130,8 @@ const scored = creations
 if (!scored.length) {
   const sampleKeys = Object.keys(creations[0] || {}).join(', ');
   throw new Error(
-    'No valid creations (need creation_id or rank + video_prompt). First row keys: ' + sampleKeys
+    'No valid creations (need creation_id + video_prompt + video_motion_prompt from Sheet 9). First row keys: ' +
+      sampleKeys
   );
 }
 
@@ -153,7 +140,6 @@ const previouslyUsed = scored
   .slice()
   .sort((a, b) => String(b.last_used_at).localeCompare(String(a.last_used_at)));
 
-// Diversify against the last N runs (not just the single previous row)
 const RECENT_N = 8;
 const recent = previouslyUsed.slice(0, RECENT_N);
 const last = recent[0] || null;
@@ -170,7 +156,6 @@ const recentBuckets = new Set(recent.map((c) => c.environment_bucket).filter(Boo
 function scorePick(c) {
   let penalty = 0;
   if (lastId && c.creation_id === lastId) penalty += 1000;
-  // Hard preference: never the same scene setting two days in a row
   if (last?.scene_setting && c.scene_setting === last.scene_setting) penalty += 2000;
   if (c.scene_setting && recentSettings.has(c.scene_setting)) penalty += 400;
   if (last?.environment_bucket && c.environment_bucket === last.environment_bucket) penalty += 180;
@@ -181,7 +166,6 @@ function scorePick(c) {
   if (c.camera_direction && recentDirections.has(c.camera_direction)) penalty += 50;
   if (c.framing && recentFramings.has(c.framing)) penalty += 60;
   if (c.category && recentCategories.has(c.category)) penalty += 40;
-  // Extra weight against the immediate previous family/camera
   if (last?.shot_family && c.shot_family === last.shot_family) penalty += 40;
   if (last?.camera_move && c.camera_move === last.camera_move) penalty += 40;
   return penalty;
@@ -200,25 +184,29 @@ const diversified = scored
     return Number(a.rank) - Number(b.rank);
   });
 
-// Hard rule: never the same scene_setting two days in a row when alternatives exist
 const lastSetting = last?.scene_setting || '';
 const notSameSetting = lastSetting
   ? diversified.filter((c) => c.scene_setting !== lastSetting)
   : diversified;
 const pick = (notSameSetting.length ? notSameSetting : diversified)[0];
 
-/** Hard rule for Grok: injection vials = aluminum crimp + rubber septum only */
-const VIAL_CLOSURE_RULE =
-  "VIAL CLOSURE RULE (MANDATORY): Every vial must be a pharmaceutical injection vial with an " +
-  "aluminum crimped seal over a rubber septum stopper. Show the crimped metal collar and rubber " +
-  "center clearly when a vial is visible. NO twist-off caps, NO screw-top vials, NO child-resistant " +
-  "twist lids, NO plastic twist closures — crimped metal + rubber only.";
-
-function withVialClosure(prompt) {
-  const p = String(prompt || '').trim();
-  if (!p) return p;
-  if (/VIAL CLOSURE RULE/i.test(p)) return p;
-  return `${p} ${VIAL_CLOSURE_RULE}`;
+if (!pick.model_still) {
+  throw new Error('Sheet 9 row missing model_still for ' + pick.creation_id);
+}
+if (!pick.model_video) {
+  throw new Error('Sheet 9 row missing model_video for ' + pick.creation_id);
+}
+if (!pick.duration_seconds) {
+  throw new Error('Sheet 9 row missing duration_seconds for ' + pick.creation_id);
+}
+if (!pick.resolution) {
+  throw new Error('Sheet 9 row missing resolution for ' + pick.creation_id);
+}
+if (!pick.aspect_ratio) {
+  throw new Error('Sheet 9 row missing aspect_ratio for ' + pick.creation_id);
+}
+if (!pick.still_resolution) {
+  throw new Error('Sheet 9 row missing still_resolution for ' + pick.creation_id);
 }
 
 let compound = {};
@@ -254,6 +242,7 @@ return [
       row_number: pick.row_number,
       lab_item_id: pick.lab_item_id,
       lab_item: pick.lab_item,
+      material_detail: pick.material_detail,
       scene_setting: pick.scene_setting,
       environment_bucket: pick.environment_bucket,
       compound_name: pick.compound_name || '',
@@ -266,8 +255,15 @@ return [
       scene_brief: pick.scene_brief,
       quality_suffix: pick.quality_suffix,
       quality_var_count: pick.quality_var_count,
-      video_prompt: withVialClosure(stripVidDisclaimer(pick.video_prompt)),
-      video_motion_prompt: stripVidDisclaimer(pick.video_motion_prompt),
+      aspect_ratio: pick.aspect_ratio,
+      duration_seconds: Number(pick.duration_seconds),
+      resolution: pick.resolution,
+      model_still: pick.model_still,
+      model_video: pick.model_video,
+      still_resolution: pick.still_resolution,
+      video_prompt: pick.video_prompt,
+      video_motion_prompt: pick.video_motion_prompt,
+      still_edit_prompt: pick.still_edit_prompt,
       surface: pick.surface,
       lighting: pick.lighting,
       camera_move: pick.camera_move,
@@ -276,8 +272,6 @@ return [
       creation_status: pick.status,
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
-
-      // Creatomate overlay copy lives on Sheet 10 (pick_text) — not on Sheet 9
 
       template_id,
     },

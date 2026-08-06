@@ -1,7 +1,10 @@
 // n8n Code node: prep_grok_video_start
 // Mode: Run Once for All Items
-// After: save_edited_still_url (or still_edit_instructions / import_still_url / save_still_url)
+// After: save_edited_still_url
 // Before: grok_video_start
+//
+// SHEETS-ONLY: model / motion / duration / resolution from Sheet via pick_creation / map_sheet_fields.
+// still_url is runtime from save_edited_still_url.
 
 function firstJson(name) {
   try {
@@ -22,18 +25,6 @@ function val(obj, names, fallback) {
   return fallback;
 }
 
-function asciiPrompt(s) {
-  return String(s || '')
-    .replace(/[\u2018\u2019]/g, "'")
-    .replace(/[\u201C\u201D]/g, '"')
-    .replace(/[\u2013\u2014\u2212]/g, '-')
-    .replace(/\u2026/g, '...')
-    .replace(/\u00d7/g, 'x')
-    .replace(/[^\x09\x0A\x0D\x20-\x7E]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
 function pickHttpsUrl(list) {
   for (var i = 0; i < list.length; i++) {
     var s = String(list[i] || '').trim();
@@ -43,11 +34,13 @@ function pickHttpsUrl(list) {
 }
 
 var input = ($input.first() && $input.first().json) || {};
+var sheet = firstJson('map_sheet_fields');
+if (!Object.keys(sheet).length) sheet = firstJson('pick_creation');
+if (!Object.keys(sheet).length) sheet = firstJson('import_still_from_sheet');
 var editedStill = firstJson('save_edited_still_url');
 var editInstructions = firstJson('still_edit_instructions');
 var importStill = firstJson('import_still_url');
 var stillNode = firstJson('save_still_url');
-var pick = firstJson('pick_creation');
 var imagine = firstJson('grok_imagine_reel_still');
 var editHttp = firstJson('grok_imagine_edit_still');
 
@@ -65,44 +58,53 @@ var stillResolved = pickHttpsUrl([
   imagine.data && imagine.data[0] && imagine.data[0].url,
 ]);
 
-if (!stillResolved) {
-  throw new Error(
-    'prep_grok_video_start: still_url must be https. ' +
-      'Check save_edited_still_url / import_still_url / save_still_url. ' +
-      'input=' +
-      JSON.stringify(input.still_url || '') +
-      ' edited=' +
-      JSON.stringify(editedStill.still_url || '') +
-      ' import=' +
-      JSON.stringify(importStill.still_url || '') +
-      ' save=' +
-      JSON.stringify(stillNode.still_url || '')
-  );
-}
+var motion = String(
+  val(input, ['video_motion_prompt']) ||
+    val(editedStill, ['video_motion_prompt']) ||
+    val(sheet, ['video_motion_prompt']) ||
+    val(importStill, ['video_motion_prompt']) ||
+    val(stillNode, ['video_motion_prompt'], '')
+).trim();
 
-var shot_family = asciiPrompt(val(pick, ['shot_family'], 'push_in'));
-var camera_angle = asciiPrompt(val(pick, ['camera_angle'], 'eye-level'));
-var camera_direction = asciiPrompt(val(pick, ['camera_direction'], 'forward'));
-var camera_move = asciiPrompt(val(pick, ['camera_move'], 'slow push-in')).slice(0, 180);
-var compound = asciiPrompt(val(pick, ['compound_name'], ''));
+var modelVideo = String(
+  val(input, ['model_video']) ||
+    val(editedStill, ['model_video']) ||
+    val(sheet, ['model_video']) ||
+    val(importStill, ['model_video'], '')
+).trim();
 
-var motion = asciiPrompt(
-  'Slow cinematic camera: ' +
-    camera_move +
-    '. Shot ' +
-    shot_family +
-    ', angle ' +
-    camera_angle +
-    ', direction ' +
-    camera_direction +
-    '. Keep the exact same scene, materials, and lighting from the still. ' +
-    'No orbit. No new objects. No duplicate props. No repeated text or graphics. ' +
-    'No people, hands, faces, needles, text watermarks, or burn-in. ' +
-    'No on-screen disclaimer or caption text.'
+var duration = Number(
+  val(input, ['duration_seconds', 'duration']) ||
+    val(editedStill, ['duration_seconds']) ||
+    val(sheet, ['duration_seconds']) ||
+    val(importStill, ['duration_seconds'], 0)
 );
 
-if (compound) {
-  motion += " Keep label '" + compound + "' unchanged if visible, printed once only.";
+var resolution = String(
+  val(input, ['resolution']) ||
+    val(editedStill, ['resolution']) ||
+    val(sheet, ['resolution']) ||
+    val(importStill, ['resolution'], '')
+).trim();
+
+if (!stillResolved) {
+  throw new Error(
+    'prep_grok_video_start: still_url must be https from save_edited_still_url / still path.'
+  );
+}
+if (!motion) {
+  throw new Error(
+    'prep_grok_video_start: video_motion_prompt missing from Sheet (pick_creation / import sheet).'
+  );
+}
+if (!modelVideo) {
+  throw new Error('prep_grok_video_start: model_video missing from Sheet.');
+}
+if (!duration) {
+  throw new Error('prep_grok_video_start: duration_seconds missing from Sheet.');
+}
+if (!resolution) {
+  throw new Error('prep_grok_video_start: resolution missing from Sheet.');
 }
 
 if (motion.length > 700) {
@@ -110,11 +112,11 @@ if (motion.length > 700) {
 }
 
 var body = {
-  model: 'grok-imagine-video-1.5',
+  model: modelVideo,
   prompt: motion,
   image: { url: stillResolved },
-  duration: 15,
-  resolution: '1080p',
+  duration: duration,
+  resolution: resolution,
 };
 
 var grok_video_body_json = JSON.stringify(body);
@@ -124,28 +126,21 @@ return [
     json: {
       still_url: stillResolved,
       video_motion_prompt: motion,
+      model_video: modelVideo,
+      duration_seconds: duration,
+      resolution: resolution,
       creation_id: String(
         val(input, ['creation_id']) ||
           val(editedStill, ['creation_id']) ||
+          val(sheet, ['creation_id']) ||
           val(importStill, ['creation_id']) ||
-          val(pick, ['creation_id']) ||
           val(stillNode, ['creation_id'], '')
       ),
-      camera_move: camera_move,
-      shot_family: shot_family,
-      camera_angle: camera_angle,
-      camera_direction: camera_direction,
-      compound_name: compound,
-      still_was_edited: Boolean(val(editedStill, ['still_was_edited'], false)),
-      original_still_url: String(
-        val(editedStill, ['original_still_url']) ||
-          val(importStill, ['still_url']) ||
-          val(stillNode, ['still_url'], '')
-      ),
+      camera_move: String(val(sheet, ['camera_move']) || val(importStill, ['camera_move'], '')),
+      shot_family: String(val(sheet, ['shot_family']) || val(importStill, ['shot_family'], '')),
       grok_video_body_json: grok_video_body_json,
       _debug_prompt_len: motion.length,
       _debug_still_host: stillResolved.split('/')[2] || '',
-      _debug_body_preview: grok_video_body_json.slice(0, 240),
     },
   },
 ];
