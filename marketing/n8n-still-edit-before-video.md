@@ -79,11 +79,31 @@ Paste: `marketing/n8n-code-prep-still-edit.js`
 
 | Setting | Value |
 |---|---|
-| Method | `POST` |
-| URL | `https://api.x.ai/v1/images/edits` |
+| Method | **`POST`** |
+| URL | **`https://api.x.ai/v1/images/edits`** (must be plural `images` + `/edits`) |
 | Authentication | Header Auth → same xAI credential as still gen |
-| Send Body | ON · **Raw** · `application/json` |
-| Body (fx ON) | `={{ $('prep_still_edit').first().json.still_edit_body_json }}` |
+| Send Headers | ON → `Content-Type` = `application/json` |
+| Send Body | **ON** |
+| Body Content Type | **JSON** |
+| Specify Body | **Using JSON** |
+| JSON (fx **ON**) | `={{ $('prep_still_edit').first().json.still_edit_body }}` |
+
+Do **not** use GET. Do **not** use `/v1/images/generations` for edits.
+
+If you still get 404, smoke-test with this fixed JSON body (fx OFF) using xAI’s sample image:
+
+```json
+{
+  "model": "grok-imagine-image-quality",
+  "prompt": "Render this as a pencil sketch with detailed shading",
+  "image": {
+    "url": "https://docs.x.ai/assets/api-examples/images/style-realistic.png"
+  }
+}
+```
+
+- Sample works → your imported image URL is private/expired/not reachable by xAI  
+- Sample also 404 → URL/method/auth on the node is still wrong  
 
 **Check:** `$json.data[0].url` is a **new** image. Open it — your add/remove should show.
 
