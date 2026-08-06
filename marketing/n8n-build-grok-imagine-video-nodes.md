@@ -5,7 +5,7 @@
 **Wire after:** `pick_creation`  
 **Auth:** xAI Header Auth for still (`GROK_API`) + **Fal** / BytePlus for Seedance video
 
-**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (500 real lab items only). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
+**Subject library:** `get_reel_creations` must read tab **`9-lab-item-creations-500`** (**100 wellness scene settings**). Do not use abstract scene tab `7` for Imagine. See `n8n-lab-items-500.md`.
 
 All new n8n field names: **lowercase**.
 
@@ -292,7 +292,7 @@ return [{
 Body (fx ON — one line):
 
 ```text
-{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality laboratory research catalog scene with slow cinematic camera motion, same product, photoreal, keep subject sharp and unchanged, no fade out, no dissolve, no people, no hands, no needles, no on-screen disclaimer or caption text.',video:{url:$json.video_url},duration:10}) }}
+{{ JSON.stringify({model:'grok-imagine-video',prompt:'Continue the same Palm Beach Vitality wellness lifestyle catalog scene with slow cinematic camera motion, same setting and product, photoreal, keep subject sharp and unchanged, no fade out, no dissolve, no people, no hands, no needles, no laboratory set, no on-screen disclaimer or caption text.',video:{url:$json.video_url},duration:10}) }}
 ```
 
 **Check:** request preview includes `"url":"https://vidgen..."` and response has `request_id`.

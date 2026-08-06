@@ -3,7 +3,7 @@
 // After: get_reel_creations / filter Active on 9-lab-item-creations-500
 // Before: grok_imagine_reel_still
 //
-// Least-used rotation + skip same category AND same shot_family as last used.
+// Least-used rotation + skip same scene_setting / category / shot_family as recent runs.
 
 const creations = $input.all().map((i) => i.json);
 
@@ -73,18 +73,20 @@ function buildMotionPrompt(row) {
   const lighting = String(val(row, ['lighting'], 'clinical catalog lighting')).trim();
   const surface = String(val(row, ['surface'], 'clean laboratory surface')).trim();
   const compound = String(val(row, ['compound_name', 'compoundName'], '')).trim();
+  const setting = String(val(row, ['scene_setting', 'sceneSetting'], '')).trim();
   const labelRule = compound
     ? `Keep any on-subject label unchanged and readable as '${compound}' only. `
     : `Do not add product compound labels onto the subject. `;
+  const place = setting || name || 'wellness lifestyle setting';
   return (
-    `Photoreal vertical 9:16 laboratory research catalog film of ${name}. ` +
+    `Photoreal vertical 9:16 wellness lifestyle catalog film in ${place}. ` +
     `SHOT FAMILY: ${family}. CAMERA ANGLE: ${angle}. CAMERA DIRECTION: ${direction}. ` +
     `FRAMING: ${framing}. CAMERA: ${camera}. ` +
     `Path must be straight or a simple tilt/pedestal only — never travel around the subject. ` +
     `Lighting continuity: ${lighting}. Surface continuity: ${surface}. ` +
-    `Keep the subject sharp and unchanged from the still. ` +
+    `Keep the scene sharp and unchanged from the still. ` +
     labelRule +
-    `No people, no hands, no needles, no lifestyle. No burn-in text or watermarks.`
+    `No people, no hands, no needles, no laboratory sets. No burn-in text or watermarks.`
   );
 }
 
@@ -94,7 +96,7 @@ const scored = creations
     const fromSheet = String(val(c, ['creation_id', 'creationId', 'Creation_ID'], '')).trim();
     const creation_id =
       fromSheet ||
-      (rankNum > 0 ? `PBVita-Lab-${String(rankNum).padStart(3, '0')}` : '');
+      (rankNum > 0 ? `PBVita-Scene-${String(rankNum).padStart(3, '0')}` : '');
 
     return {
       raw: c,
@@ -105,6 +107,8 @@ const scored = creations
         (rankNum > 0 ? rankNum + 1 : 0),
       lab_item_id: val(c, ['lab_item_id', 'labItemId']),
       lab_item: val(c, ['lab_item', 'labItem', 'item_name']),
+      scene_setting: val(c, ['scene_setting', 'sceneSetting']),
+      environment_bucket: val(c, ['environment_bucket', 'environmentBucket', 'bucket']),
       compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),
       shot_family: val(c, ['shot_family', 'shotFamily']),
       camera_angle: val(c, ['camera_angle', 'cameraAngle']),
@@ -160,10 +164,17 @@ const recentAngles = new Set(recent.map((c) => c.camera_angle).filter(Boolean));
 const recentDirections = new Set(recent.map((c) => c.camera_direction).filter(Boolean));
 const recentFramings = new Set(recent.map((c) => c.framing).filter(Boolean));
 const recentCategories = new Set(recent.map((c) => c.category).filter(Boolean));
+const recentSettings = new Set(recent.map((c) => c.scene_setting).filter(Boolean));
+const recentBuckets = new Set(recent.map((c) => c.environment_bucket).filter(Boolean));
 
 function scorePick(c) {
   let penalty = 0;
   if (lastId && c.creation_id === lastId) penalty += 1000;
+  // Hard preference: never the same scene setting two days in a row
+  if (last?.scene_setting && c.scene_setting === last.scene_setting) penalty += 2000;
+  if (c.scene_setting && recentSettings.has(c.scene_setting)) penalty += 400;
+  if (last?.environment_bucket && c.environment_bucket === last.environment_bucket) penalty += 180;
+  if (c.environment_bucket && recentBuckets.has(c.environment_bucket)) penalty += 80;
   if (c.shot_family && recentFamilies.has(c.shot_family)) penalty += 120;
   if (c.camera_move && recentCameras.has(c.camera_move)) penalty += 140;
   if (c.camera_angle && recentAngles.has(c.camera_angle)) penalty += 50;
@@ -188,7 +199,13 @@ const diversified = scored
     }
     return Number(a.rank) - Number(b.rank);
   });
-const pick = diversified[0];
+
+// Hard rule: never the same scene_setting two days in a row when alternatives exist
+const lastSetting = last?.scene_setting || '';
+const notSameSetting = lastSetting
+  ? diversified.filter((c) => c.scene_setting !== lastSetting)
+  : diversified;
+const pick = (notSameSetting.length ? notSameSetting : diversified)[0];
 
 /** Hard rule for Grok: injection vials = aluminum crimp + rubber septum only */
 const VIAL_CLOSURE_RULE =
@@ -237,6 +254,8 @@ return [
       row_number: pick.row_number,
       lab_item_id: pick.lab_item_id,
       lab_item: pick.lab_item,
+      scene_setting: pick.scene_setting,
+      environment_bucket: pick.environment_bucket,
       compound_name: pick.compound_name || '',
       shot_family: pick.shot_family,
       camera_angle: pick.camera_angle,
