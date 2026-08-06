@@ -82,11 +82,11 @@ Paste: `marketing/n8n-code-prep-still-edit.js`
 | Method | **`POST`** |
 | URL | **`https://api.x.ai/v1/images/edits`** (must be plural `images` + `/edits`) |
 | Authentication | Header Auth → same xAI credential as still gen |
-| Send Headers | ON → `Content-Type` = `application/json` |
 | Send Body | **ON** |
 | Body Content Type | **JSON** |
-| Specify Body | **Using JSON** |
-| JSON (fx **ON**) | `={{ $('prep_still_edit').first().json.still_edit_body }}` |
+| JSON (fx **ON**) | `={{ $json.still_edit_body_json }}` |
+
+**Confirmed working:** Body = JSON, expression `={{ $json.still_edit_body_json }}` from the previous `prep_still_edit` item.
 
 Do **not** use GET. Do **not** use `/v1/images/generations` for edits.
 
