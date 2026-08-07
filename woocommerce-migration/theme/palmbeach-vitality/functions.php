@@ -9,9 +9,19 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.13');
+define('PBV_THEME_VERSION', '2.10.14');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.14');
+
+/**
+ * Default top announcement bar copy.
+ *
+ * @return string
+ */
+function pbv_default_announcement() {
+    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250';
+}
 
 require_once get_template_directory() . '/inc/product-research.php';
 
@@ -449,7 +459,7 @@ function pbv_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('pbv_announcement', array(
-        'default'           => 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.',
+        'default'           => pbv_default_announcement(),
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('pbv_announcement', array(
@@ -1407,6 +1417,18 @@ function pbv_fix_primary_menu_once() {
 }
 add_action('init', 'pbv_fix_primary_menu_once', 40);
 add_action('woocommerce_init', 'pbv_fix_primary_menu_once');
+
+/**
+ * One-time: refresh announcement bar with free-shipping notice after "documentation".
+ */
+function pbv_fix_announcement_once() {
+    if (get_option('pbv_announce_fix_version') === PBV_ANNOUNCE_FIX_VERSION) {
+        return;
+    }
+    set_theme_mod('pbv_announcement', pbv_default_announcement());
+    update_option('pbv_announce_fix_version', PBV_ANNOUNCE_FIX_VERSION);
+}
+add_action('after_setup_theme', 'pbv_fix_announcement_once', 20);
 
 /**
  * Build / refresh the Primary menu.

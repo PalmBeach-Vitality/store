@@ -13,7 +13,7 @@
   <?php
   $announce = get_theme_mod(
       'pbv_announcement',
-      'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.'
+      function_exists('pbv_default_announcement') ? pbv_default_announcement() : ''
   );
   if ($announce) :
       ?>
