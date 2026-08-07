@@ -54,18 +54,24 @@ if ($hero_mobile) {
 .pbv-hero-photo__wholesale{margin:0;font-size:clamp(.736rem,2.645vw,.851rem);line-height:1.4;color:#fff;}
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 @media (min-width:750px){
+  :root{--pbv-logo-max-width:64rem;--pbv-logo-aspect:2.35;}
   .pbv-hero{display:flex;justify-content:center;align-items:center;padding:1.25rem 1rem .75rem;}
   .pbv-hero-photo{
-    width:min(28rem,36vw);max-width:28rem;min-height:0;
-    aspect-ratio:9/16;height:auto;margin:0 auto;border-radius:1.5rem;overflow:hidden;
+    --pbv-logo-w:min(100vw - 2rem,var(--pbv-logo-max-width));
+    --pbv-logo-h:calc(var(--pbv-logo-w) / var(--pbv-logo-aspect));
+    --pbv-hero-h:calc(var(--pbv-logo-h) * 2);
+    --pbv-hero-w:calc(var(--pbv-hero-h) * 9 / 16);
+    width:min(var(--pbv-hero-w),calc(100vw - 2.5rem));
+    max-width:min(var(--pbv-hero-w),calc(100vw - 2.5rem));
+    min-height:0;height:auto;aspect-ratio:9/16;margin:0 auto;border-radius:1.5rem;overflow:hidden;
     box-shadow:0 18px 40px rgba(0,0,0,.18);
     background:
-      var(--pbv-hero-image, none) center center / cover no-repeat,
+      var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center center / cover no-repeat,
       linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
   }
   .pbv-hero-photo__content{
     position:absolute;inset:0;min-height:0;height:100%;
-    padding:1.75rem 1.35rem 1.85rem;overflow:hidden;justify-content:center;
+    padding:1.75rem 1.35rem 1.85rem;overflow:auto;justify-content:center;
   }
   .pbv-hero-photo__title{font-size:2.1275rem;}
   .pbv-hero-photo__subtitle{font-size:1.265rem;margin-bottom:1rem;}
