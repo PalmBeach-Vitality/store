@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.14');
+define('PBV_THEME_VERSION', '2.10.15');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
-define('PBV_ANNOUNCE_FIX_VERSION', '2.10.14');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.15');
 
 /**
  * Default top announcement bar copy.
@@ -20,7 +20,7 @@ define('PBV_ANNOUNCE_FIX_VERSION', '2.10.14');
  * @return string
  */
 function pbv_default_announcement() {
-    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250';
+    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250!';
 }
 
 require_once get_template_directory() . '/inc/product-research.php';
@@ -1275,7 +1275,7 @@ function pbv_policy_shipping_html() {
 <p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and fully insured for transit.</p>
 
 <h3>Cold Pack Shipping</h3>
-<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout.</p>
+<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout. <strong>Free shipping on research orders over $250!</strong></p>
 
 <h3>Shipping &amp; Delivery</h3>
 <p>Most orders ship within 1–2 business days via next-day air cold pack service. You will receive a tracking number via email once your order has shipped.</p>
@@ -1665,14 +1665,65 @@ function pbv_save_checkout_policy_acceptance($order) {
 add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
 
 /**
- * Checkout: professional Next-Day Air Cold Pack shipping label.
+ * Cart subtotal threshold for free Next-Day Air Cold Pack shipping.
+ *
+ * @return float
  */
-function pbv_cold_pack_shipping_label() {
+function pbv_free_shipping_threshold() {
+    return 250.0;
+}
+
+/**
+ * Cart / package subtotal used for the free-shipping threshold.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return float
+ */
+function pbv_cart_subtotal_for_shipping($package = null) {
+    if (is_array($package) && isset($package['contents_cost'])) {
+        return (float) $package['contents_cost'];
+    }
+    if (function_exists('WC') && WC()->cart) {
+        return (float) WC()->cart->get_subtotal();
+    }
+    return 0.0;
+}
+
+/**
+ * Whether the cart qualifies for free cold-pack shipping.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return bool
+ */
+function pbv_qualifies_for_free_shipping($package = null) {
+    return pbv_cart_subtotal_for_shipping($package) >= pbv_free_shipping_threshold();
+}
+
+/**
+ * Cold-pack shipping cost: $35, or $0 when subtotal is $250+.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return float
+ */
+function pbv_cold_pack_shipping_cost($package = null) {
+    return pbv_qualifies_for_free_shipping($package) ? 0.0 : 35.0;
+}
+
+/**
+ * Checkout: professional Next-Day Air Cold Pack shipping label.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return string
+ */
+function pbv_cold_pack_shipping_label($package = null) {
+    if (pbv_qualifies_for_free_shipping($package)) {
+        return __('Next-Day Air Cold Pack Shipping — FREE', 'palmbeach-vitality');
+    }
     return __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality');
 }
 
 /**
- * Replace available shipping rates with a $35 flat cold-pack rate.
+ * Replace available shipping rates with cold-pack rate ($35, or free over $250!).
  *
  * @param array $rates   Package rates.
  * @param array $package Package data.
@@ -1687,8 +1738,8 @@ function pbv_force_cold_pack_shipping_rates($rates, $package) {
     return array(
         $id => new WC_Shipping_Rate(
             $id,
-            pbv_cold_pack_shipping_label(),
-            35.00,
+            pbv_cold_pack_shipping_label($package),
+            pbv_cold_pack_shipping_cost($package),
             array(),
             'flat_rate'
         ),
@@ -1697,7 +1748,7 @@ function pbv_force_cold_pack_shipping_rates($rates, $package) {
 add_filter('woocommerce_package_rates', 'pbv_force_cold_pack_shipping_rates', 100, 2);
 
 /**
- * Fallback: if shipping methods are disabled / empty, still charge the $35 cold-pack fee.
+ * Fallback: if shipping methods are disabled / empty, still apply cold-pack fee (or $0 when free).
  */
 function pbv_cold_pack_shipping_fee_fallback() {
     if (is_admin() && !defined('DOING_AJAX')) {
@@ -1715,16 +1766,28 @@ function pbv_cold_pack_shipping_fee_fallback() {
         }
     }
 
+    $label = pbv_cold_pack_shipping_label();
+    $cost  = pbv_cold_pack_shipping_cost();
+
     foreach (WC()->cart->get_fees() as $fee) {
         if (isset($fee->id) && $fee->id === 'pbv-cold-pack-shipping') {
             return;
         }
-        if (isset($fee->name) && $fee->name === pbv_cold_pack_shipping_label()) {
+        if (isset($fee->name) && (
+            $fee->name === $label
+            || $fee->name === __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality')
+            || $fee->name === __('Next-Day Air Cold Pack Shipping — FREE', 'palmbeach-vitality')
+        )) {
             return;
         }
     }
 
-    WC()->cart->add_fee(pbv_cold_pack_shipping_label(), 35.00, false);
+    // No fee line needed when shipping is already free.
+    if ($cost <= 0) {
+        return;
+    }
+
+    WC()->cart->add_fee($label, $cost, false);
 }
 add_action('woocommerce_cart_calculate_fees', 'pbv_cold_pack_shipping_fee_fallback', 20);
 
@@ -1752,7 +1815,7 @@ function pbv_cart_needs_shipping($needs_shipping) {
 add_filter('woocommerce_cart_needs_shipping', 'pbv_cart_needs_shipping');
 
 /**
- * Checkout note explaining cold-pack shipping.
+ * Checkout note explaining cold-pack shipping + free-shipping threshold.
  */
 function pbv_checkout_shipping_note() {
     static $printed = false;
@@ -1764,10 +1827,17 @@ function pbv_checkout_shipping_note() {
     }
     $printed = true;
     echo '<p class="pbv-checkout-shipping-note">';
-    echo esc_html__(
-        'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00.',
-        'palmbeach-vitality'
-    );
+    if (pbv_qualifies_for_free_shipping()) {
+        echo esc_html__(
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice. Your research order qualifies for FREE shipping (orders over $250!).',
+            'palmbeach-vitality'
+        );
+    } else {
+        echo esc_html__(
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00. Free shipping on research orders over $250!',
+            'palmbeach-vitality'
+        );
+    }
     echo '</p>';
 }
 add_action('woocommerce_checkout_before_order_review', 'pbv_checkout_shipping_note', 5);
