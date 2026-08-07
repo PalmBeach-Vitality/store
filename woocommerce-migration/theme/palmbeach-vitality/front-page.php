@@ -9,36 +9,35 @@ get_header();
 
 $hero        = pbv_hero_image_url();
 $hero_mobile = pbv_hero_mobile_image_url();
-$hero_style  = '';
-if ($hero) {
-    $hero_style .= '--pbv-hero-image:url(' . esc_url($hero) . ');';
-}
-if ($hero_mobile) {
-    $hero_style .= '--pbv-hero-image-mobile:url(' . esc_url($hero_mobile) . ');';
-}
 ?>
 <style id="pbv-hero-critical">
-/* Critical hero — mobile 9:16 readable; desktop type +10% */
+/* Critical hero — mobile: 9:16 min frame, content never clipped; desktop wide banner */
 .pbv-hero{display:block;width:100%;padding:.75rem .85rem .5rem;margin:0;box-sizing:border-box;}
 .pbv-hero-photo{
   position:relative;display:block;width:100%;
-  aspect-ratio:9/16;height:auto;min-height:0;margin:0;
-  border-radius:1.25rem;overflow:hidden;isolation:isolate;
+  /* Grow with copy; never shorter than true 9:16 of the photo width */
+  aspect-ratio:auto;height:auto;
+  min-height:calc((100vw - 1.7rem) * 16 / 9);
+  margin:0;border-radius:1.25rem;overflow:hidden;isolation:isolate;
   box-shadow:0 12px 28px rgba(0,0,0,.16);color:#fff;
-  background:
-    var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center top / cover no-repeat,
-    linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
+  background:linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
+}
+.pbv-hero-photo__img{
+  position:absolute;inset:0;z-index:0;width:100%;height:100%;
+  max-width:none;object-fit:cover;object-position:center top;
+  display:block;border:0;
 }
 .pbv-hero-photo__overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
   background:linear-gradient(180deg,rgba(3,8,18,.5) 0%,rgba(3,8,18,.7) 42%,rgba(3,8,18,.9) 100%);
 }
+/* Content in normal flow — drives height so nothing is cut off */
 .pbv-hero-photo__content{
-  position:absolute;inset:0;z-index:2;box-sizing:border-box;width:100%;height:100%;
-  min-height:0;margin:0;
-  display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
-  padding:clamp(1rem,4vw,1.35rem) clamp(.85rem,3.5vw,1.15rem) clamp(1.1rem,4vw,1.5rem);
-  text-align:center;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;color:#fff;
+  position:relative;z-index:2;box-sizing:border-box;width:100%;height:auto;
+  min-height:inherit;margin:0;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  padding:clamp(1.1rem,4.5vw,1.5rem) clamp(.9rem,3.5vw,1.2rem) clamp(1.25rem,4.5vw,1.65rem);
+  text-align:center;overflow:visible;color:#fff;
 }
 .pbv-hero-photo__title,
 .pbv-hero-photo__subtitle,
@@ -48,37 +47,57 @@ if ($hero_mobile) {
   display:block!important;visibility:visible!important;opacity:1!important;
   width:100%;max-width:22rem;flex-shrink:0;
 }
-.pbv-hero-photo__title{margin:0 0 .4rem;font-size:clamp(1.32rem,5.5vw,1.82rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__subtitle{margin:0 0 .7rem;font-size:clamp(.94rem,3.6vw,1.16rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
-.pbv-hero-photo__body{margin:0 0 .55rem;font-size:clamp(.73rem,2.75vw,.86rem);font-weight:400;line-height:1.42;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
-.pbv-hero-photo__welcome{margin:.45rem 0 .6rem;font-size:clamp(1.01rem,3.75vw,1.21rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.7rem,2.5vw,.81rem);line-height:1.4;color:#fff;}
+.pbv-hero-photo__title{margin:0 0 .35rem;font-size:clamp(1.38rem,5.75vw,1.9rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__subtitle{margin:0 0 .65rem;font-size:clamp(.98rem,3.8vw,1.21rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
+.pbv-hero-photo__body{margin:0 0 .5rem;font-size:clamp(.76rem,2.9vw,.9rem);font-weight:400;line-height:1.42;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
+.pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(1.06rem,3.9vw,1.27rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.74rem,2.65vw,.85rem);line-height:1.4;color:#fff;}
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 @media (min-width:750px){
-  .pbv-hero{display:flex;justify-content:center;align-items:center;padding:1.25rem 1rem .75rem;}
+  .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 1rem .75rem!important;}
+  /* Desktop: same width as logo card; height = 2 × logo height */
   .pbv-hero-photo{
-    width:min(28rem,36vw);max-width:28rem;min-height:0;
-    aspect-ratio:9/16;height:auto;margin:0 auto;border-radius:1.5rem;overflow:hidden;
-    box-shadow:0 18px 40px rgba(0,0,0,.18);
-    background:
-      var(--pbv-hero-image, none) center center / cover no-repeat,
-      linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
+    width:min(64rem, 100vw - 2rem)!important;
+    max-width:min(64rem, 100vw - 2rem)!important;
+    height:calc(min(64rem, 100vw - 2rem) / 2.35 * 2)!important;
+    min-height:0!important;
+    aspect-ratio:auto!important;
+    margin:0 auto!important;
+    border-radius:1.5rem!important;
+    box-shadow:0 18px 40px rgba(0,0,0,.18)!important;
   }
+  .pbv-hero-photo__img{object-position:center center;}
   .pbv-hero-photo__content{
-    position:absolute;inset:0;min-height:0;height:100%;
-    padding:1.75rem 1.35rem 1.85rem;overflow:hidden;justify-content:center;
+    position:absolute!important;inset:0!important;height:100%!important;min-height:0!important;
+    padding:1.75rem 1.35rem 1.85rem!important;overflow:auto!important;justify-content:center!important;
   }
-  /* Desktop hero type +10% */
-  .pbv-hero-photo__title{font-size:2.035rem;}
-  .pbv-hero-photo__subtitle{font-size:1.21rem;margin-bottom:1rem;}
-  .pbv-hero-photo__body{font-size:.88rem;line-height:1.45;}
-  .pbv-hero-photo__welcome{font-size:1.32rem;}
-  .pbv-hero-photo__wholesale{font-size:.814rem;}
+  /* Desktop hero type +10% over previous live sizes */
+  .pbv-hero-photo__title{font-size:2.34rem;}
+  .pbv-hero-photo__subtitle{font-size:1.39rem;margin-bottom:1rem;}
+  .pbv-hero-photo__body{font-size:1.01rem;line-height:1.45;}
+  .pbv-hero-photo__welcome{font-size:1.52rem;}
+  .pbv-hero-photo__wholesale{font-size:.936rem;}
 }
 </style>
 
 <section class="pbv-hero" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
-  <div class="pbv-hero-photo<?php echo $hero ? '' : ' pbv-hero-photo--placeholder'; ?>" style="<?php echo esc_attr($hero_style); ?>">
+  <div class="pbv-hero-photo<?php echo ($hero || $hero_mobile) ? '' : ' pbv-hero-photo--placeholder'; ?>">
+    <?php if ($hero_mobile || $hero) : ?>
+      <picture>
+        <?php if ($hero) : ?>
+          <source media="(min-width: 750px)" srcset="<?php echo esc_url($hero); ?>" />
+        <?php endif; ?>
+        <img
+          class="pbv-hero-photo__img"
+          src="<?php echo esc_url($hero_mobile ? $hero_mobile : $hero); ?>"
+          alt=""
+          width="1080"
+          height="1920"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
+    <?php endif; ?>
     <div class="pbv-hero-photo__overlay" aria-hidden="true"></div>
     <div class="pbv-hero-photo__content">
       <h1 class="pbv-hero-photo__title">Palm Beach Vitality</h1>
