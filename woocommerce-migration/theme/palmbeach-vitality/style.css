@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.9
+Version: 2.10.10
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -246,9 +246,8 @@ a:hover { opacity: 0.7; }
 }
 
 /*
- * Mobile hero: 9:16 portrait with FULL copy + rounded corners on all edges.
- * Content is in normal flow (not absolute) so text is never clipped.
- * Critical rules are also inlined on front-page.php for cache safety.
+ * Hero: locked 9:16 portrait + real <img> (not background crop).
+ * Desktop height = 2 × logo-card height. Critical CSS also inlined on front-page.php.
  */
 .pbv-hero {
   display: block;
@@ -260,21 +259,32 @@ a:hover { opacity: 0.7; }
 
 .pbv-hero-photo {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: block;
   width: 100%;
   max-width: none;
-  min-height: calc((100vw - 1.7rem) * 16 / 9);
+  aspect-ratio: 9 / 16;
   height: auto;
+  min-height: 0;
   margin: 0;
   border-radius: 1.25rem;
   overflow: hidden;
   isolation: isolate;
-  background:
-    var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center center / cover no-repeat,
-    linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
+  background: linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
   color: #fff;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.pbv-hero-photo__img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  border: 0;
 }
 
 .pbv-hero-photo__overlay {
@@ -296,8 +306,8 @@ a:hover { opacity: 0.7; }
   position: relative;
   z-index: 2;
   width: 100%;
-  min-height: calc((100vw - 1.7rem) * 16 / 9);
-  height: auto;
+  height: 100%;
+  min-height: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -306,7 +316,7 @@ a:hover { opacity: 0.7; }
   gap: 0;
   padding: 1.15rem 1rem 1.35rem;
   text-align: center;
-  overflow: visible;
+  overflow: auto;
   color: #fff;
 }
 
@@ -406,27 +416,17 @@ a:hover { opacity: 0.7; }
     padding: 1.25rem 1rem 0.75rem;
   }
 
-  /*
-   * Desktop hero: locked 9:16, height = 2× logo-card height.
-   * Uses the 9:16 hero asset so the photo is not cropped by a landscape source.
-   */
+  /* Desktop hero: height = 2× logo-card height, locked 9:16 */
   .pbv-hero-photo {
-    --pbv-logo-w: min(100vw - 2rem, var(--pbv-logo-max-width));
-    --pbv-logo-h: calc(var(--pbv-logo-w) / var(--pbv-logo-aspect));
-    --pbv-hero-h: calc(var(--pbv-logo-h) * 2);
-    --pbv-hero-w: calc(var(--pbv-hero-h) * 9 / 16);
-    width: min(var(--pbv-hero-w), calc(100vw - 2.5rem));
-    max-width: min(var(--pbv-hero-w), calc(100vw - 2.5rem));
-    height: auto;
-    min-height: 0;
-    aspect-ratio: 9 / 16;
+    width: calc(min(64rem, 100vw - 2rem) / 2.35 * 2 * 9 / 16) !important;
+    max-width: calc(100vw - 2rem) !important;
+    height: calc(min(64rem, 100vw - 2rem) / 2.35 * 2) !important;
+    min-height: 0 !important;
+    aspect-ratio: 9 / 16 !important;
     margin: 0 auto;
     border-radius: 1.5rem;
     overflow: hidden;
     box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-    background:
-      var(--pbv-hero-image-mobile, var(--pbv-hero-image, none)) center center / cover no-repeat,
-      linear-gradient(120deg, #0b1220 0%, #12304a 45%, #1a6b7a 100%);
   }
 
   .pbv-hero-photo__content {
