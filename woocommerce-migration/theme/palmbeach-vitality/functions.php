@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.7');
+define('PBV_THEME_VERSION', '2.10.8');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -566,6 +566,53 @@ function pbv_research_use_banner() {
     echo '</aside>';
 }
 
+/**
+ * Detect short-description lines that only repeat the RUO warning in plain text.
+ * Used so the styled warning banner remains the single RUO signal under the description.
+ *
+ * @param string $html Short description HTML.
+ * @return bool
+ */
+function pbv_is_ruo_boilerplate_text($html) {
+    $text = strtolower(trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $html))));
+    if ($text === '') {
+        return false;
+    }
+
+    // Exact / near-exact boilerplate seen on product short descriptions.
+    $exact = array(
+        'research-use peptide vial. not for human consumption.',
+        'research-use peptide vial.',
+        'research-use peptide pen. not for human consumption.',
+        'research-use peptide pen.',
+        'for research use only.',
+        'for research-use-only.',
+        'for research use only',
+        'research use only.',
+        'research-use only.',
+        'not for human consumption.',
+        'research-use peptide vial. not for human consumption',
+    );
+    if (in_array($text, $exact, true)) {
+        return true;
+    }
+
+    // Short plain RUO-only lines (no other product copy).
+    if (strlen($text) <= 90) {
+        $has_ruo = (bool) preg_match('/\b(research[\s-]?use(\s+only)?|not for human consumption)\b/u', $text);
+        $has_other = (bool) preg_match('/\b(mg|mcg|iu|vial|pen|blend|stack|amino|peptide synthesis|purity|coa)\b/u', $text);
+        // Allow "peptide vial/pen" only when the whole line is the RUO stub.
+        if ($has_ruo && preg_match('/^(research[\s-]?use([-\s]?only)?[.\s]*)?(peptide (vial|pen)[.\s]*)?(not for human consumption[.\s]*)?$/u', $text)) {
+            return true;
+        }
+        if ($has_ruo && !$has_other) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
         return;
@@ -590,7 +637,9 @@ function pbv_single_product_details_and_cart() {
 
     $short = ($product instanceof WC_Product) ? $product->get_short_description() : '';
     $short = pbv_strip_embedded_research_disclaimer($short);
-    if (trim(wp_strip_all_tags((string) $short)) !== '') {
+    // Hide duplicate plain-text RUO lines under the warning banner only.
+    // Keep the banner. Keep any short description that is not RUO boilerplate.
+    if (!pbv_is_ruo_boilerplate_text($short) && trim(wp_strip_all_tags((string) $short)) !== '') {
         echo '<div class="woocommerce-product-details__short-description">';
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo apply_filters('woocommerce_short_description', $short);
@@ -1592,4 +1641,200 @@ function pbv_save_checkout_policy_acceptance($order) {
     }
 }
 add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
+
+/**
+ * Checkout: professional Next-Day Air Cold Pack shipping label.
+ */
+function pbv_cold_pack_shipping_label() {
+    return __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality');
+}
+
+/**
+ * Replace available shipping rates with a $35 flat cold-pack rate.
+ *
+ * @param array $rates   Package rates.
+ * @param array $package Package data.
+ * @return array
+ */
+function pbv_force_cold_pack_shipping_rates($rates, $package) {
+    if (!class_exists('WC_Shipping_Rate')) {
+        return $rates;
+    }
+
+    $id = 'pbv_cold_pack_flat';
+    return array(
+        $id => new WC_Shipping_Rate(
+            $id,
+            pbv_cold_pack_shipping_label(),
+            35.00,
+            array(),
+            'flat_rate'
+        ),
+    );
+}
+add_filter('woocommerce_package_rates', 'pbv_force_cold_pack_shipping_rates', 100, 2);
+
+/**
+ * Fallback: if shipping methods are disabled / empty, still charge the $35 cold-pack fee.
+ */
+function pbv_cold_pack_shipping_fee_fallback() {
+    if (is_admin() && !defined('DOING_AJAX')) {
+        return;
+    }
+    if (!function_exists('WC') || !WC()->cart || WC()->cart->is_empty()) {
+        return;
+    }
+
+    // Prefer real shipping line items when WooCommerce shipping is active.
+    $packages = (WC()->shipping()) ? WC()->shipping()->get_packages() : array();
+    foreach ($packages as $package) {
+        if (!empty($package['rates'])) {
+            return;
+        }
+    }
+
+    foreach (WC()->cart->get_fees() as $fee) {
+        if (isset($fee->id) && $fee->id === 'pbv-cold-pack-shipping') {
+            return;
+        }
+        if (isset($fee->name) && $fee->name === pbv_cold_pack_shipping_label()) {
+            return;
+        }
+    }
+
+    WC()->cart->add_fee(pbv_cold_pack_shipping_label(), 35.00, false);
+}
+add_action('woocommerce_cart_calculate_fees', 'pbv_cold_pack_shipping_fee_fallback', 20);
+
+/**
+ * Ensure shippable carts always calculate shipping so the cold-pack rate can appear.
+ *
+ * @param bool $needs_shipping Whether the cart needs shipping.
+ * @return bool
+ */
+function pbv_cart_needs_shipping($needs_shipping) {
+    if ($needs_shipping) {
+        return true;
+    }
+    if (!function_exists('WC') || !WC()->cart) {
+        return $needs_shipping;
+    }
+    foreach (WC()->cart->get_cart() as $item) {
+        $product = isset($item['data']) ? $item['data'] : null;
+        if ($product instanceof WC_Product && $product->needs_shipping()) {
+            return true;
+        }
+    }
+    return $needs_shipping;
+}
+add_filter('woocommerce_cart_needs_shipping', 'pbv_cart_needs_shipping');
+
+/**
+ * Checkout note explaining cold-pack shipping.
+ */
+function pbv_checkout_shipping_note() {
+    static $printed = false;
+    if ($printed) {
+        return;
+    }
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return;
+    }
+    $printed = true;
+    echo '<p class="pbv-checkout-shipping-note">';
+    echo esc_html__(
+        'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00.',
+        'palmbeach-vitality'
+    );
+    echo '</p>';
+}
+add_action('woocommerce_checkout_before_order_review', 'pbv_checkout_shipping_note', 5);
+
+/**
+ * Checkout order review: show red X + "Remove item" next to each line item.
+ *
+ * @param string $name           Product name HTML.
+ * @param array  $cart_item      Cart item.
+ * @param string $cart_item_key  Cart item key.
+ * @return string
+ */
+function pbv_checkout_item_remove_link($name, $cart_item, $cart_item_key) {
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return $name;
+    }
+    if (is_order_received_page()) {
+        return $name;
+    }
+
+    $product = isset($cart_item['data']) ? $cart_item['data'] : null;
+    $label   = __('Remove item', 'palmbeach-vitality');
+    $aria    = $product instanceof WC_Product
+        ? sprintf(
+            /* translators: %s: product name */
+            __('Remove %s from cart', 'palmbeach-vitality'),
+            wp_strip_all_tags($product->get_name())
+        )
+        : $label;
+
+    // Keep customer on checkout after remove (falls back to cart when empty).
+    $remove_url = wc_get_cart_remove_url($cart_item_key);
+    $remove_url = add_query_arg('pbv_return', 'checkout', $remove_url);
+
+    $link = sprintf(
+        '<a href="%s" class="pbv-checkout-remove remove" aria-label="%s"><span class="pbv-checkout-remove__x" aria-hidden="true">&times;</span> <span class="pbv-checkout-remove__label">%s</span></a>',
+        esc_url($remove_url),
+        esc_attr($aria),
+        esc_html($label)
+    );
+
+    return $link . ' <span class="pbv-checkout-item-name">' . $name . '</span>';
+}
+add_filter('woocommerce_cart_item_name', 'pbv_checkout_item_remove_link', 10, 3);
+
+/**
+ * After removing an item from checkout, return to checkout when cart still has items.
+ */
+function pbv_redirect_after_checkout_remove() {
+    if (empty($_GET['pbv_return']) || $_GET['pbv_return'] !== 'checkout') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return;
+    }
+    if (!function_exists('WC') || !WC()->cart) {
+        return;
+    }
+    if (WC()->cart->is_empty()) {
+        return;
+    }
+    wp_safe_redirect(wc_get_checkout_url());
+    exit;
+}
+add_action('woocommerce_cart_item_removed', 'pbv_redirect_after_checkout_remove', 20);
+
+/**
+ * Load Bitcoin ($BTC) payment gateway class when WooCommerce is available.
+ */
+function pbv_load_bitcoin_gateway() {
+    if (!class_exists('WC_Payment_Gateway')) {
+        return;
+    }
+    require_once get_template_directory() . '/inc/class-wc-gateway-pbv-bitcoin.php';
+}
+add_action('plugins_loaded', 'pbv_load_bitcoin_gateway', 20);
+add_action('after_setup_theme', 'pbv_load_bitcoin_gateway', 20);
+
+/**
+ * Register Bitcoin ($BTC) payment method.
+ *
+ * @param array $gateways Gateways.
+ * @return array
+ */
+function pbv_register_bitcoin_gateway($gateways) {
+    if (!class_exists('WC_Gateway_PBV_Bitcoin')) {
+        pbv_load_bitcoin_gateway();
+    }
+    if (class_exists('WC_Gateway_PBV_Bitcoin')) {
+        $gateways[] = 'WC_Gateway_PBV_Bitcoin';
+    }
+    return $gateways;
+}
+add_filter('woocommerce_payment_gateways', 'pbv_register_bitcoin_gateway');
 

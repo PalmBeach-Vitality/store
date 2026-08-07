@@ -47,11 +47,11 @@ if ($hero_mobile) {
   display:block!important;visibility:visible!important;opacity:1!important;
   width:100%;max-width:22rem;flex-shrink:0;
 }
-.pbv-hero-photo__title{margin:0 0 .35rem;font-size:clamp(1.2rem,5vw,1.65rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__subtitle{margin:0 0 .65rem;font-size:clamp(.85rem,3.3vw,1.05rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
-.pbv-hero-photo__body{margin:0 0 .5rem;font-size:clamp(.66rem,2.5vw,.78rem);font-weight:400;line-height:1.4;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
-.pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(.92rem,3.4vw,1.1rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.64rem,2.3vw,.74rem);line-height:1.4;color:#fff;}
+.pbv-hero-photo__title{margin:0 0 .35rem;font-size:clamp(1.38rem,5.75vw,1.8975rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__subtitle{margin:0 0 .65rem;font-size:clamp(.9775rem,3.795vw,1.2075rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
+.pbv-hero-photo__body{margin:0 0 .5rem;font-size:clamp(.759rem,2.875vw,.897rem);font-weight:400;line-height:1.4;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
+.pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(1.058rem,3.91vw,1.265rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.736rem,2.645vw,.851rem);line-height:1.4;color:#fff;}
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 @media (min-width:750px){
   .pbv-hero{display:flex;justify-content:center;align-items:center;padding:1.25rem 1rem .75rem;}
@@ -67,11 +67,11 @@ if ($hero_mobile) {
     position:absolute;inset:0;min-height:0;height:100%;
     padding:1.75rem 1.35rem 1.85rem;overflow:hidden;justify-content:center;
   }
-  .pbv-hero-photo__title{font-size:1.85rem;}
-  .pbv-hero-photo__subtitle{font-size:1.1rem;margin-bottom:1rem;}
-  .pbv-hero-photo__body{font-size:.8rem;line-height:1.45;}
-  .pbv-hero-photo__welcome{font-size:1.2rem;}
-  .pbv-hero-photo__wholesale{font-size:.74rem;}
+  .pbv-hero-photo__title{font-size:2.1275rem;}
+  .pbv-hero-photo__subtitle{font-size:1.265rem;margin-bottom:1rem;}
+  .pbv-hero-photo__body{font-size:.92rem;line-height:1.45;}
+  .pbv-hero-photo__welcome{font-size:1.38rem;}
+  .pbv-hero-photo__wholesale{font-size:.851rem;}
 }
 </style>
 
