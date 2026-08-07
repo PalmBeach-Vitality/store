@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.12
+Version: 2.10.13
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1940,7 +1940,7 @@ body.pbv-lead-popup-open {
   line-height: 1.45;
 }
 
-/* Checkout: product name above red X + "Remove item" */
+/* Checkout: product name + qty above red X + "Remove item" */
 .pbv-checkout-page .pbv-checkout-item {
   display: flex;
   flex-direction: column;
@@ -1953,14 +1953,20 @@ body.pbv-lead-popup-open {
   line-height: 1.35;
 }
 
+.pbv-checkout-page .pbv-checkout-item-qty {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 .pbv-checkout-page .pbv-checkout-remove {
   display: inline-flex;
   align-items: center;
   gap: 0.3rem;
   color: #b91c1c;
   text-decoration: none;
-  font-size: 0.86rem;
-  font-weight: 600;
+  /* Match Subtotal / order-review table text size */
+  font-size: 1em;
+  font-weight: 700;
   line-height: 1.2;
 }
 

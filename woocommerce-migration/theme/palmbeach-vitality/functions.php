@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.12');
+define('PBV_THEME_VERSION', '2.10.13');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -1787,10 +1787,35 @@ function pbv_checkout_item_remove_link($name, $cart_item, $cart_item_key) {
         esc_html($label)
     );
 
-    // Product name on its own line above the remove control.
-    return '<span class="pbv-checkout-item"><span class="pbv-checkout-item-name">' . $name . '</span>' . $link . '</span>';
+    // Keep quantity beside the product name (WooCommerce otherwise appends it after our stack).
+    $qty = isset($cart_item['quantity']) ? (int) $cart_item['quantity'] : 0;
+    $qty_html = $qty > 0
+        ? sprintf(
+            ' <strong class="product-quantity pbv-checkout-item-qty">&times;&nbsp;%s</strong>',
+            esc_html((string) $qty)
+        )
+        : '';
+
+    // Product name + qty on one line; remove control on the line below.
+    return '<span class="pbv-checkout-item"><span class="pbv-checkout-item-name">' . $name . $qty_html . '</span>' . $link . '</span>';
 }
 add_filter('woocommerce_cart_item_name', 'pbv_checkout_item_remove_link', 10, 3);
+
+/**
+ * Hide the default checkout quantity marker — it is rendered next to the product name above.
+ *
+ * @param string $quantity_html Quantity HTML.
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
+ * @return string
+ */
+function pbv_checkout_suppress_default_qty($quantity_html, $cart_item, $cart_item_key) {
+    if (!function_exists('is_checkout') || !is_checkout() || is_order_received_page()) {
+        return $quantity_html;
+    }
+    return '';
+}
+add_filter('woocommerce_checkout_cart_item_quantity', 'pbv_checkout_suppress_default_qty', 10, 3);
 
 /**
  * After removing an item from checkout, return to checkout when cart still has items.
