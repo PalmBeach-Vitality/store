@@ -53,13 +53,13 @@ $hero_src    = $hero_mobile ? $hero_mobile : $hero;
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 @media (min-width:750px){
   .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 1rem .75rem!important;}
-  /* Height = 2 × logo-card height; width derived from locked 9:16 */
+  /* Desktop only: same width as logo card; keep current height (2 × logo height) */
   .pbv-hero-photo{
-    width:calc(min(64rem, 100vw - 2rem) / 2.35 * 2 * 9 / 16)!important;
-    max-width:calc(100vw - 2rem)!important;
+    width:min(64rem, 100vw - 2rem)!important;
+    max-width:min(64rem, 100vw - 2rem)!important;
     height:calc(min(64rem, 100vw - 2rem) / 2.35 * 2)!important;
     min-height:0!important;
-    aspect-ratio:9/16!important;
+    aspect-ratio:auto!important;
     margin:0 auto!important;
     border-radius:1.5rem!important;
     box-shadow:0 18px 40px rgba(0,0,0,.18)!important;
