@@ -1,0 +1,386 @@
+{
+  "name": "PBVita — Idea to Video",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Idea to Video",
+        "formDescription": "Type one idea. Grok makes a 9:16 still to review, then animates the approved still into a 1080p / 15s clip.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "idea",
+              "fieldType": "text",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-idea-form",
+      "name": "idea_form",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [0, 0],
+      "webhookId": "pbvita-idea-to-video-form"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-image-prompt",
+              "name": "image_prompt",
+              "type": "string",
+              "value": "={{ $json.idea }}, vertical 9:16 composition, cinematic, photoreal, high detail, 8k, professional color grade"
+            },
+            {
+              "id": "a-still-aspect",
+              "name": "still_aspect_ratio",
+              "type": "string",
+              "value": "9:16"
+            },
+            {
+              "id": "a-still-res",
+              "name": "still_resolution",
+              "type": "string",
+              "value": "2k"
+            },
+            {
+              "id": "a-video-res",
+              "name": "video_resolution",
+              "type": "string",
+              "value": "1080p"
+            },
+            {
+              "id": "a-video-dur",
+              "name": "video_duration",
+              "type": "number",
+              "value": 15
+            },
+            {
+              "id": "a-video-aspect",
+              "name": "video_aspect_ratio",
+              "type": "string",
+              "value": "9:16"
+            },
+            {
+              "id": "a-motion",
+              "name": "motion_prompt",
+              "type": "string",
+              "value": "Slow cinematic camera motion around this scene, keep the subject sharp and unchanged, photoreal, no fade out, no dissolve"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "node-build-prompt",
+      "name": "build_prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'grok-imagine-image-quality', prompt: $json.image_prompt, n: 1, aspect_ratio: $json.still_aspect_ratio, resolution: $json.still_resolution }) }}",
+        "options": {}
+      },
+      "id": "node-image-gen",
+      "name": "image_gen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "s-still-url",
+              "name": "still_url",
+              "type": "string",
+              "value": "={{ $json.data[0].url }}"
+            },
+            {
+              "id": "s-image-prompt",
+              "name": "image_prompt",
+              "type": "string",
+              "value": "={{ $json.image_prompt }}"
+            },
+            {
+              "id": "s-idea",
+              "name": "idea",
+              "type": "string",
+              "value": "={{ $('idea_form').first().json.idea }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "node-save-still",
+      "name": "save_still_url",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "formTitle": "Review image",
+        "formDescription": "Approve to animate, or choose Change and describe the adjustment to regenerate the still.",
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "fieldLabel": "Preview",
+              "html": "<img src=\"{{ $json.still_url }}\" style=\"max-width:100%;border-radius:8px\" />"
+            },
+            {
+              "fieldLabel": "decision",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  { "option": "Approve" },
+                  { "option": "Change" }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "adjust_prompt_text",
+              "fieldType": "textarea",
+              "requiredField": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-review-image",
+      "name": "review_image",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-decision",
+              "leftValue": "={{ $json.decision }}",
+              "rightValue": "Change",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if-change",
+      "name": "if_change",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "adj-image-prompt",
+              "name": "image_prompt",
+              "type": "string",
+              "value": "={{ $('save_still_url').first().json.image_prompt }}, {{ $json.adjust_prompt_text }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "node-adjust-prompt",
+      "name": "adjust_prompt",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1100, 240]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/videos/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'grok-imagine-video-1.5', prompt: $('build_prompt').first().json.motion_prompt, image: { url: $('save_still_url').first().json.still_url }, duration: $('build_prompt').first().json.video_duration, aspect_ratio: $('build_prompt').first().json.video_aspect_ratio, resolution: $('build_prompt').first().json.video_resolution }) }}",
+        "options": {}
+      },
+      "id": "node-video-start",
+      "name": "grok_video_start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1320, -120]
+    },
+    {
+      "parameters": {
+        "amount": 60,
+        "unit": "seconds"
+      },
+      "id": "node-wait-video",
+      "name": "wait_video",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [1540, -120],
+      "webhookId": "pbvita-idea-to-video-wait"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ 'https://api.x.ai/v1/videos/' + $('grok_video_start').first().json.request_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "node-video-poll",
+      "name": "grok_video_poll",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, -120]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c-status",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if-video-ready",
+      "name": "if_video_ready",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [1980, -120]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "v-video-url",
+              "name": "video_url",
+              "type": "string",
+              "value": "={{ $json.video.url || $json.url }}"
+            },
+            {
+              "id": "v-still-url",
+              "name": "still_url",
+              "type": "string",
+              "value": "={{ $('save_still_url').first().json.still_url }}"
+            },
+            {
+              "id": "v-req-id",
+              "name": "grok_video_request_id",
+              "type": "string",
+              "value": "={{ $('grok_video_start').first().json.request_id }}"
+            },
+            {
+              "id": "v-idea",
+              "name": "idea",
+              "type": "string",
+              "value": "={{ $('idea_form').first().json.idea }}"
+            },
+            {
+              "id": "v-created",
+              "name": "created_at",
+              "type": "string",
+              "value": "={{ $now.toISO() }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "node-save-video",
+      "name": "save_video_url",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [2200, -120]
+    }
+  ],
+  "connections": {
+    "idea_form": {
+      "main": [[{ "node": "build_prompt", "type": "main", "index": 0 }]]
+    },
+    "build_prompt": {
+      "main": [[{ "node": "image_gen", "type": "main", "index": 0 }]]
+    },
+    "image_gen": {
+      "main": [[{ "node": "save_still_url", "type": "main", "index": 0 }]]
+    },
+    "save_still_url": {
+      "main": [[{ "node": "review_image", "type": "main", "index": 0 }]]
+    },
+    "review_image": {
+      "main": [[{ "node": "if_change", "type": "main", "index": 0 }]]
+    },
+    "if_change": {
+      "main": [
+        [{ "node": "adjust_prompt", "type": "main", "index": 0 }],
+        [{ "node": "grok_video_start", "type": "main", "index": 0 }]
+      ]
+    },
+    "adjust_prompt": {
+      "main": [[{ "node": "image_gen", "type": "main", "index": 0 }]]
+    },
+    "grok_video_start": {
+      "main": [[{ "node": "wait_video", "type": "main", "index": 0 }]]
+    },
+    "wait_video": {
+      "main": [[{ "node": "grok_video_poll", "type": "main", "index": 0 }]]
+    },
+    "grok_video_poll": {
+      "main": [[{ "node": "if_video_ready", "type": "main", "index": 0 }]]
+    },
+    "if_video_ready": {
+      "main": [
+        [{ "node": "save_video_url", "type": "main", "index": 0 }],
+        [{ "node": "wait_video", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "active": false
+}

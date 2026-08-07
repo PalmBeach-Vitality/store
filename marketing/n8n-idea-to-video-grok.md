@@ -12,6 +12,23 @@ All new n8n field names are **lowercase** (house rule). xAI API keys stay exactl
 
 ---
 
+## Fastest build — import the ready-made workflow
+
+There is **no n8n MCP** connected to the agent, and no direct line to your n8n instance, so the workflow can't be built live from here. Instead the whole thing is provided as an importable file:
+
+**`marketing/workflows/pbvita-idea-to-video.n8n.json`**
+
+1. n8n → **Workflows → Import from File** → pick that JSON. All 12 nodes + both loops come in pre-wired.
+2. Open each HTTP node (`image_gen`, `grok_video_start`, `grok_video_poll`) → **Credential** → select your existing **xAI Header Auth** (same one `GROK_API` uses). Credentials are never stored in the file, so this is the one manual step.
+3. Open `review_image` → confirm the **HTML** preview element and the `decision` dropdown rendered (n8n version differences can rename the html field type — if so, re-add an HTML element with `<img src="{{ $json.still_url }}" />`).
+4. Save, then run from the Form Trigger URL.
+
+**Live build via MCP instead?** Possible only if you connect an n8n MCP server (or give the agent your n8n base URL + API key as a secret so it can call the n8n REST API). Neither is set up right now.
+
+The node-by-node spec below documents exactly what that JSON contains.
+
+---
+
 ## Output spec (locked)
 
 | Setting | Value | Notes |
