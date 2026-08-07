@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.11');
+define('PBV_THEME_VERSION', '2.10.12');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -1787,7 +1787,8 @@ function pbv_checkout_item_remove_link($name, $cart_item, $cart_item_key) {
         esc_html($label)
     );
 
-    return $link . ' <span class="pbv-checkout-item-name">' . $name . '</span>';
+    // Product name on its own line above the remove control.
+    return '<span class="pbv-checkout-item"><span class="pbv-checkout-item-name">' . $name . '</span>' . $link . '</span>';
 }
 add_filter('woocommerce_cart_item_name', 'pbv_checkout_item_remove_link', 10, 3);
 
