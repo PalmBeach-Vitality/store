@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.6
+Version: 2.10.7
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1023,6 +1023,109 @@ a:hover { opacity: 0.7; }
 .woocommerce div.product form.cart .single_add_to_cart_button {
   width: min(100%, 16rem);
   margin: 0;
+}
+
+/* Research studies + amino diagram (below Add to cart) */
+.pbv-product-research {
+  width: min(100%, 34rem);
+  margin: 1.75rem auto 0;
+  padding: 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.pbv-product-research__title {
+  margin: 0 0 0.45rem;
+  font-family: var(--pbv-font-display);
+  font-size: clamp(1.15rem, 3.2vw, 1.45rem);
+  font-weight: 400;
+  line-height: 1.3;
+  color: #111;
+}
+
+.pbv-product-research__intro {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #555;
+}
+
+.pbv-product-research__list {
+  list-style: decimal;
+  margin: 0 auto;
+  padding: 0 0 0 1.25rem;
+  text-align: left;
+}
+
+.pbv-product-research__item {
+  margin: 0 0 0.85rem;
+  padding: 0;
+}
+
+.pbv-product-research__link {
+  display: inline;
+  color: #0a5f6e;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pbv-product-research__link:hover {
+  opacity: 0.75;
+}
+
+.pbv-product-research__source {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #6b6b6b;
+}
+
+.pbv-product-research__amino {
+  margin: 1.5rem auto 0;
+  padding: 0;
+  max-width: 100%;
+  text-align: center;
+}
+
+.pbv-product-research__amino img {
+  display: block;
+  width: 100%;
+  max-width: 34rem;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid #efe4df;
+  border-radius: 0.75rem;
+  background: #faf6f4;
+}
+
+.pbv-product-research__amino figcaption {
+  margin-top: 0.55rem;
+  font-size: 0.78rem;
+  color: #6b6b6b;
+}
+
+@media (max-width: 640px) {
+  .pbv-product-research {
+    width: 100%;
+    margin-top: 1.35rem;
+    padding: 0 0.15rem;
+  }
+
+  .pbv-product-research__list {
+    padding-left: 1.1rem;
+  }
+
+  .pbv-product-research__link {
+    font-size: 0.88rem;
+  }
+
+  .pbv-product-research__amino img {
+    border-radius: 0.6rem;
+  }
 }
 
 .woocommerce div.product .related.products,

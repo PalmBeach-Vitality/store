@@ -9,9 +9,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.3');
+define('PBV_THEME_VERSION', '2.10.7');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
+
+require_once get_template_directory() . '/inc/product-research.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -596,6 +598,9 @@ function pbv_single_product_details_and_cart() {
     }
 
     woocommerce_template_single_add_to_cart();
+
+    // Research studies + amino diagram (compound-matched; additive only).
+    pbv_render_product_research_section($product);
 
     echo '</div>';
 }
