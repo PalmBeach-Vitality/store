@@ -261,17 +261,36 @@ function pbv_schema_product_description($product) {
     }
 
     $long = trim(wp_strip_all_tags((string) $product->get_description()));
-    if ($long !== '') {
+    if ($long !== '' && !pbv_is_ruo_boilerplate($long)) {
         return wp_html_excerpt($long, 300, '…');
     }
 
     $short = trim(wp_strip_all_tags((string) $product->get_short_description()));
-    // Never emit the boilerplate vial line into schema.
-    if ($short !== '' && !preg_match('/^research-use peptide vial\.?/i', $short)) {
+    if ($short !== '' && !pbv_is_ruo_boilerplate($short)) {
         return wp_html_excerpt($short, 300, '…');
     }
 
-    return '';
+    return sprintf(
+        '%s — research-use compound from Palm Beach Vitality. Sold for laboratory research only.',
+        $product->get_name()
+    );
+}
+
+/**
+ * Detect RUO short-description boilerplate that should never be used as SEO/meta copy.
+ *
+ * @param string $text Text to test.
+ * @return bool
+ */
+function pbv_is_ruo_boilerplate($text) {
+    $text = trim(wp_strip_all_tags((string) $text));
+    if ($text === '') {
+        return false;
+    }
+    return (bool) preg_match(
+        '/^research[-\s]?use peptide vial\.?(\s*not for human consumption\.?)?$/i',
+        $text
+    );
 }
 
 /**
@@ -549,4 +568,168 @@ function pbv_filter_product_meta_description($desc) {
 }
 add_filter('wpseo_metadesc', 'pbv_filter_product_meta_description', 20);
 add_filter('rank_math/frontend/description', 'pbv_filter_product_meta_description', 20);
+
+/**
+ * Stronger SERP title tags (document title only — no on-page visual changes).
+ *
+ * @param array<string,string> $parts Title parts.
+ * @return array<string,string>
+ */
+function pbv_document_title_parts($parts) {
+    $site = isset($parts['site']) && $parts['site'] !== '' ? $parts['site'] : 'Palm Beach Vitality';
+
+    if (is_front_page()) {
+        $parts['title'] = 'Palm Beach Vitality';
+        $parts['tagline'] = 'Research Peptides & Peptide Pens';
+        unset($parts['site']);
+        return $parts;
+    }
+
+    if (function_exists('is_shop') && is_shop()) {
+        $parts['title'] = 'Shop Research Peptides';
+        $parts['site']  = $site;
+        return $parts;
+    }
+
+    if (function_exists('is_product_category') && is_product_category()) {
+        $term = get_queried_object();
+        if ($term && !is_wp_error($term)) {
+            $parts['title'] = sprintf('%s | Research Compounds', $term->name);
+            $parts['site']  = $site;
+        }
+        return $parts;
+    }
+
+    if (function_exists('is_product') && is_product()) {
+        global $product;
+        if ($product instanceof WC_Product) {
+            $parts['title'] = sprintf('%s | Research Use', $product->get_name());
+            $parts['site']  = $site;
+        }
+        return $parts;
+    }
+
+    if (is_page('about')) {
+        $parts['title'] = 'About Palm Beach Vitality';
+        $parts['site']  = 'Research Peptide Supplier';
+        return $parts;
+    }
+
+    if (is_page('contact')) {
+        $parts['title'] = 'Contact Palm Beach Vitality';
+        $parts['site']  = $site;
+        return $parts;
+    }
+
+    if (is_page('wholesale')) {
+        $parts['title'] = 'Wholesale Research Peptides';
+        $parts['site']  = $site;
+        return $parts;
+    }
+
+    return $parts;
+}
+add_filter('document_title_parts', 'pbv_document_title_parts', 20);
+
+/**
+ * Organization + WebSite JSON-LD (sitewide). No review/aggregateRating fields.
+ */
+function pbv_output_organization_website_schema() {
+    if (is_admin()) {
+        return;
+    }
+
+    $logo = '';
+    if (function_exists('pbv_default_logo_uri')) {
+        $logo = pbv_default_logo_uri();
+    }
+    if (has_custom_logo()) {
+        $logo_id = get_theme_mod('custom_logo');
+        if ($logo_id) {
+            $src = wp_get_attachment_image_url((int) $logo_id, 'full');
+            if ($src) {
+                $logo = $src;
+            }
+        }
+    }
+
+    $org = array(
+        '@type' => 'Organization',
+        '@id'   => home_url('/#organization'),
+        'name'  => 'Palm Beach Vitality',
+        'url'   => home_url('/'),
+        'description' => 'U.S. supplier of research-use peptides and peptide pens with third-party testing and cold-pack shipping.',
+        'email' => 'sales@palmbeach-vitality.com',
+        'sameAs' => array(
+            'https://www.palmbeach-vitality.com',
+        ),
+    );
+    if ($logo) {
+        $org['logo'] = array(
+            '@type' => 'ImageObject',
+            'url'   => $logo,
+        );
+    }
+
+    $website = array(
+        '@type' => 'WebSite',
+        '@id'   => home_url('/#website'),
+        'url'   => home_url('/'),
+        'name'  => 'Palm Beach Vitality',
+        'description' => 'Research-use peptides and peptide pens for laboratory research.',
+        'publisher' => array('@id' => home_url('/#organization')),
+        'inLanguage' => 'en-US',
+    );
+
+    $graph = array(
+        '@context' => 'https://schema.org',
+        '@graph'   => array($org, $website),
+    );
+
+    echo '<script type="application/ld+json">' . wp_json_encode($graph, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>' . "\n";
+}
+add_action('wp_head', 'pbv_output_organization_website_schema', 4);
+
+/**
+ * Open Graph basics for key templates (complements meta description).
+ */
+function pbv_output_og_basics() {
+    if (is_admin()) {
+        return;
+    }
+
+    $title = wp_get_document_title();
+    $url   = '';
+    $type  = 'website';
+
+    if (is_front_page()) {
+        $url = home_url('/');
+    } elseif (function_exists('is_shop') && is_shop()) {
+        $url = get_permalink(wc_get_page_id('shop'));
+    } elseif (function_exists('is_product_category') && is_product_category()) {
+        $term = get_queried_object();
+        if ($term && !is_wp_error($term)) {
+            $link = get_term_link($term);
+            if (!is_wp_error($link)) {
+                $url = $link;
+            }
+        }
+    } elseif (function_exists('is_product') && is_product()) {
+        $url  = get_permalink();
+        $type = 'product';
+    } elseif (is_singular()) {
+        $url = get_permalink();
+    }
+
+    if ($title) {
+        echo '<meta property="og:title" content="' . esc_attr($title) . '" />' . "\n";
+    }
+    if ($url) {
+        echo '<meta property="og:url" content="' . esc_url($url) . '" />' . "\n";
+    }
+    echo '<meta property="og:site_name" content="Palm Beach Vitality" />' . "\n";
+    echo '<meta property="og:type" content="' . esc_attr($type) . '" />' . "\n";
+    echo '<meta property="og:locale" content="en_US" />' . "\n";
+}
+add_action('wp_head', 'pbv_output_og_basics', 2);
 

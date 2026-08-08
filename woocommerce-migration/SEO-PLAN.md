@@ -59,12 +59,16 @@
 3. GSC: Request indexing for home, shop, 4 categories, top products.
 4. Validate prior GSC rows (404s / redirects / crawled-not-indexed) after recrawl.
 
-### Phase B — Technical SEO (theme; no visual redesign) ← in progress
+### Phase B — Technical SEO (theme; no visual redesign) ← shipped through v2.10.20
 1. Meta descriptions for home, shop, categories, products (not RUO short-line).
 2. Self-canonical tags on home/shop/archives when missing.
 3. Keep junk blocked (API, feeds, Shopify CDN) + policy/collection 301s.
-4. Merchant schema: shippingDetails, validFrom, return policy (already in 2.10.18).
+4. Merchant schema: shippingDetails, validFrom, return policy (no review/aggregateRating).
 5. Sitemap hygiene (exclude cart/checkout/account/hello-world).
+6. Stronger document titles for home/shop/category/product.
+7. Organization + WebSite JSON-LD + basic Open Graph tags.
+
+User-facing checklist after upload: `SEO-YOUR-TASKS.md`.
 
 ### Phase C — On-page discoverability (no layout redesign)
 1. Unique title patterns for products/categories (tab titles only; not redesign).
