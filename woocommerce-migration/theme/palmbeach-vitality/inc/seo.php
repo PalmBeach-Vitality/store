@@ -411,3 +411,142 @@ function pbv_patch_product_jsonld_footer() {
     <?php
 }
 add_action('wp_footer', 'pbv_patch_product_jsonld_footer', 99);
+
+/**
+ * Meta description for key templates (not visible on-page copy).
+ *
+ * @return string Empty if none.
+ */
+function pbv_seo_meta_description() {
+    if (is_front_page()) {
+        return 'Palm Beach Vitality supplies research-use peptides and peptide pens with third-party testing, COAs, and cold-pack shipping across the United States.';
+    }
+
+    if (function_exists('is_shop') && is_shop()) {
+        return 'Shop research-use peptides, peptide pens, and weight-loss research compounds from Palm Beach Vitality. Lab-grade quality with documented purity testing.';
+    }
+
+    if (function_exists('is_product_category') && is_product_category()) {
+        $term = get_queried_object();
+        if ($term && !is_wp_error($term)) {
+            $name = $term->name;
+            $map  = array(
+                'peptides'          => 'Browse research-use peptide vials from Palm Beach Vitality — ready-to-use formats with COA documentation.',
+                'peptide-pens'      => 'Browse research-use peptide pens from Palm Beach Vitality — pre-filled pens for laboratory research workflows.',
+                'weight-loss'       => 'Browse weight-loss research compounds from Palm Beach Vitality, including GLP-1 related research peptides.',
+                'weight-loss-pens'  => 'Browse weight-loss research pens from Palm Beach Vitality for laboratory research use only.',
+            );
+            if (isset($map[$term->slug])) {
+                return $map[$term->slug];
+            }
+            return sprintf('Browse %s from Palm Beach Vitality — research-use compounds with quality documentation.', $name);
+        }
+    }
+
+    if (function_exists('is_product') && is_product()) {
+        global $product;
+        if ($product instanceof WC_Product) {
+            $desc = pbv_schema_product_description($product);
+            if ($desc !== '') {
+                return $desc;
+            }
+            return sprintf('%s — research-use compound from Palm Beach Vitality. Not for human consumption.', $product->get_name());
+        }
+    }
+
+    if (is_page('about')) {
+        return 'Learn about Palm Beach Vitality — a U.S. research peptide supplier focused on purity testing, documentation, and reliable cold-chain fulfillment.';
+    }
+
+    if (is_page('contact')) {
+        return 'Contact Palm Beach Vitality for order support, wholesale inquiries, or research documentation questions.';
+    }
+
+    if (is_page('wholesale')) {
+        return 'Apply for Palm Beach Vitality wholesale access for verified research buyers seeking volume peptide supply.';
+    }
+
+    if (is_page('terms')) {
+        return 'Palm Beach Vitality terms, shipping, privacy, and research-use policies.';
+    }
+
+    return '';
+}
+
+/**
+ * Print meta description + og:description when we have a curated value.
+ */
+function pbv_output_seo_meta_tags() {
+    if (is_admin()) {
+        return;
+    }
+
+    $desc = pbv_seo_meta_description();
+    if ($desc === '') {
+        return;
+    }
+
+    // Avoid duplicating if an SEO plugin already printed one.
+    if (defined('WPSEO_VERSION') || defined('RANK_MATH_VERSION') || defined('AIOSEO_VERSION')) {
+        // Still filter product junk via dedicated filters below.
+    }
+
+    echo '<meta name="description" content="' . esc_attr($desc) . '" />' . "\n";
+    echo '<meta property="og:description" content="' . esc_attr($desc) . '" />' . "\n";
+}
+add_action('wp_head', 'pbv_output_seo_meta_tags', 2);
+
+/**
+ * Ensure a self-referencing canonical on templates that currently omit one.
+ */
+function pbv_output_seo_canonical() {
+    if (is_admin()) {
+        return;
+    }
+
+    // Products / singular pages usually already have one from Woo/core.
+    if (function_exists('is_product') && is_product()) {
+        return;
+    }
+    if (is_singular() && !is_front_page()) {
+        // Core often prints canonical for pages/posts.
+        return;
+    }
+
+    $url = '';
+    if (is_front_page()) {
+        $url = home_url('/');
+    } elseif (function_exists('is_shop') && is_shop()) {
+        $url = get_permalink(wc_get_page_id('shop'));
+    } elseif (function_exists('is_product_category') && is_product_category()) {
+        $term = get_queried_object();
+        if ($term && !is_wp_error($term)) {
+            $link = get_term_link($term);
+            if (!is_wp_error($link)) {
+                $url = $link;
+            }
+        }
+    }
+
+    if ($url) {
+        echo '<link rel="canonical" href="' . esc_url($url) . '" />' . "\n";
+    }
+}
+add_action('wp_head', 'pbv_output_seo_canonical', 3);
+
+/**
+ * Stop Woo/Jetpack from using the RUO short-description line as the social/meta blurb.
+ *
+ * @param string $desc Existing description.
+ * @return string
+ */
+function pbv_filter_product_meta_description($desc) {
+    if (!function_exists('is_product') || !is_product()) {
+        return $desc;
+    }
+    $better = pbv_seo_meta_description();
+    return $better !== '' ? $better : $desc;
+}
+add_filter('wpseo_metadesc', 'pbv_filter_product_meta_description', 20);
+add_filter('rank_math/frontend/description', 'pbv_filter_product_meta_description', 20);
+

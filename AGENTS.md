@@ -2,6 +2,19 @@
 
 A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanilla JS) for the `www.palmbeach-vitality.store` domain, plus a **Shopify → WooCommerce migration kit** under `woocommerce-migration/`.
 
+## #1 GOAL: SEO OPTIMIZATION
+
+**Primary mission for this agent:** get `palmbeach-vitality.store` ranking — indexation health, technical SEO, product/category discoverability, schema, sitemaps, crawl budget, and on-page SEO that does **not** require redesigning the site.
+
+### SEO operating rules
+- Prefer **canonical WooCommerce URLs only** (`/product/.../`, `/shop/`, `/product-category/.../`). Do **not** market or depend on old Shopify `/products/`, `/collections/`, `/cdn/shop/` URLs.
+- Do **not** change images, banners, visible marketing copy, or visual layout unless the user explicitly asks.
+- Cart, checkout, contact, and menu changes require **explicit authorization** first.
+- Do **not** touch warning-label images.
+- Theme SEO work lives in `woocommerce-migration/theme/palmbeach-vitality/` (especially `inc/seo.php`). Ship via theme zip + WP upload.
+- There is **no Google Search Console / Analytics / Ahrefs / Semrush MCP** in this environment. Use live HTTP checks, sitemap/robots inspection, theme code, and user-exported GSC CSVs. Ask the user to run GSC “Request indexing” / Validate when needed.
+- Plan file: `woocommerce-migration/SEO-PLAN.md`.
+
 ## Cursor Cloud specific instructions
 
 ### Scope (do not cross)
