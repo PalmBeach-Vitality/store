@@ -9,11 +9,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.17');
+define('PBV_THEME_VERSION', '2.10.18');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
 require_once get_template_directory() . '/inc/product-research.php';
+require_once get_template_directory() . '/inc/seo.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
