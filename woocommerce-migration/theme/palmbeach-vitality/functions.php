@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.16');
+define('PBV_THEME_VERSION', '2.10.17');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -42,9 +42,10 @@ function pbv_setup() {
     add_theme_support('post-thumbnails');
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script'));
     add_theme_support('woocommerce');
+    // Single product image only — no gallery slider / thumbnails.
     add_theme_support('wc-product-gallery-zoom');
     add_theme_support('wc-product-gallery-lightbox');
-    add_theme_support('wc-product-gallery-slider');
+    remove_theme_support('wc-product-gallery-slider');
     add_theme_support('custom-logo', array(
         'height'      => 72,
         'width'       => 168,
@@ -537,8 +538,51 @@ function pbv_single_product_layout() {
 add_action('init', 'pbv_single_product_layout', 20);
 
 /**
+ * One main product image only — clear WooCommerce gallery attachment IDs.
+ * Featured image still displays; thumbnail strip / extra gallery images do not.
+ */
+function pbv_single_product_gallery_ids_none($ids) {
+    return array();
+}
+add_filter('woocommerce_product_get_gallery_image_ids', 'pbv_single_product_gallery_ids_none', 100);
+add_filter('woocommerce_product_variation_get_gallery_image_ids', 'pbv_single_product_gallery_ids_none', 100);
+
+/**
+ * Hide the redundant "Research-use peptide vial…" short-description line.
+ * Warning label images and the theme RUO banner are left untouched.
+ *
+ * @param string $short Short description HTML/text.
+ * @return string
+ */
+function pbv_strip_ruo_vial_short_description($short) {
+    $short = (string) $short;
+    if ($short === '') {
+        return $short;
+    }
+
+    // Exact vial boilerplate variants used on product short descriptions.
+    $patterns = array(
+        '/<p[^>]*>\s*Research-use peptide vial\.?\s*(Not for human consumption\.?)?\s*<\/p>/iu',
+        '/^\s*Research-use peptide vial\.?\s*(Not for human consumption\.?)?\s*$/iu',
+    );
+    foreach ($patterns as $pattern) {
+        $short = preg_replace($pattern, '', $short);
+    }
+
+    // If only whitespace/empty tags remain, return empty so the block is skipped.
+    if (trim(wp_strip_all_tags($short)) === '') {
+        return '';
+    }
+
+    return $short;
+}
+add_filter('woocommerce_product_get_short_description', 'pbv_strip_ruo_vial_short_description', 20);
+add_filter('woocommerce_short_description', 'pbv_strip_ruo_vial_short_description', 20);
+
+/**
  * ONLY remove the old Shopify disclaimer image (image_6.jpg).
  * Never strip product description text — descriptions must always display as stored.
+ * Never touch ruo-warning-label.jpg or other warning label images.
  */
 function pbv_strip_embedded_research_disclaimer($html) {
     $html = (string) $html;
