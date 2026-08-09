@@ -11,13 +11,13 @@ $hero        = pbv_hero_image_url();
 $hero_mobile = pbv_hero_mobile_image_url();
 ?>
 <style id="pbv-hero-critical">
-/* Critical hero — mobile: 9:16 min frame, content never clipped; desktop wide banner */
-.pbv-hero{display:block;width:100%;padding:.75rem .85rem .5rem;margin:0;box-sizing:border-box;}
+/* Critical hero — mobile: same width as logo (--pbv-mobile-col); desktop wide banner */
+.pbv-hero{display:flex;justify-content:center;width:100%;padding:.75rem 0 .5rem;margin:0;box-sizing:border-box;}
 .pbv-hero-photo{
-  position:relative;display:block;width:100%;
+  position:relative;display:block;width:min(100% - 2rem,36rem);max-width:36rem;
   /* Grow with copy; never shorter than true 9:16 of the photo width */
   aspect-ratio:auto;height:auto;
-  min-height:calc((100vw - 1.7rem) * 16 / 9);
+  min-height:calc((100vw - 2rem) * 16 / 9);
   margin:0;border-radius:1.25rem;overflow:hidden;isolation:isolate;
   box-shadow:0 12px 28px rgba(0,0,0,.16);color:#fff;
   background:linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);

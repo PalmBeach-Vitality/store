@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.22
+Version: 2.10.23
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -16,7 +16,7 @@ Text Domain: palmbeach-vitality
   --pbv-line: #111111;
   --pbv-soft: #f7f7f7;
   --pbv-max: 72rem;
-  /* Mobile content column — logo + product description share this exact width */
+  /* Mobile content column — logo + homepage hero share this exact width */
   --pbv-mobile-col: min(100% - 2rem, 36rem);
   --pbv-font-body: "Work Sans", system-ui, sans-serif;
   --pbv-font-display: "Libre Baskerville", Georgia, serif;
@@ -253,9 +253,12 @@ a:hover { opacity: 0.7; }
  * Critical rules are also inlined on front-page.php for cache safety.
  */
 .pbv-hero {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
   width: 100%;
-  padding: 0.75rem 0.85rem 0.5rem;
+  /* Same horizontal inset model as logo banner — width lives on the photo */
+  padding: 0.75rem 0 0.5rem;
   margin: 0;
   box-sizing: border-box;
 }
@@ -263,11 +266,11 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo {
   position: relative;
   display: block;
-  width: 100%;
-  max-width: none;
+  width: var(--pbv-mobile-col);
+  max-width: 36rem;
   aspect-ratio: auto;
   height: auto;
-  min-height: calc((100vw - 1.7rem) * 16 / 9);
+  min-height: calc((100vw - 2rem) * 16 / 9);
   margin: 0;
   border-radius: 1.25rem;
   overflow: hidden;
