@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.23
+Version: 2.10.24
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -16,7 +16,9 @@ Text Domain: palmbeach-vitality
   --pbv-line: #111111;
   --pbv-soft: #f7f7f7;
   --pbv-max: 72rem;
-  /* Mobile content column — logo + homepage hero share this exact width */
+  /* Exact width of Peptide Vials collection hero (.pbv-cat-banner) */
+  --pbv-cat-hero-col: min(100% - 1.5rem, 64rem);
+  /* Product page content column (unchanged; not the collection hero) */
   --pbv-mobile-col: min(100% - 2rem, 36rem);
   --pbv-font-body: "Work Sans", system-ui, sans-serif;
   --pbv-font-display: "Libre Baskerville", Georgia, serif;
@@ -225,8 +227,9 @@ a:hover { opacity: 0.7; }
 
 .pbv-logo-card {
   display: block;
-  width: var(--pbv-mobile-col);
-  max-width: 36rem;
+  /* Same width as Peptide Vials collection hero */
+  width: var(--pbv-cat-hero-col);
+  max-width: 64rem;
   aspect-ratio: 2.35 / 1;
   border-radius: 1.25rem;
   overflow: hidden;
@@ -266,11 +269,12 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo {
   position: relative;
   display: block;
-  width: var(--pbv-mobile-col);
-  max-width: 36rem;
+  /* Same width as Peptide Vials collection hero + logo */
+  width: var(--pbv-cat-hero-col);
+  max-width: 64rem;
   aspect-ratio: auto;
   height: auto;
-  min-height: calc((100vw - 2rem) * 16 / 9);
+  min-height: calc((100vw - 1.5rem) * 16 / 9);
   margin: 0;
   border-radius: 1.25rem;
   overflow: hidden;
@@ -403,12 +407,12 @@ a:hover { opacity: 0.7; }
 
 @media (min-width: 750px) {
   .pbv-logo-banner {
-    padding: 1.35rem 1rem 1.1rem;
+    padding: 1.35rem 0 1.1rem;
   }
 
   .pbv-logo-card {
-    width: min(100% - 2rem, 64rem);
-    max-width: none;
+    width: var(--pbv-cat-hero-col);
+    max-width: 64rem;
     border-radius: 1.5rem;
   }
 
@@ -416,13 +420,13 @@ a:hover { opacity: 0.7; }
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1.25rem 1rem 0.75rem;
+    padding: 1.25rem 0 0.75rem;
   }
 
   .pbv-hero-photo {
-    width: min(64rem, 100vw - 2rem);
-    max-width: min(64rem, 100vw - 2rem);
-    height: calc(min(64rem, 100vw - 2rem) / 2.35 * 2);
+    width: var(--pbv-cat-hero-col);
+    max-width: 64rem;
+    height: calc(min(100vw - 1.5rem, 64rem) / 2.35 * 2);
     min-height: 0;
     aspect-ratio: auto;
     margin: 0 auto;
@@ -646,7 +650,7 @@ a:hover { opacity: 0.7; }
   position: relative;
   display: grid;
   place-items: center;
-  width: min(100% - 1.5rem, 64rem);
+  width: var(--pbv-cat-hero-col);
   margin: 0.75rem auto 1.25rem;
   min-height: clamp(22rem, 58vw, 32rem);
   border-radius: 1.25rem;
