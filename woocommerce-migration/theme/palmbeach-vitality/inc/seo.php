@@ -465,11 +465,10 @@ function pbv_seo_meta_description() {
     if (function_exists('is_product') && is_product()) {
         global $product;
         if ($product instanceof WC_Product) {
-            $desc = pbv_schema_product_description($product);
-            if ($desc !== '') {
-                return $desc;
-            }
-            return sprintf('%s — research-use compound from Palm Beach Vitality. Not for human consumption.', $product->get_name());
+            return sprintf(
+                '%s — research-use compound from Palm Beach Vitality. Third-party tested with COA documentation. Laboratory research only.',
+                $product->get_name()
+            );
         }
     }
 
@@ -691,10 +690,16 @@ function pbv_output_organization_website_schema() {
 add_action('wp_head', 'pbv_output_organization_website_schema', 4);
 
 /**
- * Open Graph basics for key templates (complements meta description).
+ * Open Graph basics for key templates.
+ * Keep minimal — Jetpack OG is filtered separately to avoid duplicate junk values.
  */
 function pbv_output_og_basics() {
     if (is_admin()) {
+        return;
+    }
+
+    // If Jetpack OG is active, it will emit tags; our jetpack_open_graph_tags filter corrects them.
+    if (class_exists('Jetpack') || function_exists('jetpack_og_tags') || has_filter('jetpack_open_graph_tags')) {
         return;
     }
 
@@ -704,7 +709,7 @@ function pbv_output_og_basics() {
 
     if (is_front_page()) {
         $url = home_url('/');
-    } elseif (function_exists('is_shop') && is_shop()) {
+    } elseif (function_exists('is_shop') && is_shop() && function_exists('wc_get_page_id')) {
         $url = get_permalink(wc_get_page_id('shop'));
     } elseif (function_exists('is_product_category') && is_product_category()) {
         $term = get_queried_object();
@@ -732,4 +737,96 @@ function pbv_output_og_basics() {
     echo '<meta property="og:locale" content="en_US" />' . "\n";
 }
 add_action('wp_head', 'pbv_output_og_basics', 2);
+
+/**
+ * Prefer our document titles over Jetpack/custom SEO title fields when we have a curated pattern.
+ *
+ * @param string $title Current title.
+ * @return string
+ */
+function pbv_pre_get_document_title($title) {
+    $parts = array(
+        'title'   => '',
+        'page'    => '',
+        'tagline' => '',
+        'site'    => get_bloginfo('name', 'display'),
+    );
+    $parts = pbv_document_title_parts($parts);
+
+    if (is_front_page()) {
+        return 'Palm Beach Vitality – Research Peptides & Peptide Pens';
+    }
+
+    if (!empty($parts['title'])) {
+        $site = !empty($parts['site']) ? $parts['site'] : get_bloginfo('name', 'display');
+        if (!empty($parts['tagline'])) {
+            return $parts['title'] . ' – ' . $parts['tagline'];
+        }
+        if ($site && $parts['title'] !== $site) {
+            return $parts['title'] . ' – ' . $site;
+        }
+        return $parts['title'];
+    }
+
+    return $title;
+}
+add_filter('pre_get_document_title', 'pbv_pre_get_document_title', 20);
+
+/**
+ * Disable Jetpack per-page SEO title/description tags so theme-curated meta wins
+ * (avoids RUO short-desc + accidental wrong About SEO fields).
+ */
+add_filter('jetpack_seo_meta_tags_enabled', '__return_false');
+
+/**
+ * Force Jetpack Open Graph title/description to our curated SEO values.
+ *
+ * @param array<string,string> $tags OG tags.
+ * @return array<string,string>
+ */
+function pbv_filter_jetpack_open_graph_tags($tags) {
+    if (!is_array($tags)) {
+        $tags = array();
+    }
+
+    $desc = pbv_seo_meta_description();
+    if ($desc !== '') {
+        $tags['og:description'] = $desc;
+    }
+
+    $tags['og:title'] = wp_get_document_title();
+    $tags['og:site_name'] = 'Palm Beach Vitality';
+
+    if (function_exists('is_product') && is_product()) {
+        $tags['og:type'] = 'product';
+    }
+
+    return $tags;
+}
+add_filter('jetpack_open_graph_tags', 'pbv_filter_jetpack_open_graph_tags', 99);
+
+/**
+ * Also override Jetpack's twitter card description when present.
+ *
+ * @param array<string,string> $tags Twitter tags.
+ * @return array<string,string>
+ */
+function pbv_filter_jetpack_twitter_cards($tags) {
+    if (!is_array($tags)) {
+        return $tags;
+    }
+    $desc = pbv_seo_meta_description();
+    if ($desc !== '') {
+        $tags['twitter:description'] = $desc;
+        $tags['twitter:title'] = wp_get_document_title();
+    }
+    return $tags;
+}
+add_filter('jetpack_twitter_cards_site_tag', function ($tag) {
+    return $tag;
+}, 10);
+add_filter('twitter_cards_tags', 'pbv_filter_jetpack_twitter_cards', 99);
+add_filter('jetpack_twitter_cards_title', function ($title) {
+    return wp_get_document_title();
+}, 99);
 

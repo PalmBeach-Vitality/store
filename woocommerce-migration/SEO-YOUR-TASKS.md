@@ -35,6 +35,14 @@ For wholesale inquiries, visit our Wholesale page or contact our team.
 
 Then Update. (Optional: set a featured image later — not required for SEO.)
 
+## 3) About page SEO fields (Jetpack / page SEO box)
+If About still shows a Shop title in Google preview, open **Pages → About** and set:
+
+- **SEO title:** `About Palm Beach Vitality | Research Peptides`
+- **SEO description:** `Palm Beach Vitality supplies research-use peptides and peptide pens with COAs, third-party testing, and cold-pack shipping. Lab use only.`
+
+Or clear those fields — theme v2.10.21+ supplies correct About meta automatically.
+
 ## 4) Marketing / ads / social
 Use only:
 - `https://palmbeach-vitality.store/product/{slug}/`
