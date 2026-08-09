@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.21
+Version: 2.10.22
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -16,6 +16,8 @@ Text Domain: palmbeach-vitality
   --pbv-line: #111111;
   --pbv-soft: #f7f7f7;
   --pbv-max: 72rem;
+  /* Mobile content column — logo + product description share this exact width */
+  --pbv-mobile-col: min(100% - 2rem, 36rem);
   --pbv-font-body: "Work Sans", system-ui, sans-serif;
   --pbv-font-display: "Libre Baskerville", Georgia, serif;
 }
@@ -215,14 +217,16 @@ a:hover { opacity: 0.7; }
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 1rem 1rem 0.85rem;
+  /* Horizontal inset lives on the card width so it matches product description */
+  padding: 1rem 0 0.85rem;
   background: #fff;
   border-bottom: 1px solid #eee;
 }
 
 .pbv-logo-card {
   display: block;
-  width: min(100% - 2rem, 56rem);
+  width: var(--pbv-mobile-col);
+  max-width: 36rem;
   aspect-ratio: 2.35 / 1;
   border-radius: 1.25rem;
   overflow: hidden;
@@ -401,6 +405,7 @@ a:hover { opacity: 0.7; }
 
   .pbv-logo-card {
     width: min(100% - 2rem, 64rem);
+    max-width: none;
     border-radius: 1.5rem;
   }
 
@@ -849,9 +854,11 @@ a:hover { opacity: 0.7; }
   flex-direction: column;
   align-items: center;
   gap: 1.35rem;
+  width: var(--pbv-mobile-col);
   max-width: 36rem;
   margin: 1.25rem auto 3rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .woocommerce div.product::before,
@@ -937,8 +944,9 @@ a:hover { opacity: 0.7; }
 
 .woocommerce div.product .pbv-product-description,
 .woocommerce div.product .woocommerce-product-details__short-description {
-  width: min(100%, 34rem) !important;
-  max-width: 34rem !important;
+  /* Fill product column so width matches mobile logo exactly */
+  width: 100% !important;
+  max-width: 100% !important;
   margin: 0 auto !important;
   text-align: center;
   color: #222;
@@ -968,7 +976,7 @@ a:hover { opacity: 0.7; }
 .pbv-ruo-banner {
   display: block !important;
   width: 100% !important;
-  max-width: 34rem !important;
+  max-width: 100% !important;
   margin: 1.5rem auto 0 !important;
   padding: 1.25rem 1.35rem 1.2rem !important;
   border-radius: 0.95rem !important;
@@ -1049,7 +1057,8 @@ a:hover { opacity: 0.7; }
 
 /* Research studies + amino diagram (below Add to cart) */
 .pbv-product-research {
-  width: min(100%, 34rem);
+  width: 100%;
+  max-width: 100%;
   margin: 1.75rem auto 0;
   padding: 0;
   text-align: center;
@@ -1157,6 +1166,7 @@ a:hover { opacity: 0.7; }
 
 @media (min-width: 900px) {
   .woocommerce div.product {
+    width: min(100% - 2rem, 38rem);
     max-width: 38rem;
     gap: 1.6rem;
     margin: 2rem auto 3.5rem;
