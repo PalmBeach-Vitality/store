@@ -41,10 +41,17 @@ NO_DOUBLES = (
     "second readable copy of a label or a second hero object."
 )
 VIAL_CLOSURE = (
-    "VIAL CLOSURE RULE (MANDATORY): When a research vial appears, it must be a pharmaceutical "
-    "injection vial with an aluminum crimped seal over a rubber septum stopper. Show the crimped "
-    "metal collar and rubber center clearly. NO twist-off caps, NO screw-top vials, NO plastic "
-    "twist closures — crimped metal + rubber only."
+    "VIAL PACKAGING RULE (MANDATORY): When any vial appears it must match Palm Beach Vitality "
+    "catalog packaging exactly: clear transparent glass multi-use injection vial; bright blue "
+    "plastic flip-off cap seated on a brushed-silver aluminum crimp seal over a rubber septum "
+    "(show the blue cap + silver crimp stack clearly); clean white wrap-around label; dark maroon "
+    "stylized DNA double-helix logo centered at the top of the label; product name in large bold "
+    "dark maroon sans-serif — the exact compound name only, printed once; a solid dark maroon "
+    "horizontal bar with white dosage strength; black concentration line (mg/ml) under the bar; "
+    "small black footer text exactly '10ml Sterile Multi-Use Vial'. Prefer a single vial hero on "
+    "a clear acrylic or glass pedestal. NO amber-glass hero vials, NO gold caps, NO bare crimp "
+    "without the blue flip-cap, NO twist-off or screw caps, NO blank/unbranded pharmacy vials, "
+    "NO second vial, NO duplicate labels."
 )
 AVOID = (
     "Avoid: people, hands, faces, skin contact, needles, syringes, injection, medical procedures, "
@@ -155,7 +162,7 @@ OPENERS = [
 ]
 
 PRODUCT_FOCALS = [
-    "a single crimped-seal rubber-septum research vial catching soft rim light on a natural surface",
+    "a single clear glass Palm Beach Vitality injection vial with bright blue flip-off cap, brushed-silver aluminum crimp, and white DNA-logo label catching soft rim light on a natural surface",
     "a sealed research pen resting like a premium design object beside wellness props",
     "a small clear research vial and matching carton silhouette staged as quiet product jewelry",
     "an elegant research vial on a stone coaster, label facing camera once only",

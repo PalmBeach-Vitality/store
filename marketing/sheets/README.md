@@ -27,6 +27,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 
 - Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
+- Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**

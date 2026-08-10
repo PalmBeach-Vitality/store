@@ -40,10 +40,17 @@ NO_DOUBLES = (
     "Reflections may exist but must not create a second readable copy of a label or a second hero object."
 )
 VIAL_CLOSURE = (
-    "VIAL CLOSURE RULE (MANDATORY): Every vial must be a pharmaceutical injection vial with an "
-    "aluminum crimped seal over a rubber septum stopper. Show the crimped metal collar and rubber "
-    "center clearly when a vial is visible. NO twist-off caps, NO screw-top vials, NO child-resistant "
-    "twist lids, NO plastic twist closures — crimped metal + rubber only."
+    "VIAL PACKAGING RULE (MANDATORY): When any vial appears it must match Palm Beach Vitality "
+    "catalog packaging exactly: clear transparent glass multi-use injection vial; bright blue "
+    "plastic flip-off cap seated on a brushed-silver aluminum crimp seal over a rubber septum "
+    "(show the blue cap + silver crimp stack clearly); clean white wrap-around label; dark maroon "
+    "stylized DNA double-helix logo centered at the top of the label; product name in large bold "
+    "dark maroon sans-serif — the exact compound name only, printed once; a solid dark maroon "
+    "horizontal bar with white dosage strength; black concentration line (mg/ml) under the bar; "
+    "small black footer text exactly '10ml Sterile Multi-Use Vial'. Prefer a single vial hero on "
+    "a clear acrylic or glass pedestal. NO amber-glass hero vials, NO gold caps, NO bare crimp "
+    "without the blue flip-cap, NO twist-off or screw caps, NO blank/unbranded pharmacy vials, "
+    "NO second vial, NO duplicate labels."
 )
 AVOID = (
     "Avoid: people, hands, faces, skin contact, needles, syringes, injection, medical procedures, "
@@ -51,7 +58,7 @@ AVOID = (
     "000/500 counters, surreal CGI orbs, watermarks, lower-third captions, scene titles printed in frame, "
     "hex IDs, continuity codes, gallery name plaques, burn-in text, subtitles, timecodes, "
     "duplicated text, tiled wall lettering, repeated peptide sequences, cloned props, "
-    "twist-top vials, screw-cap vials, plastic twist closures. "
+    "amber hero vials, bare-crimp vials without blue flip-caps, twist-top vials, screw-cap vials, plastic twist closures. "
     "Do NOT render any prompt metadata as visible text in the image. "
     f"{NO_DOUBLES} {VIAL_CLOSURE}"
 )
