@@ -43,12 +43,16 @@ If `get_reel_creations` and `sheets_update_creation` point at **different** Docu
 | Column to Match On | **`creation_id`** (do **not** use `row_number` — often missing/wrong after Code nodes) |
 | Value to Match On | `={{ $('pick_creation').first().json.creation_id }}` |
 
-### Columns to set (only these two required)
+### Columns to set
 
 | Column | Value |
 |---|---|
-| `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
+| `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| $('pick_creation').first().json.times_used \|\| 0) + 1 }}` |
 | `last_used_at` | `={{ $now.toISO() }}` |
+| `still_url` | `={{ $('save_still_url').first().json.still_url }}` |
+| `video_url` | `={{ $('save_video_url').first().json.video_url }}` |
+
+Sheet 9 headers include **`still_url`** and **`video_url`** (blank until writeback).
 
 **Match value must look like** `PBVita-Lab-206` (same string as column A in the Sheet).
 
