@@ -55,9 +55,11 @@ VIAL_RULE = (
     "dark maroon sans-serif — the exact compound name only, printed once; a solid dark maroon "
     "horizontal bar with white dosage strength; black concentration line (mg/ml) under the bar; "
     "small black footer text exactly '10ml Sterile Multi-Use Vial'. Prefer a single vial hero on "
-    "a clear acrylic or glass pedestal. NO amber-glass hero vials, NO gold caps, NO bare crimp "
-    "without the blue flip-cap, NO twist-off or screw caps, NO blank/unbranded pharmacy vials, "
-    "NO second vial, NO duplicate labels."
+    "a clear acrylic or glass pedestal. NO amber-glass hero vial, NO gold caps, NO bare crimp "
+    "without the blue flip-cap, NO twist-off or screw caps, NO blank/unbranded pharmacy vial, "
+    "NO second vial, NO duplicate labels. "
+    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL): exactly ONE vial OR ONE pen per image — "
+    "never both, never a row/rack/carousel/constellation of vials or pens."
 )
 
 OLD_RULE = re.compile(
