@@ -11,6 +11,7 @@ Premium American-made peptides for researchers, clinics, and B2B brands.
 - **Products** — Full catalog with filters (Growth Factors, Metabolic, Cognitive, Hormonal, Immune, Stacks)
 - **About** — Company story, manufacturing standards, timeline, principles
 - **Research** — Research library with guides
+- **Protocols** — Interactive dosage / reconstitution calculator for catalog peptides
 - **FAQ** — Comprehensive frequently asked questions
 - **Wholesale** — B2B program benefits + application form
 - **Contact** — Contact form + dedicated Get Pricing section
