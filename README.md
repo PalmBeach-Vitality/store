@@ -57,7 +57,7 @@ All pages are fully linked and mobile-responsive. No build step required (uses T
 ## Tech
 - Pure HTML + Tailwind CSS (via CDN)
 - Inter + Playfair Display fonts
-- Vanilla JS for mobile menu + product filters
+- Vanilla JS for mobile menu, product filters, and the protocol calculator
 - Fully static — ready for Netlify, Vercel, GitHub Pages, or any host
 
 ## Customization Notes
