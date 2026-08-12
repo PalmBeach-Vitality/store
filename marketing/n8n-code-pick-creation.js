@@ -4,6 +4,7 @@
 // Before: grok_imagine_reel_still
 //
 // SHEETS-ONLY: all creative fields come from the Sheet 9 row.
+// Rotation: cycle compounds first (compound_name), then least-used row within that compound.
 // No hardcoded prompts, cameras, models, or edit text.
 
 function firstJson(name) {
@@ -140,34 +141,54 @@ const previouslyUsed = scored
   .slice()
   .sort((a, b) => String(b.last_used_at).localeCompare(String(a.last_used_at)));
 
-const RECENT_N = 8;
-const recent = previouslyUsed.slice(0, RECENT_N);
-const last = recent[0] || null;
+const last = previouslyUsed[0] || null;
 const lastId = last?.creation_id || '';
-const recentFamilies = new Set(recent.map((c) => c.shot_family).filter(Boolean));
-const recentCameras = new Set(recent.map((c) => c.camera_move).filter(Boolean));
-const recentAngles = new Set(recent.map((c) => c.camera_angle).filter(Boolean));
-const recentDirections = new Set(recent.map((c) => c.camera_direction).filter(Boolean));
-const recentFramings = new Set(recent.map((c) => c.framing).filter(Boolean));
-const recentCategories = new Set(recent.map((c) => c.category).filter(Boolean));
-const recentSettings = new Set(recent.map((c) => c.scene_setting).filter(Boolean));
-const recentBuckets = new Set(recent.map((c) => c.environment_bucket).filter(Boolean));
+const lastCompound = String(last?.compound_name || '').trim();
+
+// How many times each compound has been used (sum of row times_used)
+const compoundTimesUsed = new Map();
+const compoundLastUsed = new Map();
+for (const c of scored) {
+  const name = String(c.compound_name || '').trim() || '(none)';
+  compoundTimesUsed.set(name, (compoundTimesUsed.get(name) || 0) + (Number(c.times_used) || 0));
+  const prev = compoundLastUsed.get(name) || '';
+  if (String(c.last_used_at || '') > prev) {
+    compoundLastUsed.set(name, String(c.last_used_at || ''));
+  }
+}
+
+// Recent compound streak — avoid reusing these until others catch up
+const RECENT_COMPOUND_N = 8;
+const recentCompounds = [];
+const seenCompounds = new Set();
+for (const c of previouslyUsed) {
+  const name = String(c.compound_name || '').trim();
+  if (!name || seenCompounds.has(name)) continue;
+  seenCompounds.add(name);
+  recentCompounds.push(name);
+  if (recentCompounds.length >= RECENT_COMPOUND_N) break;
+}
+const recentCompoundSet = new Set(recentCompounds);
 
 function scorePick(c) {
+  const name = String(c.compound_name || '').trim() || '(none)';
   let penalty = 0;
-  if (lastId && c.creation_id === lastId) penalty += 1000;
-  if (last?.scene_setting && c.scene_setting === last.scene_setting) penalty += 2000;
-  if (c.scene_setting && recentSettings.has(c.scene_setting)) penalty += 400;
-  if (last?.environment_bucket && c.environment_bucket === last.environment_bucket) penalty += 180;
-  if (c.environment_bucket && recentBuckets.has(c.environment_bucket)) penalty += 80;
-  if (c.shot_family && recentFamilies.has(c.shot_family)) penalty += 120;
-  if (c.camera_move && recentCameras.has(c.camera_move)) penalty += 140;
-  if (c.camera_angle && recentAngles.has(c.camera_angle)) penalty += 50;
-  if (c.camera_direction && recentDirections.has(c.camera_direction)) penalty += 50;
-  if (c.framing && recentFramings.has(c.framing)) penalty += 60;
-  if (c.category && recentCategories.has(c.category)) penalty += 40;
-  if (last?.shot_family && c.shot_family === last.shot_family) penalty += 40;
-  if (last?.camera_move && c.camera_move === last.camera_move) penalty += 40;
+
+  // Never repeat the exact same creation back-to-back
+  if (lastId && c.creation_id === lastId) penalty += 5000;
+
+  // Primary: rotate compounds — hard avoid last compound
+  if (lastCompound && name === lastCompound) penalty += 3000;
+
+  // Avoid compounds used in the last N distinct picks
+  if (name && recentCompoundSet.has(name)) {
+    const idx = recentCompounds.indexOf(name);
+    penalty += 400 + (RECENT_COMPOUND_N - idx) * 50;
+  }
+
+  // Prefer compounds with fewer total uses across all their rows
+  penalty += (compoundTimesUsed.get(name) || 0) * 20;
+
   return penalty;
 }
 
@@ -177,6 +198,17 @@ const diversified = scored
     const pa = scorePick(a);
     const pb = scorePick(b);
     if (pa !== pb) return pa - pb;
+
+    const ca = String(a.compound_name || '').trim() || '(none)';
+    const cb = String(b.compound_name || '').trim() || '(none)';
+    const cuA = compoundTimesUsed.get(ca) || 0;
+    const cuB = compoundTimesUsed.get(cb) || 0;
+    if (cuA !== cuB) return cuA - cuB;
+
+    const clA = compoundLastUsed.get(ca) || '';
+    const clB = compoundLastUsed.get(cb) || '';
+    if (clA !== clB) return String(clA).localeCompare(String(clB));
+
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
     if (a.last_used_at !== b.last_used_at) {
       return String(a.last_used_at).localeCompare(String(b.last_used_at));
@@ -184,11 +216,11 @@ const diversified = scored
     return Number(a.rank) - Number(b.rank);
   });
 
-const lastSetting = last?.scene_setting || '';
-const notSameSetting = lastSetting
-  ? diversified.filter((c) => c.scene_setting !== lastSetting)
+// Prefer a different compound than last when any alternative exists
+const notSameCompound = lastCompound
+  ? diversified.filter((c) => String(c.compound_name || '').trim() !== lastCompound)
   : diversified;
-const pick = (notSameSetting.length ? notSameSetting : diversified)[0];
+const pick = (notSameCompound.length ? notSameCompound : diversified)[0];
 
 if (!pick.model_still) {
   throw new Error('Sheet 9 row missing model_still for ' + pick.creation_id);
