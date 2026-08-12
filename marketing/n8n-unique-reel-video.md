@@ -49,7 +49,7 @@ Reel Studio deleted those nodes and replaced them with Creatomate. Put Imagine/v
 
 ### 1) Confirm `pick_creation` outputs `video_prompt` + `video_motion_prompt`
 Execute `pick_creation`. You must see a long `video_prompt`, a unique `video_motion_prompt` / `camera_move`, and a `creation_id` (e.g. `PBVita-Lab-00x`).  
-Two runs in a row must pick a **different `compound_name`** (compound rotation) after `sheets_update_creation` writes `times_used`.
+Two runs in a row must pick a **different `compound_name` and different `lab_scene`** (`category`) after `sheets_update_creation` writes `times_used`.
 
 ### 2) Restore Imagine + video nodes from the **live** workflow
 Copy settings from live (do not invent endpoints):

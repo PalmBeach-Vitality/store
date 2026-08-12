@@ -4,8 +4,8 @@
 // Before: grok_imagine_reel_still
 //
 // SHEETS-ONLY: all creative fields come from the Sheet 9 row.
-// Rotation: cycle compounds first (compound_name), then least-used row within that compound.
-// No hardcoded prompts, cameras, models, or edit text.
+// Rotation each run: different compound_name AND different lab_scene (category).
+// Then least-used row within that pair. No hardcoded prompts/cameras/models.
 
 function firstJson(name) {
   try {
@@ -144,50 +144,70 @@ const previouslyUsed = scored
 const last = previouslyUsed[0] || null;
 const lastId = last?.creation_id || '';
 const lastCompound = String(last?.compound_name || '').trim();
+// lab_scene = Sheet column `category` (peptide_synthesis, formulation_suite, …)
+const lastLabScene = String(last?.category || '').trim();
 
-// How many times each compound has been used (sum of row times_used)
-const compoundTimesUsed = new Map();
-const compoundLastUsed = new Map();
-for (const c of scored) {
-  const name = String(c.compound_name || '').trim() || '(none)';
-  compoundTimesUsed.set(name, (compoundTimesUsed.get(name) || 0) + (Number(c.times_used) || 0));
-  const prev = compoundLastUsed.get(name) || '';
-  if (String(c.last_used_at || '') > prev) {
-    compoundLastUsed.set(name, String(c.last_used_at || ''));
+function accumulateUsage(getter) {
+  const times = new Map();
+  const lastAt = new Map();
+  for (const c of scored) {
+    const key = getter(c) || '(none)';
+    times.set(key, (times.get(key) || 0) + (Number(c.times_used) || 0));
+    const prev = lastAt.get(key) || '';
+    if (String(c.last_used_at || '') > prev) {
+      lastAt.set(key, String(c.last_used_at || ''));
+    }
   }
+  return { times, lastAt };
 }
 
-// Recent compound streak — avoid reusing these until others catch up
-const RECENT_COMPOUND_N = 8;
-const recentCompounds = [];
-const seenCompounds = new Set();
-for (const c of previouslyUsed) {
-  const name = String(c.compound_name || '').trim();
-  if (!name || seenCompounds.has(name)) continue;
-  seenCompounds.add(name);
-  recentCompounds.push(name);
-  if (recentCompounds.length >= RECENT_COMPOUND_N) break;
+const compoundUsage = accumulateUsage((c) => String(c.compound_name || '').trim());
+const labSceneUsage = accumulateUsage((c) => String(c.category || '').trim());
+
+function recentDistinct(getter, n) {
+  const out = [];
+  const seen = new Set();
+  for (const c of previouslyUsed) {
+    const key = getter(c);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(key);
+    if (out.length >= n) break;
+  }
+  return out;
 }
+
+const RECENT_N = 8;
+const recentCompounds = recentDistinct((c) => String(c.compound_name || '').trim(), RECENT_N);
+const recentLabScenes = recentDistinct((c) => String(c.category || '').trim(), RECENT_N);
 const recentCompoundSet = new Set(recentCompounds);
+const recentLabSceneSet = new Set(recentLabScenes);
 
 function scorePick(c) {
-  const name = String(c.compound_name || '').trim() || '(none)';
+  const compound = String(c.compound_name || '').trim() || '(none)';
+  const labScene = String(c.category || '').trim() || '(none)';
   let penalty = 0;
 
   // Never repeat the exact same creation back-to-back
-  if (lastId && c.creation_id === lastId) penalty += 5000;
+  if (lastId && c.creation_id === lastId) penalty += 8000;
 
-  // Primary: rotate compounds — hard avoid last compound
-  if (lastCompound && name === lastCompound) penalty += 3000;
+  // CRITICAL each workflow run: rotate compound_name AND lab_scene
+  if (lastCompound && compound === lastCompound) penalty += 4000;
+  if (lastLabScene && labScene === lastLabScene) penalty += 4000;
 
-  // Avoid compounds used in the last N distinct picks
-  if (name && recentCompoundSet.has(name)) {
-    const idx = recentCompounds.indexOf(name);
-    penalty += 400 + (RECENT_COMPOUND_N - idx) * 50;
+  // Soft-avoid recent compounds / lab scenes so the full set rotates
+  if (compound && recentCompoundSet.has(compound)) {
+    const idx = recentCompounds.indexOf(compound);
+    penalty += 300 + (RECENT_N - idx) * 40;
+  }
+  if (labScene && recentLabSceneSet.has(labScene)) {
+    const idx = recentLabScenes.indexOf(labScene);
+    penalty += 300 + (RECENT_N - idx) * 40;
   }
 
-  // Prefer compounds with fewer total uses across all their rows
-  penalty += (compoundTimesUsed.get(name) || 0) * 20;
+  // Prefer least-used compound and least-used lab scene overall
+  penalty += (compoundUsage.times.get(compound) || 0) * 25;
+  penalty += (labSceneUsage.times.get(labScene) || 0) * 25;
 
   return penalty;
 }
@@ -201,13 +221,16 @@ const diversified = scored
 
     const ca = String(a.compound_name || '').trim() || '(none)';
     const cb = String(b.compound_name || '').trim() || '(none)';
-    const cuA = compoundTimesUsed.get(ca) || 0;
-    const cuB = compoundTimesUsed.get(cb) || 0;
+    const sa = String(a.category || '').trim() || '(none)';
+    const sb = String(b.category || '').trim() || '(none)';
+
+    const cuA = compoundUsage.times.get(ca) || 0;
+    const cuB = compoundUsage.times.get(cb) || 0;
     if (cuA !== cuB) return cuA - cuB;
 
-    const clA = compoundLastUsed.get(ca) || '';
-    const clB = compoundLastUsed.get(cb) || '';
-    if (clA !== clB) return String(clA).localeCompare(String(clB));
+    const suA = labSceneUsage.times.get(sa) || 0;
+    const suB = labSceneUsage.times.get(sb) || 0;
+    if (suA !== suB) return suA - suB;
 
     if (a.times_used !== b.times_used) return a.times_used - b.times_used;
     if (a.last_used_at !== b.last_used_at) {
@@ -216,11 +239,29 @@ const diversified = scored
     return Number(a.rank) - Number(b.rank);
   });
 
-// Prefer a different compound than last when any alternative exists
-const notSameCompound = lastCompound
-  ? diversified.filter((c) => String(c.compound_name || '').trim() !== lastCompound)
-  : diversified;
-const pick = (notSameCompound.length ? notSameCompound : diversified)[0];
+// Prefer rows that change BOTH compound and lab_scene vs last run
+function differsBoth(c) {
+  const compound = String(c.compound_name || '').trim();
+  const labScene = String(c.category || '').trim();
+  const compoundOk = !lastCompound || compound !== lastCompound;
+  const sceneOk = !lastLabScene || labScene !== lastLabScene;
+  return compoundOk && sceneOk;
+}
+function differsEither(c) {
+  const compound = String(c.compound_name || '').trim();
+  const labScene = String(c.category || '').trim();
+  const compoundOk = !lastCompound || compound !== lastCompound;
+  const sceneOk = !lastLabScene || labScene !== lastLabScene;
+  return compoundOk || sceneOk;
+}
+
+const bothDifferent = diversified.filter(differsBoth);
+const eitherDifferent = diversified.filter(differsEither);
+const pick = (bothDifferent.length
+  ? bothDifferent
+  : eitherDifferent.length
+    ? eitherDifferent
+    : diversified)[0];
 
 if (!pick.model_still) {
   throw new Error('Sheet 9 row missing model_still for ' + pick.creation_id);
@@ -278,6 +319,7 @@ return [
       scene_setting: pick.scene_setting,
       environment_bucket: pick.environment_bucket,
       compound_name: pick.compound_name || '',
+      lab_scene: pick.category || '',
       shot_family: pick.shot_family,
       camera_angle: pick.camera_angle,
       camera_direction: pick.camera_direction,
