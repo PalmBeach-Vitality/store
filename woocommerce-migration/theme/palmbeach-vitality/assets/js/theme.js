@@ -325,4 +325,85 @@
       });
     }, true);
   }
+
+  // Google Sign-In (My Account / Checkout when logged out)
+  (function initGoogleSignIn() {
+    var googleRoot = document.querySelector("[data-pbv-google-signin]");
+    if (!googleRoot || !window.pbvGoogleSignIn || !pbvGoogleSignIn.clientId) return;
+
+    function setGoogleStatus(message, isError) {
+      var googleStatus = googleRoot.querySelector("[data-pbv-google-status]");
+      if (!googleStatus) return;
+      googleStatus.hidden = !message;
+      googleStatus.textContent = message || "";
+      googleStatus.classList.toggle("is-error", !!isError);
+    }
+
+    function onCredential(response) {
+      if (!response || !response.credential) {
+        setGoogleStatus("Google sign-in failed. Please try again.", true);
+        return;
+      }
+      setGoogleStatus("Signing you in…", false);
+      var body = new URLSearchParams();
+      body.set("action", "pbv_google_signin");
+      body.set("nonce", pbvGoogleSignIn.nonce);
+      body.set("credential", response.credential);
+      body.set("redirect", pbvGoogleSignIn.redirect || window.location.href);
+
+      fetch(pbvGoogleSignIn.ajaxUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+        body: body.toString(),
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          if (!data || !data.success) {
+            setGoogleStatus(
+              (data && data.data && data.data.message) || "Could not complete Google sign-in.",
+              true
+            );
+            return;
+          }
+          window.location.href =
+            (data.data && data.data.redirect) || pbvGoogleSignIn.redirect || "/my-account/";
+        })
+        .catch(function () {
+          setGoogleStatus("Network error during Google sign-in. Please try again.", true);
+        });
+    }
+
+    function render() {
+      if (!(window.google && google.accounts && google.accounts.id)) return false;
+      google.accounts.id.initialize({
+        client_id: pbvGoogleSignIn.clientId,
+        callback: onCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      var googleBtn = googleRoot.querySelector("[data-pbv-google-btn]");
+      if (googleBtn) {
+        google.accounts.id.renderButton(googleBtn, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 320,
+        });
+      }
+      return true;
+    }
+
+    if (render()) return;
+    var tries = 0;
+    var timer = window.setInterval(function () {
+      tries += 1;
+      if (render() || tries > 40) window.clearInterval(timer);
+    }, 100);
+  })();
 })();

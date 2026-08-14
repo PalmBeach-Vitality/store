@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.25');
+define('PBV_THEME_VERSION', '2.10.26');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.25');
@@ -25,6 +25,7 @@ function pbv_default_announcement() {
 
 require_once get_template_directory() . '/inc/product-research.php';
 require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/google-signin.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
