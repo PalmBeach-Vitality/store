@@ -596,7 +596,7 @@ def write_all(all_raw: list[tuple[str, str, str]]) -> None:
                 "aspect_ratio": "9:16",
                 "duration_seconds": 15,
                 "resolution": "1080p",
-                "model_still": "grok-imagine-image-quality",
+                "model_still": "grok-imagine-image-2.0",
                 "model_video": "grok-imagine-video-1.5",
                 "still_resolution": "2k",
                 "video_prompt": video_prompt,

@@ -39,17 +39,17 @@ Seedance docs remain available but are **not** required for this path.
 | Authentication | Header Auth → same xAI credential as `GROK_API` |
 | Send Body | ON · JSON |
 
-**Quality (required):** always highest — model `grok-imagine-image-quality` + `resolution: '2k'`. Never `grok-imagine-image` (fast) or `1k` for production.
+**Quality (required):** model from Sheet 9 `model_still` — currently **`grok-imagine-image-2.0`** + `resolution: '2k'`. Never the old fast `grok-imagine-image` or `1k` for production.
 
 **Body** (fx / Expression):
 
 ```text
 ={{ JSON.stringify({
-  model: 'grok-imagine-image-quality',
-  prompt: $json.video_prompt,
+  model: $('pick_creation').first().json.model_still || 'grok-imagine-image-2.0',
+  prompt: $json.video_prompt || $('pick_creation').first().json.video_prompt,
   n: 1,
-  aspect_ratio: '9:16',
-  resolution: '2k'
+  aspect_ratio: $('pick_creation').first().json.aspect_ratio || '9:16',
+  resolution: $('pick_creation').first().json.still_resolution || '2k'
 }) }}
 ```
 
