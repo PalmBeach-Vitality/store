@@ -9,33 +9,35 @@ get_header();
 
 $hero        = pbv_hero_image_url();
 $hero_mobile = pbv_hero_mobile_image_url();
-/* Desktop + mobile both use the true 9:16 asset so the photo is never side-cropped. */
-$hero_src    = $hero_mobile ? $hero_mobile : $hero;
 ?>
 <style id="pbv-hero-critical">
-/* Critical hero — wins over stale concatenated theme CSS */
-.pbv-hero{display:block;width:100%;padding:.75rem .85rem .5rem;margin:0;box-sizing:border-box;}
+/* Critical hero — same width as Peptide Vials collection hero + logo */
+.pbv-hero{display:flex;justify-content:center;width:100%;padding:.75rem 0 .5rem;margin:0;box-sizing:border-box;}
 .pbv-hero-photo{
-  position:relative;display:block;width:100%;
-  aspect-ratio:9/16;height:auto;min-height:0;margin:0;
-  border-radius:1.25rem;overflow:hidden;isolation:isolate;
+  position:relative;display:block;width:min(100% - 1.5rem,64rem);max-width:64rem;
+  /* Grow with copy; never shorter than true 9:16 of the photo width */
+  aspect-ratio:auto;height:auto;
+  min-height:calc((100vw - 1.5rem) * 16 / 9);
+  margin:0;border-radius:1.25rem;overflow:hidden;isolation:isolate;
   box-shadow:0 12px 28px rgba(0,0,0,.16);color:#fff;
   background:linear-gradient(120deg,#0b1220 0%,#12304a 45%,#1a6b7a 100%);
 }
 .pbv-hero-photo__img{
   position:absolute;inset:0;z-index:0;width:100%;height:100%;
-  max-width:none;object-fit:cover;object-position:center center;
+  max-width:none;object-fit:cover;object-position:center top;
   display:block;border:0;
 }
 .pbv-hero-photo__overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(180deg,rgba(3,8,18,.55) 0%,rgba(3,8,18,.72) 45%,rgba(3,8,18,.88) 100%);
+  background:linear-gradient(180deg,rgba(3,8,18,.5) 0%,rgba(3,8,18,.7) 42%,rgba(3,8,18,.9) 100%);
 }
+/* Content in normal flow — drives height so nothing is cut off */
 .pbv-hero-photo__content{
-  position:relative;z-index:2;box-sizing:border-box;width:100%;height:100%;
-  min-height:0;margin:0;
+  position:relative;z-index:2;box-sizing:border-box;width:100%;height:auto;
+  min-height:inherit;margin:0;
   display:flex;flex-direction:column;justify-content:center;align-items:center;
-  padding:1.15rem 1rem 1.35rem;text-align:center;overflow:auto;color:#fff;
+  padding:clamp(1.1rem,4.5vw,1.5rem) clamp(.9rem,3.5vw,1.2rem) clamp(1.25rem,4.5vw,1.65rem);
+  text-align:center;overflow:visible;color:#fff;
 }
 .pbv-hero-photo__title,
 .pbv-hero-photo__subtitle,
@@ -45,49 +47,56 @@ $hero_src    = $hero_mobile ? $hero_mobile : $hero;
   display:block!important;visibility:visible!important;opacity:1!important;
   width:100%;max-width:22rem;flex-shrink:0;
 }
-.pbv-hero-photo__title{margin:0 0 .35rem;font-size:clamp(1.38rem,5.75vw,1.8975rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__subtitle{margin:0 0 .65rem;font-size:clamp(.9775rem,3.795vw,1.2075rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
-.pbv-hero-photo__body{margin:0 0 .5rem;font-size:clamp(.759rem,2.875vw,.897rem);font-weight:400;line-height:1.4;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
-.pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(1.058rem,3.91vw,1.265rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
-.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.736rem,2.645vw,.851rem);line-height:1.4;color:#fff;}
+.pbv-hero-photo__title{margin:0 0 .35rem;font-size:clamp(1.38rem,5.75vw,1.9rem);font-weight:700;line-height:1.15;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__subtitle{margin:0 0 .65rem;font-size:clamp(.98rem,3.8vw,1.21rem);font-weight:700;line-height:1.25;color:#7ec8ff;text-shadow:0 1px 2px rgba(0,0,0,.35);}
+.pbv-hero-photo__body{margin:0 0 .5rem;font-size:clamp(.76rem,2.9vw,.9rem);font-weight:400;line-height:1.42;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4);}
+.pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(1.06rem,3.9vw,1.27rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
+.pbv-hero-photo__wholesale{margin:0;font-size:clamp(.74rem,2.65vw,.85rem);line-height:1.4;color:#fff;}
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 @media (min-width:750px){
-  .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 1rem .75rem!important;}
-  /* Desktop only: same width as logo card; keep current height (2 × logo height) */
+  .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 0 .75rem!important;}
+  /* Desktop: same width as Peptide Vials collection hero + logo */
   .pbv-hero-photo{
-    width:min(64rem, 100vw - 2rem)!important;
-    max-width:min(64rem, 100vw - 2rem)!important;
-    height:calc(min(64rem, 100vw - 2rem) / 2.35 * 2)!important;
+    width:min(100% - 1.5rem,64rem)!important;
+    max-width:64rem!important;
+    height:calc(min(100vw - 1.5rem, 64rem) / 2.35 * 2)!important;
     min-height:0!important;
     aspect-ratio:auto!important;
     margin:0 auto!important;
     border-radius:1.5rem!important;
     box-shadow:0 18px 40px rgba(0,0,0,.18)!important;
   }
+  .pbv-hero-photo__img{object-position:center center;}
   .pbv-hero-photo__content{
-    position:absolute!important;inset:0!important;height:100%!important;
+    position:absolute!important;inset:0!important;height:100%!important;min-height:0!important;
     padding:1.75rem 1.35rem 1.85rem!important;overflow:auto!important;justify-content:center!important;
   }
-  .pbv-hero-photo__title{font-size:2.1275rem;}
-  .pbv-hero-photo__subtitle{font-size:1.265rem;margin-bottom:1rem;}
-  .pbv-hero-photo__body{font-size:.92rem;line-height:1.45;}
-  .pbv-hero-photo__welcome{font-size:1.38rem;}
-  .pbv-hero-photo__wholesale{font-size:.851rem;}
+  /* Desktop hero type +10% over previous live sizes */
+  .pbv-hero-photo__title{font-size:2.34rem;}
+  .pbv-hero-photo__subtitle{font-size:1.39rem;margin-bottom:1rem;}
+  .pbv-hero-photo__body{font-size:1.01rem;line-height:1.45;}
+  .pbv-hero-photo__welcome{font-size:1.52rem;}
+  .pbv-hero-photo__wholesale{font-size:.936rem;}
 }
 </style>
 
 <section class="pbv-hero" aria-label="<?php esc_attr_e('Homepage banner', 'palmbeach-vitality'); ?>">
-  <div class="pbv-hero-photo<?php echo $hero_src ? '' : ' pbv-hero-photo--placeholder'; ?>">
-    <?php if ($hero_src) : ?>
-      <img
-        class="pbv-hero-photo__img"
-        src="<?php echo esc_url($hero_src); ?>"
-        alt=""
-        width="1080"
-        height="1920"
-        decoding="async"
-        fetchpriority="high"
-      />
+  <div class="pbv-hero-photo<?php echo ($hero || $hero_mobile) ? '' : ' pbv-hero-photo--placeholder'; ?>">
+    <?php if ($hero_mobile || $hero) : ?>
+      <picture>
+        <?php if ($hero) : ?>
+          <source media="(min-width: 750px)" srcset="<?php echo esc_url($hero); ?>" />
+        <?php endif; ?>
+        <img
+          class="pbv-hero-photo__img"
+          src="<?php echo esc_url($hero_mobile ? $hero_mobile : $hero); ?>"
+          alt=""
+          width="1080"
+          height="1920"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
     <?php endif; ?>
     <div class="pbv-hero-photo__overlay" aria-hidden="true"></div>
     <div class="pbv-hero-photo__content">

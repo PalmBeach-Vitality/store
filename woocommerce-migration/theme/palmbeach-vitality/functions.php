@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.16');
+define('PBV_THEME_VERSION', '2.10.25');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
-define('PBV_ANNOUNCE_FIX_VERSION', '2.10.15');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.25');
 
 /**
  * Default top announcement bar copy.
@@ -24,6 +24,7 @@ function pbv_default_announcement() {
 }
 
 require_once get_template_directory() . '/inc/product-research.php';
+require_once get_template_directory() . '/inc/seo.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -52,9 +53,10 @@ function pbv_setup() {
     add_theme_support('post-thumbnails');
     add_theme_support('html5', array('search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script'));
     add_theme_support('woocommerce');
+    // Single product image only — no gallery slider / thumbnails.
     add_theme_support('wc-product-gallery-zoom');
     add_theme_support('wc-product-gallery-lightbox');
-    add_theme_support('wc-product-gallery-slider');
+    remove_theme_support('wc-product-gallery-slider');
     add_theme_support('custom-logo', array(
         'height'      => 72,
         'width'       => 168,
@@ -547,8 +549,51 @@ function pbv_single_product_layout() {
 add_action('init', 'pbv_single_product_layout', 20);
 
 /**
+ * One main product image only — clear WooCommerce gallery attachment IDs.
+ * Featured image still displays; thumbnail strip / extra gallery images do not.
+ */
+function pbv_single_product_gallery_ids_none($ids) {
+    return array();
+}
+add_filter('woocommerce_product_get_gallery_image_ids', 'pbv_single_product_gallery_ids_none', 100);
+add_filter('woocommerce_product_variation_get_gallery_image_ids', 'pbv_single_product_gallery_ids_none', 100);
+
+/**
+ * Hide the redundant "Research-use peptide vial…" short-description line.
+ * Warning label images and the theme RUO banner are left untouched.
+ *
+ * @param string $short Short description HTML/text.
+ * @return string
+ */
+function pbv_strip_ruo_vial_short_description($short) {
+    $short = (string) $short;
+    if ($short === '') {
+        return $short;
+    }
+
+    // Exact vial boilerplate variants used on product short descriptions.
+    $patterns = array(
+        '/<p[^>]*>\s*Research-use peptide vial\.?\s*(Not for human consumption\.?)?\s*<\/p>/iu',
+        '/^\s*Research-use peptide vial\.?\s*(Not for human consumption\.?)?\s*$/iu',
+    );
+    foreach ($patterns as $pattern) {
+        $short = preg_replace($pattern, '', $short);
+    }
+
+    // If only whitespace/empty tags remain, return empty so the block is skipped.
+    if (trim(wp_strip_all_tags($short)) === '') {
+        return '';
+    }
+
+    return $short;
+}
+add_filter('woocommerce_product_get_short_description', 'pbv_strip_ruo_vial_short_description', 20);
+add_filter('woocommerce_short_description', 'pbv_strip_ruo_vial_short_description', 20);
+
+/**
  * ONLY remove the old Shopify disclaimer image (image_6.jpg).
  * Never strip product description text — descriptions must always display as stored.
+ * Never touch ruo-warning-label.jpg or other warning label images.
  */
 function pbv_strip_embedded_research_disclaimer($html) {
     $html = (string) $html;
@@ -576,53 +621,6 @@ function pbv_research_use_banner() {
     echo '</aside>';
 }
 
-/**
- * Detect short-description lines that only repeat the RUO warning in plain text.
- * Used so the styled warning banner remains the single RUO signal under the description.
- *
- * @param string $html Short description HTML.
- * @return bool
- */
-function pbv_is_ruo_boilerplate_text($html) {
-    $text = strtolower(trim(preg_replace('/\s+/u', ' ', wp_strip_all_tags((string) $html))));
-    if ($text === '') {
-        return false;
-    }
-
-    // Exact / near-exact boilerplate seen on product short descriptions.
-    $exact = array(
-        'research-use peptide vial. not for human consumption.',
-        'research-use peptide vial.',
-        'research-use peptide pen. not for human consumption.',
-        'research-use peptide pen.',
-        'for research use only.',
-        'for research-use-only.',
-        'for research use only',
-        'research use only.',
-        'research-use only.',
-        'not for human consumption.',
-        'research-use peptide vial. not for human consumption',
-    );
-    if (in_array($text, $exact, true)) {
-        return true;
-    }
-
-    // Short plain RUO-only lines (no other product copy).
-    if (strlen($text) <= 90) {
-        $has_ruo = (bool) preg_match('/\b(research[\s-]?use(\s+only)?|not for human consumption)\b/u', $text);
-        $has_other = (bool) preg_match('/\b(mg|mcg|iu|vial|pen|blend|stack|amino|peptide synthesis|purity|coa)\b/u', $text);
-        // Allow "peptide vial/pen" only when the whole line is the RUO stub.
-        if ($has_ruo && preg_match('/^(research[\s-]?use([-\s]?only)?[.\s]*)?(peptide (vial|pen)[.\s]*)?(not for human consumption[.\s]*)?$/u', $text)) {
-            return true;
-        }
-        if ($has_ruo && !$has_other) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
         return;
@@ -647,9 +645,7 @@ function pbv_single_product_details_and_cart() {
 
     $short = ($product instanceof WC_Product) ? $product->get_short_description() : '';
     $short = pbv_strip_embedded_research_disclaimer($short);
-    // Hide duplicate plain-text RUO lines under the warning banner only.
-    // Keep the banner. Keep any short description that is not RUO boilerplate.
-    if (!pbv_is_ruo_boilerplate_text($short) && trim(wp_strip_all_tags((string) $short)) !== '') {
+    if (trim(wp_strip_all_tags((string) $short)) !== '') {
         echo '<div class="woocommerce-product-details__short-description">';
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo apply_filters('woocommerce_short_description', $short);
@@ -1430,6 +1426,7 @@ function pbv_fix_announcement_once() {
 }
 add_action('after_setup_theme', 'pbv_fix_announcement_once', 20);
 
+
 /**
  * Build / refresh the Primary menu.
  *
@@ -1664,11 +1661,6 @@ function pbv_save_checkout_policy_acceptance($order) {
 }
 add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
 
-/**
- * Cart subtotal threshold for free Next-Day Air Cold Pack shipping.
- *
- * @return float
- */
 function pbv_free_shipping_threshold() {
     return 250.0;
 }
