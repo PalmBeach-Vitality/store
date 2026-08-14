@@ -59,7 +59,8 @@ VIAL_RULE = (
     "without the blue flip-cap, NO twist-off or screw caps, NO blank/unbranded pharmacy vial, "
     "NO second vial, NO duplicate labels. "
     "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL): exactly ONE vial OR ONE pen per image — "
-    "never both, never a row/rack/carousel/constellation of vials or pens."
+    "never both, never a row/rack/carousel/constellation of vials or pens. "
+    "See also enforce_vial_state_rules.py for upright / pre-filled / clear-vs-GLOW-blue liquid."
 )
 
 OLD_RULE = re.compile(

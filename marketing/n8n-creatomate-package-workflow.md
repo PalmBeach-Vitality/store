@@ -5,7 +5,7 @@
 **What you do each run:** upload the Grok MP4 to **[catbox.moe](https://catbox.moe)**, then paste the **catbox** `.mp4` URL into one Set node.  
 **Do not paste `vidgen.x.ai` — Creatomate cannot fetch Grok URLs.**  
 **Everything else stays the same** — text library pick, Sheets writebacks, Creatomate mods.  
-**Video clip stays muted;** optional **`bg_music`** Audio element bakes soundtrack into the package before Buffer (see `n8n-creatomate-music.md`).
+**Always muted — no music / no `bg_music` soundtrack** in Creatomate or Buffer uploads.
 
 ---
 
@@ -79,8 +79,6 @@ Type: **Edit Fields** · name exactly **`video_url_input`**
 | `public_video_url` | Same as `input_video_url` (older name — either works) |
 | `product_name` | **Required.** Exact sheet name (e.g. `BPC-157`, `NAD+`, `Semaglutide`) — pulls Facts 1–3 for that product |
 | `still_url` | Optional. Public still (catbox image) → **`end_hold`** (15–30s freeze). Not imgen.x.ai. |
-| `music_url` | Optional. Public audio (catbox `.mp3`) → Creatomate Audio element **`bg_music`**. See `n8n-creatomate-music.md`. |
-| `music_volume` | Optional. Default `35%`. |
 | `creation_id` | Optional tracking |
 
 **Daily habit:** Workflow A → download MP4 → upload [catbox.moe](https://catbox.moe) → paste into **`input_video_url`** → Execute.
@@ -148,12 +146,7 @@ Clip → **`main_video`**. Hold still → **`end_hold`**. Do **not** use `Video-
   };
   // MUST be a public image URL — never the string "end_hold"
   if ($json.end_hold_url) mods['end_hold'] = $json.end_hold_url;
-  // Soundtrack (template Audio element must be named bg_music) — see n8n-creatomate-music.md
-  if ($json.music_url) {
-    mods['bg_music'] = $json.music_url;
-    mods['bg_music.source'] = $json.music_url;
-    mods['bg_music.volume'] = $json.music_volume || '35%';
-  }
+  // No soundtrack — do not set bg_music / music_url
   return {
     template_id: $json.template_id || 'c5d54774-b029-4786-af04-d5af345dc7f2',
     render_scale: 1,
@@ -276,8 +269,7 @@ Same caption text for all three platforms (one pitch). Draft fields are aliases 
 1. Run **Workflow A** → get new Grok `video_url` (`vidgen.x.ai`)  
 2. **Download** that MP4 → **upload to catbox.moe**  
 3. Paste the **catbox** URL into **`video_url_input.public_video_url`**  
-4. (Optional) Paste catbox **`.mp3`** into **`video_url_input.music_url`** for baked-in soundtrack  
-5. Run **Workflow B** → Creatomate package (`main_video` muted + optional **`bg_music`**) → Buffer  
+4. Run **Workflow B** → Creatomate package (`main_video` muted, **no music**) → Buffer  
 
 ---
 
@@ -286,7 +278,7 @@ Same caption text for all three platforms (one pitch). Draft fields are aliases 
 - **ID:** `c5d54774-b029-4786-af04-d5af345dc7f2`
 - Dynamic video **`main_video`** — clip once, loop off, muted
 - Dynamic image **`end_hold`** — still for 15–30s hold (paste `still_url` on `video_url_input`)
-- Dynamic audio **`bg_music`** — optional soundtrack (paste `music_url`); see `n8n-creatomate-music.md`
+- **No audio / no `bg_music`** — all packages silent
 - Text: `Intro-Text`, `Fact-1-text` … `Fact-5-text`, `end-text-link`
 - Also in template (usually leave defaults): `end-text-bg`, `Image-WVC`
 

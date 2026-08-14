@@ -12,7 +12,7 @@
 // Legal disclaimer lives ONLY in buffer_caption (Buffer / Sheets), never Creatomate overlays.
 //
 // Template: c5d54774-b029-4786-af04-d5af345dc7f2
-// Elements: main_video (catbox MP4, once, muted) + end_hold (still) + bg_music (optional MP3).
+// Elements: main_video (catbox MP4, once, muted) + end_hold (still). No soundtrack / no bg_music.
 
 function firstJson(name) {
   try {
@@ -242,25 +242,6 @@ const end_hold_url = pickStillUrl(
   input.end_hold_url
 );
 
-// Background music — public HTTPS audio (catbox .mp3/.wav/.m4a). Same host rules as video.
-const music_url_raw = String(
-  urlInput.music_url ||
-    urlInput.bg_music_url ||
-    urlInput.soundtrack_url ||
-    input.music_url ||
-    input.bg_music_url ||
-    ''
-).trim();
-const music_url = music_url_raw
-  ? assertCreatomateFetchable(music_url_raw, 'music_url')
-  : '';
-if (music_url && !/\.(mp3|wav|m4a|aac|ogg)(\?|$)/i.test(music_url) && !/catbox\.moe/i.test(music_url)) {
-  throw new Error(
-    'music_url should be a direct audio link (e.g. https://files.catbox.moe/….mp3).'
-  );
-}
-const music_volume = String(urlInput.music_volume || input.music_volume || '35%').trim() || '35%';
-
 const end_text_link = 'www.palmbeach-vitality.store';
 
 // Caption may use raw sheet facts; on-screen Creatomate text is disclaimer-free.
@@ -313,9 +294,6 @@ return [
       catbox_video_url: public_video_url,
       end_hold_url,
       end_hold: end_hold_url || undefined,
-      music_url,
-      bg_music_url: music_url,
-      music_volume,
       end_text_link,
       product_name,
       mod_intro,
@@ -332,8 +310,10 @@ return [
       text_id: text.text_id,
       creation_id: String(urlInput.creation_id || '').trim(),
       template_id: 'c5d54774-b029-4786-af04-d5af345dc7f2',
-      // Clip stays muted; soundtrack is the separate Creatomate Audio element `bg_music`.
+      // Always muted — no soundtrack / no bg_music in Creatomate package or Buffer upload.
       mute_audio: true,
+      music_url: '',
+      bg_music_url: '',
     },
   },
 ];

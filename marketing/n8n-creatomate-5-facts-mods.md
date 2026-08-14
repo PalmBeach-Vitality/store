@@ -62,7 +62,7 @@ Body (expression):
 ```
 
 **Must include `main_video`** (catbox MP4). **`end_hold`** = still for freeze (optional; template default if empty).  
-**`main_video` stays muted.** Optional soundtrack: Creatomate Audio element **`bg_music`** + `music_url` — see `n8n-creatomate-music.md`.  
+**`main_video` stays muted. No music / no `bg_music`.**  
 Prefer the separate package workflow: `n8n-creatomate-package-workflow.md` — each run paste a **catbox** `.mp4` URL into `video_url_input.input_video_url` (never `vidgen.x.ai`). Keep `sheets_update_text` (and `sheets_append_reel` if present).
 
 Do **not** use keys like `Headline`, `Bullet-1`, `CTA`, `Video-8QW`, or `video_loop_source` — this template ignores them.
