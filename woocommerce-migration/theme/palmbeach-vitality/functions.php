@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.15');
+define('PBV_THEME_VERSION', '2.10.16');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.15');
@@ -1841,6 +1841,72 @@ function pbv_checkout_shipping_note() {
     echo '</p>';
 }
 add_action('woocommerce_checkout_before_order_review', 'pbv_checkout_shipping_note', 5);
+
+/**
+ * Staff addresses that must receive WooCommerce order notifications.
+ *
+ * @return string[]
+ */
+function pbv_order_notification_emails() {
+    $emails = array(
+        get_option('admin_email'),
+        'sales@palmbeach-vitality.com',
+    );
+
+    /**
+     * Filter staff order-notification recipients.
+     *
+     * @param string[] $emails Email addresses.
+     */
+    $emails = apply_filters('pbv_order_notification_emails', $emails);
+
+    $clean = array();
+    foreach ((array) $emails as $email) {
+        $email = sanitize_email((string) $email);
+        if ($email && is_email($email)) {
+            $clean[strtolower($email)] = $email;
+        }
+    }
+
+    return array_values($clean);
+}
+
+/**
+ * Merge required staff addresses into a WooCommerce recipient list.
+ *
+ * @param string $recipient Comma-separated recipients.
+ * @return string
+ */
+function pbv_merge_order_email_recipients($recipient) {
+    $existing = array();
+    foreach (explode(',', (string) $recipient) as $email) {
+        $email = sanitize_email(trim($email));
+        if ($email && is_email($email)) {
+            $existing[strtolower($email)] = $email;
+        }
+    }
+
+    foreach (pbv_order_notification_emails() as $email) {
+        $existing[strtolower($email)] = $email;
+    }
+
+    return implode(', ', array_values($existing));
+}
+add_filter('woocommerce_email_recipient_new_order', 'pbv_merge_order_email_recipients', 20);
+add_filter('woocommerce_email_recipient_cancelled_order', 'pbv_merge_order_email_recipients', 20);
+add_filter('woocommerce_email_recipient_failed_order', 'pbv_merge_order_email_recipients', 20);
+
+/**
+ * Prefer a domain From address so WordPress.com / WooCommerce mail authenticates cleanly.
+ *
+ * @param string $from From address.
+ * @return string
+ */
+function pbv_woocommerce_email_from_address($from) {
+    $domain_from = 'sales@palmbeach-vitality.com';
+    return is_email($domain_from) ? $domain_from : $from;
+}
+add_filter('woocommerce_email_from_address', 'pbv_woocommerce_email_from_address', 20);
 
 /**
  * Checkout order review: show red X + "Remove item" next to each line item.
