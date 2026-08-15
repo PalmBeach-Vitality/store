@@ -1,9 +1,9 @@
 <?php
 /**
- * New-order SMS alerts via Twilio.
+ * New-order text alerts via carrier email-to-SMS (no Twilio).
  *
- * Credentials live in Appearance → Customize → Palm Beach Storefront
- * (or environment variables). Never commit Auth Token to the repo.
+ * Appearance → Customize → Palm Beach Storefront → your cell + carrier.
+ * The store emails the carrier gateway; that becomes a normal text.
  *
  * @package PalmBeachVitality
  */
@@ -13,145 +13,148 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Read a Twilio-related setting (theme_mod, then env).
+ * Supported US carrier SMS email gateways.
  *
- * @param string $mod_key Theme mod key.
- * @param string $env_key Environment variable name.
+ * @return array<string, array{label:string, domain:string}>
+ */
+function pbv_sms_carriers() {
+    return array(
+        'att'         => array(
+            'label'  => 'AT&T',
+            'domain' => 'txt.att.net',
+        ),
+        'tmobile'     => array(
+            'label'  => 'T-Mobile',
+            'domain' => 'tmomail.net',
+        ),
+        'verizon'     => array(
+            'label'  => 'Verizon',
+            'domain' => 'vtext.com',
+        ),
+        'uscellular'  => array(
+            'label'  => 'U.S. Cellular',
+            'domain' => 'email.uscc.net',
+        ),
+        'googlefi'    => array(
+            'label'  => 'Google Fi',
+            'domain' => 'msg.fi.google.com',
+        ),
+        'boost'       => array(
+            'label'  => 'Boost Mobile',
+            'domain' => 'sms.myboostmobile.com',
+        ),
+        'cricket'     => array(
+            'label'  => 'Cricket',
+            'domain' => 'mms.cricketwireless.net',
+        ),
+        'metropcs'    => array(
+            'label'  => 'Metro by T-Mobile',
+            'domain' => 'mymetropcs.com',
+        ),
+    );
+}
+
+/**
+ * Digits-only US phone (10 digits), or empty if invalid.
+ *
+ * @param string $raw Raw phone input.
  * @return string
  */
-function pbv_sms_setting($mod_key, $env_key = '') {
-    $from_mod = trim((string) get_theme_mod($mod_key, ''));
-    if ($from_mod !== '') {
-        return $from_mod;
+function pbv_sms_normalize_phone($raw) {
+    $digits = preg_replace('/\D/', '', (string) $raw);
+    if (!is_string($digits) || $digits === '') {
+        return '';
     }
-    if ($env_key !== '') {
-        $from_env = getenv($env_key);
-        if (is_string($from_env) && trim($from_env) !== '') {
-            return trim($from_env);
-        }
+    if (strlen($digits) === 11 && $digits[0] === '1') {
+        $digits = substr($digits, 1);
     }
-    return '';
+    if (strlen($digits) !== 10) {
+        return '';
+    }
+    return $digits;
 }
 
 /**
- * @return string
+ * Staff notify phone from Customizer.
+ *
+ * @return string 10-digit US number or empty.
  */
-function pbv_twilio_account_sid() {
-    return pbv_sms_setting('pbv_twilio_account_sid', 'PBV_TWILIO_ACCOUNT_SID');
+function pbv_sms_notify_phone() {
+    return pbv_sms_normalize_phone(get_theme_mod('pbv_sms_notify_phone', ''));
 }
 
 /**
- * @return string
- */
-function pbv_twilio_auth_token() {
-    return pbv_sms_setting('pbv_twilio_auth_token', 'PBV_TWILIO_AUTH_TOKEN');
-}
-
-/**
- * Twilio “From” number in E.164 (e.g. +15551234567).
+ * Selected carrier key.
  *
  * @return string
  */
-function pbv_twilio_from_number() {
-    return pbv_sms_setting('pbv_twilio_from_number', 'PBV_TWILIO_FROM_NUMBER');
+function pbv_sms_notify_carrier() {
+    $key = sanitize_key((string) get_theme_mod('pbv_sms_notify_carrier', ''));
+    $all = pbv_sms_carriers();
+    return isset($all[$key]) ? $key : '';
 }
 
 /**
- * Staff cell number(s) to notify, comma-separated E.164.
+ * Email address for the carrier SMS gateway.
  *
- * @return string[]
+ * @return string
  */
-function pbv_sms_notify_numbers() {
-    $raw = pbv_sms_setting('pbv_sms_notify_numbers', 'PBV_SMS_NOTIFY_NUMBERS');
-    if ($raw === '') {
-        return array();
+function pbv_sms_gateway_address() {
+    $phone   = pbv_sms_notify_phone();
+    $carrier = pbv_sms_notify_carrier();
+    if ($phone === '' || $carrier === '') {
+        return '';
     }
-    $parts = preg_split('/[\s,;]+/', $raw) ?: array();
-    $out   = array();
-    foreach ($parts as $part) {
-        $part = preg_replace('/[^\d+]/', '', (string) $part);
-        if ($part !== '' && $part[0] !== '+') {
-            // Assume US if 10 digits.
-            $digits = preg_replace('/\D/', '', $part);
-            if (strlen($digits) === 10) {
-                $part = '+1' . $digits;
-            } elseif (strlen($digits) === 11 && $digits[0] === '1') {
-                $part = '+' . $digits;
-            }
-        }
-        if ($part !== '' && preg_match('/^\+\d{10,15}$/', $part)) {
-            $out[$part] = $part;
-        }
-    }
-    return array_values($out);
+    $all = pbv_sms_carriers();
+    return $phone . '@' . $all[$carrier]['domain'];
 }
 
 /**
- * Whether SMS alerts are fully configured.
+ * Whether text alerts are configured.
  *
  * @return bool
  */
 function pbv_sms_is_configured() {
-    return pbv_twilio_account_sid() !== ''
-        && pbv_twilio_auth_token() !== ''
-        && pbv_twilio_from_number() !== ''
-        && !empty(pbv_sms_notify_numbers());
+    return pbv_sms_gateway_address() !== '';
 }
 
 /**
- * Customizer controls for SMS alerts.
+ * Customizer: cell + carrier only.
  *
  * @param WP_Customize_Manager $wp_customize Customizer.
  */
 function pbv_sms_customize_register($wp_customize) {
-    $wp_customize->add_setting('pbv_twilio_account_sid', array(
+    $wp_customize->add_setting('pbv_sms_notify_phone', array(
         'default'           => '',
         'sanitize_callback' => 'sanitize_text_field',
     ));
-    $wp_customize->add_control('pbv_twilio_account_sid', array(
-        'label'       => __('Twilio Account SID', 'palmbeach-vitality'),
-        'description' => __('From console.twilio.com — starts with AC…', 'palmbeach-vitality'),
+    $wp_customize->add_control('pbv_sms_notify_phone', array(
+        'label'       => __('Order text alerts — your cell', 'palmbeach-vitality'),
+        'description' => __('US number. You’ll get a text when someone places an order (via your carrier’s email-to-text).', 'palmbeach-vitality'),
         'section'     => 'pbv_storefront',
         'type'        => 'text',
     ));
 
-    $wp_customize->add_setting('pbv_twilio_auth_token', array(
-        'default'           => '',
-        'sanitize_callback' => 'sanitize_text_field',
-    ));
-    $wp_customize->add_control('pbv_twilio_auth_token', array(
-        'label'       => __('Twilio Auth Token', 'palmbeach-vitality'),
-        'description' => __('Keep private. Paste from Twilio console (Auth Token).', 'palmbeach-vitality'),
-        'section'     => 'pbv_storefront',
-        'type'        => 'password',
-    ));
+    $choices = array('' => __('— Select carrier —', 'palmbeach-vitality'));
+    foreach (pbv_sms_carriers() as $key => $info) {
+        $choices[$key] = $info['label'];
+    }
 
-    $wp_customize->add_setting('pbv_twilio_from_number', array(
+    $wp_customize->add_setting('pbv_sms_notify_carrier', array(
         'default'           => '',
-        'sanitize_callback' => 'sanitize_text_field',
+        'sanitize_callback' => 'sanitize_key',
     ));
-    $wp_customize->add_control('pbv_twilio_from_number', array(
-        'label'       => __('Twilio From number', 'palmbeach-vitality'),
-        'description' => __('Your Twilio SMS number in E.164, e.g. +15551234567', 'palmbeach-vitality'),
-        'section'     => 'pbv_storefront',
-        'type'        => 'text',
-    ));
-
-    $wp_customize->add_setting('pbv_sms_notify_numbers', array(
-        'default'           => '',
-        'sanitize_callback' => 'sanitize_text_field',
-    ));
-    $wp_customize->add_control('pbv_sms_notify_numbers', array(
-        'label'       => __('Order SMS alert phone(s)', 'palmbeach-vitality'),
-        'description' => __('Your cell number(s) to text on new orders. E.164 or 10-digit US, comma-separated.', 'palmbeach-vitality'),
-        'section'     => 'pbv_storefront',
-        'type'        => 'text',
+    $wp_customize->add_control('pbv_sms_notify_carrier', array(
+        'label'   => __('Your cell carrier', 'palmbeach-vitality'),
+        'section' => 'pbv_storefront',
+        'type'    => 'select',
+        'choices' => $choices,
     ));
 }
 add_action('customize_register', 'pbv_sms_customize_register', 25);
 
 /**
- * Build a short SMS body for a new order.
+ * Short message body for a new order.
  *
  * @param WC_Order $order Order.
  * @return string
@@ -177,7 +180,8 @@ function pbv_sms_order_message($order) {
     $item_text = $items ? implode(', ', $items) : 'items';
     $more      = count($order->get_items()) > 3 ? '…' : '';
 
-    return sprintf(
+    // Keep under typical SMS length.
+    $body = sprintf(
         'PBV order #%1$s — %2$s — %3$s%4$s — %5$s',
         $order->get_order_number(),
         $total,
@@ -185,54 +189,12 @@ function pbv_sms_order_message($order) {
         $more,
         $name
     );
+
+    return substr($body, 0, 140);
 }
 
 /**
- * Send one SMS via Twilio REST API.
- *
- * @param string $to   E.164 destination.
- * @param string $body Message body.
- * @return true|WP_Error
- */
-function pbv_twilio_send_sms($to, $body) {
-    $sid   = pbv_twilio_account_sid();
-    $token = pbv_twilio_auth_token();
-    $from  = pbv_twilio_from_number();
-
-    if ($sid === '' || $token === '' || $from === '' || $to === '' || $body === '') {
-        return new WP_Error('pbv_sms_config', 'SMS is not fully configured.');
-    }
-
-    $url  = 'https://api.twilio.com/2010-04-01/Accounts/' . rawurlencode($sid) . '/Messages.json';
-    $args = array(
-        'timeout' => 20,
-        'headers' => array(
-            'Authorization' => 'Basic ' . base64_encode($sid . ':' . $token),
-        ),
-        'body'    => array(
-            'To'   => $to,
-            'From' => $from,
-            'Body' => $body,
-        ),
-    );
-
-    $response = wp_remote_post($url, $args);
-    if (is_wp_error($response)) {
-        return $response;
-    }
-
-    $code = (int) wp_remote_retrieve_response_code($response);
-    $data = json_decode((string) wp_remote_retrieve_body($response), true);
-    if ($code < 200 || $code >= 300) {
-        $msg = is_array($data) && !empty($data['message']) ? $data['message'] : 'Twilio SMS failed.';
-        return new WP_Error('pbv_sms_twilio', $msg, array('status' => $code));
-    }
-
-    return true;
-}
-
-/**
- * Notify staff phones about a new order (once per order).
+ * Text staff phone about a new order (once per order).
  *
  * @param int $order_id Order ID.
  */
@@ -251,19 +213,15 @@ function pbv_sms_notify_new_order($order_id) {
         return;
     }
 
-    $body    = pbv_sms_order_message($order);
-    $sent_ok = false;
-    foreach (pbv_sms_notify_numbers() as $to) {
-        $result = pbv_twilio_send_sms($to, $body);
-        if (!is_wp_error($result)) {
-            $sent_ok = true;
-        } elseif (defined('WP_DEBUG') && WP_DEBUG) {
-            // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-            error_log('PBV SMS error (' . $to . '): ' . $result->get_error_message());
-        }
+    $to   = pbv_sms_gateway_address();
+    $body = pbv_sms_order_message($order);
+    if ($to === '' || $body === '') {
+        return;
     }
 
-    if ($sent_ok) {
+    // Empty subject helps some carriers deliver as a plain text.
+    $sent = wp_mail($to, '', $body, array('Content-Type: text/plain; charset=UTF-8'));
+    if ($sent) {
         $order->update_meta_data('_pbv_sms_new_order_sent', 'yes');
         $order->save();
     }
