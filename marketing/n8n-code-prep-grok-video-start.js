@@ -48,63 +48,62 @@ var stillResolved = pickHttpsUrl([
   val(input, ['still_url', 'source_still_url', 'edited_still_url']),
   input.data && input.data[0] && input.data[0].url,
   input.url,
+  // Prefer edited still (this path saves AFTER edit into save_still_url)
+  editHttp.data && editHttp.data[0] && editHttp.data[0].url,
   val(editedStill, ['still_url']),
   editedStill.data && editedStill.data[0] && editedStill.data[0].url,
-  val(editInstructions, ['still_url']),
-  val(importStill, ['still_url']),
   val(stillNode, ['still_url']),
   stillNode.data && stillNode.data[0] && stillNode.data[0].url,
-  editHttp.data && editHttp.data[0] && editHttp.data[0].url,
+  val(editInstructions, ['still_url']),
+  val(importStill, ['still_url']),
   imagine.data && imagine.data[0] && imagine.data[0].url,
 ]);
 
 var motion = String(
   val(input, ['video_motion_prompt']) ||
+    val(stillNode, ['video_motion_prompt']) ||
     val(editedStill, ['video_motion_prompt']) ||
     val(sheet, ['video_motion_prompt']) ||
-    val(importStill, ['video_motion_prompt']) ||
-    val(stillNode, ['video_motion_prompt'], '')
+    val(importStill, ['video_motion_prompt'], '')
 ).trim();
 
 var modelVideo = String(
   val(input, ['model_video']) ||
+    val(stillNode, ['model_video']) ||
     val(editedStill, ['model_video']) ||
     val(sheet, ['model_video']) ||
-    val(importStill, ['model_video'], '')
+    val(importStill, ['model_video'], '') ||
+    'grok-imagine-video-1.5'
 ).trim();
 
 var duration = Number(
   val(input, ['duration_seconds', 'duration']) ||
+    val(stillNode, ['duration_seconds']) ||
     val(editedStill, ['duration_seconds']) ||
     val(sheet, ['duration_seconds']) ||
-    val(importStill, ['duration_seconds'], 0)
+    val(importStill, ['duration_seconds'], 0) ||
+    15
 );
 
 var resolution = String(
   val(input, ['resolution']) ||
+    val(stillNode, ['resolution']) ||
     val(editedStill, ['resolution']) ||
     val(sheet, ['resolution']) ||
-    val(importStill, ['resolution'], '')
+    val(importStill, ['resolution'], '') ||
+    '1080p'
 ).trim();
 
 if (!stillResolved) {
   throw new Error(
-    'prep_grok_video_start: still_url must be https from save_edited_still_url / still path.'
+    'prep_grok_video_start: still_url must be https from save_still_url / grok_imagine_edit_still.'
   );
 }
 if (!motion) {
   throw new Error(
-    'prep_grok_video_start: video_motion_prompt missing from Sheet (pick_creation / import sheet).'
+    'prep_grok_video_start: video_motion_prompt missing from Sheet (pick_creation). ' +
+      'On save_still_url set video_motion_prompt from pick_creation.'
   );
-}
-if (!modelVideo) {
-  throw new Error('prep_grok_video_start: model_video missing from Sheet.');
-}
-if (!duration) {
-  throw new Error('prep_grok_video_start: duration_seconds missing from Sheet.');
-}
-if (!resolution) {
-  throw new Error('prep_grok_video_start: resolution missing from Sheet.');
 }
 
 if (motion.length > 700) {
