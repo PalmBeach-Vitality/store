@@ -1,17 +1,15 @@
 // n8n Code node: flag_still_edit
 // Mode: Run Once for All Items
 //
-// Wire:
-//   still_edit_instructions → **flag_still_edit** → if → prep_still_edit / save_still_url
+// Wire (edit branch only):
+//   switch_still_path (edit) → **flag_still_edit** → prep_still_edit
 //
-// n8n Cloud: Fixed Set fields often arrive blank. Put your edit text HERE when needed.
+// Routing is the Switch node (still_path = edit|skip). This node only
+// prepares the edit prompt + still_url for the edit path.
 
-// ── EDIT THIS each run (used when Set/Sheet prompt is empty) ──────────────
+// ── EDIT THIS when still_path = edit ─────────────────────────────────────
 var CODE_STILL_EDIT_PROMPT =
   'Keep exactly one sealed hero product (one vial OR one pen). Remove any duplicate vials, pens, or extra products. Keep lighting, camera, label text, and background identical.';
-
-// Set true to always take the edit branch (uses prompt above / Set / Sheet).
-var FORCE_STILL_EDIT = true;
 // ─────────────────────────────────────────────────────────────────────────
 
 function firstJson(name) {
@@ -34,12 +32,7 @@ function pickPrompt() {
   var fromInput = String(input.still_edit_prompt || input.edit_prompt || '').trim();
   if (fromInput) return fromInput;
 
-  var names = [
-    'still_edit_instructions',
-    'Still Edit Instructions',
-    'pick_creation',
-    'map_sheet_fields',
-  ];
+  var names = ['choose_still_path', 'still_edit_instructions', 'pick_creation', 'map_sheet_fields'];
   for (var i = 0; i < names.length; i++) {
     var o = firstJson(names[i]);
     var p = String(o.still_edit_prompt || o.edit_prompt || '').trim();
@@ -55,6 +48,7 @@ var stillUrl = String(j.still_url || '').trim();
 if (!/^https:\/\//i.test(stillUrl)) {
   stillUrl =
     grokStillUrl(firstJson('grok_imagine_reel_still')) ||
+    grokStillUrl(firstJson('choose_still_path')) ||
     grokStillUrl(firstJson('save_still_url')) ||
     grokStillUrl(j) ||
     '';
@@ -66,14 +60,15 @@ if (/^https:\/\//i.test(stillUrl)) {
 
 var prompt = pickPrompt();
 j.still_edit_prompt = prompt;
-j.do_still_edit = FORCE_STILL_EDIT && prompt.length > 0;
-j.still_edit_prompt_source =
-  String((($input.first() && $input.first().json) || {}).still_edit_prompt || '').trim()
-    ? 'input'
-    : String((firstJson('still_edit_instructions').still_edit_prompt || '')).trim()
-      ? 'still_edit_instructions'
-      : String((firstJson('pick_creation').still_edit_prompt || '')).trim()
-        ? 'pick_creation'
-        : 'CODE_STILL_EDIT_PROMPT';
+j.still_path = 'edit';
+j.still_edit_prompt_source = String(CODE_STILL_EDIT_PROMPT || '').trim() === prompt
+  ? 'CODE_STILL_EDIT_PROMPT'
+  : 'upstream';
+
+if (!prompt) {
+  throw new Error(
+    'flag_still_edit: empty CODE_STILL_EDIT_PROMPT — set edit text at top of this Code, or use Switch skip.'
+  );
+}
 
 return [{ json: j }];
