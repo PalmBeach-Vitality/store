@@ -64,7 +64,7 @@ No `still_edit_prompt` field — edit text lives in `flag_still_edit` Code.
 
 | Parameter | fx | Value |
 |---|---|---|
-| Value 1 | **ON** | `={{ $json.still_path }}` |
+| Value 1 | **ON** | `={{ $('choose_still_path').first().json.still_path }}` |
 | Operator | — | **is equal to** |
 | Value 2 | **OFF** | `edit` |
 
@@ -74,7 +74,7 @@ Wire this output → `flag_still_edit`
 
 | Parameter | fx | Value |
 |---|---|---|
-| Value 1 | **ON** | `={{ $json.still_path }}` |
+| Value 1 | **ON** | `={{ $('choose_still_path').first().json.still_path }}` |
 | Operator | — | **is equal to** |
 | Value 2 | **OFF** | `skip` |
 
