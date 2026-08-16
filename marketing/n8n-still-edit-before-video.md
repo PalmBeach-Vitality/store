@@ -17,9 +17,11 @@
 pick_creation
   → grok_imagine_reel_still
   → choose_still_path              ← flip Fixed: edit | skip
+  → normalize_still_path           ← Code: forces still_path = edit|skip
   → switch_still_path
        edit → flag_still_edit → prep_still_edit → grok_imagine_edit_still → save_still_url
        skip → save_still_url
+       fallback → save_still_url   ← if Switch matches nothing
   → prep_grok_video_start → grok_video_start → wait → poll → save_video_url
   → sheets_update_creation
 ```
@@ -32,12 +34,12 @@ pick_creation
 ## Node A — `choose_still_path`
 
 **Type:** Edit Fields (Set)  
-**Before → this → After:** `grok_imagine_reel_still` → **choose_still_path** → `switch_still_path`  
+**Before → this → After:** `grok_imagine_reel_still` → **choose_still_path** → `normalize_still_path`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
 |---|---|---|
-| `still_path` | **OFF** | `edit` or `skip` (flip each run — no spaces) |
+| `still_path` | **OFF** | `edit` or `skip` (flip each run — no spaces, lowercase) |
 | `still_url` | **ON** | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
 | `creation_id` | **ON** | `={{ $('pick_creation').first().json.creation_id }}` |
 | `video_motion_prompt` | **ON** | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
@@ -47,25 +49,41 @@ Include Other Input Fields: **ON**
 | `aspect_ratio` | **ON** | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
 | `model_still` | **ON** | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
 
+**Check:** execute `choose_still_path` alone — output must show `still_path` = `edit` or `skip`.
+
 No `still_edit_prompt` field — edit text lives in `flag_still_edit` Code.
+
+---
+
+## Node A2 — `normalize_still_path`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `choose_still_path` → **normalize_still_path** → `switch_still_path`
+
+Paste: `marketing/n8n-code-normalize-still-path.js`  
+(No fx.)
+
+Forces `still_path` to exactly `edit` or `skip` (trims spaces / case).  
+**Check:** output `still_path` is exactly one of those two strings.
 
 ---
 
 ## Node B — `switch_still_path`
 
 **Type:** Switch  
-**Before → this → After:** `choose_still_path` → **switch_still_path** → edit *or* skip  
+**Before → this → After:** `normalize_still_path` → **switch_still_path** → edit *or* skip  
 
 | Setting | fx | Value |
 |---|---|---|
 | Mode | — | **Rules** |
+| Fallback Output | — | **ON** / Extra output → rename `fallback` → wire to `save_still_url` |
 
 ### Routing Rule 1 → output `edit`
 
 | Parameter | fx | Value |
 |---|---|---|
-| Value 1 | **ON** | `={{ $('choose_still_path').first().json.still_path }}` |
-| Operator | — | **is equal to** |
+| Value 1 | **ON** | `={{ $('normalize_still_path').first().json.still_path }}` |
+| Operator | — | **is equal to** (string) |
 | Value 2 | **OFF** | `edit` |
 
 Wire this output → `flag_still_edit`
@@ -74,14 +92,13 @@ Wire this output → `flag_still_edit`
 
 | Parameter | fx | Value |
 |---|---|---|
-| Value 1 | **ON** | `={{ $('choose_still_path').first().json.still_path }}` |
-| Operator | — | **is equal to** |
+| Value 1 | **ON** | `={{ $('normalize_still_path').first().json.still_path }}` |
+| Operator | — | **is equal to** (string) |
 | Value 2 | **OFF** | `skip` |
 
 Wire this output → `save_still_url`
 
-Optional fallback output → `save_still_url`
-
+**If Switch still shows 0 items:** open `normalize_still_path` output and confirm `still_path`. Then pin that item and re-execute Switch.
 ---
 
 ## Node C — `flag_still_edit` (edit branch only)
