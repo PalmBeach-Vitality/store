@@ -7,6 +7,8 @@
 **Video API:** `POST https://api.x.ai/v1/videos/generations` · `grok-imagine-video-1.5`  
 **Auth:** same xAI Header Auth as `grok_imagine_reel_still` / `grok_video_start`
 
+**fx legend:** **ON** = Expression · **OFF** = Fixed
+
 ---
 
 ## Wire (daily Vid_gen)
@@ -22,8 +24,8 @@ pick_creation
   → sheets_update_creation
 ```
 
-**Like the still** → `still_path` = `skip`  
-**Want a tweak** → `still_path` = `edit` + change `CODE_STILL_EDIT_PROMPT` in `flag_still_edit`
+**Like the still** → `still_path` = `skip` (fx **OFF**)  
+**Want a tweak** → `still_path` = `edit` (fx **OFF**) + change `CODE_STILL_EDIT_PROMPT` in `flag_still_edit`
 
 ---
 
@@ -33,41 +35,52 @@ pick_creation
 **Before → this → After:** `grok_imagine_reel_still` → **choose_still_path** → `switch_still_path`  
 Include Other Input Fields: **ON**
 
-| Name | Mode | Value |
+| Name | fx | Value |
 |---|---|---|
-| `still_path` | **Fixed** | `edit` or `skip` (you flip this each run) |
-| `still_url` | Expression | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
-| `creation_id` | Expression | `={{ $('pick_creation').first().json.creation_id }}` |
-| `video_motion_prompt` | Expression | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
-| `model_video` | Expression | `={{ $('pick_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
-| `duration_seconds` | Expression | `={{ $('pick_creation').first().json.duration_seconds \|\| 15 }}` |
-| `resolution` | Expression | `={{ $('pick_creation').first().json.resolution \|\| '1080p' }}` |
-| `aspect_ratio` | Expression | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
-| `model_still` | Expression | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
+| `still_path` | **OFF** | `edit` or `skip` (flip each run — no spaces) |
+| `still_url` | **ON** | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
+| `creation_id` | **ON** | `={{ $('pick_creation').first().json.creation_id }}` |
+| `video_motion_prompt` | **ON** | `={{ $('pick_creation').first().json.video_motion_prompt }}` |
+| `model_video` | **ON** | `={{ $('pick_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
+| `duration_seconds` | **ON** | `={{ $('pick_creation').first().json.duration_seconds \|\| 15 }}` |
+| `resolution` | **ON** | `={{ $('pick_creation').first().json.resolution \|\| '1080p' }}` |
+| `aspect_ratio` | **ON** | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
+| `model_still` | **ON** | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
 
-No `still_edit_prompt` field needed — edit text lives in `flag_still_edit` Code.
+No `still_edit_prompt` field — edit text lives in `flag_still_edit` Code.
 
 ---
 
 ## Node B — `switch_still_path`
 
 **Type:** Switch  
-**Before → this → After:** `choose_still_path` → **switch_still_path** → edit branch *or* skip branch  
+**Before → this → After:** `choose_still_path` → **switch_still_path** → edit *or* skip  
 
-| Setting | Value |
-|---|---|
-| Mode | **Rules** |
-| Output | **Extra Output** (fallback) optional — or only 2 outputs |
-| Value 1 | `={{ $json.still_path }}` |
-
-**Outputs (rename in the Switch UI):**
-
-| Output name | Rule | Wire to |
+| Setting | fx | Value |
 |---|---|---|
-| `edit` | equals (string) `edit` | `flag_still_edit` |
-| `skip` | equals (string) `skip` | `save_still_url` |
+| Mode | — | **Rules** |
 
-Use **string** compare (`edit` / `skip`), not boolean. Fallback → `save_still_url` if you add one.
+### Routing Rule 1 → output `edit`
+
+| Parameter | fx | Value |
+|---|---|---|
+| Value 1 | **ON** | `={{ $json.still_path }}` |
+| Operator | — | **is equal to** |
+| Value 2 | **OFF** | `edit` |
+
+Wire this output → `flag_still_edit`
+
+### Routing Rule 2 → output `skip`
+
+| Parameter | fx | Value |
+|---|---|---|
+| Value 1 | **ON** | `={{ $json.still_path }}` |
+| Operator | — | **is equal to** |
+| Value 2 | **OFF** | `skip` |
+
+Wire this output → `save_still_url`
+
+Optional fallback output → `save_still_url`
 
 ---
 
@@ -76,9 +89,8 @@ Use **string** compare (`edit` / `skip`), not boolean. Fallback → `save_still_
 **Type:** Code · Run Once for All Items  
 **Before → this → After:** `switch_still_path` (edit) → **flag_still_edit** → `prep_still_edit`
 
-Paste: `marketing/n8n-code-flag-still-edit.js`
-
-Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you took the **edit** path.
+Paste: `marketing/n8n-code-flag-still-edit.js`  
+(No fx — edit **`CODE_STILL_EDIT_PROMPT`** string at top of the Code.)
 
 **Check:** `still_edit_prompt` non-empty + https `still_url`.
 
@@ -89,7 +101,8 @@ Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you took the **edit** path.
 **Type:** Code · Run Once for All Items  
 **Before → this → After:** `flag_still_edit` → **prep_still_edit** → `grok_imagine_edit_still`
 
-Paste: `marketing/n8n-code-prep-still-edit.js`
+Paste: `marketing/n8n-code-prep-still-edit.js`  
+(No fx.)
 
 **Check:** `still_edit_body_json` + `source_still_url` (https).
 
@@ -98,15 +111,16 @@ Paste: `marketing/n8n-code-prep-still-edit.js`
 ## Node E — `grok_imagine_edit_still`
 
 **Type:** HTTP Request  
+**Before → this → After:** `prep_still_edit` → **grok_imagine_edit_still** → `save_still_url`
 
-| Setting | Value |
-|---|---|
-| Method | **`POST`** |
-| URL | **`https://api.x.ai/v1/images/edits`** |
-| Authentication | Header Auth → same xAI credential as still gen |
-| Send Body | **ON** |
-| Body Content Type | **JSON** |
-| JSON (fx **ON**) | `={{ $json.still_edit_body_json }}` |
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | `POST` |
+| URL | **OFF** | `https://api.x.ai/v1/images/edits` |
+| Authentication | — | Header Auth → same xAI as still gen |
+| Send Body | — | **ON** |
+| Body Content Type | — | **JSON** |
+| JSON | **ON** | `={{ $json.still_edit_body_json }}` |
 
 **Check:** `$json.data[0].url` is a **new** image.
 
@@ -115,53 +129,134 @@ Paste: `marketing/n8n-code-prep-still-edit.js`
 ## Node F — `save_still_url`
 
 **Type:** Edit Fields  
-Wire **both** Switch outputs here (edit path after `grok_imagine_edit_still`, skip path from Switch).
+Wire **both** Switch paths here (edit after HTTP; skip from Switch).
 
-**Before → this → After:** edit HTTP *or* Switch `skip` → **save_still_url** → `prep_grok_video_start`
-
+**Before → this → After:** edit HTTP *or* Switch `skip` → **save_still_url** → `prep_grok_video_start`  
 Include Other Input Fields: **ON**
 
-| Name | Value (fx ON) |
-|---|---|
-| `still_url` | `={{ $json.data[0].url \|\| $json.still_url \|\| $json.source_still_url }}` |
-| `creation_id` | `={{ $json.creation_id \|\| $('pick_creation').first().json.creation_id \|\| $('choose_still_path').first().json.creation_id }}` |
-| `video_motion_prompt` | `={{ $json.video_motion_prompt \|\| $('choose_still_path').first().json.video_motion_prompt \|\| $('pick_creation').first().json.video_motion_prompt }}` |
-| `model_video` | `={{ $json.model_video \|\| $('choose_still_path').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
-| `duration_seconds` | `={{ $json.duration_seconds \|\| $('choose_still_path').first().json.duration_seconds \|\| 15 }}` |
-| `resolution` | `={{ $json.resolution \|\| $('choose_still_path').first().json.resolution \|\| '1080p' }}` |
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | **ON** | `={{ $json.data[0].url \|\| $json.still_url \|\| $json.source_still_url }}` |
+| `creation_id` | **ON** | `={{ $json.creation_id \|\| $('choose_still_path').first().json.creation_id \|\| $('pick_creation').first().json.creation_id }}` |
+| `video_motion_prompt` | **ON** | `={{ $json.video_motion_prompt \|\| $('choose_still_path').first().json.video_motion_prompt \|\| $('pick_creation').first().json.video_motion_prompt }}` |
+| `model_video` | **ON** | `={{ $json.model_video \|\| $('choose_still_path').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
+| `duration_seconds` | **ON** | `={{ $json.duration_seconds \|\| $('choose_still_path').first().json.duration_seconds \|\| 15 }}` |
+| `resolution` | **ON** | `={{ $json.resolution \|\| $('choose_still_path').first().json.resolution \|\| '1080p' }}` |
 
 ---
 
-## Finish → video → sheets
+## Node G — `prep_grok_video_start`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `save_still_url` → **prep_grok_video_start** → `grok_video_start`
+
+Paste: `marketing/n8n-code-prep-grok-video-start.js`  
+(No fx.)
+
+**Check:** `still_url` https + `grok_video_body_json` present.
+
+---
+
+## Node H — `grok_video_start`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_grok_video_start` → **grok_video_start** → `wait_video`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | `POST` |
+| URL | **OFF** | `https://api.x.ai/v1/videos/generations` |
+| Authentication | — | Header Auth → same xAI |
+| Send Body | — | **ON** |
+| Body Content Type | — | **Raw** |
+| Content Type | **OFF** | `application/json` |
+| Body | **ON** | `={{ $json.grok_video_body_json }}` |
+
+If `$json` is empty, Body fx **ON**:
 
 ```text
-save_still_url
-  → prep_grok_video_start          ← paste n8n-code-prep-grok-video-start.js
-  → grok_video_start               ← Body: ={{ $json.grok_video_body_json }}
-  → wait_video                     ← ~200s
-  → grok_video_poll                ← GET /v1/videos/{{ request_id }}
-  → save_video_url
-  → sheets_update_creation         ← match creation_id; times_used + 1
+={{ $('prep_grok_video_start').first().json.grok_video_body_json }}
 ```
 
-Full node settings: `n8n-build-grok-imagine-video-nodes.md` (nodes 3b–7).
+**Check:** output has `request_id`.
 
-### `sheets_update_creation`
+---
 
-| Setting | Value |
-|---|---|
-| Operation | Update |
-| Sheet | `9-lab-item-creations-500` |
-| Column to Match On | `creation_id` |
-| Value to Match | `={{ $('pick_creation').first().json.creation_id }}` |
-| `times_used` | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
-| `last_used_at` | `={{ $now.toISO() }}` |
+## Node I — `wait_video`
+
+**Type:** Wait  
+**Before → this → After:** `grok_video_start` → **wait_video** → `grok_video_poll`
+
+| Setting | fx | Value |
+|---|---|---|
+| Resume | — | After time interval |
+| Wait Amount | **OFF** | `200` |
+| Wait Unit | — | Seconds |
+
+Must be **enabled** (not deactivated).
+
+---
+
+## Node J — `grok_video_poll`
+
+**Type:** HTTP Request  
+**Before → this → After:** `wait_video` → **grok_video_poll** → `save_video_url`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | `GET` |
+| URL | **ON** | `={{ 'https://api.x.ai/v1/videos/' + $('grok_video_start').first().json.request_id }}` |
+| Authentication | — | Header Auth → same xAI |
+| Send Body | — | **OFF** |
+
+**Check:** `status` = `done` / `succeeded` + video URL. If pending, raise wait and re-run.
+
+---
+
+## Node K — `save_video_url`
+
+**Type:** Edit Fields  
+**Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_creation`  
+Include Other Input Fields: **ON**
+
+| Name | fx | Value |
+|---|---|---|
+| `video_url` | **ON** | `={{ $json.video.url \|\| $json.url }}` |
+| `grok_video_request_id` | **ON** | `={{ $json.request_id \|\| $('grok_video_start').first().json.request_id }}` |
+| `still_url` | **ON** | `={{ $('save_still_url').first().json.still_url }}` |
+| `creation_id` | **ON** | `={{ $('pick_creation').first().json.creation_id }}` |
+| `row_number` | **ON** | `={{ $('pick_creation').first().json.row_number }}` |
+| `creation_times_used` | **ON** | `={{ $('pick_creation').first().json.creation_times_used }}` |
+| `created_at` | **ON** | `={{ $now.toISO() }}` |
+
+**Check:** `video_url` is https.
+
+---
+
+## Node L — `sheets_update_creation`
+
+**Type:** Google Sheets → Update  
+**Before → this → After:** `save_video_url` → **sheets_update_creation** → (end)
+
+| Setting | fx | Value |
+|---|---|---|
+| Operation | — | Update |
+| Document | — | By ID (same as `get_reel_creations`) |
+| Sheet | **OFF** | `9-lab-item-creations-500` |
+| Column to Match On | **OFF** | `creation_id` |
+| Value to Match | **ON** | `={{ $('pick_creation').first().json.creation_id }}` |
+| `times_used` | **ON** | `={{ Number($('pick_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
+| `last_used_at` | **ON** | `={{ $now.toISO() }}` |
+
+Without this writeback, `pick_creation` keeps returning the same row.
 
 ---
 
 ## Prompt examples (edit path only)
 
-| Intent | Put in `CODE_STILL_EDIT_PROMPT` |
+Put in `CODE_STILL_EDIT_PROMPT` inside `flag_still_edit` (no fx):
+
+| Intent | Text |
 |---|---|
 | Remove | `Remove the scale under the vial. Keep lighting, camera, and label identical.` |
 | One hero | `Keep exactly one sealed vial. Remove any duplicate products. Keep the rest identical.` |
