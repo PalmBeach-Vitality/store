@@ -52,12 +52,11 @@ SINGLE_RULE = (
 )
 
 STILL_EDIT_HARD = (
-    "CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product visible "
-    "(one vial OR one pen — never both). DELETE every extra vial and every extra pen — including "
-    "background vials, soft-focus vials, smaller secondary vials, open/uncapped duplicate vials, "
-    "and any product that is not the single main hero. After the edit the viewer must be able to "
-    "count exactly 1 product. Do not restyle lighting, camera angle, label text, or environment. "
-    "Do not add new products. Do not leave a second vial 'for depth'."
+    "CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product "
+    "(one vial OR one pen). DELETE every extra vial/pen. Also DELETE any weighing scale, "
+    "digital scale, platform scale, or metal tray under the product — place the single hero "
+    "directly on the table/surface. After the edit count exactly 1 product and zero scales. "
+    "Do not restyle lighting, camera, label text, or environment."
 )
 
 TEXT_KEYS = (

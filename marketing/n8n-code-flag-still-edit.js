@@ -1,16 +1,14 @@
 // n8n Code node: flag_still_edit
 // Mode: Run Once for All Items
 //
-// Wire (edit branch only):
-//   switch_still_path (edit) → **flag_still_edit** → prep_still_edit
+// Wire (linear — no Switch/IF):
+//   grok_imagine_reel_still → **flag_still_edit** → prep_still_edit
 //
-// Routing is the Switch node (still_path = edit|skip). This node only
-// prepares the edit prompt + still_url for the edit path.
+// CODE_STILL_EDIT_PROMPT wins first (what you type here). Sheet/pick is fallback only.
 
-// ── EDIT THIS when still_path = edit ─────────────────────────────────────
-// HARD single-hero cleanup — always remove extra vials/pens.
+// ── EDIT THIS — this is the prompt Grok edit uses ───────────────────────
 var CODE_STILL_EDIT_PROMPT =
-  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product visible (one vial OR one pen — never both). DELETE every extra vial and every extra pen — including background vials, soft-focus vials, smaller secondary vials, open/uncapped duplicate vials, and any product that is not the single main hero. After the edit the viewer must count exactly 1 product. Do not restyle lighting, camera angle, label text, or environment. Do not add new products. Do not leave a second vial for depth.';
+  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen (background, soft-focus, smaller secondary, open/uncapped duplicates). Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit the viewer must count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment. Do not add new products.';
 // ─────────────────────────────────────────────────────────────────────────
 
 function firstJson(name) {
@@ -28,48 +26,39 @@ function grokStillUrl(obj) {
   return '';
 }
 
-function pickPrompt() {
-  var input = ($input.first() && $input.first().json) || $json || {};
-  var fromInput = String(input.still_edit_prompt || input.edit_prompt || '').trim();
-  if (fromInput) return fromInput;
-
-  var names = ['choose_still_path', 'still_edit_instructions', 'pick_creation', 'map_sheet_fields'];
-  for (var i = 0; i < names.length; i++) {
-    var o = firstJson(names[i]);
-    var p = String(o.still_edit_prompt || o.edit_prompt || '').trim();
-    if (p) return p;
-  }
-
-  return String(CODE_STILL_EDIT_PROMPT || '').trim();
-}
-
 var j = Object.assign({}, ($input.first() && $input.first().json) || $json || {});
 
-var stillUrl = String(j.still_url || '').trim();
+// Always prefer the fresh Grok still (never a prior save_still_url from an old run)
+var stillUrl =
+  grokStillUrl(firstJson('grok_imagine_reel_still')) ||
+  grokStillUrl(j) ||
+  String(j.still_url || '').trim() ||
+  '';
+
 if (!/^https:\/\//i.test(stillUrl)) {
-  stillUrl =
-    grokStillUrl(firstJson('grok_imagine_reel_still')) ||
-    grokStillUrl(firstJson('choose_still_path')) ||
-    grokStillUrl(firstJson('save_still_url')) ||
-    grokStillUrl(j) ||
-    '';
-}
-
-if (/^https:\/\//i.test(stillUrl)) {
-  j.still_url = stillUrl;
-}
-
-var prompt = pickPrompt();
-j.still_edit_prompt = prompt;
-j.still_path = 'edit';
-j.still_edit_prompt_source = String(CODE_STILL_EDIT_PROMPT || '').trim() === prompt
-  ? 'CODE_STILL_EDIT_PROMPT'
-  : 'upstream';
-
-if (!prompt) {
   throw new Error(
-    'flag_still_edit: empty CODE_STILL_EDIT_PROMPT — set edit text at top of this Code, or use Switch skip.'
+    'flag_still_edit: no https still from grok_imagine_reel_still — run the still node first.'
   );
 }
+j.still_url = stillUrl;
+
+// CODE prompt wins. Sheet/pick only if Code string is emptied on purpose.
+var prompt = String(CODE_STILL_EDIT_PROMPT || '').trim();
+if (!prompt) {
+  prompt = String(
+    j.still_edit_prompt ||
+      firstJson('pick_creation').still_edit_prompt ||
+      firstJson('map_sheet_fields').still_edit_prompt ||
+      ''
+  ).trim();
+}
+
+if (!prompt) {
+  throw new Error('flag_still_edit: set CODE_STILL_EDIT_PROMPT at the top of this Code.');
+}
+
+j.still_edit_prompt = prompt;
+j.still_edit_prompt_source = 'CODE_STILL_EDIT_PROMPT';
+j.source_still_url = stillUrl;
 
 return [{ json: j }];

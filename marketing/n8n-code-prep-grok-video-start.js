@@ -45,17 +45,16 @@ var imagine = firstJson('grok_imagine_reel_still');
 var editHttp = firstJson('grok_imagine_edit_still');
 
 var stillResolved = pickHttpsUrl([
+  // Prefer THIS run's edit output first (never an old scale still)
+  editHttp.data && editHttp.data[0] && editHttp.data[0].url,
   val(input, ['still_url', 'source_still_url', 'edited_still_url']),
   input.data && input.data[0] && input.data[0].url,
   input.url,
-  // Prefer edited still (this path saves AFTER edit into save_still_url)
-  editHttp.data && editHttp.data[0] && editHttp.data[0].url,
   val(editedStill, ['still_url']),
   editedStill.data && editedStill.data[0] && editedStill.data[0].url,
   val(stillNode, ['still_url']),
   stillNode.data && stillNode.data[0] && stillNode.data[0].url,
-  val(editInstructions, ['still_url']),
-  val(importStill, ['still_url']),
+  // Original generate still is LAST resort only
   imagine.data && imagine.data[0] && imagine.data[0].url,
 ]);
 
