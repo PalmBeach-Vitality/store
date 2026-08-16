@@ -4,10 +4,13 @@
 // Wire (true branch):
 //   flag_still_edit → if → **prep_still_edit** → grok_imagine_edit_still → save_still_url
 //
-// still_url is runtime only (Grok still / flag). Do NOT require save_still_url —
-// on this path save runs AFTER the edit.
-//
-// still_edit_prompt: Fixed text on still_edit_instructions (Sheet 9 column is often blank).
+// still_url: runtime from Grok / flag (save_still_url is AFTER edit on this path).
+// still_edit_prompt: flag → Set → pick → CODE fallback below.
+
+// ── Same fallback as flag_still_edit (edit either; flag runs first) ───────
+var CODE_STILL_EDIT_PROMPT =
+  'Keep exactly one sealed hero product (one vial OR one pen). Remove any duplicate vials, pens, or extra products. Keep lighting, camera, label text, and background identical.';
+// ─────────────────────────────────────────────────────────────────────────
 
 function firstJson(name) {
   try {
@@ -51,14 +54,13 @@ function resolveEditPrompt(input, flag, instructions, sheet, importStill) {
     ).trim();
     if (p) return p;
   }
-  // Last resort: raw node lookups by common renames
   var alts = ['still_edit_instructions', 'Still Edit Instructions', 'flag_still_edit'];
   for (var a = 0; a < alts.length; a++) {
     var o = firstJson(alts[a]);
     var q = String(o.still_edit_prompt || o.edit_prompt || '').trim();
     if (q) return q;
   }
-  return '';
+  return String(CODE_STILL_EDIT_PROMPT || '').trim();
 }
 
 var input = ($input.first() && $input.first().json) || {};
@@ -112,10 +114,8 @@ var aspectRatio = String(
 
 if (!editPrompt) {
   throw new Error(
-    'still_edit_prompt missing. On still_edit_instructions add Fixed field ' +
-      'still_edit_prompt with your edit text (Sheet 9 column is blank). ' +
-      'Remove any duplicate empty still_edit_prompt assignment. ' +
-      'Then re-paste flag_still_edit so it does not wipe the Fixed value.'
+    'still_edit_prompt missing everywhere (Set, Sheet, and CODE_STILL_EDIT_PROMPT). ' +
+      'Edit CODE_STILL_EDIT_PROMPT at the top of flag_still_edit or prep_still_edit.'
   );
 }
 

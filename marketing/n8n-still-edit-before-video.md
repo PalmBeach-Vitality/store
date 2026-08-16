@@ -35,7 +35,7 @@ Include Other Input Fields: **ON**
 | Name | Mode | Value |
 |---|---|---|
 | `still_url` | Expression | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
-| `still_edit_prompt` | **Fixed** (change each run) | required — Sheet 9 column is blank; one Fixed field only (no duplicate empty) |
+| `still_edit_prompt` | **Fixed** (optional) | Optional — Sheet 9 is blank; if Set stays empty, edit `CODE_STILL_EDIT_PROMPT` in **flag_still_edit** |
 | `aspect_ratio` | Expression | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
 | `model_still` | Expression | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
 | `creation_id` | Expression | `={{ $('pick_creation').first().json.creation_id }}` |
@@ -59,7 +59,9 @@ Always say **what must stay the same** so Grok doesn’t restyle the whole frame
 
 Paste: `marketing/n8n-code-flag-still-edit.js`
 
-Sets `do_still_edit: true` (boolean) and backfills `still_url` from `grok_imagine_reel_still` if blank.
+Sets `still_edit_prompt` from Set → pick/sheet → **`CODE_STILL_EDIT_PROMPT`** (edit that string in the Code node — most reliable on n8n Cloud). Sets `do_still_edit` boolean when prompt text exists. Backfills `still_url` from `grok_imagine_reel_still` if blank.
+
+**Check output:** `still_edit_prompt` non-empty + `still_edit_prompt_source` (`CODE_STILL_EDIT_PROMPT` is fine).
 
 ---
 
