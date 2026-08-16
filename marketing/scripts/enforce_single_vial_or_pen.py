@@ -41,14 +41,27 @@ PEN_HERO = (
 )
 
 SINGLE_RULE = (
-    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The frame must contain "
-    "exactly ONE research product hero — either ONE vial OR ONE pen — never both, never two, "
-    "never three. COUNT THE PRODUCTS: if you can see more than one vial or more than one pen, "
-    "the image is WRONG. Forbidden: second vial, background vial, foreground + background vial "
-    "pair, large vial + small vial, open vial + capped vial, twin vials, mirrored duplicate vial, "
-    "reflection that reads as a second hero, row/rack/carousel/constellation/cluster/shelf/array/"
-    "lineup of vials or pens, carton + vial double hero. Background architecture only — zero extra "
-    "vials or pens as props, soft-focus props, or depth-cue products. ONE object. ONE hero. Period."
+    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The finished image must "
+    "contain exactly ONE research product container total — either ONE vial OR ONE pen — "
+    "never both, never two, never three. PRODUCT COUNT MUST EQUAL 1. If you can see more than "
+    "one vial or more than one pen anywhere in the frame (including background, blur, edges, "
+    "reflections, or depth), the image is WRONG. Forbidden: second vial, background vial, "
+    "foreground+background vial pair, large+small vial, open+capped vial pair, mirrored "
+    "duplicate, row/rack/carousel/cluster/shelf/array of vials or pens, carton+vial double hero, "
+    "extra bottles that read as products. Background = architecture and atmosphere only. "
+    "ONE object. ONE hero. COUNT = 1. Period."
+)
+
+OPENING_LOCK = (
+    "HARD OUTPUT LOCK (READ FIRST): Render exactly 1 product container in the entire image — "
+    "either 1 sealed vial OR 1 sealed pen. Product count = 1. No second vial. No background vial. "
+    "No soft-focus vial. No product pair for depth. "
+)
+
+CLOSING_LOCK = (
+    " HARD OUTPUT LOCK (FINAL CHECK): Before finishing, count every vial and pen in the image. "
+    "The total must be exactly 1. If the count is 2 or more, remove the extras until only one "
+    "hero remains. COUNT = 1."
 )
 
 STILL_EDIT_HARD = (
@@ -218,9 +231,46 @@ PACKAGING_PLURAL_FIXES: list[tuple[re.Pattern[str], str]] = [
     ),
 ]
 
+# Phrases that actively teach the model to draw MORE than one product
+ANTI_MULTI_FIXES: list[tuple[re.Pattern[str], str]] = [
+    (
+        re.compile(
+            r"Create an exciting, unique laboratory / peptide R&D / health-and-wellness "
+            r"industry scene — not a boring single product cutout\.",
+            re.I,
+        ),
+        "Create an exciting, unique laboratory / peptide R&D / health-and-wellness "
+        "industry environment scene that still contains exactly ONE product hero only "
+        "(never two vials, never two pens, never a product pair).",
+    ),
+    (
+        re.compile(r"not a boring single product cutout", re.I),
+        "exactly one product hero in a full environment (never two products)",
+    ),
+    (
+        re.compile(
+            r"Nested glass doors create recursive reflections of the same hero object\.",
+            re.I,
+        ),
+        "Glass may reflect light only — no second readable vial or pen in any reflection.",
+    ),
+    (
+        re.compile(r"recursive reflections of the same hero object", re.I),
+        "no second readable vial or pen in any reflection",
+    ),
+    (
+        re.compile(
+            r"Color-blocked solvent bottles create a deliberate Pantone story behind the hero\.",
+            re.I,
+        ),
+        "Keep the background clean behind the single hero — no extra bottles that read as product heroes.",
+    ),
+]
+
 QUALITY_NEGATIVES = (
-    "exactly one product hero only, no second vial, no background vial, "
-    "no duplicate products, no twin vials, count equals one"
+    "exactly one product hero only, product count equals 1, no second vial anywhere, "
+    "no background vial, no soft-focus vial, no twin vials, no product pair, "
+    "no duplicate products, one container only"
 )
 
 
@@ -230,55 +280,65 @@ def apply_replacements(text: str) -> str:
         out = pat.sub(repl, out)
     for pat, repl in PACKAGING_PLURAL_FIXES:
         out = pat.sub(repl, out)
+    for pat, repl in ANTI_MULTI_FIXES:
+        out = pat.sub(repl, out)
     out = re.sub(r"\ba a single\b", "a single", out, flags=re.I)
     out = re.sub(r"\s{2,}", " ", out)
     return out
 
 
+def strip_locks_and_old_rules(text: str) -> str:
+    t = text or ""
+    t = re.sub(r"HARD OUTPUT LOCK \(READ FIRST\):.*?(?:for depth\.\s*|depth\.\s*)", "", t, flags=re.I | re.S)
+    t = re.sub(r"HARD OUTPUT LOCK \(FINAL CHECK\):.*?COUNT = 1\.", "", t, flags=re.I | re.S)
+    t = re.sub(
+        r"SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):.*?(?:COUNT = 1\. Period\.|Period\.|props are forbidden\.)",
+        "",
+        t,
+        flags=re.I | re.S,
+    )
+    return re.sub(r"\s{2,}", " ", t).strip()
+
+
 def ensure_single_rule(text: str) -> str:
     t = apply_replacements(text or "")
-    if "SINGLE HERO PRODUCT RULE" in t:
-        t = re.sub(
-            r"SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):.*?(?:Period\.|props are forbidden\.|never a row[^.]*\.)",
-            SINGLE_RULE,
-            t,
-            count=1,
-            flags=re.I | re.DOTALL,
-        )
-        return t
-
-    if "VIAL PACKAGING RULE (MANDATORY):" in t:
-        t = re.sub(
-            r"(VIAL PACKAGING RULE \(MANDATORY\):.*?(?:NO duplicate labels\.|NO second vial, NO duplicate labels\.))",
-            r"\1 " + SINGLE_RULE,
-            t,
-            count=1,
-            flags=re.I | re.DOTALL,
-        )
-        if "SINGLE HERO PRODUCT RULE" in t:
-            return t
-
-    markers = [
-        "If the single hero vial or single hero pen shows a product name",
-        "If any vial, pen, carton panel",
-        "ABSOLUTE RULE — NO DOUBLES",
-        "ABSOLUTE RULE - NO DOUBLES",
-        "Quality: ultra detailed",
-    ]
-    for marker in markers:
-        idx = t.find(marker)
-        if idx != -1:
-            return t[:idx].rstrip() + " " + SINGLE_RULE + " " + t[idx:]
-    return (t.rstrip() + " " + SINGLE_RULE).strip()
+    t = strip_locks_and_old_rules(t)
+    # Always wrap: opening lock + body + single rule + closing lock
+    if not t.startswith("HARD OUTPUT LOCK"):
+        t = OPENING_LOCK + t
+    if "SINGLE HERO PRODUCT RULE" not in t:
+        # insert before Quality / ABSOLUTE / end
+        markers = [
+            "ABSOLUTE RULE — NO DOUBLES",
+            "ABSOLUTE RULE - NO DOUBLES",
+            "Quality: ultra detailed",
+        ]
+        placed = False
+        for marker in markers:
+            idx = t.find(marker)
+            if idx != -1:
+                t = t[:idx].rstrip() + " " + SINGLE_RULE + " " + t[idx:]
+                placed = True
+                break
+        if not placed:
+            t = t + " " + SINGLE_RULE
+    if "HARD OUTPUT LOCK (FINAL CHECK)" not in t:
+        t = t.rstrip() + CLOSING_LOCK
+    return t.strip()
 
 
 def ensure_quality_negatives(text: str) -> str:
-    t = (text or "").strip()
-    if "exactly one product hero only" in t.lower():
-        return t
+    t = apply_replacements((text or "").strip())
+    # Always refresh negatives block
+    t = re.sub(
+        r",?\s*exactly one product hero only.*$",
+        "",
+        t,
+        flags=re.I,
+    ).rstrip(", ")
     if not t:
         return QUALITY_NEGATIVES
-    return t.rstrip(", ") + ", " + QUALITY_NEGATIVES
+    return t + ", " + QUALITY_NEGATIVES
 
 
 def patch_row(row: dict) -> bool:

@@ -56,26 +56,62 @@ function stripVidDisclaimer(text) {
   return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
 }
 
-/** Appended every run so Grok cannot invent a second vial/pen even if sheet text is soft. */
+/** Forced on EVERY still prompt at runtime (start + end). Sheet text alone is not enough. */
+const OPENING_LOCK =
+  'HARD OUTPUT LOCK (READ FIRST): Render exactly 1 product container in the entire image — either 1 sealed vial OR 1 sealed pen. Product count = 1. No second vial. No background vial. No soft-focus vial. No product pair for depth. ';
+
+const CLOSING_LOCK =
+  ' HARD OUTPUT LOCK (FINAL CHECK): Before finishing, count every vial and pen in the image. The total must be exactly 1. If the count is 2 or more, remove the extras until only one hero remains. COUNT = 1.';
+
 const HARD_SINGLE_HERO =
-  ' SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): exactly ONE research product hero — either ONE vial OR ONE pen — never both, never two. Forbidden: second vial, background vial, foreground+background vial pair, large+small vial, open+capped twin, mirrored duplicate, row/rack/cluster of vials or pens. ONE object. ONE hero. Period.';
+  ' SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The finished image must contain exactly ONE research product container total — either ONE vial OR ONE pen — never both, never two, never three. PRODUCT COUNT MUST EQUAL 1. Forbidden: second vial, background vial, foreground+background pair, large+small vial, open+capped pair, mirrored duplicate, row/rack/cluster of vials or pens. Background = architecture only. ONE object. ONE hero. COUNT = 1. Period.';
 
 const HARD_STILL_EDIT =
   'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen. Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment.';
 
 function hardenStillPrompt(text) {
   let t = String(text || '').trim();
+
+  // THIS PHRASE WAS TEACHING GROK TO DRAW MULTIPLE PRODUCTS — kill it
+  t = t.replace(
+    /Create an exciting, unique laboratory \/ peptide R&D \/ health-and-wellness industry scene — not a boring single product cutout\./gi,
+    'Create an exciting, unique laboratory / peptide R&D / health-and-wellness industry environment scene that still contains exactly ONE product hero only (never two vials, never two pens, never a product pair).'
+  );
+  t = t.replace(
+    /not a boring single product cutout/gi,
+    'exactly one product hero in a full environment (never two products)'
+  );
   t = t.replace(/\bnot a single boring SKU\b/gi, 'not a boring SKU catalog shot');
   t = t.replace(/\bHero cluster\b/gi, 'Hero');
-  // Strip accidental duplicated packaging tail that teaches two vials
+  t = t.replace(
+    /Nested glass doors create recursive reflections of the same hero object\./gi,
+    'Glass may reflect light only — no second readable vial or pen in any reflection.'
+  );
+  t = t.replace(
+    /recursive reflections of the same hero object/gi,
+    'no second readable vial or pen in any reflection'
+  );
+  t = t.replace(
+    /Color-blocked solvent bottles create a deliberate Pantone story behind the hero\./gi,
+    'Keep the background clean behind the single hero — no extra bottles that read as product heroes.'
+  );
+
+  // Strip duplicated packaging tail that teaches two vials
   t = t.replace(
     /(10ml Sterile Multi-Use Vial')\s+with bright blue flip-off cap,[\s\S]*?footer reading '10ml Sterile Multi-Use Vial'/gi,
     "$1"
   );
-  if (!/COUNT = 1/i.test(t)) {
-    t = (t + HARD_SINGLE_HERO).trim();
-  }
-  return t;
+
+  // Strip prior locks/rules so we re-wrap clean every run
+  t = t.replace(/HARD OUTPUT LOCK \(READ FIRST\):[\s\S]*?(?:for depth\.\s*|depth\.\s*)/gi, '');
+  t = t.replace(/HARD OUTPUT LOCK \(FINAL CHECK\):[\s\S]*?COUNT = 1\./gi, '');
+  t = t.replace(
+    /SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):[\s\S]*?(?:COUNT = 1\. Period\.|Period\.)/gi,
+    ''
+  );
+  t = t.replace(/\s+/g, ' ').trim();
+
+  return (OPENING_LOCK + t + HARD_SINGLE_HERO + CLOSING_LOCK).trim();
 }
 
 const creations = $input.all().map((i) => i.json);
