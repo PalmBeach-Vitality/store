@@ -462,7 +462,7 @@ def rebuild_still_prompt(row: dict, shot: dict) -> str:
         )
     return (
         f"Photoreal vertical 9:16 Palm Beach Vitality cinematic research still. "
-        f"Create an exciting, unique laboratory / peptide R&D / health-and-wellness industry scene — "
+        f"Create an exciting, unique laboratory / peptide R&D / health-and-wellness "
         f"industry environment scene that still contains exactly ONE product hero only "
         f"(never two vials, never two pens, never a product pair). "
         f"FULL SCENE BRIEF: {scene} "
