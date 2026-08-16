@@ -6,6 +6,8 @@
 //
 // still_url is runtime only (Grok still / flag). Do NOT require save_still_url —
 // on this path save runs AFTER the edit.
+//
+// still_edit_prompt: Fixed text on still_edit_instructions (Sheet 9 column is often blank).
 
 function firstJson(name) {
   try {
@@ -41,9 +43,30 @@ function grokStillUrl(obj) {
   );
 }
 
+function resolveEditPrompt(input, flag, instructions, sheet, importStill) {
+  var sources = [input, flag, instructions, sheet, importStill, firstJson('pick_creation')];
+  for (var i = 0; i < sources.length; i++) {
+    var p = String(
+      val(sources[i], ['still_edit_prompt', 'edit_prompt', 'Still Edit Prompt'], '')
+    ).trim();
+    if (p) return p;
+  }
+  // Last resort: raw node lookups by common renames
+  var alts = ['still_edit_instructions', 'Still Edit Instructions', 'flag_still_edit'];
+  for (var a = 0; a < alts.length; a++) {
+    var o = firstJson(alts[a]);
+    var q = String(o.still_edit_prompt || o.edit_prompt || '').trim();
+    if (q) return q;
+  }
+  return '';
+}
+
 var input = ($input.first() && $input.first().json) || {};
 var flag = firstJson('flag_still_edit');
 var instructions = firstJson('still_edit_instructions');
+if (!Object.keys(instructions).length) {
+  instructions = firstJson('Still Edit Instructions');
+}
 var imagine = firstJson('grok_imagine_reel_still');
 var saveStill = firstJson('save_still_url');
 var sheet = firstJson('map_sheet_fields');
@@ -63,18 +86,11 @@ var sourceStill =
 if (!sourceStill) {
   throw new Error(
     'still_url missing — set still_url on still_edit_instructions to ' +
-      "={{ $('grok_imagine_reel_still').first().json.data[0].url }} " +
-      '(or re-paste this prep_still_edit Code from the repo).'
+      "={{ $('grok_imagine_reel_still').first().json.data[0].url }}"
   );
 }
 
-var editPrompt = String(
-  val(input, ['still_edit_prompt', 'edit_prompt']) ||
-    val(flag, ['still_edit_prompt', 'edit_prompt']) ||
-    val(instructions, ['still_edit_prompt', 'edit_prompt']) ||
-    val(sheet, ['still_edit_prompt', 'edit_prompt']) ||
-    val(importStill, ['still_edit_prompt'], '')
-).trim();
+var editPrompt = resolveEditPrompt(input, flag, instructions, sheet, importStill);
 
 var modelStill = String(
   val(input, ['model_still']) ||
@@ -95,7 +111,12 @@ var aspectRatio = String(
 ).trim();
 
 if (!editPrompt) {
-  throw new Error('prep_still_edit: still_edit_prompt missing.');
+  throw new Error(
+    'still_edit_prompt missing. On still_edit_instructions add Fixed field ' +
+      'still_edit_prompt with your edit text (Sheet 9 column is blank). ' +
+      'Remove any duplicate empty still_edit_prompt assignment. ' +
+      'Then re-paste flag_still_edit so it does not wipe the Fixed value.'
+  );
 }
 
 var body = {

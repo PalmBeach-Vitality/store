@@ -35,7 +35,7 @@ Include Other Input Fields: **ON**
 | Name | Mode | Value |
 |---|---|---|
 | `still_url` | Expression | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
-| `still_edit_prompt` | **Fixed** (change each run) | see examples below |
+| `still_edit_prompt` | **Fixed** (change each run) | required — Sheet 9 column is blank; one Fixed field only (no duplicate empty) |
 | `aspect_ratio` | Expression | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
 | `model_still` | Expression | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
 | `creation_id` | Expression | `={{ $('pick_creation').first().json.creation_id }}` |
