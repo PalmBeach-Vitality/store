@@ -3,42 +3,42 @@
 **Goal:** After Grok creates the still, optionally **edit the image** (add or remove parts) with a text instruction, then send the **edited** still into **`grok-imagine-video-1.5`**.
 
 **Workflow:** `PBVita — Grok Daily` / Reel Studio vid gen  
-**Still edit API:** `POST https://api.x.ai/v1/images/edits` · `grok-imagine-image-quality`  
+**Still edit API:** `POST https://api.x.ai/v1/images/edits` · `grok-imagine-image-2.0`  
 **Video API:** `POST https://api.x.ai/v1/videos/generations` · `grok-imagine-video-1.5`  
 **Auth:** same xAI Header Auth as `grok_imagine_reel_still` / `grok_video_start`
 
 ---
 
-## Wire
+## Wire (daily Vid_gen)
 
 ```text
 pick_creation
   → grok_imagine_reel_still
-  → save_still_url
-  → still_edit_instructions      ← NEW (you type add/remove)
-  → if_still_edit                ← NEW (skip when blank)
-       true  → prep_still_edit → grok_imagine_edit_still → save_edited_still_url
-       false → save_edited_still_url                     (original still_url)
-  → prep_grok_video_start        ← uses edited still when present
-  → grok_video_start             ← grok-imagine-video-1.5
-  → wait_video → grok_video_poll → save_video_url → …
+  → still_edit_instructions
+  → flag_still_edit
+  → if
+       true  → prep_still_edit → grok_imagine_edit_still → save_still_url
+       false → save_still_url
+  → prep_grok_video_start → grok_video_start → wait → poll → save_video_url
 ```
 
-Leave `still_edit_prompt` **empty** → original still goes to video (no edit call).
+`save_still_url` is **after** the edit on this path — do not make `prep_still_edit` depend on it.
 
 ---
 
 ## Node A — `still_edit_instructions`
 
 **Type:** Edit Fields (Set)  
-**After:** `save_still_url`  
+**Before → this → After:** `grok_imagine_reel_still` → **still_edit_instructions** → `flag_still_edit`  
 Include Other Input Fields: **ON**
 
 | Name | Mode | Value |
 |---|---|---|
-| `still_url` | Expression | `={{ $json.still_url \|\| $json.data[0].url }}` |
+| `still_url` | Expression | `={{ $('grok_imagine_reel_still').first().json.data[0].url }}` |
 | `still_edit_prompt` | **Fixed** (change each run) | see examples below |
-| `creation_id` | Expression | `={{ $json.creation_id \|\| $('pick_creation').first().json.creation_id }}` |
+| `aspect_ratio` | Expression | `={{ $('pick_creation').first().json.aspect_ratio \|\| '9:16' }}` |
+| `model_still` | Expression | `={{ $('pick_creation').first().json.model_still \|\| 'grok-imagine-image-2.0' }}` |
+| `creation_id` | Expression | `={{ $('pick_creation').first().json.creation_id }}` |
 
 ### Prompt examples
 
@@ -52,28 +52,40 @@ Always say **what must stay the same** so Grok doesn’t restyle the whole frame
 
 ---
 
-## Node B — `if_still_edit`
+## Node B — `flag_still_edit`
 
-**Type:** IF  
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `still_edit_instructions` → **flag_still_edit** → `if`
 
-Condition: `{{ String($json.still_edit_prompt || '').trim() }}` **is not empty**
+Paste: `marketing/n8n-code-flag-still-edit.js`
 
-- **true** → Nodes C → D → E  
-- **false** → Node E (passthrough original)
+Sets `do_still_edit: true` (boolean) and backfills `still_url` from `grok_imagine_reel_still` if blank.
 
 ---
 
-## Node C — `prep_still_edit`
+## Node C — `if`
+
+**Type:** IF  
+
+Condition: `{{ $json.do_still_edit }}` **equals** boolean **`true`** (not the string `"true"`).
+
+- **true** → `prep_still_edit` → …  
+- **false** → `save_still_url`
+
+---
+
+## Node D — `prep_still_edit`
 
 **Type:** Code · Run Once for All Items  
+**Before → this → After:** `if` (true) → **prep_still_edit** → `grok_imagine_edit_still`
 
-Paste: `marketing/n8n-code-prep-still-edit.js`
+Paste: `marketing/n8n-code-prep-still-edit.js` (replace any older “still_url missing” snippet).
 
 **Check:** `still_edit_body_json` + `source_still_url` (https).
 
 ---
 
-## Node D — `grok_imagine_edit_still`
+## Node E — `grok_imagine_edit_still`
 
 **Type:** HTTP Request  
 
@@ -94,7 +106,7 @@ If you still get 404, smoke-test with this fixed JSON body (fx OFF) using xAI’
 
 ```json
 {
-  "model": "grok-imagine-image-quality",
+  "model": "grok-imagine-image-2.0",
   "prompt": "Render this as a pencil sketch with detailed shading",
   "image": {
     "url": "https://docs.x.ai/assets/api-examples/images/style-realistic.png"
@@ -109,55 +121,46 @@ If you still get 404, smoke-test with this fixed JSON body (fx OFF) using xAI’
 
 ---
 
-## Node E — `save_edited_still_url`
+## Node F — `save_still_url`
 
 **Type:** Edit Fields  
 Wire **both** IF branches here.
+
+**Before → this → After:** `grok_imagine_edit_still` *or* `if` (false) → **save_still_url** → `prep_grok_video_start`
 
 Include Other Input Fields: **ON**
 
 | Name | Value (fx ON) |
 |---|---|
-| `still_url` | `={{ $json.data?.[0]?.url \|\| $json.still_url \|\| $('save_still_url').first().json.still_url }}` |
-| `original_still_url` | `={{ $('save_still_url').first().json.still_url }}` |
-| `still_edit_prompt` | `={{ $('still_edit_instructions').first().json.still_edit_prompt \|\| '' }}` |
-| `still_was_edited` | `={{ Boolean($json.data?.[0]?.url) }}` |
-| `creation_id` | `={{ $('pick_creation').first().json.creation_id }}` |
-| `video_motion_prompt` | `={{ $('save_still_url').first().json.video_motion_prompt \|\| $('pick_creation').first().json.video_motion_prompt }}` |
+| `still_url` | `={{ $json.data[0].url \|\| $json.still_url \|\| $json.source_still_url }}` |
+| `creation_id` | `={{ $json.creation_id \|\| $('pick_creation').first().json.creation_id }}` |
+| `video_motion_prompt` | `={{ $json.video_motion_prompt \|\| $('pick_creation').first().json.video_motion_prompt }}` |
 
 ---
 
 ## Point Grok video 1.5 at the edited still
 
 ```text
-save_edited_still_url → prep_grok_video_start → grok_video_start
+save_still_url → prep_grok_video_start → grok_video_start
 ```
 
-`prep_grok_video_start` resolves `still_url` from `save_edited_still_url` first (see `n8n-code-prep-grok-video-start.js`).
+`prep_grok_video_start` resolves `still_url` from `save_still_url` (see `n8n-code-prep-grok-video-start.js`).
 
-`grok_video_start` body (unchanged model):
+`grok_video_start` body:
 
 ```text
 ={{ $('prep_grok_video_start').first().json.grok_video_body_json }}
 ```
 
-Or:
-
-```text
-={{ JSON.stringify({ model: 'grok-imagine-video-1.5', prompt: $('prep_grok_video_start').first().json.video_motion_prompt, image: { url: $('prep_grok_video_start').first().json.still_url }, duration: 15, resolution: '1080p' }) }}
-```
-
-Do **not** point `image.url` at `save_still_url` once this edit path exists — use prep’s `still_url` (edited or original).
-
 ---
 
 ## Smoke test
 
-1. Run through `save_still_url` — note original URL  
-2. Set `still_edit_prompt` = `Remove any duplicate props. Keep the hero product and lighting unchanged.`  
-3. `grok_imagine_edit_still` returns a different URL  
-4. `prep_grok_video_start.still_url` = edited URL  
-5. `grok_video_start` (`grok-imagine-video-1.5`) animates the edited frame  
+1. Fix `still_url` on instructions → grok node expression above  
+2. Re-paste `flag_still_edit` + `prep_still_edit` Code from repo  
+3. IF true → `prep_still_edit` shows https `source_still_url`  
+4. `grok_imagine_edit_still` returns a different URL  
+5. `save_still_url.still_url` = edited URL → video  
 
 Reply **`still edit ok`** + original URL + edited URL when green.
 
@@ -165,6 +168,7 @@ Reply **`still edit ok`** + original URL + edited URL when green.
 
 ## Related
 
-- Video nodes: `n8n-build-grok-imagine-video-nodes.md`  
+- Flag: `n8n-code-flag-still-edit.js`  
 - Prep edit: `n8n-code-prep-still-edit.js`  
-- Prep video: `n8n-code-prep-grok-video-start.js`
+- Prep video: `n8n-code-prep-grok-video-start.js`  
+- Video nodes: `n8n-build-grok-imagine-video-nodes.md`
