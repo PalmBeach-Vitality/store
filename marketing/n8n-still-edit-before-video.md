@@ -11,23 +11,27 @@
 
 ---
 
-## Wire (daily Vid_gen)
+## Wire (daily Vid_gen) — NO Switch / NO IF
 
 ```text
 pick_creation
   → grok_imagine_reel_still
-  → choose_still_path              ← flip Fixed: edit | skip
-  → normalize_still_path           ← Code: forces still_path = edit|skip
-  → switch_still_path
-       edit → flag_still_edit → prep_still_edit → grok_imagine_edit_still → save_still_url
-       skip → save_still_url
-       fallback → save_still_url   ← if Switch matches nothing
+  → flag_still_edit              ← edit CODE_STILL_EDIT_PROMPT here when needed
+  → prep_still_edit
+  → grok_imagine_edit_still
+  → save_still_url
   → prep_grok_video_start → grok_video_start → wait → poll → save_video_url
   → sheets_update_creation
 ```
 
-**Like the still** → `still_path` = `skip` (fx **OFF**)  
-**Want a tweak** → `still_path` = `edit` (fx **OFF**) + change `CODE_STILL_EDIT_PROMPT` in `flag_still_edit`
+**Do not use Switch or IF for still edit.** They keep dropping items when fields are blank.
+
+- Default `CODE_STILL_EDIT_PROMPT` = hard COUNT=1 cleanup (removes extra vials).
+- If you like the still and want almost no change, set prompt to:  
+  `Keep this image identical. Do not add or remove objects. Do not restyle.`  
+  (Grok may still nudge pixels — that’s the tradeoff of a linear path.)
+
+Optional Set nodes (`choose_still_path`, `normalize_still_path`, `switch_still_path`) are **retired** — delete or leave unwired.
 
 ---
 
