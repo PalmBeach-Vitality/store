@@ -2,6 +2,7 @@
 """CRITICAL: exactly ONE vial OR ONE pen per creation image — never both, never multiples.
 
 Patches Sheet 9 / 8 / 12 (+250 compat) and JSON export.
+Also fills still_edit_prompt with a hard single-hero cleanup for every row.
 Safe to re-run.
 """
 
@@ -40,11 +41,23 @@ PEN_HERO = (
 )
 
 SINGLE_RULE = (
-    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL): The frame may contain exactly ONE "
-    "research product hero — either ONE vial OR ONE pen — never both, never two, never a "
-    "row/rack/carousel/constellation/cluster/shelf/array of vials or pens. No second vial in "
-    "reflection as a readable duplicate hero. No carton + vial double hero. Background lab "
-    "architecture is fine; extra vials or pens as props are forbidden."
+    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The frame must contain "
+    "exactly ONE research product hero — either ONE vial OR ONE pen — never both, never two, "
+    "never three. COUNT THE PRODUCTS: if you can see more than one vial or more than one pen, "
+    "the image is WRONG. Forbidden: second vial, background vial, foreground + background vial "
+    "pair, large vial + small vial, open vial + capped vial, twin vials, mirrored duplicate vial, "
+    "reflection that reads as a second hero, row/rack/carousel/constellation/cluster/shelf/array/"
+    "lineup of vials or pens, carton + vial double hero. Background architecture only — zero extra "
+    "vials or pens as props, soft-focus props, or depth-cue products. ONE object. ONE hero. Period."
+)
+
+STILL_EDIT_HARD = (
+    "CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product visible "
+    "(one vial OR one pen — never both). DELETE every extra vial and every extra pen — including "
+    "background vials, soft-focus vials, smaller secondary vials, open/uncapped duplicate vials, "
+    "and any product that is not the single main hero. After the edit the viewer must be able to "
+    "count exactly 1 product. Do not restyle lighting, camera angle, label text, or environment. "
+    "Do not add new products. Do not leave a second vial 'for depth'."
 )
 
 TEXT_KEYS = (
@@ -55,10 +68,29 @@ TEXT_KEYS = (
     "product_hero",
     "product_form_detail",
     "still_edit_prompt",
+    "quality_suffix",
 )
 
 # Order matters — longer / more specific first
 REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
+    # duplicated packaging pasted after VIAL_HERO (causes model to draw two vials)
+    (
+        re.compile(
+            r"(10ml Sterile Multi-Use Vial')\s+with bright blue flip-off cap, "
+            r"brushed-silver aluminum crimp seal over rubber septum, and a clean white "
+            r"wrap-around label bearing a dark maroon DNA double-helix logo, the exact "
+            r"compound name in large bold dark maroon type, a solid dark maroon dosage bar "
+            r"with white mg strength, black mg/ml concentration text, and a small black "
+            r"footer reading '10ml Sterile Multi-Use Vial'",
+            re.I,
+        ),
+        r"\1",
+    ),
+    # "not a single boring SKU" confuses count language
+    (re.compile(r"\bnot a single boring SKU\b", re.I), "not a boring SKU catalog shot"),
+    (re.compile(r"\bThis is not a single boring SKU\b", re.I), "This is not a boring SKU catalog shot"),
+    # Hero cluster wording
+    (re.compile(r"\bHero cluster\b", re.I), "Hero"),
     # double article bug
     (re.compile(r"\ba a single clear glass Palm Beach Vitality injection vial\b", re.I), VIAL_HERO),
     # carton + vial double hero → vial only
@@ -86,7 +118,6 @@ REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
         ),
         f"{VIAL_HERO} as the only product hero",
     ),
-    # constellation / cluster language even when "single" was already inserted
     (
         re.compile(
             r"(?:Hero cluster — )?(?:a )?constellation of (?:a single )?clear glass "
@@ -107,7 +138,6 @@ REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
         re.compile(r"\ba constellation of\b", re.I),
         "a single",
     ),
-    # multi pens
     (
         re.compile(
             r"a carousel of research pens on matte acrylic like jewelry, caps sealed",
@@ -123,7 +153,6 @@ REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
         re.compile(r"\bresearch pens on matte acrylic like jewelry, caps sealed\b", re.I),
         "single sealed research pen on matte acrylic, cap on",
     ),
-    # truncated scene_brief leftovers
     (
         re.compile(r"a carousel of research pens on matte acrylic lik…", re.I),
         "a single sealed research pen on matte acrylic…",
@@ -139,7 +168,6 @@ REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
         ),
         "a marble console holding a single clear glass PB Vitality vial…",
     ),
-    # generic plurals in hero/focal phrasing (not in NO-lists)
     (
         re.compile(
             r"a floating glass shelf of research powders in sealed jars, labeled for laboratory use only",
@@ -168,9 +196,11 @@ REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\bmultiple (?:research )?pens\b", re.I), "a single research pen"),
     (re.compile(r"\bseveral (?:research )?vials\b", re.I), "a single research vial"),
     (re.compile(r"\bseveral (?:research )?pens\b", re.I), "a single research pen"),
+    (re.compile(r"\btwin vials\b", re.I), "a single vial"),
+    (re.compile(r"\btwo vials\b", re.I), "one vial"),
+    (re.compile(r"\b2 vials\b", re.I), "1 vial"),
 ]
 
-# Soften packaging-rule plurals that teach the model "vials" as the subject
 PACKAGING_PLURAL_FIXES: list[tuple[re.Pattern[str], str]] = [
     (
         re.compile(r"NO amber-glass hero vials", re.I),
@@ -189,6 +219,11 @@ PACKAGING_PLURAL_FIXES: list[tuple[re.Pattern[str], str]] = [
     ),
 ]
 
+QUALITY_NEGATIVES = (
+    "exactly one product hero only, no second vial, no background vial, "
+    "no duplicate products, no twin vials, count equals one"
+)
+
 
 def apply_replacements(text: str) -> str:
     out = text or ""
@@ -196,7 +231,6 @@ def apply_replacements(text: str) -> str:
         out = pat.sub(repl, out)
     for pat, repl in PACKAGING_PLURAL_FIXES:
         out = pat.sub(repl, out)
-    # collapse accidental "a a single"
     out = re.sub(r"\ba a single\b", "a single", out, flags=re.I)
     out = re.sub(r"\s{2,}", " ", out)
     return out
@@ -205,9 +239,8 @@ def apply_replacements(text: str) -> str:
 def ensure_single_rule(text: str) -> str:
     t = apply_replacements(text or "")
     if "SINGLE HERO PRODUCT RULE" in t:
-        # refresh wording to latest
         t = re.sub(
-            r"SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):.*?(?:extra vials or pens as props are forbidden\.|never a row[^.]*\.)",
+            r"SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):.*?(?:Period\.|props are forbidden\.|never a row[^.]*\.)",
             SINGLE_RULE,
             t,
             count=1,
@@ -215,7 +248,6 @@ def ensure_single_rule(text: str) -> str:
         )
         return t
 
-    # Insert after packaging rule if present, else before label instruction / NO DOUBLES
     if "VIAL PACKAGING RULE (MANDATORY):" in t:
         t = re.sub(
             r"(VIAL PACKAGING RULE \(MANDATORY\):.*?(?:NO duplicate labels\.|NO second vial, NO duplicate labels\.))",
@@ -241,19 +273,39 @@ def ensure_single_rule(text: str) -> str:
     return (t.rstrip() + " " + SINGLE_RULE).strip()
 
 
+def ensure_quality_negatives(text: str) -> str:
+    t = (text or "").strip()
+    if "exactly one product hero only" in t.lower():
+        return t
+    if not t:
+        return QUALITY_NEGATIVES
+    return t.rstrip(", ") + ", " + QUALITY_NEGATIVES
+
+
 def patch_row(row: dict) -> bool:
     changed = False
     for key in TEXT_KEYS:
         if key not in row or row[key] is None:
             continue
         old = str(row[key])
+        if key == "still_edit_prompt":
+            # Always refresh to hard cleanup (sheet was blank / soft)
+            if old.strip() != STILL_EDIT_HARD:
+                row[key] = STILL_EDIT_HARD
+                changed = True
+            continue
+        if key == "quality_suffix":
+            new = ensure_quality_negatives(apply_replacements(old))
+            if new != old:
+                row[key] = new
+                changed = True
+            continue
         if not old.strip():
             continue
         if key in ("lab_item", "video_prompt", "scene_brief", "product_hero"):
             new = ensure_single_rule(old)
         else:
             new = apply_replacements(old)
-            # material_detail often holds the focal — attach rule if vial/pen present
             if re.search(r"\b(vial|pen)\b", new, re.I) and "SINGLE HERO PRODUCT RULE" not in new:
                 new = ensure_single_rule(new)
         if new != old:
@@ -300,11 +352,30 @@ def audit(path: Path) -> None:
     with path.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
     bad = []
+    dup_pack = 0
+    edit_filled = 0
     for r in rows:
-        blob = " ".join((r.get(k) or "") for k in ("lab_item", "video_prompt", "material_detail", "scene_brief"))
-        # ignore rule/avoid sentences when flagging plurals
-        scrub = re.sub(r"SINGLE HERO PRODUCT RULE.*?(?:forbidden\.|props are forbidden\.)", " ", blob, flags=re.I | re.S)
-        scrub = re.sub(r"VIAL PACKAGING RULE.*?(?:duplicate labels\.|NO duplicate labels\.)", " ", scrub, flags=re.I | re.S)
+        if (r.get("still_edit_prompt") or "").strip():
+            edit_filled += 1
+        blob = " ".join(
+            (r.get(k) or "") for k in ("lab_item", "video_prompt", "material_detail", "scene_brief")
+        )
+        if re.search(
+            r"10ml Sterile Multi-Use Vial' with bright blue flip-off", blob, re.I
+        ):
+            dup_pack += 1
+        scrub = re.sub(
+            r"SINGLE HERO PRODUCT RULE.*?(?:Period\.|forbidden\.)",
+            " ",
+            blob,
+            flags=re.I | re.S,
+        )
+        scrub = re.sub(
+            r"VIAL PACKAGING RULE.*?(?:duplicate labels\.|NO duplicate labels\.)",
+            " ",
+            scrub,
+            flags=re.I | re.S,
+        )
         scrub = re.sub(r"Avoid:.*", " ", scrub, flags=re.I)
         flags = []
         if re.search(r"\bcarousel of research pens\b", scrub, re.I):
@@ -315,16 +386,15 @@ def audit(path: Path) -> None:
             flags.append("carton+vial")
         if re.search(r"\bmulti-vial\b", scrub, re.I):
             flags.append("multi-vial")
-        if re.search(r"\b(row|rack|cluster|array|lineup|pair|set) of (?:research )?(?:vials|pens)\b", scrub, re.I):
+        if re.search(
+            r"\b(row|rack|cluster|array|lineup|pair|set) of (?:research )?(?:vials|pens)\b",
+            scrub,
+            re.I,
+        ):
             flags.append("group of vials/pens")
-        # both vial and pen as positive heroes in focal
-        focals = re.findall(r"focal — ([^;]+)", scrub, flags=re.I)
-        for f in focals:
-            if re.search(r"\bvial\b", f, re.I) and re.search(r"\bpen\b", f, re.I):
-                flags.append("vial+pen focal")
         if flags:
             bad.append((r.get("creation_id") or r.get("lab_item_id"), flags))
-    print(f"AUDIT {path.name}: {len(bad)} suspect rows")
+    print(f"AUDIT {path.name}: {len(bad)} suspect, dup_pack={dup_pack}, still_edit_filled={edit_filled}/{len(rows)}")
     for cid, flags in bad[:15]:
         print(" ", cid, flags)
 

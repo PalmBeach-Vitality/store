@@ -259,7 +259,7 @@ Put in `CODE_STILL_EDIT_PROMPT` inside `flag_still_edit` (no fx):
 | Intent | Text |
 |---|---|
 | Remove | `Remove the scale under the vial. Keep lighting, camera, and label identical.` |
-| One hero | `Keep exactly one sealed vial. Remove any duplicate products. Keep the rest identical.` |
+| One hero | *(default in Code)* CRITICAL COUNT FIX — delete every extra vial/pen until count = 1 |
 
 ---
 

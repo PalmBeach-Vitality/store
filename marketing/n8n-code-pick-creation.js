@@ -56,6 +56,28 @@ function stripVidDisclaimer(text) {
   return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
 }
 
+/** Appended every run so Grok cannot invent a second vial/pen even if sheet text is soft. */
+const HARD_SINGLE_HERO =
+  ' SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): exactly ONE research product hero — either ONE vial OR ONE pen — never both, never two. Forbidden: second vial, background vial, foreground+background vial pair, large+small vial, open+capped twin, mirrored duplicate, row/rack/cluster of vials or pens. ONE object. ONE hero. Period.';
+
+const HARD_STILL_EDIT =
+  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product visible (one vial OR one pen — never both). DELETE every extra vial and every extra pen — including background vials, soft-focus vials, smaller secondary vials, open/uncapped duplicate vials, and any product that is not the single main hero. After the edit the viewer must count exactly 1 product. Do not restyle lighting, camera angle, label text, or environment. Do not add new products. Do not leave a second vial for depth.';
+
+function hardenStillPrompt(text) {
+  let t = String(text || '').trim();
+  t = t.replace(/\bnot a single boring SKU\b/gi, 'not a boring SKU catalog shot');
+  t = t.replace(/\bHero cluster\b/gi, 'Hero');
+  // Strip accidental duplicated packaging tail that teaches two vials
+  t = t.replace(
+    /(10ml Sterile Multi-Use Vial')\s+with bright blue flip-off cap,[\s\S]*?footer reading '10ml Sterile Multi-Use Vial'/gi,
+    "$1"
+  );
+  if (!/COUNT = 1/i.test(t)) {
+    t = (t + HARD_SINGLE_HERO).trim();
+  }
+  return t;
+}
+
 const creations = $input.all().map((i) => i.json);
 
 if (!creations.length) {
@@ -72,10 +94,16 @@ const scored = creations
       fromSheet ||
       (rankNum > 0 ? `PBVita-Lab-${String(rankNum).padStart(3, '0')}` : '');
 
-    const video_prompt = stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt']));
+    const video_prompt = hardenStillPrompt(
+      stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt']))
+    );
     const video_motion_prompt = stripVidDisclaimer(
       val(c, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'])
     );
+    const still_edit_from_sheet = String(
+      val(c, ['still_edit_prompt', 'stillEditPrompt'], '')
+    ).trim();
+    const still_edit_prompt = still_edit_from_sheet || HARD_STILL_EDIT;
 
     return {
       raw: c,
@@ -107,7 +135,7 @@ const scored = creations
       still_resolution: val(c, ['still_resolution', 'stillResolution']),
       video_prompt,
       video_motion_prompt,
-      still_edit_prompt: String(val(c, ['still_edit_prompt', 'stillEditPrompt'], '')).trim(),
+      still_edit_prompt,
       surface: val(c, ['surface']),
       lighting: val(c, ['lighting']),
       camera_move: val(c, ['camera_move', 'cameraMove', 'camera']),

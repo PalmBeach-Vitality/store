@@ -9,7 +9,7 @@
 
 // ── Same fallback as flag_still_edit (edit either; flag runs first) ───────
 var CODE_STILL_EDIT_PROMPT =
-  'Keep exactly one sealed hero product (one vial OR one pen). Remove any duplicate vials, pens, or extra products. Keep lighting, camera, label text, and background identical.';
+  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product visible (one vial OR one pen — never both). DELETE every extra vial and every extra pen — including background vials, soft-focus vials, smaller secondary vials, open/uncapped duplicate vials, and any product that is not the single main hero. After the edit the viewer must count exactly 1 product. Do not restyle lighting, camera angle, label text, or environment. Do not add new products. Do not leave a second vial for depth.';
 // ─────────────────────────────────────────────────────────────────────────
 
 function firstJson(name) {
