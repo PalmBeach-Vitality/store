@@ -56,26 +56,38 @@ function stripVidDisclaimer(text) {
   return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
 }
 
-/** Forced on EVERY still prompt at runtime (start + end). Sheet text alone is not enough. */
+/** xAI images/generations prompt max = 8000. Stay under with headroom. */
+const PROMPT_MAX = 7900;
+
+/** Compact locks — must survive truncation of the middle. */
 const OPENING_LOCK =
-  'HARD OUTPUT LOCK (READ FIRST): Render exactly 1 product container in the entire image — either 1 sealed vial OR 1 sealed pen. Product count = 1. No second vial. No background vial. No soft-focus vial. No product pair for depth. ';
+  'HARD OUTPUT LOCK: exactly 1 product container in the entire image (1 sealed vial OR 1 sealed pen). Product count = 1. No second vial, no background vial, no soft-focus vial, no product pair. ';
 
 const CLOSING_LOCK =
-  ' HARD OUTPUT LOCK (FINAL CHECK): Before finishing, count every vial and pen in the image. The total must be exactly 1. If the count is 2 or more, remove the extras until only one hero remains. COUNT = 1.';
+  ' FINAL CHECK: count every vial and pen — total must be exactly 1. If 2+, remove extras. COUNT = 1.';
 
 const HARD_SINGLE_HERO =
-  ' SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The finished image must contain exactly ONE research product container total — either ONE vial OR ONE pen — never both, never two, never three. PRODUCT COUNT MUST EQUAL 1. Forbidden: second vial, background vial, foreground+background pair, large+small vial, open+capped pair, mirrored duplicate, row/rack/cluster of vials or pens. Background = architecture only. ONE object. ONE hero. COUNT = 1. Period.';
+  ' SINGLE HERO (COUNT=1): exactly ONE vial OR ONE pen — never both, never two. Forbidden: background vial, large+small pair, open+capped pair, mirrored duplicate, rack/row/cluster. Architecture only in background. ONE hero.';
 
 const HARD_STILL_EDIT =
   'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen. Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment.';
 
+function truncateMiddle(mid, budget) {
+  mid = String(mid || '').trim();
+  if (mid.length <= budget) return mid;
+  var slice = mid.slice(0, budget);
+  var cut = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('; '), slice.lastIndexOf(' '));
+  if (cut > budget * 0.6) slice = slice.slice(0, cut + 1);
+  return slice.trim();
+}
+
 function hardenStillPrompt(text) {
-  let t = String(text || '').trim();
+  var t = String(text || '').trim();
 
   // THIS PHRASE WAS TEACHING GROK TO DRAW MULTIPLE PRODUCTS — kill it
   t = t.replace(
     /Create an exciting, unique laboratory \/ peptide R&D \/ health-and-wellness industry scene — not a boring single product cutout\./gi,
-    'Create an exciting, unique laboratory / peptide R&D / health-and-wellness industry environment scene that still contains exactly ONE product hero only (never two vials, never two pens, never a product pair).'
+    'Create an exciting laboratory / peptide R&D environment with exactly ONE product hero only (never two vials or pens).'
   );
   t = t.replace(
     /not a boring single product cutout/gi,
@@ -104,14 +116,35 @@ function hardenStillPrompt(text) {
 
   // Strip prior locks/rules so we re-wrap clean every run
   t = t.replace(/HARD OUTPUT LOCK \(READ FIRST\):[\s\S]*?(?:for depth\.\s*|depth\.\s*)/gi, '');
+  t = t.replace(/HARD OUTPUT LOCK:[\s\S]*?(?:product pair\.\s*|for depth\.\s*)/gi, '');
   t = t.replace(/HARD OUTPUT LOCK \(FINAL CHECK\):[\s\S]*?COUNT = 1\./gi, '');
+  t = t.replace(/FINAL CHECK:[\s\S]*?COUNT = 1\./gi, '');
   t = t.replace(
     /SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):[\s\S]*?(?:COUNT = 1\. Period\.|Period\.)/gi,
     ''
   );
+  t = t.replace(/SINGLE HERO \(COUNT=1\):[\s\S]*?ONE hero\./gi, '');
+
+  // Drop long disclaimer / quality fluff that burns the 8000 budget
+  t = t.replace(/\s*No treatment, cure, dosage-for-humans[\s\S]*$/i, '');
+  t = t.replace(/\s*Do not print research-use disclaimers[\s\S]*$/i, '');
+  t = t.replace(
+    /\s*Quality: ultra detailed, extremely detailed, hyper-detailed[\s\S]*?(?=VIAL PACKAGING|SINGLE HERO|ABSOLUTE RULE|HARD OUTPUT|FINAL CHECK|$)/i,
+    ' Quality: photoreal, sharp focus, 8k. '
+  );
+
   t = t.replace(/\s+/g, ' ').trim();
 
-  return (OPENING_LOCK + t + HARD_SINGLE_HERO + CLOSING_LOCK).trim();
+  var head = OPENING_LOCK;
+  var tail = HARD_SINGLE_HERO + CLOSING_LOCK;
+  var budget = PROMPT_MAX - head.length - tail.length;
+  if (budget < 2000) budget = 2000;
+  var mid = truncateMiddle(t, budget);
+  var out = (head + mid + tail).trim();
+  if (out.length > PROMPT_MAX) {
+    out = out.slice(0, PROMPT_MAX);
+  }
+  return out;
 }
 
 const creations = $input.all().map((i) => i.json);
@@ -400,6 +433,7 @@ return [
       model_video: pick.model_video,
       still_resolution: pick.still_resolution,
       video_prompt: pick.video_prompt,
+      video_prompt_len: String(pick.video_prompt || '').length,
       video_motion_prompt: pick.video_motion_prompt,
       still_edit_prompt: pick.still_edit_prompt,
       surface: pick.surface,

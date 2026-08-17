@@ -40,29 +40,24 @@ PEN_HERO = (
     "cap on, one pen only — no second pen, no carousel, no pen tray"
 )
 
-SINGLE_RULE = (
-    "SINGLE HERO PRODUCT RULE (MANDATORY — CRITICAL — COUNT = 1): The finished image must "
-    "contain exactly ONE research product container total — either ONE vial OR ONE pen — "
-    "never both, never two, never three. PRODUCT COUNT MUST EQUAL 1. If you can see more than "
-    "one vial or more than one pen anywhere in the frame (including background, blur, edges, "
-    "reflections, or depth), the image is WRONG. Forbidden: second vial, background vial, "
-    "foreground+background vial pair, large+small vial, open+capped vial pair, mirrored "
-    "duplicate, row/rack/carousel/cluster/shelf/array of vials or pens, carton+vial double hero, "
-    "extra bottles that read as products. Background = architecture and atmosphere only. "
-    "ONE object. ONE hero. COUNT = 1. Period."
-)
-
 OPENING_LOCK = (
-    "HARD OUTPUT LOCK (READ FIRST): Render exactly 1 product container in the entire image — "
-    "either 1 sealed vial OR 1 sealed pen. Product count = 1. No second vial. No background vial. "
-    "No soft-focus vial. No product pair for depth. "
+    "HARD OUTPUT LOCK: exactly 1 product container in the entire image "
+    "(1 sealed vial OR 1 sealed pen). Product count = 1. No second vial, "
+    "no background vial, no soft-focus vial, no product pair. "
 )
 
 CLOSING_LOCK = (
-    " HARD OUTPUT LOCK (FINAL CHECK): Before finishing, count every vial and pen in the image. "
-    "The total must be exactly 1. If the count is 2 or more, remove the extras until only one "
-    "hero remains. COUNT = 1."
+    " FINAL CHECK: count every vial and pen — total must be exactly 1. "
+    "If 2+, remove extras. COUNT = 1."
 )
+
+SINGLE_RULE = (
+    "SINGLE HERO (COUNT=1): exactly ONE vial OR ONE pen — never both, never two. "
+    "Forbidden: background vial, large+small pair, open+capped pair, mirrored duplicate, "
+    "rack/row/cluster. Architecture only in background. ONE hero."
+)
+
+PROMPT_MAX = 7500
 
 STILL_EDIT_HARD = (
     "CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product "
@@ -290,12 +285,23 @@ def apply_replacements(text: str) -> str:
 def strip_locks_and_old_rules(text: str) -> str:
     t = text or ""
     t = re.sub(r"HARD OUTPUT LOCK \(READ FIRST\):.*?(?:for depth\.\s*|depth\.\s*)", "", t, flags=re.I | re.S)
+    t = re.sub(r"HARD OUTPUT LOCK:.*?(?:product pair\.\s*|for depth\.\s*)", "", t, flags=re.I | re.S)
     t = re.sub(r"HARD OUTPUT LOCK \(FINAL CHECK\):.*?COUNT = 1\.", "", t, flags=re.I | re.S)
+    t = re.sub(r"FINAL CHECK:.*?COUNT = 1\.", "", t, flags=re.I | re.S)
     t = re.sub(
         r"SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):.*?(?:COUNT = 1\. Period\.|Period\.|props are forbidden\.)",
         "",
         t,
         flags=re.I | re.S,
+    )
+    t = re.sub(r"SINGLE HERO \(COUNT=1\):.*?ONE hero\.", "", t, flags=re.I | re.S)
+    t = re.sub(r"\s*No treatment, cure, dosage-for-humans[\s\S]*$", "", t, flags=re.I)
+    t = re.sub(r"\s*Do not print research-use disclaimers[\s\S]*$", "", t, flags=re.I)
+    t = re.sub(
+        r"\s*Quality: ultra detailed, extremely detailed, hyper-detailed[\s\S]*?(?=VIAL PACKAGING|SINGLE HERO|ABSOLUTE RULE|HARD OUTPUT|FINAL CHECK|$)",
+        " Quality: photoreal, sharp focus, 8k. ",
+        t,
+        flags=re.I,
     )
     return re.sub(r"\s{2,}", " ", t).strip()
 
@@ -303,14 +309,13 @@ def strip_locks_and_old_rules(text: str) -> str:
 def ensure_single_rule(text: str) -> str:
     t = apply_replacements(text or "")
     t = strip_locks_and_old_rules(t)
-    # Always wrap: opening lock + body + single rule + closing lock
     if not t.startswith("HARD OUTPUT LOCK"):
         t = OPENING_LOCK + t
-    if "SINGLE HERO PRODUCT RULE" not in t:
-        # insert before Quality / ABSOLUTE / end
+    if "SINGLE HERO (COUNT=1)" not in t and "SINGLE HERO PRODUCT RULE" not in t:
         markers = [
             "ABSOLUTE RULE — NO DOUBLES",
             "ABSOLUTE RULE - NO DOUBLES",
+            "Quality: photoreal",
             "Quality: ultra detailed",
         ]
         placed = False
@@ -322,8 +327,21 @@ def ensure_single_rule(text: str) -> str:
                 break
         if not placed:
             t = t + " " + SINGLE_RULE
-    if "HARD OUTPUT LOCK (FINAL CHECK)" not in t:
+    if "FINAL CHECK:" not in t and "HARD OUTPUT LOCK (FINAL CHECK)" not in t:
         t = t.rstrip() + CLOSING_LOCK
+    # Cap under xAI 8000 limit (leave headroom for pick_creation re-wrap)
+    if len(t) > PROMPT_MAX:
+        head = OPENING_LOCK
+        tail = " " + SINGLE_RULE + CLOSING_LOCK
+        budget = PROMPT_MAX - len(head) - len(tail)
+        # body without locks
+        body = strip_locks_and_old_rules(t)
+        if len(body) > budget:
+            body = body[:budget]
+            cut = max(body.rfind(". "), body.rfind(" "))
+            if cut > budget * 0.6:
+                body = body[: cut + 1]
+        t = (head + body.strip() + tail).strip()
     return t.strip()
 
 
