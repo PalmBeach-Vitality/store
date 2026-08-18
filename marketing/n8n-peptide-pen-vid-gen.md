@@ -34,7 +34,7 @@ manual_trigger
 
 ## After import
 
-1. Import tabs `3-image-scenes-150` and `14-pen-creations-150` into the **same Google workbook**.
+1. Import tab `14-pen-creations-150` into the **same Google workbook**. Do **not** replace `3-image-scenes-150`.
 2. On `get_pen_creations` + `sheets_update_pen`: Document **By ID** (same ID both nodes) · Sheet **By Name** `14-pen-creations-150`.
 3. Attach **Google Sheets** credential and **xAI Header Auth** (same GROK_API as vial stills).
 4. Do not point this workflow at `9-lab-item-creations-500` (mixed lab) or `13-chem-breakdown-54` (molecules).
@@ -231,7 +231,7 @@ n8n: **Import from File** → name stays `peptide_pen_vid_gen` → attach creden
 ## Related
 
 - Sheet 9 columns (output): `marketing/sheets/14-pen-creations-150.csv`
-- Pen input params: `marketing/sheets/3-image-scenes-150.csv`
+- Pen input *field names* (do not overwrite that tab): `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting` from `3-image-scenes-150`
 - Builder: `marketing/scripts/build_pen_creations_from_image_scenes.py`
 - Pick: `marketing/n8n-code-pick-pen-creation.js`
 - Prep video: `marketing/n8n-code-prep-pen-video-start.js`

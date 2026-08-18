@@ -2,7 +2,7 @@
 
 | File | Tab name |
 |---|---|
-| `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB + pen-scene **input** params — writeback = `last_used_date` only; 150 pen-only rows: `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`) |
+| `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
 | `5-reel-scenes.csv` | `5-reel-scenes` (630 Creatomate/Grok visual scene briefs) |
@@ -23,9 +23,7 @@
 
 Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`.
 
-Repo CSV is **150 pen-only rows** (one capped research pen). Those fields are the **input parameters** for `14-pen-creations-150`. Builder: `scripts/build_pen_creations_from_image_scenes.py`.
-
-Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet. `caption_lock` is captions-only (never in Grok prompts).
+Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
 
 ## Reel Studio / Creatomate
 

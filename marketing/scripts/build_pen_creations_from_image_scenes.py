@@ -8,8 +8,9 @@ Sources (do NOT clone Sheet 13 / molecules):
       product_hero, product_form_detail, compound_id, compound_name,
       canonical_url, scene_brief
 
-3-image-scenes-150.csv in the repo was header-only. This script fills 150
-pen-only scene rows, then maps each row 1:1 into Sheet-9-format creations.
+Uses the 3-image-scenes-150 *field names* as pen input parameters
+(product_hero, product_form_detail, lab_environment, camera, lighting).
+Does NOT write or modify 3-image-scenes-150.csv (Buffer sheet — leave it).
 
 Does NOT modify 9-lab-item-creations-500.csv or 13-chem-breakdown-54.csv.
 """
@@ -469,6 +470,13 @@ def main() -> None:
     fields9 = sheet9_fields()
     if "creation_id" not in fields9 or "video_prompt" not in fields9:
         raise SystemExit("could not read Sheet 9 columns from 9-lab-item-creations-500.csv")
+    with CSV3.open(newline="", encoding="utf-8") as f:
+        header3 = list(csv.DictReader(f).fieldnames or [])
+    if header3 != SCENE3_FIELDS:
+        raise SystemExit(
+            "3-image-scenes-150 header changed — do not overwrite that file; update SCENE3_FIELDS if intended"
+        )
+    # Never write CSV3. Buffer sheet stays as-is.
 
     cams = build_unique_camera_sequence(N_SCENES)
     scenes = build_scene_rows(cams)
@@ -487,7 +495,6 @@ def main() -> None:
         if len(r["video_prompt"]) > PROMPT_MAX:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 
-    write_csv(CSV3, SCENE3_FIELDS, scenes)
     write_csv(CSV14, fields9, creations)
 
     old = SHEETS / "14-pen-creations-54.csv"
@@ -495,8 +502,7 @@ def main() -> None:
         old.unlink()
 
     lens = [len(r["video_prompt"]) for r in creations]
-    print(f"wrote {CSV3.name}: {len(scenes)} pen scene rows")
-    print(f"wrote {CSV14.name}: {len(creations)} Sheet-9-column rows")
+    print(f"wrote {CSV14.name}: {len(creations)} Sheet-9-column rows (did not touch 3-image-scenes-150.csv)")
     print(f"Sheet 9 columns ({len(fields9)}): {', '.join(fields9)}")
     print(f"video_prompt chars min={min(lens)} max={max(lens)}")
     print("first 8 ranks:")
