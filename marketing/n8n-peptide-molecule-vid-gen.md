@@ -8,7 +8,7 @@
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq  
 **Workbook:** https://docs.google.com/spreadsheets/d/1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0 — tab `13-chem-breakdown-54`.
 
-**Vibe (mandatory):** dark cinematic 3D **medical animation** at microscopic scale — glossy ball-and-stick peptide hovering over a **wet pebbled cell membrane**. Not a sunlit studio. Not a glass pedestal. Not the pen workflow. Overlay: compound name once at bottom-center only (no palm logo, no URL — add those after). Clip is muted.
+**Vibe (mandatory):** dark cinematic 3D **medical animation of a cellular chemical reaction** — living cells + amino acids forming peptide bonds at microscopic scale. Not a sunlit studio. Not a glass pedestal. Not the pen workflow. **No logo. No text. No sound** (add those after vid gen). Clip is muted (`audio: false`).
 
 Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen-creations-150`. Do not mix sheets.
 

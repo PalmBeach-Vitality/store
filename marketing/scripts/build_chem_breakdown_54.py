@@ -48,18 +48,18 @@ FIELDS = [
 ]
 
 QUALITY = (
-    "cinematic 3D medical animation, photoreal physically based, razor sharp molecule, 8k, HDR, "
-    "exactly one molecular hero, product count equals 1, no second molecule, "
-    "no vials, no pens, no people, no product studio"
+    "cinematic 3D medical animation of a cellular chemical reaction, photoreal, 8k, HDR, "
+    "living cells plus amino acids reacting at microscopic scale, "
+    "no vials, no pens, no people, no product studio, no readable text, no logos"
 )
 
 STILL_EDIT = (
-    "CRITICAL VIBE FIX: Replace any sunlit studio, white cyclorama, frosted glass pedestal, "
-    "spa, or lifestyle room with a DARK microscopic medical-animation scene. "
-    "Keep exactly ONE photoreal ball-and-stick 3D molecule hovering over a dark wet pebbled "
-    "cell-membrane / tissue landscape (navy-charcoal, glistening). Dramatic directional light, "
-    "shallow depth of field, floating microscopic particles. DELETE extra molecules, vials, pens, "
-    "product bottles, palm logos, URLs. Count = 1. Do not restyle into a cartoon."
+    "CRITICAL VIBE FIX: This must be an IN-PROGRESS cellular chemical reaction, not a catalog product still. "
+    "Replace any sunlit studio, white cyclorama, glass pedestal, spa, or floating lone molecule on a stand "
+    "with a DARK microscopic living-cell scene: lipid-bilayer cell membrane, cytoplasm, amino-acid "
+    "ball-and-stick monomers colliding and forming peptide bonds with energy flashes. "
+    "DELETE every logo, palm tree, watermark, URL, caption, letter, number, and label. "
+    "BLANK frame — no typography anywhere. No vials, no pens, no people. Do not restyle into a cartoon."
 )
 
 COMPOUNDS = [
@@ -96,45 +96,45 @@ LOOKS = [
     {
         "suffix": "A",
         "category": "chem_studio",
-        "lab_item": "Chemical breakdown — dark microscopic membrane molecule hero",
-        "surface": "dark wet pebbled cell-membrane tissue, navy-charcoal, glistening mounds",
-        "lighting": "dramatic directional key from above-left; cool rim; deep shadows; not high-key",
-        "color_grade": "cool microscopic medical grade, high contrast pink/purple vs navy",
-        "hero_style": "cinematic 3D medical-animation ball-and-stick over a membrane",
+        "lab_item": "Chemical breakdown — cellular amino-acid reaction at the cell membrane",
+        "surface": "living cell lipid bilayer, wet receptors, extracellular fluid",
+        "lighting": "dramatic subsurface glow from cytoplasm; reaction sparks at forming bonds",
+        "color_grade": "cool microscopic medical grade, luminous amino acids vs navy cell",
+        "hero_style": "cellular chemical reaction — amino acids assembling a peptide at a living cell",
         "shot_family": "push_in",
         "camera_angle": "eye-level",
         "camera_direction": "forward",
-        "framing": "9:16, molecule mid-right over dark membrane, shallow DOF, generous dark negative space",
-        "camera_move": "slow cinematic push-in toward the molecule as it drifts over the wet membrane, then hold",
+        "framing": "9:16, living cell filling lower frame, amino acids reacting mid-frame, shallow DOF",
+        "camera_move": "slow push-in as amino acids dock the membrane and peptide bonds flash, then hold",
         "env": (
-            "DARK cinematic 3D medical animation at microscopic scale. Intra-body / extracellular fluid void. "
-            "A dark wet pebbled biological surface fills the lower frame like a cell membrane or glistening "
-            "tissue mounds (navy, charcoal, deep blue) with specular highlights. Tiny out-of-focus white "
-            "particles float in the dark fluid. Exactly one photoreal ball-and-stick molecule hovers just "
-            "above the membrane. Optional faint wispy energy filaments from atoms toward the surface. "
-            "Shallow depth of field, tack-sharp molecule, blurred foreground membrane and background void. "
-            "NOT a photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle."
+            "DARK cinematic 3D medical animation of a LIVE cellular chemical reaction at microscopic scale. "
+            "A real biological cell dominates the lower frame: lipid-bilayer membrane, wet receptors, "
+            "cytoplasm glowing faintly inside. In the extracellular fluid, many small photoreal amino-acid "
+            "monomers (glossy colored ball-and-stick) swarm, collide, and chemically react — peptide bonds "
+            "snap into place with brief energy flashes, wispy electron-cloud filaments, and released particles. "
+            "A forming peptide chain grows at a membrane receptor. This is chemistry in a living cell, "
+            "not a catalog product still. NOT a photography studio. NOT a white cyclorama. NOT a glass pedestal."
         ),
     },
     {
         "suffix": "B",
         "category": "chem_creative",
-        "lab_item": "Chemical breakdown — macro peptide chain over dark tissue",
-        "surface": "dense field of dark blue organic pebbles / cells, wet speculars",
-        "lighting": "backlit blue glow from behind the molecule plus hard spec on glossy atoms",
-        "color_grade": "high-contrast biotech: luminous peptide vs deep navy tissue",
-        "hero_style": "macro medical-animation peptide chain, cinematic bokeh",
+        "lab_item": "Chemical breakdown — intracellular amino-acid condensation reaction",
+        "surface": "cytoplasm among organelles, ribosome-like machinery, wet protein mesh",
+        "lighting": "backlit cytoplasmic bloom plus hard spec on reacting amino-acid atoms",
+        "color_grade": "high-contrast intracellular biotech: luminous bonds vs deep navy cytoplasm",
+        "hero_style": "intracellular chemical reaction — amino acids condensing into a peptide chain",
         "shot_family": "static_lock",
         "camera_angle": "low-angle",
         "camera_direction": "no travel / locked",
-        "framing": "9:16, long peptide chain vertical through frame over dark pebbled tissue",
-        "camera_move": "locked tripod, molecule slowly yaws a few degrees over the membrane, then hold",
+        "framing": "9:16, cytoplasm volume, amino acids condensing into a vertical peptide chain",
+        "camera_move": "locked tripod, amino acids stream in and lock onto the growing chain with bond flashes",
         "env": (
-            "DARK cinematic 3D medical animation, extreme close-up. The single peptide chain winds through "
-            "the frame above a dense dark-blue pebbled cellular landscape. Center of the chain is sharp; "
-            "ends fall into bokeh. A soft blue spotlight blooms behind the molecule. Floating microscopic "
-            "particles. Wet organic tissue, not stone, not glass furniture. "
-            "NOT a sunlit showroom. NOT pale stone. NOT a rainbow prism. NOT a product catalog set."
+            "DARK cinematic 3D medical animation INSIDE a living cell. Cytoplasm, organelle silhouettes, "
+            "and a wet protein mesh fill the frame. Amino-acid monomers stream toward a growing peptide "
+            "chain and condense — each new peptide bond a sharp chemical flash. Nearby a cell nucleus "
+            "or mitochondrion looms in bokeh. Active reaction, not a static floating molecule. "
+            "NOT a sunlit showroom. NOT a product catalog set. NOT a glass pedestal."
         ),
     },
 ]
@@ -142,35 +142,36 @@ LOOKS = [
 
 def molecule_lock(name: str) -> str:
     return (
-        f"HARD OUTPUT LOCK: exactly ONE 3D ball-and-stick molecular model of '{name}' as the hero. "
-        "Hero count = 1. No second molecule, no background molecule, no vial, no pen, "
-        "no syringe, no people. Cinematic photoreal 3D medical animation (not cartoon, not sketch, "
-        "not a product photo). Setting MUST be a dark microscopic wet cell-membrane landscape — "
-        "never a sunlit studio, never a white room, never a glass pedestal. "
-        f"If any text appears, print '{name}' once only in bold white sans-serif at bottom-center. "
-        "NO palm-tree logo, NO URL, NO watermark."
+        f"HARD OUTPUT LOCK: a cellular-level CHEMICAL REACTION featuring the peptide '{name}'. "
+        "Show living cells AND amino acids actually reacting (bonds forming, docking, condensation). "
+        "Cinematic photoreal 3D medical animation — not cartoon, not sketch, not product photography. "
+        "NO TEXT anywhere: no letters, numbers, captions, titles, compound-name overlay, labels. "
+        "NO LOGO, NO palm tree, NO watermark, NO URL, NO brand mark. "
+        "No vial, no pen, no syringe, no people, no packaging. "
+        f"Use '{name}' only as the unseen scientific subject — never render it as readable type."
     )
 
 
 def closing_lock() -> str:
     return (
-        " FINAL CHECK: count molecular heroes. Total must be 1. "
-        "If 2+, remove extras. No vials. COUNT = 1."
+        " FINAL CHECK: this is a living-cell chemical reaction with amino acids, not a studio product shot. "
+        "Zero typography. Zero logos. No vials. No pens."
     )
 
 
 def video_prompt(name: str, look: dict, mol: str) -> str:
     lock = molecule_lock(name)
     body = (
-        f"Vertical 9:16 Palm Beach Vitality chemical-breakdown still — DARK microscopic medical animation. "
+        f"Vertical 9:16 chemical-reaction still — DARK microscopic cellular animation. "
         f"{look['env']} "
-        f"HERO: {mol}. Atoms are glossy translucent colored glass spheres with metallic/glass bonds, "
-        "correct weight and refraction, slight internal glow. "
-        "Shallow depth of field, cinematic macro lens, tack-sharp molecule, dark bokeh. "
+        f"REACTION SUBJECT (visual only, never as text): {mol}. "
+        "Amino acids are glossy translucent colored glass spheres with metallic bonds; "
+        "the forming peptide matches that look as monomers lock together. "
+        "Shallow depth of field, cinematic macro lens, tack-sharp reaction plane, dark cellular bokeh. "
         "FORBIDDEN scenery: white cyclorama, sunlit photography studio, frosted optical-glass pedestal, "
         "spa, lifestyle interior, windows, palm-frond wall shadows, product stands. "
-        "No product packaging. No research-use disclaimer. No logos, URLs, or palm watermarks. "
-        "No medical claims in frame."
+        "FORBIDDEN overlays: any readable text, any logo, any URL, any palm watermark, any caption. "
+        "No product packaging. No research-use disclaimer. No medical claims in frame."
     )
     return f"{lock} {body}{closing_lock()}"
 
@@ -178,19 +179,19 @@ def video_prompt(name: str, look: dict, mol: str) -> str:
 def motion(name: str, look: dict) -> str:
     return (
         "Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. "
-        f"Slow cinematic camera: {look['camera_move']}. "
-        f"Keep the exact same photoreal 3D '{name}' molecule, dark wet membrane, materials, and lighting. "
-        "Stay in the dark microscopic medical-animation world. Do not cut to a studio or pedestal. "
-        "The molecule may rotate a few degrees on its axis or drift slightly over the membrane. "
-        "No new objects. No second molecule. No vials, people, needles, logos, URLs, or extra text. "
-        f"Keep label '{name}' unchanged if visible, once only at bottom-center."
+        f"Camera: {look['camera_move']}. "
+        "Keep the same living-cell environment and lighting. "
+        "Continue the chemical reaction: amino acids drift in, collide, peptide bonds form with "
+        "energy flashes, the cell membrane / cytoplasm undulates. "
+        "Do not cut to a studio or pedestal. No vials, people, needles. "
+        "NO text appears. NO logos appear. NO captions. Completely blank of typography."
     )
 
 
 def brief(name: str, look: dict, mol: str) -> str:
     return (
-        f"chem breakdown · {name} · {mol} · {look['env'][:160]}… "
-        f"shot:{look['shot_family']} · {look['camera_angle']} · label:{name}"
+        f"chem reaction · {name} · {mol} · {look['env'][:160]}… "
+        f"shot:{look['shot_family']} · {look['camera_angle']} · no text · no logo"
     )
 
 
@@ -324,10 +325,19 @@ def main() -> None:
 
     for r in rows:
         vp = r["video_prompt"].lower()
-        if "dark microscopic" not in vp and "medical animation" not in vp:
-            raise SystemExit(f"missing dark microscopic vibe {r['creation_id']}")
-        if "cell membrane" not in vp and "pebbled" not in vp:
-            raise SystemExit(f"missing membrane surface {r['creation_id']}")
+        mp = r["video_motion_prompt"].lower()
+        if "chemical reaction" not in vp and "amino acid" not in vp:
+            raise SystemExit(f"missing cellular reaction vibe {r['creation_id']}")
+        if "living cell" not in vp and "cytoplasm" not in vp and "lipid" not in vp:
+            raise SystemExit(f"missing living-cell scenery {r['creation_id']}")
+        if "no text" not in vp:
+            raise SystemExit(f"missing no-text lock {r['creation_id']}")
+        if "no logo" not in vp and "no palm" not in vp:
+            raise SystemExit(f"missing no-logo lock {r['creation_id']}")
+        if "silent" not in mp:
+            raise SystemExit(f"missing silent lock {r['creation_id']}")
+        if "bottom-center" in vp or "sans-serif" in vp:
+            raise SystemExit(f"overlay text still requested {r['creation_id']}")
         if len(r["video_prompt"]) > 7900:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 

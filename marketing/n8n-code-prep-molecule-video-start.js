@@ -38,7 +38,8 @@ var motion = String(
   input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''
 ).trim();
 motion =
-  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' + motion;
+  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. No text, no captions, no logos appear. Cellular reaction continues. ' +
+  motion;
 if (motion.length > 700) {
   motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
 }

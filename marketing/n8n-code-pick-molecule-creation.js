@@ -41,15 +41,14 @@ function capPrompt(text) {
 function moleculeVibeLock(name) {
   var n = String(name || '').trim();
   return (
-    "HARD VIBE LOCK (READ FIRST): Dark cinematic 3D MEDICAL ANIMATION at microscopic scale. " +
-    "NOT a product photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle. NOT sunlit windows. " +
-    "Setting: intra-body dark fluid void. Lower frame is a DARK WET PEBBLED CELL MEMBRANE / glistening tissue (navy-charcoal mounds, specular highlights). Tiny out-of-focus particles float in the dark. " +
-    "Hero: exactly ONE photoreal ball-and-stick 3D molecule of '" +
+    "HARD VIBE LOCK (READ FIRST): DARK cinematic 3D MEDICAL ANIMATION of a LIVE CELLULAR CHEMICAL REACTION. " +
+    "NOT a product photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle. NOT a catalog still of one floating molecule. " +
+    "Setting: inside/around a living cell — lipid-bilayer membrane, cytoplasm, wet receptors. " +
+    "Action: amino-acid monomers (glossy ball-and-stick) collide, dock, and form peptide bonds with energy flashes. A forming peptide chain of '" +
     n +
-    "' — glossy translucent colored glass atoms, metallic/glass bonds, slight glow, shallow depth of field, dramatic directional light. Molecule hovers just above the membrane. Optional faint wispy filaments toward the surface. " +
-    "If any text: '" +
-    n +
-    "' once in bold white sans-serif bottom-center only. NO palm-tree logo, NO URL, NO watermark. No vial. No pen. Count = 1."
+    "' is the unseen reaction subject. " +
+    "NO TEXT anywhere — no letters, numbers, captions, titles, compound-name overlay, labels. " +
+    "NO LOGO, NO palm tree, NO URL, NO watermark. No vial. No pen. Silent later — do not imply captions."
   );
 }
 
@@ -195,9 +194,9 @@ return [
       video_prompt: videoPrompt,
       video_prompt_len: videoPrompt.length,
       video_motion_prompt: capPrompt(
-        "Silent video. Stay in the dark microscopic medical-animation world over the wet membrane. Same '" +
+        "Silent video. No text, no logos, no captions. Cellular chemical reaction continues: living cells and amino acids forming peptide bonds. Same '" +
           pick.compound_name +
-          "' molecule. No studio cut. " +
+          "' reaction subject — never printed. No studio cut. " +
           pick.video_motion_prompt
       ),
       still_edit_prompt: capPrompt(vibe + ' ' + pick.still_edit_prompt),
