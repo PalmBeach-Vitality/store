@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import re
 import sys
 from pathlib import Path
 
@@ -66,16 +67,17 @@ SCENE3_FIELDS = [
 QUALITY = (
     "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
     "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
-    "exactly one capped research pen, product count equals 1, no second pen, no vial, "
-    "no product pair, no duplicate products, one container only"
+    "exactly one white matte insulin-style 3ml research pen, product count equals 1, no second pen, no vial, "
+    "no product pair, no duplicate products, one container only, cap on, orange ridged dial"
 )
 
 STILL_EDIT = (
-    "CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality research pen, cap ON. "
-    "DELETE every extra pen, every vial, every syringe, every needle, every scale, every tray, "
-    "and any loose cap. Place the single capped pen directly on the surface. "
-    "After the edit count exactly 1 pen and zero vials. Do not restyle lighting, camera, "
-    "label text, or environment. Cap stays on."
+    "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
+    "with exactly ONE white matte plastic insulin-style 3ml injectable pen. Cap ON with white "
+    "pocket clip. Small rectangular barrel window only (not a tall glass chamber). Bright orange "
+    "ridged dose-dial on the end opposite the cap. Label: bright BLUE DNA helix + orange compound "
+    "name + orange badge '3ml pen' only. DELETE burgundy vial branding, palm trees, milligram dosage, extra pens, "
+    "vials, needles, syringes, scales, trays. After the edit: count exactly 1 white pen, zero vials. Cap on."
 )
 
 CAPTION_LOCK = (
@@ -84,68 +86,75 @@ CAPTION_LOCK = (
     "Captions only — never burn this into the image or Grok prompt."
 )
 
-# 3-image-scenes product_hero / product_form_detail — ONE capped pen only
-# (research_pens bank + enforce_single_vial_or_pen PEN_HERO / fix_lab_libraries)
+# Same physical pen in every row. Only pose / surface change.
+# Hardware: white insulin-style injector (not a glass vial, not brushed silver).
+PEN_HARDWARE = (
+    "white matte plastic insulin-style 3ml injectable pen; white cap with white pocket clip ON "
+    "covering the tip; small rectangular transparent barrel window beside the label "
+    "(a glimpse of liquid/mechanism only — NOT a tall glass reservoir, NOT most of the body as glass); "
+    "bright orange ridged dose-dial / injection button on the end opposite the cap"
+)
+
 PEN_FORMS: list[tuple[str, str]] = [
     (
-        "pre-filled research pen on matte black acrylic",
-        "clear barrel window, dial collar, capped tip cover on",
+        "white matte insulin-style 3ml research pen lying horizontally on a light reflective surface",
+        PEN_HARDWARE + "; catalog product still, cap on",
     ),
     (
-        "precision research pen standing upright",
-        "vertical hero, soft reflection, cap on",
+        "white matte insulin-style 3ml research pen three-quarter catalog view",
+        PEN_HARDWARE + "; soft reflection, cap on",
     ),
     (
-        "research pen on mirrored chrome plate",
-        "hard specular highlights, product catalog, cap on",
+        "white matte insulin-style 3ml research pen on mirrored chrome plate",
+        PEN_HARDWARE + "; hard specular highlights, cap on",
     ),
     (
-        "research pen with dose window close-up",
-        "numeric window readable, shallow depth, cap on",
+        "white matte insulin-style 3ml research pen barrel-window close-up",
+        PEN_HARDWARE + "; small window readable, shallow depth, cap on",
     ),
     (
-        "frosted research pen body with metal clip",
-        "matte body texture, metal pocket clip, cap on",
+        "white matte insulin-style 3ml research pen on matte white seamless paper",
+        PEN_HARDWARE + "; plain white backdrop, cap on",
     ),
     (
-        "research pen barrel showing pre-filled liquid",
-        "optical clarity of liquid in barrel window, cap on",
+        "white matte insulin-style 3ml research pen edge-lit silhouette",
+        PEN_HARDWARE + "; rim light outlining the white body and orange dial, cap on",
     ),
     (
-        "research pen on matte white seamless paper",
-        "one capped research pen on plain white backdrop",
+        "white matte insulin-style 3ml research pen low-angle hero",
+        PEN_HARDWARE + "; premium catalog angle, cap on",
     ),
     (
-        "research pen silhouette edge-lit",
-        "rim light outlining form, cap on, dark field",
+        "white matte insulin-style 3ml research pen on frosted glass platform",
+        PEN_HARDWARE + "; soft reflection beneath, cap on",
     ),
     (
-        "compact travel research pen shorter body",
-        "shorter form factor, capped tip cover on",
+        "white matte insulin-style 3ml research pen label-facing catalog",
+        PEN_HARDWARE + "; label fully readable, cap on",
     ),
     (
-        "research pen with protective tip shield locked",
-        "safety shield engaged, cap on",
+        "white matte insulin-style 3ml research pen slight diagonal on acrylic",
+        PEN_HARDWARE + "; one pen only, no stand claw, cap on",
     ),
     (
-        "slim research pen graphite gray body",
-        "matte gray finish, dial collar, cap on",
+        "white matte insulin-style 3ml research pen on dark matte acrylic",
+        PEN_HARDWARE + "; white body contrast, cap on",
     ),
     (
-        "research pen with translucent smoke barrel",
-        "smoke tint showing liquid, cap on",
+        "white matte insulin-style 3ml research pen orange-dial macro",
+        PEN_HARDWARE + "; orange ridged dial in frame, cap on",
     ),
     (
-        "research pen on frosted glass platform",
-        "soft reflection beneath, barrel window, cap on",
+        "white matte insulin-style 3ml research pen clip-and-cap detail",
+        PEN_HARDWARE + "; white pocket clip visible, cap on",
     ),
     (
-        "research pen rubber grip section macro",
-        "grip texture, dial collar, capped tip cover on",
+        "white matte insulin-style 3ml research pen on linen lab wipe",
+        PEN_HARDWARE + "; product only, cap on",
     ),
     (
-        "single sealed Palm Beach Vitality research pen on a matte acrylic pedestal",
-        "cap on, one pen only — no second pen, no carousel, no pen tray",
+        "single white matte insulin-style 3ml Palm Beach Vitality research pen",
+        PEN_HARDWARE + "; no chrome claw stand, no vial, cap on",
     ),
 ]
 
@@ -242,10 +251,12 @@ def liquid_detail(name: str, form: str) -> str:
 
 def pen_lock(name: str) -> str:
     return (
-        f"HARD OUTPUT LOCK (READ FIRST): Render exactly 1 sealed Palm Beach Vitality research pen "
-        f"labeled '{name}'. Product count = 1. Cap ON covering the tip — never removed, never sitting "
-        f"beside the pen, never showing a needle. No second pen. No background pen. No carousel. "
-        f"No pen tray. No vial. No syringe. No people."
+        f"HARD OUTPUT LOCK (READ FIRST): Render exactly 1 white matte plastic insulin-style "
+        f"Palm Beach Vitality 3ml injectable pen labeled '{name}'. This is a medical injection pen, "
+        f"NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. "
+        f"Product count = 1. White cap ON with white pocket clip covering the tip — never removed, "
+        f"never sitting beside the pen, never showing a needle. Bright orange ridged dose-dial on "
+        f"the opposite end. No second pen. No vial. No syringe. No people."
     )
 
 
@@ -258,9 +269,14 @@ def closing_lock() -> str:
 
 def brand_label(name: str) -> str:
     return (
-        "Clean white wrap-around barrel label with a dark maroon DNA double-helix logo, "
-        f"the exact compound name '{name}' in large bold dark maroon type, and a solid dark maroon "
-        "dosage bar with white mg strength. Printed ONCE only. No research-use disclaimer on the label."
+        "LABEL (MANDATORY, printed ONCE): clean white wrap-around barrel label in landscape along the pen. "
+        "Far left: stylized bright BLUE DNA double-helix icon (not burgundy vial branding). "
+        f"Next: exact compound name '{name}' in large bold ORANGE sans-serif (Helvetica/Arial), left-aligned. "
+        "To the right of the name: a solid ORANGE rounded-rectangle badge with white text exactly '3ml pen'. "
+        f"The only readable words on the entire pen are '{name}' and '3ml pen'. "
+        "FORBIDDEN on the label and anywhere in frame: milligram dosage, milligram-per-milliliter, "
+        "milligram-per-vial, concentration numbers, burgundy vial branding, palm tree, research-use disclaimer, "
+        "subcutaneous, extra class names, any other words."
     )
 
 
@@ -342,8 +358,8 @@ def lab_item_paragraph(scene: dict) -> str:
         f"{brand_label(name)} "
         f"Lighting: {scene['lighting']}. "
         "Empty of people; no clinical procedure staging; no needles. "
-        "No research-use disclaimer, captions, watermarks, or burn-in text in frame "
-        "except the optional exact compound label once and a small palm mark once."
+        "No research-use disclaimer, captions, watermarks, palm tree, or burn-in text in frame "
+        f"except '{name}' and '3ml pen' on the pen label once."
         f"{closing_lock()}"
     )
 
@@ -377,10 +393,10 @@ def video_prompt(scene: dict, lab_item: str, material: str) -> str:
         f"Intended follow-on camera move: {shot['camera_move']}. "
         f"Energy: {shot.get('energy', 'cinematic')}. "
         f"Color grade: {scene['_color_grade']}. "
-        f"LABEL REQUIREMENT: if any label appears, it MUST read exactly '{name}' "
-        "(Palm Beach Vitality compound name only), printed ONCE only. "
+        f"{brand_label(name)} "
         "Avoid: people, hands, faces, skin, needles, syringes, injection, medical procedures, "
-        "vials, second pens, scales, trays, watermarks, lower-thirds, scene titles, burn-in text. "
+        "vials, second pens, silver vial-pens, chrome claw stands, scales, trays, watermarks, "
+        "lower-thirds, scene titles, burn-in text. "
         "Do NOT render prompt metadata as visible text. "
         f"Quality: {QUALITY}. "
         "No treatment, cure, dosage-for-humans, or clinical outcome claims as readable text. "
@@ -406,12 +422,13 @@ def motion_prompt(scene: dict) -> str:
         f"Slow cinematic camera: {move}. "
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "
-        f"Keep the exact same single capped '{name}' research pen, materials, and lighting. "
+        f"Keep the exact same single white insulin-style '{name}' 3ml pen, orange dial, "
+        "blue DNA icon, materials, and lighting. "
         "Cap stays ON. No orbit. No new objects. No second pen. No vial, people, needles, "
         "watermarks, burn-in, or on-screen disclaimers. "
         f"{glow}"
         "Liquid does not change level — pre-filled and static. "
-        f"Keep label '{name}' unchanged if visible, once only."
+        f"Keep label words '{name}' and '3ml pen' unchanged, once only. No milligram dosage text."
     )
 
 
@@ -492,6 +509,16 @@ def main() -> None:
             raise SystemExit(f"non-GLOW blue: {r['compound_name']}")
         if "chem_studio" in r["category"] or "molecule" in vp:
             raise SystemExit("molecule leakage")
+        if "3ml pen" not in r["video_prompt"]:
+            raise SystemExit(f"missing 3ml pen badge: {r['creation_id']}")
+        if re.search(r"\d\s*mg(?:/ml|/vial)?\b", r["video_prompt"], re.I):
+            raise SystemExit(f"mg/ml leaked: {r['creation_id']}")
+        if "dark maroon" in vp:
+            raise SystemExit(f"maroon leaked: {r['creation_id']}")
+        if "small palm mark" in vp:
+            raise SystemExit(f"palm mark leaked: {r['creation_id']}")
+        if "insulin-style" not in vp and "white matte" not in vp:
+            raise SystemExit(f"missing white insulin-style hardware: {r['creation_id']}")
         if len(r["video_prompt"]) > PROMPT_MAX:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 

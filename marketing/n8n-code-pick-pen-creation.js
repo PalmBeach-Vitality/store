@@ -38,6 +38,23 @@ function capPrompt(text) {
   return t;
 }
 
+function penLookLock(name) {
+  var n = String(name || '').trim();
+  return (
+    "HARD OUTPUT LOCK (READ FIRST): The hero is exactly ONE white matte plastic insulin-style injectable research pen " +
+    "(medical injection pen), NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome display claw. " +
+    "Body: smooth matte white plastic cylinder. Left: white plastic cap WITH a white pocket clip — cap ON covering the tip, never a needle. " +
+    "Small rectangular transparent window on the barrel beside the label (a glimpse of liquid only — not a tall glass reservoir). " +
+    "Right: bright orange ridged dose-dial / injection button matching the orange on the label. " +
+    "LABEL: white wrap-around. Far left bright BLUE DNA double-helix icon. Then '" +
+    n +
+    "' in large bold ORANGE sans-serif. Then a solid ORANGE rounded-rectangle badge with white text exactly '3ml pen'. " +
+    "The only readable words on the entire pen are '" +
+    n +
+    "' and '3ml pen'. FORBIDDEN: milligram dosage, milligram-per-milliliter, milligram-per-vial, concentration numbers, burgundy vial branding, palm tree, extra words. Product count = 1. No vial. No second pen."
+  );
+}
+
 var creations = $input.all().map(function (i) {
   return i.json;
 });
@@ -150,6 +167,8 @@ scored.sort(function (a, b) {
 });
 
 var pick = scored[0];
+var look = penLookLock(pick.compound_name);
+var videoPrompt = capPrompt(look + ' ' + pick.video_prompt);
 
 return [
   {
@@ -175,10 +194,15 @@ return [
       model_still: pick.model_still,
       model_video: pick.model_video,
       still_resolution: pick.still_resolution,
-      video_prompt: pick.video_prompt,
-      video_prompt_len: pick.video_prompt.length,
-      video_motion_prompt: pick.video_motion_prompt,
-      still_edit_prompt: pick.still_edit_prompt,
+      video_prompt: videoPrompt,
+      video_prompt_len: videoPrompt.length,
+      video_motion_prompt: capPrompt(
+        "Keep the exact same white insulin-style pen, orange dial, blue DNA, orange '" +
+          pick.compound_name +
+          "' and orange '3ml pen' badge. Cap ON. No milligram dosage text. " +
+          pick.video_motion_prompt
+      ),
+      still_edit_prompt: capPrompt(look + ' ' + pick.still_edit_prompt),
       surface: pick.surface,
       lighting: pick.lighting,
       camera_move: pick.camera_move,
