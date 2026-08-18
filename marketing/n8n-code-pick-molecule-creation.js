@@ -1,11 +1,12 @@
 // n8n Code node: pick_molecule_creation
 // Workflow: peptide_molecule_vid_gen
 // Mode: Run Once for All Items
+// Settings → Execute Once = OFF (must receive all Sheet 13 rows)
 // After: get_chem_creations / filter Active on 13-chem-breakdown-54
-// Before: grok_imagine_molecule_still
+// Before: sheets_update_chem → grok_imagine_molecule_still
 //
-// Rotates by compound_name (one video per compound cycle). Sheet prompts
-// already include molecule COUNT=1 locks — do NOT wrap vial rules.
+// Next unused row by rank (CHEM-001 then CHEM-002 …). Sheet prompts
+// already include reaction locks — do NOT wrap vial rules.
 
 function val(obj, names, fallback) {
   if (fallback === undefined) fallback = '';
@@ -62,6 +63,16 @@ if (!creations.length) {
   );
 }
 
+if (creations.length < 2) {
+  throw new Error(
+    'pick_molecule_creation saw only ' +
+      creations.length +
+      ' row(s) (' +
+      String((creations[0] && (creations[0].lab_item_id || creations[0].creation_id)) || '?') +
+      '). Execute Once must be OFF on this node so it receives all 54 Sheet 13 rows, not just CHEM-001.'
+  );
+}
+
 var scored = creations
   .map(function (c) {
     var rankNum = Number(val(c, ['rank', 'creation_rank'], 0));
@@ -114,52 +125,18 @@ if (!scored.length) {
   );
 }
 
-var compoundTimes = {};
-var lastAt = {};
-scored.forEach(function (c) {
-  var k = c.compound_name;
-  compoundTimes[k] = (compoundTimes[k] || 0) + c.times_used;
-  if (String(c.last_used_at || '') > String(lastAt[k] || '')) lastAt[k] = c.last_used_at;
-});
-
-var previouslyUsed = scored
-  .filter(function (c) {
-    return c.times_used > 0 || (c.last_used_at && c.last_used_at.trim());
-  })
-  .slice()
-  .sort(function (a, b) {
-    return String(b.last_used_at).localeCompare(String(a.last_used_at));
-  });
-
-var RECENT_N = 5;
-var recentCompounds = [];
-var seenRecent = {};
-for (var r = 0; r < previouslyUsed.length; r++) {
-  var nm = previouslyUsed[r].compound_name;
-  if (!nm || seenRecent[nm]) continue;
-  seenRecent[nm] = true;
-  recentCompounds.push(nm);
-  if (recentCompounds.length >= RECENT_N) break;
-}
-var lastCompound = recentCompounds[0] || '';
-
-function scorePick(c) {
-  var penalty = c.times_used * 100;
-  penalty += (compoundTimes[c.compound_name] || 0) * 40;
-  var recentIdx = recentCompounds.indexOf(c.compound_name);
-  if (recentIdx !== -1) {
-    penalty += 8000 + (RECENT_N - recentIdx) * 400;
-  }
-  if (lastCompound && c.compound_name === lastCompound) penalty += 5000;
-  penalty += c.rank * 0.001;
-  return penalty;
+function usedCount(c) {
+  var n = Number(c.times_used);
+  if (!isFinite(n) || n < 0) n = 0;
+  var last = String(c.last_used_at || '').trim();
+  if (last && last !== '0') n = Math.max(n, 1);
+  return n;
 }
 
 scored.sort(function (a, b) {
-  var pa = scorePick(a);
-  var pb = scorePick(b);
-  if (pa !== pb) return pa - pb;
-  if (a.times_used !== b.times_used) return a.times_used - b.times_used;
+  var ua = usedCount(a);
+  var ub = usedCount(b);
+  if (ua !== ub) return ua - ub;
   return a.rank - b.rank;
 });
 
@@ -208,6 +185,10 @@ return [
       creation_status: pick.status,
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
+      input_row_count: scored.length,
+      unused_row_count: scored.filter(function (c) {
+        return usedCount(c) === 0;
+      }).length,
     },
   },
 ];

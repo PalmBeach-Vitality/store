@@ -23,6 +23,7 @@ manual_trigger
   → get_chem_creations
   → filter_chem_active
   → pick_molecule_creation
+  → sheets_update_chem
   → grok_imagine_molecule_still
   → save_still_url
   → prep_molecule_video_start
@@ -30,7 +31,6 @@ manual_trigger
   → wait_video
   → grok_video_poll
   → save_video_url
-  → sheets_update_chem
 ```
 
 ---
@@ -80,20 +80,24 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 ## Node 4 — `pick_molecule_creation`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `filter_chem_active` → **pick_molecule_creation** → `grok_imagine_molecule_still`
+**Before → this → After:** `filter_chem_active` → **pick_molecule_creation** → `sheets_update_chem`
 
 Paste: `marketing/n8n-code-pick-molecule-creation.js`
 
 Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
 
-**Check:** `compound_name`, `video_prompt_len` (~1200), `model_still` = `grok-imagine-image-2.0`
+**Settings → Execute Once:** **OFF**. If this is ON, n8n only passes CHEM-001 into the Code node and every run repeats row 1.
+
+Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set.
+
+**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `model_still` = `grok-imagine-image-2.0`
 
 ---
 
 ## Node 5 — `grok_imagine_molecule_still`
 
 **Type:** HTTP Request  
-**Before → this → After:** `pick_molecule_creation` → **grok_imagine_molecule_still** → `save_still_url`
+**Before → this → After:** `sheets_update_chem` → **grok_imagine_molecule_still** → `save_still_url`
 
 | Setting | fx | Value |
 |---|---|---|
@@ -105,7 +109,7 @@ Rotates **compound_name** (never the last **5** used compounds). Sheet rows are 
 | JSON | **ON** | see below |
 
 ```text
-={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: 1, aspect_ratio: $json.aspect_ratio || '9:16', resolution: $json.still_resolution || '2k' }) }}
+={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio || '9:16', resolution: $('pick_molecule_creation').first().json.still_resolution || '2k' }) }}
 ```
 
 **Check:** `$json.data[0].url` — one molecule, no vial.
@@ -194,7 +198,7 @@ Must be **enabled**.
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_chem`  
+**Before → this → After:** `grok_video_poll` → **save_video_url** → (end)  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -210,7 +214,9 @@ Include Other Input Fields: **ON**
 ## Node 12 — `sheets_update_chem`
 
 **Type:** Google Sheets → Update  
-**Before → this → After:** `save_video_url` → **sheets_update_chem** → (end)
+**Before → this → After:** `pick_molecule_creation` → **sheets_update_chem** → `grok_imagine_molecule_still`
+
+Marks the row used **before** the still so a still-only Execute still advances to CHEM-002 next time.
 
 | Setting | fx | Value |
 |---|---|---|
