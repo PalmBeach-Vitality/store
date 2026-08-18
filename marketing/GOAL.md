@@ -10,7 +10,7 @@ Daily **45–60s** Instagram-ready reel:
 2. **Creatomate package** — 60s loop + Intro/Facts (muted — music added manually)  
 3. **FDA-safe** lab catalog only — disclaimers in **captions only**, never burned into video/prompts/overlays  
 
-## Two workflows
+## Workflows
 
 ### A — `PBVita — Grok Daily`
 
