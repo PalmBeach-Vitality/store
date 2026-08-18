@@ -116,13 +116,27 @@ var previouslyUsed = scored
   .sort(function (a, b) {
     return String(b.last_used_at).localeCompare(String(a.last_used_at));
   });
-var lastCompound = previouslyUsed[0] ? previouslyUsed[0].compound_name : '';
+
+var RECENT_N = 5;
+var recentCompounds = [];
+var seenRecent = {};
+for (var r = 0; r < previouslyUsed.length; r++) {
+  var nm = previouslyUsed[r].compound_name;
+  if (!nm || seenRecent[nm]) continue;
+  seenRecent[nm] = true;
+  recentCompounds.push(nm);
+  if (recentCompounds.length >= RECENT_N) break;
+}
+var lastCompound = recentCompounds[0] || '';
 
 function scorePick(c) {
   var penalty = c.times_used * 100;
   penalty += (compoundTimes[c.compound_name] || 0) * 40;
+  var recentIdx = recentCompounds.indexOf(c.compound_name);
+  if (recentIdx !== -1) {
+    penalty += 8000 + (RECENT_N - recentIdx) * 400;
+  }
   if (lastCompound && c.compound_name === lastCompound) penalty += 5000;
-  if (c.category === 'chem_studio') penalty -= 5;
   penalty += c.rank * 0.001;
   return penalty;
 }

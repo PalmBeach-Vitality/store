@@ -78,7 +78,7 @@ manual_trigger
 
 Paste: `marketing/n8n-code-pick-molecule-creation.js`
 
-Rotates **compound_name** (least-used, not last compound). Prefers `chem_studio` when tied.
+Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
 
 **Check:** `compound_name`, `video_prompt_len` (~1200), `model_still` = `grok-imagine-image-2.0`
 

@@ -181,49 +181,133 @@ def brief(name: str, look: dict, mol: str) -> str:
     )
 
 
+# Visual stagger: family members (BPC / TB / blend) stay far apart.
+STAGGER_ROUND_A = [
+    "BPC-157",
+    "Retatrutide",
+    "GHK-Cu",
+    "NAD+",
+    "Semaglutide",
+    "GLOW",
+    "Sermorelin",
+    "PT-141",
+    "Tirzepatide",
+    "MOTS-C",
+    "Selank",
+    "TB-500",
+    "5-Amino-1MQ",
+    "Tesamorelin",
+    "KPV",
+    "CJC",
+    "Melanotan 2",
+    "SS-31",
+    "AOD-9604",
+    "BPC-157/TB-500",
+    "SEMAX",
+    "KLOW",
+    "Cagrilinitide",
+    "TA-1",
+    "DSIP",
+    "Tesamorelin/Ipamorelin",
+    "CJC (no DAC)/Ipamorelin",
+]
+
+MIN_UNIQUE_WINDOW = 5
+
+
+def related_family(name: str) -> str:
+    if name in ("BPC-157", "BPC-157/TB-500", "TB-500"):
+        return "bpc_tb"
+    if name in ("CJC", "CJC (no DAC)/Ipamorelin"):
+        return "cjc"
+    if name in ("Tesamorelin", "Tesamorelin/Ipamorelin"):
+        return "tesa"
+    if name in ("GLOW", "KLOW"):
+        return "glow_klow"
+    return name
+
+
+def window_ok(names: list[str], window: int = MIN_UNIQUE_WINDOW) -> bool:
+    for i in range(len(names)):
+        chunk = names[i : i + window]
+        if len(chunk) < 2:
+            continue
+        if len(set(chunk)) != len(chunk):
+            return False
+    return True
+
+
+def rotate_until_ok(round_a: list[str], offset: int) -> list[str]:
+    n = len(round_a)
+    for extra in range(n):
+        rot = (offset + extra) % n
+        round_b = round_a[rot:] + round_a[:rot]
+        seq = round_a + round_b
+        # also check wrap from last rows back to first (if someone loops the sheet)
+        wrap = seq + round_a[:MIN_UNIQUE_WINDOW]
+        if window_ok(seq) and window_ok(wrap):
+            return round_b
+    raise SystemExit("could not stagger round B")
+
+
+def make_row(rank: int, cid: str, name: str, mol: str, look: dict) -> dict:
+    return {
+        "creation_id": f"PBVita-Chem-{rank:03d}",
+        "rank": rank,
+        "lab_item_id": f"CHEM-{rank:03d}",
+        "category": look["category"],
+        "lab_item": look["lab_item"],
+        "material_detail": mol,
+        "compound_name": name,
+        "shot_family": look["shot_family"],
+        "camera_angle": look["camera_angle"],
+        "camera_direction": look["camera_direction"],
+        "framing": look["framing"],
+        "scene_brief": brief(name, look, mol),
+        "quality_var_count": 8,
+        "quality_suffix": QUALITY,
+        "aspect_ratio": "9:16",
+        "duration_seconds": 15,
+        "resolution": "1080p",
+        "model_still": "grok-imagine-image-2.0",
+        "model_video": "grok-imagine-video-1.5",
+        "still_resolution": "2k",
+        "video_prompt": video_prompt(name, look, mol),
+        "video_motion_prompt": motion(name, look),
+        "still_edit_prompt": STILL_EDIT,
+        "status": "Active",
+        "times_used": 0,
+        "last_used_at": "",
+        "surface": look["surface"],
+        "lighting": look["lighting"],
+        "camera_move": look["camera_move"],
+        "color_grade": look["color_grade"],
+        "hero_style": look["hero_style"],
+    }
+
+
 def main() -> None:
+    by_name = {name: (cid, mol) for cid, name, mol in COMPOUNDS}
+    missing = [n for n in STAGGER_ROUND_A if n not in by_name]
+    extra = [n for n in by_name if n not in STAGGER_ROUND_A]
+    if missing or extra:
+        raise SystemExit(f"stagger mismatch missing={missing} extra={extra}")
+    if len(set(STAGGER_ROUND_A)) != 27:
+        raise SystemExit("STAGGER_ROUND_A must be 27 unique compounds")
+    if not window_ok(STAGGER_ROUND_A):
+        raise SystemExit("round A window failed")
+
+    round_b = rotate_until_ok(STAGGER_ROUND_A, offset=13)
+    sequence = [(n, LOOKS[0]) for n in STAGGER_ROUND_A] + [(n, LOOKS[1]) for n in round_b]
+
     rows = []
-    rank = 0
-    for i, (cid, name, mol) in enumerate(COMPOUNDS, start=1):
-        for look in LOOKS:
-            rank += 1
-            creation_id = f"PBVita-Chem-{rank:03d}"
-            lab_item_id = f"CHEM-{rank:03d}"
-            rows.append(
-                {
-                    "creation_id": creation_id,
-                    "rank": rank,
-                    "lab_item_id": lab_item_id,
-                    "category": look["category"],
-                    "lab_item": look["lab_item"],
-                    "material_detail": mol,
-                    "compound_name": name,
-                    "shot_family": look["shot_family"],
-                    "camera_angle": look["camera_angle"],
-                    "camera_direction": look["camera_direction"],
-                    "framing": look["framing"],
-                    "scene_brief": brief(name, look, mol),
-                    "quality_var_count": 8,
-                    "quality_suffix": QUALITY,
-                    "aspect_ratio": "9:16",
-                    "duration_seconds": 15,
-                    "resolution": "1080p",
-                    "model_still": "grok-imagine-image-2.0",
-                    "model_video": "grok-imagine-video-1.5",
-                    "still_resolution": "2k",
-                    "video_prompt": video_prompt(name, look, mol),
-                    "video_motion_prompt": motion(name, look),
-                    "still_edit_prompt": STILL_EDIT,
-                    "status": "Active",
-                    "times_used": 0,
-                    "last_used_at": "",
-                    "surface": look["surface"],
-                    "lighting": look["lighting"],
-                    "camera_move": look["camera_move"],
-                    "color_grade": look["color_grade"],
-                    "hero_style": look["hero_style"],
-                }
-            )
+    for rank, (name, look) in enumerate(sequence, start=1):
+        cid, mol = by_name[name]
+        rows.append(make_row(rank, cid, name, mol, look))
+
+    names = [r["compound_name"] for r in rows]
+    if not window_ok(names):
+        raise SystemExit("final sequence window failed")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", newline="", encoding="utf-8") as f:
@@ -234,8 +318,10 @@ def main() -> None:
     lens = [len(r["video_prompt"]) for r in rows]
     print(f"wrote {OUT.name}: {len(rows)} rows")
     print(f"video_prompt chars min={min(lens)} max={max(lens)}")
-    names = sorted({r["compound_name"] for r in rows})
-    print(f"compounds {len(names)}: {', '.join(names)}")
+    print("rank sequence:")
+    for r in rows:
+        print(f"  {r['rank']:02d}  {r['category']:<14}  {r['compound_name']}")
+    print("round B offset compounds:", ", ".join(round_b[:5]), "...")
 
 
 if __name__ == "__main__":
