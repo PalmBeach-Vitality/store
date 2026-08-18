@@ -37,6 +37,8 @@ if (!still) {
 var motion = String(
   input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''
 ).trim();
+motion =
+  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' + motion;
 if (motion.length > 700) {
   motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
 }
@@ -56,6 +58,7 @@ var body = {
   image: { url: still },
   duration: duration,
   resolution: resolution,
+  audio: false,
 };
 
 return [

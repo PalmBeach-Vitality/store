@@ -422,6 +422,7 @@ def motion_prompt(scene: dict) -> str:
     )
     move = shot["camera_move"].replace("—", "-").replace("–", "-")
     return (
+        "Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. "
         f"Slow cinematic camera: {move}. "
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "

@@ -158,7 +158,7 @@ Paste: `marketing/n8n-code-prep-pen-video-start.js`
 | Content Type | **OFF** | `application/json` |
 | Body | **ON** | `={{ $json.grok_video_body_json }}` |
 
-**Check:** `request_id`
+**Check:** `request_id`. Clip is **muted** (`audio: false` + silent motion). Add sound later.
 
 ---
 

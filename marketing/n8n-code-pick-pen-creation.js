@@ -198,7 +198,7 @@ return [
       video_prompt: videoPrompt,
       video_prompt_len: videoPrompt.length,
       video_motion_prompt: capPrompt(
-        "Keep the exact same white insulin-style pen, 10-20% longer full-length barrel, orange dial, blue DNA, orange '" +
+        "Silent video. No soundtrack. Keep the exact same white insulin-style pen, 10-20% longer full-length barrel, orange dial, blue DNA, orange '" +
           pick.compound_name +
           "' and orange '3ml pen' badge. Cap ON. No milligram dosage text. " +
           pick.video_motion_prompt
