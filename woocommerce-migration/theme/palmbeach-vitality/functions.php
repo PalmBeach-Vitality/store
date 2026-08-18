@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.29');
+define('PBV_THEME_VERSION', '2.10.30');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
-define('PBV_ANNOUNCE_FIX_VERSION', '2.10.29');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.30');
 
 /**
  * Default top announcement bar copy.
@@ -20,7 +20,7 @@ define('PBV_ANNOUNCE_FIX_VERSION', '2.10.29');
  * @return string
  */
 function pbv_default_announcement() {
-    return 'New clients: 20% off with code WELCOME20 — enter your email to get it sent! Free shipping on research orders over $250! Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.';
+    return 'New clients: 20% off — click here to get your welcome code! Free shipping on research orders over $250! Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.';
 }
 
 require_once get_template_directory() . '/inc/product-research.php';

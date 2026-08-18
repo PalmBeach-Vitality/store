@@ -108,7 +108,7 @@
     ageAccepted = true;
   }
 
-  // Homepage lead popup — 10 seconds after landing (after age gate)
+  // Welcome discount popup — banner click + homepage timer
   var lead = document.querySelector("[data-lead-popup]");
   var leadTimer = null;
   var cfg = window.pbvTheme || {};
@@ -133,8 +133,9 @@
     document.body.classList.remove("pbv-lead-popup-open");
   }
 
-  function openLeadPopup() {
-    if (!lead || hasLeadDismissed()) return;
+  function openLeadPopup(force) {
+    if (!lead) return;
+    if (!force && hasLeadDismissed()) return;
     lead.removeAttribute("hidden");
     document.body.classList.add("pbv-lead-popup-open");
     var email = lead.querySelector("#pbv-lead-email");
@@ -144,8 +145,16 @@
   function scheduleLeadPopup() {
     if (!lead || !cfg.isHome || hasLeadDismissed() || !ageAccepted) return;
     if (leadTimer) window.clearTimeout(leadTimer);
-    leadTimer = window.setTimeout(openLeadPopup, 10000);
+    leadTimer = window.setTimeout(function () {
+      openLeadPopup(false);
+    }, 10000);
   }
+
+  document.querySelectorAll("[data-lead-popup-open]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      openLeadPopup(true);
+    });
+  });
 
   if (lead) {
     lead.querySelectorAll("[data-lead-popup-close]").forEach(function (el) {
