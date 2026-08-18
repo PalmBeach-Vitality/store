@@ -2,7 +2,7 @@
 
 | File | Tab name |
 |---|---|
-| `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
+| `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB + pen-scene **input** params — writeback = `last_used_date` only; 150 pen-only rows: `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
 | `5-reel-scenes.csv` | `5-reel-scenes` (630 Creatomate/Grok visual scene briefs) |
@@ -12,7 +12,7 @@
 | `8-lab-items-500.csv` | `8-lab-items-500` (legacy subject list — not auto-synced from wellness rebuild) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — 500 rows; includes `still_edit_prompt`, models, motion; no Creatomate `mod_*`) |
 | `13-chem-breakdown-54.csv` | `13-chem-breakdown-54` (**new** chemical-breakdown molecule vids — same columns as Sheet 9; 27 compounds × 2 looks = 54 rows; do not mix with vial Sheet 9) |
-| `14-pen-creations-54.csv` | `14-pen-creations-54` (**new** pens-only catalog vids — same columns as Sheet 9; 27 compounds × 2 looks = 54 rows; one capped pre-filled research pen; look from `3-image-scenes-150` `product_hero` / `product_form_detail`; do not mix with Sheet 9 or Sheet 13) |
+| `14-pen-creations-150.csv` | `14-pen-creations-150` (**new** pens-only catalog vids — **columns copied from** `9-lab-item-creations-500`; **pen params from** `3-image-scenes-150`; 150 rows, one capped pen, no vial; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |
 | `12-import-still-queue.csv` | `12-import-still-queue` (import path — same creative columns as Sheet 9 + `still_url` + `import_id`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
@@ -23,7 +23,9 @@
 
 Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`.
 
-Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
+Repo CSV is **150 pen-only rows** (one capped research pen). Those fields are the **input parameters** for `14-pen-creations-150`. Builder: `scripts/build_pen_creations_from_image_scenes.py`.
+
+Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet. `caption_lock` is captions-only (never in Grok prompts).
 
 ## Reel Studio / Creatomate
 
@@ -34,7 +36,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; molecule hero, not vial)
-- Pens-only catalog vids: tab **`14-pen-creations-54`** (Sheet 9 columns; one capped research pen, no vial; form = clear barrel window, dial collar, cap on)
+- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one capped research pen, no vial)
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**
 - Creatomate / Buffer packages: **no music** (muted only)

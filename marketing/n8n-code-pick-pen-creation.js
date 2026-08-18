@@ -1,7 +1,7 @@
 // n8n Code node: pick_pen_creation
 // Workflow: peptide_pen_vid_gen
 // Mode: Run Once for All Items
-// After: get_pen_creations / filter Active on 14-pen-creations-54
+// After: get_pen_creations / filter Active on 14-pen-creations-150
 // Before: grok_imagine_pen_still
 //
 // Rotates by compound_name (one video per compound cycle). Sheet prompts
@@ -44,7 +44,7 @@ var creations = $input.all().map(function (i) {
 
 if (!creations.length) {
   throw new Error(
-    'No pen rows. Check get_pen_creations → Sheet 14-pen-creations-54, status=Active.'
+    'No pen rows. Check get_pen_creations → Sheet 14-pen-creations-150, status=Active.'
   );
 }
 

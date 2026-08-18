@@ -6,7 +6,7 @@
 **Sheet:** `13-chem-breakdown-54` (same columns as Sheet 9)  
 **Name the workflow exactly:** `peptide_molecule_vid_gen`
 
-Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen-creations-54`. Do not mix sheets.
+Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen-creations-150`. Do not mix sheets.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 

@@ -3,10 +3,11 @@
 **New workflow** — pens-only catalog videos.  
 **Not** the lab-vial daily path. **Not** molecules. **Not** Creatomate. **No Switch / IF.**
 
-**Sheet:** `14-pen-creations-54` (same columns as Sheet 9)  
+**Sheet:** `14-pen-creations-150` (**columns from** `9-lab-item-creations-500`, not Sheet 13)  
 **Name the workflow exactly:** `peptide_pen_vid_gen`
 
-**Look:** `3-image-scenes-150` pen schema — `product_hero` = pre-filled catalog research pen · `product_form_detail` = clear barrel window, dial collar, capped tip cover **on**. Exactly **one** pen. Cap stays on. No vial.
+**Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
+Exactly **one** capped pre-filled research pen. Cap stays on. No vial.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 
@@ -33,10 +34,10 @@ manual_trigger
 
 ## After import
 
-1. Import tab `14-pen-creations-54` into the **same Google workbook** you already use (or a dedicated one).
-2. On `get_pen_creations` + `sheets_update_pen`: Document **By ID** (same ID both nodes) · Sheet **By Name** `14-pen-creations-54`.
+1. Import tabs `3-image-scenes-150` and `14-pen-creations-150` into the **same Google workbook**.
+2. On `get_pen_creations` + `sheets_update_pen`: Document **By ID** (same ID both nodes) · Sheet **By Name** `14-pen-creations-150`.
 3. Attach **Google Sheets** credential and **xAI Header Auth** (same GROK_API as vial stills).
-4. Do not point this workflow at `9-lab-item-creations-500` or `13-chem-breakdown-54`.
+4. Do not point this workflow at `9-lab-item-creations-500` (mixed lab) or `13-chem-breakdown-54` (molecules).
 
 ---
 
@@ -55,7 +56,7 @@ manual_trigger
 |---|---|---|
 | Operation | — | Get Row(s) |
 | Document | — | **By ID** (your workbook) |
-| Sheet | **OFF** | `14-pen-creations-54` |
+| Sheet | **OFF** | `14-pen-creations-150` |
 | Return All | — | **ON** |
 
 ---
@@ -82,7 +83,7 @@ Paste: `marketing/n8n-code-pick-pen-creation.js`
 
 Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
 
-**Check:** `compound_name`, `video_prompt_len` (~2000), `model_still` = `grok-imagine-image-2.0`
+**Check:** `compound_name`, `video_prompt_len` (~4500), `model_still` = `grok-imagine-image-2.0`
 
 ---
 
@@ -212,7 +213,7 @@ Include Other Input Fields: **ON**
 |---|---|---|
 | Operation | — | Update |
 | Document | — | **By ID** (same as `get_pen_creations`) |
-| Sheet | **OFF** | `14-pen-creations-54` |
+| Sheet | **OFF** | `14-pen-creations-150` |
 | Column to Match On | **OFF** | `creation_id` |
 | Value to Match | **ON** | `={{ $('pick_pen_creation').first().json.creation_id }}` |
 | `times_used` | **ON** | `={{ Number($('pick_pen_creation').first().json.creation_times_used \|\| 0) + 1 }}` |
@@ -229,8 +230,9 @@ n8n: **Import from File** → name stays `peptide_pen_vid_gen` → attach creden
 
 ## Related
 
-- Sheet: `marketing/sheets/14-pen-creations-54.csv`
-- Builder: `marketing/scripts/build_pen_creations_54.py`
+- Sheet 9 columns (output): `marketing/sheets/14-pen-creations-150.csv`
+- Pen input params: `marketing/sheets/3-image-scenes-150.csv`
+- Builder: `marketing/scripts/build_pen_creations_from_image_scenes.py`
 - Pick: `marketing/n8n-code-pick-pen-creation.js`
 - Prep video: `marketing/n8n-code-prep-pen-video-start.js`
-- Sister workflow: `peptide_molecule_vid_gen` / Sheet 13
+- Sister workflow: `peptide_molecule_vid_gen` / Sheet 13 (do not mix)

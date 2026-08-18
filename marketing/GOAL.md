@@ -61,7 +61,7 @@ See `n8n-peptide-molecule-vid-gen.md`. Import JSON: `marketing/workflows/peptide
 
 ### D — `peptide_pen_vid_gen` (separate)
 
-Pens-only catalog reels. Sheet **`14-pen-creations-54`**. One capped pre-filled research pen (look from `3-image-scenes-150`). Not vials. Not molecules. Linear — no Switch/IF.
+Pens-only catalog reels. **Columns** from Sheet **`9-lab-item-creations-500`**. **Pen params** from **`3-image-scenes-150`** (`product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`). Output tab **`14-pen-creations-150`**. One capped pre-filled research pen. Not vials. Not molecules. Linear — no Switch/IF.
 
 ```text
 get_pen_creations → pick_pen_creation
