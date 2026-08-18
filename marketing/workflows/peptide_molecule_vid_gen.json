@@ -24,7 +24,7 @@
           "__rl": true,
           "value": "0",
           "mode": "list",
-          "cachedResultName": "Sheet1"
+          "cachedResultName": "13-chem-breakdown-54"
         },
         "options": {}
       },
@@ -36,7 +36,7 @@
         240,
         300
       ],
-      "notes": "Workbook 13-chem-breakdown-54. Live tab is still named Sheet1 (gid 0) after CSV import."
+      "notes": "Workbook tab 13-chem-breakdown-54 (gid 0). Do not use Sheet 9."
     },
     {
       "parameters": {
@@ -295,7 +295,7 @@
           "__rl": true,
           "value": "0",
           "mode": "list",
-          "cachedResultName": "Sheet1"
+          "cachedResultName": "13-chem-breakdown-54"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -324,7 +324,7 @@
     },
     {
       "parameters": {
-        "content": "## peptide_molecule_vid_gen\\nLinear: Sheet 13 workbook → Grok still → Grok video 1.5 → sheets writeback.\\nLive n8n: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq\\nTab is currently Sheet1 (CSV import). Do not use Sheet 9 / vials.",
+        "content": "## peptide_molecule_vid_gen\\nLinear: Sheet 13 → Grok still → Grok video 1.5 → sheets writeback.\\nLive n8n: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq\\nTab: 13-chem-breakdown-54. Do not use Sheet 9 / vials.",
         "height": 280,
         "width": 420,
         "color": 5
