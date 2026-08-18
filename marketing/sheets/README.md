@@ -12,6 +12,7 @@
 | `8-lab-items-500.csv` | `8-lab-items-500` (legacy subject list — not auto-synced from wellness rebuild) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — 500 rows; includes `still_edit_prompt`, models, motion; no Creatomate `mod_*`) |
 | `13-chem-breakdown-54.csv` | `13-chem-breakdown-54` (**new** chemical-breakdown molecule vids — same columns as Sheet 9; 27 compounds × 2 looks = 54 rows; do not mix with vial Sheet 9) |
+| `14-pen-creations-54.csv` | `14-pen-creations-54` (**new** pens-only catalog vids — same columns as Sheet 9; 27 compounds × 2 looks = 54 rows; one capped pre-filled research pen; look from `3-image-scenes-150` `product_hero` / `product_form_detail`; do not mix with Sheet 9 or Sheet 13) |
 | `12-import-still-queue.csv` | `12-import-still-queue` (import path — same creative columns as Sheet 9 + `still_url` + `import_id`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
@@ -33,6 +34,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; molecule hero, not vial)
+- Pens-only catalog vids: tab **`14-pen-creations-54`** (Sheet 9 columns; one capped research pen, no vial; form = clear barrel window, dial collar, cap on)
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**
 - Creatomate / Buffer packages: **no music** (muted only)

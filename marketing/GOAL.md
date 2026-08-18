@@ -46,6 +46,32 @@ See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 **No music in renders** — mute `main_video`; add soundtrack manually later.  
 **Template:** `c5d54774-b029-4786-af04-d5af345dc7f2` (`main_video` + `end_hold`).
 
+### C — `peptide_molecule_vid_gen` (separate)
+
+Chemical-breakdown **3D molecule** reels. Sheet **`13-chem-breakdown-54`**. Not vials. Linear — no Switch/IF.
+
+```text
+get_chem_creations → pick_molecule_creation
+  → grok_imagine_molecule_still → save_still_url
+  → prep_molecule_video_start → grok_video_start
+  → wait → poll → save_video_url → sheets_update_chem
+```
+
+See `n8n-peptide-molecule-vid-gen.md`. Import JSON: `marketing/workflows/peptide_molecule_vid_gen.json`.
+
+### D — `peptide_pen_vid_gen` (separate)
+
+Pens-only catalog reels. Sheet **`14-pen-creations-54`**. One capped pre-filled research pen (look from `3-image-scenes-150`). Not vials. Not molecules. Linear — no Switch/IF.
+
+```text
+get_pen_creations → pick_pen_creation
+  → grok_imagine_pen_still → save_still_url
+  → prep_pen_video_start → grok_video_start
+  → wait → poll → save_video_url → sheets_update_pen
+```
+
+See `n8n-peptide-pen-vid-gen.md`. Import JSON: `marketing/workflows/peptide_pen_vid_gen.json`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -62,6 +88,8 @@ See `n8n-camera-diversity-plan.md`.
 
 ## Canonical docs
 
+- Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
+- Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
 - Lab items: `n8n-lab-items-500.md`  
