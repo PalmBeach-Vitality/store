@@ -4,7 +4,9 @@
 **Not** the lab-vial daily path. **Not** Creatomate. **No Switch / IF.**
 
 **Sheet:** `13-chem-breakdown-54` (same columns as Sheet 9)  
-**Name the workflow exactly:** `peptide_molecule_vid_gen`
+**Name the workflow exactly:** `peptide_molecule_vid_gen`  
+**Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq  
+**Workbook:** https://docs.google.com/spreadsheets/d/1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0 — tab is still named `Sheet1` after CSV import (gid 0). Rename in Google if you want; the n8n nodes bind by gid.
 
 Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen-creations-150`. Do not mix sheets.
 
@@ -33,10 +35,11 @@ manual_trigger
 
 ## After import
 
-1. Import tab `13-chem-breakdown-54` into the **same Google workbook** you already use (or a dedicated one).
-2. On `get_chem_creations` + `sheets_update_chem`: Document **By ID** (same ID both nodes) · Sheet **By Name** `13-chem-breakdown-54`.
-3. Attach **Google Sheets** credential and **xAI Header Auth** (same GROK_API as vial stills).
-4. Do not point this workflow at `9-lab-item-creations-500`.
+Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header auth are attached.
+
+1. Optional: rename workbook tab `Sheet1` → `13-chem-breakdown-54` (nodes use gid 0, so they keep working).
+2. Do not point this workflow at `9-lab-item-creations-500`.
+3. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
 
 ---
 

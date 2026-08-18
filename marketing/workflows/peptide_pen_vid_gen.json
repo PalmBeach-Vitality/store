@@ -22,8 +22,9 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "14-pen-creations-150",
-          "mode": "name"
+          "value": "1395194708",
+          "mode": "list",
+          "cachedResultName": "14-pen-creations-150"
         },
         "options": {}
       },
@@ -292,8 +293,9 @@
         },
         "sheetName": {
           "__rl": true,
-          "value": "14-pen-creations-150",
-          "mode": "name"
+          "value": "1395194708",
+          "mode": "list",
+          "cachedResultName": "14-pen-creations-150"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -322,7 +324,7 @@
     },
     {
       "parameters": {
-        "content": "## peptide_pen_vid_gen\\nColumns = Sheet 9. Pen params = 3-image-scenes-150.\\n1. Import 3-image-scenes-150 + 14-pen-creations-150\\n2. Paste Google Sheet Document ID on get_pen_creations + sheets_update_pen\\n3. Attach Google Sheets + xAI Header Auth\\n4. Do not use Sheet 9 mixed lab rows or Sheet 13 molecules",
+        "content": "## peptide_pen_vid_gen\\nColumns = Sheet 9. Pen params = 3-image-scenes field names.\\nLive n8n: https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB\\nTab 14-pen-creations-150. Do not use Sheet 9 mixed lab rows or Sheet 13 molecules.",
         "height": 280,
         "width": 420,
         "color": 5

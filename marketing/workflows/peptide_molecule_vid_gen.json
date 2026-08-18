@@ -17,13 +17,14 @@
         "operation": "read",
         "documentId": {
           "__rl": true,
-          "value": "PASTE_GOOGLE_SHEET_DOCUMENT_ID",
+          "value": "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "13-chem-breakdown-54",
-          "mode": "name"
+          "value": "0",
+          "mode": "list",
+          "cachedResultName": "Sheet1"
         },
         "options": {}
       },
@@ -35,7 +36,7 @@
         240,
         300
       ],
-      "notes": "Set Document By ID. Sheet name must be exactly 13-chem-breakdown-54."
+      "notes": "Workbook 13-chem-breakdown-54. Live tab is still named Sheet1 (gid 0) after CSV import."
     },
     {
       "parameters": {
@@ -287,13 +288,14 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "PASTE_GOOGLE_SHEET_DOCUMENT_ID",
+          "value": "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
-          "value": "13-chem-breakdown-54",
-          "mode": "name"
+          "value": "0",
+          "mode": "list",
+          "cachedResultName": "Sheet1"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -322,7 +324,7 @@
     },
     {
       "parameters": {
-        "content": "## peptide_molecule_vid_gen\\nLinear: Sheet 13 → Grok still → Grok video 1.5 → sheets writeback.\\n1. Paste Google Sheet Document ID on get_chem_creations + sheets_update_chem\\n2. Attach Google Sheets + xAI Header Auth\\n3. Do not use Sheet 9 / vials",
+        "content": "## peptide_molecule_vid_gen\\nLinear: Sheet 13 workbook → Grok still → Grok video 1.5 → sheets writeback.\\nLive n8n: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq\\nTab is currently Sheet1 (CSV import). Do not use Sheet 9 / vials.",
         "height": 280,
         "width": 420,
         "color": 5

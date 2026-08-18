@@ -4,7 +4,9 @@
 **Not** the lab-vial daily path. **Not** molecules. **Not** Creatomate. **No Switch / IF.**
 
 **Sheet:** `14-pen-creations-150` (**columns from** `9-lab-item-creations-500`, not Sheet 13)  
-**Name the workflow exactly:** `peptide_pen_vid_gen`
+**Name the workflow exactly:** `peptide_pen_vid_gen`  
+**Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB  
+**Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
 Exactly **one** capped pre-filled research pen. Cap stays on. No vial.
@@ -34,10 +36,11 @@ manual_trigger
 
 ## After import
 
-1. Import tab `14-pen-creations-150` into the **same Google workbook**. Do **not** replace `3-image-scenes-150`.
-2. On `get_pen_creations` + `sheets_update_pen`: Document **By ID** (same ID both nodes) · Sheet **By Name** `14-pen-creations-150`.
-3. Attach **Google Sheets** credential and **xAI Header Auth** (same GROK_API as vial stills).
-4. Do not point this workflow at `9-lab-item-creations-500` (mixed lab) or `13-chem-breakdown-54` (molecules).
+Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header auth are attached.
+
+1. Do **not** replace `3-image-scenes-150` (Buffer tab stays header-only).
+2. Do not point this workflow at `9-lab-item-creations-500` (mixed lab) or `13-chem-breakdown-54` (molecules).
+3. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
 
 ---
 
