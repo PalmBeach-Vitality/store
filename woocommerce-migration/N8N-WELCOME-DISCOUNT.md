@@ -2,9 +2,14 @@
 
 Workflow name: **`Vitality.store_email_webhook`**
 
-Importable JSON: [`n8n/Vitality.store_email_webhook.json`](./n8n/Vitality.store_email_webhook.json)
+| | |
+|---|---|
+| n8n workflow | `Vitality.store_email_webhook` (id `zzB1jno5x9QW1UCr`) |
+| Status | **Active** |
+| Production webhook | `https://stockjohnson.app.n8n.cloud/webhook/vitality-store-email-webhook` |
+| Importable JSON | [`n8n/Vitality.store_email_webhook.json`](./n8n/Vitality.store_email_webhook.json) |
 
-The Palm Beach theme POSTs JSON to your n8n webhook when someone enters their email in the homepage popup.
+The Palm Beach theme POSTs JSON to this webhook when someone enters their email in the homepage popup.
 
 ## Webhook payload
 
@@ -20,20 +25,23 @@ The Palm Beach theme POSTs JSON to your n8n webhook when someone enters their em
 }
 ```
 
-## Import + activate
+## Wire to WordPress (Customizer)
 
-1. n8n → **Workflows → Import from File** → choose `Vitality.store_email_webhook.json`
-2. Open node **Email WELCOME20** → select your Gmail (or swap to SMTP) credential
-3. **Activate** the workflow
-4. Open **Welcome discount webhook** → copy the **Production** URL  
-   (path ends with `/webhook/vitality-store-email-webhook`)
-5. On WordPress: Appearance → Customize → **Palm Beach Storefront** → paste into **n8n webhook — welcome discount email** → Publish
+1. Upload theme **v2.10.29+** on [palmbeach-vitality.store](https://palmbeach-vitality.store)
+2. Appearance → Customize → **Palm Beach Storefront**
+3. Paste into **n8n webhook — welcome discount email**:
 
-## Flow (in the JSON)
+```
+https://stockjohnson.app.n8n.cloud/webhook/vitality-store-email-webhook
+```
 
-1. **Webhook** `POST` path `vitality-store-email-webhook`
+4. Publish → test the homepage popup
+
+## Flow
+
+1. **Webhook** `POST` `/webhook/vitality-store-email-webhook`
 2. **Code** — normalize email / coupon / HTML body
-3. **Gmail** — send WELCOME20 to the shopper (Reply-To sales@)
+3. **Gmail** (`Gmail account`) — send WELCOME20 (Reply-To sales@palmbeach-vitality.com)
 4. **Respond to Webhook** — `{ ok: true, email, coupon_code }`
 
 If the Customizer webhook field is empty, WordPress emails `WELCOME20` itself as a fallback.

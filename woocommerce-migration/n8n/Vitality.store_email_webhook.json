@@ -46,15 +46,15 @@
       "position": [760, 300],
       "credentials": {
         "gmailOAuth2": {
-          "id": "REPLACE_WITH_GMAIL_CREDENTIAL_ID",
-          "name": "Gmail — Palm Beach Vitality"
+          "id": "Tx1ufF7Jxq9yLprP",
+          "name": "Gmail account"
         }
       }
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, email: $json.email, coupon_code: $json.coupon_code }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, email: $('Normalize lead').item.json.email, coupon_code: $('Normalize lead').item.json.coupon_code }) }}",
         "options": {
           "responseCode": 200
         }
