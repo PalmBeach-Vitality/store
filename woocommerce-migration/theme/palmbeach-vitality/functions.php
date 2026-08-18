@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.28');
+define('PBV_THEME_VERSION', '2.10.29');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
-define('PBV_ANNOUNCE_FIX_VERSION', '2.10.25');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.29');
 
 /**
  * Default top announcement bar copy.
@@ -20,13 +20,14 @@ define('PBV_ANNOUNCE_FIX_VERSION', '2.10.25');
  * @return string
  */
 function pbv_default_announcement() {
-    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250!';
+    return 'New clients: 20% off with code WELCOME20 — enter your email to get it sent! Free shipping on research orders over $250! Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.';
 }
 
 require_once get_template_directory() . '/inc/product-research.php';
 require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/google-signin.php';
 require_once get_template_directory() . '/inc/order-sms.php';
+require_once get_template_directory() . '/inc/welcome-discount.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -424,7 +425,7 @@ function pbv_disable_blog_index() {
 add_action('template_redirect', 'pbv_disable_blog_index', 2);
 
 /**
- * Homepage lead popup form submission → email site admin.
+ * Homepage lead popup → n8n (preferred) or WP mail with WELCOME20.
  */
 function pbv_handle_lead_popup() {
     check_ajax_referer('pbv_lead_popup', 'nonce');
@@ -436,22 +437,78 @@ function pbv_handle_lead_popup() {
         wp_send_json_error(array('message' => 'Please enter a valid email address.'), 400);
     }
 
-    $to = get_option('admin_email');
-    $subject = sprintf('[%s] Learn more request', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES));
-    $body = "New homepage lead popup submission:\n\n"
-        . "Email: {$email}\n"
-        . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
-        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
-        . 'Page: ' . home_url('/') . "\n";
-
-    $headers = array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email);
-    $sent = wp_mail($to, $subject, $body, $headers);
-
-    if (!$sent) {
-        wp_send_json_error(array('message' => 'Could not send right now. Please try again.'), 500);
+    if (function_exists('pbv_ensure_welcome_coupon')) {
+        pbv_ensure_welcome_coupon();
     }
 
-    wp_send_json_success(array('message' => 'Thanks — we will be in touch soon.'));
+    $code    = defined('PBV_WELCOME_COUPON_CODE') ? PBV_WELCOME_COUPON_CODE : 'WELCOME20';
+    $percent = defined('PBV_WELCOME_COUPON_PERCENT') ? (int) PBV_WELCOME_COUPON_PERCENT : 20;
+
+    $payload = array(
+        'email'            => $email,
+        'optin'            => (bool) $optin,
+        'coupon_code'      => $code,
+        'discount_percent' => $percent,
+        'site'             => home_url('/'),
+        'source'           => 'homepage_lead_popup',
+        'submitted_at'     => gmdate('c'),
+    );
+
+    $delivered = false;
+    $via_n8n   = false;
+
+    if (function_exists('pbv_n8n_welcome_webhook_url') && pbv_n8n_welcome_webhook_url() !== '') {
+        $n8n = pbv_n8n_post_welcome_lead($payload);
+        if (!is_wp_error($n8n)) {
+            $delivered = true;
+            $via_n8n   = true;
+        }
+    }
+
+    if (!$delivered && function_exists('pbv_mail_welcome_coupon_to_customer')) {
+        $delivered = pbv_mail_welcome_coupon_to_customer($email);
+    }
+
+    // Always notify staff (non-blocking for the shopper response).
+    $admin = get_option('admin_email');
+    $staff = array_filter(array_unique(array($admin, 'sales@palmbeach-vitality.com')));
+    $staff_body = "Welcome discount request:\n\n"
+        . "Email: {$email}\n"
+        . "Code: {$code} ({$percent}% off)\n"
+        . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
+        . 'Delivery: ' . ($via_n8n ? 'n8n webhook' : ($delivered ? 'WordPress email' : 'FAILED')) . "\n"
+        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
+        . 'Page: ' . home_url('/') . "\n";
+    wp_mail(
+        implode(',', $staff),
+        sprintf('[%s] Welcome discount request', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES)),
+        $staff_body,
+        array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email)
+    );
+
+    if (!$delivered) {
+        wp_send_json_error(
+            array(
+                'message' => sprintf(
+                    'We could not email right now. Use code %s at checkout for %d%% off.',
+                    $code,
+                    $percent
+                ),
+            ),
+            500
+        );
+    }
+
+    wp_send_json_success(
+        array(
+            'message' => sprintf(
+                'Check your inbox — your code is %s (%d%% off your first order).',
+                $code,
+                $percent
+            ),
+            'coupon_code' => $code,
+        )
+    );
 }
 add_action('wp_ajax_pbv_lead_popup', 'pbv_handle_lead_popup');
 add_action('wp_ajax_nopriv_pbv_lead_popup', 'pbv_handle_lead_popup');
