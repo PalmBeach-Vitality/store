@@ -43,7 +43,8 @@ function penLookLock(name) {
   return (
     "HARD OUTPUT LOCK (READ FIRST): The hero is exactly ONE white matte plastic insulin-style injectable research pen " +
     "(medical injection pen), NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome display claw. " +
-    "Body: smooth matte white plastic cylinder. Left: white plastic cap WITH a white pocket clip — cap ON covering the tip, never a needle. " +
+    "PROPORTION: the pen body must be 10-20% longer than a stubby travel pen — full-length elongated adult injector, not compact, not short. Stretch the white barrel, keep diameter the same. " +
+    "Body: smooth matte white plastic cylinder, elongated. Left: white plastic cap WITH a white pocket clip — cap ON covering the tip, never a needle. " +
     "Small rectangular transparent window on the barrel beside the label (a glimpse of liquid only — not a tall glass reservoir). " +
     "Right: bright orange ridged dose-dial / injection button matching the orange on the label. " +
     "LABEL: white wrap-around. Far left bright BLUE DNA double-helix icon. Then '" +
@@ -197,7 +198,7 @@ return [
       video_prompt: videoPrompt,
       video_prompt_len: videoPrompt.length,
       video_motion_prompt: capPrompt(
-        "Keep the exact same white insulin-style pen, orange dial, blue DNA, orange '" +
+        "Keep the exact same white insulin-style pen, 10-20% longer full-length barrel, orange dial, blue DNA, orange '" +
           pick.compound_name +
           "' and orange '3ml pen' badge. Cap ON. No milligram dosage text. " +
           pick.video_motion_prompt

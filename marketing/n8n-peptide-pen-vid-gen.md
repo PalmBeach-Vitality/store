@@ -9,7 +9,7 @@
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **one** white matte insulin-style **3ml** pen. Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear.
+Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear.
 
 **Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
 

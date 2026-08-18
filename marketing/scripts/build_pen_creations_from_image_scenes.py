@@ -73,7 +73,8 @@ QUALITY = (
 
 STILL_EDIT = (
     "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
-    "with exactly ONE white matte plastic insulin-style 3ml injectable pen. Cap ON with white "
+    "with exactly ONE white matte plastic insulin-style 3ml injectable pen. Make the barrel 10-20% longer "
+    "(full-length elongated injector, not stubby/compact). Cap ON with white "
     "pocket clip. Small rectangular barrel window only (not a tall glass chamber). Bright orange "
     "ridged dose-dial on the end opposite the cap. Label: bright BLUE DNA helix + orange compound "
     "name + orange badge '3ml pen' only. DELETE burgundy vial branding, palm trees, milligram dosage, extra pens, "
@@ -89,7 +90,8 @@ CAPTION_LOCK = (
 # Same physical pen in every row. Only pose / surface change.
 # Hardware: white insulin-style injector (not a glass vial, not brushed silver).
 PEN_HARDWARE = (
-    "white matte plastic insulin-style 3ml injectable pen; white cap with white pocket clip ON "
+    "white matte plastic insulin-style 3ml injectable pen; body 10-20% longer than a stubby travel pen "
+    "(elongated barrel, adult full-length injector, not compact/short); white cap with white pocket clip ON "
     "covering the tip; small rectangular transparent barrel window beside the label "
     "(a glimpse of liquid/mechanism only — NOT a tall glass reservoir, NOT most of the body as glass); "
     "bright orange ridged dose-dial / injection button on the end opposite the cap"
@@ -252,7 +254,8 @@ def liquid_detail(name: str, form: str) -> str:
 def pen_lock(name: str) -> str:
     return (
         f"HARD OUTPUT LOCK (READ FIRST): Render exactly 1 white matte plastic insulin-style "
-        f"Palm Beach Vitality 3ml injectable pen labeled '{name}'. This is a medical injection pen, "
+        f"Palm Beach Vitality 3ml injectable pen labeled '{name}'. Barrel is 10-20% longer than a short "
+        f"travel pen — full-length elongated white injector, not stubby or compact. This is a medical injection pen, "
         f"NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. "
         f"Product count = 1. White cap ON with white pocket clip covering the tip — never removed, "
         f"never sitting beside the pen, never showing a needle. Bright orange ridged dose-dial on "
@@ -422,7 +425,7 @@ def motion_prompt(scene: dict) -> str:
         f"Slow cinematic camera: {move}. "
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "
-        f"Keep the exact same single white insulin-style '{name}' 3ml pen, orange dial, "
+        f"Keep the exact same single white insulin-style '{name}' 3ml pen (same 10-20% longer full-length barrel), orange dial, "
         "blue DNA icon, materials, and lighting. "
         "Cap stays ON. No orbit. No new objects. No second pen. No vial, people, needles, "
         "watermarks, burn-in, or on-screen disclaimers. "
@@ -519,6 +522,8 @@ def main() -> None:
             raise SystemExit(f"palm mark leaked: {r['creation_id']}")
         if "insulin-style" not in vp and "white matte" not in vp:
             raise SystemExit(f"missing white insulin-style hardware: {r['creation_id']}")
+        if "10-20%" not in r["video_prompt"] and "full-length" not in vp:
+            raise SystemExit(f"missing longer-pen proportion: {r['creation_id']}")
         if len(r["video_prompt"]) > PROMPT_MAX:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 
