@@ -48,16 +48,18 @@ FIELDS = [
 ]
 
 QUALITY = (
-    "photoreal, physically based 3D, razor sharp focus, 8k, HDR, "
+    "cinematic 3D medical animation, photoreal physically based, razor sharp molecule, 8k, HDR, "
     "exactly one molecular hero, product count equals 1, no second molecule, "
-    "no vials, no pens, no people"
+    "no vials, no pens, no people, no product studio"
 )
 
 STILL_EDIT = (
-    "CRITICAL: Keep exactly ONE 3D molecular model as the hero. "
-    "DELETE any extra molecules, duplicate peptide chains, vials, pens, syringes, "
-    "or product bottles. Keep lighting, camera, and environment. "
-    "Do not restyle the molecule into a cartoon. Count = 1."
+    "CRITICAL VIBE FIX: Replace any sunlit studio, white cyclorama, frosted glass pedestal, "
+    "spa, or lifestyle room with a DARK microscopic medical-animation scene. "
+    "Keep exactly ONE photoreal ball-and-stick 3D molecule hovering over a dark wet pebbled "
+    "cell-membrane / tissue landscape (navy-charcoal, glistening). Dramatic directional light, "
+    "shallow depth of field, floating microscopic particles. DELETE extra molecules, vials, pens, "
+    "product bottles, palm logos, URLs. Count = 1. Do not restyle into a cartoon."
 )
 
 COMPOUNDS = [
@@ -94,41 +96,45 @@ LOOKS = [
     {
         "suffix": "A",
         "category": "chem_studio",
-        "lab_item": "Chemical breakdown — sunlit glass studio molecule hero",
-        "surface": "frosted optical glass pedestal over white cyclorama",
-        "lighting": "soft high-key studio key plus warm rim; not a dark wet interior",
-        "color_grade": "clean editorial, true materials, gentle contrast",
-        "hero_style": "photoreal 3D molecule as luxury catalog hero",
+        "lab_item": "Chemical breakdown — dark microscopic membrane molecule hero",
+        "surface": "dark wet pebbled cell-membrane tissue, navy-charcoal, glistening mounds",
+        "lighting": "dramatic directional key from above-left; cool rim; deep shadows; not high-key",
+        "color_grade": "cool microscopic medical grade, high contrast pink/purple vs navy",
+        "hero_style": "cinematic 3D medical-animation ball-and-stick over a membrane",
         "shot_family": "push_in",
         "camera_angle": "eye-level",
         "camera_direction": "forward",
-        "framing": "9:16, molecule centered mid-frame, generous negative space",
-        "camera_move": "slow straight push-in toward the molecule, then hold",
+        "framing": "9:16, molecule mid-right over dark membrane, shallow DOF, generous dark negative space",
+        "camera_move": "slow cinematic push-in toward the molecule as it drifts over the wet membrane, then hold",
         "env": (
-            "A bright sunlit glass photography studio with a white cyclorama, "
-            "one frosted optical-glass pedestal, and a single 3D molecular model as the only hero. "
-            "Coastal daylight through tall windows. Palm-frond shadow may fall on the cyc once. "
-            "Air is clear — no dark body-fluid, no wet pores, no medical interior."
+            "DARK cinematic 3D medical animation at microscopic scale. Intra-body / extracellular fluid void. "
+            "A dark wet pebbled biological surface fills the lower frame like a cell membrane or glistening "
+            "tissue mounds (navy, charcoal, deep blue) with specular highlights. Tiny out-of-focus white "
+            "particles float in the dark fluid. Exactly one photoreal ball-and-stick molecule hovers just "
+            "above the membrane. Optional faint wispy energy filaments from atoms toward the surface. "
+            "Shallow depth of field, tack-sharp molecule, blurred foreground membrane and background void. "
+            "NOT a photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle."
         ),
     },
     {
         "suffix": "B",
         "category": "chem_creative",
-        "lab_item": "Chemical breakdown — creative photoreal environment molecule hero",
-        "surface": "honed pale stone with a shallow water sheen (not submerged)",
-        "lighting": "golden coastal window plus cool bounce; cinematic but airy",
-        "color_grade": "warm coastal grade, honest speculars on glass atoms",
-        "hero_style": "photoreal 3D molecule in a designed environment",
+        "lab_item": "Chemical breakdown — macro peptide chain over dark tissue",
+        "surface": "dense field of dark blue organic pebbles / cells, wet speculars",
+        "lighting": "backlit blue glow from behind the molecule plus hard spec on glossy atoms",
+        "color_grade": "high-contrast biotech: luminous peptide vs deep navy tissue",
+        "hero_style": "macro medical-animation peptide chain, cinematic bokeh",
         "shot_family": "static_lock",
         "camera_angle": "low-angle",
         "camera_direction": "no travel / locked",
-        "framing": "9:16, low heroic angle, molecule large in the lower third to mid-frame",
-        "camera_move": "locked tripod, molecule may slowly yaw a few degrees, then hold",
+        "framing": "9:16, long peptide chain vertical through frame over dark pebbled tissue",
+        "camera_move": "locked tripod, molecule slowly yaws a few degrees over the membrane, then hold",
         "env": (
-            "A designed Palm Beach research-showroom environment: pale stone, one prism catching "
-            "a rainbow caustic, distant out-of-focus glass architecture. The single molecular model "
-            "hovers just above the surface. Creative and premium — still photoreal. "
-            "Not a dark wet microscopy cavity, not a horror cell interior."
+            "DARK cinematic 3D medical animation, extreme close-up. The single peptide chain winds through "
+            "the frame above a dense dark-blue pebbled cellular landscape. Center of the chain is sharp; "
+            "ends fall into bokeh. A soft blue spotlight blooms behind the molecule. Floating microscopic "
+            "particles. Wet organic tissue, not stone, not glass furniture. "
+            "NOT a sunlit showroom. NOT pale stone. NOT a rainbow prism. NOT a product catalog set."
         ),
     },
 ]
@@ -136,11 +142,13 @@ LOOKS = [
 
 def molecule_lock(name: str) -> str:
     return (
-        f"HARD OUTPUT LOCK: exactly ONE 3D molecular model of '{name}' as the hero. "
+        f"HARD OUTPUT LOCK: exactly ONE 3D ball-and-stick molecular model of '{name}' as the hero. "
         "Hero count = 1. No second molecule, no background molecule, no vial, no pen, "
-        "no syringe, no people. Photoreal physically-based 3D (not cartoon, not sketch). "
-        f"If any text appears, print '{name}' once only in clean white sans-serif near the bottom. "
-        "A small circular palm-tree mark may appear once in the top-right. No other text."
+        "no syringe, no people. Cinematic photoreal 3D medical animation (not cartoon, not sketch, "
+        "not a product photo). Setting MUST be a dark microscopic wet cell-membrane landscape — "
+        "never a sunlit studio, never a white room, never a glass pedestal. "
+        f"If any text appears, print '{name}' once only in bold white sans-serif at bottom-center. "
+        "NO palm-tree logo, NO URL, NO watermark."
     )
 
 
@@ -154,23 +162,28 @@ def closing_lock() -> str:
 def video_prompt(name: str, look: dict, mol: str) -> str:
     lock = molecule_lock(name)
     body = (
-        f"Photoreal vertical 9:16 Palm Beach Vitality chemical-breakdown still. "
+        f"Vertical 9:16 Palm Beach Vitality chemical-breakdown still — DARK microscopic medical animation. "
         f"{look['env']} "
-        f"HERO: {mol}. Atoms feel like glass and metal with correct weight and refraction. "
-        "Shallow depth of field, cinematic macro lens, tack-sharp molecule, soft background. "
-        "No product packaging. No research-use disclaimer text. No captions, watermarks besides "
-        "the optional single palm mark. No medical claims in frame."
+        f"HERO: {mol}. Atoms are glossy translucent colored glass spheres with metallic/glass bonds, "
+        "correct weight and refraction, slight internal glow. "
+        "Shallow depth of field, cinematic macro lens, tack-sharp molecule, dark bokeh. "
+        "FORBIDDEN scenery: white cyclorama, sunlit photography studio, frosted optical-glass pedestal, "
+        "spa, lifestyle interior, windows, palm-frond wall shadows, product stands. "
+        "No product packaging. No research-use disclaimer. No logos, URLs, or palm watermarks. "
+        "No medical claims in frame."
     )
     return f"{lock} {body}{closing_lock()}"
 
 
 def motion(name: str, look: dict) -> str:
     return (
+        "Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. "
         f"Slow cinematic camera: {look['camera_move']}. "
-        f"Keep the exact same photoreal 3D '{name}' molecule, materials, and lighting. "
-        "The molecule may rotate a few degrees on its axis. No new objects. "
-        "No second molecule. No vials, people, needles, burn-in, or extra text. "
-        f"Keep label '{name}' unchanged if visible, once only."
+        f"Keep the exact same photoreal 3D '{name}' molecule, dark wet membrane, materials, and lighting. "
+        "Stay in the dark microscopic medical-animation world. Do not cut to a studio or pedestal. "
+        "The molecule may rotate a few degrees on its axis or drift slightly over the membrane. "
+        "No new objects. No second molecule. No vials, people, needles, logos, URLs, or extra text. "
+        f"Keep label '{name}' unchanged if visible, once only at bottom-center."
     )
 
 
@@ -308,6 +321,15 @@ def main() -> None:
     names = [r["compound_name"] for r in rows]
     if not window_ok(names):
         raise SystemExit("final sequence window failed")
+
+    for r in rows:
+        vp = r["video_prompt"].lower()
+        if "dark microscopic" not in vp and "medical animation" not in vp:
+            raise SystemExit(f"missing dark microscopic vibe {r['creation_id']}")
+        if "cell membrane" not in vp and "pebbled" not in vp:
+            raise SystemExit(f"missing membrane surface {r['creation_id']}")
+        if len(r["video_prompt"]) > 7900:
+            raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", newline="", encoding="utf-8") as f:
