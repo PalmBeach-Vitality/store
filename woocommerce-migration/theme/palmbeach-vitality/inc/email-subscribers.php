@@ -29,7 +29,7 @@ function pbv_get_email_subscribers() {
  * @return bool
  */
 function pbv_mailpoet_api_available() {
-    return class_exists('\MailPoet\API\API');
+    return class_exists('\MailPoet\API\API', false);
 }
 
 /**
@@ -136,7 +136,7 @@ function pbv_mailpoet_enable_signup_confirmation() {
     if (!pbv_should_touch_mailpoet()) {
         return;
     }
-    if (!class_exists('\MailPoet\Settings\SettingsController')) {
+    if (!class_exists('\MailPoet\Settings\SettingsController', false)) {
         return;
     }
     if (get_option('pbv_mailpoet_doi_set')) {
@@ -197,7 +197,7 @@ function pbv_mailpoet_subscriber_options() {
  * @return bool
  */
 function pbv_mailpoet_signup_confirmation_enabled() {
-    if (!pbv_should_touch_mailpoet() || !class_exists('\MailPoet\Settings\SettingsController')) {
+    if (!pbv_should_touch_mailpoet() || !class_exists('\MailPoet\Settings\SettingsController', false)) {
         return false;
     }
     try {
