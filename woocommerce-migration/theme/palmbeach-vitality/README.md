@@ -1,10 +1,10 @@
-# Palm Beach Vitality theme (v2.10.45)
+# Palm Beach Vitality theme (v2.10.46)
 
 WooCommerce storefront matched to your Shopify Horizon homepage:
 
 - White announcement bar + **2.35:1** logo banner + centered menu
-- Bundled lab/beach hero with brand copy (no product grid on homepage)
-- FAQ accordion + Terms and Conditions footer link
+- Bundled lab/beach hero with brand copy, shop-collection tiles, and a balanced product grid
+- Related products on each product page + FAQ accordion
 - Auto-seeds Primary menu, category shells, and key pages on activate
 
 ## Install

@@ -1,6 +1,6 @@
 <?php
 /**
- * Homepage — hero copy overlay + FAQ (no product grid).
+ * Homepage — hero copy overlay, collections, featured products, FAQ.
  *
  * @package PalmBeachVitality
  */
@@ -43,7 +43,8 @@ $hero_mobile = pbv_hero_mobile_image_url();
 .pbv-hero-photo__subtitle,
 .pbv-hero-photo__body,
 .pbv-hero-photo__welcome,
-.pbv-hero-photo__wholesale{
+.pbv-hero-photo__wholesale,
+.pbv-hero-photo__cta{
   display:block!important;visibility:visible!important;opacity:1!important;
   width:100%;max-width:22rem;flex-shrink:0;
 }
@@ -53,6 +54,12 @@ $hero_mobile = pbv_hero_mobile_image_url();
 .pbv-hero-photo__welcome{margin:.4rem 0 .55rem;font-size:clamp(1.06rem,3.9vw,1.27rem);font-weight:700;line-height:1.3;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.45);}
 .pbv-hero-photo__wholesale{margin:0;font-size:clamp(.74rem,2.65vw,.85rem);line-height:1.4;color:#fff;}
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
+.pbv-hero-photo__cta{margin:.85rem 0 .45rem;}
+.pbv-hero-photo__shop{
+  display:inline-flex!important;align-items:center;justify-content:center;
+  padding:.55rem 1.15rem;border-radius:999px;background:#fff;color:#0b1220!important;
+  font-size:.82rem;font-weight:700;text-decoration:none!important;text-shadow:none;
+}
 @media (min-width:750px){
   .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 0 .75rem!important;}
   /* Desktop: same width as Peptide Vials collection hero + logo */
@@ -106,9 +113,21 @@ $hero_mobile = pbv_hero_mobile_image_url();
       <p class="pbv-hero-photo__body">No shortcuts. No compromises. Just the finest peptides available — made right here in America with cutting-edge science and uncompromising quality standards.</p>
       <p class="pbv-hero-photo__welcome">Welcome to Palm Beach Vitality.<br>Where premium meets performance.</p>
       <p class="pbv-hero-photo__wholesale">For wholesale information please visit <a href="https://www.palmbeach-vitality.com">www.palmbeach-vitality.com</a></p>
+      <p class="pbv-hero-photo__cta">
+        <a class="pbv-hero-photo__shop" href="#shop-collections">Shop collections</a>
+      </p>
     </div>
   </div>
 </section>
+
+<?php
+if (function_exists('pbv_render_homepage_collections')) {
+    pbv_render_homepage_collections();
+}
+if (function_exists('pbv_render_homepage_products')) {
+    pbv_render_homepage_products();
+}
+?>
 
 <section class="pbv-faq" id="faq">
   <div class="pbv-container pbv-faq__inner">

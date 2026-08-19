@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.45');
+define('PBV_THEME_VERSION', '2.10.46');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -28,6 +28,7 @@ require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/google-signin.php';
 require_once get_template_directory() . '/inc/order-sms.php';
 require_once get_template_directory() . '/inc/welcome-discount.php';
+require_once get_template_directory() . '/inc/homepage-shop.php';
 require_once get_template_directory() . '/inc/email-subscribers.php';
 
 function pbv_asset_uri($relative) {
@@ -581,7 +582,7 @@ function pbv_woo_wrapper_end() {
 add_action('woocommerce_after_main_content', 'pbv_woo_wrapper_end', 10);
 
 function pbv_products_per_page() {
-    return 24;
+    return 48;
 }
 add_filter('loop_shop_per_page', 'pbv_products_per_page');
 
@@ -623,13 +624,14 @@ add_filter('loop_shop_columns', 'pbv_loop_columns');
  * - Main description first
  * - Research use only banner at bottom of description (every product)
  * - Short description + Add to cart below it
- * - No related products / upsells / data tabs
- * - No SKU / category / tags meta row
+ * - Related products after the product card (same collection)
+ * - No data tabs / SKU / category / tags meta row
  */
 function pbv_single_product_layout() {
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
+    add_action('woocommerce_after_single_product', 'woocommerce_output_related_products', 20);
 
     // Cover both classic and current WooCommerce hook priorities.
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
@@ -755,10 +757,16 @@ function pbv_single_product_details_and_cart() {
     echo '</div>';
 }
 
-add_filter('woocommerce_output_related_products_args', 'pbv_disable_related_products');
-function pbv_disable_related_products($args) {
-    $args['posts_per_page'] = 0;
+add_filter('woocommerce_output_related_products_args', 'pbv_related_products_args');
+function pbv_related_products_args($args) {
+    $args['posts_per_page'] = 4;
+    $args['columns']        = 4;
     return $args;
+}
+
+add_filter('woocommerce_product_related_products_heading', 'pbv_related_products_heading');
+function pbv_related_products_heading() {
+    return __('More from this collection', 'palmbeach-vitality');
 }
 
 function pbv_cart_link() {

@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.45
+Version: 2.10.46
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -334,7 +334,8 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo__subtitle,
 .pbv-hero-photo__body,
 .pbv-hero-photo__welcome,
-.pbv-hero-photo__wholesale {
+.pbv-hero-photo__wholesale,
+.pbv-hero-photo__cta {
   display: block;
   width: 100%;
   max-width: 22rem;
@@ -399,6 +400,29 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo__wholesale a:hover {
   opacity: 1;
   color: #a8dbff;
+}
+
+.pbv-hero-photo__cta {
+  margin: 0.85rem 0 0.45rem;
+}
+
+.pbv-hero-photo__shop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #0b1220 !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+.pbv-hero-photo__shop:hover {
+  opacity: 0.92;
+  color: #0b1220 !important;
 }
 
 .pbv-hero-photo--placeholder {
@@ -498,6 +522,130 @@ a:hover { opacity: 0.7; }
 
 .pbv-popular__empty {
   color: var(--pbv-muted);
+}
+
+/* Homepage collections + featured products */
+.pbv-home-shop,
+.pbv-home-products {
+  padding: clamp(2.25rem, 6vw, 3.75rem) 0;
+}
+
+.pbv-home-shop {
+  background: #fff;
+}
+
+.pbv-home-products {
+  background: var(--pbv-soft);
+}
+
+.pbv-home-shop__inner,
+.pbv-home-products__inner {
+  width: var(--pbv-cat-hero-col);
+  margin-inline: auto;
+}
+
+.pbv-home-shop__title {
+  font-family: var(--pbv-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  text-align: center;
+  margin: 0 0 0.45rem;
+  color: #111;
+}
+
+.pbv-home-shop__lede {
+  margin: 0 auto 1.6rem;
+  max-width: 32rem;
+  text-align: center;
+  color: var(--pbv-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.pbv-home-collections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.pbv-home-collection {
+  position: relative;
+  display: block;
+  min-height: 10.5rem;
+  border-radius: 1.15rem;
+  overflow: hidden;
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+}
+
+.pbv-home-collection:hover {
+  opacity: 1;
+}
+
+.pbv-home-collection__media,
+.pbv-home-collection__overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.pbv-home-collection__media {
+  background: #12304a center / cover no-repeat;
+}
+
+.pbv-home-collection__overlay {
+  background: linear-gradient(180deg, rgba(3, 10, 22, 0.28) 0%, rgba(3, 10, 22, 0.78) 100%);
+}
+
+.pbv-home-collection__copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 10.5rem;
+  padding: 1.15rem 1.1rem;
+}
+
+.pbv-home-collection__kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7ec8ff;
+  font-weight: 700;
+}
+
+.pbv-home-collection__name {
+  margin-top: 0.2rem;
+  font-size: 1.22rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.pbv-home-products__more {
+  margin: 1.6rem 0 0;
+  text-align: center;
+}
+
+.pbv-home-products__more .btn {
+  min-width: 12rem;
+}
+
+.pbv-home-products ul.products {
+  margin-bottom: 0;
+}
+
+@media (min-width: 700px) {
+  .pbv-home-collections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .pbv-home-collection,
+  .pbv-home-collection__copy {
+    min-height: 12.5rem;
+  }
 }
 
 /* FAQ */
@@ -1166,9 +1314,22 @@ a:hover { opacity: 0.7; }
   }
 }
 
-.woocommerce div.product .related.products,
-.woocommerce div.product .upsells.products {
-  display: none !important;
+.related.products,
+.upsells.products {
+  width: 100%;
+  margin: 0 auto 2.5rem;
+  padding-top: 0.5rem;
+  text-align: center;
+}
+
+.related.products > h2,
+.upsells.products > h2 {
+  font-family: var(--pbv-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  margin: 0 0 1.35rem;
+  color: #111;
 }
 
 @media (min-width: 900px) {
