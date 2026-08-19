@@ -1,6 +1,6 @@
 <?php
 /**
- * New-client 20% welcome discount (WELCOME20) + email capture → n8n.
+ * Store coupons: WELCOME20 (new-client 20%) + AS-1010 (10%, stackable).
  *
  * @package PalmBeachVitality
  */
@@ -9,35 +9,55 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-/** Coupon code shown in banner / emails. */
+/** New-client welcome code. */
 define('PBV_WELCOME_COUPON_CODE', 'WELCOME20');
 
 /** Percent off for new clients. */
 define('PBV_WELCOME_COUPON_PERCENT', 20);
 
+/** Stackable promo code. */
+define('PBV_STACK_COUPON_CODE', 'AS-1010');
+
+/** Stackable promo percent. */
+define('PBV_STACK_COUPON_PERCENT', 10);
+
 /**
- * Ensure the WELCOME20 WooCommerce coupon exists.
+ * Create or sync a percent coupon.
  *
- * @return int|false Coupon post ID or false.
+ * @param string $code        Coupon code.
+ * @param float  $percent     Discount percent.
+ * @param string $description Admin description.
+ * @param array  $args {
+ *     @type bool $individual_use      Whether coupon is exclusive.
+ *     @type int  $usage_limit_per_user Per-customer usage limit (0 = unlimited).
+ * }
+ * @return int|false Coupon ID or false.
  */
-function pbv_ensure_welcome_coupon() {
+function pbv_ensure_percent_coupon($code, $percent, $description, $args = array()) {
     if (!class_exists('WC_Coupon') || !function_exists('wc_get_coupon_id_by_code')) {
         return false;
     }
 
-    $code = PBV_WELCOME_COUPON_CODE;
-    $existing_id = wc_get_coupon_id_by_code($code);
-    if ($existing_id) {
-        return (int) $existing_id;
+    $code = wc_format_coupon_code($code);
+    if ($code === '') {
+        return false;
     }
 
-    $coupon = new WC_Coupon();
+    $defaults = array(
+        'individual_use'       => false,
+        'usage_limit_per_user' => 0,
+    );
+    $args = wp_parse_args($args, $defaults);
+
+    $existing_id = wc_get_coupon_id_by_code($code);
+    $coupon      = $existing_id ? new WC_Coupon($existing_id) : new WC_Coupon();
+
     $coupon->set_code($code);
-    $coupon->set_description(__('New-client welcome discount — 20% off first order.', 'palmbeach-vitality'));
+    $coupon->set_description($description);
     $coupon->set_discount_type('percent');
-    $coupon->set_amount((float) PBV_WELCOME_COUPON_PERCENT);
-    $coupon->set_individual_use(true);
-    $coupon->set_usage_limit_per_user(1);
+    $coupon->set_amount((float) $percent);
+    $coupon->set_individual_use((bool) $args['individual_use']);
+    $coupon->set_usage_limit_per_user((int) $args['usage_limit_per_user']);
     $coupon->set_free_shipping(false);
     $coupon->set_exclude_sale_items(false);
     $coupon->save();
@@ -46,28 +66,66 @@ function pbv_ensure_welcome_coupon() {
 }
 
 /**
- * One-time / recurring seed so Marketing → Coupons has WELCOME20.
+ * Ensure WELCOME20 exists (new clients, 1× per customer, stackable with AS-1010).
+ *
+ * @return int|false
+ */
+function pbv_ensure_welcome_coupon() {
+    return pbv_ensure_percent_coupon(
+        PBV_WELCOME_COUPON_CODE,
+        (float) PBV_WELCOME_COUPON_PERCENT,
+        __('New-client welcome discount — 20% off first order (1 use per client; stacks with AS-1010).', 'palmbeach-vitality'),
+        array(
+            'individual_use'       => false,
+            'usage_limit_per_user' => 1,
+        )
+    );
+}
+
+/**
+ * Ensure AS-1010 exists (10%, stackable with WELCOME20).
+ *
+ * @return int|false
+ */
+function pbv_ensure_stack_coupon() {
+    return pbv_ensure_percent_coupon(
+        PBV_STACK_COUPON_CODE,
+        (float) PBV_STACK_COUPON_PERCENT,
+        __('Promo AS-1010 — 10% off (stacks with WELCOME20).', 'palmbeach-vitality'),
+        array(
+            'individual_use'       => false,
+            'usage_limit_per_user' => 0,
+        )
+    );
+}
+
+/**
+ * Seed / sync store coupons.
  */
 function pbv_seed_welcome_coupon_once() {
     if (!function_exists('WC')) {
         return;
     }
     update_option('woocommerce_enable_coupons', 'yes');
-    if (get_option('pbv_welcome_coupon_version') === '1.0.0') {
-        // Still ensure it exists if someone deleted it.
+
+    $version = '1.1.0'; // 1.1.0: AS-1010 + allow stacking (WELCOME20 individual_use off).
+    if (get_option('pbv_welcome_coupon_version') === $version) {
         pbv_ensure_welcome_coupon();
+        pbv_ensure_stack_coupon();
         return;
     }
+
     pbv_ensure_welcome_coupon();
-    update_option('pbv_welcome_coupon_version', '1.0.0');
+    pbv_ensure_stack_coupon();
+    update_option('pbv_welcome_coupon_version', $version);
 }
 add_action('woocommerce_init', 'pbv_seed_welcome_coupon_once', 40);
 
 /**
- * New customers only: no completed/processing orders for this email/user.
+ * WELCOME20: new customers only (first order) + already limited to 1 use per user.
  *
- * @param bool       $valid  Whether coupon is valid.
- * @param WC_Coupon  $coupon Coupon.
+ * @param bool         $valid     Whether coupon is valid.
+ * @param WC_Coupon    $coupon    Coupon.
  * @param WC_Discounts $discounts Discounts helper (unused).
  * @return bool
  */
@@ -85,7 +143,7 @@ function pbv_welcome_coupon_new_customers_only($valid, $coupon, $discounts = nul
         $email = $user && $user->user_email ? $user->user_email : '';
         $count = wc_get_customer_order_count(get_current_user_id());
         if ($count > 0) {
-            throw new Exception(__('WELCOME20 is for new clients only (first order).', 'palmbeach-vitality'));
+            throw new Exception(__('WELCOME20 is for new clients only (first order, one use).', 'palmbeach-vitality'));
         }
     }
 
@@ -109,7 +167,7 @@ function pbv_welcome_coupon_new_customers_only($valid, $coupon, $discounts = nul
             )
         );
         if (!empty($orders)) {
-            throw new Exception(__('WELCOME20 is for new clients only (first order).', 'palmbeach-vitality'));
+            throw new Exception(__('WELCOME20 is for new clients only (first order, one use).', 'palmbeach-vitality'));
         }
     }
 
@@ -210,8 +268,9 @@ function pbv_mail_welcome_coupon_to_customer($email) {
     );
     $body = "Welcome to Palm Beach Vitality.\n\n"
         . "Your new-client discount code is: {$code}\n"
-        . "That's {$percent}% off your first order.\n\n"
-        . "Apply it at checkout:\n{$shop}\n\n"
+        . "That's {$percent}% off your first order (one-time use for new clients).\n"
+        . 'You can also stack promo code ' . PBV_STACK_COUPON_CODE . ' for an extra ' . (int) PBV_STACK_COUPON_PERCENT . "% off.\n\n"
+        . "Apply them at checkout:\n{$shop}\n\n"
         . "Questions? Reply to this email or write sales@palmbeach-vitality.com.\n";
 
     $headers = array(
@@ -233,10 +292,12 @@ function pbv_checkout_welcome_coupon_hint() {
     echo '<p class="pbv-welcome-coupon-hint">'
         . esc_html(
             sprintf(
-                /* translators: 1: coupon code, 2: percent */
-                __('New client? Use code %1$s for %2$d%% off your first order (enter email on the homepage popup if you need it sent).', 'palmbeach-vitality'),
+                /* translators: 1: welcome code, 2: welcome %, 3: stack code, 4: stack % */
+                __('New clients: %1$s = %2$d%% off (first order, one use). Stack with %3$s for an extra %4$d%% off.', 'palmbeach-vitality'),
                 PBV_WELCOME_COUPON_CODE,
-                (int) PBV_WELCOME_COUPON_PERCENT
+                (int) PBV_WELCOME_COUPON_PERCENT,
+                PBV_STACK_COUPON_CODE,
+                (int) PBV_STACK_COUPON_PERCENT
             )
         )
         . '</p>';
