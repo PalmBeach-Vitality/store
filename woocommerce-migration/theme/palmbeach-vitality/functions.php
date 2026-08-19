@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.36');
+define('PBV_THEME_VERSION', '2.10.37');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -28,6 +28,7 @@ require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/google-signin.php';
 require_once get_template_directory() . '/inc/order-sms.php';
 require_once get_template_directory() . '/inc/welcome-discount.php';
+require_once get_template_directory() . '/inc/email-subscribers.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -438,16 +439,28 @@ function pbv_handle_lead_popup() {
     }
 
     $payload = array(
-        'email'        => $email,
-        'optin'        => (bool) $optin,
-        'site'         => home_url('/'),
-        'shop_url'     => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/'),
-        'logo_url'     => function_exists('pbv_intro_email_logo_url') ? pbv_intro_email_logo_url() : '',
-        'bg_url'       => function_exists('pbv_intro_email_bg_url') ? pbv_intro_email_bg_url() : '',
-        'source'       => 'homepage_subscribe_popup',
-        'email_type'   => 'intro',
-        'submitted_at' => gmdate('c'),
+        'email'          => $email,
+        'optin'          => (bool) $optin,
+        'site'           => home_url('/'),
+        'shop_url'       => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/'),
+        'logo_url'       => function_exists('pbv_intro_email_logo_url') ? pbv_intro_email_logo_url() : '',
+        'bg_url'         => function_exists('pbv_intro_email_bg_url') ? pbv_intro_email_bg_url() : '',
+        'coupon_code'    => defined('PBV_WELCOME_COUPON_CODE') ? PBV_WELCOME_COUPON_CODE : '',
+        'coupon_percent' => defined('PBV_WELCOME_COUPON_PERCENT') ? (int) PBV_WELCOME_COUPON_PERCENT : 0,
+        'source'         => 'homepage_subscribe_popup',
+        'email_type'     => 'intro',
+        'submitted_at'   => gmdate('c'),
     );
+
+    if (function_exists('pbv_record_email_subscriber')) {
+        pbv_record_email_subscriber(
+            $email,
+            array(
+                'optin'  => $optin,
+                'source' => 'homepage_subscribe_popup',
+            )
+        );
+    }
 
     $delivered = false;
     $via_n8n   = false;

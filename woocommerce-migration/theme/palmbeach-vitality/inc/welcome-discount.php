@@ -329,7 +329,7 @@ function pbv_intro_email_html($shop_url, $logo_url, $bg_url = '') {
                     <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#c8d6e0;">You\'re on the list. We build research-grade peptides around cutting-edge research, rigorous quality standards, and formulations that actually perform — documented, COA-backed, and intended for laboratory use only.</p>
                     <p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#e8f1f7;">As a subscriber you\'ll get:</p>
                     <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> Weekly / monthly research notes</p>
-                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> Exclusive discount codes</p>
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> ' . (int) PBV_WELCOME_COUPON_PERCENT . '% off your first order with code <strong style="color:#00d4ff;font-weight:700;">' . esc_html(PBV_WELCOME_COUPON_CODE) . '</strong></p>
                     <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> First access to new compounds</p>
                     <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> A direct line to the team</p>
                     <table role="presentation" cellpadding="0" cellspacing="0">
@@ -371,7 +371,7 @@ function pbv_intro_email_text($shop_url) {
         . "You're on the Palm Beach Vitality list — research-driven peptides and performance compounds, built around rigorous quality standards and formulations that actually perform.\n\n"
         . "As a subscriber you'll get:\n"
         . "- Weekly / monthly research notes\n"
-        . "- Exclusive discount codes\n"
+        . '- ' . (int) PBV_WELCOME_COUPON_PERCENT . '% off your first order with code ' . PBV_WELCOME_COUPON_CODE . "\n"
         . "- First access to new compounds\n"
         . "- A direct line to the team\n\n"
         . "Explore the catalog: {$shop_url}\n\n"
