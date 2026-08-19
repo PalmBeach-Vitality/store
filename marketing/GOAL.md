@@ -72,6 +72,18 @@ get_pen_creations → pick_pen_creation
 
 See `n8n-peptide-pen-vid-gen.md`. Import JSON: `marketing/workflows/peptide_pen_vid_gen.json`.
 
+### E — `peptide_caption_gen` (separate)
+
+IG captions for **vial** and **pen** (2 each). Manual compound name → Sheet 15 science brief → FDA verify → email. Not Creatomate. Not vid gen. Linear — no Switch/IF.
+
+```text
+enter_compound → get_caption_science → match_compound
+  → build_captions → verify_fda_captions
+  → prep_caption_email → gmail_send_captions → sheets_append_captions
+```
+
+See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
