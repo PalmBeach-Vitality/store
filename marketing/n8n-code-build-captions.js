@@ -4,7 +4,8 @@
 // After: match_compound
 // Before: verify_fda_captions
 //
-// 2 vial + 2 pen captions. Same science, different product-form language.
+// 2 vial + 2 pen captions. Same science family, different form language.
+// Vial 1 matches the short catalog format Salvatore approved.
 
 function firstJson(name) {
   try {
@@ -21,14 +22,25 @@ function toHashtag(name) {
   return raw ? '#' + raw : '#PeptideResearch';
 }
 
+function cleanSentence(s) {
+  return String(s || '')
+    .replace(/\s+/g, ' ')
+    .replace(/\s+\./g, '.')
+    .trim()
+    .replace(/\.+$/, '');
+}
+
 var m = firstJson('match_compound');
 var name = String(m.compound_name || '').trim();
 if (!name) throw new Error('build_captions: compound_name missing from match_compound.');
 
-var what = String(m.science_what || '').trim();
-var focus = String(m.science_focus || '').trim();
-var pathways = String(m.science_pathways || '').trim();
+var what = cleanSentence(m.science_what);
+var focus = cleanSentence(m.science_focus);
+var pathways = cleanSentence(m.science_pathways);
 var url = String(m.store_url || 'www.palmbeach-vitality.store').trim();
+if (!what || !focus || !pathways) {
+  throw new Error('build_captions: Sheet 15 science_what / science_focus / science_pathways incomplete for ' + name);
+}
 
 var tags = [
   toHashtag(name),
@@ -42,26 +54,23 @@ function pack(body, cta) {
   return (body + '\n' + cta + '\n' + tags).replace(/\s+\n/g, '\n').trim();
 }
 
-var vialCtaA = 'Explore research-grade ' + name + ' in the 10ml laboratory vial catalog at ' + url;
-var vialCtaB = 'Browse the 10ml research vial listing for ' + name + ' at ' + url;
-var penCtaA = 'Explore research-grade ' + name + ' in the 3ml research pen catalog at ' + url;
-var penCtaB = 'Browse the 3ml research pen listing for ' + name + ' at ' + url;
-
+// Vial 1 = approved short CTA. Vial 2 names the 10ml vial listing.
+// Pen copy stays in the same science family with different verbs + 3ml pen CTA.
 var vial1 = pack(
   name + ' is ' + what + '. Research focuses on ' + focus + '.',
-  vialCtaA
+  'Explore research-grade ' + name + ' at ' + url
 );
 var vial2 = pack(
   name + ' is studied as ' + what + '. Laboratory work examines ' + pathways + '.',
-  vialCtaB
+  'Browse the 10ml research vial listing for ' + name + ' at ' + url
 );
 var pen1 = pack(
-  name + ' is ' + what + '. Research focuses on ' + focus + '.',
-  penCtaA
+  name + ' is ' + what + '. Research maps ' + focus + '.',
+  'Explore research-grade ' + name + ' in the 3ml pen catalog at ' + url
 );
 var pen2 = pack(
-  name + ' is studied as ' + what + '. Laboratory work examines ' + pathways + '.',
-  penCtaB
+  name + ' is cataloged as ' + what + '. Laboratory work examines ' + pathways + '.',
+  'Browse the 3ml research pen listing for ' + name + ' at ' + url
 );
 
 return [

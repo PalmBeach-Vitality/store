@@ -15,6 +15,8 @@ Type the compound in `enter_compound`, Execute. You get **2 vial + 2 pen** capti
 2. Catalog CTA + `www.palmbeach-vitality.store`
 3. Exactly **5 hashtags** — first hashtag is always the compound name (`#BPC157`)
 
+Vial 1 is the short approved CTA. Pen captions stay in the same science family with different verbs and a 3ml pen line.
+
 **fx:** **ON** = Expression · **OFF** = Fixed
 
 ---
@@ -109,7 +111,7 @@ Paste: `marketing/n8n-code-build-captions.js`
 
 **Check:** `vial_caption_1`, `vial_caption_2`, `pen_caption_1`, `pen_caption_2`
 
-Vial CTA uses **10ml laboratory vial**. Pen CTA uses **3ml research pen**. Science sentences stay the same family, different form line.
+Vial 1 uses the short approved CTA (`Explore research-grade NAME at URL`). Vial 2 names the **10ml research vial** listing. Pen copy stays in the same science family with different verbs and a **3ml pen** CTA.
 
 ---
 
@@ -127,6 +129,7 @@ Stops the run (no IF) if any caption has:
 - not exactly 5 hashtags
 - first hashtag ≠ compound
 - vial copy that reads as a pen (or the reverse)
+- vial 1 and pen 1 identical (or vial 2 / pen 2)
 
 **Check:** `verify_status` = `accepted`
 
