@@ -38,7 +38,7 @@ manual_trigger
   → sheets_update_chem
 ```
 
-Grok’s generate API max is **15 seconds**. A 30s clip is **two 15s jobs**: generate 15s, then one silent 15s extend (xAI stitches them into one file). Set `VIDEO_SECONDS` in `enter_video_seconds` before Execute.
+Grok’s generate API max is **15 seconds**. `VIDEO_SECONDS = 30` is **two jobs**: generate 15s on `grok-imagine-video-1.5`, then one silent **10s** extend on `grok-imagine-video` (xAI stitches them into one file, ≈ **25s**). Extend only works on `grok-imagine-video` — `grok-imagine-video-1.5` returns *Video extension is not supported for this model.* Duration on `/videos/extensions` is seconds **added** (max 10), not total length. Set `VIDEO_SECONDS` in `enter_video_seconds` before Execute.
 
 ---
 
@@ -68,7 +68,7 @@ Paste: `marketing/n8n-code-enter-video-seconds.js`
 |---|---|---|
 | Mode | — | Run Once for All Items |
 | Execute Once | — | **OFF** |
-| `VIDEO_SECONDS` in code | **OFF** | `15` (default) or `30` |
+| `VIDEO_SECONDS` in code | **OFF** | `15` (default) or `30` (15s gen + 10s extend ≈ 25s) |
 
 **Check:** `video_seconds` is 15 or 30.
 
@@ -229,7 +229,7 @@ Must be **enabled**.
 
 ## Nodes 10b–10e — 30s extend (linear, no Switch)
 
-Grok cannot generate 30s in one call. **Two 15s jobs:** generate 15s, then one silent 15s extend. When `VIDEO_SECONDS = 15` this hop **GET**s the finished 15s clip (wait 2s) and does not call `/videos/extensions`. When `VIDEO_SECONDS = 30` it POSTs one 15s silent extend.
+Grok cannot generate 30s in one call. **Two jobs:** generate 15s on `grok-imagine-video-1.5`, then one silent **10s** extend on `grok-imagine-video` (combined ≈ 25s). When `VIDEO_SECONDS = 15` this hop **GET**s the finished 15s clip (wait 2s) and does not call `/videos/extensions`. When `VIDEO_SECONDS = 30` it POSTs `model: grok-imagine-video`, `duration: 10`. Never send `grok-imagine-video-1.5` on the extend body.
 
 **`prep_molecule_extend_1`** — Code. Paste `marketing/n8n-code-prep-molecule-video-extend.js`. Execute Once **OFF**.
 
@@ -253,7 +253,7 @@ Grok cannot generate 30s in one call. **Two 15s jobs:** generate 15s, then one s
 |---|---|---|
 | URL | **ON** | `={{ 'https://api.x.ai/v1/videos/' + ($('grok_video_extend_1').first().json.request_id \|\| $('prep_molecule_extend_1').first().json.poll_request_id) }}` |
 
-**Check (30):** final `video.duration` is 30. Clip stays muted. No logo, no text.
+**Check (30):** final `video.duration` is ≈ 25 (15 + 10). Clip stays muted. No logo, no text.
 
 ---
 

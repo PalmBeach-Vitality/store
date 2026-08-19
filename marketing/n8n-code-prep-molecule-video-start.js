@@ -52,7 +52,8 @@ var modelVideo = String(
 ).trim();
 var wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);
 if (wanted !== 30) wanted = 15;
-// First clip is always 15s — Grok generate max. 30s is a second 15s silent extend.
+// First clip is always 15s — Grok generate max. Longer clips add a 10s
+// silent extend on grok-imagine-video (1.5 cannot extend).
 var duration = 15;
 var resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();
 

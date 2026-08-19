@@ -5,9 +5,12 @@
 // After: grok_video_poll
 // Before: grok_video_extend_1
 //
-// 30s = two 15s Grok jobs: generate 15, then one silent 15s extend
-// (API returns one combined clip). VIDEO_SECONDS=15 skips the extend
-// (GET the finished 15s clip).
+// VIDEO_SECONDS=30 = generate 15s on grok-imagine-video-1.5, then one
+// silent extend on grok-imagine-video (the ONLY model that supports
+// /videos/extensions). Extend duration is seconds ADDED, max 10.
+// Combined clip ≈ 25s. grok-imagine-video-1.5 cannot extend (400:
+// "Video extension is not supported for this model.").
+// VIDEO_SECONDS=15 skips the extend (GET the finished 15s clip).
 
 function firstJson(name) {
   try {
@@ -40,7 +43,8 @@ var start = firstJson('grok_video_start');
 var poll = ($input.first() && $input.first().json) || {};
 var sourceUrl = videoUrlFrom(poll) || videoUrlFrom(firstJson('grok_video_poll'));
 var originId = String(start.request_id || '').trim();
-var extendSeconds = 15;
+// xAI extend: duration = seconds added (2–10), not total length.
+var extendSeconds = 10;
 var waitSeconds = doExtend ? 200 : 2;
 
 if (doExtend && !sourceUrl) {
@@ -60,7 +64,7 @@ if (motion.length > 700) {
 }
 
 var body = {
-  model: 'grok-imagine-video-1.5',
+  model: 'grok-imagine-video',
   prompt: motion,
   duration: extendSeconds,
   video: { url: sourceUrl },
@@ -80,6 +84,7 @@ return [
       video_seconds: wanted,
       extend_applied: doExtend,
       extend_seconds: doExtend ? extendSeconds : 0,
+      extend_model: doExtend ? 'grok-imagine-video' : '',
       wait_seconds: waitSeconds,
       source_video_url: sourceUrl,
       poll_request_id: originId,
