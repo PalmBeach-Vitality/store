@@ -10,7 +10,7 @@ Gmail shows **This message isn't authenticated and the sender can't be verified*
 
 WordPress.com is **not** on that SPF list. Theme v2.10.39+ sends WordPress mail From `wordpress@palmbeach-vitality.store` instead.
 
-n8n **Email intro** uses Gmail credential **Gmail account 3**. That login must be the **sales@** Workspace mailbox.
+n8n **Email intro** uses Gmail credential **Gmail account 2** (`IVBMByCjDhHJYhXB`). That login must be the **sales@** Workspace mailbox.
 
 Normalize lead → **Email intro** → Respond 200
 
@@ -19,7 +19,7 @@ Normalize lead → **Email intro** → Respond 200
 Do these in order. Skip anything already done.
 
 ### 1. Confirm n8n is actually sales@
-In n8n, open the **Gmail account 3** credential. The Google account on the consent screen must be **sales@palmbeach-vitality.com**, not `salvatorejohnson1984@gmail.com`.
+In n8n, open the **Gmail account 2** credential (`IVBMByCjDhHJYhXB`). The Google account on the consent screen must be **sales@palmbeach-vitality.com**, not `salvatorejohnson1984@gmail.com`.
 
 Send a test from n8n. In the received message, **Show original**. `From:` must be `sales@palmbeach-vitality.com`.
 
@@ -65,7 +65,7 @@ Send one intro to a Gmail inbox you control. Open the message → **⋮ → Show
 - `DKIM: PASS` with `d=palmbeach-vitality.com` (not `d=gmail.com`)
 - `DMARC: PASS`
 
-If DKIM is `d=gmail.com`, n8n is still the personal Gmail login. Reconnect **Gmail account 3** as sales@.
+If DKIM is `d=gmail.com`, n8n is still the personal Gmail login. Reconnect **Gmail account 2** as sales@.
 
 ## MailPoet confirmation emails
 
