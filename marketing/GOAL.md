@@ -84,6 +84,10 @@ enter_compound → get_caption_science → match_compound
 
 See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
 
+### F — `sheet_format_as_tables` (one-shot)
+
+Converts marketing Google Sheets into Tables (table menu + header dropdowns). Does not change cell data. See `n8n-sheet-format-as-tables.md`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
