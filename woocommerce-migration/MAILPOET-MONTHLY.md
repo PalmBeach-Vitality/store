@@ -1,6 +1,8 @@
 # MailPoet — subscribers + monthly email blog
 
-WordPress.com Commerce already includes **MailPoet** and **MailPoet Premium**. The theme (v2.10.38+) saves every homepage-popup signup and adds them to MailPoet when the plugin is active.
+WordPress.com Commerce already includes **MailPoet** and **MailPoet Premium**. The theme (v2.10.39+) saves every homepage-popup signup and adds them to MailPoet when the plugin is active.
+
+Authenticate **palmbeach-vitality.com** in MailPoet → Settings → Send with… so confirmation mail is signed (SPF/DKIM). Otherwise Gmail shows “sender can’t be verified” and files it in spam. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
 
 ## Sign-up confirmation (double opt-in)
 

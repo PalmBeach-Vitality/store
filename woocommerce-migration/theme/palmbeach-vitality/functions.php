@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.38');
+define('PBV_THEME_VERSION', '2.10.39');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -464,12 +464,15 @@ function pbv_handle_lead_popup() {
 
     $delivered = false;
     $via_n8n   = false;
+    $n8n_note  = '';
 
     if (function_exists('pbv_n8n_welcome_webhook_url') && pbv_n8n_welcome_webhook_url() !== '') {
         $n8n = pbv_n8n_post_welcome_lead($payload);
         if (!is_wp_error($n8n)) {
             $delivered = true;
             $via_n8n   = true;
+        } else {
+            $n8n_note = $n8n->get_error_message();
         }
     }
 
@@ -480,10 +483,20 @@ function pbv_handle_lead_popup() {
     // Always notify staff (non-blocking for the shopper response).
     $admin = get_option('admin_email');
     $staff = array_filter(array_unique(array($admin, 'sales@palmbeach-vitality.com')));
+    $mp_status = '';
+    if (function_exists('pbv_get_email_subscribers')) {
+        $stored = pbv_get_email_subscribers();
+        $key = strtolower($email);
+        if (isset($stored[$key]['mailpoet'])) {
+            $mp_status = (string) $stored[$key]['mailpoet'];
+        }
+    }
     $staff_body = "Subscribe / intro email request:\n\n"
         . "Email: {$email}\n"
         . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
         . 'Delivery: ' . ($via_n8n ? 'n8n webhook' : ($delivered ? 'WordPress email' : 'FAILED')) . "\n"
+        . ($n8n_note !== '' ? "n8n: {$n8n_note}\n" : '')
+        . ($mp_status !== '' ? "MailPoet: {$mp_status}\n" : '')
         . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
         . 'Page: ' . home_url('/') . "\n";
     wp_mail(
@@ -1946,16 +1959,68 @@ add_filter('woocommerce_email_recipient_cancelled_order', 'pbv_merge_order_email
 add_filter('woocommerce_email_recipient_failed_order', 'pbv_merge_order_email_recipients', 20);
 
 /**
- * Prefer a domain From address so WordPress.com / WooCommerce mail authenticates cleanly.
+ * From address WordPress.com can sign (SPF includes _spf.wpcloud.com on .store).
+ *
+ * Do not send From sales@palmbeach-vitality.com through WordPress.com — that domain’s
+ * SPF only allows Google and Mailgun, and DMARC is p=quarantine (Gmail spam banner).
+ *
+ * @return string
+ */
+function pbv_authenticated_from_address() {
+    $host = wp_parse_url(home_url(), PHP_URL_HOST);
+    if (!is_string($host) || $host === '') {
+        return '';
+    }
+    $host = preg_replace('/^www\./i', '', $host);
+    $addr = 'wordpress@' . $host;
+    return is_email($addr) ? $addr : '';
+}
+
+/**
+ * WooCommerce From address that matches WordPress.com SPF (not sales@ .com).
  *
  * @param string $from From address.
  * @return string
  */
 function pbv_woocommerce_email_from_address($from) {
-    $domain_from = 'sales@palmbeach-vitality.com';
-    return is_email($domain_from) ? $domain_from : $from;
+    $signed = pbv_authenticated_from_address();
+    return $signed !== '' ? $signed : $from;
 }
 add_filter('woocommerce_email_from_address', 'pbv_woocommerce_email_from_address', 20);
+
+/**
+ * @param string $name From name.
+ * @return string
+ */
+function pbv_woocommerce_email_from_name($name) {
+    return 'Palm Beach Vitality';
+}
+add_filter('woocommerce_email_from_name', 'pbv_woocommerce_email_from_name', 20);
+
+/**
+ * Replies on store emails go to sales@.
+ *
+ * @param string|string[] $headers Headers.
+ * @return string|string[]
+ */
+function pbv_woocommerce_email_headers($headers) {
+    $extra = 'Reply-To: Palm Beach Vitality <sales@palmbeach-vitality.com>';
+    if (is_array($headers)) {
+        foreach ($headers as $row) {
+            if (is_string($row) && stripos($row, 'Reply-To:') !== false) {
+                return $headers;
+            }
+        }
+        $headers[] = $extra;
+        return $headers;
+    }
+    $headers = (string) $headers;
+    if (stripos($headers, 'Reply-To:') !== false) {
+        return $headers;
+    }
+    return rtrim($headers) . "\r\n" . $extra . "\r\n";
+}
+add_filter('woocommerce_email_headers', 'pbv_woocommerce_email_headers', 20);
 
 /**
  * Checkout order review: show red X + "Remove item" next to each line item.

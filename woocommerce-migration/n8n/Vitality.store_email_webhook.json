@@ -42,7 +42,8 @@
         "emailType": "html",
         "message": "={{ $json.html }}",
         "options": {
-          "replyTo": "sales@palmbeach-vitality.com"
+          "senderName": "Palm Beach Vitality",
+          "appendAttribution": false
         }
       },
       "id": "gmail-send",

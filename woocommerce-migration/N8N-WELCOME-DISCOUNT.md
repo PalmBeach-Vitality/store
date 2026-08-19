@@ -21,6 +21,10 @@ Subscribe webhook → **Normalize lead** → Email intro
 
 Map `coupon_code` and `coupon_percent` from the WordPress webhook body. If either is missing, the Code node fails — do not hardcode a fallback code.
 
+Normalize lead → **Email intro** → Respond 200
+
+Gmail node: sender name **Palm Beach Vitality**, attribution off. Do **not** set Reply-To to `sales@` while the Gmail credential is still a personal `@gmail.com` address (that mismatch triggers Gmail’s unauthenticated-sender warning). Reconnect the Gmail credential as **sales@palmbeach-vitality.com** (Google Workspace) so From is signed. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
+
 ## Webhook payload
 
 ```json

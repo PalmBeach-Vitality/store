@@ -18,8 +18,8 @@ define('PBV_WELCOME_COUPON_PERCENT', 20);
 /** Stackable promo code. */
 define('PBV_STACK_COUPON_CODE', 'AS-1010');
 
-/** Stackable promo percent. */
-define('PBV_STACK_COUPON_PERCENT', 10);
+/** Production n8n webhook for the branded intro email. */
+define('PBV_N8N_WELCOME_WEBHOOK_DEFAULT', 'https://stockjohnson.app.n8n.cloud/webhook/vitality-store-email-webhook');
 
 /**
  * Create or sync a percent coupon.
@@ -176,7 +176,7 @@ function pbv_welcome_coupon_new_customers_only($valid, $coupon, $discounts = nul
 add_filter('woocommerce_coupon_is_valid', 'pbv_welcome_coupon_new_customers_only', 20, 3);
 
 /**
- * n8n webhook URL for welcome-code emails (Customizer or env).
+ * n8n webhook URL for intro emails (Customizer, env, or production default).
  *
  * @return string
  */
@@ -189,7 +189,7 @@ function pbv_n8n_welcome_webhook_url() {
     if (is_string($from_env) && trim($from_env) !== '') {
         return esc_url_raw(trim($from_env));
     }
-    return '';
+    return PBV_N8N_WELCOME_WEBHOOK_DEFAULT;
 }
 
 /**
@@ -204,7 +204,7 @@ function pbv_welcome_discount_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('pbv_n8n_welcome_webhook', array(
         'label'       => __('n8n webhook — welcome discount email', 'palmbeach-vitality'),
-        'description' => __('Production webhook URL. Site POSTs JSON {email, coupon_code, discount_percent, optin, site, source}. Leave blank to email the code from WordPress instead.', 'palmbeach-vitality'),
+        'description' => __('Production webhook URL. Leave blank to use the default n8n intro webhook.', 'palmbeach-vitality'),
         'section'     => 'pbv_storefront',
         'type'        => 'url',
     ));
@@ -392,9 +392,12 @@ function pbv_mail_intro_email_to_subscriber($email) {
     $subject = 'Welcome to the inner circle — Palm Beach Vitality';
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: Palm Beach Vitality <sales@palmbeach-vitality.com>',
         'Reply-To: sales@palmbeach-vitality.com',
     );
+    $from = function_exists('pbv_authenticated_from_address') ? pbv_authenticated_from_address() : '';
+    if ($from !== '') {
+        $headers[] = 'From: Palm Beach Vitality <' . $from . '>';
+    }
     return (bool) wp_mail($email, $subject, pbv_intro_email_html($shop, $logo, $bg), $headers);
 }
 
