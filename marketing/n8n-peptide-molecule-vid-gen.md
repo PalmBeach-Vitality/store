@@ -20,18 +20,29 @@ Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen
 
 ```text
 manual_trigger
+  → enter_video_seconds
   → get_chem_creations
   → filter_chem_active
   → pick_molecule_creation
-  → sheets_update_chem
   → grok_imagine_molecule_still
   → save_still_url
   → prep_molecule_video_start
   → grok_video_start
   → wait_video
   → grok_video_poll
+  → prep_molecule_extend_1
+  → grok_video_extend_1
+  → wait_extend_1
+  → grok_extend_poll_1
+  → prep_molecule_extend_2
+  → grok_video_extend_2
+  → wait_extend_2
+  → grok_extend_poll_2
   → save_video_url
+  → sheets_update_chem
 ```
+
+Grok’s generate API max is **15 seconds**. A 30s clip is that 15s video plus two silent extends (10s then 5s). Set `VIDEO_SECONDS` in `enter_video_seconds` before Execute.
 
 ---
 
@@ -40,7 +51,7 @@ manual_trigger
 Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header auth are attached.
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
-2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
+2. Open `enter_video_seconds` → set `VIDEO_SECONDS = 15` or `30` → Execute. Do not Publish until one row looks right.
 
 ---
 
@@ -50,10 +61,27 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 ---
 
+## Node 1b — `enter_video_seconds`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `manual_trigger` → **enter_video_seconds** → `get_chem_creations`
+
+Paste: `marketing/n8n-code-enter-video-seconds.js`
+
+| Parameter | fx | Value |
+|---|---|---|
+| Mode | — | Run Once for All Items |
+| Execute Once | — | **OFF** |
+| `VIDEO_SECONDS` in code | **OFF** | `15` (default) or `30` |
+
+**Check:** `video_seconds` is 15 or 30.
+
+---
+
 ## Node 2 — `get_chem_creations`
 
 **Type:** Google Sheets · Get Row(s)  
-**Before → this → After:** `manual_trigger` → **get_chem_creations** → `filter_chem_active`
+**Before → this → After:** `enter_video_seconds` → **get_chem_creations** → `filter_chem_active`
 
 | Setting | fx | Value |
 |---|---|---|
@@ -203,10 +231,42 @@ Must be **enabled**.
 
 ---
 
+## Nodes 10b–10i — 30s extend (linear, no Switch)
+
+Grok cannot generate 30s in one call. These hops always run. When `VIDEO_SECONDS = 15` they **GET** the finished 15s clip (wait 2s) and do not call `/videos/extensions`. When `VIDEO_SECONDS = 30` they POST silent extends: **10s then 5s**.
+
+**`prep_molecule_extend_1` / `_2`** — Code. Paste `marketing/n8n-code-prep-molecule-video-extend.js`. Hop 1 keeps `EXTEND_HOP = 1`. Hop 2 sets `EXTEND_HOP = 2`. Execute Once **OFF**.
+
+**`grok_video_extend_1` / `_2`** — HTTP Request
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | **ON** | `={{ $json.http_method }}` |
+| URL | **ON** | `={{ $json.http_url }}` |
+| Authentication | — | same xAI Header Auth |
+| Send Body | **ON** | `={{ $json.send_body }}` |
+| Body Content Type | — | **Raw** |
+| Content Type | **OFF** | `application/json` |
+| Body | **ON** | `={{ $json.grok_extend_body_json }}` |
+
+**`wait_extend_1` / `_2`** — Wait · After time interval · Unit seconds · Amount **ON** `={{ Number($('prep_molecule_extend_1').first().json.wait_seconds) }}` (use `_2` on hop 2). 180s / 140s when extending, 2s when skipping.
+
+**`grok_extend_poll_1` / `_2`** — HTTP GET
+
+| Setting | fx | Value |
+|---|---|---|
+| URL | **ON** | `={{ 'https://api.x.ai/v1/videos/' + ($('grok_video_extend_1').first().json.request_id \|\| $('prep_molecule_extend_1').first().json.poll_request_id) }}` |
+
+Hop 2 poll reads `grok_video_extend_2` / `prep_molecule_extend_2`.
+
+**Check (30):** final `video.duration` is 30. Clip stays muted. No logo, no text.
+
+---
+
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → (end)  
+**Before → this → After:** `grok_extend_poll_2` → **save_video_url** → `sheets_update_chem`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -222,9 +282,9 @@ Include Other Input Fields: **ON**
 ## Node 12 — `sheets_update_chem`
 
 **Type:** Google Sheets → Update  
-**Before → this → After:** `pick_molecule_creation` → **sheets_update_chem** → `grok_imagine_molecule_still`
+**Before → this → After:** `save_video_url` → **sheets_update_chem** → (end)
 
-Marks the row used **before** the still so a still-only Execute still advances to CHEM-002 next time.
+Marks the row used **after** the video so a failed still/video does not burn the next rank. Match on `creation_id`.
 
 | Setting | fx | Value |
 |---|---|---|
@@ -249,4 +309,6 @@ n8n: **Import from File** → name stays `peptide_molecule_vid_gen` → attach c
 
 - Sheet: `marketing/sheets/13-chem-breakdown-54.csv`
 - Pick: `marketing/n8n-code-pick-molecule-creation.js`
+- Duration: `marketing/n8n-code-enter-video-seconds.js`
 - Prep video: `marketing/n8n-code-prep-molecule-video-start.js`
+- Prep extend: `marketing/n8n-code-prep-molecule-video-extend.js`
