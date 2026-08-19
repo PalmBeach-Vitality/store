@@ -198,7 +198,7 @@ function pbv_redirect_legacy_storefront_paths() {
         '/pages/privacy-policy'         => home_url('/terms/#privacy'),
         '/pages/refund-policy'          => home_url('/terms/#refund'),
         '/pages/shipping-policy'        => home_url('/terms/#shipping'),
-        '/pages/terms-of-service'       => home_url('/terms/'),
+        '/pages/terms-of-service'       => home_url('/terms/#terms-of-service'),
         '/account'                      => home_url('/my-account/'),
         '/account/login'                => home_url('/my-account/'),
         '/account/register'             => home_url('/my-account/'),

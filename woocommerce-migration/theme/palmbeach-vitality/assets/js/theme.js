@@ -69,8 +69,10 @@
     var errorEl = gate.querySelector("[data-age-gate-error]");
     var enterBtn = gate.querySelector("[data-age-gate-enter]");
     var exitBtn = gate.querySelector("[data-age-gate-exit]");
+    var path = (window.location.pathname || "").replace(/\/+$/, "") || "/";
+    var isTermsPage = path === "/terms";
 
-    if (hasAgeAccepted()) {
+    if (hasAgeAccepted() || isTermsPage) {
       gate.setAttribute("hidden", "");
       ageAccepted = true;
     } else {
