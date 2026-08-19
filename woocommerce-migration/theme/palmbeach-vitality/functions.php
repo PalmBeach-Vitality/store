@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.42');
+define('PBV_THEME_VERSION', '2.10.43');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -2134,15 +2134,26 @@ add_action('woocommerce_cart_item_removed', 'pbv_redirect_after_checkout_remove'
 
 /**
  * Load Bitcoin ($BTC) payment gateway class when WooCommerce is available.
+ *
+ * Theme functions.php loads after plugins_loaded, so that hook never runs here.
+ * Load on before_woocommerce_init so the class exists before WC instantiates gateways.
  */
 function pbv_load_bitcoin_gateway() {
-    if (!class_exists('WC_Payment_Gateway')) {
+    static $loaded = false;
+    if ($loaded) {
+        return;
+    }
+    if (!class_exists('WC_Payment_Gateway', false)) {
+        return;
+    }
+    if (class_exists('WC_Gateway_PBV_Bitcoin', false)) {
+        $loaded = true;
         return;
     }
     require_once get_template_directory() . '/inc/class-wc-gateway-pbv-bitcoin.php';
+    $loaded = class_exists('WC_Gateway_PBV_Bitcoin', false);
 }
-add_action('plugins_loaded', 'pbv_load_bitcoin_gateway', 20);
-add_action('after_setup_theme', 'pbv_load_bitcoin_gateway', 20);
+add_action('before_woocommerce_init', 'pbv_load_bitcoin_gateway', 0);
 
 /**
  * Register Bitcoin ($BTC) payment method.
@@ -2151,10 +2162,11 @@ add_action('after_setup_theme', 'pbv_load_bitcoin_gateway', 20);
  * @return array
  */
 function pbv_register_bitcoin_gateway($gateways) {
-    if (!class_exists('WC_Gateway_PBV_Bitcoin')) {
-        pbv_load_bitcoin_gateway();
-    }
-    if (class_exists('WC_Gateway_PBV_Bitcoin')) {
+    pbv_load_bitcoin_gateway();
+    if (
+        class_exists('WC_Gateway_PBV_Bitcoin', false)
+        && !in_array('WC_Gateway_PBV_Bitcoin', $gateways, true)
+    ) {
         $gateways[] = 'WC_Gateway_PBV_Bitcoin';
     }
     return $gateways;

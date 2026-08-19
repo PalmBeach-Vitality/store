@@ -25,9 +25,11 @@ Goal: make paying with **$BTC** as easy as possible on `palmbeach-vitality.store
 
 **Bottom line for “easiest for customers + easiest for you”:** install **Coinsnap**, connect a Lightning wallet, enable the payment method. Customers scan a QR and pay in seconds via Lightning (with on-chain fallback).
 
-## What this theme already adds (v2.10.8)
+## What this theme already adds (v2.10.8, quieted in v2.10.43)
 
 Theme payment method: **Bitcoin ($BTC)** (`pbv_bitcoin`)
+
+v2.10.43 declares gateway properties and registers WooCommerce hooks once so PHP 8.2+ does not flood error logs (that warning volume can blank wp-admin and disconnect Jetpack).
 
 1. Upload/replace `palmbeach-vitality-theme.zip` (v2.10.8+)
 2. WooCommerce → Settings → Payments → **Bitcoin ($BTC)** → Enable

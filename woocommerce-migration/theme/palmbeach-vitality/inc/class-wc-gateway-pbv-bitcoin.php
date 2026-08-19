@@ -10,14 +10,31 @@
 
 defined('ABSPATH') || exit;
 
-if (!class_exists('WC_Payment_Gateway')) {
-    return;
-}
-
 /**
  * WC_Gateway_PBV_Bitcoin class.
  */
 class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
+
+    /**
+     * Extra instructions shown on the thank-you page and in emails.
+     *
+     * @var string
+     */
+    public $instructions = '';
+
+    /**
+     * BTC receiving address from gateway settings.
+     *
+     * @var string
+     */
+    public $btc_address = '';
+
+    /**
+     * Register WooCommerce hooks only once (WC instantiates this class often).
+     *
+     * @var bool
+     */
+    private static $hooks_registered = false;
 
     /**
      * Constructor.
@@ -36,14 +53,26 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         $this->init_form_fields();
         $this->init_settings();
 
-        $this->title              = $this->get_option('title', __('Bitcoin ($BTC)', 'palmbeach-vitality'));
-        $this->description        = $this->get_option(
+        $this->title        = $this->get_option('title', __('Bitcoin ($BTC)', 'palmbeach-vitality'));
+        $this->description  = $this->get_option(
             'description',
             __('Pay with Bitcoin. After placing your order you will receive payment instructions, including our BTC address and the exact amount due.', 'palmbeach-vitality')
         );
-        $this->instructions       = $this->get_option('instructions', '');
-        $this->btc_address        = $this->get_option('btc_address', '');
-        $this->enabled            = $this->get_option('enabled', 'yes');
+        $this->instructions = (string) $this->get_option('instructions', '');
+        $this->btc_address  = (string) $this->get_option('btc_address', '');
+        $this->enabled      = $this->get_option('enabled', 'yes');
+
+        $this->register_hooks();
+    }
+
+    /**
+     * Attach thank-you / email / settings hooks a single time per request.
+     */
+    private function register_hooks() {
+        if (self::$hooks_registered) {
+            return;
+        }
+        self::$hooks_registered = true;
 
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' . $this->id, array($this, 'thankyou_page'));
@@ -139,7 +168,9 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         }
 
         wc_reduce_stock_levels($order_id);
-        WC()->cart->empty_cart();
+        if (WC()->cart) {
+            WC()->cart->empty_cart();
+        }
 
         return array(
             'result'   => 'success',
@@ -159,12 +190,15 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
     /**
      * Email instructions.
      *
-     * @param WC_Order $order         Order.
-     * @param bool     $sent_to_admin Admin email.
-     * @param bool     $plain_text    Plain text email.
+     * @param mixed $order         Order.
+     * @param bool  $sent_to_admin Admin email.
+     * @param bool  $plain_text    Plain text email.
      */
     public function email_instructions($order, $sent_to_admin, $plain_text = false) {
-        if ($sent_to_admin || $order->get_payment_method() !== $this->id) {
+        if ($sent_to_admin || !is_a($order, 'WC_Order')) {
+            return;
+        }
+        if ($order->get_payment_method() !== $this->id) {
             return;
         }
         if (!$order->has_status('on-hold')) {
