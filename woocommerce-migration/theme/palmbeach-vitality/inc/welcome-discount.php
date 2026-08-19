@@ -264,15 +264,34 @@ function pbv_intro_email_logo_url() {
 }
 
 /**
- * HTML intro email (inner-circle layout, store logo).
+ * Public URL for the intro-email lab/beach background.
+ *
+ * @return string
+ */
+function pbv_intro_email_bg_url() {
+    if (file_exists(pbv_asset_path('assets/images/email-intro-bg.jpg'))) {
+        return pbv_asset_uri('assets/images/email-intro-bg.jpg');
+    }
+    return '';
+}
+
+/**
+ * HTML intro email — lab/beach background, charcoal + cyan (no green).
  *
  * @param string $shop_url Shop URL.
  * @param string $logo_url Logo image URL.
+ * @param string $bg_url   Background image URL.
  * @return string
  */
-function pbv_intro_email_html($shop_url, $logo_url) {
+function pbv_intro_email_html($shop_url, $logo_url, $bg_url = '') {
     $shop = esc_url($shop_url);
     $logo = esc_url($logo_url);
+    $bg   = esc_url($bg_url !== '' ? $bg_url : pbv_intro_email_bg_url());
+    $bg_attr = $bg !== '' ? ' background="' . $bg . '"' : '';
+    $bg_css  = $bg !== ''
+        ? 'background-color:#0a0f14;background-image:url(' . $bg . ');background-size:cover;background-position:center top;background-repeat:no-repeat;'
+        : 'background-color:#0a0f14;';
+
     return '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -280,46 +299,58 @@ function pbv_intro_email_html($shop_url, $logo_url) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Welcome to Palm Beach Vitality</title>
 </head>
-<body style="margin:0;padding:0;background:#071018;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(180deg,#071018 0%,#0a1a22 40%,#12303a 100%);padding:28px 12px;">
+<body style="margin:0;padding:0;background:#05080c;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"' . $bg_attr . ' style="' . $bg_css . 'padding:36px 14px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:6px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.35);">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
           <tr>
-            <td style="background:#0b1c28;padding:0;">
-              <a href="' . $shop . '" style="display:block;">
-                <img src="' . $logo . '" alt="Palm Beach Vitality" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
-              </a>
-            </td>
+            <td style="height:42px;line-height:42px;font-size:1px;">&nbsp;</td>
           </tr>
           <tr>
-            <td style="background:#14352c;padding:18px 28px;text-align:center;">
-              <div style="font-family:Georgia,\'Times New Roman\',serif;font-size:18px;letter-spacing:0.18em;color:#ffffff;">PALM BEACH VITALITY</div>
-              <div style="margin-top:8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;color:#d7ece4;">RESEARCH-DRIVEN PEPTIDES &amp; PERFORMANCE COMPOUNDS</div>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:36px 36px 12px;background:#ffffff;">
-              <h1 style="margin:0 0 18px;font-family:Georgia,\'Times New Roman\',serif;font-size:32px;line-height:1.2;color:#14352c;font-weight:700;">Welcome to the inner circle.</h1>
-              <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;">You\'re on the list. We build research-grade peptides around cutting-edge research, rigorous quality standards, and formulations that actually perform — documented, COA-backed, and intended for laboratory use only.</p>
-              <p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;">As a subscriber you\'ll get:</p>
-              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ Weekly / monthly research notes</p>
-              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ Exclusive discount codes</p>
-              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ First access to new compounds</p>
-              <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ A direct line to the team</p>
-              <table role="presentation" cellpadding="0" cellspacing="0">
+            <td style="background:#0c121a;border:1px solid #1e2a38;border-top:3px solid #00d4ff;border-radius:8px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.55);">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="background:#14352c;border-radius:4px;">
-                    <a href="' . $shop . '" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;letter-spacing:0.08em;text-decoration:none;color:#ffffff;font-weight:700;">EXPLORE THE CATALOG</a>
+                  <td style="background:#080d14;padding:0;">
+                    <a href="' . $shop . '" style="display:block;">
+                      <img src="' . $logo . '" alt="Palm Beach Vitality" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background:#0a1018;padding:16px 28px;text-align:center;border-bottom:1px solid #1a2430;">
+                    <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:0.28em;color:#00d4ff;font-weight:700;">PALM BEACH VITALITY</div>
+                    <div style="margin-top:8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.18em;color:#9eb6c8;">RESEARCH-DRIVEN PEPTIDES &amp; PERFORMANCE COMPOUNDS</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:34px 34px 10px;background:#0c121a;">
+                    <h1 style="margin:0 0 16px;font-family:Georgia,\'Times New Roman\',serif;font-size:30px;line-height:1.25;color:#f4f8fb;font-weight:700;">Welcome to the inner circle.</h1>
+                    <p style="margin:0 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#c8d6e0;">You\'re on the list. We build research-grade peptides around cutting-edge research, rigorous quality standards, and formulations that actually perform — documented, COA-backed, and intended for laboratory use only.</p>
+                    <p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.65;color:#e8f1f7;">As a subscriber you\'ll get:</p>
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> Weekly / monthly research notes</p>
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> Exclusive discount codes</p>
+                    <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> First access to new compounds</p>
+                    <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#c8d6e0;"><span style="color:#00d4ff;">→</span> A direct line to the team</p>
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="background:#00d4ff;border-radius:4px;">
+                          <a href="' . $shop . '" style="display:inline-block;padding:14px 26px;font-family:Arial,Helvetica,sans-serif;font-size:13px;letter-spacing:0.1em;text-decoration:none;color:#041018;font-weight:700;">EXPLORE THE CATALOG</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:24px 34px 32px;background:#0c121a;border-top:1px solid #1a2430;">
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.65;color:#7f93a3;">Palm Beach Vitality · Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
           <tr>
-            <td style="padding:28px 36px 36px;background:#ffffff;">
-              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#6b7a76;">Palm Beach Vitality · Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>
-            </td>
+            <td style="height:42px;line-height:42px;font-size:1px;">&nbsp;</td>
           </tr>
         </table>
       </td>
@@ -357,13 +388,14 @@ function pbv_intro_email_text($shop_url) {
 function pbv_mail_intro_email_to_subscriber($email) {
     $shop = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/');
     $logo = pbv_intro_email_logo_url();
+    $bg   = pbv_intro_email_bg_url();
     $subject = 'Welcome to the inner circle — Palm Beach Vitality';
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
         'From: Palm Beach Vitality <sales@palmbeach-vitality.com>',
         'Reply-To: sales@palmbeach-vitality.com',
     );
-    return (bool) wp_mail($email, $subject, pbv_intro_email_html($shop, $logo), $headers);
+    return (bool) wp_mail($email, $subject, pbv_intro_email_html($shop, $logo, $bg), $headers);
 }
 
 /**

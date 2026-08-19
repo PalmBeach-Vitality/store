@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.32');
+define('PBV_THEME_VERSION', '2.10.33');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -443,6 +443,7 @@ function pbv_handle_lead_popup() {
         'site'         => home_url('/'),
         'shop_url'     => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/'),
         'logo_url'     => function_exists('pbv_intro_email_logo_url') ? pbv_intro_email_logo_url() : '',
+        'bg_url'       => function_exists('pbv_intro_email_bg_url') ? pbv_intro_email_bg_url() : '',
         'source'       => 'homepage_subscribe_popup',
         'email_type'   => 'intro',
         'submitted_at' => gmdate('c'),
