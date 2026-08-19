@@ -8,6 +8,7 @@ Output: marketing/sheets/13-chem-breakdown-54.csv
 from __future__ import annotations
 
 import csv
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,7 +60,8 @@ STILL_EDIT = (
     "with a DARK microscopic living-cell scene: lipid-bilayer cell membrane, cytoplasm, amino-acid "
     "ball-and-stick monomers colliding and forming peptide bonds with energy flashes. "
     "DELETE every logo, palm tree, watermark, URL, caption, letter, number, and label. "
-    "BLANK frame — no typography anywhere. No vials, no pens, no people. Do not restyle into a cartoon."
+    "BLANK frame — no typography anywhere. No vials, no pens, no people. Do not restyle into a cartoon. "
+    "Keep the row's SURFACE, LIGHTING, COLOR GRADE, and CAMERA MOVE."
 )
 
 COMPOUNDS = [
@@ -92,52 +94,159 @@ COMPOUNDS = [
     ("P-TIRZ-001", "Tirzepatide", "dual-agonist peptide in warm terracotta and gold"),
 ]
 
-LOOKS = [
+# 6 values each. Rank i uses offsets so consecutive days never repeat
+# shot_family, camera_move, surface, lighting, or color_grade.
+SHOTS = [
     {
-        "suffix": "A",
-        "category": "chem_studio",
-        "lab_item": "Chemical breakdown — cellular amino-acid reaction at the cell membrane",
-        "surface": "living cell lipid bilayer, wet receptors, extracellular fluid",
-        "lighting": "dramatic subsurface glow from cytoplasm; reaction sparks at forming bonds",
-        "color_grade": "cool microscopic medical grade, luminous amino acids vs navy cell",
-        "hero_style": "cellular chemical reaction — amino acids assembling a peptide at a living cell",
         "shot_family": "push_in",
         "camera_angle": "eye-level",
         "camera_direction": "forward",
-        "framing": "9:16, living cell filling lower frame, amino acids reacting mid-frame, shallow DOF",
-        "camera_move": "slow push-in as amino acids dock the membrane and peptide bonds flash, then hold",
-        "env": (
-            "DARK cinematic 3D medical animation of a LIVE cellular chemical reaction at microscopic scale. "
-            "A real biological cell dominates the lower frame: lipid-bilayer membrane, wet receptors, "
-            "cytoplasm glowing faintly inside. In the extracellular fluid, many small photoreal amino-acid "
-            "monomers (glossy colored ball-and-stick) swarm, collide, and chemically react — peptide bonds "
-            "snap into place with brief energy flashes, wispy electron-cloud filaments, and released particles. "
-            "A forming peptide chain grows at a membrane receptor. This is chemistry in a living cell, "
-            "not a catalog product still. NOT a photography studio. NOT a white cyclorama. NOT a glass pedestal."
-        ),
+        "framing": "9:16, reaction plane mid-frame, finishes closer, shallow DOF",
+        "camera_move": "slow push-in as amino acids dock and peptide bonds flash, then hold",
     },
     {
-        "suffix": "B",
-        "category": "chem_creative",
-        "lab_item": "Chemical breakdown — intracellular amino-acid condensation reaction",
-        "surface": "cytoplasm among organelles, ribosome-like machinery, wet protein mesh",
-        "lighting": "backlit cytoplasmic bloom plus hard spec on reacting amino-acid atoms",
-        "color_grade": "high-contrast intracellular biotech: luminous bonds vs deep navy cytoplasm",
-        "hero_style": "intracellular chemical reaction — amino acids condensing into a peptide chain",
+        "shot_family": "pull_back",
+        "camera_angle": "slight-high",
+        "camera_direction": "backward",
+        "framing": "9:16, starts tight on a forming bond, reveals the full cell",
+        "camera_move": "slow pull-back from a flashing peptide bond to the whole living cell, then hold",
+    },
+    {
+        "shot_family": "vertical_rise",
+        "camera_angle": "slight-low",
+        "camera_direction": "up",
+        "framing": "9:16, starts at the lower membrane, rises along the reaction",
+        "camera_move": "slow vertical rise along the bilayer as amino acids lock into the chain, then hold",
+    },
+    {
+        "shot_family": "lateral_drift",
+        "camera_angle": "three-quarter-left",
+        "camera_direction": "left to right",
+        "framing": "9:16, slides along the membrane edge, reaction stays sharp",
+        "camera_move": "slow lateral drift along the membrane as monomers collide and bonds flash, then hold",
+    },
+    {
+        "shot_family": "macro_detail",
+        "camera_angle": "macro-plane",
+        "camera_direction": "micro-push",
+        "framing": "9:16, extreme close on two amino acids forming a peptide bond",
+        "camera_move": "creeping macro push onto the bond-forming atoms with a single energy flash, then hold",
+    },
+    {
         "shot_family": "static_lock",
         "camera_angle": "low-angle",
         "camera_direction": "no travel / locked",
-        "framing": "9:16, cytoplasm volume, amino acids condensing into a vertical peptide chain",
+        "framing": "9:16, locked volume, peptide chain growing in place, shallow DOF",
         "camera_move": "locked tripod, amino acids stream in and lock onto the growing chain with bond flashes",
+    },
+]
+
+SURFACES = [
+    {
+        "surface": "living cell lipid bilayer, wet receptors, extracellular fluid",
+        "category": "chem_membrane",
+        "lab_item": "Chemical breakdown — amino-acid reaction at the cell membrane",
+        "hero_style": "membrane docking — amino acids assembling a peptide at a living cell",
+        "env": (
+            "DARK cinematic 3D medical animation at the OUTER membrane of a living cell. "
+            "Lipid-bilayer, wet receptors, extracellular fluid. Amino-acid monomers swarm, dock, "
+            "and form peptide bonds with energy flashes. A forming chain grows at a receptor. "
+            "NOT a photography studio. NOT a white cyclorama. NOT a glass pedestal."
+        ),
+    },
+    {
+        "surface": "cytoplasm among organelles, ribosome-like machinery, wet protein mesh",
+        "category": "chem_cytosol",
+        "lab_item": "Chemical breakdown — intracellular amino-acid condensation",
+        "hero_style": "cytosol condensation — amino acids locking into a peptide chain",
         "env": (
             "DARK cinematic 3D medical animation INSIDE a living cell. Cytoplasm, organelle silhouettes, "
-            "and a wet protein mesh fill the frame. Amino-acid monomers stream toward a growing peptide "
-            "chain and condense — each new peptide bond a sharp chemical flash. Nearby a cell nucleus "
-            "or mitochondrion looms in bokeh. Active reaction, not a static floating molecule. "
+            "wet protein mesh. Amino-acid monomers stream toward a growing peptide and condense — "
+            "each new bond a sharp chemical flash. Nucleus or mitochondrion in bokeh. "
             "NOT a sunlit showroom. NOT a product catalog set. NOT a glass pedestal."
         ),
     },
+    {
+        "surface": "mitochondrial inner membrane, cristae folds, dense matrix",
+        "category": "chem_mito",
+        "lab_item": "Chemical breakdown — mitochondrial-membrane peptide assembly",
+        "hero_style": "cristae reaction — amino acids assembling along inner membrane folds",
+        "env": (
+            "DARK cinematic 3D medical animation at a mitochondrion. Cristae folds, dense matrix, "
+            "inner membrane. Amino acids collide along the membrane and form peptide bonds with "
+            "brief energy flashes. Living-cell chemistry, not a catalog still. "
+            "NOT a photography studio. NOT a glass pedestal."
+        ),
+    },
+    {
+        "surface": "nuclear envelope pore, chromatin bokeh, nucleoplasm edge",
+        "category": "chem_nucleus",
+        "lab_item": "Chemical breakdown — nuclear-envelope peptide reaction",
+        "hero_style": "nuclear-pore reaction — amino acids assembling at the envelope edge",
+        "env": (
+            "DARK cinematic 3D medical animation at the nuclear envelope. A nuclear pore, chromatin "
+            "bokeh, nucleoplasm edge. Amino-acid monomers gather at the pore and form peptide bonds "
+            "with wispy electron-cloud filaments. NOT a spa. NOT a white cyclorama. NOT a glass pedestal."
+        ),
+    },
+    {
+        "surface": "endoplasmic reticulum cisternae, ribosome-studded membrane",
+        "category": "chem_er",
+        "lab_item": "Chemical breakdown — ER-membrane peptide condensation",
+        "hero_style": "ER cisternae reaction — amino acids condensing on a ribosome-studded membrane",
+        "env": (
+            "DARK cinematic 3D medical animation on endoplasmic reticulum. Stacked cisternae, "
+            "ribosome-studded membrane. Amino acids condense into a growing peptide along the ER "
+            "surface with bond flashes. Active reaction, not a floating molecule. "
+            "NOT a sunlit studio. NOT a glass pedestal."
+        ),
+    },
+    {
+        "surface": "vesicle docking field, cytosolic haze, membrane fusion sites",
+        "category": "chem_vesicle",
+        "lab_item": "Chemical breakdown — vesicle-docking peptide reaction",
+        "hero_style": "vesicle-field reaction — amino acids assembling at docking sites",
+        "env": (
+            "DARK cinematic 3D medical animation in a vesicle docking field. Cytosolic haze, "
+            "membrane fusion sites. Amino-acid monomers cluster at a docking patch and form peptide "
+            "bonds with energy flashes. Living-cell chemistry. "
+            "NOT a product stand. NOT a white cyclorama. NOT a glass pedestal."
+        ),
+    },
 ]
+
+LIGHTINGS = [
+    "dramatic subsurface glow from cytoplasm; reaction sparks at forming bonds",
+    "backlit cytoplasmic bloom plus hard spec on reacting amino-acid atoms",
+    "low-key rim light along the membrane; bond flashes as the only key",
+    "volumetric caustic shafts through translucent cytoplasm",
+    "cool bioluminescent fill with a warm flash at each peptide bond",
+    "dark-field microscope look: near-black surround, luminous atoms",
+]
+
+COLOR_GRADES = [
+    "cool microscopic medical grade, luminous amino acids vs navy cell",
+    "high-contrast intracellular biotech: luminous bonds vs deep navy cytoplasm",
+    "teal-and-gold mitochondrial grade, warm bond sparks",
+    "violet-cyan night-lab grade, ice-blue amino acids",
+    "emerald cytosol grade, rose-gold peptide bonds",
+    "copper-amber organelle grade, cool cyan highlights",
+]
+
+
+def look_for_rank(rank: int) -> dict:
+    """1-based rank. Offsets keep adjacent days from sharing any of the 5 look columns."""
+    i = rank - 1
+    shot = SHOTS[i % 6]
+    surface = SURFACES[(i + 1) % 6]
+    lighting = LIGHTINGS[(i + 2) % 6]
+    color_grade = COLOR_GRADES[(i + 3) % 6]
+    return {
+        **shot,
+        **surface,
+        "lighting": lighting,
+        "color_grade": color_grade,
+    }
 
 
 def molecule_lock(name: str) -> str:
@@ -164,6 +273,10 @@ def video_prompt(name: str, look: dict, mol: str) -> str:
     body = (
         f"Vertical 9:16 chemical-reaction still — DARK microscopic cellular animation. "
         f"{look['env']} "
+        f"SURFACE: {look['surface']}. "
+        f"LIGHTING: {look['lighting']}. "
+        f"COLOR GRADE: {look['color_grade']}. "
+        f"SHOT FAMILY: {look['shot_family']}. CAMERA MOVE: {look['camera_move']}. "
         f"REACTION SUBJECT (visual only, never as text): {mol}. "
         "Amino acids are glossy translucent colored glass spheres with metallic bonds; "
         "the forming peptide matches that look as monomers lock together. "
@@ -191,7 +304,7 @@ def motion(name: str, look: dict) -> str:
 def brief(name: str, look: dict, mol: str) -> str:
     return (
         f"chem reaction · {name} · {mol} · {look['env'][:160]}… "
-        f"shot:{look['shot_family']} · {look['camera_angle']} · no text · no logo"
+        f"shot:{look['shot_family']} · {look['camera_angle']} · {look['surface'][:48]} · no text · no logo"
     )
 
 
@@ -278,7 +391,7 @@ def make_row(rank: int, cid: str, name: str, mol: str, look: dict) -> dict:
         "camera_direction": look["camera_direction"],
         "framing": look["framing"],
         "scene_brief": brief(name, look, mol),
-        "quality_var_count": 8,
+        "quality_var_count": 6,
         "quality_suffix": QUALITY,
         "aspect_ratio": "9:16",
         "duration_seconds": 15,
@@ -312,16 +425,28 @@ def main() -> None:
         raise SystemExit("round A window failed")
 
     round_b = rotate_until_ok(STAGGER_ROUND_A, offset=13)
-    sequence = [(n, LOOKS[0]) for n in STAGGER_ROUND_A] + [(n, LOOKS[1]) for n in round_b]
+    sequence = list(STAGGER_ROUND_A) + list(round_b)
 
     rows = []
-    for rank, (name, look) in enumerate(sequence, start=1):
+    for rank, name in enumerate(sequence, start=1):
         cid, mol = by_name[name]
+        look = look_for_rank(rank)
         rows.append(make_row(rank, cid, name, mol, look))
 
     names = [r["compound_name"] for r in rows]
     if not window_ok(names):
         raise SystemExit("final sequence window failed")
+
+    for key in ("shot_family", "camera_move", "surface", "lighting", "color_grade"):
+        uniq = {r[key] for r in rows}
+        if len(uniq) < 6:
+            raise SystemExit(f"{key} has {len(uniq)} values, need 6")
+        for i in range(1, len(rows)):
+            if rows[i][key] == rows[i - 1][key]:
+                raise SystemExit(f"adjacent ranks share {key}: {rows[i]['creation_id']}")
+            # also block wrapping day 54 → day 1 if someone loops
+        if rows[0][key] == rows[-1][key]:
+            raise SystemExit(f"rank 1 and rank 54 share {key}")
 
     for r in rows:
         vp = r["video_prompt"].lower()
@@ -352,8 +477,63 @@ def main() -> None:
     print(f"video_prompt chars min={min(lens)} max={max(lens)}")
     print("rank sequence:")
     for r in rows:
-        print(f"  {r['rank']:02d}  {r['category']:<14}  {r['compound_name']}")
+        print(f"  {r['rank']:02d}  {r['shot_family']:<14}  {r['compound_name']}")
+    print("unique shot_family:", len({r['shot_family'] for r in rows}))
+    print("unique camera_move:", len({r['camera_move'] for r in rows}))
+    print("unique surface:", len({r['surface'] for r in rows}))
+    print("unique lighting:", len({r['lighting'] for r in rows}))
+    print("unique color_grade:", len({r['color_grade'] for r in rows}))
     print("round B offset compounds:", ", ".join(round_b[:5]), "...")
+
+    patch_path = Path("/tmp/n8n-code-rebuild-chem-looks.js")
+    keys = [
+        "creation_id",
+        "category",
+        "lab_item",
+        "shot_family",
+        "camera_angle",
+        "camera_direction",
+        "framing",
+        "scene_brief",
+        "quality_var_count",
+        "video_prompt",
+        "video_motion_prompt",
+        "still_edit_prompt",
+        "surface",
+        "lighting",
+        "camera_move",
+        "color_grade",
+        "hero_style",
+    ]
+    patch = [{k: r[k] for k in keys} for r in rows]
+    js = (
+        "// n8n Code node: rebuild_chem_looks\n"
+        "// Mode: Run Once for All Items. Execute Once OFF.\n"
+        "// After: get_chem_creations  Before: sheets_update_chem_looks\n"
+        "// Overlays 6-way staggered looks. Keeps times_used / last_used_at / status.\n"
+        "var PATCH = "
+        + json.dumps(patch, ensure_ascii=True)
+        + ";\n"
+        "var byId = {};\n"
+        "PATCH.forEach(function (p) { byId[p.creation_id] = p; });\n"
+        "var items = $input.all();\n"
+        "if (items.length < 2) throw new Error('rebuild_chem_looks: need all Sheet 13 rows');\n"
+        "return items.map(function (item) {\n"
+        "  var row = item.json || {};\n"
+        "  var id = String(row.creation_id || '').trim();\n"
+        "  var p = byId[id];\n"
+        "  if (!p) throw new Error('rebuild_chem_looks: no patch for ' + id);\n"
+        "  var out = {};\n"
+        "  Object.keys(p).forEach(function (k) { out[k] = p[k]; });\n"
+        "  out.times_used = row.times_used;\n"
+        "  out.last_used_at = row.last_used_at;\n"
+        "  out.status = row.status || 'Active';\n"
+        "  out.compound_name = row.compound_name;\n"
+        "  return { json: out };\n"
+        "});\n"
+    )
+    patch_path.write_text(js, encoding="utf-8")
+    print(f"wrote {patch_path} ({len(js)} chars)")
 
 
 if __name__ == "__main__":

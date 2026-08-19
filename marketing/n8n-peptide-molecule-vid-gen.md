@@ -86,6 +86,8 @@ Paste: `marketing/n8n-code-pick-molecule-creation.js`
 
 Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
 
+Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has **6** values. Consecutive ranks never reuse the same value in those columns (so day 2 cannot look like day 1).
+
 **Settings → Execute Once:** **OFF**. If this is ON, n8n only passes CHEM-001 into the Code node and every run repeats row 1.
 
 Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set.
