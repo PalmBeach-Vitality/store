@@ -17,11 +17,7 @@
   );
   if ($announce) :
       ?>
-    <div class="pbv-announce">
-      <button type="button" class="pbv-announce__cta" data-lead-popup-open>
-        <?php echo esc_html($announce); ?>
-      </button>
-    </div>
+    <div class="pbv-announce"><?php echo esc_html($announce); ?></div>
   <?php endif; ?>
 
   <?php

@@ -115,7 +115,7 @@
 
   function hasLeadDismissed() {
     try {
-      return window.localStorage.getItem("pbv_lead_popup_v2") === "done";
+      return window.localStorage.getItem("pbv_lead_popup_v3") === "done";
     } catch (e) {
       return false;
     }
@@ -123,7 +123,7 @@
 
   function markLeadDone() {
     try {
-      window.localStorage.setItem("pbv_lead_popup_v2", "done");
+      window.localStorage.setItem("pbv_lead_popup_v3", "done");
     } catch (e) {}
   }
 
@@ -210,7 +210,7 @@
               statusEl.textContent =
                 (result.data && result.data.data && result.data.data.message) ||
                 (result.ok
-                  ? "Check your inbox — your code is WELCOME20 (20% off)."
+                  ? "You’re in — check your inbox for a welcome note."
                   : "Something went wrong. Please try again.");
               if (!result.ok) statusEl.classList.add("is-error");
             }
@@ -229,7 +229,7 @@
           .finally(function () {
             if (submitBtn) {
               submitBtn.disabled = false;
-              submitBtn.textContent = "Send my discount code";
+              submitBtn.textContent = "Subscribe";
             }
           });
       });

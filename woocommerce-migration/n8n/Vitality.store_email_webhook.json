@@ -2,7 +2,7 @@
   "name": "Vitality.store_email_webhook",
   "meta": {
     "templateCredsSetupCompleted": false,
-    "description": "Receives homepage welcome-discount leads from palmbeach-vitality.store and emails WELCOME20 to the shopper."
+    "description": "Homepage subscribe popup \u2192 branded intro email (store logo). WELCOME20 remains a valid checkout coupon but is not emailed from this workflow."
   },
   "nodes": [
     {
@@ -13,21 +13,27 @@
         "options": {}
       },
       "id": "wh-vitality-welcome",
-      "name": "Welcome discount webhook",
+      "name": "Subscribe webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [260, 300],
+      "position": [
+        260,
+        300
+      ],
       "webhookId": "vitality-store-email-webhook"
     },
     {
       "parameters": {
-        "jsCode": "const body = $input.first().json.body || $input.first().json;\nconst email = String(body.email || '').trim().toLowerCase();\nconst coupon = String(body.coupon_code || 'WELCOME20').trim();\nconst percent = Number(body.discount_percent || 20);\nconst optin = Boolean(body.optin);\nconst site = String(body.site || 'https://palmbeach-vitality.store/');\nconst source = String(body.source || 'homepage_lead_popup');\n\nif (!email || !email.includes('@')) {\n  throw new Error('Missing or invalid email');\n}\n\nconst shopUrl = site.replace(/\\/?$/, '/') + 'shop/';\nconst subject = `Your ${percent}% welcome code — Palm Beach Vitality`;\nconst text = [\n  'Welcome to Palm Beach Vitality.',\n  '',\n  `Your new-client discount code is: ${coupon}`,\n  `That's ${percent}% off your first order.`,\n  '',\n  `Apply it at checkout: ${shopUrl}`,\n  '',\n  'Questions? Reply to this email or write sales@palmbeach-vitality.com.',\n].join('\\n');\n\nconst html = `\n  <p>Welcome to <strong>Palm Beach Vitality</strong>.</p>\n  <p>Your new-client discount code is:</p>\n  <p style=\"font-size:22px;font-weight:700;letter-spacing:0.04em;\">${coupon}</p>\n  <p>That's <strong>${percent}% off</strong> your first order.</p>\n  <p><a href=\"${shopUrl}\">Shop now</a> and enter the code at checkout.</p>\n  <p style=\"color:#666;font-size:13px;\">Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>\n`;\n\nreturn [{\n  json: {\n    email,\n    coupon_code: coupon,\n    discount_percent: percent,\n    optin,\n    site,\n    source,\n    subject,\n    text,\n    html,\n  }\n}];"
+        "jsCode": "const raw = $input.first().json;\nconst body = raw.body || raw;\nconst email = String(body.email || '').trim().toLowerCase();\nconst optin = Boolean(body.optin);\nconst site = String(body.site || 'https://palmbeach-vitality.store/');\nconst source = String(body.source || 'homepage_subscribe_popup');\nconst shopUrl = String(body.shop_url || (site.replace(/\\/?$/, '/') + 'shop/'));\nconst logoUrl = String(body.logo_url || 'https://palmbeach-vitality.store/wp-content/themes/palmbeach-vitality/assets/images/logo-full.jpg');\n\nif (!email || !email.includes('@')) {\n  throw new Error('Missing or invalid email');\n}\n\nconst subject = 'Welcome to the inner circle \u2014 Palm Beach Vitality';\nconst text = [\n  'Welcome to the inner circle.',\n  '',\n  \"You're on the Palm Beach Vitality list \u2014 research-driven peptides and performance compounds, built around rigorous quality standards and formulations that actually perform.\",\n  '',\n  \"As a subscriber you'll get:\",\n  '- Weekly / monthly research notes',\n  '- Exclusive discount codes',\n  '- First access to new compounds',\n  '- A direct line to the team',\n  '',\n  'Explore the catalog: ' + shopUrl,\n  '',\n  'All products are intended for research purposes only. Not for human consumption.',\n  'Questions? Reply to this email or write sales@palmbeach-vitality.com.',\n].join('\\n');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"></head>\n<body style=\"margin:0;padding:0;background:#071018;\">\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#071018;padding:28px 12px;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"max-width:600px;width:100%;background:#ffffff;border-radius:6px;overflow:hidden;\">\n        <tr><td style=\"background:#0b1c28;padding:0;\">\n          <a href=\"${shopUrl}\" style=\"display:block;\"><img src=\"${logoUrl}\" alt=\"Palm Beach Vitality\" width=\"600\" style=\"display:block;width:100%;max-width:600px;height:auto;border:0;\"></a>\n        </td></tr>\n        <tr><td style=\"background:#14352c;padding:18px 28px;text-align:center;\">\n          <div style=\"font-family:Georgia,'Times New Roman',serif;font-size:18px;letter-spacing:0.18em;color:#ffffff;\">PALM BEACH VITALITY</div>\n          <div style=\"margin-top:8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;color:#d7ece4;\">RESEARCH-DRIVEN PEPTIDES &amp; PERFORMANCE COMPOUNDS</div>\n        </td></tr>\n        <tr><td style=\"padding:36px 36px 12px;background:#ffffff;\">\n          <h1 style=\"margin:0 0 18px;font-family:Georgia,'Times New Roman',serif;font-size:32px;line-height:1.2;color:#14352c;font-weight:700;\">Welcome to the inner circle.</h1>\n          <p style=\"margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;\">You're on the list. We build research-grade peptides around cutting-edge research, rigorous quality standards, and formulations that actually perform \u2014 documented, COA-backed, and intended for laboratory use only.</p>\n          <p style=\"margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;\">As a subscriber you'll get:</p>\n          <p style=\"margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;\">\u2192 Weekly / monthly research notes</p>\n          <p style=\"margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;\">\u2192 Exclusive discount codes</p>\n          <p style=\"margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;\">\u2192 First access to new compounds</p>\n          <p style=\"margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;\">\u2192 A direct line to the team</p>\n          <table role=\"presentation\" cellpadding=\"0\" cellspacing=\"0\"><tr>\n            <td style=\"background:#14352c;border-radius:4px;\">\n              <a href=\"${shopUrl}\" style=\"display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;letter-spacing:0.08em;text-decoration:none;color:#ffffff;font-weight:700;\">EXPLORE THE CATALOG</a>\n            </td>\n          </tr></table>\n        </td></tr>\n        <tr><td style=\"padding:28px 36px 36px;background:#ffffff;\">\n          <p style=\"margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#6b7a76;\">Palm Beach Vitality \u00b7 Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>`;\n\nreturn [{\n  json: { email, optin, site, source, shopUrl, logoUrl, subject, text, html }\n}];\n"
       },
       "id": "code-normalize",
       "name": "Normalize lead",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [500, 300]
+      "position": [
+        500,
+        300
+      ]
     },
     {
       "parameters": {
@@ -40,10 +46,13 @@
         }
       },
       "id": "gmail-send",
-      "name": "Email WELCOME20",
+      "name": "Email intro",
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
-      "position": [760, 300],
+      "position": [
+        760,
+        300
+      ],
       "credentials": {
         "gmailOAuth2": {
           "id": "Tx1ufF7Jxq9yLprP",
@@ -54,7 +63,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, email: $('Normalize lead').item.json.email, coupon_code: $('Normalize lead').item.json.coupon_code }) }}",
+        "responseBody": "={{ JSON.stringify({ ok: true, email: $('Normalize lead').item.json.email }) }}",
         "options": {
           "responseCode": 200
         }
@@ -63,11 +72,14 @@
       "name": "Respond 200",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1020, 300]
+      "position": [
+        1020,
+        300
+      ]
     }
   ],
   "connections": {
-    "Welcome discount webhook": {
+    "Subscribe webhook": {
       "main": [
         [
           {
@@ -82,14 +94,14 @@
       "main": [
         [
           {
-            "node": "Email WELCOME20",
+            "node": "Email intro",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Email WELCOME20": {
+    "Email intro": {
       "main": [
         [
           {
@@ -110,7 +122,7 @@
       "name": "palmbeach-vitality"
     },
     {
-      "name": "welcome-discount"
+      "name": "intro-email"
     }
   ]
 }

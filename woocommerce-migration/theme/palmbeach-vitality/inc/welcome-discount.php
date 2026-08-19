@@ -252,34 +252,118 @@ function pbv_n8n_post_welcome_lead(array $payload) {
 }
 
 /**
- * Fallback: email the customer their WELCOME20 code from WordPress.
+ * Public URL for the store logo used in intro emails.
  *
- * @param string $email Customer email.
+ * @return string
+ */
+function pbv_intro_email_logo_url() {
+    if (file_exists(pbv_asset_path('assets/images/logo-full.jpg'))) {
+        return pbv_asset_uri('assets/images/logo-full.jpg');
+    }
+    return function_exists('pbv_default_logo_uri') ? pbv_default_logo_uri() : home_url('/');
+}
+
+/**
+ * HTML intro email (inner-circle layout, store logo).
+ *
+ * @param string $shop_url Shop URL.
+ * @param string $logo_url Logo image URL.
+ * @return string
+ */
+function pbv_intro_email_html($shop_url, $logo_url) {
+    $shop = esc_url($shop_url);
+    $logo = esc_url($logo_url);
+    return '<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to Palm Beach Vitality</title>
+</head>
+<body style="margin:0;padding:0;background:#071018;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:linear-gradient(180deg,#071018 0%,#0a1a22 40%,#12303a 100%);padding:28px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:6px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.35);">
+          <tr>
+            <td style="background:#0b1c28;padding:0;">
+              <a href="' . $shop . '" style="display:block;">
+                <img src="' . $logo . '" alt="Palm Beach Vitality" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;">
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#14352c;padding:18px 28px;text-align:center;">
+              <div style="font-family:Georgia,\'Times New Roman\',serif;font-size:18px;letter-spacing:0.18em;color:#ffffff;">PALM BEACH VITALITY</div>
+              <div style="margin-top:8px;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:0.16em;color:#d7ece4;">RESEARCH-DRIVEN PEPTIDES &amp; PERFORMANCE COMPOUNDS</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:36px 36px 12px;background:#ffffff;">
+              <h1 style="margin:0 0 18px;font-family:Georgia,\'Times New Roman\',serif;font-size:32px;line-height:1.2;color:#14352c;font-weight:700;">Welcome to the inner circle.</h1>
+              <p style="margin:0 0 18px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;">You\'re on the list. We build research-grade peptides around cutting-edge research, rigorous quality standards, and formulations that actually perform — documented, COA-backed, and intended for laboratory use only.</p>
+              <p style="margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#1c2a28;">As a subscriber you\'ll get:</p>
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ Weekly / monthly research notes</p>
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ Exclusive discount codes</p>
+              <p style="margin:0 0 6px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ First access to new compounds</p>
+              <p style="margin:0 0 28px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.7;color:#1c2a28;">→ A direct line to the team</p>
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:#14352c;border-radius:4px;">
+                    <a href="' . $shop . '" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:14px;letter-spacing:0.08em;text-decoration:none;color:#ffffff;font-weight:700;">EXPLORE THE CATALOG</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 36px 36px;background:#ffffff;">
+              <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#6b7a76;">Palm Beach Vitality · Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
+}
+
+/**
+ * Plain-text intro email.
+ *
+ * @param string $shop_url Shop URL.
+ * @return string
+ */
+function pbv_intro_email_text($shop_url) {
+    return "Welcome to the inner circle.\n\n"
+        . "You're on the Palm Beach Vitality list — research-driven peptides and performance compounds, built around rigorous quality standards and formulations that actually perform.\n\n"
+        . "As a subscriber you'll get:\n"
+        . "- Weekly / monthly research notes\n"
+        . "- Exclusive discount codes\n"
+        . "- First access to new compounds\n"
+        . "- A direct line to the team\n\n"
+        . "Explore the catalog: {$shop_url}\n\n"
+        . "All products are intended for research purposes only. Not for human consumption.\n"
+        . "Questions? Reply to this email or write sales@palmbeach-vitality.com.\n";
+}
+
+/**
+ * Fallback: email the subscriber an intro note from WordPress.
+ *
+ * @param string $email Subscriber email.
  * @return bool
  */
-function pbv_mail_welcome_coupon_to_customer($email) {
-    $code    = PBV_WELCOME_COUPON_CODE;
-    $percent = (int) PBV_WELCOME_COUPON_PERCENT;
-    $shop    = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/');
-    $subject = sprintf(
-        /* translators: %d: discount percent */
-        __('Your %d%% welcome code — Palm Beach Vitality', 'palmbeach-vitality'),
-        $percent
-    );
-    $body = "Welcome to Palm Beach Vitality.\n\n"
-        . "Your new-client discount code is: {$code}\n"
-        . "That's {$percent}% off your first order (one-time use for new clients).\n"
-        . 'You can also stack promo code ' . PBV_STACK_COUPON_CODE . ' for an extra ' . (int) PBV_STACK_COUPON_PERCENT . "% off.\n\n"
-        . "Apply them at checkout:\n{$shop}\n\n"
-        . "Questions? Reply to this email or write sales@palmbeach-vitality.com.\n";
-
+function pbv_mail_intro_email_to_subscriber($email) {
+    $shop = function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/');
+    $logo = pbv_intro_email_logo_url();
+    $subject = 'Welcome to the inner circle — Palm Beach Vitality';
     $headers = array(
-        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Type: text/html; charset=UTF-8',
         'From: Palm Beach Vitality <sales@palmbeach-vitality.com>',
         'Reply-To: sales@palmbeach-vitality.com',
     );
-
-    return (bool) wp_mail($email, $subject, $body, $headers);
+    return (bool) wp_mail($email, $subject, pbv_intro_email_html($shop, $logo), $headers);
 }
 
 /**
@@ -293,7 +377,7 @@ function pbv_checkout_welcome_coupon_hint() {
         . esc_html(
             sprintf(
                 /* translators: 1: welcome code, 2: welcome %, 3: stack code, 4: stack % */
-                __('New clients: %1$s = %2$d%% off (first order, one use). Stack with %3$s for an extra %4$d%% off.', 'palmbeach-vitality'),
+                __('Have a code? New-client %1$s = %2$d%% off (first order, one use) stacks with %3$s (%4$d%%).', 'palmbeach-vitality'),
                 PBV_WELCOME_COUPON_CODE,
                 (int) PBV_WELCOME_COUPON_PERCENT,
                 PBV_STACK_COUPON_CODE,
