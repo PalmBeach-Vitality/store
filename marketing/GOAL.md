@@ -86,7 +86,7 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 ### F — `sheet_format_as_tables` (one-shot)
 
-Converts marketing Google Sheets into Tables (table menu + header dropdowns). Does not change cell data. See `n8n-sheet-format-as-tables.md`.
+Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
 ## Shot diversity
 

@@ -1,44 +1,29 @@
-# sheet_format_as_tables
+# Sheet tables + dropdown menus
 
-One-shot linear workflow. Turns marketing spreadsheets into **Google Tables** so each tab has:
+15 looks the way it does because it is a **Google Table**: table menu on the left, filter arrows on every header.
 
-- a **table menu** (top-left of the table)
-- **dropdown menus on every header** (filter / sort)
-- chip dropdowns on `status`, `compound_name`, caption `tag2–tag5`, and `verify_status`
+n8n cannot call the Tables API with your Google Sheets login (that credential is blocked on HTTP Request nodes). Run this once from Sheets instead.
 
-**Not** vid gen. **Not** Creatomate. **No Switch / IF.**
+## Convert every marketing workbook (one run)
 
-**Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/5SgleIocZapgI2In
+1. Open [15-caption-science-27](https://docs.google.com/spreadsheets/d/1yRVkX7fVzU5wopvHH9LVsenHTszHDDhVR_smOfgOrNk/edit)
+2. **Extensions → Apps Script**
+3. Delete the stub code and paste `marketing/scripts/sheets_convert_to_tables.gs`
+4. Left sidebar **Services → + → Google Sheets API → Add**
+5. Run **`convertMarketingSheetsToTables`** → Allow
 
-Open the workflow → Execute. It walks these workbooks only (not the price list or dosing chart):
+That walks 15, 13 (all tabs), 14, 3, 9, 4, 12, and 10. Cell data stays put.
 
-- `15-caption-science-27`
-- `13-chem-breakdown-54` (all tabs, including 15/16 if they live here)
-- `14-pen-creations-150` (live n8n list uses the pen workbook ID; repo copy is `PASTE_GOOGLE_SHEET_DOCUMENT_ID`)
-- `3-image-scenes-150`
-- `9-lab-item-creations-500`
-- `4-reel-queue`
-- `12-import-still-queue`
-- `10-creatomate-text-1000`
+## Convert only the file you have open
 
-## Wire
+Reload the sheet. Menu **PB Vitality → Convert this file to a Table**.
 
-```text
-manual_trigger
-  → list_table_workbooks
-  → http_get_meta
-  → build_batchget_url
-  → http_batchget_dims
-  → build_table_requests
-  → http_apply_tables
-```
+## What you get
 
-## After it runs
+- Table menu (name chip, views)
+- Header dropdowns (filter / sort on every column)
+- Chip dropdowns on `status`, `compound_name`, caption `tag2–tag5`, `verify_status`
 
-Open any of those files. You should see a table name chip and header arrows. Click a header arrow to filter. `status` and `compound_name` are chip dropdowns.
+## One file, by hand
 
-Data is unchanged. n8n still reads the same column names.
-
-## Manual equivalent (one file)
-
-Format → Convert to table → use row 1 as headers.
+Click the data → **Format → Convert to table** → use row 1 as headers.
