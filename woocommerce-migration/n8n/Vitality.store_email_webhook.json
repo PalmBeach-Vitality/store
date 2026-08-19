@@ -37,6 +37,8 @@
     },
     {
       "parameters": {
+        "resource": "message",
+        "operation": "send",
         "sendTo": "={{ $json.email }}",
         "subject": "={{ $json.subject }}",
         "emailType": "html",
@@ -56,8 +58,8 @@
       ],
       "credentials": {
         "gmailOAuth2": {
-          "id": "Tx1ufF7Jxq9yLprP",
-          "name": "Gmail account"
+          "id": "QFs7vWlhrRkL0gqd",
+          "name": "Gmail account 3"
         }
       }
     },

@@ -23,7 +23,7 @@ Map `coupon_code` and `coupon_percent` from the WordPress webhook body. If eithe
 
 Normalize lead → **Email intro** → Respond 200
 
-Gmail node: sender name **Palm Beach Vitality**, attribution off. Do **not** set Reply-To to `sales@` while the Gmail credential is still a personal `@gmail.com` address (that mismatch triggers Gmail’s unauthenticated-sender warning). Reconnect the Gmail credential as **sales@palmbeach-vitality.com** (Google Workspace) so From is signed. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
+Gmail node: credential **Gmail account 3**, sender name **Palm Beach Vitality**, attribution off. That OAuth login must be **sales@palmbeach-vitality.com**. Do **not** set Reply-To to `sales@` while the credential is still a personal `@gmail.com` address. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
 
 ## Webhook payload
 
