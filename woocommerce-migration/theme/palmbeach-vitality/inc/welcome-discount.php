@@ -18,6 +18,9 @@ define('PBV_WELCOME_COUPON_PERCENT', 20);
 /** Stackable promo code. */
 define('PBV_STACK_COUPON_CODE', 'AS-1010');
 
+/** Percent off for the stackable promo. */
+define('PBV_STACK_COUPON_PERCENT', 10);
+
 /** Production n8n webhook for the branded intro email. */
 define('PBV_N8N_WELCOME_WEBHOOK_DEFAULT', 'https://stockjohnson.app.n8n.cloud/webhook/vitality-store-email-webhook');
 
@@ -101,23 +104,32 @@ function pbv_ensure_stack_coupon() {
 
 /**
  * Seed / sync store coupons.
+ *
+ * Wrapped so a coupon-seed failure cannot white-screen wp-admin or the storefront.
  */
 function pbv_seed_welcome_coupon_once() {
     if (!function_exists('WC')) {
         return;
     }
-    update_option('woocommerce_enable_coupons', 'yes');
 
-    $version = '1.1.0'; // 1.1.0: AS-1010 + allow stacking (WELCOME20 individual_use off).
-    if (get_option('pbv_welcome_coupon_version') === $version) {
+    try {
+        update_option('woocommerce_enable_coupons', 'yes');
+
+        $version = '1.1.0'; // 1.1.0: AS-1010 + allow stacking (WELCOME20 individual_use off).
+        if (get_option('pbv_welcome_coupon_version') === $version) {
+            pbv_ensure_welcome_coupon();
+            pbv_ensure_stack_coupon();
+            return;
+        }
+
         pbv_ensure_welcome_coupon();
         pbv_ensure_stack_coupon();
-        return;
+        update_option('pbv_welcome_coupon_version', $version);
+    } catch (Throwable $e) {
+        if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {
+            error_log('Palm Beach Vitality coupon seed failed: ' . $e->getMessage());
+        }
     }
-
-    pbv_ensure_welcome_coupon();
-    pbv_ensure_stack_coupon();
-    update_option('pbv_welcome_coupon_version', $version);
 }
 add_action('woocommerce_init', 'pbv_seed_welcome_coupon_once', 40);
 
