@@ -189,6 +189,34 @@ function pbv_redirect_legacy_storefront_paths() {
         '/telehealth'                   => home_url('/contact/'),
         '/hello-world'                  => $home,
         '/2026/07/29/hello-world'       => $home,
+        '/research'                     => $home,
+        '/privacy-policy'               => home_url('/terms/#privacy'),
+        '/refund-policy'                => home_url('/terms/#refund'),
+        '/refund_returns'               => home_url('/terms/#refund'),
+        '/shipping-policy'              => home_url('/terms/#shipping'),
+        '/terms-of-service'             => home_url('/terms/#terms-of-service'),
+        '/pages/privacy-policy'         => home_url('/terms/#privacy'),
+        '/pages/refund-policy'          => home_url('/terms/#refund'),
+        '/pages/shipping-policy'        => home_url('/terms/#shipping'),
+        '/pages/terms-of-service'       => home_url('/terms/'),
+        '/account'                      => home_url('/my-account/'),
+        '/account/login'                => home_url('/my-account/'),
+        '/account/register'             => home_url('/my-account/'),
+        '/contact-us'                   => home_url('/contact/'),
+        '/about-us'                     => home_url('/about/'),
+        '/faqs'                         => home_url('/faq/'),
+        '/about.html'                   => home_url('/about/'),
+        '/faq.html'                     => home_url('/faq/'),
+        '/contact.html'                 => home_url('/contact/'),
+        '/wholesale.html'               => home_url('/wholesale/'),
+        '/peptide-vials'                => home_url('/product-category/peptides/'),
+        '/peptide-pens'                 => home_url('/product-category/peptide-pens/'),
+        '/weight-loss'                  => home_url('/product-category/weight-loss/'),
+        '/weight-loss-pens'             => home_url('/product-category/weight-loss-pens/'),
+        '/collection/peptides'          => home_url('/product-category/peptides/'),
+        '/wp-sitemap.xml'               => home_url('/sitemap.xml'),
+        '/sitemap_products_1.xml'       => home_url('/sitemap.xml'),
+        '/sitemap_pages_1.xml'          => home_url('/sitemap.xml'),
     );
 
     if (isset($map[$lower])) {
@@ -242,8 +270,52 @@ function pbv_redirect_legacy_storefront_paths() {
         wp_safe_redirect($home, 301);
         exit;
     }
+
+    if (strpos($lower, '/research/') === 0) {
+        wp_safe_redirect($home, 301);
+        exit;
+    }
+
+    if (strpos($lower, '/account/') === 0) {
+        wp_safe_redirect(home_url('/my-account/'), 301);
+        exit;
+    }
+
+    if (preg_match('#^/wp-sitemap(-.*)?\.xml$#', $lower) || preg_match('#^/sitemap_.+\.xml$#', $lower)) {
+        wp_safe_redirect(home_url('/sitemap.xml'), 301);
+        exit;
+    }
 }
 add_action('template_redirect', 'pbv_redirect_legacy_storefront_paths', 0);
+
+/**
+ * Remaining HTML 404s from the Shopify / static-site era → shop.
+ * Leaves wp-admin, wp-json, uploads, and binary assets as true 404s.
+ */
+function pbv_redirect_remaining_html_404s() {
+    if (!is_404() || is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+        return;
+    }
+    if (isset($_SERVER['REQUEST_METHOD']) && strtoupper((string) $_SERVER['REQUEST_METHOD']) !== 'GET') {
+        return;
+    }
+
+    $path = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+    $path = strtok($path, '?');
+    $lower = strtolower((string) $path);
+
+    if (strpos($lower, '/wp-admin') === 0 || strpos($lower, '/wp-json') === 0 || strpos($lower, '/wp-content/') === 0) {
+        return;
+    }
+
+    if (preg_match('/\.(png|jpe?g|gif|webp|svg|css|js|txt|json|ico|woff2?|map|pdf|xml)$/i', $lower)) {
+        return;
+    }
+
+    wp_safe_redirect(home_url('/shop/'), 301);
+    exit;
+}
+add_action('template_redirect', 'pbv_redirect_remaining_html_404s', 99);
 
 /**
  * 301 leftover Woo product slugs that 404 (discontinued / never imported).
