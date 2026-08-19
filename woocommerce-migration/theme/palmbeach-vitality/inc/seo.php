@@ -11,7 +11,24 @@ if (!defined('ABSPATH')) {
 }
 
 /**
- * Append crawl rules that keep junk / legacy Shopify asset paths out of the index.
+ * Pages that must never appear in sitemaps or Google's index.
+ *
+ * @return string[]
+ */
+function pbv_seo_noindex_slugs() {
+    return array(
+        'cart',
+        'checkout',
+        'my-account',
+        'hello-world',
+        'communication-preferences',
+        'telehealth',
+    );
+}
+
+/**
+ * Crawl rules: only block private / cart-trap paths.
+ * Do not Disallow URLs we 301 (Google must recrawl the redirect to drop GSC "blocked" rows).
  *
  * @param string $output Robots.txt body.
  * @param bool   $public Blog public flag.
@@ -24,25 +41,29 @@ function pbv_robots_txt($output, $public) {
 
     $extra = array(
         '',
-        '# Palm Beach Vitality — keep non-storefront junk out of Google',
+        '# Palm Beach Vitality — private / cart-trap paths only',
         'User-agent: *',
-        'Disallow: /cdn/shop/',
-        'Disallow: /services/',
-        'Disallow: /wpm',
-        'Disallow: /wpm/',
         'Disallow: /*?action=qcld_',
         'Disallow: /*?*action=qcld_',
         'Disallow: /*?wc-ajax=',
         'Disallow: /*?*wc-ajax=',
-        'Disallow: /feed/',
-        'Disallow: /*/feed/',
-        'Disallow: /*/feed/atom/',
         'Disallow: /wp-json/woocommerce-analytics/',
     );
 
     return rtrim((string) $output) . "\n" . implode("\n", $extra) . "\n";
 }
 add_filter('robots_txt', 'pbv_robots_txt', 100, 2);
+
+/**
+ * Storefront does not publish news — hide Jetpack news sitemap from robots.txt.
+ *
+ * @param bool $discover Whether to advertise news-sitemap.xml.
+ * @return bool
+ */
+function pbv_disable_news_sitemap($discover) {
+    return false;
+}
+add_filter('jetpack_news_sitemap_generate', 'pbv_disable_news_sitemap');
 
 /**
  * Send X-Robots-Tag / wp_robots noindex for feeds, chatbot API query routes, and hello-world.
@@ -53,15 +74,27 @@ add_filter('robots_txt', 'pbv_robots_txt', 100, 2);
 function pbv_wp_robots_noindex_junk($robots) {
     $noindex = false;
 
-    if (is_feed()) {
+    if (is_feed() || is_search() || is_author() || is_date() || is_attachment()) {
         $noindex = true;
     }
 
-    if (is_singular('post')) {
+    if (function_exists('is_cart') && (is_cart() || is_checkout() || is_account_page())) {
+        $noindex = true;
+    }
+
+    if (function_exists('is_product_tag') && is_product_tag()) {
+        $noindex = true;
+    }
+
+    if (is_singular()) {
         $slug = get_post_field('post_name', get_queried_object_id());
-        if ($slug === 'hello-world') {
+        if ($slug && in_array($slug, pbv_seo_noindex_slugs(), true)) {
             $noindex = true;
         }
+    }
+
+    if (isset($_GET['s'])) {
+        $noindex = true;
     }
 
     $action = isset($_GET['action']) ? sanitize_text_field(wp_unslash((string) $_GET['action'])) : '';
@@ -69,7 +102,7 @@ function pbv_wp_robots_noindex_junk($robots) {
         $noindex = true;
     }
 
-    if (isset($_GET['wc-ajax'])) {
+    if (isset($_GET['wc-ajax']) || isset($_GET['add-to-cart'])) {
         $noindex = true;
     }
 
@@ -121,17 +154,41 @@ function pbv_redirect_legacy_storefront_paths() {
     }
     $lower = strtolower($path);
 
+    $shop = home_url('/shop/');
+    $home = home_url('/');
+
     $map = array(
-        '/policies/shipping-policy'  => home_url('/terms/#shipping'),
-        '/policies/terms-of-service' => home_url('/terms/#terms-of-service'),
-        '/policies/refund-policy'    => home_url('/terms/#refund'),
-        '/policies/privacy-policy'   => home_url('/terms/#privacy'),
+        '/policies/shipping-policy'     => home_url('/terms/#shipping'),
+        '/policies/terms-of-service'    => home_url('/terms/#terms-of-service'),
+        '/policies/refund-policy'       => home_url('/terms/#refund'),
+        '/policies/privacy-policy'      => home_url('/terms/#privacy'),
         '/collections/weight-loss-pens' => home_url('/product-category/weight-loss-pens/'),
         '/collections/weight-loss'      => home_url('/product-category/weight-loss/'),
         '/collections/peptides'         => home_url('/product-category/peptides/'),
         '/collections/peptide-pens'     => home_url('/product-category/peptide-pens/'),
-        '/collections/all'              => home_url('/shop/'),
-        '/wpm'                          => home_url('/'),
+        '/collections/all'              => $shop,
+        '/wpm'                          => $home,
+        '/services'                     => $home,
+        '/products'                     => $shop,
+        '/products.html'                => $shop,
+        '/collections'                  => $shop,
+        '/search'                       => $shop,
+        '/blog'                         => $home,
+        '/sample-page'                  => $home,
+        '/protocols'                    => $shop,
+        '/product-category'             => $shop,
+        '/product'                      => $shop,
+        '/cdn/shop'                     => $home,
+        '/pages/about'                  => home_url('/about/'),
+        '/pages/contact'                => home_url('/contact/'),
+        '/pages/faq'                    => home_url('/faq/'),
+        '/pages/wholesale'              => home_url('/wholesale/'),
+        '/pages/terms'                  => home_url('/terms/'),
+        '/pages/telehealth'             => home_url('/contact/'),
+        '/peptides'                     => home_url('/product-category/peptides/'),
+        '/telehealth'                   => home_url('/contact/'),
+        '/hello-world'                  => $home,
+        '/2026/07/29/hello-world'       => $home,
     );
 
     if (isset($map[$lower])) {
@@ -139,39 +196,177 @@ function pbv_redirect_legacy_storefront_paths() {
         exit;
     }
 
-    // Any other /policies/* → terms hub.
     if (strpos($lower, '/policies/') === 0) {
         wp_safe_redirect(home_url('/terms/'), 301);
+        exit;
+    }
+
+    if (strpos($lower, '/collections/') === 0) {
+        wp_safe_redirect($shop, 301);
+        exit;
+    }
+
+    if (strpos($lower, '/cdn/shop') === 0) {
+        wp_safe_redirect($home, 301);
+        exit;
+    }
+
+    if (is_attachment()) {
+        $parent = wp_get_post_parent_id(get_queried_object_id());
+        $dest   = $parent ? get_permalink($parent) : $home;
+        if ($dest) {
+            wp_safe_redirect($dest, 301);
+            exit;
+        }
+    }
+
+    if (is_singular('post')) {
+        $slug = get_post_field('post_name', get_queried_object_id());
+        if ($slug === 'hello-world') {
+            wp_safe_redirect($home, 301);
+            exit;
+        }
+    }
+
+    if (is_page('peptides')) {
+        wp_safe_redirect(home_url('/product-category/peptides/'), 301);
+        exit;
+    }
+
+    if (is_page('telehealth')) {
+        wp_safe_redirect(home_url('/contact/'), 301);
+        exit;
+    }
+
+    if (is_author() || is_date()) {
+        wp_safe_redirect($home, 301);
         exit;
     }
 }
 add_action('template_redirect', 'pbv_redirect_legacy_storefront_paths', 0);
 
 /**
- * Skip transactional / junk pages from Jetpack XML sitemaps.
+ * 301 leftover Woo product slugs that 404 (discontinued / never imported).
+ */
+function pbv_redirect_missing_product_slugs() {
+    if (!is_404()) {
+        return;
+    }
+
+    $path = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+    $path = strtok($path, '?');
+    $path = trim((string) $path, '/');
+
+    if (!preg_match('#^product/([^/]+)/?$#i', $path, $matches)) {
+        return;
+    }
+
+    $slug = sanitize_title(rawurldecode($matches[1]));
+    $weight_loss = array(
+        'retatrutide',
+        'retatrutide-60mg',
+        'retatrutide-100mg',
+        'retatrutide-200mg',
+        'retatrutride-8mg-pen',
+        'retatrutride-16mg-pen',
+        'retatrutride-24mg-pen',
+        'retatrutride-32mg-pen',
+        'retatrutride-40mg-pen',
+    );
+
+    if (in_array($slug, $weight_loss, true) || strpos($slug, 'retatrut') === 0) {
+        wp_safe_redirect(home_url('/product-category/weight-loss/'), 301);
+        exit;
+    }
+
+    wp_safe_redirect(home_url('/shop/'), 301);
+    exit;
+}
+add_action('template_redirect', 'pbv_redirect_missing_product_slugs', 20);
+
+/**
+ * Skip transactional / junk / attachment URLs from Jetpack XML sitemaps.
+ * Jetpack passes a $wpdb row object here, not a WP_Post — do not use instanceof WP_Post.
  *
- * @param bool     $skip Whether to skip.
- * @param WP_Post  $post Post object.
+ * @param bool   $skip Whether to skip.
+ * @param object $post Database row.
  * @return bool
  */
 function pbv_jetpack_sitemap_skip_post($skip, $post) {
-    if (!$post instanceof WP_Post) {
+    if (!is_object($post)) {
         return $skip;
     }
 
-    $skip_slugs = array('cart', 'checkout', 'my-account', 'hello-world');
-    if (in_array($post->post_name, $skip_slugs, true)) {
+    $type = isset($post->post_type) ? (string) $post->post_type : '';
+    $name = isset($post->post_name) ? (string) $post->post_name : '';
+    $pass = isset($post->post_password) ? (string) $post->post_password : '';
+
+    if ($type === 'attachment' || $type === 'post') {
         return true;
     }
 
-    // Never sitemap feeds or password posts.
-    if (!empty($post->post_password)) {
+    $skip_slugs = array_merge(pbv_seo_noindex_slugs(), array('peptides'));
+    if ($name !== '' && in_array($name, $skip_slugs, true)) {
+        return true;
+    }
+
+    if ($pass !== '') {
         return true;
     }
 
     return $skip;
 }
 add_filter('jetpack_sitemap_skip_post', 'pbv_jetpack_sitemap_skip_post', 10, 2);
+add_filter('jetpack_sitemap_news_skip_post', 'pbv_jetpack_sitemap_skip_post', 10, 2);
+
+/**
+ * Skip every post from the news sitemap (this is not a news publisher).
+ *
+ * @param bool   $skip Whether to skip.
+ * @param object $post Database row.
+ * @return bool
+ */
+function pbv_jetpack_news_skip_all($skip, $post) {
+    return true;
+}
+add_filter('jetpack_sitemap_news_skip_post', 'pbv_jetpack_news_skip_all', 20, 2);
+
+/**
+ * Add live product category URLs to the Jetpack page sitemap.
+ *
+ * @param array<int,array<string,string>> $urls Extra URLs.
+ * @return array<int,array<string,string>>
+ */
+function pbv_jetpack_sitemap_other_urls($urls) {
+    if (!is_array($urls)) {
+        $urls = array();
+    }
+    if (!taxonomy_exists('product_cat')) {
+        return $urls;
+    }
+
+    $terms = get_terms(array(
+        'taxonomy'   => 'product_cat',
+        'hide_empty' => true,
+    ));
+    if (is_wp_error($terms) || empty($terms)) {
+        return $urls;
+    }
+
+    foreach ($terms as $term) {
+        $link = get_term_link($term);
+        if (is_wp_error($link) || !$link) {
+            continue;
+        }
+        $urls[] = array(
+            'loc'     => $link,
+            'lastmod' => gmdate('Y-m-d\TH:i:s\Z'),
+        );
+    }
+
+    return $urls;
+}
+add_filter('jetpack_page_sitemap_other_urls', 'pbv_jetpack_sitemap_other_urls');
 
 /**
  * Also exclude cart/checkout/account from core wp_sitemaps if used.
@@ -181,7 +376,7 @@ add_filter('jetpack_sitemap_skip_post', 'pbv_jetpack_sitemap_skip_post', 10, 2);
  */
 function pbv_wp_sitemaps_exclude_pages($args) {
     $exclude = array();
-    foreach (array('cart', 'checkout', 'my-account', 'hello-world') as $slug) {
+    foreach (array_merge(pbv_seo_noindex_slugs(), array('peptides')) as $slug) {
         $page = get_page_by_path($slug);
         if ($page) {
             $exclude[] = (int) $page->ID;
@@ -544,6 +739,17 @@ function pbv_output_seo_canonical() {
                 $url = $link;
             }
         }
+    } elseif (function_exists('is_product_tag') && is_product_tag()) {
+        $term = get_queried_object();
+        if ($term && !is_wp_error($term)) {
+            $cat = get_term_by('slug', $term->slug, 'product_cat');
+            if ($cat && !is_wp_error($cat)) {
+                $link = get_term_link($cat);
+                if (!is_wp_error($link)) {
+                    $url = $link;
+                }
+            }
+        }
     }
 
     if ($url) {
@@ -551,6 +757,36 @@ function pbv_output_seo_canonical() {
     }
 }
 add_action('wp_head', 'pbv_output_seo_canonical', 3);
+
+/**
+ * Keep checkout canonical on checkout (Woo otherwise points it at cart).
+ *
+ * @param string  $canonical Canonical URL.
+ * @param WP_Post $post      Post object.
+ * @return string
+ */
+function pbv_filter_canonical_url($canonical, $post = null) {
+    if (function_exists('is_checkout') && is_checkout() && function_exists('wc_get_checkout_url')) {
+        return wc_get_checkout_url();
+    }
+    return $canonical;
+}
+add_filter('get_canonical_url', 'pbv_filter_canonical_url', 20, 2);
+
+/**
+ * Drop author/user sitemaps (those URLs 404 on this store).
+ *
+ * @param object|false $provider Provider.
+ * @param string       $name     Provider name.
+ * @return object|false
+ */
+function pbv_remove_users_sitemap($provider, $name) {
+    if ($name === 'users') {
+        return false;
+    }
+    return $provider;
+}
+add_filter('wp_sitemaps_add_provider', 'pbv_remove_users_sitemap', 10, 2);
 
 /**
  * Stop Woo/Jetpack from using the RUO short-description line as the social/meta blurb.
@@ -745,6 +981,9 @@ add_action('wp_head', 'pbv_output_og_basics', 2);
  * @return string
  */
 function pbv_pre_get_document_title($title) {
+    if (is_search() || is_feed() || isset($_GET['s'])) {
+        return $title;
+    }
     $parts = array(
         'title'   => '',
         'page'    => '',
