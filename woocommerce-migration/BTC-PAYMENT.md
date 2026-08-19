@@ -29,7 +29,7 @@ Goal: make paying with **$BTC** as easy as possible on `palmbeach-vitality.store
 
 Theme payment method: **Bitcoin ($BTC)** (`pbv_bitcoin`)
 
-v2.10.43 declares gateway properties and registers WooCommerce hooks once so PHP 8.2+ does not flood error logs (that warning volume can blank wp-admin and disconnect Jetpack).
+v2.10.44 stops the live PHP log flood (`Undefined variable $BTC` in a double-quoted default string) and still registers gateway hooks once. That warning volume can blank wp-admin and disconnect Jetpack.
 
 1. Upload/replace `palmbeach-vitality-theme.zip` (v2.10.8+)
 2. WooCommerce → Settings → Payments → **Bitcoin ($BTC)** → Enable

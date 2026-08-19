@@ -115,7 +115,9 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
                 'type'        => 'textarea',
                 'description' => __('Extra instructions shown on the thank-you page and in order emails.', 'palmbeach-vitality'),
                 'default'     => __(
-                    "Send the exact order total in Bitcoin ($BTC) to the address below.\nInclude your Order ID in the wallet memo/note if available.\nYour order ships after the payment confirms on the Bitcoin network.",
+                    'Send the exact order total in Bitcoin ($BTC) to the address below.' . "\n"
+                    . 'Include your Order ID in the wallet memo/note if available.' . "\n"
+                    . 'Your order ships after the payment confirms on the Bitcoin network.',
                     'palmbeach-vitality'
                 ),
             ),
