@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.40');
+define('PBV_THEME_VERSION', '2.10.41');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -89,6 +89,28 @@ function pbv_setup() {
     ));
 }
 add_action('after_setup_theme', 'pbv_setup');
+
+/**
+ * This is a classic PHP theme. The block Site Editor will look broken; use Customizer.
+ */
+function pbv_classic_theme_editor_notice() {
+    if (!function_exists('get_current_screen')) {
+        return;
+    }
+    $screen = get_current_screen();
+    if (!$screen) {
+        return;
+    }
+    $id = (string) $screen->id;
+    if (strpos($id, 'site-editor') === false && $id !== 'appearance_page_gutenberg-edit-site') {
+        return;
+    }
+    echo '<div class="notice notice-warning"><p>';
+    echo esc_html__('Palm Beach Vitality is a classic theme. Use Appearance → Customize (not Appearance → Editor). If WordPress.com says the site is disconnected, open Jetpack in WP Admin and reconnect.', 'palmbeach-vitality');
+    echo ' <a href="' . esc_url(admin_url('customize.php')) . '">' . esc_html__('Open Customizer', 'palmbeach-vitality') . '</a>';
+    echo '</p></div>';
+}
+add_action('admin_notices', 'pbv_classic_theme_editor_notice');
 
 /**
  * Hero URL: Customizer header image, else bundled default.

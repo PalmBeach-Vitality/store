@@ -6,8 +6,12 @@
  * @package PalmBeach_Vitality
  */
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 /**
- * Skip storefront 301s on wp-admin, AJAX, cron, and REST (MailPoet uses /wp-json/).
+ * Skip storefront 301s on wp-admin, AJAX, cron, REST, and XML-RPC (Jetpack / WP.com).
  *
  * @return bool
  */
@@ -18,11 +22,14 @@ function pbv_is_wp_system_request() {
     if (defined('REST_REQUEST') && REST_REQUEST) {
         return true;
     }
+    if (defined('XMLRPC_REQUEST') && XMLRPC_REQUEST) {
+        return true;
+    }
     $uri = isset($_SERVER['REQUEST_URI']) ? strtolower((string) wp_unslash($_SERVER['REQUEST_URI'])) : '';
     if ($uri === '') {
         return false;
     }
-    if (strpos($uri, '/wp-json') !== false || strpos($uri, 'rest_route=') !== false) {
+    if (strpos($uri, '/wp-json') !== false || strpos($uri, 'rest_route=') !== false || strpos($uri, 'xmlrpc.php') !== false) {
         return true;
     }
     return false;
