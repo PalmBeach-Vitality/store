@@ -34,15 +34,11 @@ manual_trigger
   → grok_video_extend_1
   → wait_extend_1
   → grok_extend_poll_1
-  → prep_molecule_extend_2
-  → grok_video_extend_2
-  → wait_extend_2
-  → grok_extend_poll_2
   → save_video_url
   → sheets_update_chem
 ```
 
-Grok’s generate API max is **15 seconds**. A 30s clip is that 15s video plus two silent extends (10s then 5s). Set `VIDEO_SECONDS` in `enter_video_seconds` before Execute.
+Grok’s generate API max is **15 seconds**. A 30s clip is **two 15s jobs**: generate 15s, then one silent 15s extend (xAI stitches them into one file). Set `VIDEO_SECONDS` in `enter_video_seconds` before Execute.
 
 ---
 
@@ -231,33 +227,31 @@ Must be **enabled**.
 
 ---
 
-## Nodes 10b–10i — 30s extend (linear, no Switch)
+## Nodes 10b–10e — 30s extend (linear, no Switch)
 
-Grok cannot generate 30s in one call. These hops always run. When `VIDEO_SECONDS = 15` they **GET** the finished 15s clip (wait 2s) and do not call `/videos/extensions`. When `VIDEO_SECONDS = 30` they POST silent extends: **10s then 5s**.
+Grok cannot generate 30s in one call. **Two 15s jobs:** generate 15s, then one silent 15s extend. When `VIDEO_SECONDS = 15` this hop **GET**s the finished 15s clip (wait 2s) and does not call `/videos/extensions`. When `VIDEO_SECONDS = 30` it POSTs one 15s silent extend.
 
-**`prep_molecule_extend_1` / `_2`** — Code. Paste `marketing/n8n-code-prep-molecule-video-extend.js`. Hop 1 keeps `EXTEND_HOP = 1`. Hop 2 sets `EXTEND_HOP = 2`. Execute Once **OFF**.
+**`prep_molecule_extend_1`** — Code. Paste `marketing/n8n-code-prep-molecule-video-extend.js`. Execute Once **OFF**.
 
-**`grok_video_extend_1` / `_2`** — HTTP Request
+**`grok_video_extend_1`** — HTTP Request
 
 | Setting | fx | Value |
 |---|---|---|
 | Method | **ON** | `={{ $json.http_method }}` |
 | URL | **ON** | `={{ $json.http_url }}` |
 | Authentication | — | same xAI Header Auth |
-| Send Body | **ON** | `={{ $json.send_body }}` |
+| Send Body | — | **ON** (Fixed boolean) |
 | Body Content Type | — | **Raw** |
 | Content Type | **OFF** | `application/json` |
 | Body | **ON** | `={{ $json.grok_extend_body_json }}` |
 
-**`wait_extend_1` / `_2`** — Wait · After time interval · Unit seconds · Amount **ON** `={{ Number($('prep_molecule_extend_1').first().json.wait_seconds) }}` (use `_2` on hop 2). 180s / 140s when extending, 2s when skipping.
+**`wait_extend_1`** — Wait · After time interval · Unit seconds · Amount **ON** `={{ Number($('prep_molecule_extend_1').first().json.wait_seconds) }}`. 200s when extending, 2s when skipping.
 
-**`grok_extend_poll_1` / `_2`** — HTTP GET
+**`grok_extend_poll_1`** — HTTP GET
 
 | Setting | fx | Value |
 |---|---|---|
 | URL | **ON** | `={{ 'https://api.x.ai/v1/videos/' + ($('grok_video_extend_1').first().json.request_id \|\| $('prep_molecule_extend_1').first().json.poll_request_id) }}` |
-
-Hop 2 poll reads `grok_video_extend_2` / `prep_molecule_extend_2`.
 
 **Check (30):** final `video.duration` is 30. Clip stays muted. No logo, no text.
 
@@ -266,7 +260,7 @@ Hop 2 poll reads `grok_video_extend_2` / `prep_molecule_extend_2`.
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_extend_poll_2` → **save_video_url** → `sheets_update_chem`  
+**Before → this → After:** `grok_extend_poll_1` → **save_video_url** → `sheets_update_chem`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |

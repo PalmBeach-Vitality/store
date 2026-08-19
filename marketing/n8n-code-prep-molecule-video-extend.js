@@ -2,14 +2,12 @@
 // Workflow: peptide_molecule_vid_gen
 // Mode: Run Once for All Items
 // Settings → Execute Once = OFF
-// Duplicate this node as prep_molecule_extend_1 (HOP=1) and prep_molecule_extend_2 (HOP=2).
-// After: grok_video_poll / grok_extend_poll_1
-// Before: grok_video_extend_1 / grok_video_extend_2
+// After: grok_video_poll
+// Before: grok_video_extend_1
 //
-// Grok generate max is 15s. Extend segment max is 10s.
-// 30s total = 15 + 10 + 5. VIDEO_SECONDS=15 skips both hops (GET the finished 15s clip).
-
-var EXTEND_HOP = 1;
+// 30s = two 15s Grok jobs: generate 15, then one silent 15s extend
+// (API returns one combined clip). VIDEO_SECONDS=15 skips the extend
+// (GET the finished 15s clip).
 
 function firstJson(name) {
   try {
@@ -34,31 +32,20 @@ function videoUrlFrom(obj) {
   );
 }
 
-var hop = Number(EXTEND_HOP) === 2 ? 2 : 1;
 var wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);
 if (wanted !== 30) wanted = 15;
 var doExtend = wanted === 30;
 
 var start = firstJson('grok_video_start');
 var poll = ($input.first() && $input.first().json) || {};
-var sourceUrl = videoUrlFrom(poll);
-if (!sourceUrl) sourceUrl = videoUrlFrom(firstJson('grok_video_poll'));
-if (!sourceUrl && hop === 2) sourceUrl = videoUrlFrom(firstJson('grok_extend_poll_1'));
-
+var sourceUrl = videoUrlFrom(poll) || videoUrlFrom(firstJson('grok_video_poll'));
 var originId = String(start.request_id || '').trim();
-var pollRequestId = originId;
-if (hop === 2) {
-  pollRequestId = String(firstJson('grok_video_extend_1').request_id || originId).trim();
-}
-
-var extendSeconds = hop === 1 ? 10 : 5;
-var waitSeconds = doExtend ? (hop === 1 ? 180 : 140) : 2;
+var extendSeconds = 15;
+var waitSeconds = doExtend ? 200 : 2;
 
 if (doExtend && !sourceUrl) {
   throw new Error(
-    'prep_molecule_video_extend hop ' +
-      hop +
-      ': missing source video URL from the previous poll. Check grok_video_poll status=done and video.url.'
+    'prep_molecule_video_extend: missing source video URL from grok_video_poll. Need status=done and video.url.'
   );
 }
 
@@ -73,7 +60,7 @@ if (motion.length > 700) {
 }
 
 var body = {
-  model: 'grok-imagine-video',
+  model: 'grok-imagine-video-1.5',
   prompt: motion,
   duration: extendSeconds,
   video: { url: sourceUrl },
@@ -82,8 +69,8 @@ var body = {
 var httpMethod = doExtend ? 'POST' : 'GET';
 var httpUrl = doExtend
   ? 'https://api.x.ai/v1/videos/extensions'
-  : 'https://api.x.ai/v1/videos/' + pollRequestId;
-if (!doExtend && !pollRequestId) {
+  : 'https://api.x.ai/v1/videos/' + originId;
+if (!doExtend && !originId) {
   throw new Error('prep_molecule_video_extend: missing grok_video_start.request_id to re-read the 15s clip.');
 }
 
@@ -91,12 +78,11 @@ return [
   {
     json: {
       video_seconds: wanted,
-      extend_hop: hop,
       extend_applied: doExtend,
       extend_seconds: doExtend ? extendSeconds : 0,
       wait_seconds: waitSeconds,
       source_video_url: sourceUrl,
-      poll_request_id: pollRequestId,
+      poll_request_id: originId,
       http_method: httpMethod,
       http_url: httpUrl,
       send_body: doExtend,

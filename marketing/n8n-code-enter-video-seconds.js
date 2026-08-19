@@ -5,8 +5,8 @@
 // After: manual_trigger
 // Before: get_chem_creations
 //
-// 15 = one Grok clip (API max).
-// 30 = 15s clip + silent extend 10s + silent extend 5s.
+// 15 = one Grok clip (generate max).
+// 30 = two 15s jobs: generate 15s, then one 15s silent extend.
 
 var VIDEO_SECONDS = 15;
 

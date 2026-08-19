@@ -171,7 +171,7 @@
     {
       "parameters": {
         "mode": "runOnceForAllItems",
-        "jsCode": "// n8n Code node: prep_molecule_video_start\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// After: save_still_url\n// Before: grok_video_start\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nvar input = ($input.first() && $input.first().json) || {};\nvar pick = firstJson('pick_molecule_creation');\nvar saveStill = firstJson('save_still_url');\nvar imagine = firstJson('grok_imagine_molecule_still');\n\nvar still =\n  httpsUrl(input.still_url) ||\n  httpsUrl(saveStill.still_url) ||\n  httpsUrl(imagine.data && imagine.data[0] && imagine.data[0].url) ||\n  '';\n\nif (!still) {\n  throw new Error(\n    'prep_molecule_video_start: still_url missing. save_still_url must be ={{ $json.data[0].url }} from grok_imagine_molecule_still.'\n  );\n}\n\nvar motion = String(\n  input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''\n).trim();\nmotion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. No text, no captions, no logos appear. Cellular reaction continues. ' +\n  motion;\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\nif (!motion) {\n  throw new Error('prep_molecule_video_start: video_motion_prompt missing from pick_molecule_creation.');\n}\n\nvar modelVideo = String(\n  input.model_video || pick.model_video || saveStill.model_video || 'grok-imagine-video-1.5'\n).trim();\nvar wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);\nif (wanted !== 30) wanted = 15;\n// First clip is always 15s \u2014 Grok generate max. 30s is 15 + extend 10 + extend 5.\nvar duration = 15;\nvar resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();\n\nvar body = {\n  model: modelVideo,\n  prompt: motion,\n  image: { url: still },\n  duration: duration,\n  resolution: resolution,\n  audio: false,\n};\n\nreturn [\n  {\n    json: {\n      still_url: still,\n      video_motion_prompt: motion,\n      model_video: modelVideo,\n      duration_seconds: duration,\n      video_seconds: wanted,\n      resolution: resolution,\n      creation_id: String(input.creation_id || pick.creation_id || ''),\n      compound_name: String(input.compound_name || pick.compound_name || ''),\n      grok_video_body_json: JSON.stringify(body),\n    },\n  },\n];\n",
+        "jsCode": "// n8n Code node: prep_molecule_video_start\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// After: save_still_url\n// Before: grok_video_start\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nvar input = ($input.first() && $input.first().json) || {};\nvar pick = firstJson('pick_molecule_creation');\nvar saveStill = firstJson('save_still_url');\nvar imagine = firstJson('grok_imagine_molecule_still');\n\nvar still =\n  httpsUrl(input.still_url) ||\n  httpsUrl(saveStill.still_url) ||\n  httpsUrl(imagine.data && imagine.data[0] && imagine.data[0].url) ||\n  '';\n\nif (!still) {\n  throw new Error(\n    'prep_molecule_video_start: still_url missing. save_still_url must be ={{ $json.data[0].url }} from grok_imagine_molecule_still.'\n  );\n}\n\nvar motion = String(\n  input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''\n).trim();\nmotion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. No text, no captions, no logos appear. Cellular reaction continues. ' +\n  motion;\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\nif (!motion) {\n  throw new Error('prep_molecule_video_start: video_motion_prompt missing from pick_molecule_creation.');\n}\n\nvar modelVideo = String(\n  input.model_video || pick.model_video || saveStill.model_video || 'grok-imagine-video-1.5'\n).trim();\nvar wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);\nif (wanted !== 30) wanted = 15;\n// First clip is always 15s \u2014 Grok generate max. 30s is a second 15s silent extend.\nvar duration = 15;\nvar resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();\n\nvar body = {\n  model: modelVideo,\n  prompt: motion,\n  image: { url: still },\n  duration: duration,\n  resolution: resolution,\n  audio: false,\n};\n\nreturn [\n  {\n    json: {\n      still_url: still,\n      video_motion_prompt: motion,\n      model_video: modelVideo,\n      duration_seconds: duration,\n      video_seconds: wanted,\n      resolution: resolution,\n      creation_id: String(input.creation_id || pick.creation_id || ''),\n      compound_name: String(input.compound_name || pick.compound_name || ''),\n      grok_video_body_json: JSON.stringify(body),\n    },\n  },\n];\n",
         "language": "javaScript"
       },
       "id": "code-prep-001",
@@ -337,7 +337,7 @@
     },
     {
       "parameters": {
-        "content": "## peptide_molecule_vid_gen\nCellular chemical reaction: living cells + amino acids.\nNO logo. NO text. NO sound (add after).\nenter_video_seconds: VIDEO_SECONDS = 15 or 30.\n30s = 15s clip + silent extend 10 + 5.\nLive: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq",
+        "content": "## peptide_molecule_vid_gen\nCellular chemical reaction: living cells + amino acids.\nNO logo. NO text. NO sound (add after).\nenter_video_seconds: VIDEO_SECONDS = 15 or 30.\n30s = two 15s jobs (generate + silent extend).\nLive: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq",
         "height": 280,
         "width": 420,
         "color": 5
@@ -355,7 +355,7 @@
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
-        "jsCode": "// n8n Code node: enter_video_seconds\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: manual_trigger\n// Before: get_chem_creations\n//\n// 15 = one Grok clip (API max).\n// 30 = 15s clip + silent extend 10s + silent extend 5s.\n\nvar VIDEO_SECONDS = 15;\n\nvar n = Number(VIDEO_SECONDS);\nif (n !== 30) n = 15;\n\nreturn [\n  {\n    json: {\n      video_seconds: n,\n    },\n  },\n];\n"
+        "jsCode": "// n8n Code node: enter_video_seconds\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: manual_trigger\n// Before: get_chem_creations\n//\n// 15 = one Grok clip (generate max).\n// 30 = two 15s jobs: generate 15s, then one 15s silent extend.\n\nvar VIDEO_SECONDS = 15;\n\nvar n = Number(VIDEO_SECONDS);\nif (n !== 30) n = 15;\n\nreturn [\n  {\n    json: {\n      video_seconds: n,\n    },\n  },\n];\n"
       },
       "id": "code-enter-dur-001",
       "name": "enter_video_seconds",
@@ -365,13 +365,13 @@
         120,
         300
       ],
-      "notes": "Set VIDEO_SECONDS = 15 or 30, then Execute. 30 = silent extend 10s + 5s."
+      "notes": "Set VIDEO_SECONDS = 15 or 30. 30 = two 15s jobs (generate + silent extend)."
     },
     {
       "parameters": {
         "mode": "runOnceForAllItems",
         "language": "javaScript",
-        "jsCode": "// n8n Code node: prep_molecule_video_extend\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// Duplicate this node as prep_molecule_extend_1 (HOP=1) and prep_molecule_extend_2 (HOP=2).\n// After: grok_video_poll / grok_extend_poll_1\n// Before: grok_video_extend_1 / grok_video_extend_2\n//\n// Grok generate max is 15s. Extend segment max is 10s.\n// 30s total = 15 + 10 + 5. VIDEO_SECONDS=15 skips both hops (GET the finished 15s clip).\n\nvar EXTEND_HOP = 1;\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nfunction videoUrlFrom(obj) {\n  if (!obj) return '';\n  return (\n    httpsUrl(obj.video && obj.video.url) ||\n    httpsUrl(obj.url) ||\n    httpsUrl(obj.video_url) ||\n    ''\n  );\n}\n\nvar hop = Number(EXTEND_HOP) === 2 ? 2 : 1;\nvar wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);\nif (wanted !== 30) wanted = 15;\nvar doExtend = wanted === 30;\n\nvar start = firstJson('grok_video_start');\nvar poll = ($input.first() && $input.first().json) || {};\nvar sourceUrl = videoUrlFrom(poll);\nif (!sourceUrl) sourceUrl = videoUrlFrom(firstJson('grok_video_poll'));\nif (!sourceUrl && hop === 2) sourceUrl = videoUrlFrom(firstJson('grok_extend_poll_1'));\n\nvar originId = String(start.request_id || '').trim();\nvar pollRequestId = originId;\nif (hop === 2) {\n  pollRequestId = String(firstJson('grok_video_extend_1').request_id || originId).trim();\n}\n\nvar extendSeconds = hop === 1 ? 10 : 5;\nvar waitSeconds = doExtend ? (hop === 1 ? 180 : 140) : 2;\n\nif (doExtend && !sourceUrl) {\n  throw new Error(\n    'prep_molecule_video_extend hop ' +\n      hop +\n      ': missing source video URL from the previous poll. Check grok_video_poll status=done and video.url.'\n  );\n}\n\nvar motion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' +\n  'Continue from the last frame of the same dark cinematic 3D medical animation of a live cellular chemical reaction. ' +\n  'Amino acids keep colliding and docking. Peptide bonds form with energy flashes. The living-cell membrane and cytoplasm keep moving. ' +\n  'Keep the same lighting, color grade, and slow camera energy. No cut. No new scene. ' +\n  'NO text, NO logos, NO captions, NO vials, NO pens, NO people. Completely blank of typography.';\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\n\nvar body = {\n  model: 'grok-imagine-video',\n  prompt: motion,\n  duration: extendSeconds,\n  video: { url: sourceUrl },\n};\n\nvar httpMethod = doExtend ? 'POST' : 'GET';\nvar httpUrl = doExtend\n  ? 'https://api.x.ai/v1/videos/extensions'\n  : 'https://api.x.ai/v1/videos/' + pollRequestId;\nif (!doExtend && !pollRequestId) {\n  throw new Error('prep_molecule_video_extend: missing grok_video_start.request_id to re-read the 15s clip.');\n}\n\nreturn [\n  {\n    json: {\n      video_seconds: wanted,\n      extend_hop: hop,\n      extend_applied: doExtend,\n      extend_seconds: doExtend ? extendSeconds : 0,\n      wait_seconds: waitSeconds,\n      source_video_url: sourceUrl,\n      poll_request_id: pollRequestId,\n      http_method: httpMethod,\n      http_url: httpUrl,\n      send_body: doExtend,\n      grok_extend_body_json: doExtend ? JSON.stringify(body) : '{}',\n      still_url: String(firstJson('save_still_url').still_url || ''),\n      creation_id: String(firstJson('pick_molecule_creation').creation_id || ''),\n      compound_name: String(firstJson('pick_molecule_creation').compound_name || ''),\n    },\n  },\n];\n"
+        "jsCode": "// n8n Code node: prep_molecule_video_extend\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: grok_video_poll\n// Before: grok_video_extend_1\n//\n// 30s = two 15s Grok jobs: generate 15, then one silent 15s extend\n// (API returns one combined clip). VIDEO_SECONDS=15 skips the extend\n// (GET the finished 15s clip).\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nfunction videoUrlFrom(obj) {\n  if (!obj) return '';\n  return (\n    httpsUrl(obj.video && obj.video.url) ||\n    httpsUrl(obj.url) ||\n    httpsUrl(obj.video_url) ||\n    ''\n  );\n}\n\nvar wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);\nif (wanted !== 30) wanted = 15;\nvar doExtend = wanted === 30;\n\nvar start = firstJson('grok_video_start');\nvar poll = ($input.first() && $input.first().json) || {};\nvar sourceUrl = videoUrlFrom(poll) || videoUrlFrom(firstJson('grok_video_poll'));\nvar originId = String(start.request_id || '').trim();\nvar extendSeconds = 15;\nvar waitSeconds = doExtend ? 200 : 2;\n\nif (doExtend && !sourceUrl) {\n  throw new Error(\n    'prep_molecule_video_extend: missing source video URL from grok_video_poll. Need status=done and video.url.'\n  );\n}\n\nvar motion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' +\n  'Continue from the last frame of the same dark cinematic 3D medical animation of a live cellular chemical reaction. ' +\n  'Amino acids keep colliding and docking. Peptide bonds form with energy flashes. The living-cell membrane and cytoplasm keep moving. ' +\n  'Keep the same lighting, color grade, and slow camera energy. No cut. No new scene. ' +\n  'NO text, NO logos, NO captions, NO vials, NO pens, NO people. Completely blank of typography.';\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\n\nvar body = {\n  model: 'grok-imagine-video-1.5',\n  prompt: motion,\n  duration: extendSeconds,\n  video: { url: sourceUrl },\n};\n\nvar httpMethod = doExtend ? 'POST' : 'GET';\nvar httpUrl = doExtend\n  ? 'https://api.x.ai/v1/videos/extensions'\n  : 'https://api.x.ai/v1/videos/' + originId;\nif (!doExtend && !originId) {\n  throw new Error('prep_molecule_video_extend: missing grok_video_start.request_id to re-read the 15s clip.');\n}\n\nreturn [\n  {\n    json: {\n      video_seconds: wanted,\n      extend_applied: doExtend,\n      extend_seconds: doExtend ? extendSeconds : 0,\n      wait_seconds: waitSeconds,\n      source_video_url: sourceUrl,\n      poll_request_id: originId,\n      http_method: httpMethod,\n      http_url: httpUrl,\n      send_body: doExtend,\n      grok_extend_body_json: doExtend ? JSON.stringify(body) : '{}',\n      still_url: String(firstJson('save_still_url').still_url || ''),\n      creation_id: String(firstJson('pick_molecule_creation').creation_id || ''),\n      compound_name: String(firstJson('pick_molecule_creation').compound_name || ''),\n    },\n  },\n];\n"
       },
       "id": "code-ext-1",
       "name": "prep_molecule_extend_1",
@@ -381,7 +381,7 @@
         2280,
         300
       ],
-      "notes": "HOP=1. 10s silent extend when VIDEO_SECONDS=30."
+      "notes": "One 15s silent extend when VIDEO_SECONDS=30."
     },
     {
       "parameters": {
@@ -438,80 +438,6 @@
       "typeVersion": 4.2,
       "position": [
         3000,
-        300
-      ]
-    },
-    {
-      "parameters": {
-        "mode": "runOnceForAllItems",
-        "language": "javaScript",
-        "jsCode": "// n8n Code node: prep_molecule_video_extend\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// Duplicate this node as prep_molecule_extend_1 (HOP=1) and prep_molecule_extend_2 (HOP=2).\n// After: grok_video_poll / grok_extend_poll_1\n// Before: grok_video_extend_1 / grok_video_extend_2\n//\n// Grok generate max is 15s. Extend segment max is 10s.\n// 30s total = 15 + 10 + 5. VIDEO_SECONDS=15 skips both hops (GET the finished 15s clip).\n\nvar EXTEND_HOP = 2;\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nfunction videoUrlFrom(obj) {\n  if (!obj) return '';\n  return (\n    httpsUrl(obj.video && obj.video.url) ||\n    httpsUrl(obj.url) ||\n    httpsUrl(obj.video_url) ||\n    ''\n  );\n}\n\nvar hop = Number(EXTEND_HOP) === 2 ? 2 : 1;\nvar wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);\nif (wanted !== 30) wanted = 15;\nvar doExtend = wanted === 30;\n\nvar start = firstJson('grok_video_start');\nvar poll = ($input.first() && $input.first().json) || {};\nvar sourceUrl = videoUrlFrom(poll);\nif (!sourceUrl) sourceUrl = videoUrlFrom(firstJson('grok_video_poll'));\nif (!sourceUrl && hop === 2) sourceUrl = videoUrlFrom(firstJson('grok_extend_poll_1'));\n\nvar originId = String(start.request_id || '').trim();\nvar pollRequestId = originId;\nif (hop === 2) {\n  pollRequestId = String(firstJson('grok_video_extend_1').request_id || originId).trim();\n}\n\nvar extendSeconds = hop === 1 ? 10 : 5;\nvar waitSeconds = doExtend ? (hop === 1 ? 180 : 140) : 2;\n\nif (doExtend && !sourceUrl) {\n  throw new Error(\n    'prep_molecule_video_extend hop ' +\n      hop +\n      ': missing source video URL from the previous poll. Check grok_video_poll status=done and video.url.'\n  );\n}\n\nvar motion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' +\n  'Continue from the last frame of the same dark cinematic 3D medical animation of a live cellular chemical reaction. ' +\n  'Amino acids keep colliding and docking. Peptide bonds form with energy flashes. The living-cell membrane and cytoplasm keep moving. ' +\n  'Keep the same lighting, color grade, and slow camera energy. No cut. No new scene. ' +\n  'NO text, NO logos, NO captions, NO vials, NO pens, NO people. Completely blank of typography.';\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\n\nvar body = {\n  model: 'grok-imagine-video',\n  prompt: motion,\n  duration: extendSeconds,\n  video: { url: sourceUrl },\n};\n\nvar httpMethod = doExtend ? 'POST' : 'GET';\nvar httpUrl = doExtend\n  ? 'https://api.x.ai/v1/videos/extensions'\n  : 'https://api.x.ai/v1/videos/' + pollRequestId;\nif (!doExtend && !pollRequestId) {\n  throw new Error('prep_molecule_video_extend: missing grok_video_start.request_id to re-read the 15s clip.');\n}\n\nreturn [\n  {\n    json: {\n      video_seconds: wanted,\n      extend_hop: hop,\n      extend_applied: doExtend,\n      extend_seconds: doExtend ? extendSeconds : 0,\n      wait_seconds: waitSeconds,\n      source_video_url: sourceUrl,\n      poll_request_id: pollRequestId,\n      http_method: httpMethod,\n      http_url: httpUrl,\n      send_body: doExtend,\n      grok_extend_body_json: doExtend ? JSON.stringify(body) : '{}',\n      still_url: String(firstJson('save_still_url').still_url || ''),\n      creation_id: String(firstJson('pick_molecule_creation').creation_id || ''),\n      compound_name: String(firstJson('pick_molecule_creation').compound_name || ''),\n    },\n  },\n];\n"
-      },
-      "id": "code-ext-2",
-      "name": "prep_molecule_extend_2",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        3240,
-        300
-      ],
-      "notes": "HOP=2. 5s silent extend when VIDEO_SECONDS=30."
-    },
-    {
-      "parameters": {
-        "method": "={{ $json.http_method }}",
-        "url": "={{ $json.http_url }}",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "sendBody": "={{ $json.send_body }}",
-        "contentType": "raw",
-        "rawContentType": "application/json",
-        "body": "={{ $json.grok_extend_body_json }}",
-        "options": {
-          "timeout": 120000
-        }
-      },
-      "id": "http-ext-2",
-      "name": "grok_video_extend_2",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        3480,
-        300
-      ],
-      "notes": "POST /videos/extensions when VIDEO_SECONDS=30; GET finished clip when 15."
-    },
-    {
-      "parameters": {
-        "resume": "timeInterval",
-        "amount": "={{ Number($('prep_molecule_extend_2').first().json.wait_seconds) }}",
-        "unit": "seconds"
-      },
-      "id": "wait-ext-2",
-      "name": "wait_extend_2",
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        3720,
-        300
-      ],
-      "webhookId": "wait-wait_extend_2"
-    },
-    {
-      "parameters": {
-        "url": "={{ 'https://api.x.ai/v1/videos/' + ($('grok_video_extend_2').first().json.request_id || $('prep_molecule_extend_2').first().json.poll_request_id) }}",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpHeaderAuth",
-        "options": {
-          "timeout": 120000
-        }
-      },
-      "id": "http-extpoll-2",
-      "name": "grok_extend_poll_2",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        3960,
         300
       ]
     }
@@ -683,50 +609,6 @@
       ]
     },
     "grok_extend_poll_1": {
-      "main": [
-        [
-          {
-            "node": "prep_molecule_extend_2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "prep_molecule_extend_2": {
-      "main": [
-        [
-          {
-            "node": "grok_video_extend_2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "grok_video_extend_2": {
-      "main": [
-        [
-          {
-            "node": "wait_extend_2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "wait_extend_2": {
-      "main": [
-        [
-          {
-            "node": "grok_extend_poll_2",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "grok_extend_poll_2": {
       "main": [
         [
           {
