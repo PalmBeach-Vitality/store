@@ -1,0 +1,474 @@
+{
+  "name": "peptide_molecule_vid_gen",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trg-manual-001",
+      "name": "manual_trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "0",
+          "mode": "list",
+          "cachedResultName": "13-chem-breakdown-54"
+        },
+        "options": {}
+      },
+      "id": "gs-get-001",
+      "name": "get_chem_creations",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        300
+      ],
+      "notes": "Workbook tab 13-chem-breakdown-54 (gid 0). Do not use Sheet 9."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "flt-active-1",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Active",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "flt-001",
+      "name": "filter_chem_active",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n Code node: pick_molecule_creation\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF (must receive all Sheet 13 rows)\n// After: get_chem_creations / filter Active on 13-chem-breakdown-54\n// Before: sheets_update_chem \u2192 grok_imagine_molecule_still\n//\n// Next unused row by rank (CHEM-001 then CHEM-002 \u2026). Sheet prompts\n// already include reaction locks \u2014 do NOT wrap vial rules.\n\nfunction val(obj, names, fallback) {\n  if (fallback === undefined) fallback = '';\n  for (var i = 0; i < names.length; i++) {\n    var n = names[i];\n    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {\n      return obj[n];\n    }\n  }\n  var keys = Object.keys(obj || {});\n  for (var w = 0; w < names.length; w++) {\n    var want = String(names[w]).toLowerCase().replace(/\\s+/g, '_');\n    for (var k = 0; k < keys.length; k++) {\n      if (keys[k].toLowerCase().replace(/\\s+/g, '_') === want && String(obj[keys[k]]).trim() !== '') {\n        return obj[keys[k]];\n      }\n    }\n  }\n  return fallback;\n}\n\nfunction isActive(status) {\n  var s = String(status || '').trim().toLowerCase();\n  return !s || s === 'active' || s === 'true' || s === '1' || s === 'yes';\n}\n\nfunction capPrompt(text) {\n  var t = String(text || '').replace(/\\s+/g, ' ').trim();\n  if (t.length > 7900) t = t.slice(0, 7900);\n  return t;\n}\n\nfunction moleculeVibeLock(name) {\n  var n = String(name || '').trim();\n  return (\n    \"HARD VIBE LOCK (READ FIRST): DARK cinematic 3D MEDICAL ANIMATION of a LIVE CELLULAR CHEMICAL REACTION. \" +\n    \"NOT a product photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle. NOT a catalog still of one floating molecule. \" +\n    \"Setting: inside/around a living cell \u2014 lipid-bilayer membrane, cytoplasm, wet receptors. \" +\n    \"Action: amino-acid monomers (glossy ball-and-stick) collide, dock, and form peptide bonds with energy flashes. A forming peptide chain of '\" +\n    n +\n    \"' is the unseen reaction subject. \" +\n    \"NO TEXT anywhere \u2014 no letters, numbers, captions, titles, compound-name overlay, labels. \" +\n    \"NO LOGO, NO palm tree, NO URL, NO watermark. No vial. No pen. Silent later \u2014 do not imply captions.\"\n  );\n}\n\nvar creations = $input.all().map(function (i) {\n  return i.json;\n});\n\nif (!creations.length) {\n  throw new Error(\n    'No chem rows. Check get_chem_creations \u2192 Sheet 13-chem-breakdown-54, status=Active.'\n  );\n}\n\nif (creations.length < 2) {\n  throw new Error(\n    'pick_molecule_creation saw only ' +\n      creations.length +\n      ' row(s) (' +\n      String((creations[0] && (creations[0].lab_item_id || creations[0].creation_id)) || '?') +\n      '). Execute Once must be OFF on this node so it receives all 54 Sheet 13 rows, not just CHEM-001.'\n  );\n}\n\nvar scored = creations\n  .map(function (c) {\n    var rankNum = Number(val(c, ['rank', 'creation_rank'], 0));\n    var creation_id = String(val(c, ['creation_id', 'creationId'], '')).trim();\n    if (!creation_id && rankNum > 0) {\n      creation_id = 'PBVita-Chem-' + String(rankNum).padStart(3, '0');\n    }\n    return {\n      creation_id: creation_id,\n      rank: rankNum,\n      lab_item_id: val(c, ['lab_item_id']),\n      lab_item: val(c, ['lab_item']),\n      material_detail: val(c, ['material_detail']),\n      compound_name: String(val(c, ['compound_name'], '')).trim(),\n      shot_family: val(c, ['shot_family']),\n      camera_angle: val(c, ['camera_angle']),\n      camera_direction: val(c, ['camera_direction']),\n      framing: val(c, ['framing']),\n      category: val(c, ['category', 'scene_category']),\n      scene_brief: val(c, ['scene_brief']),\n      quality_suffix: val(c, ['quality_suffix']),\n      quality_var_count: val(c, ['quality_var_count'], ''),\n      aspect_ratio: val(c, ['aspect_ratio']) || '9:16',\n      duration_seconds: Number(val(c, ['duration_seconds', 'duration'], 15)) || 15,\n      resolution: val(c, ['resolution']) || '1080p',\n      model_still: val(c, ['model_still']) || 'grok-imagine-image-2.0',\n      model_video: val(c, ['model_video']) || 'grok-imagine-video-1.5',\n      still_resolution: val(c, ['still_resolution']) || '2k',\n      video_prompt: capPrompt(val(c, ['video_prompt'])),\n      video_motion_prompt: capPrompt(val(c, ['video_motion_prompt'])),\n      still_edit_prompt: String(val(c, ['still_edit_prompt'], '')).trim(),\n      surface: val(c, ['surface']),\n      lighting: val(c, ['lighting']),\n      camera_move: val(c, ['camera_move']),\n      color_grade: val(c, ['color_grade']),\n      hero_style: val(c, ['hero_style']),\n      status: val(c, ['status'], 'Active'),\n      times_used: Number(val(c, ['times_used'], 0)) || 0,\n      last_used_at: String(val(c, ['last_used_at'], '')),\n    };\n  })\n  .filter(function (c) {\n    return c.creation_id && c.video_prompt && c.video_motion_prompt && c.compound_name && isActive(c.status);\n  });\n\nif (!scored.length) {\n  throw new Error(\n    'No valid Sheet 13 rows (need creation_id + compound_name + video_prompt + video_motion_prompt). Keys: ' +\n      Object.keys(creations[0] || {}).join(', ')\n  );\n}\n\nfunction usedCount(c) {\n  var n = Number(c.times_used);\n  if (!isFinite(n) || n < 0) n = 0;\n  var last = String(c.last_used_at || '').trim();\n  if (last && last !== '0') n = Math.max(n, 1);\n  return n;\n}\n\nscored.sort(function (a, b) {\n  var ua = usedCount(a);\n  var ub = usedCount(b);\n  if (ua !== ub) return ua - ub;\n  return a.rank - b.rank;\n});\n\nvar pick = scored[0];\nvar vibe = moleculeVibeLock(pick.compound_name);\nvar videoPrompt = capPrompt(vibe + ' ' + pick.video_prompt);\n\nreturn [\n  {\n    json: {\n      creation_id: pick.creation_id,\n      creation_rank: pick.rank,\n      lab_item_id: pick.lab_item_id,\n      lab_item: pick.lab_item,\n      material_detail: pick.material_detail,\n      compound_name: pick.compound_name,\n      lab_scene: pick.category,\n      shot_family: pick.shot_family,\n      camera_angle: pick.camera_angle,\n      camera_direction: pick.camera_direction,\n      framing: pick.framing,\n      scene_category: pick.category,\n      scene_brief: pick.scene_brief,\n      quality_suffix: pick.quality_suffix,\n      quality_var_count: pick.quality_var_count,\n      aspect_ratio: pick.aspect_ratio,\n      duration_seconds: pick.duration_seconds,\n      resolution: pick.resolution,\n      model_still: pick.model_still,\n      model_video: pick.model_video,\n      still_resolution: pick.still_resolution,\n      video_prompt: videoPrompt,\n      video_prompt_len: videoPrompt.length,\n      video_motion_prompt: capPrompt(\n        \"Silent video. No text, no logos, no captions. Cellular chemical reaction continues: living cells and amino acids forming peptide bonds. Same '\" +\n          pick.compound_name +\n          \"' reaction subject \u2014 never printed. No studio cut. \" +\n          pick.video_motion_prompt\n      ),\n      still_edit_prompt: capPrompt(vibe + ' ' + pick.still_edit_prompt),\n      surface: pick.surface,\n      lighting: pick.lighting,\n      camera_move: pick.camera_move,\n      color_grade: pick.color_grade,\n      hero_style: pick.hero_style,\n      creation_status: pick.status,\n      creation_times_used: pick.times_used,\n      creation_last_used_at: pick.last_used_at,\n      input_row_count: scored.length,\n      unused_row_count: scored.filter(function (c) {\n        return usedCount(c) === 0;\n      }).length,\n    },\n  },\n];\n",
+        "language": "javaScript"
+      },
+      "id": "code-pick-001",
+      "name": "pick_molecule_creation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        300
+      ],
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio || '9:16', resolution: $('pick_molecule_creation').first().json.still_resolution || '2k' }) }}",
+        "options": {}
+      },
+      "id": "http-still-001",
+      "name": "grok_imagine_molecule_still",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1080,
+        300
+      ],
+      "notes": "Prompt from pick_molecule_creation (not sheets_update_chem output)."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "still_url",
+              "value": "={{ $json.data[0].url }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "creation_id",
+              "value": "={{ $('pick_molecule_creation').first().json.creation_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "compound_name",
+              "value": "={{ $('pick_molecule_creation').first().json.compound_name }}",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "video_motion_prompt",
+              "value": "={{ $('pick_molecule_creation').first().json.video_motion_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "a5",
+              "name": "model_video",
+              "value": "={{ $('pick_molecule_creation').first().json.model_video || 'grok-imagine-video-1.5' }}",
+              "type": "string"
+            },
+            {
+              "id": "a6",
+              "name": "duration_seconds",
+              "value": "={{ $('pick_molecule_creation').first().json.duration_seconds || 15 }}",
+              "type": "number"
+            },
+            {
+              "id": "a7",
+              "name": "resolution",
+              "value": "={{ $('pick_molecule_creation').first().json.resolution || '1080p' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "set-still-001",
+      "name": "save_still_url",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1200,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "// n8n Code node: prep_molecule_video_start\n// Workflow: peptide_molecule_vid_gen\n// Mode: Run Once for All Items\n// After: save_still_url\n// Before: grok_video_start\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nvar input = ($input.first() && $input.first().json) || {};\nvar pick = firstJson('pick_molecule_creation');\nvar saveStill = firstJson('save_still_url');\nvar imagine = firstJson('grok_imagine_molecule_still');\n\nvar still =\n  httpsUrl(input.still_url) ||\n  httpsUrl(saveStill.still_url) ||\n  httpsUrl(imagine.data && imagine.data[0] && imagine.data[0].url) ||\n  '';\n\nif (!still) {\n  throw new Error(\n    'prep_molecule_video_start: still_url missing. save_still_url must be ={{ $json.data[0].url }} from grok_imagine_molecule_still.'\n  );\n}\n\nvar motion = String(\n  input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''\n).trim();\nmotion =\n  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. No text, no captions, no logos appear. Cellular reaction continues. ' +\n  motion;\nif (motion.length > 700) {\n  motion = motion.slice(0, 697).replace(/\\s+\\S*$/, '') + '.';\n}\nif (!motion) {\n  throw new Error('prep_molecule_video_start: video_motion_prompt missing from pick_molecule_creation.');\n}\n\nvar modelVideo = String(\n  input.model_video || pick.model_video || saveStill.model_video || 'grok-imagine-video-1.5'\n).trim();\nvar duration = Number(input.duration_seconds || pick.duration_seconds || saveStill.duration_seconds || 15) || 15;\nvar resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();\n\nvar body = {\n  model: modelVideo,\n  prompt: motion,\n  image: { url: still },\n  duration: duration,\n  resolution: resolution,\n  audio: false,\n};\n\nreturn [\n  {\n    json: {\n      still_url: still,\n      video_motion_prompt: motion,\n      model_video: modelVideo,\n      duration_seconds: duration,\n      resolution: resolution,\n      creation_id: String(input.creation_id || pick.creation_id || ''),\n      compound_name: String(input.compound_name || pick.compound_name || ''),\n      grok_video_body_json: JSON.stringify(body),\n    },\n  },\n];\n",
+        "language": "javaScript"
+      },
+      "id": "code-prep-001",
+      "name": "prep_molecule_video_start",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/videos/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.grok_video_body_json }}",
+        "options": {}
+      },
+      "id": "http-vid-001",
+      "name": "grok_video_start",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "timeInterval",
+        "amount": 200,
+        "unit": "seconds"
+      },
+      "id": "wait-001",
+      "name": "wait_video",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1920,
+        300
+      ],
+      "webhookId": "wait-peptide-molecule-vid-gen"
+    },
+    {
+      "parameters": {
+        "url": "={{ 'https://api.x.ai/v1/videos/' + $('grok_video_start').first().json.request_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "http-poll-001",
+      "name": "grok_video_poll",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "v1",
+              "name": "video_url",
+              "value": "={{ $json.video.url || $json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "v2",
+              "name": "still_url",
+              "value": "={{ $('save_still_url').first().json.still_url }}",
+              "type": "string"
+            },
+            {
+              "id": "v3",
+              "name": "creation_id",
+              "value": "={{ $('pick_molecule_creation').first().json.creation_id }}",
+              "type": "string"
+            },
+            {
+              "id": "v4",
+              "name": "compound_name",
+              "value": "={{ $('pick_molecule_creation').first().json.compound_name }}",
+              "type": "string"
+            },
+            {
+              "id": "v5",
+              "name": "created_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "set-vid-001",
+      "name": "save_video_url",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "0",
+          "mode": "list",
+          "cachedResultName": "13-chem-breakdown-54"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "creation_id": "={{ $('pick_molecule_creation').first().json.creation_id }}",
+            "times_used": "={{ Number($('pick_molecule_creation').first().json.creation_times_used || 0) + 1 }}",
+            "last_used_at": "={{ $now.toISO() }}"
+          },
+          "matchingColumns": [
+            "creation_id"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "gs-upd-001",
+      "name": "sheets_update_chem",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        840,
+        300
+      ],
+      "notes": "Mark row used immediately after pick so still-only Execute advances to CHEM-002. Match on creation_id."
+    },
+    {
+      "parameters": {
+        "content": "## peptide_molecule_vid_gen\nCellular chemical reaction: living cells + amino acids.\nNO logo. NO text. NO sound (add after).\nPick Execute Once = OFF (else always CHEM-001).\nLive: https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq",
+        "height": 280,
+        "width": 420,
+        "color": 5
+      },
+      "id": "note-001",
+      "name": "sticky_setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "manual_trigger": {
+      "main": [
+        [
+          {
+            "node": "get_chem_creations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_chem_creations": {
+      "main": [
+        [
+          {
+            "node": "filter_chem_active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter_chem_active": {
+      "main": [
+        [
+          {
+            "node": "pick_molecule_creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pick_molecule_creation": {
+      "main": [
+        [
+          {
+            "node": "sheets_update_chem",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_imagine_molecule_still": {
+      "main": [
+        [
+          {
+            "node": "save_still_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_still_url": {
+      "main": [
+        [
+          {
+            "node": "prep_molecule_video_start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prep_molecule_video_start": {
+      "main": [
+        [
+          {
+            "node": "grok_video_start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_video_start": {
+      "main": [
+        [
+          {
+            "node": "wait_video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait_video": {
+      "main": [
+        [
+          {
+            "node": "grok_video_poll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_video_poll": {
+      "main": [
+        [
+          {
+            "node": "save_video_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sheets_update_chem": {
+      "main": [
+        [
+          {
+            "node": "grok_imagine_molecule_still",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

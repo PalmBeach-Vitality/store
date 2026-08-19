@@ -10,7 +10,7 @@ Daily **45–60s** Instagram-ready reel:
 2. **Creatomate package** — 60s loop + Intro/Facts (muted — music added manually)  
 3. **FDA-safe** lab catalog only — disclaimers in **captions only**, never burned into video/prompts/overlays  
 
-## Two workflows
+## Workflows
 
 ### A — `PBVita — Grok Daily`
 
@@ -46,6 +46,48 @@ See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 **No music in renders** — mute `main_video`; add soundtrack manually later.  
 **Template:** `c5d54774-b029-4786-af04-d5af345dc7f2` (`main_video` + `end_hold`).
 
+### C — `peptide_molecule_vid_gen` (separate)
+
+Chemical-breakdown **3D molecule** reels. Sheet **`13-chem-breakdown-54`**. Not vials. Linear — no Switch/IF.
+
+```text
+get_chem_creations → pick_molecule_creation
+  → grok_imagine_molecule_still → save_still_url
+  → prep_molecule_video_start → grok_video_start
+  → wait → poll → save_video_url → sheets_update_chem
+```
+
+See `n8n-peptide-molecule-vid-gen.md`. Import JSON: `marketing/workflows/peptide_molecule_vid_gen.json`.
+
+### D — `peptide_pen_vid_gen` (separate)
+
+Pens-only catalog reels. **Columns** from Sheet **`9-lab-item-creations-500`**. **Pen params** from **`3-image-scenes-150`** (`product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`). Output tab **`14-pen-creations-150`**. One capped pre-filled research pen. Not vials. Not molecules. Linear — no Switch/IF.
+
+```text
+get_pen_creations → pick_pen_creation
+  → grok_imagine_pen_still → save_still_url
+  → prep_pen_video_start → grok_video_start
+  → wait → poll → save_video_url → sheets_update_pen
+```
+
+See `n8n-peptide-pen-vid-gen.md`. Import JSON: `marketing/workflows/peptide_pen_vid_gen.json`.
+
+### E — `peptide_caption_gen` (separate)
+
+IG captions for **vial** and **pen** (2 each). Manual compound name → Sheet 15 science brief → FDA verify → email. Not Creatomate. Not vid gen. Linear — no Switch/IF.
+
+```text
+enter_compound → get_caption_science → match_compound
+  → build_captions → verify_fda_captions
+  → prep_caption_email → gmail_send_captions → sheets_append_captions
+```
+
+See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
+
+### F — `sheet_format_as_tables` (one-shot)
+
+Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -62,6 +104,8 @@ See `n8n-camera-diversity-plan.md`.
 
 ## Canonical docs
 
+- Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
+- Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
 - Lab items: `n8n-lab-items-500.md`  
