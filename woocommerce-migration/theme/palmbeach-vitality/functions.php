@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.37');
+define('PBV_THEME_VERSION', '2.10.38');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -504,7 +504,7 @@ function pbv_handle_lead_popup() {
 
     wp_send_json_success(
         array(
-            'message' => 'You’re in — check your inbox for a welcome note.',
+            'message' => 'You’re in — check your inbox for the welcome note, then confirm to get monthly research emails.',
         )
     );
 }

@@ -127,39 +127,110 @@ function pbv_mailpoet_list_id() {
 }
 
 /**
- * Add (or re-subscribe) an address in MailPoet.
+ * Enable MailPoet sign-up confirmation (double opt-in).
+ *
+ * Required by the MailPoet Sending Service. New list members stay Unconfirmed
+ * until they click the link in MailPoet’s confirmation email.
+ */
+function pbv_mailpoet_enable_signup_confirmation() {
+    if (!class_exists('\MailPoet\Settings\SettingsController')) {
+        return;
+    }
+    try {
+        $settings = \MailPoet\Settings\SettingsController::getInstance();
+        if (method_exists($settings, 'isSettingEnabled') && $settings->isSettingEnabled('signup_confirmation.enabled')) {
+            return;
+        }
+        $settings->set('signup_confirmation.enabled', true);
+    } catch (\Throwable $e) {
+        return;
+    }
+}
+add_action('init', 'pbv_mailpoet_enable_signup_confirmation', 20);
+
+/**
+ * Options for MailPoet addSubscriber / subscribeToLists.
+ *
+ * Confirmation email stays on. MailPoet welcome emails stay off (the storefront
+ * already sends the branded intro with WELCOME20).
+ *
+ * @return array<string, bool>
+ */
+function pbv_mailpoet_subscriber_options() {
+    return array(
+        'send_confirmation_email'      => true,
+        'schedule_welcome_email'       => false,
+        'skip_subscriber_notification' => true,
+    );
+}
+
+/**
+ * Whether MailPoet sign-up confirmation is on.
+ *
+ * @return bool
+ */
+function pbv_mailpoet_signup_confirmation_enabled() {
+    if (!class_exists('\MailPoet\Settings\SettingsController')) {
+        return false;
+    }
+    try {
+        $settings = \MailPoet\Settings\SettingsController::getInstance();
+        if (method_exists($settings, 'isSettingEnabled')) {
+            return (bool) $settings->isSettingEnabled('signup_confirmation.enabled');
+        }
+        $value = $settings->get('signup_confirmation.enabled');
+        return $value === true || $value === 1 || $value === '1';
+    } catch (\Throwable $e) {
+        return false;
+    }
+}
+
+/**
+ * Add (or re-subscribe) an address in MailPoet as unconfirmed until they click Confirm.
+ *
+ * Do not pass status=subscribed — that skips double opt-in, which the MailPoet
+ * Sending Service does not allow.
  *
  * @param string $email Email.
  * @param bool   $optin Marketing opt-in from the popup.
- * @return string Status token: added, exists, skipped, or error: …
+ * @return string Status token: added-pending-confirm, exists, skipped, skipped-no-optin, or error: …
  */
 function pbv_mailpoet_add_subscriber($email, $optin = true) {
     $api = pbv_mailpoet_api();
     if (!$api) {
         return 'skipped';
     }
+    if (!$optin) {
+        return 'skipped-no-optin';
+    }
+
+    pbv_mailpoet_enable_signup_confirmation();
 
     $list_id = pbv_mailpoet_list_id();
     $lists   = $list_id ? array($list_id) : array();
+    $options = pbv_mailpoet_subscriber_options();
     $payload = array(
-        'email'  => $email,
-        'status' => $optin ? 'subscribed' : 'unconfirmed',
+        'email' => $email,
     );
 
     try {
-        $api->addSubscriber($payload, $lists);
-        return 'added';
+        $api->addSubscriber($payload, $lists, $options);
+        return 'added-pending-confirm';
     } catch (\Exception $e) {
-        $msg = $e->getMessage();
-        if (stripos($msg, 'already exists') !== false || stripos($msg, 'This subscriber already exists') !== false) {
+        $msg  = $e->getMessage();
+        $code = (int) $e->getCode();
+        if ($code === 12 || stripos($msg, 'already exists') !== false || stripos($msg, 'This subscriber already exists') !== false) {
             if ($list_id && method_exists($api, 'subscribeToLists')) {
                 try {
-                    $api->subscribeToLists($email, $lists);
+                    $api->subscribeToLists($email, $lists, $options);
                 } catch (\Exception $e2) {
                     return 'exists';
                 }
             }
             return 'exists';
+        }
+        if ($code === 10) {
+            return 'error: confirmation email failed to send';
         }
         return 'error: ' . sanitize_text_field($msg);
     }
@@ -406,6 +477,8 @@ function pbv_render_subscribers_page() {
     );
     $mailpoet_subs = admin_url('admin.php?page=mailpoet-subscribers');
     $mailpoet_emails = admin_url('admin.php?page=mailpoet-newsletters');
+    $mailpoet_signup = admin_url('admin.php?page=mailpoet-settings#/signup');
+    $confirm_on = $mp_on && function_exists('pbv_mailpoet_signup_confirmation_enabled') && pbv_mailpoet_signup_confirmation_enabled();
     $plugins_url = admin_url('plugins.php');
     $lab_notes_url = admin_url('edit.php?post_type=pbv_lab_note');
     $welcome = defined('PBV_WELCOME_COUPON_CODE') ? PBV_WELCOME_COUPON_CODE : 'WELCOME20';
@@ -422,7 +495,7 @@ function pbv_render_subscribers_page() {
     echo '<p>' . esc_html(
         sprintf(
             /* translators: %s: coupon code */
-            __('New popup signups are stored here, emailed the branded intro (including %s), and added to MailPoet when that plugin is active.', 'palmbeach-vitality'),
+            __('New popup signups are stored here, emailed the branded intro (including %s), and added to MailPoet as Unconfirmed until they click the confirmation link.', 'palmbeach-vitality'),
             $welcome
         )
     ) . '</p>';
@@ -464,6 +537,17 @@ function pbv_render_subscribers_page() {
             );
         }
         echo '</p>';
+        echo '<p>';
+        if ($confirm_on) {
+            echo '<span class="dashicons dashicons-yes-alt" style="color:#00a32a;"></span> '
+                . esc_html__('Sign-up confirmation (double opt-in) is on. Newsletters wait until they click Confirm. Required for the MailPoet Sending Service.', 'palmbeach-vitality');
+        } else {
+            echo '<span class="dashicons dashicons-warning" style="color:#dba617;"></span> '
+                . esc_html__('Sign-up confirmation is off. The theme will turn it on; if this still shows, open MailPoet Settings.', 'palmbeach-vitality');
+        }
+        echo ' <a href="' . esc_url($mailpoet_signup) . '">'
+            . esc_html__('MailPoet → Settings → Sign-up Confirmation', 'palmbeach-vitality')
+            . '</a></p>';
         echo '<ol>';
         echo '<li>' . esc_html__('MailPoet → Settings → confirm the sender is sales@palmbeach-vitality.com (or your domain mailbox).', 'palmbeach-vitality') . '</li>';
         echo '<li><a href="' . esc_url($mailpoet_emails) . '">'

@@ -1,6 +1,18 @@
 # MailPoet — subscribers + monthly email blog
 
-WordPress.com Commerce already includes **MailPoet** and **MailPoet Premium**. The theme (v2.10.37+) saves every homepage-popup signup and adds them to MailPoet when the plugin is active.
+WordPress.com Commerce already includes **MailPoet** and **MailPoet Premium**. The theme (v2.10.38+) saves every homepage-popup signup and adds them to MailPoet when the plugin is active.
+
+## Sign-up confirmation (double opt-in)
+
+**On.** Required when sending with the MailPoet Sending Service.
+
+1. The storefront still sends the branded intro immediately (with **WELCOME20**).
+2. MailPoet also sends a **confirmation email**.
+3. After they click Confirm, MailPoet marks them **Confirmed** and they receive newsletters.
+
+The theme turns on **MailPoet → Settings → Sign-up Confirmation** and does **not** add people as already Subscribed (that would skip confirmation).
+
+You can edit the confirmation email copy on that same settings tab. Leave the feature enabled.
 
 ## Where to see subscribers
 

@@ -212,7 +212,7 @@
               statusEl.textContent =
                 (result.data && result.data.data && result.data.data.message) ||
                 (result.ok
-                  ? "You’re in — check your inbox for a welcome note."
+                  ? "You’re in — check your inbox for the welcome note, then confirm to get monthly research emails."
                   : "Something went wrong. Please try again.");
               if (!result.ok) statusEl.classList.add("is-error");
             }
