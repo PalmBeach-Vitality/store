@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.39');
+define('PBV_THEME_VERSION', '2.10.40');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -237,7 +237,7 @@ add_action('wp_ajax_nopriv_pbv_contact_form', 'pbv_handle_contact_form');
  * Old links were falling through to the blog index ("Updates").
  */
 function pbv_redirect_shopify_product_urls() {
-    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+    if (pbv_is_wp_system_request()) {
         return;
     }
 
@@ -418,6 +418,9 @@ add_action('template_redirect', 'pbv_redirect_shopify_product_urls', 1);
  * Never expose a posts/"Updates" index on this commerce site.
  */
 function pbv_disable_blog_index() {
+    if (pbv_is_wp_system_request()) {
+        return;
+    }
     if (is_home() && !is_front_page()) {
         wp_safe_redirect(home_url('/'), 301);
         exit;

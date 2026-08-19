@@ -4,6 +4,12 @@ WordPress.com Commerce already includes **MailPoet** and **MailPoet Premium**. T
 
 Authenticate **palmbeach-vitality.com** in MailPoet → Settings → Send with… so confirmation mail is signed (SPF/DKIM). Otherwise Gmail shows “sender can’t be verified” and files it in spam. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
 
+If MailPoet admin is a blank page or endless spinner, upload theme **v2.10.40+** (it no longer writes MailPoet settings on every page load). Then open MailPoet from classic WP Admin:
+
+`https://palmbeach-vitality.store/wp-admin/admin.php?page=mailpoet-newsletters`
+
+Not the wordpress.com overlay. Try a private window. Settings → Permalinks → Save if it still hangs.
+
 ## Sign-up confirmation (double opt-in)
 
 **On.** Required when sending with the MailPoet Sending Service.

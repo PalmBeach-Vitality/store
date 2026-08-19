@@ -6,9 +6,38 @@
  * @package PalmBeach_Vitality
  */
 
-if (!defined('ABSPATH')) {
-    exit;
+/**
+ * Skip storefront 301s on wp-admin, AJAX, cron, and REST (MailPoet uses /wp-json/).
+ *
+ * @return bool
+ */
+function pbv_is_wp_system_request() {
+    if (is_admin() || wp_doing_ajax() || wp_doing_cron()) {
+        return true;
+    }
+    if (defined('REST_REQUEST') && REST_REQUEST) {
+        return true;
+    }
+    $uri = isset($_SERVER['REQUEST_URI']) ? strtolower((string) wp_unslash($_SERVER['REQUEST_URI'])) : '';
+    if ($uri === '') {
+        return false;
+    }
+    if (strpos($uri, '/wp-json') !== false || strpos($uri, 'rest_route=') !== false) {
+        return true;
+    }
+    return false;
 }
+
+/**
+ * Do not let the edge cache store empty REST responses (breaks MailPoet admin).
+ */
+function pbv_nocache_rest_api() {
+    nocache_headers();
+    if (!headers_sent()) {
+        header('Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0', true);
+    }
+}
+add_action('rest_api_init', 'pbv_nocache_rest_api', 1);
 
 /**
  * Pages that must never appear in sitemaps or Google's index.
@@ -142,7 +171,7 @@ add_action('send_headers', 'pbv_send_x_robots_for_junk', 20);
  * Not for marketing — crawl consolidation only. Do not promote /products/ or /collections/ URLs.
  */
 function pbv_redirect_legacy_storefront_paths() {
-    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+    if (pbv_is_wp_system_request()) {
         return;
     }
 
@@ -293,7 +322,7 @@ add_action('template_redirect', 'pbv_redirect_legacy_storefront_paths', 0);
  * Leaves wp-admin, wp-json, uploads, and binary assets as true 404s.
  */
 function pbv_redirect_remaining_html_404s() {
-    if (!is_404() || is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+    if (!is_404() || pbv_is_wp_system_request()) {
         return;
     }
     if (isset($_SERVER['REQUEST_METHOD']) && strtoupper((string) $_SERVER['REQUEST_METHOD']) !== 'GET') {
@@ -321,7 +350,7 @@ add_action('template_redirect', 'pbv_redirect_remaining_html_404s', 99);
  * 301 leftover Woo product slugs that 404 (discontinued / never imported).
  */
 function pbv_redirect_missing_product_slugs() {
-    if (!is_404()) {
+    if (!is_404() || pbv_is_wp_system_request()) {
         return;
     }
 

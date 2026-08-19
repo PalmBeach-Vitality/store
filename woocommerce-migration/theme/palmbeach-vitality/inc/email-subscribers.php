@@ -36,7 +36,7 @@ function pbv_mailpoet_api_available() {
  * @return \MailPoet\API\MP\v1\API|null
  */
 function pbv_mailpoet_api() {
-    if (!pbv_mailpoet_api_available()) {
+    if (!pbv_should_touch_mailpoet() || !pbv_mailpoet_api_available()) {
         return null;
     }
     try {
@@ -133,20 +133,47 @@ function pbv_mailpoet_list_id() {
  * until they click the link in MailPoet’s confirmation email.
  */
 function pbv_mailpoet_enable_signup_confirmation() {
+    if (!pbv_should_touch_mailpoet()) {
+        return;
+    }
     if (!class_exists('\MailPoet\Settings\SettingsController')) {
+        return;
+    }
+    if (get_option('pbv_mailpoet_doi_set')) {
         return;
     }
     try {
         $settings = \MailPoet\Settings\SettingsController::getInstance();
         if (method_exists($settings, 'isSettingEnabled') && $settings->isSettingEnabled('signup_confirmation.enabled')) {
+            update_option('pbv_mailpoet_doi_set', 1, false);
             return;
         }
         $settings->set('signup_confirmation.enabled', true);
+        update_option('pbv_mailpoet_doi_set', 1, false);
     } catch (\Throwable $e) {
         return;
     }
 }
-add_action('init', 'pbv_mailpoet_enable_signup_confirmation', 20);
+
+/**
+ * Avoid MailPoet’s own REST/admin bootstrap (blank/spinner admin pages).
+ *
+ * @return bool
+ */
+function pbv_should_touch_mailpoet() {
+    if (defined('REST_REQUEST') && REST_REQUEST) {
+        return false;
+    }
+    $page = isset($_GET['page']) ? (string) $_GET['page'] : '';
+    if ($page !== '' && strpos($page, 'mailpoet') === 0) {
+        return false;
+    }
+    $uri = isset($_SERVER['REQUEST_URI']) ? strtolower((string) wp_unslash($_SERVER['REQUEST_URI'])) : '';
+    if ($uri !== '' && (strpos($uri, '/wp-json/mailpoet') !== false || strpos($uri, 'page=mailpoet') !== false)) {
+        return false;
+    }
+    return true;
+}
 
 /**
  * Options for MailPoet addSubscriber / subscribeToLists.
@@ -170,7 +197,7 @@ function pbv_mailpoet_subscriber_options() {
  * @return bool
  */
 function pbv_mailpoet_signup_confirmation_enabled() {
-    if (!class_exists('\MailPoet\Settings\SettingsController')) {
+    if (!pbv_should_touch_mailpoet() || !class_exists('\MailPoet\Settings\SettingsController')) {
         return false;
     }
     try {
