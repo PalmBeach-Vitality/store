@@ -31,14 +31,22 @@ Signed in as **sales@** → Gmail → ⚙️ → **See all settings** → **Acco
 - Treat as the **default**
 - Do **not** set a different Reply-to address
 
-### 3. Turn DKIM on (this is the usual miss)
-DNS already has `google._domainkey.palmbeach-vitality.com`. Google still has to **start signing**.
+### 3. Replace the DKIM TXT at GoDaddy, then Start authentication
 
-1. [admin.google.com](https://admin.google.com) as a Workspace admin
-2. **Apps → Google Workspace → Gmail → Authenticate email**
-3. Domain: **palmbeach-vitality.com**
-4. Status must say Gmail is authenticating email (DKIM **on**)
-5. If it still says generate / start authentication: click **Start authentication** (record is already in DNS)
+Google generated a **new** key. DNS still has the **old** `google._domainkey` value, so **do not** click Start authentication yet.
+
+GoDaddy (nameservers `ns43` / `ns44.domaincontrol.com`) → **palmbeach-vitality.com** → **DNS** → find the existing **TXT** named `google._domainkey` → **Edit** (do not add a second one).
+
+| Field | Value |
+|---|---|
+| Type | TXT |
+| Name / Host | `google._domainkey` (not `google._domainkey.palmbeach-vitality.com`) |
+| Value | `v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh1lGf3Uapqo/7vKbu52Wp58twD2IIAYxnpyq9/6yhdorMFbmn8z5zjECc6txMSzpn3Y00G32im/XlheJkWdYTXJomSDotxurVQeaDfH9Nju/6qnRxUwkXMy2U+el9IZR5XuQk3PNgNqYZnBJ5lgDVi4OBOlincd32UwYKwHZ63v5g3VLIe8tYJuquP2CI4p1yQlZlCH8HOtm+F1jb0x0QpvGcKbgvGYVQCsVJA70mZi7ICSf8ir7xSz7ySm6AF8iJOHZ0Wfm7twW3C0m5JIlA8F1e6tkB8FJQDUldhvfMw0bgvDOpVw4Ooe3kon4DOfJl6fmRhgCaCSLnQCrDvr1qwIDAQAB` |
+| TTL | 600 seconds (or 1 hour) |
+
+Save. Wait until a lookup shows `p=MIIB…Ah1lGf3Uapqo` (not the old `AwsGvqdTeCyU` key). Then in Google Admin click **Start authentication**.
+
+Leave the Mailgun `smtp._domainkey` TXT alone.
 
 ### 4. Allow n8n to send
 Still in Admin (if a send from n8n is blocked or asks for access):
