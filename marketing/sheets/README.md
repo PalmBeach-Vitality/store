@@ -11,7 +11,7 @@
 | `health_wellness_scene_settings_100.csv` | Source list of **100** lifestyle scene settings (input only) |
 | `8-lab-items-500.csv` | `8-lab-items-500` (legacy subject list — not auto-synced from wellness rebuild) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — 500 rows; includes `still_edit_prompt`, models, motion; no Creatomate `mod_*`) |
-| `13-chem-breakdown-54.csv` | `13-chem-breakdown-54` (**new** chemical-breakdown molecule vids — same columns as Sheet 9; 27 compounds × 2 looks = 54 rows; do not mix with vial Sheet 9) |
+| `13-chem-breakdown-54.csv` | `13-chem-breakdown-54` (**new** chemical-breakdown molecule vids — same columns as Sheet 9; 27 compounds × 2 ranks = 54 rows; `shot_family` / `camera_move` / `surface` / `lighting` / `color_grade` each have **6** staggered values; do not mix with vial Sheet 9) |
 | `15-caption-science-27.csv` | `15-caption-science-27` (**new** IG caption science briefs — 27 compounds; input for `peptide_caption_gen`) |
 | `16-ig-captions.csv` | `16-ig-captions` (**new** caption archive — header + appended vial/pen captions after verify) |
 | `14-pen-creations-150.csv` | `14-pen-creations-150` (**new** pens-only catalog vids — **columns copied from** `9-lab-item-creations-500`; **pen params from** `3-image-scenes-150`; 150 rows, one capped pen, no vial; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |

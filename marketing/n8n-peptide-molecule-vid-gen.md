@@ -86,7 +86,13 @@ Paste: `marketing/n8n-code-pick-molecule-creation.js`
 
 Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
 
-Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has **6** values. Consecutive ranks never reuse the same value in those columns (so day 2 cannot look like day 1).
+Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has **6** values. Consecutive ranks never reuse the same value in those columns (so day 2 cannot look like day 1). Offsets: shot `i%6`, surface `(i+1)%6`, lighting `(i+2)%6`, grade `(i+3)%6`.
+
+- **shot_family:** `push_in`, `pull_back`, `vertical_rise`, `lateral_drift`, `macro_detail`, `static_lock`
+- **camera_move:** slow push-in / slow pull-back / slow vertical rise / slow lateral drift / creeping macro push / locked tripod (each paired to its shot family)
+- **surface:** cytoplasm · mitochondrial inner membrane · nuclear envelope pore · ER cisternae · vesicle docking field · living cell lipid bilayer
+- **lighting:** low-key rim · volumetric caustics · cool bioluminescent fill · dark-field microscope · dramatic subsurface glow · backlit cytoplasmic bloom
+- **color_grade:** violet-cyan night-lab · emerald cytosol · copper-amber organelle · cool microscopic medical · high-contrast intracellular biotech · teal-and-gold mitochondrial
 
 **Settings → Execute Once:** **OFF**. If this is ON, n8n only passes CHEM-001 into the Code node and every run repeats row 1.
 
