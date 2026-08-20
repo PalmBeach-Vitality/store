@@ -85,7 +85,7 @@ function pbv_render_homepage_collections() {
     <section class="pbv-home-shop" id="shop-collections" aria-labelledby="pbv-home-collections-title">
       <div class="pbv-container pbv-home-shop__inner">
         <h2 class="pbv-home-shop__title" id="pbv-home-collections-title">Shop collections</h2>
-        <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds for laboratory use.</p>
+        <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds — intended for laboratory research use only.</p>
         <div class="pbv-home-collections">
           <?php foreach ($cards as $card) :
               $url   = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
