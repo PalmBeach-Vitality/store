@@ -5,9 +5,10 @@ One-shot. Do **not** Publish. Execute once, then archive.
 **First overlay (archived):** https://stockjohnson.app.n8n.cloud/workflow/DgllPY7GowXkKPVo  
 Manual execution `1489` wrote **329** `vial_10ml` rows only — **missed `set_environment`**.
 
-**Second overlay (live until archived):** https://stockjohnson.app.n8n.cloud/workflow/MeKW5oSpuN6f7Btt  
+**Second overlay (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/MeKW5oSpuN6f7Btt  
 `overlay_landscape_vial_look2` — patches `vial_10ml` **and** `set_environment`. Skips `pen_3ml`.  
-Exec `1491` **failed**: sheet name `Semax` vs catalog key `SEMAX` (9 `set_environment` rows), so **zero rows were written**.
+Exec `1491` **failed**: sheet name `Semax` vs catalog key `SEMAX` (9 `set_environment` rows), so **zero rows were written**.  
+Exec `1492` **succeeded** — **673** rows (`329` `vial_10ml` + `344` `set_environment`). Workflow is archived. Do **not** Publish.
 
 **Target sheet:** `500_Peptide_Wellness_Reel_Scenes.csv` gid `444650679`  
 **Daily reader:** `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` (`Kc2HqqjSyiKs87qy`) — sheets-only, unpublished.
