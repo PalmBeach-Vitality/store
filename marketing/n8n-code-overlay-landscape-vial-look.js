@@ -55,6 +55,8 @@ var ALIASES = {
   'Thymosin Alpha-1': 'TA-1',
   TA1: 'TA-1',
   'Thymosin A1': 'TA-1',
+  Semax: 'SEMAX',
+  SEMAX: 'SEMAX',
 };
 
 var OLD_VIAL_PHRASES = [
@@ -62,7 +64,24 @@ var OLD_VIAL_PHRASES = [
   '10ml sterile injectable-style glass vial with rubber stopper and aluminum crimp seal (NOT screw-cap, NOT black twist cap)',
   '10mL sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
   '10ml sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
+  'A frosted glass bottle of cellular support',
   'frosted glass bottle of cellular support',
+  'A pure white ceramic-capped vial',
+  'pure white ceramic-capped vial',
+  'A glowing amber wellness vial',
+  'glowing amber wellness vial',
+  'A precision-dosed peptide vial',
+  'precision-dosed peptide vial',
+  'A high-clarity research-grade vial',
+  'high-clarity research-grade vial',
+  'A crystal-clear recovery vial',
+  'crystal-clear recovery vial',
+  'A sleek glass peptide vial',
+  'sleek glass peptide vial',
+  'A slim silver-capped peptide bottle',
+  'slim silver-capped peptide bottle',
+  'A minimalist wellness bottle',
+  'minimalist wellness bottle',
   'frosted glass bottle',
 ];
 
@@ -107,12 +126,34 @@ function liquidLine(name) {
   return 'filled with clear colorless liquid';
 }
 
+function lookupMap(map, name) {
+  if (map[name]) return map[name];
+  var want = String(name || '').toLowerCase();
+  var keys = Object.keys(map);
+  for (var i = 0; i < keys.length; i++) {
+    if (String(keys[i]).toLowerCase() === want) return map[keys[i]];
+  }
+  return null;
+}
+
 function catalogSpec(name) {
+  name = String(name || '').trim();
+  if (!name) return null;
   if (CATALOG[name]) return { labelName: name, spec: CATALOG[name], catalogKey: name };
-  var aliased = ALIASES[name];
+  var aliased = lookupMap(ALIASES, name);
   if (aliased && CATALOG[aliased]) {
     return { labelName: name, spec: CATALOG[aliased], catalogKey: aliased };
   }
+  var catalogKey = null;
+  var keys = Object.keys(CATALOG);
+  var want = name.toLowerCase();
+  for (var i = 0; i < keys.length; i++) {
+    if (String(keys[i]).toLowerCase() === want) {
+      catalogKey = keys[i];
+      break;
+    }
+  }
+  if (catalogKey) return { labelName: name, spec: CATALOG[catalogKey], catalogKey: catalogKey };
   return null;
 }
 
@@ -152,6 +193,14 @@ function vialNoun(name, spec, catalogKey) {
 }
 
 function vialSpec(name, spec, catalogKey) {
+  var doseWarn =
+    catalogKey === 'GHK-Cu' || name === 'GHK-Cu'
+      ? "GHK-Cu catalog is 50mg / 5mg/ml — never print 10mg/ml on GHK-Cu. "
+      : "Print exactly '" +
+        spec.mg +
+        "' and '" +
+        spec.conc +
+        "' — do not copy another compound's milligrams onto this vial. ";
   return (
     'VIAL SPEC: Copy the GHK-Cu catalog-vial still exactly — same hardware, same label layout — only swap the compound name and the catalog milligrams. ' +
     'HARDWARE: clear glass 10ml-style injection vial (not amber, not plastic, not a pen). Vibrant BLUE plastic flip-off cap sitting on a brushed-silver aluminum crimp + gray rubber septum. Show the blue cap + silver crimp stack. ' +
@@ -167,13 +216,17 @@ function vialSpec(name, spec, catalogKey) {
     "'. Footer: small black '" +
     spec.vol +
     " Sterile Multi-Use Vial'. " +
-    "GHK-Cu catalog is 50mg / 5mg/ml — never print 10mg/ml on GHK-Cu. " +
+    doseWarn +
     'FORBIDDEN: gold caps, missing blue flip-cap, bare crimp, twist/screw caps, amber glass, blank pharmacy vial, second vial, a pen in the same frame, invented concentrations. ' +
     'Stage the single vial upright on a reflective clear glass or acrylic shelf. Keep the scene environment. '
   );
 }
 
-function hardLock(name, spec) {
+function hardLock(name, spec, catalogKey) {
+  var ghkWarn =
+    catalogKey === 'GHK-Cu' || name === 'GHK-Cu'
+      ? 'Never print 10mg/ml on GHK-Cu. '
+      : '';
   return (
     "HARD OUTPUT LOCK (READ FIRST): Any vial in this image MUST copy the GHK-Cu catalog still — clear glass, vibrant blue plastic flip-off cap on brushed-silver crimp, white wrap-around label, dark maroon DNA helix at top, dark maroon '" +
     name +
@@ -183,7 +236,8 @@ function hardLock(name, spec) {
     spec.conc +
     "', footer '" +
     spec.vol +
-    " Sterile Multi-Use Vial'. Never a crimp-only vial without the blue flip-cap. Never a twist cap. Never amber glass. Never 10mg/ml on GHK-Cu. "
+    " Sterile Multi-Use Vial'. Never a crimp-only vial without the blue flip-cap. Never a twist cap. Never amber glass. " +
+    ghkWarn
   );
 }
 
@@ -239,6 +293,8 @@ function applyDoseBar(t, spec) {
 function paintVial(t, name, spec, noun, catalogKey) {
   t = String(t || '');
   t = stripLock(t, 'HARD OUTPUT LOCK (READ FIRST):', 'Never 10mg/ml on GHK-Cu. ');
+  t = stripLock(t, 'HARD OUTPUT LOCK (READ FIRST):', 'Never print 10mg/ml on GHK-Cu. ');
+  t = stripLock(t, 'HARD OUTPUT LOCK (READ FIRST):', 'Never amber glass. ');
   t = applyDoseBar(t, spec);
   for (var p = 0; p < OLD_VIAL_PHRASES.length; p++) {
     t = swapAll(t, OLD_VIAL_PHRASES[p], noun);
@@ -261,10 +317,20 @@ function paintVial(t, name, spec, noun, catalogKey) {
     'Do not restyle lighting, camera, label text, or environment.',
     'Do not restyle lighting, camera, or environment (vial packaging and label ARE restyled by VIAL LOOK LOCK).'
   );
+  t = swapAll(
+    t,
+    name + ' locked via typography / subtle mid-ground prop only',
+    'if any vial appears it is exactly one ' + noun
+  );
+  t = swapAll(
+    t,
+    'locked via typography / subtle mid-ground prop only',
+    'if any vial appears it is the catalog vial in VIAL SPEC'
+  );
   if (t.indexOf('VIAL SPEC:') < 0) {
     t = vialSpec(name, spec, catalogKey) + t;
   }
-  t = hardLock(name, spec) + t;
+  t = hardLock(name, spec, catalogKey) + t;
   while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
   return t.trim();
 }
