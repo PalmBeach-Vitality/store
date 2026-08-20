@@ -2,7 +2,8 @@
 
 One-shot. Do **not** Publish. Execute once, then archive.
 
-**Live overlay (archive after execute):** created in n8n as `overlay_landscape_vial_look`  
+**Live overlay (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/DgllPY7GowXkKPVo  
+Manual execution `1489` succeeded (**329** `vial_10ml` rows). Workflow is archived.  
 **Target sheet:** `500_Peptide_Wellness_Reel_Scenes.csv` gid `444650679`  
 **Daily reader:** `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` (`Kc2HqqjSyiKs87qy`) — sheets-only, unpublished.
 
