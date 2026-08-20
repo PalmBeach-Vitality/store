@@ -85,7 +85,7 @@ function pbv_render_homepage_collections() {
     <section class="pbv-home-shop" id="shop-collections" aria-labelledby="pbv-home-collections-title">
       <div class="pbv-container pbv-home-shop__inner">
         <h2 class="pbv-home-shop__title" id="pbv-home-collections-title">Shop collections</h2>
-        <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds — equal space for every line.</p>
+        <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds for laboratory use.</p>
         <div class="pbv-home-collections">
           <?php foreach ($cards as $card) :
               $url   = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
@@ -128,7 +128,7 @@ function pbv_render_homepage_products() {
     <section class="pbv-home-products woocommerce" aria-labelledby="pbv-home-products-title">
       <div class="pbv-container pbv-home-products__inner">
         <h2 class="pbv-home-shop__title" id="pbv-home-products-title">Featured in the lab</h2>
-        <p class="pbv-home-shop__lede">Two compounds from each collection. Open any card, or browse the full catalog.</p>
+        <p class="pbv-home-shop__lede">Two compounds from each collection. Intended for laboratory research use only.</p>
         <?php
         echo do_shortcode('[products ids="' . esc_attr($id_list) . '" columns="4" orderby="post__in" limit="8"]');
         ?>
