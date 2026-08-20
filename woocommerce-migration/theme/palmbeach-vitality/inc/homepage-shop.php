@@ -11,34 +11,35 @@ if (!defined('ABSPATH')) {
 
 /**
  * Four storefront collections, in menu order.
+ * Tile artwork already includes VIALS/PENS + Peptides/Metabolic labels.
  *
- * @return array<int, array{slug:string,title:string,kicker:string,image:string}>
+ * @return array<int, array{slug:string,title:string,alt:string,image:string}>
  */
 function pbv_homepage_collections() {
     return array(
         array(
-            'slug'   => 'peptides',
-            'title'  => 'Peptides',
-            'kicker' => 'Vials',
-            'image'  => 'peptides-header.jpg',
+            'slug'  => 'peptides',
+            'title' => 'Peptides',
+            'alt'   => 'Vials — Peptides',
+            'image' => 'home-peptides.jpg',
         ),
         array(
-            'slug'   => 'peptide-pens',
-            'title'  => 'Peptide Pens',
-            'kicker' => 'Ready to use',
-            'image'  => 'peptide-pens-header.jpg',
+            'slug'  => 'peptide-pens',
+            'title' => 'Peptide Pens',
+            'alt'   => 'Pens — Peptides',
+            'image' => 'home-peptide-pens.jpg',
         ),
         array(
-            'slug'   => 'weight-loss',
-            'title'  => 'Weight Loss',
-            'kicker' => 'Vials',
-            'image'  => 'weight-loss-header.jpg',
+            'slug'  => 'weight-loss',
+            'title' => 'Weight Loss',
+            'alt'   => 'Vials — Metabolic',
+            'image' => 'home-weight-loss.jpg',
         ),
         array(
-            'slug'   => 'weight-loss-pens',
-            'title'  => 'Weight Loss Pens',
-            'kicker' => 'Ready to use',
-            'image'  => 'weight-loss-pens-header.jpg',
+            'slug'  => 'weight-loss-pens',
+            'title' => 'Weight Loss Pens',
+            'alt'   => 'Pens — Metabolic',
+            'image' => 'home-weight-loss-pens.jpg',
         ),
     );
 }
@@ -90,13 +91,20 @@ function pbv_render_homepage_collections() {
               $url   = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
               $image = pbv_asset_uri('assets/images/' . $card['image']);
               ?>
-            <a class="pbv-home-collection" href="<?php echo esc_url($url); ?>">
-              <span class="pbv-home-collection__media" style="background-image:url('<?php echo esc_url($image); ?>');"></span>
-              <span class="pbv-home-collection__overlay" aria-hidden="true"></span>
-              <span class="pbv-home-collection__copy">
-                <span class="pbv-home-collection__kicker"><?php echo esc_html($card['kicker']); ?></span>
-                <span class="pbv-home-collection__name"><?php echo esc_html($card['title']); ?></span>
-              </span>
+            <a
+              class="pbv-home-collection"
+              href="<?php echo esc_url($url); ?>"
+              aria-label="<?php echo esc_attr($card['title']); ?>"
+            >
+              <img
+                class="pbv-home-collection__img"
+                src="<?php echo esc_url($image); ?>"
+                alt="<?php echo esc_attr($card['alt']); ?>"
+                width="1600"
+                height="900"
+                loading="lazy"
+                decoding="async"
+              />
             </a>
           <?php endforeach; ?>
         </div>
