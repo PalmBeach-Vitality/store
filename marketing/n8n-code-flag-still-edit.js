@@ -4,12 +4,8 @@
 // Wire (linear — no Switch/IF):
 //   grok_imagine_reel_still → **flag_still_edit** → prep_still_edit
 //
-// CODE_STILL_EDIT_PROMPT wins first (what you type here). Sheet/pick is fallback only.
-
-// ── EDIT THIS — this is the prompt Grok edit uses ───────────────────────
-var CODE_STILL_EDIT_PROMPT =
-  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen (background, soft-focus, smaller secondary, open/uncapped duplicates). Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit the viewer must count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment. Do not add new products.';
-// ─────────────────────────────────────────────────────────────────────────
+// SHEETS-ONLY: still_edit_prompt comes from pick_creation / the sheet row.
+// This node does not invent an edit prompt.
 
 function firstJson(name) {
   try {
@@ -27,8 +23,8 @@ function grokStillUrl(obj) {
 }
 
 var j = Object.assign({}, ($input.first() && $input.first().json) || $json || {});
+var pick = firstJson('pick_creation');
 
-// Always prefer the fresh Grok still (never a prior save_still_url from an old run)
 var stillUrl =
   grokStillUrl(firstJson('grok_imagine_reel_still')) ||
   grokStillUrl(j) ||
@@ -41,24 +37,25 @@ if (!/^https:\/\//i.test(stillUrl)) {
   );
 }
 j.still_url = stillUrl;
+j.source_still_url = stillUrl;
 
-// CODE prompt wins. Sheet/pick only if Code string is emptied on purpose.
-var prompt = String(CODE_STILL_EDIT_PROMPT || '').trim();
-if (!prompt) {
-  prompt = String(
-    j.still_edit_prompt ||
-      firstJson('pick_creation').still_edit_prompt ||
-      firstJson('map_sheet_fields').still_edit_prompt ||
-      ''
-  ).trim();
-}
+var prompt = String(
+  j.still_edit_prompt ||
+    pick.still_edit_prompt ||
+    firstJson('map_sheet_fields').still_edit_prompt ||
+    ''
+).trim();
 
 if (!prompt) {
-  throw new Error('flag_still_edit: set CODE_STILL_EDIT_PROMPT at the top of this Code.');
+  throw new Error(
+    'SHEETS-ONLY: still_edit_prompt missing on sheet row creation_id=' +
+      (j.creation_id || pick.creation_id || '?')
+  );
 }
 
 j.still_edit_prompt = prompt;
-j.still_edit_prompt_source = 'CODE_STILL_EDIT_PROMPT';
-j.source_still_url = stillUrl;
+j.still_edit_prompt_source = 'sheet';
+if (!j.model_still) j.model_still = pick.model_still || '';
+if (!j.aspect_ratio) j.aspect_ratio = pick.aspect_ratio || '';
 
 return [{ json: j }];

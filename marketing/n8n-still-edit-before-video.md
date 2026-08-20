@@ -1,6 +1,7 @@
 # Still edit before Grok Imagine video 1.5
 
-**Goal:** Still → hard single-hero edit → video → sheets. **No Switch. No IF.**
+**Goal:** Still → sheet `still_edit_prompt` edit → video → sheets. **No Switch. No IF.**  
+**Sheets-only:** do not hardcode the edit prompt in Code. Put the text on the Sheet 9 `still_edit_prompt` cell.
 
 **fx legend:** **ON** = Expression · **OFF** = Fixed
 
@@ -11,7 +12,7 @@
 ```text
 pick_creation
   → grok_imagine_reel_still
-  → flag_still_edit                 ← CODE_STILL_EDIT_PROMPT (only place to tweak)
+  → flag_still_edit                 ← copies sheet still_edit_prompt (throws if empty)
   → prep_still_edit
   → grok_imagine_edit_still
   → save_still_url
@@ -25,6 +26,8 @@ pick_creation
 
 Delete / unwired: `choose_still_path`, `normalize_still_path`, `switch_still_path`, any IF for still edit.
 
+Live lab vid-gen currently skips this still-edit hop (`save_still_url` → `prep_grok_video_start`). The Code paste-sources are sheets-only so the hop can be wired later without inventing a prompt.
+
 ---
 
 ## Node 1 — `flag_still_edit`
@@ -32,11 +35,9 @@ Delete / unwired: `choose_still_path`, `normalize_still_path`, `switch_still_pat
 **Type:** Code · Run Once for All Items  
 **Before → this → After:** `grok_imagine_reel_still` → **flag_still_edit** → `prep_still_edit`
 
-Paste: https://github.com/PalmBeach-Vitality/store/blob/cursor/creatomate-url-set-workflow-4c4b/marketing/n8n-code-flag-still-edit.js
+Paste: `marketing/n8n-code-flag-still-edit.js`
 
-Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you need a custom tweak. Default = hard COUNT=1 (delete extra vials).
-
-**Check:** `still_edit_prompt` + https `still_url`
+**Check:** `still_edit_prompt` from the sheet row + https `still_url`
 
 ---
 
@@ -45,9 +46,9 @@ Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you need a custom tweak. Defau
 **Type:** Code · Run Once for All Items  
 **Before → this → After:** `flag_still_edit` → **prep_still_edit** → `grok_imagine_edit_still`
 
-Paste: https://github.com/PalmBeach-Vitality/store/blob/cursor/creatomate-url-set-workflow-4c4b/marketing/n8n-code-prep-still-edit.js
+Paste: `marketing/n8n-code-prep-still-edit.js`
 
-**Check:** `still_edit_body_json` + `source_still_url`
+**Check:** `still_edit_body_json` uses sheet `still_edit_prompt` + `model_still` + `aspect_ratio` (throws if any are empty) + `source_still_url`
 
 ---
 
