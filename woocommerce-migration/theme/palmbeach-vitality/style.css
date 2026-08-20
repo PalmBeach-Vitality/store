@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.47
+Version: 2.10.48
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -571,25 +571,20 @@ a:hover { opacity: 0.7; }
 
 .pbv-home-collection {
   display: block;
-  border-radius: 1.15rem;
-  overflow: hidden;
-  background: #07101c;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+  background: transparent;
   line-height: 0;
 }
 
 .pbv-home-collection:hover {
   opacity: 1;
-  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
 }
 
 .pbv-home-collection__img {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  object-position: left bottom;
+  object-fit: contain;
+  object-position: center;
 }
 
 .pbv-home-products__more {
@@ -907,15 +902,15 @@ a:hover { opacity: 0.7; }
 .woocommerce ul.products li.product a img,
 .woocommerce ul.products li.product img {
   display: block;
-  width: 70%;
-  max-width: 11.5rem;
+  width: 100%;
+  max-width: none;
   height: auto;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 1 / 1;
   object-fit: contain;
   object-position: center center;
   margin: 0 auto 0.65rem;
   background: #eef2f5;
-  border-radius: 0.65rem;
+  border-radius: 1.15rem;
   image-rendering: auto;
 }
 
@@ -947,7 +942,7 @@ a:hover { opacity: 0.7; }
 
   .woocommerce ul.products li.product a img,
   .woocommerce ul.products li.product img {
-    max-width: 12.5rem;
+    max-width: none;
   }
 
   .woocommerce ul.products li.product .woocommerce-loop-product__title {
@@ -963,7 +958,7 @@ a:hover { opacity: 0.7; }
 
   .woocommerce ul.products li.product a img,
   .woocommerce ul.products li.product img {
-    max-width: 11.75rem;
+    max-width: none;
   }
 }
 
@@ -1013,7 +1008,7 @@ a:hover { opacity: 0.7; }
   object-fit: contain;
   object-position: center;
   background: #eef2f5;
-  border-radius: 0.75rem;
+  border-radius: 1.15rem;
 }
 
 /* One product image only — hide gallery thumbnail strips / flex control nav */

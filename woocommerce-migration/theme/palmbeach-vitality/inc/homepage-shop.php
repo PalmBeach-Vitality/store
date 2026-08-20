@@ -100,8 +100,8 @@ function pbv_render_homepage_collections() {
                 class="pbv-home-collection__img"
                 src="<?php echo esc_url($image); ?>"
                 alt="<?php echo esc_attr($card['alt']); ?>"
-                width="1600"
-                height="900"
+                width="1792"
+                height="1008"
                 loading="lazy"
                 decoding="async"
               />
