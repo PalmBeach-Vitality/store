@@ -115,6 +115,7 @@ var body = {
   image: { url: stillResolved },
   duration: duration,
   resolution: resolution,
+  audio: false,
 };
 
 var grok_video_body_json = JSON.stringify(body);
