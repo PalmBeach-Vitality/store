@@ -71,8 +71,7 @@ var modelVideo = String(
     val(stillNode, ['model_video']) ||
     val(editedStill, ['model_video']) ||
     val(sheet, ['model_video']) ||
-    val(importStill, ['model_video'], '') ||
-    'grok-imagine-video-1.5'
+    val(importStill, ['model_video'], '')
 ).trim();
 
 var duration = Number(
@@ -80,8 +79,7 @@ var duration = Number(
     val(stillNode, ['duration_seconds']) ||
     val(editedStill, ['duration_seconds']) ||
     val(sheet, ['duration_seconds']) ||
-    val(importStill, ['duration_seconds'], 0) ||
-    15
+    val(importStill, ['duration_seconds'], 0)
 );
 
 var resolution = String(
@@ -89,8 +87,7 @@ var resolution = String(
     val(stillNode, ['resolution']) ||
     val(editedStill, ['resolution']) ||
     val(sheet, ['resolution']) ||
-    val(importStill, ['resolution'], '') ||
-    '1080p'
+    val(importStill, ['resolution'], '')
 ).trim();
 
 if (!stillResolved) {
@@ -100,13 +97,17 @@ if (!stillResolved) {
 }
 if (!motion) {
   throw new Error(
-    'prep_grok_video_start: video_motion_prompt missing from Sheet (pick_creation). ' +
-      'On save_still_url set video_motion_prompt from pick_creation.'
+    'SHEETS-ONLY: video_motion_prompt missing from Sheet (pick_creation).'
   );
 }
-
-if (motion.length > 700) {
-  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
+if (!modelVideo) {
+  throw new Error('SHEETS-ONLY: model_video missing from Sheet (pick_creation).');
+}
+if (!Number.isFinite(duration) || duration <= 0) {
+  throw new Error('SHEETS-ONLY: duration_seconds missing from Sheet (pick_creation).');
+}
+if (!resolution) {
+  throw new Error('SHEETS-ONLY: resolution missing from Sheet (pick_creation).');
 }
 
 var body = {

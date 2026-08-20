@@ -7,14 +7,6 @@
 // Rotation each run: different compound_name AND different lab_scene (category).
 // Then least-used row within that pair. No hardcoded prompts/cameras/models.
 
-function firstJson(name) {
-  try {
-    return $(name).first()?.json || {};
-  } catch (e) {
-    return {};
-  }
-}
-
 function val(obj, names, fallback = '') {
   for (const n of names) {
     if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
@@ -56,95 +48,13 @@ function stripVidDisclaimer(text) {
   return t.replace(/\s+/g, ' ').replace(/\s+\./g, '.').trim();
 }
 
-/** xAI images/generations prompt max = 8000. Stay under with headroom. */
+/** xAI images/generations prompt max = 8000. Stay under with headroom. Do not wrap extra locks. */
 const PROMPT_MAX = 7900;
 
-/** Compact locks — must survive truncation of the middle. */
-const OPENING_LOCK =
-  'HARD OUTPUT LOCK: exactly 1 product container in the entire image (1 sealed vial OR 1 sealed pen). Product count = 1. No second vial, no background vial, no soft-focus vial, no product pair. ';
-
-const CLOSING_LOCK =
-  ' FINAL CHECK: count every vial and pen — total must be exactly 1. If 2+, remove extras. COUNT = 1.';
-
-const HARD_SINGLE_HERO =
-  ' SINGLE HERO (COUNT=1): exactly ONE vial OR ONE pen — never both, never two. Forbidden: background vial, large+small pair, open+capped pair, mirrored duplicate, rack/row/cluster. Architecture only in background. ONE hero.';
-
-const HARD_STILL_EDIT =
-  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen. Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment.';
-
-function truncateMiddle(mid, budget) {
-  mid = String(mid || '').trim();
-  if (mid.length <= budget) return mid;
-  var slice = mid.slice(0, budget);
-  var cut = Math.max(slice.lastIndexOf('. '), slice.lastIndexOf('; '), slice.lastIndexOf(' '));
-  if (cut > budget * 0.6) slice = slice.slice(0, cut + 1);
-  return slice.trim();
-}
-
-function hardenStillPrompt(text) {
-  var t = String(text || '').trim();
-
-  // THIS PHRASE WAS TEACHING GROK TO DRAW MULTIPLE PRODUCTS — kill it
-  t = t.replace(
-    /Create an exciting, unique laboratory \/ peptide R&D \/ health-and-wellness industry scene — not a boring single product cutout\./gi,
-    'Create an exciting laboratory / peptide R&D environment with exactly ONE product hero only (never two vials or pens).'
-  );
-  t = t.replace(
-    /not a boring single product cutout/gi,
-    'exactly one product hero in a full environment (never two products)'
-  );
-  t = t.replace(/\bnot a single boring SKU\b/gi, 'not a boring SKU catalog shot');
-  t = t.replace(/\bHero cluster\b/gi, 'Hero');
-  t = t.replace(
-    /Nested glass doors create recursive reflections of the same hero object\./gi,
-    'Glass may reflect light only — no second readable vial or pen in any reflection.'
-  );
-  t = t.replace(
-    /recursive reflections of the same hero object/gi,
-    'no second readable vial or pen in any reflection'
-  );
-  t = t.replace(
-    /Color-blocked solvent bottles create a deliberate Pantone story behind the hero\./gi,
-    'Keep the background clean behind the single hero — no extra bottles that read as product heroes.'
-  );
-
-  // Strip duplicated packaging tail that teaches two vials
-  t = t.replace(
-    /(10ml Sterile Multi-Use Vial')\s+with bright blue flip-off cap,[\s\S]*?footer reading '10ml Sterile Multi-Use Vial'/gi,
-    "$1"
-  );
-
-  // Strip prior locks/rules so we re-wrap clean every run
-  t = t.replace(/HARD OUTPUT LOCK \(READ FIRST\):[\s\S]*?(?:for depth\.\s*|depth\.\s*)/gi, '');
-  t = t.replace(/HARD OUTPUT LOCK:[\s\S]*?(?:product pair\.\s*|for depth\.\s*)/gi, '');
-  t = t.replace(/HARD OUTPUT LOCK \(FINAL CHECK\):[\s\S]*?COUNT = 1\./gi, '');
-  t = t.replace(/FINAL CHECK:[\s\S]*?COUNT = 1\./gi, '');
-  t = t.replace(
-    /SINGLE HERO PRODUCT RULE \(MANDATORY[^\)]*\):[\s\S]*?(?:COUNT = 1\. Period\.|Period\.)/gi,
-    ''
-  );
-  t = t.replace(/SINGLE HERO \(COUNT=1\):[\s\S]*?ONE hero\./gi, '');
-
-  // Drop long disclaimer / quality fluff that burns the 8000 budget
-  t = t.replace(/\s*No treatment, cure, dosage-for-humans[\s\S]*$/i, '');
-  t = t.replace(/\s*Do not print research-use disclaimers[\s\S]*$/i, '');
-  t = t.replace(
-    /\s*Quality: ultra detailed, extremely detailed, hyper-detailed[\s\S]*?(?=VIAL PACKAGING|SINGLE HERO|ABSOLUTE RULE|HARD OUTPUT|FINAL CHECK|$)/i,
-    ' Quality: photoreal, sharp focus, 8k. '
-  );
-
-  t = t.replace(/\s+/g, ' ').trim();
-
-  var head = OPENING_LOCK;
-  var tail = HARD_SINGLE_HERO + CLOSING_LOCK;
-  var budget = PROMPT_MAX - head.length - tail.length;
-  if (budget < 2000) budget = 2000;
-  var mid = truncateMiddle(t, budget);
-  var out = (head + mid + tail).trim();
-  if (out.length > PROMPT_MAX) {
-    out = out.slice(0, PROMPT_MAX);
-  }
-  return out;
+function capPrompt(text) {
+  var t = String(text || '').replace(/\s+/g, ' ').trim();
+  if (t.length > PROMPT_MAX) t = t.slice(0, PROMPT_MAX);
+  return t;
 }
 
 const creations = $input.all().map((i) => i.json);
@@ -163,16 +73,17 @@ const scored = creations
       fromSheet ||
       (rankNum > 0 ? `PBVita-Lab-${String(rankNum).padStart(3, '0')}` : '');
 
-    const video_prompt = hardenStillPrompt(
+    const video_prompt = capPrompt(
       stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt']))
     );
-    const video_motion_prompt = stripVidDisclaimer(
-      val(c, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'])
+    const video_motion_prompt = capPrompt(
+      stripVidDisclaimer(
+        val(c, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'])
+      )
     );
-    const still_edit_from_sheet = String(
-      val(c, ['still_edit_prompt', 'stillEditPrompt'], '')
-    ).trim();
-    const still_edit_prompt = still_edit_from_sheet || HARD_STILL_EDIT;
+    const still_edit_prompt = capPrompt(
+      String(val(c, ['still_edit_prompt', 'stillEditPrompt'], '')).trim()
+    );
 
     return {
       raw: c,
@@ -378,35 +289,13 @@ if (!pick.aspect_ratio) {
 if (!pick.still_resolution) {
   throw new Error('Sheet 9 row missing still_resolution for ' + pick.creation_id);
 }
-
-let compound = {};
-try {
-  compound = $('Parse_Grok').item?.json || {};
-} catch (e) {
-  compound = {};
-}
-if (!Object.keys(compound).length) {
-  try {
-    compound = $('if_compliance').item?.json || {};
-  } catch (e) {
-    compound = {};
-  }
-}
-
-let template_id = compound.template_id || '';
-if (!template_id) {
-  try {
-    template_id = $('Prep_day_variant').item?.json?.template_id || '';
-  } catch (e) {
-    template_id = '';
-  }
+if (!pick.still_edit_prompt) {
+  throw new Error('Sheet 9 row missing still_edit_prompt for ' + pick.creation_id);
 }
 
 return [
   {
     json: {
-      ...compound,
-
       creation_id: pick.creation_id,
       creation_rank: pick.rank,
       row_number: pick.row_number,
@@ -444,8 +333,6 @@ return [
       creation_status: pick.status,
       creation_times_used: pick.times_used,
       creation_last_used_at: pick.last_used_at,
-
-      template_id,
     },
   },
 ];
