@@ -14,6 +14,10 @@ Reference look (mandatory when a vial appears):
 
 Replaces older "crimped aluminum + rubber only / no plastic caps" language.
 Safe to re-run.
+
+After packaging replacements, catalog mg / mg/ml locks from
+`overlay_lab_vial_dosages.py` are re-applied so this script does not revert
+exact `'10mg'` / `'1 mg/ml'` text back to the generic “white mg strength” phrase.
 """
 
 from __future__ import annotations
@@ -22,6 +26,8 @@ import csv
 import json
 import re
 from pathlib import Path
+
+from overlay_lab_vial_dosages import patch_row as apply_catalog_vial_dose
 
 ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
@@ -216,6 +222,8 @@ def patch_row(row: dict) -> bool:
         if new != old:
             row[key] = new
             changed = True
+    if apply_catalog_vial_dose(row):
+        changed = True
     return changed
 
 
