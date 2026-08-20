@@ -10,6 +10,7 @@
 // Peptide pens: glossy white body, RED compound name.
 // Metabolic pens: glossy white body, BLUE compound name.
 // DNA logo is bright blue on every pen. Line 2 is black.
+// NO ORANGE on the pen (not the dial, not the clicker, not the name).
 // Do not recolor scene blacks (void, lake, etc.).
 
 var METABOLIC = {
@@ -69,6 +70,10 @@ function paintNouns(t, noun) {
   t = swapAll(t, 'same elongated shape', 'insulin-style injector silhouette');
   t = swapAll(t, 'elongated 3mL pen shape and design', 'insulin-style 3mL injector silhouette');
   t = swapAll(t, 'elongated 3mL research pen', 'insulin-style 3mL injector pen');
+  t = swapAll(t, 'orange clicker button only', 'white clicker button');
+  t = swapAll(t, 'translucent orange clicker button only', 'white clicker button');
+  t = swapAll(t, 'translucent ORANGE clicker button on the far right only', 'WHITE clicker button');
+  t = swapAll(t, 'translucent orange-tinted clicker BUTTON only. Orange exists ONLY on that button.', 'glossy WHITE clicker BUTTON.');
   while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
   t = swapAll(t, ' .', '.');
   return t.trim();
@@ -99,8 +104,8 @@ for (var i = 0; i < items.length; i++) {
     'Smooth GLOSSY white plastic barrel — not matte, not black, not gray, not metal, not a glass vial, not an elongated slim research cartridge. ' +
     'LEFT: rounded glossy white cap with an integrated white pocket clip like a ballpoint; cap ON covering the tip; never a needle. ' +
     'MID: recessed band with two small vertical rectangular notches. ' +
-    'RIGHT: glossy WHITE cylindrical dose dial with raised vertical grip ridges — the dial is white, not orange. ' +
-    'FAR RIGHT: translucent orange-tinted clicker BUTTON only. Orange exists ONLY on that button. ' +
+    'RIGHT: glossy WHITE cylindrical dose dial with raised vertical grip ridges. ' +
+    'FAR RIGHT: glossy WHITE clicker BUTTON, same white plastic as the dial — not orange, not tinted, not translucent amber. ' +
     'LABEL: bright-blue vertical DNA double-helix at far left; then ' +
     name +
     ' in large bold ' +
@@ -110,7 +115,8 @@ for (var i = 0; i < items.length; i++) {
     '. DNA logo stays blue. Compound name is ' +
     inkAdj +
     ' only — not orange, not gold, not black. Line 2 is black. ' +
-    'FORBIDDEN: orange dose dial, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle. ' +
+    'NO ORANGE anywhere on the pen: not the dial, not the clicker, not the name, not a badge, not a tint. ' +
+    'FORBIDDEN: orange, gold text, black barrel, missing clip, uncapped needle. ' +
     'No injection act, no people, no needles in use. ';
 
   var hero =
@@ -120,10 +126,10 @@ for (var i = 0; i < items.length; i++) {
     inkAdj +
     ' compound name, black ' +
     line2 +
-    ' line, white ridged dial, orange clicker button only, mid-ground in environment; no injection act, no people, no needle use';
+    ' line, white ridged dial, white clicker button, mid-ground in environment; no injection act, no people, no needle use';
 
   var material =
-    '3mL insulin-style injector — glossy white body, white clip-cap ON, white ridged dose dial, translucent orange clicker button only; bright-blue DNA helix; ' +
+    '3mL insulin-style injector — glossy white body, white clip-cap ON, white ridged dose dial, white clicker button; bright-blue DNA helix; ' +
     inkAdj +
     ' ' +
     name +
@@ -133,7 +139,7 @@ for (var i = 0; i < items.length; i++) {
   var designLock =
     'PEN DESIGN LOCK (overrides COUNT FIX restyle for the pen, including shape and label): ' +
     'REPLACE the hero with this exact injector. Do not keep an elongated research pen. Do not keep a black, gray, metal, or matte barrel — the plastic is GLOSSY white. ' +
-    'Hardware: rounded white cap + white clip ON; recessed mid with two small vertical notches; WHITE ridged dose dial; translucent ORANGE clicker button on the far right only. ' +
+    'Hardware: rounded white cap + white clip ON; recessed mid with two small vertical notches; WHITE ridged dose dial; WHITE clicker button. ' +
     'Label: bright-blue vertical DNA double-helix at left; large bold ' +
     inkAdj +
     ' ' +
@@ -141,7 +147,7 @@ for (var i = 0; i < items.length; i++) {
     '; smaller thinner black ' +
     line2 +
     '. Peptide names are red. Metabolic names are blue. ' +
-    'FORBIDDEN: orange dial, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle, glass vial. ' +
+    'NO ORANGE anywhere on the pen. FORBIDDEN: orange dial, orange clicker, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle, glass vial. ' +
     'Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.';
 
   var stillEdit = String(row.still_edit_prompt || '').trim();
