@@ -41,7 +41,6 @@
         width="1175"
         height="500"
         decoding="async"
-        fetchpriority="high"
       />
     </a>
   </div>

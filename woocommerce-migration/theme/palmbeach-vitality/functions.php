@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.24');
+define('PBV_THEME_VERSION', '2.10.25');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -119,9 +119,10 @@ function pbv_site_logo() {
 }
 
 function pbv_assets() {
+    // Lean font request (same families/weights used in CSS; drop unused Work Sans italics).
     wp_enqueue_style(
         'pbv-fonts',
-        'https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400;1,700&family=Work+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap',
+        'https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,700&family=Work+Sans:wght@400;500;600;700&display=swap',
         array(),
         null
     );
@@ -131,7 +132,10 @@ function pbv_assets() {
         get_template_directory_uri() . '/assets/js/theme.js',
         array(),
         PBV_THEME_VERSION,
-        true
+        array(
+            'in_footer' => true,
+            'strategy'  => 'defer',
+        )
     );
     wp_localize_script('pbv-theme', 'pbvTheme', array(
         'ajaxUrl'       => admin_url('admin-ajax.php'),
@@ -141,6 +145,67 @@ function pbv_assets() {
     ));
 }
 add_action('wp_enqueue_scripts', 'pbv_assets');
+
+/**
+ * Performance: resource hints + LCP preload (same assets; faster discovery only).
+ */
+function pbv_performance_head() {
+    echo '<link rel="preconnect" href="https://fonts.googleapis.com" />' . "\n";
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />' . "\n";
+    echo '<link rel="preconnect" href="https://fonts-api.wp.com" crossorigin />' . "\n";
+
+    if (is_front_page()) {
+        $lcp = function_exists('pbv_hero_mobile_image_url') ? pbv_hero_mobile_image_url() : '';
+        if ($lcp) {
+            echo '<link rel="preload" as="image" href="' . esc_url($lcp) . '" fetchpriority="high" />' . "\n";
+        }
+    }
+}
+add_action('wp_head', 'pbv_performance_head', 1);
+
+/**
+ * Performance: dequeue WooCommerce chrome unused on the homepage.
+ * Does not change markup, copy, images, or product placement.
+ */
+function pbv_dequeue_unused_front_assets() {
+    if (!is_front_page()) {
+        return;
+    }
+
+    $styles = array(
+        'woocommerce-general',
+        'woocommerce-layout',
+        'woocommerce-smallscreen',
+        'woocommerce-inline',
+        'wc-blocks-style',
+        'wc-blocks-vendors-style',
+        'woocommerce_prettyPhoto_css',
+        'jquery-selectBox',
+        'dashicons',
+    );
+    foreach ($styles as $handle) {
+        wp_dequeue_style($handle);
+        wp_deregister_style($handle);
+    }
+
+    wp_dequeue_style('woocommerce-gift-cards');
+    wp_dequeue_style('woocommerce-product-addons-css');
+    wp_dequeue_style('woocommerce-addons-css');
+
+    $scripts = array(
+        'wc-add-to-cart',
+        'wc-cart-fragments',
+        'woocommerce',
+        'wc-jquery-blockui',
+        'js-cookie',
+        'wc-add-to-cart-variation',
+        'accounting',
+    );
+    foreach ($scripts as $handle) {
+        wp_dequeue_script($handle);
+    }
+}
+add_action('wp_enqueue_scripts', 'pbv_dequeue_unused_front_assets', 100);
 
 /**
  * Contact form → sales@palmbeach-vitality.com
