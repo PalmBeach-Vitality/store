@@ -11,11 +11,11 @@ Match the reference still: a **glossy white insulin-style 3mL injector** (Ozempi
 
 | Part | Exact |
 |---|---|
-| Barrel | Smooth **glossy** white plastic |
+| Barrel | Smooth **glossy** white plastic, **longer** full-length (10–20% longer than a stubby travel pen) |
 | Cap | Rounded glossy white cap, **clip ON**, covering the tip |
 | Mid | Recessed band with **two small vertical rectangular notches** |
 | Dial | Glossy **white** cylindrical dose dial with raised vertical ridges |
-| Clicker | Glossy **white** button — **no orange** anywhere on the pen |
+| Bottom clicker | Translucent **red** (peptide) or **blue** (metabolic) — same color as the name. Never orange. Never white. |
 | DNA | Bright-**blue** vertical double-helix at far left of the label |
 | Name | Large bold sans-serif — **red** peptide / **blue** metabolic |
 | Line 2 | Smaller thinner **black** type: `3ml Pen` (MOTS-C: `20mg 3ml Pen`) |

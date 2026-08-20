@@ -7,10 +7,11 @@
 // 500_Peptide_Wellness_Reel_Scenes pen_3ml rows only.
 // Does NOT emit times_used / last_used_at / reel_still_url / video_url.
 //
-// Peptide pens: glossy white body, RED compound name.
-// Metabolic pens: glossy white body, BLUE compound name.
-// DNA logo is bright blue on every pen. Line 2 is black.
-// NO ORANGE on the pen (not the dial, not the clicker, not the name).
+// Peptide pens: white body, RED compound name, RED translucent bottom clicker.
+// Metabolic pens: white body, BLUE compound name, BLUE translucent bottom clicker.
+// DNA logo is bright blue on every pen. Line 2 is black. Dial stays white.
+// Barrel is a LONGER full-length insulin-style injector (not stubby).
+// Orange is the wrong color — never use orange on name or clicker.
 // Do not recolor scene blacks (void, lake, etc.).
 
 var METABOLIC = {
@@ -60,20 +61,21 @@ function replaceBetween(t, startMark, endMark, replacement) {
   return t.slice(0, start) + replacement + t.slice(end);
 }
 
-function paintNouns(t, noun) {
+function paintNouns(t, noun, clicker) {
   t = String(t || '');
   t = swapAll(t, 'matte-white peptide pen with red on-pen text', noun);
   t = swapAll(t, 'matte-white metabolic pen with blue on-pen text', noun);
   t = swapAll(t, 'matte-black peptide pen', noun);
   t = swapAll(t, 'matte-white research dosage pen', 'glossy white insulin-style injector pen');
   t = swapAll(t, 'Keep the same elongated pen shape.', '');
-  t = swapAll(t, 'same elongated shape', 'insulin-style injector silhouette');
-  t = swapAll(t, 'elongated 3mL pen shape and design', 'insulin-style 3mL injector silhouette');
-  t = swapAll(t, 'elongated 3mL research pen', 'insulin-style 3mL injector pen');
-  t = swapAll(t, 'orange clicker button only', 'white clicker button');
-  t = swapAll(t, 'translucent orange clicker button only', 'white clicker button');
-  t = swapAll(t, 'translucent ORANGE clicker button on the far right only', 'WHITE clicker button');
-  t = swapAll(t, 'translucent orange-tinted clicker BUTTON only. Orange exists ONLY on that button.', 'glossy WHITE clicker BUTTON.');
+  t = swapAll(t, 'same elongated shape', 'longer full-length insulin-style injector');
+  t = swapAll(t, 'elongated 3mL pen shape and design', 'longer full-length insulin-style 3mL injector');
+  t = swapAll(t, 'elongated 3mL research pen', 'longer insulin-style 3mL injector pen');
+  t = swapAll(t, 'white clicker button', clicker);
+  t = swapAll(t, 'WHITE clicker button', clicker);
+  t = swapAll(t, 'glossy WHITE clicker BUTTON', clicker);
+  t = swapAll(t, 'orange clicker button only', clicker);
+  t = swapAll(t, 'translucent orange clicker button only', clicker);
   while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
   t = swapAll(t, ' .', '.');
   return t.trim();
@@ -97,15 +99,20 @@ for (var i = 0; i < items.length; i++) {
   var ink = metabolic ? 'blue' : 'red';
   var inkAdj = metabolic ? 'bright blue' : 'bright red';
   var line2 = lineTwo(name);
-  var noun = 'glossy-white insulin-style ' + family + ' pen with ' + ink + ' compound-name';
+  var noun =
+    'longer glossy-white insulin-style ' + family + ' pen with ' + ink + ' compound-name and ' + ink + ' bottom clicker';
+  var clicker = 'translucent ' + inkAdj + ' bottom clicker';
 
   var spec =
-    'PEN SPEC: Exact Palm Beach Vitality 3mL insulin-style injector (Ozempic/Wegovy silhouette). ' +
-    'Smooth GLOSSY white plastic barrel — not matte, not black, not gray, not metal, not a glass vial, not an elongated slim research cartridge. ' +
+    'PEN SPEC: Exact Palm Beach Vitality 3mL insulin-style injector (Ozempic/Wegovy silhouette) with a LONGER full-length barrel. ' +
+    'Stretch the white body 10-20 percent longer than a stubby travel pen — adult full-length injector, not compact, not short. Keep the diameter. ' +
+    'Smooth GLOSSY white plastic barrel — not black, not gray, not metal, not a glass vial, not a skinny research cartridge. ' +
     'LEFT: rounded glossy white cap with an integrated white pocket clip like a ballpoint; cap ON covering the tip; never a needle. ' +
     'MID: recessed band with two small vertical rectangular notches. ' +
-    'RIGHT: glossy WHITE cylindrical dose dial with raised vertical grip ridges. ' +
-    'FAR RIGHT: glossy WHITE clicker BUTTON, same white plastic as the dial — not orange, not tinted, not translucent amber. ' +
+    'RIGHT: glossy WHITE cylindrical dose dial with raised vertical grip ridges. Dial stays white. ' +
+    'BOTTOM / FAR RIGHT plunger: translucent ' +
+    inkAdj +
+    ' clicker BUTTON — same color as the compound name. Peptide = red bottom. Metabolic = blue bottom. Not orange. Not white. Not amber. ' +
     'LABEL: bright-blue vertical DNA double-helix at far left; then ' +
     name +
     ' in large bold ' +
@@ -115,21 +122,24 @@ for (var i = 0; i < items.length; i++) {
     '. DNA logo stays blue. Compound name is ' +
     inkAdj +
     ' only — not orange, not gold, not black. Line 2 is black. ' +
-    'NO ORANGE anywhere on the pen: not the dial, not the clicker, not the name, not a badge, not a tint. ' +
-    'FORBIDDEN: orange, gold text, black barrel, missing clip, uncapped needle. ' +
+    'Orange is the wrong color. FORBIDDEN: orange name, orange clicker, orange dial, orange badge, gold text, black barrel, missing clip, uncapped needle, stubby short pen. ' +
     'No injection act, no people, no needles in use. ';
 
   var hero =
-    'exactly one glossy white insulin-style 3mL injector pen of ' +
+    'exactly one LONGER glossy white insulin-style 3mL injector pen of ' +
     name +
     ' with blue DNA helix, ' +
     inkAdj +
     ' compound name, black ' +
     line2 +
-    ' line, white ridged dial, white clicker button, mid-ground in environment; no injection act, no people, no needle use';
+    ' line, white ridged dial, translucent ' +
+    inkAdj +
+    ' bottom clicker, mid-ground in environment; no injection act, no people, no needle use';
 
   var material =
-    '3mL insulin-style injector — glossy white body, white clip-cap ON, white ridged dose dial, white clicker button; bright-blue DNA helix; ' +
+    'longer 3mL insulin-style injector — glossy white body stretched full-length, white clip-cap ON, white ridged dose dial, translucent ' +
+    inkAdj +
+    ' bottom clicker; bright-blue DNA helix; ' +
     inkAdj +
     ' ' +
     name +
@@ -138,16 +148,19 @@ for (var i = 0; i < items.length; i++) {
 
   var designLock =
     'PEN DESIGN LOCK (overrides COUNT FIX restyle for the pen, including shape and label): ' +
-    'REPLACE the hero with this exact injector. Do not keep an elongated research pen. Do not keep a black, gray, metal, or matte barrel — the plastic is GLOSSY white. ' +
-    'Hardware: rounded white cap + white clip ON; recessed mid with two small vertical notches; WHITE ridged dose dial; WHITE clicker button. ' +
+    'REPLACE the hero with this exact injector. Make the barrel LONGER — full-length adult insulin pen, 10-20 percent longer than a stubby travel pen, same diameter. ' +
+    'Do not keep a short compact pen. Do not keep a black, gray, or metal barrel — the plastic is GLOSSY white. ' +
+    'Hardware: rounded white cap + white clip ON; recessed mid with two small vertical notches; WHITE ridged dose dial; translucent ' +
+    inkAdj +
+    ' bottom clicker (same color as the name — red peptide / blue metabolic). ' +
     'Label: bright-blue vertical DNA double-helix at left; large bold ' +
     inkAdj +
     ' ' +
     name +
     '; smaller thinner black ' +
     line2 +
-    '. Peptide names are red. Metabolic names are blue. ' +
-    'NO ORANGE anywhere on the pen. FORBIDDEN: orange dial, orange clicker, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle, glass vial. ' +
+    '. Peptide names and bottoms are red. Metabolic names and bottoms are blue. ' +
+    'Orange is the wrong color. FORBIDDEN: orange name, orange clicker, orange dial, orange badge, white clicker, gold text, black barrel, missing clip, uncapped needle, glass vial, stubby pen. ' +
     'Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.';
 
   var stillEdit = String(row.still_edit_prompt || '').trim();
@@ -161,7 +174,7 @@ for (var i = 0; i < items.length; i++) {
   stillEdit = (stillEdit ? stillEdit + ' ' : '') + designLock;
 
   function withSpec(s) {
-    s = paintNouns(s, noun);
+    s = paintNouns(s, noun, clicker);
     s = replaceBetween(s, 'PEN SPEC:', 'SIGNAGE RULE:', spec);
     s = replaceBetween(s, 'Hero style:', ' Lighting:', 'Hero style: ' + hero + '.');
     s = replaceBetween(s, 'Hero style:', 'Lighting:', 'Hero style: ' + hero + '. ');
@@ -179,8 +192,8 @@ for (var i = 0; i < items.length; i++) {
       hero_style: hero,
       scene_brief: withSpec(row.scene_brief),
       video_prompt: withSpec(row.video_prompt),
-      video_motion_prompt: paintNouns(row.video_motion_prompt, noun),
-      surface: paintNouns(row.surface, noun),
+      video_motion_prompt: paintNouns(row.video_motion_prompt, noun, clicker),
+      surface: paintNouns(row.surface, noun, clicker),
       still_edit_prompt: stillEdit,
     },
   });
