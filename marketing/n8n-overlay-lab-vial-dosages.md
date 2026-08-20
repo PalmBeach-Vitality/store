@@ -2,6 +2,9 @@
 
 One-shot. Do **not** Publish. Execute once, then archive.
 
+**Live (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/od9QOEUltjhw82bD  
+Manual execution `1482` succeeded (438 rows). Workflow is archived.
+
 ## Why
 
 Grok was inventing concentrations (Semax still showed **2 mg/ml**). Sheet 9 only said “white mg strength, black mg/ml concentration text” with **no numbers**. Catalog Semax 10 mL vial is **10mg / 1 mg/ml**.
