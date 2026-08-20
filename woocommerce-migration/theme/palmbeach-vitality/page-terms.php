@@ -33,13 +33,18 @@ $sections = pbv_terms_policy_sections();
 </main>
 <script>
 (function () {
-  var hash = window.location.hash.replace(/^#/, '');
-  if (!hash) return;
-  var el = document.getElementById(hash);
-  if (el && el.tagName.toLowerCase() === 'details') {
+  function openPolicyFromHash() {
+    var hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+    var el = document.getElementById(hash);
+    if (!el || el.tagName.toLowerCase() !== "details") return;
     el.open = true;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.setTimeout(function () {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   }
+  openPolicyFromHash();
+  window.addEventListener("hashchange", openPolicyFromHash);
 })();
 </script>
 <?php

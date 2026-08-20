@@ -69,8 +69,10 @@
     var errorEl = gate.querySelector("[data-age-gate-error]");
     var enterBtn = gate.querySelector("[data-age-gate-enter]");
     var exitBtn = gate.querySelector("[data-age-gate-exit]");
+    var path = (window.location.pathname || "").replace(/\/+$/, "") || "/";
+    var isTermsPage = path === "/terms";
 
-    if (hasAgeAccepted()) {
+    if (hasAgeAccepted() || isTermsPage) {
       gate.setAttribute("hidden", "");
       ageAccepted = true;
     } else {
@@ -108,14 +110,14 @@
     ageAccepted = true;
   }
 
-  // Homepage lead popup — 10 seconds after landing (after age gate)
+  // Welcome discount popup — banner click + homepage timer
   var lead = document.querySelector("[data-lead-popup]");
   var leadTimer = null;
   var cfg = window.pbvTheme || {};
 
   function hasLeadDismissed() {
     try {
-      return window.localStorage.getItem("pbv_lead_popup_v1") === "done";
+      return window.localStorage.getItem("pbv_lead_popup_v3") === "done";
     } catch (e) {
       return false;
     }
@@ -123,7 +125,7 @@
 
   function markLeadDone() {
     try {
-      window.localStorage.setItem("pbv_lead_popup_v1", "done");
+      window.localStorage.setItem("pbv_lead_popup_v3", "done");
     } catch (e) {}
   }
 
@@ -133,8 +135,9 @@
     document.body.classList.remove("pbv-lead-popup-open");
   }
 
-  function openLeadPopup() {
-    if (!lead || hasLeadDismissed()) return;
+  function openLeadPopup(force) {
+    if (!lead) return;
+    if (!force && hasLeadDismissed()) return;
     lead.removeAttribute("hidden");
     document.body.classList.add("pbv-lead-popup-open");
     var email = lead.querySelector("#pbv-lead-email");
@@ -144,8 +147,16 @@
   function scheduleLeadPopup() {
     if (!lead || !cfg.isHome || hasLeadDismissed() || !ageAccepted) return;
     if (leadTimer) window.clearTimeout(leadTimer);
-    leadTimer = window.setTimeout(openLeadPopup, 10000);
+    leadTimer = window.setTimeout(function () {
+      openLeadPopup(false);
+    }, 10000);
   }
+
+  document.querySelectorAll("[data-lead-popup-open]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      openLeadPopup(true);
+    });
+  });
 
   if (lead) {
     lead.querySelectorAll("[data-lead-popup-close]").forEach(function (el) {
@@ -201,7 +212,7 @@
               statusEl.textContent =
                 (result.data && result.data.data && result.data.data.message) ||
                 (result.ok
-                  ? "Thanks — we will be in touch soon."
+                  ? "You’re in — check your inbox for the welcome note, then confirm to get monthly research emails."
                   : "Something went wrong. Please try again.");
               if (!result.ok) statusEl.classList.add("is-error");
             }
@@ -220,7 +231,7 @@
           .finally(function () {
             if (submitBtn) {
               submitBtn.disabled = false;
-              submitBtn.textContent = "I'd like to know more";
+              submitBtn.textContent = "Subscribe";
             }
           });
       });
@@ -325,4 +336,85 @@
       });
     }, true);
   }
+
+  // Google Sign-In (My Account / Checkout when logged out)
+  (function initGoogleSignIn() {
+    var googleRoot = document.querySelector("[data-pbv-google-signin]");
+    if (!googleRoot || !window.pbvGoogleSignIn || !pbvGoogleSignIn.clientId) return;
+
+    function setGoogleStatus(message, isError) {
+      var googleStatus = googleRoot.querySelector("[data-pbv-google-status]");
+      if (!googleStatus) return;
+      googleStatus.hidden = !message;
+      googleStatus.textContent = message || "";
+      googleStatus.classList.toggle("is-error", !!isError);
+    }
+
+    function onCredential(response) {
+      if (!response || !response.credential) {
+        setGoogleStatus("Google sign-in failed. Please try again.", true);
+        return;
+      }
+      setGoogleStatus("Signing you in…", false);
+      var body = new URLSearchParams();
+      body.set("action", "pbv_google_signin");
+      body.set("nonce", pbvGoogleSignIn.nonce);
+      body.set("credential", response.credential);
+      body.set("redirect", pbvGoogleSignIn.redirect || window.location.href);
+
+      fetch(pbvGoogleSignIn.ajaxUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8" },
+        body: body.toString(),
+      })
+        .then(function (res) {
+          return res.json();
+        })
+        .then(function (data) {
+          if (!data || !data.success) {
+            setGoogleStatus(
+              (data && data.data && data.data.message) || "Could not complete Google sign-in.",
+              true
+            );
+            return;
+          }
+          window.location.href =
+            (data.data && data.data.redirect) || pbvGoogleSignIn.redirect || "/my-account/";
+        })
+        .catch(function () {
+          setGoogleStatus("Network error during Google sign-in. Please try again.", true);
+        });
+    }
+
+    function render() {
+      if (!(window.google && google.accounts && google.accounts.id)) return false;
+      google.accounts.id.initialize({
+        client_id: pbvGoogleSignIn.clientId,
+        callback: onCredential,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+      var googleBtn = googleRoot.querySelector("[data-pbv-google-btn]");
+      if (googleBtn) {
+        google.accounts.id.renderButton(googleBtn, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "continue_with",
+          shape: "rectangular",
+          logo_alignment: "left",
+          width: 320,
+        });
+      }
+      return true;
+    }
+
+    if (render()) return;
+    var tries = 0;
+    var timer = window.setInterval(function () {
+      tries += 1;
+      if (render() || tries > 40) window.clearInterval(timer);
+    }, 100);
+  })();
 })();

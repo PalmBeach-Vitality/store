@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.27
+Version: 2.10.52
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -334,7 +334,8 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo__subtitle,
 .pbv-hero-photo__body,
 .pbv-hero-photo__welcome,
-.pbv-hero-photo__wholesale {
+.pbv-hero-photo__wholesale,
+.pbv-hero-photo__cta {
   display: block;
   width: 100%;
   max-width: 22rem;
@@ -399,6 +400,29 @@ a:hover { opacity: 0.7; }
 .pbv-hero-photo__wholesale a:hover {
   opacity: 1;
   color: #a8dbff;
+}
+
+.pbv-hero-photo__cta {
+  margin: 0.85rem 0 0.45rem;
+}
+
+.pbv-hero-photo__shop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.15rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #0b1220 !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-shadow: none;
+}
+
+.pbv-hero-photo__shop:hover {
+  opacity: 0.92;
+  color: #0b1220 !important;
 }
 
 .pbv-hero-photo--placeholder {
@@ -498,6 +522,89 @@ a:hover { opacity: 0.7; }
 
 .pbv-popular__empty {
   color: var(--pbv-muted);
+}
+
+/* Homepage collections + featured products */
+.pbv-home-shop,
+.pbv-home-products {
+  padding: clamp(2.25rem, 6vw, 3.75rem) 0;
+}
+
+.pbv-home-shop {
+  background: #fff;
+}
+
+.pbv-home-products {
+  background: var(--pbv-soft);
+}
+
+.pbv-home-shop__inner,
+.pbv-home-products__inner {
+  width: var(--pbv-cat-hero-col);
+  margin-inline: auto;
+}
+
+.pbv-home-shop__title {
+  font-family: var(--pbv-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  text-align: center;
+  margin: 0 0 0.45rem;
+  color: #111;
+}
+
+.pbv-home-shop__lede {
+  margin: 0 auto 1.6rem;
+  max-width: 32rem;
+  text-align: center;
+  color: var(--pbv-muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.pbv-home-collections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.pbv-home-collection {
+  display: block;
+  background: transparent;
+  line-height: 0;
+}
+
+.pbv-home-collection:hover {
+  opacity: 1;
+}
+
+.pbv-home-collection__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+.pbv-home-products__more {
+  margin: 1.6rem 0 0;
+  text-align: center;
+}
+
+.pbv-home-products__more .btn {
+  min-width: 12rem;
+}
+
+.pbv-home-products ul.products {
+  margin-bottom: 0;
+}
+
+@media (min-width: 700px) {
+  .pbv-home-collections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
 }
 
 /* FAQ */
@@ -793,17 +900,21 @@ a:hover { opacity: 0.7; }
 }
 
 .woocommerce ul.products li.product a img,
-.woocommerce ul.products li.product img {
-  display: block;
-  width: 70%;
-  max-width: 11.5rem;
-  height: auto;
-  aspect-ratio: 2 / 3;
-  object-fit: contain;
-  object-position: center center;
-  margin: 0 auto 0.65rem;
-  background: #eef2f5;
-  border-radius: 0.65rem;
+.woocommerce ul.products li.product img,
+.related.products ul.products li.product img,
+.pbv-home-products ul.products li.product img {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  aspect-ratio: 1 / 1 !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  margin: 0 auto 0.65rem !important;
+  padding: 0.55rem;
+  background: #eef2f5 !important;
+  border-radius: 1.15rem !important;
+  box-shadow: none !important;
   image-rendering: auto;
 }
 
@@ -835,7 +946,7 @@ a:hover { opacity: 0.7; }
 
   .woocommerce ul.products li.product a img,
   .woocommerce ul.products li.product img {
-    max-width: 12.5rem;
+    max-width: none;
   }
 
   .woocommerce ul.products li.product .woocommerce-loop-product__title {
@@ -851,7 +962,7 @@ a:hover { opacity: 0.7; }
 
   .woocommerce ul.products li.product a img,
   .woocommerce ul.products li.product img {
-    max-width: 11.75rem;
+    max-width: none;
   }
 }
 
@@ -901,7 +1012,7 @@ a:hover { opacity: 0.7; }
   object-fit: contain;
   object-position: center;
   background: #eef2f5;
-  border-radius: 0.75rem;
+  border-radius: 1.15rem;
 }
 
 /* One product image only — hide gallery thumbnail strips / flex control nav */
@@ -1166,9 +1277,22 @@ a:hover { opacity: 0.7; }
   }
 }
 
-.woocommerce div.product .related.products,
-.woocommerce div.product .upsells.products {
-  display: none !important;
+.related.products,
+.upsells.products {
+  width: 100%;
+  margin: 0 auto 2.5rem;
+  padding-top: 0.5rem;
+  text-align: center;
+}
+
+.related.products > h2,
+.upsells.products > h2 {
+  font-family: var(--pbv-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+  margin: 0 0 1.35rem;
+  color: #111;
 }
 
 @media (min-width: 900px) {
@@ -1356,6 +1480,7 @@ a:hover { opacity: 0.7; }
   border-radius: 0.75rem;
   background: #fff;
   overflow: hidden;
+  scroll-margin-top: 5.5rem;
 }
 
 .pbv-policy__summary {
@@ -1953,3 +2078,143 @@ body.pbv-lead-popup-open {
   font-weight: 600;
   text-decoration: underline;
 }
+
+/* Checkout shipping note + cold-pack totals */
+.pbv-checkout-shipping-note {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #d9e7ea;
+  background: #f4fafb;
+  color: #12304a;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+/* Checkout: product name + qty above red X + "Remove item" */
+.pbv-checkout-page .pbv-checkout-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+}
+
+.pbv-checkout-page .pbv-checkout-item-name {
+  display: block;
+  line-height: 1.35;
+}
+
+.pbv-checkout-page .pbv-checkout-item-qty {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pbv-checkout-page .pbv-checkout-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #b91c1c;
+  text-decoration: none;
+  /* Match Subtotal / order-review table text size */
+  font-size: 1em;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.pbv-checkout-page .pbv-checkout-remove:hover,
+.pbv-checkout-page .pbv-checkout-remove:focus {
+  color: #991b1b;
+  text-decoration: underline;
+}
+
+.pbv-checkout-page .pbv-checkout-remove__x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.pbv-checkout-page .pbv-checkout-remove__label {
+  white-space: nowrap;
+}
+
+/* Bitcoin ($BTC) payment method */
+.pbv-btc-payment-fields {
+  margin: 0.35rem 0 0;
+}
+
+.pbv-btc-payment-fields__hint {
+  margin: 0 0 0.45rem;
+  font-size: 0.9rem;
+  color: #334155;
+}
+
+.pbv-btc-payment-fields__address code,
+.pbv-btc-instructions__address {
+  display: inline-block;
+  margin-top: 0.2rem;
+  padding: 0.2rem 0.4rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.3rem;
+  font-size: 0.86rem;
+  word-break: break-all;
+}
+
+.pbv-btc-instructions {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.pbv-btc-instructions h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.1rem;
+}
+
+/* Google Sign-In */
+.pbv-google-signin {
+  margin: 0 0 1.25rem;
+  padding: 0 0 1.15rem;
+  border-bottom: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.pbv-google-signin__label {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.pbv-google-signin__btn {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.pbv-google-signin__status {
+  margin: 0.75rem 0 0;
+  font-size: 0.88rem;
+  color: #0f766e;
+}
+
+.pbv-google-signin__status.is-error {
+  color: #b91c1c;
+}
+
+.pbv-welcome-coupon-hint {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--pbv-fg);
+  background: var(--pbv-soft);
+  border-left: 3px solid var(--pbv-line);
+}
+

@@ -90,8 +90,8 @@ $lead_img = file_exists(pbv_asset_path('assets/images/hero.jpg'))
     <button type="button" class="pbv-lead-popup__close" data-lead-popup-close aria-label="Close">×</button>
     <div class="pbv-lead-popup__split">
       <div class="pbv-lead-popup__form-side">
-        <h2 id="pbv-lead-popup-title" class="pbv-lead-popup__title">Learn more!</h2>
-        <p class="pbv-lead-popup__subtitle">Looking for more information on a specific product?</p>
+        <h2 id="pbv-lead-popup-title" class="pbv-lead-popup__title">Subscribe for updates and discounts</h2>
+        <p class="pbv-lead-popup__subtitle">Join the list for new compounds, research notes, and subscriber-only offers.</p>
 
         <form class="pbv-lead-popup__form" data-lead-popup-form novalidate>
           <label class="screen-reader-text" for="pbv-lead-email">Email</label>
@@ -104,10 +104,10 @@ $lead_img = file_exists(pbv_asset_path('assets/images/hero.jpg'))
             required
             autocomplete="email"
           />
-          <button type="submit" class="pbv-lead-popup__submit">I'd like to know more</button>
+          <button type="submit" class="pbv-lead-popup__submit">Subscribe</button>
           <label class="pbv-lead-popup__optin">
-            <input type="checkbox" name="optin" value="1" />
-            <span>Keep me up to date on news and offers</span>
+            <input type="checkbox" name="optin" value="1" checked />
+            <span>Send me updates and discount announcements</span>
           </label>
           <p class="pbv-lead-popup__status" data-lead-popup-status hidden></p>
         </form>

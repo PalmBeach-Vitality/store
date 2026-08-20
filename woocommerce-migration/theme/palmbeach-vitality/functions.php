@@ -9,12 +9,27 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.27');
+define('PBV_THEME_VERSION', '2.10.52');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
+
+/**
+ * Default top announcement bar copy (no discount promo).
+ *
+ * @return string
+ */
+function pbv_default_announcement() {
+    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250!';
+}
 
 require_once get_template_directory() . '/inc/product-research.php';
 require_once get_template_directory() . '/inc/seo.php';
+require_once get_template_directory() . '/inc/google-signin.php';
+require_once get_template_directory() . '/inc/order-sms.php';
+require_once get_template_directory() . '/inc/welcome-discount.php';
+require_once get_template_directory() . '/inc/homepage-shop.php';
+require_once get_template_directory() . '/inc/email-subscribers.php';
 
 function pbv_asset_uri($relative) {
     return trailingslashit(get_template_directory_uri()) . ltrim($relative, '/');
@@ -75,6 +90,28 @@ function pbv_setup() {
     ));
 }
 add_action('after_setup_theme', 'pbv_setup');
+
+/**
+ * This is a classic PHP theme. The block Site Editor will look broken; use Customizer.
+ */
+function pbv_classic_theme_editor_notice() {
+    if (!function_exists('get_current_screen')) {
+        return;
+    }
+    $screen = get_current_screen();
+    if (!$screen) {
+        return;
+    }
+    $id = (string) $screen->id;
+    if (strpos($id, 'site-editor') === false && $id !== 'appearance_page_gutenberg-edit-site') {
+        return;
+    }
+    echo '<div class="notice notice-warning"><p>';
+    echo esc_html__('Palm Beach Vitality is a classic theme. Use Appearance → Customize (not Appearance → Editor). If WordPress.com says the site is disconnected, open Jetpack in WP Admin and reconnect.', 'palmbeach-vitality');
+    echo ' <a href="' . esc_url(admin_url('customize.php')) . '">' . esc_html__('Open Customizer', 'palmbeach-vitality') . '</a>';
+    echo '</p></div>';
+}
+add_action('admin_notices', 'pbv_classic_theme_editor_notice');
 
 /**
  * Hero URL: Customizer header image, else bundled default.
@@ -164,8 +201,8 @@ function pbv_performance_head() {
 add_action('wp_head', 'pbv_performance_head', 1);
 
 /**
- * Performance: dequeue WooCommerce chrome unused on the homepage.
- * Does not change markup, copy, images, or product placement.
+ * Performance: dequeue clearly unused chrome on the homepage.
+ * Keep WooCommerce CSS/JS — homepage renders collection products.
  */
 function pbv_dequeue_unused_front_assets() {
     if (!is_front_page()) {
@@ -173,53 +210,17 @@ function pbv_dequeue_unused_front_assets() {
     }
 
     $styles = array(
-        'woocommerce-general',
-        'woocommerce-layout',
-        'woocommerce-smallscreen',
-        'woocommerce-inline',
-        'wc-blocks-style',
-        'wc-blocks-vendors-style',
-        'woocommerce_prettyPhoto_css',
-        'jquery-selectBox',
         'dashicons',
         'gravatar-enhanced-hovercards',
-        'wp-block-library',
-        'wc-blocks-integration',
+        'jquery-ui-style',
     );
     foreach ($styles as $handle) {
         wp_dequeue_style($handle);
         wp_deregister_style($handle);
     }
-
-    // Common WP.com / plugin handle variants.
-    wp_dequeue_style('woocommerce-gift-cards');
-    wp_dequeue_style('woocommerce_gift_cards');
-    wp_dequeue_style('woocommerce-product-addons-css');
-    wp_dequeue_style('woocommerce-addons-css');
-    wp_dequeue_style('jquery-ui-style');
-
-    $scripts = array(
-        'wc-add-to-cart',
-        'wc-cart-fragments',
-        'woocommerce',
-        'wc-jquery-blockui',
-        'js-cookie',
-        'wc-add-to-cart-variation',
-        'accounting',
-        'underscore',
-        'wp-util',
-        'jquery-ui-core',
-        'jquery-ui-datepicker',
-        'jquery-blockui',
-    );
-    foreach ($scripts as $handle) {
-        wp_dequeue_script($handle);
-        wp_deregister_script($handle);
-    }
 }
 add_action('wp_enqueue_scripts', 'pbv_dequeue_unused_front_assets', 100);
 add_action('wp_print_styles', 'pbv_dequeue_unused_front_assets', 100);
-add_action('wp_print_scripts', 'pbv_dequeue_unused_front_assets', 100);
 
 /**
  * Contact form → sales@palmbeach-vitality.com
@@ -302,7 +303,7 @@ add_action('wp_ajax_nopriv_pbv_contact_form', 'pbv_handle_contact_form');
  * Old links were falling through to the blog index ("Updates").
  */
 function pbv_redirect_shopify_product_urls() {
-    if (is_admin() || wp_doing_ajax() || (defined('REST_REQUEST') && REST_REQUEST)) {
+    if (pbv_is_wp_system_request()) {
         return;
     }
 
@@ -483,6 +484,9 @@ add_action('template_redirect', 'pbv_redirect_shopify_product_urls', 1);
  * Never expose a posts/"Updates" index on this commerce site.
  */
 function pbv_disable_blog_index() {
+    if (pbv_is_wp_system_request()) {
+        return;
+    }
     if (is_home() && !is_front_page()) {
         wp_safe_redirect(home_url('/'), 301);
         exit;
@@ -491,7 +495,7 @@ function pbv_disable_blog_index() {
 add_action('template_redirect', 'pbv_disable_blog_index', 2);
 
 /**
- * Homepage lead popup form submission → email site admin.
+ * Homepage subscribe popup → n8n (preferred) or WP intro email.
  */
 function pbv_handle_lead_popup() {
     check_ajax_referer('pbv_lead_popup', 'nonce');
@@ -503,22 +507,88 @@ function pbv_handle_lead_popup() {
         wp_send_json_error(array('message' => 'Please enter a valid email address.'), 400);
     }
 
-    $to = get_option('admin_email');
-    $subject = sprintf('[%s] Learn more request', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES));
-    $body = "New homepage lead popup submission:\n\n"
-        . "Email: {$email}\n"
-        . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
-        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
-        . 'Page: ' . home_url('/') . "\n";
+    $payload = array(
+        'email'          => $email,
+        'optin'          => (bool) $optin,
+        'site'           => home_url('/'),
+        'shop_url'       => function_exists('wc_get_page_permalink') ? wc_get_page_permalink('shop') : home_url('/shop/'),
+        'logo_url'       => function_exists('pbv_intro_email_logo_url') ? pbv_intro_email_logo_url() : '',
+        'bg_url'         => function_exists('pbv_intro_email_bg_url') ? pbv_intro_email_bg_url() : '',
+        'coupon_code'    => defined('PBV_WELCOME_COUPON_CODE') ? PBV_WELCOME_COUPON_CODE : '',
+        'coupon_percent' => defined('PBV_WELCOME_COUPON_PERCENT') ? (int) PBV_WELCOME_COUPON_PERCENT : 0,
+        'source'         => 'homepage_subscribe_popup',
+        'email_type'     => 'intro',
+        'submitted_at'   => gmdate('c'),
+    );
 
-    $headers = array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email);
-    $sent = wp_mail($to, $subject, $body, $headers);
-
-    if (!$sent) {
-        wp_send_json_error(array('message' => 'Could not send right now. Please try again.'), 500);
+    if (function_exists('pbv_record_email_subscriber')) {
+        pbv_record_email_subscriber(
+            $email,
+            array(
+                'optin'  => $optin,
+                'source' => 'homepage_subscribe_popup',
+            )
+        );
     }
 
-    wp_send_json_success(array('message' => 'Thanks — we will be in touch soon.'));
+    $delivered = false;
+    $via_n8n   = false;
+    $n8n_note  = '';
+
+    if (function_exists('pbv_n8n_welcome_webhook_url') && pbv_n8n_welcome_webhook_url() !== '') {
+        $n8n = pbv_n8n_post_welcome_lead($payload);
+        if (!is_wp_error($n8n)) {
+            $delivered = true;
+            $via_n8n   = true;
+        } else {
+            $n8n_note = $n8n->get_error_message();
+        }
+    }
+
+    if (!$delivered && function_exists('pbv_mail_intro_email_to_subscriber')) {
+        $delivered = pbv_mail_intro_email_to_subscriber($email);
+    }
+
+    // Always notify staff (non-blocking for the shopper response).
+    $admin = get_option('admin_email');
+    $staff = array_filter(array_unique(array($admin, 'sales@palmbeach-vitality.com')));
+    $mp_status = '';
+    if (function_exists('pbv_get_email_subscribers')) {
+        $stored = pbv_get_email_subscribers();
+        $key = strtolower($email);
+        if (isset($stored[$key]['mailpoet'])) {
+            $mp_status = (string) $stored[$key]['mailpoet'];
+        }
+    }
+    $staff_body = "Subscribe / intro email request:\n\n"
+        . "Email: {$email}\n"
+        . 'Marketing opt-in: ' . ($optin ? 'Yes' : 'No') . "\n"
+        . 'Delivery: ' . ($via_n8n ? 'n8n webhook' : ($delivered ? 'WordPress email' : 'FAILED')) . "\n"
+        . ($n8n_note !== '' ? "n8n: {$n8n_note}\n" : '')
+        . ($mp_status !== '' ? "MailPoet: {$mp_status}\n" : '')
+        . 'Submitted: ' . gmdate('Y-m-d H:i:s') . " UTC\n"
+        . 'Page: ' . home_url('/') . "\n";
+    wp_mail(
+        implode(',', $staff),
+        sprintf('[%s] New subscriber', wp_specialchars_decode(get_bloginfo('name'), ENT_QUOTES)),
+        $staff_body,
+        array('Content-Type: text/plain; charset=UTF-8', 'Reply-To: ' . $email)
+    );
+
+    if (!$delivered) {
+        wp_send_json_error(
+            array(
+                'message' => 'We could not email right now. Please try again.',
+            ),
+            500
+        );
+    }
+
+    wp_send_json_success(
+        array(
+            'message' => 'You’re in — check your inbox for the welcome note, then confirm to get monthly research emails.',
+        )
+    );
 }
 add_action('wp_ajax_pbv_lead_popup', 'pbv_handle_lead_popup');
 add_action('wp_ajax_nopriv_pbv_lead_popup', 'pbv_handle_lead_popup');
@@ -530,7 +600,7 @@ function pbv_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('pbv_announcement', array(
-        'default'           => 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation.',
+        'default'           => pbv_default_announcement(),
         'sanitize_callback' => 'sanitize_text_field',
     ));
     $wp_customize->add_control('pbv_announcement', array(
@@ -555,7 +625,7 @@ function pbv_woo_wrapper_end() {
 add_action('woocommerce_after_main_content', 'pbv_woo_wrapper_end', 10);
 
 function pbv_products_per_page() {
-    return 24;
+    return 48;
 }
 add_filter('loop_shop_per_page', 'pbv_products_per_page');
 
@@ -597,13 +667,14 @@ add_filter('loop_shop_columns', 'pbv_loop_columns');
  * - Main description first
  * - Research use only banner at bottom of description (every product)
  * - Short description + Add to cart below it
- * - No related products / upsells / data tabs
- * - No SKU / category / tags meta row
+ * - Related products after the product card (same collection)
+ * - No data tabs / SKU / category / tags meta row
  */
 function pbv_single_product_layout() {
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15);
     remove_action('woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20);
+    add_action('woocommerce_after_single_product', 'woocommerce_output_related_products', 20);
 
     // Cover both classic and current WooCommerce hook priorities.
     remove_action('woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20);
@@ -729,10 +800,16 @@ function pbv_single_product_details_and_cart() {
     echo '</div>';
 }
 
-add_filter('woocommerce_output_related_products_args', 'pbv_disable_related_products');
-function pbv_disable_related_products($args) {
-    $args['posts_per_page'] = 0;
+add_filter('woocommerce_output_related_products_args', 'pbv_related_products_args');
+function pbv_related_products_args($args) {
+    $args['posts_per_page'] = 4;
+    $args['columns']        = 4;
     return $args;
+}
+
+add_filter('woocommerce_product_related_products_heading', 'pbv_related_products_heading');
+function pbv_related_products_heading() {
+    return __('More from this collection', 'palmbeach-vitality');
 }
 
 function pbv_cart_link() {
@@ -1340,7 +1417,7 @@ function pbv_policy_shipping_html() {
 <p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and fully insured for transit.</p>
 
 <h3>Cold Pack Shipping</h3>
-<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout.</p>
+<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout. <strong>Free shipping on research orders over $250!</strong></p>
 
 <h3>Shipping &amp; Delivery</h3>
 <p>Most orders ship within 1–2 business days via next-day air cold pack service. You will receive a tracking number via email once your order has shipped.</p>
@@ -1482,6 +1559,19 @@ function pbv_fix_primary_menu_once() {
 }
 add_action('init', 'pbv_fix_primary_menu_once', 40);
 add_action('woocommerce_init', 'pbv_fix_primary_menu_once');
+
+/**
+ * One-time: refresh announcement bar with free-shipping notice after "documentation".
+ */
+function pbv_fix_announcement_once() {
+    if (get_option('pbv_announce_fix_version') === PBV_ANNOUNCE_FIX_VERSION) {
+        return;
+    }
+    set_theme_mod('pbv_announcement', pbv_default_announcement());
+    update_option('pbv_announce_fix_version', PBV_ANNOUNCE_FIX_VERSION);
+}
+add_action('after_setup_theme', 'pbv_fix_announcement_once', 20);
+
 
 /**
  * Build / refresh the Primary menu.
@@ -1716,4 +1806,421 @@ function pbv_save_checkout_policy_acceptance($order) {
     }
 }
 add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
+
+function pbv_free_shipping_threshold() {
+    return 250.0;
+}
+
+/**
+ * Cart / package subtotal used for the free-shipping threshold.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return float
+ */
+function pbv_cart_subtotal_for_shipping($package = null) {
+    if (is_array($package) && isset($package['contents_cost'])) {
+        return (float) $package['contents_cost'];
+    }
+    if (function_exists('WC') && WC()->cart) {
+        return (float) WC()->cart->get_subtotal();
+    }
+    return 0.0;
+}
+
+/**
+ * Whether the cart qualifies for free cold-pack shipping.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return bool
+ */
+function pbv_qualifies_for_free_shipping($package = null) {
+    return pbv_cart_subtotal_for_shipping($package) >= pbv_free_shipping_threshold();
+}
+
+/**
+ * Cold-pack shipping cost: $35, or $0 when subtotal is $250+.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return float
+ */
+function pbv_cold_pack_shipping_cost($package = null) {
+    return pbv_qualifies_for_free_shipping($package) ? 0.0 : 35.0;
+}
+
+/**
+ * Checkout: professional Next-Day Air Cold Pack shipping label.
+ *
+ * @param array|null $package Optional WooCommerce shipping package.
+ * @return string
+ */
+function pbv_cold_pack_shipping_label($package = null) {
+    if (pbv_qualifies_for_free_shipping($package)) {
+        return __('Next-Day Air Cold Pack Shipping — FREE', 'palmbeach-vitality');
+    }
+    return __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality');
+}
+
+/**
+ * Replace available shipping rates with cold-pack rate ($35, or free over $250!).
+ *
+ * @param array $rates   Package rates.
+ * @param array $package Package data.
+ * @return array
+ */
+function pbv_force_cold_pack_shipping_rates($rates, $package) {
+    if (!class_exists('WC_Shipping_Rate')) {
+        return $rates;
+    }
+
+    $id = 'pbv_cold_pack_flat';
+    return array(
+        $id => new WC_Shipping_Rate(
+            $id,
+            pbv_cold_pack_shipping_label($package),
+            pbv_cold_pack_shipping_cost($package),
+            array(),
+            'flat_rate'
+        ),
+    );
+}
+add_filter('woocommerce_package_rates', 'pbv_force_cold_pack_shipping_rates', 100, 2);
+
+/**
+ * Fallback: if shipping methods are disabled / empty, still apply cold-pack fee (or $0 when free).
+ */
+function pbv_cold_pack_shipping_fee_fallback() {
+    if (is_admin() && !defined('DOING_AJAX')) {
+        return;
+    }
+    if (!function_exists('WC') || !WC()->cart || WC()->cart->is_empty()) {
+        return;
+    }
+
+    // Prefer real shipping line items when WooCommerce shipping is active.
+    $packages = (WC()->shipping()) ? WC()->shipping()->get_packages() : array();
+    foreach ($packages as $package) {
+        if (!empty($package['rates'])) {
+            return;
+        }
+    }
+
+    $label = pbv_cold_pack_shipping_label();
+    $cost  = pbv_cold_pack_shipping_cost();
+
+    foreach (WC()->cart->get_fees() as $fee) {
+        if (isset($fee->id) && $fee->id === 'pbv-cold-pack-shipping') {
+            return;
+        }
+        if (isset($fee->name) && (
+            $fee->name === $label
+            || $fee->name === __('Next-Day Air Cold Pack Shipping — Cooler & Dry Ice', 'palmbeach-vitality')
+            || $fee->name === __('Next-Day Air Cold Pack Shipping — FREE', 'palmbeach-vitality')
+        )) {
+            return;
+        }
+    }
+
+    // No fee line needed when shipping is already free.
+    if ($cost <= 0) {
+        return;
+    }
+
+    WC()->cart->add_fee($label, $cost, false);
+}
+add_action('woocommerce_cart_calculate_fees', 'pbv_cold_pack_shipping_fee_fallback', 20);
+
+/**
+ * Ensure shippable carts always calculate shipping so the cold-pack rate can appear.
+ *
+ * @param bool $needs_shipping Whether the cart needs shipping.
+ * @return bool
+ */
+function pbv_cart_needs_shipping($needs_shipping) {
+    if ($needs_shipping) {
+        return true;
+    }
+    if (!function_exists('WC') || !WC()->cart) {
+        return $needs_shipping;
+    }
+    foreach (WC()->cart->get_cart() as $item) {
+        $product = isset($item['data']) ? $item['data'] : null;
+        if ($product instanceof WC_Product && $product->needs_shipping()) {
+            return true;
+        }
+    }
+    return $needs_shipping;
+}
+add_filter('woocommerce_cart_needs_shipping', 'pbv_cart_needs_shipping');
+
+/**
+ * Checkout note explaining cold-pack shipping + free-shipping threshold.
+ */
+function pbv_checkout_shipping_note() {
+    static $printed = false;
+    if ($printed) {
+        return;
+    }
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return;
+    }
+    $printed = true;
+    echo '<p class="pbv-checkout-shipping-note">';
+    if (pbv_qualifies_for_free_shipping()) {
+        echo esc_html__(
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice. Your research order qualifies for FREE shipping (orders over $250!).',
+            'palmbeach-vitality'
+        );
+    } else {
+        echo esc_html__(
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00. Free shipping on research orders over $250!',
+            'palmbeach-vitality'
+        );
+    }
+    echo '</p>';
+}
+add_action('woocommerce_checkout_before_order_review', 'pbv_checkout_shipping_note', 5);
+
+/**
+ * Staff addresses that must receive WooCommerce order notifications.
+ *
+ * @return string[]
+ */
+function pbv_order_notification_emails() {
+    $emails = array(
+        get_option('admin_email'),
+        'sales@palmbeach-vitality.com',
+    );
+
+    /**
+     * Filter staff order-notification recipients.
+     *
+     * @param string[] $emails Email addresses.
+     */
+    $emails = apply_filters('pbv_order_notification_emails', $emails);
+
+    $clean = array();
+    foreach ((array) $emails as $email) {
+        $email = sanitize_email((string) $email);
+        if ($email && is_email($email)) {
+            $clean[strtolower($email)] = $email;
+        }
+    }
+
+    return array_values($clean);
+}
+
+/**
+ * Merge required staff addresses into a WooCommerce recipient list.
+ *
+ * @param string $recipient Comma-separated recipients.
+ * @return string
+ */
+function pbv_merge_order_email_recipients($recipient) {
+    $existing = array();
+    foreach (explode(',', (string) $recipient) as $email) {
+        $email = sanitize_email(trim($email));
+        if ($email && is_email($email)) {
+            $existing[strtolower($email)] = $email;
+        }
+    }
+
+    foreach (pbv_order_notification_emails() as $email) {
+        $existing[strtolower($email)] = $email;
+    }
+
+    return implode(', ', array_values($existing));
+}
+add_filter('woocommerce_email_recipient_new_order', 'pbv_merge_order_email_recipients', 20);
+add_filter('woocommerce_email_recipient_cancelled_order', 'pbv_merge_order_email_recipients', 20);
+add_filter('woocommerce_email_recipient_failed_order', 'pbv_merge_order_email_recipients', 20);
+
+/**
+ * From address WordPress.com can sign (SPF includes _spf.wpcloud.com on .store).
+ *
+ * Do not send From sales@palmbeach-vitality.com through WordPress.com — that domain’s
+ * SPF only allows Google and Mailgun, and DMARC is p=quarantine (Gmail spam banner).
+ *
+ * @return string
+ */
+function pbv_authenticated_from_address() {
+    $host = wp_parse_url(home_url(), PHP_URL_HOST);
+    if (!is_string($host) || $host === '') {
+        return '';
+    }
+    $host = preg_replace('/^www\./i', '', $host);
+    $addr = 'wordpress@' . $host;
+    return is_email($addr) ? $addr : '';
+}
+
+/**
+ * WooCommerce From address that matches WordPress.com SPF (not sales@ .com).
+ *
+ * @param string $from From address.
+ * @return string
+ */
+function pbv_woocommerce_email_from_address($from) {
+    $signed = pbv_authenticated_from_address();
+    return $signed !== '' ? $signed : $from;
+}
+add_filter('woocommerce_email_from_address', 'pbv_woocommerce_email_from_address', 20);
+
+/**
+ * @param string $name From name.
+ * @return string
+ */
+function pbv_woocommerce_email_from_name($name) {
+    return 'Palm Beach Vitality';
+}
+add_filter('woocommerce_email_from_name', 'pbv_woocommerce_email_from_name', 20);
+
+/**
+ * Replies on store emails go to sales@.
+ *
+ * @param string|string[] $headers Headers.
+ * @return string|string[]
+ */
+function pbv_woocommerce_email_headers($headers) {
+    $extra = 'Reply-To: Palm Beach Vitality <sales@palmbeach-vitality.com>';
+    if (is_array($headers)) {
+        foreach ($headers as $row) {
+            if (is_string($row) && stripos($row, 'Reply-To:') !== false) {
+                return $headers;
+            }
+        }
+        $headers[] = $extra;
+        return $headers;
+    }
+    $headers = (string) $headers;
+    if (stripos($headers, 'Reply-To:') !== false) {
+        return $headers;
+    }
+    return rtrim($headers) . "\r\n" . $extra . "\r\n";
+}
+add_filter('woocommerce_email_headers', 'pbv_woocommerce_email_headers', 20);
+
+/**
+ * Checkout order review: show red X + "Remove item" next to each line item.
+ *
+ * @param string $name           Product name HTML.
+ * @param array  $cart_item      Cart item.
+ * @param string $cart_item_key  Cart item key.
+ * @return string
+ */
+function pbv_checkout_item_remove_link($name, $cart_item, $cart_item_key) {
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return $name;
+    }
+    if (is_order_received_page()) {
+        return $name;
+    }
+
+    $product = isset($cart_item['data']) ? $cart_item['data'] : null;
+    $label   = __('Remove item', 'palmbeach-vitality');
+    $aria    = $product instanceof WC_Product
+        ? sprintf(
+            /* translators: %s: product name */
+            __('Remove %s from cart', 'palmbeach-vitality'),
+            wp_strip_all_tags($product->get_name())
+        )
+        : $label;
+
+    // Keep customer on checkout after remove (falls back to cart when empty).
+    $remove_url = wc_get_cart_remove_url($cart_item_key);
+    $remove_url = add_query_arg('pbv_return', 'checkout', $remove_url);
+
+    $link = sprintf(
+        '<a href="%s" class="pbv-checkout-remove remove" aria-label="%s"><span class="pbv-checkout-remove__x" aria-hidden="true">&times;</span> <span class="pbv-checkout-remove__label">%s</span></a>',
+        esc_url($remove_url),
+        esc_attr($aria),
+        esc_html($label)
+    );
+
+    // Keep quantity beside the product name (WooCommerce otherwise appends it after our stack).
+    $qty = isset($cart_item['quantity']) ? (int) $cart_item['quantity'] : 0;
+    $qty_html = $qty > 0
+        ? sprintf(
+            ' <strong class="product-quantity pbv-checkout-item-qty">&times;&nbsp;%s</strong>',
+            esc_html((string) $qty)
+        )
+        : '';
+
+    // Product name + qty on one line; remove control on the line below.
+    return '<span class="pbv-checkout-item"><span class="pbv-checkout-item-name">' . $name . $qty_html . '</span>' . $link . '</span>';
+}
+add_filter('woocommerce_cart_item_name', 'pbv_checkout_item_remove_link', 10, 3);
+
+/**
+ * Hide the default checkout quantity marker — it is rendered next to the product name above.
+ *
+ * @param string $quantity_html Quantity HTML.
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
+ * @return string
+ */
+function pbv_checkout_suppress_default_qty($quantity_html, $cart_item, $cart_item_key) {
+    if (!function_exists('is_checkout') || !is_checkout() || is_order_received_page()) {
+        return $quantity_html;
+    }
+    return '';
+}
+add_filter('woocommerce_checkout_cart_item_quantity', 'pbv_checkout_suppress_default_qty', 10, 3);
+
+/**
+ * After removing an item from checkout, return to checkout when cart still has items.
+ */
+function pbv_redirect_after_checkout_remove() {
+    if (empty($_GET['pbv_return']) || $_GET['pbv_return'] !== 'checkout') { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return;
+    }
+    if (!function_exists('WC') || !WC()->cart) {
+        return;
+    }
+    if (WC()->cart->is_empty()) {
+        return;
+    }
+    wp_safe_redirect(wc_get_checkout_url());
+    exit;
+}
+add_action('woocommerce_cart_item_removed', 'pbv_redirect_after_checkout_remove', 20);
+
+/**
+ * Load Bitcoin ($BTC) payment gateway class when WooCommerce is available.
+ *
+ * Theme functions.php loads after plugins_loaded, so that hook never runs here.
+ * Load on before_woocommerce_init so the class exists before WC instantiates gateways.
+ */
+function pbv_load_bitcoin_gateway() {
+    static $loaded = false;
+    if ($loaded) {
+        return;
+    }
+    if (!class_exists('WC_Payment_Gateway', false)) {
+        return;
+    }
+    if (class_exists('WC_Gateway_PBV_Bitcoin', false)) {
+        $loaded = true;
+        return;
+    }
+    require_once get_template_directory() . '/inc/class-wc-gateway-pbv-bitcoin.php';
+    $loaded = class_exists('WC_Gateway_PBV_Bitcoin', false);
+}
+add_action('before_woocommerce_init', 'pbv_load_bitcoin_gateway', 0);
+
+/**
+ * Register Bitcoin ($BTC) payment method.
+ *
+ * @param array $gateways Gateways.
+ * @return array
+ */
+function pbv_register_bitcoin_gateway($gateways) {
+    pbv_load_bitcoin_gateway();
+    if (
+        class_exists('WC_Gateway_PBV_Bitcoin', false)
+        && !in_array('WC_Gateway_PBV_Bitcoin', $gateways, true)
+    ) {
+        $gateways[] = 'WC_Gateway_PBV_Bitcoin';
+    }
+    return $gateways;
+}
+add_filter('woocommerce_payment_gateways', 'pbv_register_bitcoin_gateway');
 
