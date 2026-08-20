@@ -46,6 +46,23 @@ var CATALOG = {
   'MOTS-C': { mg: '25mg', conc: '5mg/ml', vol: '5ml' },
 };
 
+var ALIASES = {
+  'CJC (no DAC)': 'CJC (no DAC)/Ipamorelin',
+  'BPC-157 / TB-500': 'BPC-157/TB-500',
+  'BPC-157 / TB-500 / GHK-Cu': 'GLOW',
+  'KPV / BPC-157 / TB-500 / GHK-Cu': 'KLOW',
+  'Thymosin Alpha-1': 'TA-1',
+  TA1: 'TA-1',
+  'Thymosin A1': 'TA-1',
+};
+
+var OLD_VIAL_PHRASES = [
+  '10mL sterile injectable-style glass vial with rubber stopper and aluminum crimp seal (NOT screw-cap, NOT black twist cap)',
+  '10ml sterile injectable-style glass vial with rubber stopper and aluminum crimp seal (NOT screw-cap, NOT black twist cap)',
+  '10mL sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
+  '10ml sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
+];
+
 var PEN_ONLY = {
   '5-Amino-1MQ': 1,
   DSIP: 1,
@@ -87,6 +104,24 @@ function liquidLine(name) {
   return 'filled with clear colorless liquid';
 }
 
+function catalogSpec(name) {
+  if (CATALOG[name]) return { labelName: name, spec: CATALOG[name], catalogKey: name };
+  var aliased = ALIASES[name];
+  if (aliased && CATALOG[aliased]) {
+    return { labelName: name, spec: CATALOG[aliased], catalogKey: aliased };
+  }
+  return null;
+}
+
+function replaceBetween(t, startMark, endMark, replacement) {
+  t = String(t || '');
+  var start = t.indexOf(startMark);
+  if (start < 0) return t;
+  var end = t.indexOf(endMark, start);
+  if (end < 0) return t.slice(0, start) + replacement;
+  return t.slice(0, start) + replacement + t.slice(end);
+}
+
 function doseBar(spec) {
   return (
     "a solid dark maroon horizontal dosage bar with white text exactly '" +
@@ -97,12 +132,12 @@ function doseBar(spec) {
   );
 }
 
-function vialNoun(name, spec) {
+function vialNoun(name, spec, catalogKey) {
   return (
     'clear pharmaceutical-grade glass multi-use injection vial of ' +
     name +
     ', ' +
-    liquidLine(name) +
+    liquidLine(catalogKey || name) +
     ', sealed with a vibrant blue plastic flip-off cap on a brushed-silver aluminum crimp over a rubber septum, clean white wrap-around label with a dark maroon DNA double-helix centered at the top, the name ' +
     name +
     ' in large bold dark maroon sans-serif printed once, ' +
@@ -113,12 +148,12 @@ function vialNoun(name, spec) {
   );
 }
 
-function vialSpec(name, spec) {
+function vialSpec(name, spec, catalogKey) {
   return (
     'VIAL SPEC: Copy the GHK-Cu catalog-vial still exactly — same hardware, same label layout — only swap the compound name and the catalog milligrams. ' +
     'HARDWARE: clear glass 10ml-style injection vial (not amber, not plastic, not a pen). Vibrant BLUE plastic flip-off cap sitting on a brushed-silver aluminum crimp + gray rubber septum. Show the blue cap + silver crimp stack. ' +
     'LIQUID: ' +
-    liquidLine(name) +
+    liquidLine(catalogKey || name) +
     '. ' +
     'LABEL: clean white wrap-around. Top center: dark maroon DNA double-helix icon. Then large bold dark maroon ' +
     name +
@@ -135,7 +170,7 @@ function vialSpec(name, spec) {
   );
 }
 
-function lookLock(name, spec) {
+function lookLock(name, spec, catalogKey) {
   return (
     'VIAL LOOK LOCK (overrides COUNT FIX restyle for the vial, including glass, cap, crimp, and label): ' +
     'REPLACE the hero with this exact Palm Beach Vitality catalog vial, copied from the GHK-Cu reference still. ' +
@@ -148,7 +183,7 @@ function lookLock(name, spec) {
     "'. Black footer '" +
     spec.vol +
     " Sterile Multi-Use Vial'. " +
-    liquidLine(name) +
+    liquidLine(catalogKey || name) +
     '. Upright on a reflective clear glass or acrylic shelf. ' +
     'If the still shows 10mg/ml on GHK-Cu, change it to 5mg/ml. If the cap is not bright blue, make it bright blue. If the glass is amber, make it clear. ' +
     'Do not restyle lighting, camera, or environment. Do restyle the vial and label to this lock.'
@@ -184,25 +219,32 @@ function applyDoseBar(t, spec) {
   return t;
 }
 
-function paintVial(t, name, spec, noun) {
+function paintVial(t, name, spec, noun, catalogKey) {
   t = String(t || '');
-  t = stripLock(t, 'VIAL SPEC:', 'Keep the scene environment. ');
   t = applyDoseBar(t, spec);
+  for (var p = 0; p < OLD_VIAL_PHRASES.length; p++) {
+    t = swapAll(t, OLD_VIAL_PHRASES[p], noun);
+  }
   t = swapAll(
     t,
-    'clear glass Palm Beach Vitality injection vial with bright blue flip-off cap, brushed-silver aluminum crimp seal over rubber septum, and a clean white wrap-around label bearing a dark maroon DNA double-helix logo, the exact compound name in large bold dark maroon type, ' +
-      'a solid dark maroon dosage bar with white mg strength, black mg/ml concentration text, and a small black footer reading \'' +
-      spec.vol +
-      ' Sterile Multi-Use Vial\'',
-    noun
+    '10mL sterile crimp-seal vial of ' + name + ' mid-ground; never black twist/screw cap; not extreme macro',
+    noun + ' mid-ground; not extreme macro'
   );
+  t = swapAll(
+    t,
+    '10ml sterile crimp-seal vial of ' + name + ' mid-ground; never black twist/screw cap; not extreme macro',
+    noun + ' mid-ground; not extreme macro'
+  );
+  t = replaceBetween(t, 'VIAL SPEC:', 'SIGNAGE RULE:', vialSpec(name, spec, catalogKey));
+  t = replaceBetween(t, 'Hero style:', ' Lighting:', 'Hero style: ' + noun + '.');
+  t = replaceBetween(t, 'Hero style:', 'Lighting:', 'Hero style: ' + noun + '. ');
   t = swapAll(
     t,
     'Do not restyle lighting, camera, label text, or environment.',
     'Do not restyle lighting, camera, or environment (vial packaging and label ARE restyled by VIAL LOOK LOCK).'
   );
   if (t.indexOf('VIAL SPEC:') < 0) {
-    t = vialSpec(name, spec) + t;
+    t = vialSpec(name, spec, catalogKey) + t;
   }
   while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
   return t.trim();
@@ -234,16 +276,19 @@ for (var i = 0; i < items.length; i++) {
     skippedOther += 1;
     continue;
   }
-  var spec = CATALOG[name];
-  if (!spec) {
+  var mapped = catalogSpec(name);
+  if (!mapped) {
     unknown[name] = (unknown[name] || 0) + 1;
     continue;
   }
-  var noun = vialNoun(name, spec);
+  var spec = mapped.spec;
+  var labelName = mapped.labelName;
+  var catalogKey = mapped.catalogKey;
+  var noun = vialNoun(labelName, spec, catalogKey);
   var stillEdit = String(row.still_edit_prompt || '').trim();
   stillEdit = stripLock(stillEdit, 'VIAL LOOK LOCK', 'Do restyle the vial and label to this lock.');
-  stillEdit = paintVial(stillEdit, name, spec, noun);
-  stillEdit = (stillEdit ? stillEdit + ' ' : '') + lookLock(name, spec);
+  stillEdit = paintVial(stillEdit, labelName, spec, noun, catalogKey);
+  stillEdit = (stillEdit ? stillEdit + ' ' : '') + lookLock(labelName, spec, catalogKey);
 
   var json = {
     creation_id: requireId(row),
@@ -252,9 +297,9 @@ for (var i = 0; i < items.length; i++) {
       'exactly one ' +
       noun +
       '; no injection act, no people, no second vial, no pen in frame',
-    scene_brief: paintVial(row.scene_brief, name, spec, noun),
-    video_prompt: paintVial(row.video_prompt, name, spec, noun),
-    video_motion_prompt: paintVial(row.video_motion_prompt, name, spec, noun),
+    scene_brief: paintVial(row.scene_brief, labelName, spec, noun, catalogKey),
+    video_prompt: paintVial(row.video_prompt, labelName, spec, noun, catalogKey),
+    video_motion_prompt: paintVial(row.video_motion_prompt, labelName, spec, noun, catalogKey),
     surface: applyDoseBar(String(row.surface || ''), spec),
     still_edit_prompt: stillEdit,
   };

@@ -38,6 +38,13 @@
     "NAD+": "500mg in 10 mL = 50 mg/ml. Shopify 500mg body copy-paste listed Total 1000 mg; title + math win.",
     "Cagrilinitide": "Catalog liquid vial is 25mg / 5 mL / 5 mg/ml.",
     "MOTS-C": "Catalog liquid vial is 25mg / 5 mL / 5 mg/ml.",
-    "no_vial_sku": "Pen-only in Shopify. Do not invent 10mg / 1 mg/ml on those vial stills."
+    "no_vial_sku": "Pen-only in Shopify. Do not invent 10mg / 1 mg/ml on those vial stills.",
+    "landscape_aliases": {
+      "CJC (no DAC)": "CJC (no DAC)/Ipamorelin",
+      "BPC-157 / TB-500": "BPC-157/TB-500",
+      "BPC-157 / TB-500 / GHK-Cu": "GLOW",
+      "KPV / BPC-157 / TB-500 / GHK-Cu": "KLOW",
+      "Thymosin Alpha-1": "TA-1"
+    }
   }
 }
