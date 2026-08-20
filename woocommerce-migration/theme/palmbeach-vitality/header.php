@@ -4,8 +4,18 @@
   <meta charset="<?php bloginfo('charset'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <?php wp_head(); ?>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7984692756918604"
-     crossorigin="anonymous"></script>
+  <?php /* AdSense: load after window load so it does not block FCP/LCP. Same ad client. */ ?>
+  <script>
+  window.addEventListener('load', function () {
+    if (window.pbvAdSenseLoaded) return;
+    window.pbvAdSenseLoaded = true;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7984692756918604';
+    s.crossOrigin = 'anonymous';
+    document.head.appendChild(s);
+  });
+  </script>
 </head>
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>

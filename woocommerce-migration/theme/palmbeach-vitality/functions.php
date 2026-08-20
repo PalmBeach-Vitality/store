@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.25');
+define('PBV_THEME_VERSION', '2.10.26');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 
@@ -182,15 +182,21 @@ function pbv_dequeue_unused_front_assets() {
         'woocommerce_prettyPhoto_css',
         'jquery-selectBox',
         'dashicons',
+        'gravatar-enhanced-hovercards',
+        'wp-block-library',
+        'wc-blocks-integration',
     );
     foreach ($styles as $handle) {
         wp_dequeue_style($handle);
         wp_deregister_style($handle);
     }
 
+    // Common WP.com / plugin handle variants.
     wp_dequeue_style('woocommerce-gift-cards');
+    wp_dequeue_style('woocommerce_gift_cards');
     wp_dequeue_style('woocommerce-product-addons-css');
     wp_dequeue_style('woocommerce-addons-css');
+    wp_dequeue_style('jquery-ui-style');
 
     $scripts = array(
         'wc-add-to-cart',
@@ -200,12 +206,20 @@ function pbv_dequeue_unused_front_assets() {
         'js-cookie',
         'wc-add-to-cart-variation',
         'accounting',
+        'underscore',
+        'wp-util',
+        'jquery-ui-core',
+        'jquery-ui-datepicker',
+        'jquery-blockui',
     );
     foreach ($scripts as $handle) {
         wp_dequeue_script($handle);
+        wp_deregister_script($handle);
     }
 }
 add_action('wp_enqueue_scripts', 'pbv_dequeue_unused_front_assets', 100);
+add_action('wp_print_styles', 'pbv_dequeue_unused_front_assets', 100);
+add_action('wp_print_scripts', 'pbv_dequeue_unused_front_assets', 100);
 
 /**
  * Contact form → sales@palmbeach-vitality.com
