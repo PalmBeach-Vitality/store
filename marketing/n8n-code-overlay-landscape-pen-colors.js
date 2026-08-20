@@ -1,14 +1,16 @@
 // n8n Code node: overlay_landscape_pen_colors
-// Workflow: overlay_landscape_pen_colors (one-shot, then archive)
+// Workflow: overlay_landscape_pen_design (one-shot, then archive)
 // Mode: Run Once for All Items. Execute Once = OFF
-// After: get_landscape_rows  Before: sheets_update_landscape_pen_colors
+// After: get_reel_creations  Before: sheets_update_pen_colors
 //
-// Writes pen color onto 500_Peptide_Wellness_Reel_Scenes pen_3ml rows only.
+// Writes the EXACT insulin-style pen (reference still) onto
+// 500_Peptide_Wellness_Reel_Scenes pen_3ml rows only.
 // Does NOT emit times_used / last_used_at / reel_still_url / video_url.
 //
-// Peptide pens: matte white body, red on-pen text.
-// Metabolic pens: matte white body, blue on-pen text.
-// Shape / design unchanged. Do not recolor scene blacks (void, lake, etc.).
+// Peptide pens: glossy white body, RED compound name.
+// Metabolic pens: glossy white body, BLUE compound name.
+// DNA logo is bright blue on every pen. Line 2 is black.
+// Do not recolor scene blacks (void, lake, etc.).
 
 var METABOLIC = {
   '5-Amino-1MQ': 1,
@@ -24,24 +26,57 @@ var METABOLIC = {
   'Tirzepatide': 1,
 };
 
-var PEN_NOUN_RE = /matte-black peptide pen/gi;
-
 function isMetabolic(name) {
   return !!METABOLIC[String(name || '').trim()];
-}
-
-function paintPen(text, family, ink) {
-  var t = String(text || '');
-  if (!t) return t;
-  var noun = 'matte-white ' + family + ' pen with ' + ink + ' on-pen text';
-  t = t.replace(PEN_NOUN_RE, noun);
-  return t;
 }
 
 function requireId(row) {
   var id = String(row.creation_id || '').trim();
   if (!id) throw new Error('overlay_landscape_pen_colors: missing creation_id');
   return id;
+}
+
+function swapAll(t, oldP, newP) {
+  t = String(t || '');
+  if (!oldP) return t;
+  while (t.indexOf(oldP) !== -1) t = t.split(oldP).join(newP);
+  return t;
+}
+
+function stripLock(t, marker) {
+  t = String(t || '');
+  var i = t.indexOf(marker);
+  if (i === -1) return t.trim();
+  return t.slice(0, i).trim();
+}
+
+function replaceBetween(t, startMark, endMark, replacement) {
+  t = String(t || '');
+  var start = t.indexOf(startMark);
+  if (start === -1) return t;
+  var end = t.indexOf(endMark, start);
+  if (end === -1) return t.slice(0, start) + replacement;
+  return t.slice(0, start) + replacement + t.slice(end);
+}
+
+function paintNouns(t, noun) {
+  t = String(t || '');
+  t = swapAll(t, 'matte-white peptide pen with red on-pen text', noun);
+  t = swapAll(t, 'matte-white metabolic pen with blue on-pen text', noun);
+  t = swapAll(t, 'matte-black peptide pen', noun);
+  t = swapAll(t, 'matte-white research dosage pen', 'glossy white insulin-style injector pen');
+  t = swapAll(t, 'Keep the same elongated pen shape.', '');
+  t = swapAll(t, 'same elongated shape', 'insulin-style injector silhouette');
+  t = swapAll(t, 'elongated 3mL pen shape and design', 'insulin-style 3mL injector silhouette');
+  t = swapAll(t, 'elongated 3mL research pen', 'insulin-style 3mL injector pen');
+  while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
+  t = swapAll(t, ' .', '.');
+  return t.trim();
+}
+
+function lineTwo(name) {
+  if (name === 'MOTS-C') return '20mg 3ml Pen';
+  return '3ml Pen';
 }
 
 var items = $input.all();
@@ -56,47 +91,80 @@ for (var i = 0; i < items.length; i++) {
   var family = metabolic ? 'metabolic' : 'peptide';
   var ink = metabolic ? 'blue' : 'red';
   var inkAdj = metabolic ? 'bright blue' : 'bright red';
+  var line2 = lineTwo(name);
+  var noun = 'glossy-white insulin-style ' + family + ' pen with ' + ink + ' compound-name';
 
-  var colorLock =
-    'PEN COLOR LOCK (overrides COUNT FIX restyle only for the pen): ' +
-    'Keep the same elongated 3mL pen shape and design. ' +
-    'If the pen is black, dark, gray, metal, or gold-lettered, recolor it now. ' +
-    'Body, cap, and clip must be matte white — not black, not gray, not metal. ' +
-    'All on-pen lettering must be ' +
+  var spec =
+    'PEN SPEC: Exact Palm Beach Vitality 3mL insulin-style injector (Ozempic/Wegovy silhouette). ' +
+    'Smooth GLOSSY white plastic barrel — not matte, not black, not gray, not metal, not a glass vial, not an elongated slim research cartridge. ' +
+    'LEFT: rounded glossy white cap with an integrated white pocket clip like a ballpoint; cap ON covering the tip; never a needle. ' +
+    'MID: recessed band with two small vertical rectangular notches. ' +
+    'RIGHT: glossy WHITE cylindrical dose dial with raised vertical grip ridges — the dial is white, not orange. ' +
+    'FAR RIGHT: translucent orange-tinted clicker BUTTON only. Orange exists ONLY on that button. ' +
+    'LABEL: bright-blue vertical DNA double-helix at far left; then ' +
+    name +
+    ' in large bold ' +
     inkAdj +
-    ' only. No gold text. No black barrel. ' +
-    'Do not restyle lighting, camera, or environment. ' +
-    'Do not recolor scene blacks such as a void or lake.';
-
-  var stillEdit = String(row.still_edit_prompt || '').trim();
-  if (stillEdit.indexOf('PEN COLOR LOCK') === -1) {
-    stillEdit = (stillEdit ? stillEdit + ' ' : '') + colorLock;
-  }
-
-  var specLead =
-    'PEN SPEC: 3mL pre-filled research dosage pen. Matte white body, cap, and clip. On-pen text is ' +
+    ' sans-serif; then smaller thinner black ' +
+    line2 +
+    '. DNA logo stays blue. Compound name is ' +
     inkAdj +
-    ' only — not gold, not black. Keep the same elongated pen shape.';
-
-  function withSpec(s) {
-    s = paintPen(s, family, ink);
-    s = s.replace(/PEN SPEC:\s*3mL pre-filled research dosage pen\./gi, specLead);
-    s = s.replace(
-      /Hero style: 3mL research dosage pen of .+? mid-ground in environment/gi,
-      'Hero style: 3mL matte-white research dosage pen of ' + name + ' with ' + inkAdj + ' on-pen text, mid-ground in environment'
-    );
-    return s;
-  }
+    ' only — not orange, not gold, not black. Line 2 is black. ' +
+    'FORBIDDEN: orange dose dial, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle. ' +
+    'No injection act, no people, no needles in use. ';
 
   var hero =
-    '3mL matte-white research dosage pen of ' +
+    'exactly one glossy white insulin-style 3mL injector pen of ' +
     name +
-    ' with ' +
+    ' with blue DNA helix, ' +
     inkAdj +
-    ' on-pen text, mid-ground in environment; no injection act, no people, no needle use';
+    ' compound name, black ' +
+    line2 +
+    ' line, white ridged dial, orange clicker button only, mid-ground in environment; no injection act, no people, no needle use';
 
   var material =
-    '3mL pre-filled research dosage pen — matte white body, cap, and clip; ' + inkAdj + ' on-pen text; same elongated shape';
+    '3mL insulin-style injector — glossy white body, white clip-cap ON, white ridged dose dial, translucent orange clicker button only; bright-blue DNA helix; ' +
+    inkAdj +
+    ' ' +
+    name +
+    '; black ' +
+    line2;
+
+  var designLock =
+    'PEN DESIGN LOCK (overrides COUNT FIX restyle for the pen, including shape and label): ' +
+    'REPLACE the hero with this exact injector. Do not keep an elongated research pen. Do not keep a black, gray, metal, or matte barrel — the plastic is GLOSSY white. ' +
+    'Hardware: rounded white cap + white clip ON; recessed mid with two small vertical notches; WHITE ridged dose dial; translucent ORANGE clicker button on the far right only. ' +
+    'Label: bright-blue vertical DNA double-helix at left; large bold ' +
+    inkAdj +
+    ' ' +
+    name +
+    '; smaller thinner black ' +
+    line2 +
+    '. Peptide names are red. Metabolic names are blue. ' +
+    'FORBIDDEN: orange dial, orange name, orange badge, gold text, black barrel, missing clip, uncapped needle, glass vial. ' +
+    'Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.';
+
+  var stillEdit = String(row.still_edit_prompt || '').trim();
+  stillEdit = stripLock(stillEdit, 'PEN DESIGN LOCK');
+  stillEdit = stripLock(stillEdit, 'PEN COLOR LOCK');
+  stillEdit = swapAll(
+    stillEdit,
+    'Do not restyle lighting, camera, label text, or environment.',
+    'Do not restyle lighting, camera, or environment (pen shape and label ARE restyled by PEN DESIGN LOCK).'
+  );
+  stillEdit = (stillEdit ? stillEdit + ' ' : '') + designLock;
+
+  function withSpec(s) {
+    s = paintNouns(s, noun);
+    s = replaceBetween(s, 'PEN SPEC:', 'SIGNAGE RULE:', spec);
+    s = replaceBetween(s, 'Hero style:', ' Lighting:', 'Hero style: ' + hero + '.');
+    s = replaceBetween(s, 'Hero style:', 'Lighting:', 'Hero style: ' + hero + '. ');
+    s = swapAll(s, '3mL research dosage pen of ' + name, 'glossy white insulin-style 3mL injector pen of ' + name);
+    s = swapAll(s, '3mL pre-filled research dosage pen', '3mL insulin-style injector pen');
+    s = swapAll(s, '3mL matte-white research dosage pen of ' + name + ' with ' + inkAdj + ' on-pen text', hero);
+    while (s.indexOf('  ') !== -1) s = s.split('  ').join(' ');
+    return s.trim();
+  }
 
   out.push({
     json: {
@@ -105,8 +173,8 @@ for (var i = 0; i < items.length; i++) {
       hero_style: hero,
       scene_brief: withSpec(row.scene_brief),
       video_prompt: withSpec(row.video_prompt),
-      video_motion_prompt: paintPen(row.video_motion_prompt, family, ink),
-      surface: paintPen(row.surface, family, ink),
+      video_motion_prompt: paintNouns(row.video_motion_prompt, noun),
+      surface: paintNouns(row.surface, noun),
       still_edit_prompt: stillEdit,
     },
   });
