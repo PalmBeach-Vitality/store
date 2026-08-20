@@ -1,0 +1,51 @@
+{
+  "source": "Shopify 10 mL (or 5 mL) ready-to-use liquid vial listings. Concentration = catalog mg / catalog ml.",
+  "labels": {
+    "AOD-9604": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "BPC-157": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "BPC-157/TB-500": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Cagrilinitide": { "mg": "25mg", "conc": "5 mg/ml", "vol": "5ml" },
+    "CJC": { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" },
+    "CJC (no DAC)/Ipamorelin": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "GHK-Cu": { "mg": "50mg", "conc": "5 mg/ml", "vol": "10ml" },
+    "GLOW": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "KLOW": { "mg": "80mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Melanotan 2": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "MOTS-C": { "mg": "25mg", "conc": "5 mg/ml", "vol": "5ml" },
+    "NAD+": { "mg": "500mg", "conc": "50 mg/ml", "vol": "10ml" },
+    "PT-141": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "Retatrutide": { "mg": "60mg", "conc": "6 mg/ml", "vol": "10ml" },
+    "Selank": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Semaglutide": { "mg": "25mg", "conc": "2.5 mg/ml", "vol": "10ml" },
+    "SEMAX": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Sermorelin": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "SS-31": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "TA-1": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "TB-500": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Tesamorelin": { "mg": "30mg", "conc": "3 mg/ml", "vol": "10ml" },
+    "Tirzepatide": { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" }
+  },
+  "no_vial_sku": [
+    "5-Amino-1MQ",
+    "DSIP",
+    "KPV",
+    "Tesamorelin/Ipamorelin"
+  ],
+  "notes": {
+    "SEMAX": "Catalog Semax 10 mL vial is 10mg at 1 mg/ml. Never 2 mg/ml.",
+    "BPC-157": "Primary 10 mL SKU is 10mg / 1 mg/ml (the 20mg SKU is 2 mg/ml — do not use that on SEMAX or default BPC rows).",
+    "BPC-157/TB-500": "Primary 10 mL SKU is 10mg / 1 mg/ml (Sheet 9 name is BPC-157/TB-500).",
+    "NAD+": "500mg in 10 mL = 50 mg/ml. Shopify 500mg body copy-paste listed Total 1000 mg; title + math win.",
+    "Cagrilinitide": "Catalog liquid vial is 25mg / 5 mL / 5 mg/ml.",
+    "MOTS-C": "Catalog liquid vial is 25mg / 5 mL / 5 mg/ml.",
+    "no_vial_sku": "Pen-only in Shopify. Do not invent 10mg / 1 mg/ml on those vial stills.",
+    "landscape_aliases": {
+      "CJC (no DAC)": "CJC (no DAC)/Ipamorelin",
+      "BPC-157 / TB-500": "BPC-157/TB-500",
+      "BPC-157 / TB-500 / GHK-Cu": "GLOW",
+      "KPV / BPC-157 / TB-500 / GHK-Cu": "KLOW",
+      "Thymosin Alpha-1": "TA-1",
+      "Semax": "SEMAX"
+    }
+  }
+}
