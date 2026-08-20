@@ -5,7 +5,8 @@
 //
 // Writes the EXACT GHK-Cu reference vial (clear glass, bright blue flip-cap,
 // silver crimp, white label, maroon DNA + name + dosage bar) onto
-// 500_Peptide_Wellness_Reel_Scenes vial_10ml rows only.
+// 500_Peptide_Wellness_Reel_Scenes vial_10ml AND set_environment rows.
+// set_environment stills were inventing crimp-only vials (no blue flip-cap).
 // Catalog mg / mg/ml per compound — GHK-Cu is 50mg / 5mg/ml (never 10mg/ml).
 // Does NOT emit times_used / last_used_at / reel_still_url / video_url.
 // Does NOT touch pen_3ml rows.
@@ -61,6 +62,8 @@ var OLD_VIAL_PHRASES = [
   '10ml sterile injectable-style glass vial with rubber stopper and aluminum crimp seal (NOT screw-cap, NOT black twist cap)',
   '10mL sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
   '10ml sterile injectable-style clear glass vial, rubber stopper + aluminum crimp only',
+  'frosted glass bottle of cellular support',
+  'frosted glass bottle',
 ];
 
 var PEN_ONLY = {
@@ -170,6 +173,20 @@ function vialSpec(name, spec, catalogKey) {
   );
 }
 
+function hardLock(name, spec) {
+  return (
+    "HARD OUTPUT LOCK (READ FIRST): Any vial in this image MUST copy the GHK-Cu catalog still — clear glass, vibrant blue plastic flip-off cap on brushed-silver crimp, white wrap-around label, dark maroon DNA helix at top, dark maroon '" +
+    name +
+    "', maroon bar white '" +
+    spec.mg +
+    "', black '" +
+    spec.conc +
+    "', footer '" +
+    spec.vol +
+    " Sterile Multi-Use Vial'. Never a crimp-only vial without the blue flip-cap. Never a twist cap. Never amber glass. Never 10mg/ml on GHK-Cu. "
+  );
+}
+
 function lookLock(name, spec, catalogKey) {
   return (
     'VIAL LOOK LOCK (overrides COUNT FIX restyle for the vial, including glass, cap, crimp, and label): ' +
@@ -221,6 +238,7 @@ function applyDoseBar(t, spec) {
 
 function paintVial(t, name, spec, noun, catalogKey) {
   t = String(t || '');
+  t = stripLock(t, 'HARD OUTPUT LOCK (READ FIRST):', 'Never 10mg/ml on GHK-Cu. ');
   t = applyDoseBar(t, spec);
   for (var p = 0; p < OLD_VIAL_PHRASES.length; p++) {
     t = swapAll(t, OLD_VIAL_PHRASES[p], noun);
@@ -246,6 +264,7 @@ function paintVial(t, name, spec, noun, catalogKey) {
   if (t.indexOf('VIAL SPEC:') < 0) {
     t = vialSpec(name, spec, catalogKey) + t;
   }
+  t = hardLock(name, spec) + t;
   while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
   return t.trim();
 }
@@ -263,7 +282,7 @@ for (var i = 0; i < items.length; i++) {
     skippedPen += 1;
     continue;
   }
-  if (cat !== 'vial_10ml') {
+  if (cat !== 'vial_10ml' && cat !== 'set_environment') {
     skippedOther += 1;
     continue;
   }
@@ -288,15 +307,26 @@ for (var i = 0; i < items.length; i++) {
   var stillEdit = String(row.still_edit_prompt || '').trim();
   stillEdit = stripLock(stillEdit, 'VIAL LOOK LOCK', 'Do restyle the vial and label to this lock.');
   stillEdit = paintVial(stillEdit, labelName, spec, noun, catalogKey);
+  stillEdit = swapAll(
+    stillEdit,
+    'Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen).',
+    'If a vial appears it must be the exact catalog vial in VIAL LOOK LOCK (blue flip-cap, maroon DNA, maroon name, maroon bar). Do not invent a crimp-only or unlabeled vial. Keep at most ONE product.'
+  );
   stillEdit = (stillEdit ? stillEdit + ' ' : '') + lookLock(labelName, spec, catalogKey);
+
+  var hero =
+    cat === 'set_environment'
+      ? 'environment-led landscape; if any vial appears it is exactly one ' +
+        noun +
+        '; no injection act, no people, no second vial, no pen in frame'
+      : 'exactly one ' +
+        noun +
+        '; no injection act, no people, no second vial, no pen in frame';
 
   var json = {
     creation_id: requireId(row),
     material_detail: noun,
-    hero_style:
-      'exactly one ' +
-      noun +
-      '; no injection act, no people, no second vial, no pen in frame',
+    hero_style: hero,
     scene_brief: paintVial(row.scene_brief, labelName, spec, noun, catalogKey),
     video_prompt: paintVial(row.video_prompt, labelName, spec, noun, catalogKey),
     video_motion_prompt: paintVial(row.video_motion_prompt, labelName, spec, noun, catalogKey),
@@ -311,7 +341,7 @@ if (unknownKeys.length) {
   throw new Error('overlay_landscape_vial_look: unknown compounds ' + JSON.stringify(unknown));
 }
 if (!out.length) {
-  throw new Error('overlay_landscape_vial_look: no vial_10ml rows in input');
+  throw new Error('overlay_landscape_vial_look: no vial_10ml or set_environment rows in input');
 }
 
 console.log(

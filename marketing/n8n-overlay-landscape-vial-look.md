@@ -13,7 +13,7 @@ Every landscape **vial** must match the GHK-Cu catalog still: clear glass, vibra
 
 GHK-Cu catalog is **50mg / 5mg/ml**. A still that prints **10mg/ml** is wrong (50mg ÷ 10ml = 5mg/ml). Other compounds keep **their** Shopify liquid SKU — not GHK-Cu’s numbers on every bottle.
 
-**Pen rows stay pens.** `category=pen_3ml` is skipped.
+**Pen rows stay pens.** `category=pen_3ml` is skipped. `set_environment` is included — those rows were still inventing a generic vial (vid-gen run `1490` picked `LI-098` / PT-141 `set_environment` with no catalog vial lock).
 
 ## Wire (linear)
 
@@ -31,4 +31,4 @@ Do **not** touch `times_used` / URLs.
 
 ## After execute
 
-Existing JPEGs do not change. Pin/re-Execute landscape vid-gen from `pick_creation` (or still + edit) so Grok rebuilds the vial. Do **not** Publish. Caption stays a separate workflow.
+Existing JPEGs do not change. Re-Execute landscape vid-gen from **`get_reel_creations`** (not a pinned `pick_creation` from an old run). Do **not** Publish. Caption stays a separate workflow.
