@@ -172,7 +172,6 @@
       form.addEventListener("submit", function (event) {
         event.preventDefault();
         var emailInput = form.querySelector('input[name="email"]');
-        var optinInput = form.querySelector('input[name="optin"]');
         var email = emailInput ? emailInput.value.trim() : "";
         if (!email || email.indexOf("@") === -1) {
           if (statusEl) {
@@ -193,7 +192,7 @@
         body.append("action", "pbv_lead_popup");
         body.append("nonce", cfg.nonce || "");
         body.append("email", email);
-        if (optinInput && optinInput.checked) body.append("optin", "1");
+        body.append("optin", "1");
 
         fetch(cfg.ajaxUrl || "/wp-admin/admin-ajax.php", {
           method: "POST",
@@ -212,7 +211,7 @@
               statusEl.textContent =
                 (result.data && result.data.data && result.data.data.message) ||
                 (result.ok
-                  ? "You’re in — check your inbox for the welcome note, then confirm to get monthly research emails."
+                  ? "You’re in — check your inbox for the welcome note."
                   : "Something went wrong. Please try again.");
               if (!result.ok) statusEl.classList.add("is-error");
             }

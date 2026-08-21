@@ -12,7 +12,7 @@ Not the wordpress.com overlay. Try a private window. Settings → Permalinks →
 
 ## Sign-up confirmation
 
-**Off.** Entering an email on the storefront popup adds them to MailPoet as **Subscribed** immediately. They still get the branded intro (with **WELCOME20**). There is no Confirm-link email.
+**Off.** Entering an email on the storefront popup adds them to MailPoet as **Subscribed** immediately (status Subscribed, so newsletters can send). They still get the branded intro (with **WELCOME20**). There is no Confirm-link email and no extra opt-in checkbox.
 
 The theme turns off **MailPoet → Settings → Sign-up Confirmation**. After uploading, click **Email list → Sync to MailPoet** to flip anyone still Unconfirmed on the Palm Beach Vitality list to Subscribed.
 

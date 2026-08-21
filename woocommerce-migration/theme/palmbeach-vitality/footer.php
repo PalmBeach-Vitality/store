@@ -105,10 +105,6 @@ $lead_img = file_exists(pbv_asset_path('assets/images/hero.jpg'))
             autocomplete="email"
           />
           <button type="submit" class="pbv-lead-popup__submit">Subscribe</button>
-          <label class="pbv-lead-popup__optin">
-            <input type="checkbox" name="optin" value="1" checked />
-            <span>Send me updates and discount announcements</span>
-          </label>
           <p class="pbv-lead-popup__status" data-lead-popup-status hidden></p>
         </form>
 
