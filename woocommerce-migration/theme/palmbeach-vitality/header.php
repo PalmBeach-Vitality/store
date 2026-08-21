@@ -20,6 +20,10 @@
     <div class="pbv-announce"><?php echo esc_html($announce); ?></div>
   <?php endif; ?>
 
+  <?php if (!empty($_GET['pbv_confirmed'])) : ?>
+    <div class="pbv-confirm-banner" role="status"><?php esc_html_e('Thanks — your email is confirmed for Lab Notes.', 'palmbeach-vitality'); ?></div>
+  <?php endif; ?>
+
   <?php
   $logo_card = file_exists(pbv_asset_path('assets/images/logo-full.jpg'))
       ? pbv_asset_uri('assets/images/logo-full.jpg')

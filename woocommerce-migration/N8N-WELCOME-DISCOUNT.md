@@ -23,7 +23,7 @@ Map `coupon_code` and `coupon_percent` from the WordPress webhook body. If eithe
 
 Normalize lead → **Email intro** → Respond 200
 
-Gmail node: credential **Gmail account 2** (`IVBMByCjDhHJYhXB`), sender name **Palm Beach Vitality**, attribution off. That OAuth login must be **sales@palmbeach-vitality.com**.
+Gmail node: credential **Gmail account 2** (`IVBMByCjDhHJYhXB`), sender name **Palm Beach Vitality**, attribution off. That OAuth login must be **sales@palmbeach-vitality.com**. Do **not** set Reply-To to `sales@` unless From is already the Workspace mailbox. See [`EMAIL-AUTHENTICATION.md`](./EMAIL-AUTHENTICATION.md).
 
 ## Webhook payload
 

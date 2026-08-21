@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.53');
+define('PBV_THEME_VERSION', '2.10.54');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -2008,6 +2008,27 @@ function pbv_authenticated_from_address() {
     $addr = 'wordpress@' . $host;
     return is_email($addr) ? $addr : '';
 }
+
+/**
+ * All wp_mail (including MailPoet if it uses WordPress mail) From the SPF-signed store address.
+ *
+ * @param string $from From address.
+ * @return string
+ */
+function pbv_wp_mail_from($from) {
+    $signed = pbv_authenticated_from_address();
+    return $signed !== '' ? $signed : $from;
+}
+add_filter('wp_mail_from', 'pbv_wp_mail_from', 20);
+
+/**
+ * @param string $name From name.
+ * @return string
+ */
+function pbv_wp_mail_from_name($name) {
+    return 'Palm Beach Vitality';
+}
+add_filter('wp_mail_from_name', 'pbv_wp_mail_from_name', 20);
 
 /**
  * WooCommerce From address that matches WordPress.com SPF (not sales@ .com).

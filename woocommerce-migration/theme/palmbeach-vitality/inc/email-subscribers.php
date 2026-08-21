@@ -178,18 +178,257 @@ function pbv_should_touch_mailpoet() {
 /**
  * Options for MailPoet addSubscriber / subscribeToLists.
  *
- * Confirmation email stays on. MailPoet welcome emails stay off (the storefront
- * already sends the branded intro with WELCOME20).
+ * Do not let MailPoet send the confirmation email. WordPress.com cannot
+ * deliver MailPoet mail From sales@palmbeach-vitality.com (API code 10).
+ * The theme sends the confirm link with wp_mail From wordpress@…store.
+ * MailPoet welcome emails stay off (the storefront already sends WELCOME20).
  *
  * @return array<string, bool>
  */
 function pbv_mailpoet_subscriber_options() {
+    return pbv_mailpoet_silent_options();
+}
+
+/**
+ * MailPoet From that WordPress.com can actually send.
+ *
+ * sales@palmbeach-vitality.com is DMARC-quarantined on WP.com (not in that SPF).
+ * wordpress@palmbeach-vitality.store is the same From the intro fallback uses.
+ */
+function pbv_mailpoet_align_sender() {
+    if (!pbv_should_touch_mailpoet() || !class_exists('\MailPoet\Settings\SettingsController', false)) {
+        return;
+    }
+    if (get_option('pbv_mailpoet_sender_set')) {
+        return;
+    }
+    $from = function_exists('pbv_authenticated_from_address') ? pbv_authenticated_from_address() : '';
+    if ($from === '') {
+        return;
+    }
+    try {
+        $settings = \MailPoet\Settings\SettingsController::getInstance();
+        $settings->set(
+            'sender',
+            array(
+                'name'    => 'Palm Beach Vitality',
+                'address' => $from,
+            )
+        );
+        $settings->set(
+            'reply_to',
+            array(
+                'name'    => 'Palm Beach Vitality',
+                'address' => 'sales@palmbeach-vitality.com',
+            )
+        );
+        update_option('pbv_mailpoet_sender_set', 1, false);
+    } catch (\Throwable $e) {
+        return;
+    }
+}
+add_action('init', 'pbv_mailpoet_align_sender', 20);
+
+/**
+ * HMAC for the storefront list-confirm link.
+ *
+ * @param string $email Email.
+ * @return string
+ */
+function pbv_list_confirm_token($email) {
+    return hash_hmac('sha256', strtolower(sanitize_email($email)), wp_salt('nonce'));
+}
+
+/**
+ * Public confirm URL (Lab Notes opt-in).
+ *
+ * @param string $email Email.
+ * @return string
+ */
+function pbv_list_confirm_url($email) {
+    $email = strtolower(sanitize_email($email));
+    return add_query_arg(
+        array(
+            'pbv_confirm' => pbv_list_confirm_token($email),
+            'email'       => $email,
+        ),
+        home_url('/')
+    );
+}
+
+/**
+ * MailPoet options that do not try to send MailPoet’s own confirmation mail.
+ *
+ * @return array<string, bool>
+ */
+function pbv_mailpoet_silent_options() {
     return array(
-        'send_confirmation_email'      => true,
+        'send_confirmation_email'      => false,
         'schedule_welcome_email'       => false,
         'skip_subscriber_notification' => true,
     );
 }
+
+/**
+ * Add to MailPoet without triggering MailPoet’s confirmation mailer.
+ *
+ * @param string $email Email.
+ * @param int[]  $lists List ids.
+ * @return bool
+ */
+function pbv_mailpoet_add_silent($email, array $lists) {
+    $api = pbv_mailpoet_api();
+    if (!$api) {
+        return false;
+    }
+    $opts = pbv_mailpoet_silent_options();
+    try {
+        $api->addSubscriber(array('email' => $email), $lists, $opts);
+        return true;
+    } catch (\Exception $e) {
+        $code = (int) $e->getCode();
+        $msg  = $e->getMessage();
+        if ($code === 12 || stripos($msg, 'already exists') !== false) {
+            if ($lists && method_exists($api, 'subscribeToLists')) {
+                try {
+                    $api->subscribeToLists($email, $lists, $opts);
+                } catch (\Exception $e2) {
+                    return true;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+}
+
+/**
+ * Mark a MailPoet subscriber confirmed/subscribed after they click our link.
+ *
+ * @param string $email Email.
+ * @return bool
+ */
+function pbv_mailpoet_mark_subscribed($email) {
+    $email = strtolower(sanitize_email($email));
+    if ($email === '') {
+        return false;
+    }
+    $api     = pbv_mailpoet_api();
+    $list_id = pbv_mailpoet_list_id();
+    $lists   = $list_id ? array($list_id) : array();
+    $opts    = pbv_mailpoet_silent_options();
+
+    if ($api) {
+        try {
+            $api->addSubscriber(
+                array(
+                    'email'  => $email,
+                    'status' => 'subscribed',
+                ),
+                $lists,
+                $opts
+            );
+            return true;
+        } catch (\Exception $e) {
+            if ($lists && method_exists($api, 'subscribeToLists')) {
+                try {
+                    $api->subscribeToLists($email, $lists, $opts);
+                } catch (\Exception $e2) {
+                    // Fall through to entity/repository updates.
+                }
+            }
+        }
+    }
+
+    try {
+        if (class_exists('\MailPoet\DI\ContainerWrapper') && class_exists('\MailPoet\Subscribers\SubscribersRepository') && class_exists('\MailPoet\Entities\SubscriberEntity')) {
+            $repo = \MailPoet\DI\ContainerWrapper::getInstance()->get(\MailPoet\Subscribers\SubscribersRepository::class);
+            if ($repo && method_exists($repo, 'findOneBy')) {
+                $sub = $repo->findOneBy(array('email' => $email));
+                if ($sub && method_exists($sub, 'setStatus')) {
+                    $sub->setStatus(\MailPoet\Entities\SubscriberEntity::STATUS_SUBSCRIBED);
+                    if (method_exists($sub, 'setConfirmedAt')) {
+                        $sub->setConfirmedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+                    }
+                    if (method_exists($repo, 'flush')) {
+                        $repo->flush();
+                    }
+                    return true;
+                }
+            }
+        }
+    } catch (\Throwable $e) {
+        // Older MailPoet below.
+    }
+
+    try {
+        if (class_exists('\MailPoet\Models\Subscriber')) {
+            $sub = \MailPoet\Models\Subscriber::findOne($email);
+            if ($sub) {
+                $sub->status = \MailPoet\Models\Subscriber::STATUS_SUBSCRIBED;
+                $sub->save();
+                return true;
+            }
+        }
+    } catch (\Throwable $e) {
+        return false;
+    }
+
+    return false;
+}
+
+/**
+ * Confirmation email WordPress.com can send (From wordpress@…store).
+ *
+ * @param string $email Email.
+ * @return bool
+ */
+function pbv_send_list_confirm_email($email) {
+    $email = strtolower(sanitize_email($email));
+    if ($email === '' || !is_email($email)) {
+        return false;
+    }
+    $url     = pbv_list_confirm_url($email);
+    $subject = 'Confirm your email for Lab Notes — Palm Beach Vitality';
+    $html    = '<p>Thanks for joining the Palm Beach Vitality research list.</p>'
+        . '<p>Confirm this address to receive Lab Notes (research updates only). This is not for human consumption or medical advice.</p>'
+        . '<p><a href="' . esc_url($url) . '">Confirm my email</a></p>'
+        . '<p style="color:#6b6b6b;font-size:13px;">If you did not subscribe, ignore this message.</p>';
+    $headers = array(
+        'Content-Type: text/html; charset=UTF-8',
+        'Reply-To: sales@palmbeach-vitality.com',
+    );
+    $from = function_exists('pbv_authenticated_from_address') ? pbv_authenticated_from_address() : '';
+    if ($from !== '') {
+        $headers[] = 'From: Palm Beach Vitality <' . $from . '>';
+    }
+    return (bool) wp_mail($email, $subject, $html, $headers);
+}
+
+/**
+ * Handle ?pbv_confirm=&email= from the storefront confirmation mail.
+ */
+function pbv_handle_list_confirm() {
+    if (empty($_GET['pbv_confirm']) || empty($_GET['email'])) {
+        return;
+    }
+    $email = strtolower(sanitize_email(wp_unslash((string) $_GET['email'])));
+    $token = sanitize_text_field(wp_unslash((string) $_GET['pbv_confirm']));
+    $expected = pbv_list_confirm_token($email);
+    if ($email === '' || !is_email($email) || strlen($token) !== strlen($expected) || !hash_equals($expected, $token)) {
+        wp_die(esc_html__('That confirmation link is not valid.', 'palmbeach-vitality'), '', array('response' => 400));
+    }
+    pbv_mailpoet_mark_subscribed($email);
+    $rows = pbv_get_email_subscribers();
+    if (isset($rows[$email]) && is_array($rows[$email])) {
+        $rows[$email]['mailpoet']     = 'confirmed';
+        $rows[$email]['last_seen_at'] = current_time('mysql');
+        update_option(PBV_EMAIL_SUBSCRIBERS_OPTION, $rows, false);
+    }
+    wp_safe_redirect(add_query_arg('pbv_confirmed', '1', home_url('/')));
+    exit;
+}
+add_action('template_redirect', 'pbv_handle_list_confirm', 0);
 
 /**
  * Whether MailPoet sign-up confirmation is on.
@@ -216,11 +455,12 @@ function pbv_mailpoet_signup_confirmation_enabled() {
  * Add (or re-subscribe) an address in MailPoet as unconfirmed until they click Confirm.
  *
  * Do not pass status=subscribed — that skips double opt-in, which the MailPoet
- * Sending Service does not allow.
+ * Sending Service does not allow. Do not ask MailPoet to send the confirm mail
+ * (WordPress.com returns API code 10). Store wp_mail sends the link instead.
  *
  * @param string $email Email.
  * @param bool   $optin Marketing opt-in from the popup.
- * @return string Status token: added-pending-confirm, exists, skipped, skipped-no-optin, or error: …
+ * @return string Status token: confirm-sent-store-mail, skipped, skipped-no-optin, or error: …
  */
 function pbv_mailpoet_add_subscriber($email, $optin = true) {
     $api = pbv_mailpoet_api();
@@ -232,35 +472,15 @@ function pbv_mailpoet_add_subscriber($email, $optin = true) {
     }
 
     pbv_mailpoet_enable_signup_confirmation();
+    pbv_mailpoet_align_sender();
 
     $list_id = pbv_mailpoet_list_id();
     $lists   = $list_id ? array($list_id) : array();
-    $options = pbv_mailpoet_subscriber_options();
-    $payload = array(
-        'email' => $email,
-    );
+    pbv_mailpoet_add_silent($email, $lists);
 
-    try {
-        $api->addSubscriber($payload, $lists, $options);
-        return 'added-pending-confirm';
-    } catch (\Exception $e) {
-        $msg  = $e->getMessage();
-        $code = (int) $e->getCode();
-        if ($code === 12 || stripos($msg, 'already exists') !== false || stripos($msg, 'This subscriber already exists') !== false) {
-            if ($list_id && method_exists($api, 'subscribeToLists')) {
-                try {
-                    $api->subscribeToLists($email, $lists, $options);
-                } catch (\Exception $e2) {
-                    return 'exists';
-                }
-            }
-            return 'exists';
-        }
-        if ($code === 10) {
-            return 'error: confirmation email failed to send';
-        }
-        return 'error: ' . sanitize_text_field($msg);
-    }
+    return pbv_send_list_confirm_email($email)
+        ? 'confirm-sent-store-mail'
+        : 'error: confirmation email failed to send';
 }
 
 /**
@@ -436,6 +656,10 @@ function pbv_maybe_resync_mailpoet() {
         if (!is_array($row)) {
             continue;
         }
+        $prev = isset($row['mailpoet']) ? (string) $row['mailpoet'] : '';
+        if ($prev === 'confirmed' || $prev === 'confirm-sent-store-mail' || $prev === 'skipped-no-optin') {
+            continue;
+        }
         $optin = !empty($row['optin']);
         $rows[$email]['mailpoet'] = pbv_mailpoet_add_subscriber($email, $optin);
     }
@@ -522,7 +746,7 @@ function pbv_render_subscribers_page() {
     echo '<p>' . esc_html(
         sprintf(
             /* translators: %s: coupon code */
-            __('New popup signups are stored here, emailed the branded intro (including %s), and added to MailPoet as Unconfirmed until they click the confirmation link.', 'palmbeach-vitality'),
+            __('New popup signups are stored here, emailed the branded intro (including %s), added to MailPoet as Unconfirmed, and emailed a Confirm link from wordpress@palmbeach-vitality.store until they click it.', 'palmbeach-vitality'),
             $welcome
         )
     ) . '</p>';
@@ -576,7 +800,7 @@ function pbv_render_subscribers_page() {
             . esc_html__('MailPoet → Settings → Sign-up Confirmation', 'palmbeach-vitality')
             . '</a></p>';
         echo '<ol>';
-        echo '<li>' . esc_html__('MailPoet → Settings → confirm the sender is sales@palmbeach-vitality.com (or your domain mailbox).', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('MailPoet → Settings → sender must be wordpress@palmbeach-vitality.store (WordPress.com can sign that address). Reply-To can stay sales@palmbeach-vitality.com. The theme sets this once after upload.', 'palmbeach-vitality') . '</li>';
         echo '<li><a href="' . esc_url($mailpoet_emails) . '">'
             . esc_html__('MailPoet → Emails → New email → Newsletter', 'palmbeach-vitality')
             . '</a> — '
