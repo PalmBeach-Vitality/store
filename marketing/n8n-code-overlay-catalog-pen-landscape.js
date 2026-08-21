@@ -1,10 +1,10 @@
-// n8n Code node: overlay_catalog_pen_landscape
-// Workflow: overlay_catalog_pen_landscape (one-shot, then archive)
+// n8n Code node: overlay_catalog_pen_production_row_landscape
+// Workflow: overlay_catalog_pen_production_row_landscape (one-shot, then archive)
 // Mode: Run Once for All Items. Execute Once = OFF
 // After: get_reel_creations  Before: sheets_update_catalog_pen
 //
 // pen_3ml rows only on 500_Peptide_Wellness_Reel_Scenes.
-// Does NOT touch vial_10ml or set_environment.
+// Pulled-back production row of identical pens. Does NOT touch vial_10ml or set_environment.
 // Does NOT emit times_used / last_used_at / reel_still_url / video_url.
 //
 // PEPTIDE = crimson red text + logo. METABOLIC = cobalt blue text + logo.
@@ -104,15 +104,30 @@ function catalogLabel(name, accent) {
   );
 }
 
+function catalogLayout(name) {
+  return (
+    "COMPOSITION: Camera PULLED BACK. Do NOT fill the frame with one giant pen. " +
+    "Show a collection of identical freshly manufactured catalog pens of '" +
+    name +
+    "' lined up in a neat straight production row, as if they were just produced. " +
+    'Every pen is the same compound, same label, same hardware, same orientation, caps ON, evenly spaced, parallel. ' +
+    'Each pen is SMALL in the frame — the row sits mid-ground so the environment stays readable. Wide shot. ' +
+    'FORBIDDEN: one oversized hero pen filling the frame, extreme close-up packshot, mixed compounds, vials, syringes, people.'
+  );
+}
+
 function catalogLock(name, accent, family) {
   return (
-    'HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Exactly ONE ' +
+    'HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render a production row of identical ' +
     catalogHardware(accent) +
-    '. NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. ' +
-    'Product count = 1. No second pen. No vial. No syringe. No people. ' +
+    " pens labeled '" +
+    name +
+    "'. NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. " +
+    catalogLayout(name) +
+    ' ' +
     catalogLabel(name, accent) +
     ' COLOR LOCK: Peptide pens = crimson red text + logo. Metabolic pens (Semaglutide / Tirzepatide / Retatrutide only) = cobalt blue text + logo. ' +
-    'This pen is ' +
+    'This SKU is ' +
     family +
     ' / ' +
     accent +
@@ -124,31 +139,35 @@ function catalogLock(name, accent, family) {
 
 function catalogStillEdit(name, accent, family) {
   return (
-    'CRITICAL PRODUCT FIX: Replace any wrong injector, vial, chrome claw, gray body, clear cap, or colored dial with exactly ONE catalog pen. ' +
+    'CRITICAL PRODUCT FIX: Replace the giant single-pen close-up with a pulled-back production row of identical catalog pens of ' +
+    name +
+    ', lined up as if they were just produced. Camera PULLED BACK. Each pen SMALL in the frame. Each pen is one ' +
     catalogHardware(accent) +
     '. ' +
     catalogLabel(name, accent) +
     ' This is a ' +
     family +
-    ' pen — ' +
+    ' SKU — ' +
     accent +
-    ' text and logo. STRETCH the barrel longer — full-length adult injector, not stubby. DELETE hands around the DNA helix. ' +
-    'DELETE orange, vials, second pens, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
-    'After the edit: count exactly 1 longer matte white pen, zero vials, zero hands on the logo. Cap on. Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.'
+    ' text and logo on every pen. STRETCH each barrel longer — full-length adult injector, not stubby. DELETE hands around the DNA helix. ' +
+    'DELETE one oversized hero filling the frame. DELETE orange, vials, mixed compounds, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
+    'After the edit: a neat production row of identical longer matte white pens, zero vials, zero hands on the logos. Caps on. Keep lighting and environment. Do not recolor scene blacks such as a void or lake.'
   );
 }
 
 function catalogMotionKeep(name, accent) {
   return (
-    'Keep the exact same single matte white catalog pen, white cap ON with white clip, white ridged dial, ' +
+    'Keep the exact same production row of identical matte white catalog pens of ' +
+    name +
+    ', camera pulled back, each pen small in frame, white caps ON with white clips, white ridged dials, ' +
     accent +
-    ' circular plunger tip, ' +
+    ' circular plunger tips, ' +
     accent +
     " DNA double-helix logo (no hands) above '" +
     name +
     "', " +
     accent +
-    " '10mg' badge, vertical For Research Purposes Only on the label. No orange. Cap stays ON. No vial. No second pen."
+    " '10mg' badge, vertical For Research Purposes Only on every label. No orange. Caps stay ON. No vial. Do not zoom into one giant pen. Do not scramble the row."
   );
 }
 
@@ -156,8 +175,8 @@ function catalogQuality(accent) {
   return (
     'ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, ' +
     'crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, ' +
-    'exactly one LONGER full-length matte white catalog insulin-style research pen, not stubby, product count equals 1, no second pen, no vial, ' +
-    'no product pair, no duplicate products, one container only, cap on, white ridged dial, DNA helix with no hands, ' +
+    'pulled-back wide still of a production row of identical LONGER full-length matte white catalog insulin-style research pens, not stubby, each pen small in frame, ' +
+    'not one giant close-up, no vial, caps on, white ridged dial, DNA helix with no hands, ' +
     accent +
     ' circular plunger tip, no orange'
   );
@@ -191,7 +210,12 @@ function paintOld(t, noun) {
   t = swapAll(t, 'VIAL LABEL LOCK (MANDATORY): If a vial is visible, the sticker has exactly two lines: peptide name, then 10ml. No milligram marks, no per-milliliter marks, no extra numbers.', '');
   t = swapAll(t, 'Keep any visible vial sticker', 'Do not show a vial');
   t = swapAll(t, 'if a vial is visible keep the catalog vial sticker unchanged', '');
-  t = swapAll(t, 'if a vial is visible', 'if a second pen is visible');
+  t = swapAll(t, 'Product count = 1', 'a production row of identical pens');
+  t = swapAll(t, 'exactly ONE', 'a production row of identical');
+  t = swapAll(t, 'exactly one', 'a production row of identical');
+  t = swapAll(t, 'No second pen', 'No mixed compounds. No vials');
+  t = swapAll(t, 'one container only', 'a lined-up production collection');
+  t = swapAll(t, 'COUNT = 1', 'production row, camera pulled back');
   t = swapAll(t, 'black 3ml Pen', "white '10mg' badge");
   t = swapAll(t, 'black 20mg 3ml Pen', "white '10mg' badge");
   t = swapAll(t, '3ml Pen', '10mg');
@@ -211,16 +235,16 @@ for (var i = 0; i < items.length; i++) {
   var row = items[i].json || {};
   if (String(row.category || '').trim() !== 'pen_3ml') continue;
   var id = String(row.creation_id || '').trim();
-  if (!id) throw new Error('overlay_catalog_pen_landscape: missing creation_id');
+  if (!id) throw new Error('overlay_catalog_pen_production_row_landscape: missing creation_id');
   var name = String(row.compound_name || '').trim();
-  if (!name) throw new Error('overlay_catalog_pen_landscape: missing compound_name on ' + id);
+  if (!name) throw new Error('overlay_catalog_pen_production_row_landscape: missing compound_name on ' + id);
   var accent = accentFor(name, row.compound_id);
   var family = familyFor(name, row.compound_id);
   var lock = catalogLock(name, accent, family);
   var noun =
-    'matte white catalog ' +
+    'a production row of identical matte white catalog ' +
     family +
-    ' pen with ' +
+    ' pens with ' +
     accent +
     ' text and logo';
   var spec =
@@ -234,17 +258,17 @@ for (var i = 0; i < items.length; i++) {
     accent +
     '. Orange is the wrong color. No injection act, no people, no needles in use. ';
   var hero =
-    'exactly one LONGER full-length matte white catalog insulin-style pen of ' +
+    'a neat production row of identical LONGER full-length matte white catalog insulin-style pens of ' +
     name +
     ' with ' +
     accent +
-    ' DNA helix icon (no hands) above the name, ' +
+    ' DNA helix icon (no hands) above the name, lined up as just produced, camera pulled back, each pen small in frame, ' +
     accent +
     ' compound name, white 10mg badge on a ' +
     accent +
     ' rectangle, white ridged dial, ' +
     accent +
-    ' circular plunger tip, cap ON, mid-ground in environment; no injection act, no people';
+    ' circular plunger tip, caps ON, mid-ground in environment; no injection act, no people';
 
   function withSpec(s) {
     s = stripLeadingCatalogLock(s);
@@ -285,7 +309,7 @@ for (var i = 0; i < items.length; i++) {
 }
 
 if (!out.length) {
-  throw new Error('overlay_catalog_pen_landscape: no pen_3ml rows in input');
+  throw new Error('overlay_catalog_pen_production_row_landscape: no pen_3ml rows in input');
 }
 
 return out;

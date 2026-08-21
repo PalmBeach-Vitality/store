@@ -1,10 +1,10 @@
-// n8n Code node: overlay_catalog_pen_image_scenes
-// Workflow: overlay_catalog_pen_image_scenes (one-shot, then archive)
+// n8n Code node: overlay_catalog_pen_production_row_image_scenes
+// Workflow: overlay_catalog_pen_production_row_image_scenes (one-shot, then archive)
 // Mode: Run Once for All Items. Execute Once = OFF
 // After: get_image_scenes  Before: sheets_update_catalog_pen
 //
-// pen_3ml_scene rows only. Writes the catalog injector (red peptide /
-// blue metabolic) into product_hero, product_form_detail, scene_brief,
+// pen_3ml_scene rows only. Writes a pulled-back production row of identical
+// catalog pens into product_hero, product_form_detail, scene_brief,
 // still_prompt, model_still, aspect_ratio, still_resolution, still_n.
 // Does NOT emit last_used_date / caption_lock / rotation_order.
 // Does NOT touch vial_10ml_scene or lab_scene.
@@ -69,15 +69,30 @@ function catalogLabel(name, accent) {
   );
 }
 
+function catalogLayout(name) {
+  return (
+    "COMPOSITION: Camera PULLED BACK. Do NOT fill the frame with one giant pen. " +
+    "Show a collection of identical freshly manufactured catalog pens of '" +
+    name +
+    "' lined up in a neat straight production row, as if they were just produced. " +
+    'Every pen is the same compound, same label, same hardware, same orientation, caps ON, evenly spaced, parallel. ' +
+    'Each pen is SMALL in the frame — the row sits mid-ground so the environment stays readable. Wide shot. ' +
+    'FORBIDDEN: one oversized hero pen filling the frame, extreme close-up packshot, mixed compounds, vials, syringes, people.'
+  );
+}
+
 function catalogLock(name, accent, family) {
   return (
-    'HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Exactly ONE ' +
+    'HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render a production row of identical ' +
     catalogHardware(accent) +
-    '. NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. ' +
-    'Product count = 1. No second pen. No vial. No syringe. No people. ' +
+    " pens labeled '" +
+    name +
+    "'. NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. " +
+    catalogLayout(name) +
+    ' ' +
     catalogLabel(name, accent) +
     ' COLOR LOCK: Peptide pens = crimson red text + logo. Metabolic pens (Semaglutide / Tirzepatide / Retatrutide only) = cobalt blue text + logo. ' +
-    'This pen is ' +
+    'This SKU is ' +
     family +
     ' / ' +
     accent +
@@ -89,8 +104,8 @@ function catalogLock(name, accent, family) {
 
 function catalogClose() {
   return (
-    ' HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be exactly 1 — the single capped catalog pen. ' +
-    'If 2+, remove extras. No vials. COUNT = 1. Cap on. Longer full-length barrel. White dial. Accent plunger tip. DNA helix with no hands. No orange.'
+    ' HARD OUTPUT LOCK (FINAL CHECK): This is a PRODUCTION ROW of identical freshly made pens, camera pulled back, each pen small in frame. ' +
+    'Not one oversized close-up. Lined up as just produced. No vials. No mixed SKUs. Caps on. Longer full-length barrel on each pen. White dial. Accent plunger tip. DNA helix with no hands. No orange.'
   );
 }
 
@@ -119,9 +134,9 @@ for (var i = 0; i < items.length; i++) {
   var row = items[i].json || {};
   if (String(row.scene_category || '').trim() !== 'pen_3ml_scene') continue;
   var sid = String(row.scene_id || '').trim();
-  if (!sid) throw new Error('overlay_catalog_pen_image_scenes: missing scene_id');
+  if (!sid) throw new Error('overlay_catalog_pen_production_row_image_scenes: missing scene_id');
   var name = String(row.compound_name || '').trim();
-  if (!name) throw new Error('overlay_catalog_pen_image_scenes: missing compound_name on ' + sid);
+  if (!name) throw new Error('overlay_catalog_pen_production_row_image_scenes: missing compound_name on ' + sid);
   var accent = accentFor(name, row.compound_id);
   var family = familyFor(name, row.compound_id);
   var lock = catalogLock(name, accent, family);
@@ -131,18 +146,18 @@ for (var i = 0; i < items.length; i++) {
   var sceneName = String(row.scene_name || '').trim();
   var form = catalogMaterial(name, accent);
   var hero =
-    'exactly one LONGER full-length matte white catalog insulin-style pen of ' +
+    'a neat production row of identical LONGER full-length matte white catalog insulin-style pens of ' +
     name +
     ' (' +
     family +
     ' / ' +
     accent +
-    ' text + DNA helix icon with no hands), cap ON, white ridged dial, mid-ground in the scene environment';
+    ' text + DNA helix icon with no hands), lined up as just produced, camera pulled back, each pen small in frame, caps ON, white ridged dial, mid-ground in the scene environment';
 
   var stillPrompt = capPrompt(
     lock +
       ' Photoreal square 1:1 Palm Beach Vitality catalog still for Instagram feed. ' +
-      'Wide environmental pharmaceutical / peptide R&D scene containing exactly ONE capped catalog pen. ' +
+      'Wide environmental pharmaceutical / peptide R&D scene containing a production row of identical capped catalog pens, lined up as just produced, camera pulled back so each pen is small in frame. ' +
       'Scene name: ' +
       sceneName +
       '. Environment: ' +
@@ -156,7 +171,7 @@ for (var i = 0; i < items.length; i++) {
       '. FORM: ' +
       form +
       '. Deep focus. Architecture readable. Pen label fully readable. ' +
-      'No people, needles, vials, second pens, chrome claws, orange, or poster overlays. ' +
+      'No people, needles, vials, mixed compounds, one giant close-up pen filling the frame, chrome claws, orange, or poster overlays. ' +
       'Do NOT render prompt metadata as visible text.' +
       catalogClose()
   );
@@ -177,7 +192,7 @@ for (var i = 0; i < items.length; i++) {
 }
 
 if (!out.length) {
-  throw new Error('overlay_catalog_pen_image_scenes: no pen_3ml_scene rows');
+  throw new Error('overlay_catalog_pen_production_row_image_scenes: no pen_3ml_scene rows');
 }
 
 return out;

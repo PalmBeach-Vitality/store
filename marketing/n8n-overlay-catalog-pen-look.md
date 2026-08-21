@@ -18,6 +18,7 @@ Match the catalog pen still. Ignore neon/synthwave backgrounds.
 
 | Part | Exact |
 |---|---|
+| Framing | **Pulled-back production row** of identical pens, lined up as just produced. Each pen **small in the frame**. Not one giant close-up. |
 | Barrel | Smooth **matte white** cylindrical insulin-style injector. **LONGER** full-length barrel — stretch **10–20% longer** than a stubby travel pen; keep diameter the same. Not compact, not short. |
 | Cap | Matching **white matte cap ON** with integrated **white pocket clip** |
 | Dial | **White** ridged gear-like dose dial (not colored) |
@@ -79,4 +80,10 @@ Length + helix-only (unpublished, then archived):
 | `overlay_catalog_pen_longer_nohands_image_scenes` `Qfn2AEnW4q2dl4nP` | **1506** | success — `pen_3ml_scene` only |
 | `overlay_catalog_pen_longer_nohands_landscape` `nZUNwhCa1HV9HVSF` | **1509** | success — `pen_3ml` only |
 
-Existing stills will not change by themselves. Re-Execute the daily workflows (unpublished). Do not Publish.
+Production-row framing (this pass; archive after execute):
+
+| Overlay | ID | Exec | Result |
+|---|---|---|---|
+| `overlay_catalog_pen_production_row_sheet14` | `sdS6tiEnoJCBtQzF` | pending | Sheet 14 — pulled-back identical-pen row |
+| `overlay_catalog_pen_production_row_image_scenes` | `dv9uFKyPMnin2JM9` | pending | `pen_3ml_scene` only |
+| `overlay_catalog_pen_production_row_landscape` | `FRQWsICXTntOkU8F` | pending | `pen_3ml` only |

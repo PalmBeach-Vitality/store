@@ -35,7 +35,6 @@ from rebuild_scene_library_500 import (  # noqa: E402
     ACTIONS,
     BEATS,
     COLOR_GRADES,
-    HERO_STYLES,
     LIGHTINGS,
     OPENERS,
     SETTINGS,
@@ -78,8 +77,8 @@ def quality_line(accent: str) -> str:
     return (
         "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
         "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
-        "exactly one LONGER full-length matte white catalog insulin-style research pen, not stubby, product count equals 1, no second pen, no vial, "
-        "no product pair, no duplicate products, one container only, cap on, white ridged dial, DNA helix with no hands, "
+        "pulled-back wide still of a production row of identical LONGER full-length matte white catalog insulin-style research pens, not stubby, each pen small in frame, "
+        "not one giant close-up, no vial, caps on, white ridged dial, DNA helix with no hands, "
         f"{accent} circular plunger tip, no orange"
     )
 
@@ -88,17 +87,17 @@ def still_edit_line(name: str) -> str:
     accent = accent_for(name)
     family = family_for(name)
     return (
-        "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
-        "with exactly ONE matte white catalog insulin-style injectable pen. Cap ON with white "
-        "pocket clip. White ridged gear-like dose dial (not colored). Small flat circular plunger tip "
-        f"in {accent}. Logo ABOVE the name: {accent} DNA double-helix icon only — no hands, no palms, "
+        "CRITICAL PRODUCT FIX: Replace the giant single-pen close-up with a pulled-back production row of identical "
+        f"matte white catalog insulin-style pens of '{name}', lined up as if they were just produced. Camera PULLED BACK. "
+        "Each pen SMALL in the frame. Cap ON with white pocket clip. White ridged gear-like dose dial (not colored). "
+        f"Small flat circular plunger tip in {accent}. Logo ABOVE the name: {accent} DNA double-helix icon only — no hands, no palms, "
         "no figurative hands cradling the helix. "
         f"Name '{name}' large bold {accent} sans-serif. Solid {accent} rectangle badge with white '10mg'. "
         "Fine-print black lines under the name. Vertical label text: For Research Purposes Only. "
-        f"This is a {family} pen — {accent} text and logo. STRETCH the barrel longer — full-length adult "
-        "injector, not stubby. DELETE hands around the DNA helix. DELETE orange, burgundy vial branding, "
-        "palm trees, extra pens, vials, needles, syringes, scales, trays. After the edit: count exactly 1 "
-        "longer white pen, zero vials, zero hands on the logo. Cap on."
+        f"This is a {family} SKU — {accent} text and logo on every pen. STRETCH each barrel longer — full-length adult "
+        "injector, not stubby. DELETE hands around the DNA helix. DELETE one oversized hero filling the frame. DELETE orange, burgundy vial branding, "
+        "palm trees, mixed compounds, vials, needles, syringes, scales, trays. After the edit: a neat production row of identical "
+        "longer white pens, zero vials, zero hands on the logos. Caps on."
     )
 
 CAPTION_LOCK = (
@@ -107,7 +106,16 @@ CAPTION_LOCK = (
     "Captions only — never burn this into the image or Grok prompt."
 )
 
-# Same physical pen in every row. Only pose / surface / compound-name color change.
+def hero_pose(name: str) -> str:
+    accent = accent_for(name)
+    return (
+        "production row of identical catalog injectors — just produced, lined up, camera pulled back, "
+        f"each pen small in frame, matte white, white clip-cap ON, white ridged dial, "
+        f"{accent} DNA helix icon (no hands) + name + 10mg badge, {accent} plunger tip"
+    )
+
+
+# Same physical pens in every row. Collection / production-row framing (do not invent a count).
 # Hardware: catalog injector (not a glass vial, not brushed silver, not orange).
 PEN_HARDWARE = (
     "smooth matte white cylindrical insulin-style injectable research pen with a LONGER full-length barrel — "
@@ -121,28 +129,28 @@ PEN_HARDWARE = (
 
 PEN_FORMS: list[tuple[str, str]] = [
     (
-        "matte white catalog insulin-style research pen lying horizontally on a light reflective surface",
-        PEN_HARDWARE + "; catalog product still, cap on",
+        "a collection of identical matte white catalog insulin-style research pens lined up in a neat production row on a light reflective surface, camera pulled back, each pen small in frame",
+        PEN_HARDWARE + "; catalog product still, caps on, production row",
     ),
     (
-        "matte white catalog insulin-style research pen three-quarter catalog view",
-        PEN_HARDWARE + "; soft reflection, cap on",
+        "a collection of identical matte white catalog insulin-style research pens in a three-quarter production-row catalog view, camera pulled back",
+        PEN_HARDWARE + "; soft reflection, caps on, lined up as just produced",
     ),
     (
-        "matte white catalog insulin-style research pen on mirrored chrome plate",
-        PEN_HARDWARE + "; hard specular highlights, cap on",
+        "a collection of identical matte white catalog insulin-style research pens lined up on a mirrored chrome plate, camera pulled back, each pen small in frame",
+        PEN_HARDWARE + "; hard specular highlights, caps on, production row",
     ),
     (
-        "matte white catalog insulin-style research pen barrel-window close-up",
-        PEN_HARDWARE + "; small window readable, shallow depth, cap on",
+        "a collection of identical matte white catalog insulin-style research pens lined up so barrel windows stay readable, wide pulled-back production row (not a close-up)",
+        PEN_HARDWARE + "; labels readable, caps on, mid-ground row",
     ),
     (
-        "matte white catalog insulin-style research pen on matte white seamless paper",
-        PEN_HARDWARE + "; plain white backdrop, cap on",
+        "a collection of identical matte white catalog insulin-style research pens lined up on matte white seamless paper, camera pulled back",
+        PEN_HARDWARE + "; plain white backdrop, caps on, production row",
     ),
     (
-        "matte white catalog insulin-style research pen edge-lit silhouette",
-        PEN_HARDWARE + "; rim light outlining the white body and accent plunger tip, cap on",
+        "a collection of identical matte white catalog insulin-style research pens edge-lit in a production row, camera pulled back, each pen small in frame",
+        PEN_HARDWARE + "; rim light outlining each white body and accent plunger tip, caps on",
     ),
     (
         "matte white catalog insulin-style research pen low-angle hero",
@@ -277,26 +285,28 @@ def pen_lock(name: str) -> str:
     accent = accent_for(name)
     family = family_for(name)
     return (
-        "HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render exactly 1 "
-        f"smooth matte white cylindrical insulin-style Palm Beach Vitality research pen labeled '{name}'. "
+        "HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render a production row of identical "
+        f"smooth matte white cylindrical insulin-style Palm Beach Vitality research pens labeled '{name}', "
+        "lined up as if they were just produced. Camera PULLED BACK. Each pen SMALL in the frame. "
         "LONGER full-length barrel — stretch 10-20 percent longer than a stubby travel pen, adult injector, "
         "not compact, not short, keep the diameter. "
         "This is a medical injection pen, NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, "
-        "NOT a chrome claw stand. Product count = 1. White matte cap ON with integrated white pocket clip "
+        "NOT a chrome claw stand. White matte cap ON with integrated white pocket clip "
         "covering the tip — never removed, never sitting beside the pen, never showing a needle. "
         "White ridged gear-like dose dial (NOT colored, NOT orange). Small flat circular plunger tip "
-        f"at the bottom of the dial in {accent}. No second pen. No vial. No syringe. No people. "
+        f"at the bottom of the dial in {accent}. No mixed compounds. No vial. No syringe. No people. "
         "COLOR LOCK: Peptide pens = crimson red text + logo. Metabolic pens "
         "(Semaglutide / Tirzepatide / Retatrutide only) = cobalt blue text + logo. "
-        f"This pen is {family} / {accent}. FORBIDDEN: orange anywhere. FORBIDDEN: hands near the DNA helix."
+        f"This SKU is {family} / {accent}. FORBIDDEN: orange anywhere. FORBIDDEN: hands near the DNA helix. "
+        "FORBIDDEN: one oversized hero pen filling the frame."
     )
 
 
 def closing_lock() -> str:
     return (
-        " HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be "
-        "exactly 1 — the single capped catalog pen. If 2+, remove extras. No vials. COUNT = 1. "
-        "Cap on. Longer full-length barrel. White dial. Accent plunger tip. DNA helix with no hands. No orange."
+        " HARD OUTPUT LOCK (FINAL CHECK): This is a PRODUCTION ROW of identical freshly made pens, camera pulled back, "
+        "each pen small in frame. Not one oversized close-up. Lined up as just produced. No vials. No mixed SKUs. "
+        "Caps on. Longer full-length barrel on each pen. White dial. Accent plunger tip. DNA helix with no hands. No orange."
     )
 
 
@@ -376,7 +386,7 @@ def build_scene_rows(cams: list[dict]) -> list[dict]:
                 "_shot": shot,
                 "_surface": surface,
                 "_color_grade": pick(COLOR_GRADES, i, 7),
-                "_hero_style": pick(HERO_STYLES, i, 8),
+                "_hero_style": hero_pose(name),
                 "_theme_title": theme_title,
             }
         )
@@ -405,7 +415,7 @@ def material_detail(scene: dict) -> str:
         f"product_form_detail — {scene['product_form_detail']}; "
         f"lab_environment — {scene['lab_environment'][:180]}; "
         f"surface {scene['_surface']}; lighting {scene['lighting']}. "
-        "One capped pen only. No vial."
+        "A production row of identical capped pens. No vial."
     )
 
 
@@ -416,7 +426,8 @@ def video_prompt(scene: dict, lab_item: str, material: str) -> str:
         f"{pen_lock(name)} "
         "Photoreal vertical 9:16 Palm Beach Vitality cinematic research still. "
         "Create an exciting laboratory / peptide R&D / health-and-wellness industry environment "
-        "that contains exactly ONE capped research pen (never a vial, never two pens). "
+        "that contains a production row of identical capped research pens, lined up as just produced, camera pulled back "
+        "(never a vial, never one giant close-up pen). "
         f"FULL SCENE BRIEF: {lab_item} "
         f"Supporting notes: {material} "
         f"SHOT FAMILY: {shot['shot_family']}. "
@@ -430,7 +441,7 @@ def video_prompt(scene: dict, lab_item: str, material: str) -> str:
         f"Color grade: {scene['_color_grade']}. "
         f"{brand_label(name)} "
         "Avoid: people, hands, faces, skin, needles, syringes, injection, medical procedures, "
-        "vials, second pens, silver vial-pens, chrome claw stands, scales, trays, watermarks, "
+        "vials, mixed compounds, one giant close-up pen filling the frame, silver vial-pens, chrome claw stands, scales, trays, watermarks, "
         "lower-thirds, scene titles, burn-in text. "
         "Do NOT render prompt metadata as visible text. "
         f"Quality: {quality_line(accent_for(name))}. "
@@ -458,9 +469,10 @@ def motion_prompt(scene: dict) -> str:
         f"Slow cinematic camera: {move}. "
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "
-        f"Keep the exact same single matte white catalog '{name}' pen, white ridged dial, "
-        f"{accent_for(name)} plunger tip, {accent_for(name)} DNA helix icon with no hands, materials, and lighting. "
-        "Cap stays ON. No orbit. No new objects. No second pen. No vial, people, needles, "
+        f"Keep the exact same production row of identical matte white catalog '{name}' pens, camera pulled back, "
+        f"each pen small in frame, white ridged dial, {accent_for(name)} plunger tip, "
+        f"{accent_for(name)} DNA helix icon with no hands, materials, and lighting. "
+        "Caps stay ON. No orbit. No new objects. Do not zoom into one giant pen. No vial, people, needles, "
         "watermarks, poster overlays, or orange paint. "
         f"{glow}"
         "Liquid does not change level — pre-filled and static. "
@@ -570,7 +582,13 @@ def main() -> None:
         if "dna double-helix icon only" not in vp and "helix icon" not in vp:
             raise SystemExit(f"missing helix-only logo: {r['creation_id']}")
         if "10-20 percent longer" not in vp and "longer full-length" not in vp:
-            raise SystemExit(f"missing longer barrel: {r['creation_id']}")
+            raise SystemExit(f"missing longer-barrel lock: {r['creation_id']}")
+        if "production row" not in vp and "lined up" not in vp:
+            raise SystemExit(f"missing production row: {r['creation_id']}")
+        if "pulled back" not in vp and "small in the frame" not in vp and "small in frame" not in vp:
+            raise SystemExit(f"missing pulled-back framing: {r['creation_id']}")
+        if "never two pens" in vp or "product count = 1" in vp or "product count equals 1" in vp:
+            raise SystemExit(f"single-pen lock leaked: {r['creation_id']}")
         if "10mg" not in r["video_prompt"]:
             raise SystemExit(f"missing 10mg badge: {r['creation_id']}")
         if len(r["video_prompt"]) > PROMPT_MAX:
