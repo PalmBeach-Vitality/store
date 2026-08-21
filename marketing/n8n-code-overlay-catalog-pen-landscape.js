@@ -67,6 +67,21 @@ function stripLock(t, marker) {
   return t.slice(0, i).trim();
 }
 
+function motionBase(t) {
+  t = String(t || '');
+  var marks = ['Keep the exact same', 'Cap stays', 'CRITICAL COUNT', 'CRITICAL PRODUCT FIX'];
+  var end = t.length;
+  for (var i = 0; i < marks.length; i++) {
+    var e = t.indexOf(marks[i]);
+    if (e !== -1 && e < end) end = e;
+  }
+  t = t.slice(0, end).trim();
+  while (t.indexOf('Silent video. No soundtrack. Silent video. No soundtrack.') !== -1) {
+    t = t.split('Silent video. No soundtrack. Silent video. No soundtrack.').join('Silent video. No soundtrack.');
+  }
+  return t;
+}
+
 function replaceBetween(t, startMark, endMark, replacement) {
   t = String(t || '');
   var start = t.indexOf(startMark);
@@ -213,9 +228,12 @@ function paintOld(t, noun) {
   t = swapAll(t, 'Product count = 1', 'a production row of identical pens');
   t = swapAll(t, 'exactly ONE', 'a production row of identical');
   t = swapAll(t, 'exactly one', 'a production row of identical');
+  t = swapAll(t, 'Keep the exact same single matte white catalog pen', 'Keep the exact same production row of identical matte white catalog pens');
+  t = swapAll(t, 'count exactly 1 product', 'see a production row of identical pens');
   t = swapAll(t, 'No second pen', 'No mixed compounds. No vials');
   t = swapAll(t, 'one container only', 'a lined-up production collection');
   t = swapAll(t, 'COUNT = 1', 'production row, camera pulled back');
+  t = swapAll(t, 'on line 1 and 10ml on line 2', 'on every pen label');
   t = swapAll(t, 'black 3ml Pen', "white '10mg' badge");
   t = swapAll(t, 'black 20mg 3ml Pen', "white '10mg' badge");
   t = swapAll(t, '3ml Pen', '10mg');
@@ -280,18 +298,13 @@ for (var i = 0; i < items.length; i++) {
     return capPrompt(s);
   }
 
-  var stillEdit = String(row.still_edit_prompt || '').trim();
-  stillEdit = stripLock(stillEdit, 'PEN DESIGN LOCK');
-  stillEdit = stripLock(stillEdit, 'PEN COLOR LOCK');
-  stillEdit = stripLock(stillEdit, 'CRITICAL PRODUCT FIX');
-  stillEdit = capPrompt((stillEdit ? stillEdit + ' ' : '') + catalogStillEdit(name, accent, family));
+  var stillEdit = catalogStillEdit(name, accent, family);
 
-  var motion = capPrompt(
-    'Silent video. No soundtrack. ' +
-      paintOld(row.video_motion_prompt, noun) +
-      ' ' +
-      catalogMotionKeep(name, accent)
-  );
+  var motionSrc = motionBase(paintOld(row.video_motion_prompt, noun));
+  if (motionSrc.indexOf('Silent video') !== 0) {
+    motionSrc = 'Silent video. No soundtrack. ' + motionSrc;
+  }
+  var motion = capPrompt(motionSrc + ' ' + catalogMotionKeep(name, accent));
 
   out.push({
     json: {

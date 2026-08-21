@@ -80,10 +80,10 @@ Length + helix-only (unpublished, then archived):
 | `overlay_catalog_pen_longer_nohands_image_scenes` `Qfn2AEnW4q2dl4nP` | **1506** | success — `pen_3ml_scene` only |
 | `overlay_catalog_pen_longer_nohands_landscape` `nZUNwhCa1HV9HVSF` | **1509** | success — `pen_3ml` only |
 
-Production-row framing (this pass; archive after execute):
+Production-row framing (unpublished, then archived):
 
-| Overlay | ID | Exec | Result |
-|---|---|---|---|
-| `overlay_catalog_pen_production_row_sheet14` | `sdS6tiEnoJCBtQzF` | pending | Sheet 14 — pulled-back identical-pen row |
-| `overlay_catalog_pen_production_row_image_scenes` | `dv9uFKyPMnin2JM9` | pending | `pen_3ml_scene` only |
-| `overlay_catalog_pen_production_row_landscape` | `FRQWsICXTntOkU8F` | pending | `pen_3ml` only |
+| Overlay | Exec | Result |
+|---|---|---|
+| `overlay_catalog_pen_production_row_sheet14` `sdS6tiEnoJCBtQzF` | **1515** | success — all Sheet 14 rows (1512 Google 503, retried) |
+| `overlay_catalog_pen_production_row_image_scenes` `dv9uFKyPMnin2JM9` | **1513** | success — `pen_3ml_scene` only |
+| `overlay_catalog_pen_production_row_landscape` `FRQWsICXTntOkU8F` | **1516** | success — `pen_3ml` only (still_edit is production-row only; leftover COUNT=1 stripped) |
