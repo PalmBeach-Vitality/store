@@ -3,9 +3,10 @@
 // Mode: Run Once for All Items. Execute Once = OFF
 // After: get_image_scenes  Before: sheets_update_catalog_pen
 //
-// pen_3ml_scene rows only. Writes a pulled-back production row of identical
-// catalog pens into product_hero, product_form_detail, scene_brief,
-// still_prompt, model_still, aspect_ratio, still_resolution, still_n.
+// pen_3ml_scene rows only. Writes a pulled-back 9:16 production row of identical
+// catalog pens (same format as Sheet 14 vid-gen) into product_hero,
+// product_form_detail, scene_brief, still_prompt, model_still, aspect_ratio,
+// still_resolution, still_n.
 // Does NOT emit last_used_date / caption_lock / rotation_order.
 // Does NOT touch vial_10ml_scene or lab_scene.
 
@@ -109,6 +110,17 @@ function catalogClose() {
   );
 }
 
+function catalogQuality(accent) {
+  return (
+    'ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, ' +
+    'crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, ' +
+    'pulled-back wide still of a production row of identical LONGER full-length matte white catalog insulin-style research pens, not stubby, each pen small in frame, ' +
+    'not one giant close-up, no vial, caps on, white ridged dial, DNA helix with no hands, ' +
+    accent +
+    ' circular plunger tip, no orange'
+  );
+}
+
 function liquidLine(name) {
   if (String(name || '').toUpperCase() === 'GLOW') {
     return 'barrel window shows settled clear bright blue liquid already inside at a stable level (GLOW only — blue liquid); never filling';
@@ -134,9 +146,9 @@ for (var i = 0; i < items.length; i++) {
   var row = items[i].json || {};
   if (String(row.scene_category || '').trim() !== 'pen_3ml_scene') continue;
   var sid = String(row.scene_id || '').trim();
-  if (!sid) throw new Error('overlay_catalog_pen_production_row_image_scenes: missing scene_id');
+  if (!sid) throw new Error('overlay_catalog_pen_image_gen_format: missing scene_id');
   var name = String(row.compound_name || '').trim();
-  if (!name) throw new Error('overlay_catalog_pen_production_row_image_scenes: missing compound_name on ' + sid);
+  if (!name) throw new Error('overlay_catalog_pen_image_gen_format: missing compound_name on ' + sid);
   var accent = accentFor(name, row.compound_id);
   var family = familyFor(name, row.compound_id);
   var lock = catalogLock(name, accent, family);
@@ -156,8 +168,8 @@ for (var i = 0; i < items.length; i++) {
 
   var stillPrompt = capPrompt(
     lock +
-      ' Photoreal square 1:1 Palm Beach Vitality catalog still for Instagram feed. ' +
-      'Wide environmental pharmaceutical / peptide R&D scene containing a production row of identical capped catalog pens, lined up as just produced, camera pulled back so each pen is small in frame. ' +
+      ' Photoreal vertical 9:16 Palm Beach Vitality cinematic research still. ' +
+      'Create a laboratory / peptide R&D / health-and-wellness environment that contains a production row of identical capped catalog pens, lined up as just produced, camera pulled back (never a vial, never one giant close-up pen). ' +
       'Scene name: ' +
       sceneName +
       '. Environment: ' +
@@ -172,7 +184,9 @@ for (var i = 0; i < items.length; i++) {
       form +
       '. Deep focus. Architecture readable. Pen label fully readable. ' +
       'No people, needles, vials, mixed compounds, one giant close-up pen filling the frame, chrome claws, orange, or poster overlays. ' +
-      'Do NOT render prompt metadata as visible text.' +
+      'Do NOT render prompt metadata as visible text. Quality: ' +
+      catalogQuality(accent) +
+      '.' +
       catalogClose()
   );
 
@@ -184,7 +198,7 @@ for (var i = 0; i < items.length; i++) {
       scene_brief: stillPrompt,
       still_prompt: stillPrompt,
       model_still: 'grok-imagine-image-2.0',
-      aspect_ratio: '1:1',
+      aspect_ratio: '9:16',
       still_resolution: '2k',
       still_n: '1',
     },
@@ -192,7 +206,7 @@ for (var i = 0; i < items.length; i++) {
 }
 
 if (!out.length) {
-  throw new Error('overlay_catalog_pen_production_row_image_scenes: no pen_3ml_scene rows');
+  throw new Error('overlay_catalog_pen_image_gen_format: no pen_3ml_scene rows');
 }
 
 return out;

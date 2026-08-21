@@ -60,7 +60,7 @@ Manual Trigger
 Do **not** emit `times_used` / `last_used_at` / `last_used_date` / URLs.  
 Do **not** restyle landscape `vial_10ml` / `set_environment` or buffer `vial_10ml_scene` / `lab_scene`.
 
-Image-scenes overlay also writes `still_prompt`, `model_still`, `aspect_ratio` (`1:1`), `still_resolution`, `still_n` (new columns if missing). Caption path stays. Writeback stays `last_used_date` only.
+Image-scenes overlay also writes `still_prompt`, `model_still`, `aspect_ratio` (`9:16`, same as Sheet 14), `still_resolution`, `still_n` on **`pen_3ml_scene` only**. Caption path stays. Writeback stays `last_used_date` only. Vial prompts are not rewritten.
 
 ## After overlay
 
@@ -87,3 +87,9 @@ Production-row framing (unpublished, then archived):
 | `overlay_catalog_pen_production_row_sheet14` `sdS6tiEnoJCBtQzF` | **1515** | success — all Sheet 14 rows (1512 Google 503, retried) |
 | `overlay_catalog_pen_production_row_image_scenes` `dv9uFKyPMnin2JM9` | **1513** | success — `pen_3ml_scene` only |
 | `overlay_catalog_pen_production_row_landscape` `FRQWsICXTntOkU8F` | **1516** | success — `pen_3ml` only (still_edit is production-row only; leftover COUNT=1 stripped) |
+
+Image-gen pens matched to Sheet 14 9:16 format (pen_3ml_scene only; vials untouched):
+
+| Overlay | Exec | Result |
+|---|---|---|
+| `overlay_catalog_pen_image_gen_format` | pending | `pen_3ml_scene` only — 9:16 production row |

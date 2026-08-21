@@ -23,7 +23,7 @@
 
 ## Image scenes (`3-image-scenes-150`)
 
-Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`. Pen overlay may add `still_prompt`, `model_still`, `aspect_ratio`, `still_resolution`, `still_n` on `pen_3ml_scene` rows.
+Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`. Pen overlay may add `still_prompt`, `model_still`, `aspect_ratio` (`9:16`), `still_resolution`, `still_n` on **`pen_3ml_scene` only**. Do **not** rewrite `vial_10ml_scene` or `lab_scene` prompts.
 
 Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
 
