@@ -60,4 +60,12 @@ Image-scenes overlay also writes `still_prompt`, `model_still`, `aspect_ratio` (
 
 ## After overlay
 
+Executed (unpublished, then archived):
+
+| Overlay | Exec | Result |
+|---|---|---|
+| `overlay_catalog_pen_sheet14` `eH6cxum21dLDnfpP` | **1500** | success — all Sheet 14 rows |
+| `overlay_catalog_pen_image_scenes` `IKcK9L9uUcLyAPuu` | **1501** | success — `pen_3ml_scene` only |
+| `overlay_catalog_pen_landscape` `EFRhwuhx6vIccDPk` | **1502** | success — `pen_3ml` only |
+
 Existing stills will not change by themselves. Re-Execute the daily workflows (unpublished). Do not Publish.
