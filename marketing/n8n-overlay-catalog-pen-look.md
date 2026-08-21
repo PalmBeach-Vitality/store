@@ -92,4 +92,4 @@ Image-gen pens matched to Sheet 14 9:16 format (pen_3ml_scene only; vials untouc
 
 | Overlay | Exec | Result |
 |---|---|---|
-| `overlay_catalog_pen_image_gen_format` | pending | `pen_3ml_scene` only — 9:16 production row |
+| `overlay_catalog_pen_image_gen_format` `BnTsmLUsf8cXzyjJ` | **1517** | success — `pen_3ml_scene` only — 9:16 production row; `vial_10ml_scene` / `lab_scene` not rewritten |
