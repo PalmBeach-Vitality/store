@@ -305,26 +305,117 @@ function pbv_mailpoet_add_silent($email, array $lists) {
 }
 
 /**
- * MailPoet table name if it exists (wp_mailpoet_subscribers, etc.).
+ * MailPoet table name (wp_mailpoet_subscribers, etc.).
  *
  * @param string $suffix Table suffix after mailpoet_.
  * @return string
  */
 function pbv_mailpoet_table($suffix) {
     global $wpdb;
-    $name = $wpdb->prefix . 'mailpoet_' . preg_replace('/[^a-z_]/', '', strtolower((string) $suffix));
-    if ($name === $wpdb->prefix . 'mailpoet_') {
+    $suffix = preg_replace('/[^a-z_]/', '', strtolower((string) $suffix));
+    if ($suffix === '') {
         return '';
     }
-    $found = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($name)));
-    return is_string($found) && $found === $name ? $name : '';
+    if (class_exists('\MailPoet\Config\Env', false) && !empty(\MailPoet\Config\Env::$dbPrefix)) {
+        return \MailPoet\Config\Env::$dbPrefix . $suffix;
+    }
+    return $wpdb->prefix . 'mailpoet_' . $suffix;
+}
+
+/**
+ * Emails to re-apply Subscribed on shutdown (after MailPoet Doctrine flush).
+ *
+ * @param string|null $email Email to queue, or null to read the queue.
+ * @return string[]
+ */
+function pbv_mailpoet_pending_force_emails($email = null) {
+    static $emails = array();
+    if (is_string($email) && $email !== '') {
+        $emails[strtolower($email)] = true;
+    }
+    return array_keys($emails);
+}
+
+/**
+ * Use MailPoet’s admin save path (Edit → Status → Subscribed).
+ *
+ * The public addSubscriber API cannot set Subscribed while confirmation is on.
+ *
+ * @param string $email Email.
+ * @return bool
+ */
+function pbv_mailpoet_admin_set_subscribed($email) {
+    $email = strtolower(sanitize_email($email));
+    if ($email === '' || !class_exists('\MailPoet\DI\ContainerWrapper', false)) {
+        return false;
+    }
+    try {
+        $container = \MailPoet\DI\ContainerWrapper::getInstance();
+        if (!$container) {
+            return false;
+        }
+        $repo = class_exists('\MailPoet\Subscribers\SubscribersRepository', false)
+            ? $container->get(\MailPoet\Subscribers\SubscribersRepository::class)
+            : null;
+        $save = class_exists('\MailPoet\Subscribers\SubscriberSaveController', false)
+            ? $container->get(\MailPoet\Subscribers\SubscriberSaveController::class)
+            : null;
+        if (!$repo || !$save) {
+            return false;
+        }
+
+        $sub = null;
+        if (method_exists($repo, 'findOneByEmail')) {
+            $sub = $repo->findOneByEmail($email);
+        }
+        if (!$sub && method_exists($repo, 'findOneBy')) {
+            $sub = $repo->findOneBy(array('email' => $email));
+        }
+        if (!$sub) {
+            return false;
+        }
+
+        $data = array(
+            'status'       => 'subscribed',
+            'confirmed_at' => gmdate('Y-m-d H:i:s'),
+        );
+        if (class_exists('\MailPoet\Subscription\Source', false)) {
+            $data['source'] = \MailPoet\Subscription\Source::ADMINISTRATOR;
+        } elseif (class_exists('\MailPoet\Subscribers\Source', false)) {
+            $data['source'] = \MailPoet\Subscribers\Source::ADMINISTRATOR;
+        }
+
+        if (method_exists($save, 'createOrUpdate')) {
+            $save->createOrUpdate($data, $sub);
+        } elseif (method_exists($sub, 'setStatus')) {
+            $sub->setStatus('subscribed');
+            if (method_exists($sub, 'setConfirmedAt')) {
+                $sub->setConfirmedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            }
+            if (method_exists($sub, 'setUnconfirmedData')) {
+                $sub->setUnconfirmedData(null);
+            }
+            if (method_exists($repo, 'persist')) {
+                $repo->persist($sub);
+            }
+            if (method_exists($repo, 'flush')) {
+                $repo->flush();
+            }
+        } else {
+            return false;
+        }
+
+        if (method_exists($repo, 'refresh')) {
+            $repo->refresh($sub);
+        }
+        return method_exists($sub, 'getStatus') ? $sub->getStatus() === 'subscribed' : true;
+    } catch (\Throwable $e) {
+        return false;
+    }
 }
 
 /**
  * Force MailPoet global + list status to subscribed (same as Edit → Status).
- *
- * The public API often leaves people Unconfirmed when the MailPoet Sending
- * Service is on. Direct table update is what MailPoet’s own admin edit does.
  *
  * @param string $email Email.
  * @return bool
@@ -345,26 +436,32 @@ function pbv_mailpoet_force_subscribed_status($email) {
     $now = gmdate('Y-m-d H:i:s');
     $wpdb->query(
         $wpdb->prepare(
-            "UPDATE `{$subs_table}` SET `status` = %s WHERE `email` = %s",
+            "UPDATE `{$subs_table}` SET `status` = %s WHERE LOWER(`email`) = %s",
             'subscribed',
             $email
         )
     );
     $wpdb->query(
         $wpdb->prepare(
-            "UPDATE `{$subs_table}` SET `confirmed_at` = %s WHERE `email` = %s",
+            "UPDATE `{$subs_table}` SET `confirmed_at` = %s WHERE LOWER(`email`) = %s",
             $now,
+            $email
+        )
+    );
+    $wpdb->query(
+        $wpdb->prepare(
+            "UPDATE `{$subs_table}` SET `unconfirmed_data` = NULL WHERE LOWER(`email`) = %s",
             $email
         )
     );
 
     $sub_id = (int) $wpdb->get_var(
-        $wpdb->prepare("SELECT id FROM `{$subs_table}` WHERE email = %s LIMIT 1", $email)
+        $wpdb->prepare("SELECT id FROM `{$subs_table}` WHERE LOWER(email) = %s LIMIT 1", $email)
     );
-    if ($sub_id) {
+    $list_id = (int) get_option('pbv_mailpoet_list_id', 0);
+    if ($sub_id && $list_id) {
         $seg_table = pbv_mailpoet_table('subscriber_segment');
-        $list_id   = pbv_mailpoet_list_id();
-        if ($seg_table !== '' && $list_id) {
+        if ($seg_table !== '') {
             $seg_updated = $wpdb->update(
                 $seg_table,
                 array('status' => 'subscribed'),
@@ -390,11 +487,32 @@ function pbv_mailpoet_force_subscribed_status($email) {
         }
     }
 
+    try {
+        if (class_exists('\MailPoet\DI\ContainerWrapper', false) && class_exists('\Doctrine\ORM\EntityManager', false)) {
+            $em = \MailPoet\DI\ContainerWrapper::getInstance()->get(\Doctrine\ORM\EntityManager::class);
+            if ($em && method_exists($em, 'clear')) {
+                $em->clear();
+            }
+        }
+    } catch (\Throwable $e) {
+        // Status row below is the source of truth.
+    }
+
     $status = (string) $wpdb->get_var(
-        $wpdb->prepare("SELECT status FROM `{$subs_table}` WHERE email = %s LIMIT 1", $email)
+        $wpdb->prepare("SELECT status FROM `{$subs_table}` WHERE LOWER(email) = %s LIMIT 1", $email)
     );
     return $status === 'subscribed';
 }
+
+/**
+ * Re-apply Subscribed after MailPoet’s own shutdown flush.
+ */
+function pbv_mailpoet_shutdown_force_subscribed() {
+    foreach (pbv_mailpoet_pending_force_emails() as $email) {
+        pbv_mailpoet_force_subscribed_status($email);
+    }
+}
+add_action('shutdown', 'pbv_mailpoet_shutdown_force_subscribed', 1000);
 
 /**
  * Mark a MailPoet subscriber subscribed (newsletters can send).
@@ -407,78 +525,14 @@ function pbv_mailpoet_mark_subscribed($email) {
     if ($email === '') {
         return false;
     }
-    $api     = pbv_mailpoet_api();
     $list_id = pbv_mailpoet_list_id();
     $lists   = $list_id ? array($list_id) : array();
-    $opts    = pbv_mailpoet_silent_options();
 
-    if ($api) {
-        try {
-            $api->addSubscriber(
-                array(
-                    'email'  => $email,
-                    'status' => 'subscribed',
-                ),
-                $lists,
-                $opts
-            );
-        } catch (\Exception $e) {
-            if (method_exists($api, 'updateSubscriber')) {
-                try {
-                    $api->updateSubscriber($email, array('status' => 'subscribed'));
-                } catch (\Exception $e_upd) {
-                    // Fall through.
-                }
-            }
-            if ($lists && method_exists($api, 'subscribeToLists')) {
-                try {
-                    $api->subscribeToLists($email, $lists, $opts);
-                } catch (\Exception $e2) {
-                    // Continue to a forced status write.
-                }
-            }
-        }
-    }
-
-    try {
-        if (class_exists('\MailPoet\DI\ContainerWrapper') && class_exists('\MailPoet\Subscribers\SubscribersRepository') && class_exists('\MailPoet\Entities\SubscriberEntity')) {
-            $repo = \MailPoet\DI\ContainerWrapper::getInstance()->get(\MailPoet\Subscribers\SubscribersRepository::class);
-            $sub  = null;
-            if ($repo && method_exists($repo, 'findOneByEmail')) {
-                $sub = $repo->findOneByEmail($email);
-            } elseif ($repo && method_exists($repo, 'findOneBy')) {
-                $sub = $repo->findOneBy(array('email' => $email));
-            }
-            if ($sub && method_exists($sub, 'setStatus')) {
-                $sub->setStatus(\MailPoet\Entities\SubscriberEntity::STATUS_SUBSCRIBED);
-                if (method_exists($sub, 'setConfirmedAt')) {
-                    $sub->setConfirmedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-                }
-                if (method_exists($repo, 'persist')) {
-                    $repo->persist($sub);
-                }
-                if (method_exists($repo, 'flush')) {
-                    $repo->flush();
-                }
-            }
-        }
-    } catch (\Throwable $e) {
-        // Direct table write below.
-    }
-
-    try {
-        if (class_exists('\MailPoet\Models\Subscriber')) {
-            $sub = \MailPoet\Models\Subscriber::findOne($email);
-            if ($sub) {
-                $sub->status = \MailPoet\Models\Subscriber::STATUS_SUBSCRIBED;
-                $sub->save();
-            }
-        }
-    } catch (\Throwable $e) {
-        // Direct table write below.
-    }
-
-    return pbv_mailpoet_force_subscribed_status($email);
+    pbv_mailpoet_add_silent($email, $lists);
+    pbv_mailpoet_admin_set_subscribed($email);
+    pbv_mailpoet_pending_force_emails($email);
+    $ok = pbv_mailpoet_force_subscribed_status($email);
+    return $ok;
 }
 
 /**
@@ -565,20 +619,12 @@ function pbv_mailpoet_signup_confirmation_enabled() {
  * @return string Status token: subscribed, skipped, skipped-no-optin, or error: …
  */
 function pbv_mailpoet_add_subscriber($email, $optin = true) {
-    $api = pbv_mailpoet_api();
-    if (!$api) {
-        return 'skipped';
-    }
-    if (!$optin) {
-        $optin = true;
-    }
-
     pbv_mailpoet_disable_signup_confirmation();
     pbv_mailpoet_align_sender();
 
     return pbv_mailpoet_mark_subscribed($email)
         ? 'subscribed'
-        : 'error: could not subscribe';
+        : 'error: still-unconfirmed';
 }
 
 /**
@@ -900,6 +946,13 @@ function pbv_render_subscribers_page() {
 
     echo '<div class="wrap">';
     echo '<h1>' . esc_html__('Email subscribers', 'palmbeach-vitality') . '</h1>';
+    echo '<p class="description">' . esc_html(
+        sprintf(
+            /* translators: %s: theme version */
+            __('Theme v%s.', 'palmbeach-vitality'),
+            defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : ''
+        )
+    ) . '</p>';
 
     if (!empty($_GET['pbv_synced'])) {
         echo '<div class="notice notice-success is-dismissible"><p>'
@@ -963,8 +1016,9 @@ function pbv_render_subscribers_page() {
         echo ' <a href="' . esc_url($mailpoet_signup) . '">'
             . esc_html__('MailPoet → Settings → Sign-up Confirmation', 'palmbeach-vitality')
             . '</a></p>';
+        echo '<p>' . esc_html__('If MailPoet still shows Unconfirmed after Sync: open the subscriber → Edit → Status → Subscribed. That is the switch that lets newsletters send. Being on the Palm Beach Vitality list is not enough.', 'palmbeach-vitality') . '</p>';
         echo '<ol>';
-        echo '<li>' . esc_html__('MailPoet → Settings → sender must be wordpress@palmbeach-vitality.store (WordPress.com can sign that address). Reply-To can stay sales@palmbeach-vitality.com. The theme sets this once after upload.', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('MailPoet → Settings → Basics → Default sender must be the From address you authorized in MailPoet (My Authorized Emails).', 'palmbeach-vitality') . '</li>';
         echo '<li><a href="' . esc_url($mailpoet_emails) . '">'
             . esc_html__('MailPoet → Emails → New email → Newsletter', 'palmbeach-vitality')
             . '</a> — '
