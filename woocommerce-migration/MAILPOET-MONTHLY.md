@@ -10,17 +10,11 @@ If MailPoet admin is a blank page or endless spinner, upload theme **v2.10.40+**
 
 Not the wordpress.com overlay. Try a private window. Settings → Permalinks → Save if it still hangs.
 
-## Sign-up confirmation (double opt-in)
+## Sign-up confirmation
 
-**On.** Required when sending with the MailPoet Sending Service.
+**Off.** Entering an email on the storefront popup adds them to MailPoet as **Subscribed** immediately. They still get the branded intro (with **WELCOME20**). There is no Confirm-link email.
 
-1. The storefront still sends the branded intro immediately (with **WELCOME20**).
-2. MailPoet also sends a **confirmation email**.
-3. After they click Confirm, MailPoet marks them **Confirmed** and they receive newsletters.
-
-The theme turns on **MailPoet → Settings → Sign-up Confirmation** and does **not** add people as already Subscribed (that would skip confirmation).
-
-You can edit the confirmation email copy on that same settings tab. Leave the feature enabled.
+The theme turns off **MailPoet → Settings → Sign-up Confirmation**. After uploading, click **Email list → Sync to MailPoet** to flip anyone still Unconfirmed on the Palm Beach Vitality list to Subscribed.
 
 ## Where to see subscribers
 
