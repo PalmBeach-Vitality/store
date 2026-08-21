@@ -36,7 +36,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; dark microscopic **cellular chemical reaction** — living cells + amino acids; no logo, no text, no sound; not a vial, not a pen). `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` each have **6** staggered values so consecutive ranks never match.
-- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one matte white catalog pen, crimson-red peptide / cobalt-blue metabolic text+logo, white `10mg` badge, no orange, no vial)
+- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one **longer** full-length matte white catalog pen, crimson-red peptide / cobalt-blue metabolic text+logo, DNA helix icon **with no hands**, white `10mg` badge, no orange, no vial)
 - IG captions (vial + pen): tab **`15-caption-science-27`** in, **`16-ig-captions`** out — research language only, no “human use” / “benefits of using”
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**

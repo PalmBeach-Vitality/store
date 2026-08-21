@@ -18,11 +18,11 @@ Match the catalog pen still. Ignore neon/synthwave backgrounds.
 
 | Part | Exact |
 |---|---|
-| Barrel | Smooth **matte white** cylindrical insulin-style injector |
+| Barrel | Smooth **matte white** cylindrical insulin-style injector. **LONGER** full-length barrel — stretch **10–20% longer** than a stubby travel pen; keep diameter the same. Not compact, not short. |
 | Cap | Matching **white matte cap ON** with integrated **white pocket clip** |
 | Dial | **White** ridged gear-like dose dial (not colored) |
 | Plunger tip | Small flat circular tip in the accent color |
-| Logo | Accent-color DNA double-helix **cradled by two hands**, **above** the name |
+| Logo | Accent-color **DNA double-helix icon only**, **above** the name. **No hands, no palms, no figurative hands** near/cradling the helix. |
 | Name | Large bold accent sans-serif (swaps per compound) |
 | Badge | Solid accent rectangle, white **`10mg`** |
 | Fine print | Small dense black/dark-grey lines under the name |
@@ -34,7 +34,10 @@ Match the catalog pen still. Ignore neon/synthwave backgrounds.
 Metabolic names only: `Semaglutide`, `Tirzepatide`, `Retatrutide`  
 (IDs `P-SEM-001` / `P-SEMA-001`, `P-TIR-001` / `P-TIRZ-001`, `P-RET-001` / `P-RETA-001`). Everyone else is peptide / red.
 
-**FORBIDDEN: orange** (DNA, name, badge, dial, anywhere).
+**FORBIDDEN: orange** (DNA, name, badge, dial, anywhere).  
+**FORBIDDEN: hands** around the DNA helix.
+
+## Overlays
 
 GLOW liquid in the barrel window stays bright blue. That is not the logo color.
 
@@ -67,5 +70,13 @@ Executed (unpublished, then archived):
 | `overlay_catalog_pen_sheet14` `eH6cxum21dLDnfpP` | **1500** | success — all Sheet 14 rows |
 | `overlay_catalog_pen_image_scenes` `IKcK9L9uUcLyAPuu` | **1501** | success — `pen_3ml_scene` only |
 | `overlay_catalog_pen_landscape` `EFRhwuhx6vIccDPk` | **1502** | success — `pen_3ml` only |
+
+Length + helix-only (this pass; archive after execute):
+
+| Overlay | Exec | Result |
+|---|---|---|
+| `overlay_catalog_pen_longer_nohands_sheet14` | pending | Sheet 14 — longer barrel, DNA helix icon only |
+| `overlay_catalog_pen_longer_nohands_image_scenes` | pending | `pen_3ml_scene` only |
+| `overlay_catalog_pen_longer_nohands_landscape` | pending | `pen_3ml` only |
 
 Existing stills will not change by themselves. Re-Execute the daily workflows (unpublished). Do not Publish.

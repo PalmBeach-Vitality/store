@@ -9,7 +9,7 @@
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **one** matte white catalog insulin-style pen. Cap on (white clip). White ridged dial. Accent circular plunger tip. Label = **hands-and-DNA logo above the name** + compound name + white **`10mg`** badge + vertical **For Research Purposes Only**. Peptide = **crimson red** text/logo. Metabolic (`Semaglutide` / `Tirzepatide` / `Retatrutide`) = **cobalt blue** text/logo. No orange.
+Exactly **one** longer full-length matte white catalog insulin-style pen (barrel 10–20% longer than a stubby travel pen). Cap on (white clip). White ridged dial. Accent circular plunger tip. Label = **DNA helix icon only (no hands)** above the name + compound name + white **`10mg`** badge + vertical **For Research Purposes Only**. Peptide = **crimson red** text/logo. Metabolic (`Semaglutide` / `Tirzepatide` / `Retatrutide`) = **cobalt blue** text/logo. No orange. No hands near the DNA helix.
 
 **Pen hardware (mandatory):** matte white plastic body, white cap + pocket clip ON, white ridged dial, accent plunger tip. Logo ABOVE the name. Not a glass vial. Not brushed silver. Not maroon vial branding. Not orange.
 

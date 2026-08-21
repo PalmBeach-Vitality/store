@@ -49,6 +49,17 @@ function swapAll(t, oldP, newP) {
   return t;
 }
 
+function stripLeadingCatalogLock(t) {
+  t = String(t || '');
+  var endMark = 'No burn-in captions except the catalog label itself.';
+  while (t.indexOf('HARD OUTPUT LOCK (READ FIRST):') === 0) {
+    var i = t.indexOf(endMark);
+    if (i === -1) break;
+    t = t.slice(i + endMark.length).trim();
+  }
+  return t;
+}
+
 function stripLock(t, marker) {
   t = String(t || '');
   var i = t.indexOf(marker);
@@ -67,7 +78,8 @@ function replaceBetween(t, startMark, endMark, replacement) {
 
 function catalogHardware(accent) {
   return (
-    'smooth MATTE white cylindrical insulin-style injectable research pen; ' +
+    'smooth MATTE white cylindrical insulin-style injectable research pen with a LONGER full-length barrel — ' +
+    'PROPORTION: barrel 10-20 percent longer than a stubby travel pen, full-length elongated adult injector, not compact, not short. Stretch the white barrel, keep the diameter the same; ' +
     'matching white matte cap ON with integrated white pocket clip covering the tip (never a needle); ' +
     'white ridged gear-like dose dial (NOT colored, NOT orange); ' +
     'small flat circular plunger tip at the bottom of the dial in ' +
@@ -79,7 +91,7 @@ function catalogLabel(name, accent) {
   return (
     'LABEL: white wrap-around. Logo ABOVE the name: ' +
     accent +
-    ' DNA double-helix cradled by two hands (not maroon vial DNA, not a lone helix with no hands). ' +
+    ' DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. ' +
     "Compound name '" +
     name +
     "' in large bold " +
@@ -88,7 +100,7 @@ function catalogLabel(name, accent) {
     accent +
     " rectangle badge with white text exactly '10mg'. " +
     'Small dense black/dark-grey fine-print lines under the name. ' +
-    'Vertical side text on the label: For Research Purposes Only.'
+    'Vertical side text on the label: For Research Purposes Only. FORBIDDEN on the logo: hands near the DNA helix.'
   );
 }
 
@@ -120,8 +132,9 @@ function catalogStillEdit(name, accent, family) {
     family +
     ' pen — ' +
     accent +
-    ' text and logo. DELETE orange, vials, second pens, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
-    'After the edit: count exactly 1 matte white pen, zero vials. Cap on. Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.'
+    ' text and logo. STRETCH the barrel longer — full-length adult injector, not stubby. DELETE hands around the DNA helix. ' +
+    'DELETE orange, vials, second pens, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
+    'After the edit: count exactly 1 longer matte white pen, zero vials, zero hands on the logo. Cap on. Keep lighting, camera, and environment. Do not recolor scene blacks such as a void or lake.'
   );
 }
 
@@ -131,7 +144,7 @@ function catalogMotionKeep(name, accent) {
     accent +
     ' circular plunger tip, ' +
     accent +
-    " hands-and-DNA logo above '" +
+    " DNA double-helix logo (no hands) above '" +
     name +
     "', " +
     accent +
@@ -143,8 +156,8 @@ function catalogQuality(accent) {
   return (
     'ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, ' +
     'crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, ' +
-    'exactly one matte white catalog insulin-style research pen, product count equals 1, no second pen, no vial, ' +
-    'no product pair, no duplicate products, one container only, cap on, white ridged dial, ' +
+    'exactly one LONGER full-length matte white catalog insulin-style research pen, not stubby, product count equals 1, no second pen, no vial, ' +
+    'no product pair, no duplicate products, one container only, cap on, white ridged dial, DNA helix with no hands, ' +
     accent +
     ' circular plunger tip, no orange'
   );
@@ -169,7 +182,13 @@ function paintOld(t, noun) {
   t = swapAll(t, 'glossy WHITE cylindrical dose dial', 'white ridged gear-like dose dial');
   t = swapAll(t, 'translucent bright red bottom clicker', 'crimson red circular plunger tip');
   t = swapAll(t, 'translucent bright blue bottom clicker', 'cobalt blue circular plunger tip');
-  t = swapAll(t, 'bright-blue vertical DNA double-helix', 'accent-color DNA double-helix cradled by two hands');
+  t = swapAll(t, 'bright-blue vertical DNA double-helix', 'accent-color DNA double-helix icon only with no hands');
+  t = swapAll(t, 'DNA double-helix cradled by two hands', 'DNA double-helix icon only with no hands');
+  t = swapAll(t, 'cradled by two hands', 'icon only with no hands');
+  t = swapAll(t, 'hands-and-DNA logo', 'DNA helix icon with no hands');
+  t = swapAll(t, 'not a lone helix with no hands', 'helix icon only');
+  t = swapAll(t, 'if a vial is visible keep the catalog vial sticker unchanged', '');
+  t = swapAll(t, 'if a vial is visible', 'if a second pen is visible');
   t = swapAll(t, 'black 3ml Pen', "white '10mg' badge");
   t = swapAll(t, 'black 20mg 3ml Pen', "white '10mg' badge");
   t = swapAll(t, '3ml Pen', '10mg');
@@ -212,11 +231,11 @@ for (var i = 0; i < items.length; i++) {
     accent +
     '. Orange is the wrong color. No injection act, no people, no needles in use. ';
   var hero =
-    'exactly one matte white catalog insulin-style pen of ' +
+    'exactly one LONGER full-length matte white catalog insulin-style pen of ' +
     name +
     ' with ' +
     accent +
-    ' hands-and-DNA logo above the name, ' +
+    ' DNA helix icon (no hands) above the name, ' +
     accent +
     ' compound name, white 10mg badge on a ' +
     accent +
@@ -225,6 +244,7 @@ for (var i = 0; i < items.length; i++) {
     ' circular plunger tip, cap ON, mid-ground in environment; no injection act, no people';
 
   function withSpec(s) {
+    s = stripLeadingCatalogLock(s);
     s = paintOld(s, noun);
     s = replaceBetween(s, 'PEN SPEC:', 'SIGNAGE RULE:', spec);
     s = replaceBetween(s, 'Hero style:', ' Lighting:', 'Hero style: ' + hero + '.');

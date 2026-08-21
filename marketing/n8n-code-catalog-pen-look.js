@@ -7,10 +7,10 @@
 // (also IDs P-SEM-001 / P-SEMA-001, P-TIR-001 / P-TIRZ-001, P-RET-001 / P-RETA-001)
 //
 // Hardware from the catalog injector photo:
-// matte white body, white cap ON + white pocket clip, white ridged dial,
-// accent circular plunger tip, hands-and-DNA logo ABOVE the name, 10mg badge,
-// fine-print under the name, vertical "For Research Purposes Only".
-// FORBIDDEN: orange anywhere.
+// LONGER full-length matte white body (not stubby), white cap ON + white pocket clip,
+// white ridged dial, accent circular plunger tip, DNA helix logo ABOVE the name
+// (no hands), 10mg badge, fine-print under the name, vertical "For Research Purposes Only".
+// FORBIDDEN: orange anywhere. FORBIDDEN: hands around the DNA helix.
 
 var BLUE_NAMES = {
   semaglutide: 1,
@@ -55,7 +55,8 @@ function capPrompt(text) {
 
 function catalogHardware(accent) {
   return (
-    'smooth MATTE white cylindrical insulin-style injectable research pen; ' +
+    'smooth MATTE white cylindrical insulin-style injectable research pen with a LONGER full-length barrel — ' +
+    'PROPORTION: barrel 10-20 percent longer than a stubby travel pen, full-length elongated adult injector, not compact, not short. Stretch the white barrel, keep the diameter the same; ' +
     'matching white matte cap ON with integrated white pocket clip covering the tip (never a needle); ' +
     'white ridged gear-like dose dial (NOT colored, NOT orange); ' +
     'small flat circular plunger tip at the bottom of the dial in ' +
@@ -65,9 +66,9 @@ function catalogHardware(accent) {
 
 function catalogLabel(name, accent) {
   return (
-    "LABEL: white wrap-around. Logo ABOVE the name: " +
+    'LABEL: white wrap-around. Logo ABOVE the name: ' +
     accent +
-    ' DNA double-helix cradled by two hands (not maroon vial DNA, not a lone helix with no hands). ' +
+    ' DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. ' +
     "Compound name '" +
     name +
     "' in large bold " +
@@ -76,7 +77,7 @@ function catalogLabel(name, accent) {
     accent +
     " rectangle badge with white text exactly '10mg'. " +
     'Small dense black/dark-grey fine-print lines under the name. ' +
-    'Vertical side text on the label: For Research Purposes Only.'
+    'Vertical side text on the label: For Research Purposes Only. FORBIDDEN on the logo: hands near the DNA helix.'
   );
 }
 
@@ -101,7 +102,7 @@ function catalogLock(name, accent, family) {
 function catalogClose() {
   return (
     ' HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be exactly 1 — the single capped catalog pen. ' +
-    'If 2+, remove extras. No vials. COUNT = 1. Cap on. White dial. Accent plunger tip. No orange.'
+    'If 2+, remove extras. No vials. COUNT = 1. Cap on. Longer full-length barrel. White dial. Accent plunger tip. DNA helix with no hands. No orange.'
   );
 }
 
@@ -115,8 +116,9 @@ function catalogStillEdit(name, accent, family) {
     family +
     ' pen — ' +
     accent +
-    ' text and logo. DELETE orange, vials, second pens, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
-    'After the edit: count exactly 1 matte white pen, zero vials. Cap on. Keep lighting, camera, and environment.'
+    ' text and logo. STRETCH the barrel longer — full-length adult injector, not stubby. DELETE hands around the DNA helix. ' +
+    'DELETE orange, vials, second pens, chrome claws, needles, gray bodies, missing clips, colored dials. ' +
+    'After the edit: count exactly 1 longer matte white pen, zero vials, zero hands on the logo. Cap on. Keep lighting, camera, and environment.'
   );
 }
 
@@ -126,7 +128,7 @@ function catalogMotionKeep(name, accent) {
     accent +
     ' circular plunger tip, ' +
     accent +
-    " hands-and-DNA logo above '" +
+    " DNA double-helix logo (no hands) above '" +
     name +
     "', " +
     accent +
@@ -138,8 +140,8 @@ function catalogQuality(accent) {
   return (
     'ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, ' +
     'crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, ' +
-    'exactly one matte white catalog insulin-style research pen, product count equals 1, no second pen, no vial, ' +
-    'no product pair, no duplicate products, one container only, cap on, white ridged dial, ' +
+    'exactly one LONGER full-length matte white catalog insulin-style research pen, not stubby, product count equals 1, no second pen, no vial, ' +
+    'no product pair, no duplicate products, one container only, cap on, white ridged dial, DNA helix with no hands, ' +
     accent +
     ' circular plunger tip, no orange'
   );
@@ -158,7 +160,7 @@ function catalogHero(name, accent, pose) {
     name +
     ' with ' +
     accent +
-    ' hands-and-DNA logo above the name, ' +
+    ' DNA double-helix logo (no hands) above the name, ' +
     accent +
     " '" +
     name +

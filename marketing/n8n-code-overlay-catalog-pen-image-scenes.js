@@ -43,7 +43,8 @@ function capPrompt(text) {
 
 function catalogHardware(accent) {
   return (
-    'smooth MATTE white cylindrical insulin-style injectable research pen; ' +
+    'smooth MATTE white cylindrical insulin-style injectable research pen with a LONGER full-length barrel — ' +
+    'PROPORTION: barrel 10-20 percent longer than a stubby travel pen, full-length elongated adult injector, not compact, not short. Stretch the white barrel, keep the diameter the same; ' +
     'matching white matte cap ON with integrated white pocket clip covering the tip (never a needle); ' +
     'white ridged gear-like dose dial (NOT colored, NOT orange); ' +
     'small flat circular plunger tip at the bottom of the dial in ' +
@@ -55,7 +56,7 @@ function catalogLabel(name, accent) {
   return (
     'LABEL: white wrap-around. Logo ABOVE the name: ' +
     accent +
-    ' DNA double-helix cradled by two hands (not maroon vial DNA, not a lone helix with no hands). ' +
+    ' DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. ' +
     "Compound name '" +
     name +
     "' in large bold " +
@@ -64,7 +65,7 @@ function catalogLabel(name, accent) {
     accent +
     " rectangle badge with white text exactly '10mg'. " +
     'Small dense black/dark-grey fine-print lines under the name. ' +
-    'Vertical side text on the label: For Research Purposes Only.'
+    'Vertical side text on the label: For Research Purposes Only. FORBIDDEN on the logo: hands near the DNA helix.'
   );
 }
 
@@ -89,7 +90,7 @@ function catalogLock(name, accent, family) {
 function catalogClose() {
   return (
     ' HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be exactly 1 — the single capped catalog pen. ' +
-    'If 2+, remove extras. No vials. COUNT = 1. Cap on. White dial. Accent plunger tip. No orange.'
+    'If 2+, remove extras. No vials. COUNT = 1. Cap on. Longer full-length barrel. White dial. Accent plunger tip. DNA helix with no hands. No orange.'
   );
 }
 
@@ -130,13 +131,13 @@ for (var i = 0; i < items.length; i++) {
   var sceneName = String(row.scene_name || '').trim();
   var form = catalogMaterial(name, accent);
   var hero =
-    'exactly one matte white catalog insulin-style pen of ' +
+    'exactly one LONGER full-length matte white catalog insulin-style pen of ' +
     name +
     ' (' +
     family +
     ' / ' +
     accent +
-    ' text + logo), cap ON, white ridged dial, mid-ground in the scene environment';
+    ' text + DNA helix icon with no hands), cap ON, white ridged dial, mid-ground in the scene environment';
 
   var stillPrompt = capPrompt(
     lock +

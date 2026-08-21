@@ -78,8 +78,8 @@ def quality_line(accent: str) -> str:
     return (
         "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
         "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
-        "exactly one matte white catalog insulin-style research pen, product count equals 1, no second pen, no vial, "
-        "no product pair, no duplicate products, one container only, cap on, white ridged dial, "
+        "exactly one LONGER full-length matte white catalog insulin-style research pen, not stubby, product count equals 1, no second pen, no vial, "
+        "no product pair, no duplicate products, one container only, cap on, white ridged dial, DNA helix with no hands, "
         f"{accent} circular plunger tip, no orange"
     )
 
@@ -91,11 +91,14 @@ def still_edit_line(name: str) -> str:
         "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
         "with exactly ONE matte white catalog insulin-style injectable pen. Cap ON with white "
         "pocket clip. White ridged gear-like dose dial (not colored). Small flat circular plunger tip "
-        f"in {accent}. Logo ABOVE the name: {accent} DNA double-helix cradled by two hands. "
+        f"in {accent}. Logo ABOVE the name: {accent} DNA double-helix icon only — no hands, no palms, "
+        "no figurative hands cradling the helix. "
         f"Name '{name}' large bold {accent} sans-serif. Solid {accent} rectangle badge with white '10mg'. "
         "Fine-print black lines under the name. Vertical label text: For Research Purposes Only. "
-        f"This is a {family} pen — {accent} text and logo. DELETE orange, burgundy vial branding, "
-        "palm trees, extra pens, vials, needles, syringes, scales, trays. After the edit: count exactly 1 white pen, zero vials. Cap on."
+        f"This is a {family} pen — {accent} text and logo. STRETCH the barrel longer — full-length adult "
+        "injector, not stubby. DELETE hands around the DNA helix. DELETE orange, burgundy vial branding, "
+        "palm trees, extra pens, vials, needles, syringes, scales, trays. After the edit: count exactly 1 "
+        "longer white pen, zero vials, zero hands on the logo. Cap on."
     )
 
 CAPTION_LOCK = (
@@ -107,7 +110,9 @@ CAPTION_LOCK = (
 # Same physical pen in every row. Only pose / surface / compound-name color change.
 # Hardware: catalog injector (not a glass vial, not brushed silver, not orange).
 PEN_HARDWARE = (
-    "smooth matte white cylindrical insulin-style injectable research pen; matching white matte cap ON "
+    "smooth matte white cylindrical insulin-style injectable research pen with a LONGER full-length barrel — "
+    "PROPORTION: barrel 10-20 percent longer than a stubby travel pen, full-length elongated adult injector, "
+    "not compact, not short; stretch the white barrel, keep the diameter the same; matching white matte cap ON "
     "with integrated white pocket clip covering the tip; white ridged gear-like dose dial "
     "(NOT colored, NOT orange); small flat circular plunger tip at the bottom of the dial in the accent color; "
     "small rectangular transparent barrel window beside the label "
@@ -274,6 +279,8 @@ def pen_lock(name: str) -> str:
     return (
         "HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render exactly 1 "
         f"smooth matte white cylindrical insulin-style Palm Beach Vitality research pen labeled '{name}'. "
+        "LONGER full-length barrel — stretch 10-20 percent longer than a stubby travel pen, adult injector, "
+        "not compact, not short, keep the diameter. "
         "This is a medical injection pen, NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, "
         "NOT a chrome claw stand. Product count = 1. White matte cap ON with integrated white pocket clip "
         "covering the tip — never removed, never sitting beside the pen, never showing a needle. "
@@ -281,7 +288,7 @@ def pen_lock(name: str) -> str:
         f"at the bottom of the dial in {accent}. No second pen. No vial. No syringe. No people. "
         "COLOR LOCK: Peptide pens = crimson red text + logo. Metabolic pens "
         "(Semaglutide / Tirzepatide / Retatrutide only) = cobalt blue text + logo. "
-        f"This pen is {family} / {accent}. FORBIDDEN: orange anywhere."
+        f"This pen is {family} / {accent}. FORBIDDEN: orange anywhere. FORBIDDEN: hands near the DNA helix."
     )
 
 
@@ -289,7 +296,7 @@ def closing_lock() -> str:
     return (
         " HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be "
         "exactly 1 — the single capped catalog pen. If 2+, remove extras. No vials. COUNT = 1. "
-        "Cap on. White dial. Accent plunger tip. No orange."
+        "Cap on. Longer full-length barrel. White dial. Accent plunger tip. DNA helix with no hands. No orange."
     )
 
 
@@ -297,8 +304,8 @@ def brand_label(name: str) -> str:
     accent = accent_for(name)
     return (
         "LABEL (MANDATORY): clean white wrap-around barrel label. "
-        f"Logo ABOVE the name: {accent} DNA double-helix cradled by two hands "
-        "(not maroon vial DNA, not a lone helix with no hands). "
+        f"Logo ABOVE the name: {accent} DNA double-helix icon only — no hands, no palms, "
+        "no figurative hands cradling the helix. "
         f"Exact compound name '{name}' in large bold {accent} sans-serif (Helvetica/Arial). "
         f"Solid {accent} rectangle badge with white text exactly '10mg'. "
         "Small dense black/dark-grey fine-print lines under the name. "
@@ -387,7 +394,7 @@ def lab_item_paragraph(scene: dict) -> str:
         f"Lighting: {scene['lighting']}. "
         "Empty of people; no clinical procedure staging; no needles. "
         "No poster overlay, captions, watermarks, palm tree, or burn-in text in frame "
-        f"except the catalog label ('{name}', '10mg', hands-and-DNA logo, vertical For Research Purposes Only)."
+        f"except the catalog label ('{name}', '10mg', DNA helix icon with no hands, vertical For Research Purposes Only)."
         f"{closing_lock()}"
     )
 
@@ -452,7 +459,7 @@ def motion_prompt(scene: dict) -> str:
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "
         f"Keep the exact same single matte white catalog '{name}' pen, white ridged dial, "
-        f"{accent_for(name)} plunger tip, {accent_for(name)} hands-and-DNA logo, materials, and lighting. "
+        f"{accent_for(name)} plunger tip, {accent_for(name)} DNA helix icon with no hands, materials, and lighting. "
         "Cap stays ON. No orbit. No new objects. No second pen. No vial, people, needles, "
         "watermarks, poster overlays, or orange paint. "
         f"{glow}"
@@ -558,6 +565,12 @@ def main() -> None:
             raise SystemExit(f"missing white insulin-style hardware: {r['creation_id']}")
         if "pocket clip" not in vp:
             raise SystemExit(f"missing pocket clip: {r['creation_id']}")
+        if "cradled by two hands" in vp or "hands-and-dna" in vp:
+            raise SystemExit(f"hands-and-DNA leaked: {r['creation_id']}")
+        if "dna double-helix icon only" not in vp and "helix icon" not in vp:
+            raise SystemExit(f"missing helix-only logo: {r['creation_id']}")
+        if "10-20 percent longer" not in vp and "longer full-length" not in vp:
+            raise SystemExit(f"missing longer barrel: {r['creation_id']}")
         if "10mg" not in r["video_prompt"]:
             raise SystemExit(f"missing 10mg badge: {r['creation_id']}")
         if len(r["video_prompt"]) > PROMPT_MAX:
