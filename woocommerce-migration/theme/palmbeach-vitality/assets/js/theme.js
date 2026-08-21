@@ -27,87 +27,13 @@
     });
   }
 
-  // Product pages: hide only the old Shopify disclaimer image + extra theme banners.
+  // Product pages: hide only the old Shopify disclaimer image.
   // NEVER remove product description text/nodes.
   var description = document.querySelector(".pbv-product-description");
   if (description) {
     description.querySelectorAll('img[src*="image_6.jpg"]').forEach(function (img) {
       img.remove();
     });
-
-    var banners = description.querySelectorAll(".pbv-ruo-banner");
-    banners.forEach(function (banner, index) {
-      if (index > 0) banner.remove();
-    });
-  }
-
-  // Age gate + required Terms checkbox (21+)
-  var gate = document.querySelector("[data-age-gate]");
-  var ageAccepted = false;
-
-  function hasAgeAccepted() {
-    try {
-      return window.localStorage.getItem("pbv_age_gate_v1") === "accepted";
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function acceptAgeGate() {
-    try {
-      window.localStorage.setItem("pbv_age_gate_v1", "accepted");
-    } catch (e) {}
-    if (gate) gate.setAttribute("hidden", "");
-    document.body.classList.remove("pbv-age-gate-open");
-    ageAccepted = true;
-    scheduleLeadPopup();
-  }
-
-  if (gate) {
-    var ageInput = gate.querySelector("[data-age-gate-age]");
-    var termsInput = gate.querySelector("[data-age-gate-terms]");
-    var errorEl = gate.querySelector("[data-age-gate-error]");
-    var enterBtn = gate.querySelector("[data-age-gate-enter]");
-    var exitBtn = gate.querySelector("[data-age-gate-exit]");
-    var path = (window.location.pathname || "").replace(/\/+$/, "") || "/";
-    var isTermsPage = path === "/terms";
-
-    if (hasAgeAccepted() || isTermsPage) {
-      gate.setAttribute("hidden", "");
-      ageAccepted = true;
-    } else {
-      gate.removeAttribute("hidden");
-      document.body.classList.add("pbv-age-gate-open");
-      if (ageInput) ageInput.focus();
-    }
-
-    if (enterBtn) {
-      enterBtn.addEventListener("click", function () {
-        var okAge = ageInput && ageInput.checked;
-        var okTerms = termsInput && termsInput.checked;
-        if (!okAge || !okTerms) {
-          if (errorEl) errorEl.removeAttribute("hidden");
-          return;
-        }
-        if (errorEl) errorEl.setAttribute("hidden", "");
-        acceptAgeGate();
-      });
-    }
-
-    if (exitBtn) {
-      exitBtn.addEventListener("click", function () {
-        window.location.href = "https://www.google.com/";
-      });
-    }
-
-    gate.addEventListener("keydown", function (event) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    });
-  } else {
-    ageAccepted = true;
   }
 
   // Welcome discount popup — banner click + homepage timer
@@ -145,7 +71,7 @@
   }
 
   function scheduleLeadPopup() {
-    if (!lead || !cfg.isHome || hasLeadDismissed() || !ageAccepted) return;
+    if (!lead || !cfg.isHome || hasLeadDismissed()) return;
     if (leadTimer) window.clearTimeout(leadTimer);
     leadTimer = window.setTimeout(function () {
       openLeadPopup(false);
@@ -236,7 +162,7 @@
       });
     }
 
-    if (ageAccepted) scheduleLeadPopup();
+    scheduleLeadPopup();
   }
 
   // Contact page form → sales@palmbeach-vitality.com

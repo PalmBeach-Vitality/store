@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.57');
+define('PBV_THEME_VERSION', '2.10.58');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -708,16 +708,6 @@ function pbv_strip_embedded_research_disclaimer($html) {
     return $html;
 }
 
-/**
- * Selank-reference Research Use Only warning (fixed copy + size via CSS).
- */
-function pbv_research_use_banner() {
-    echo '<aside class="pbv-ruo-banner" role="note" aria-label="Research use only warning">';
-    echo '<p class="pbv-ruo-banner__title"><span class="pbv-ruo-banner__icon" aria-hidden="true">⚠</span> Research use only</p>';
-    echo '<p class="pbv-ruo-banner__body">Not for human consumption. This product is sold exclusively for research and educational purposes. It is not intended to diagnose, treat, cure, or prevent any disease.</p>';
-    echo '</aside>';
-}
-
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
         return;
@@ -736,8 +726,6 @@ function pbv_single_product_details_and_cart() {
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo apply_filters('the_content', $description);
     }
-    // Theme warning banner after description (CSS hides duplicate image_6).
-    pbv_research_use_banner();
     echo '</div>';
 
     $short = ($product instanceof WC_Product) ? $product->get_short_description() : '';
