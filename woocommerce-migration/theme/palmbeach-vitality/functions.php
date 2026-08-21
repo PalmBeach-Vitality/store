@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.52');
+define('PBV_THEME_VERSION', '2.10.53');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -830,7 +830,7 @@ function pbv_social_links() {
         ),
         'facebook' => array(
             'label' => 'Facebook',
-            'url'   => 'https://www.facebook.com/profile.php?id=61592263329627',
+            'url'   => 'https://www.facebook.com/people/Palm-Beach-Vitality/61592263329627/',
             'icon'  => pbv_icon_facebook(),
         ),
         'whatsapp' => array(
@@ -840,7 +840,7 @@ function pbv_social_links() {
         ),
         'tiktok' => array(
             'label' => 'TikTok',
-            'url'   => '',
+            'url'   => 'https://www.tiktok.com/@palmbeachvitality',
             'icon'  => pbv_icon_tiktok(),
         ),
         'youtube' => array(
