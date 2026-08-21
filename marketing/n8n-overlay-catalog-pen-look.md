@@ -71,12 +71,12 @@ Executed (unpublished, then archived):
 | `overlay_catalog_pen_image_scenes` `IKcK9L9uUcLyAPuu` | **1501** | success — `pen_3ml_scene` only |
 | `overlay_catalog_pen_landscape` `EFRhwuhx6vIccDPk` | **1502** | success — `pen_3ml` only |
 
-Length + helix-only (this pass; archive after execute):
+Length + helix-only (unpublished, then archived):
 
 | Overlay | Exec | Result |
 |---|---|---|
-| `overlay_catalog_pen_longer_nohands_sheet14` | pending | Sheet 14 — longer barrel, DNA helix icon only |
-| `overlay_catalog_pen_longer_nohands_image_scenes` | pending | `pen_3ml_scene` only |
-| `overlay_catalog_pen_longer_nohands_landscape` | pending | `pen_3ml` only |
+| `overlay_catalog_pen_longer_nohands_sheet14` `JBrcVryez4EzgqYy` | **1508** | success — all Sheet 14 rows (longer barrel, DNA helix icon only; leftover hands-and-DNA stripped from env) |
+| `overlay_catalog_pen_longer_nohands_image_scenes` `Qfn2AEnW4q2dl4nP` | **1506** | success — `pen_3ml_scene` only |
+| `overlay_catalog_pen_longer_nohands_landscape` `nZUNwhCa1HV9HVSF` | **1509** | success — `pen_3ml` only |
 
 Existing stills will not change by themselves. Re-Execute the daily workflows (unpublished). Do not Publish.

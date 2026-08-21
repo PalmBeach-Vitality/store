@@ -187,6 +187,9 @@ function paintOld(t, noun) {
   t = swapAll(t, 'cradled by two hands', 'icon only with no hands');
   t = swapAll(t, 'hands-and-DNA logo', 'DNA helix icon with no hands');
   t = swapAll(t, 'not a lone helix with no hands', 'helix icon only');
+  t = swapAll(t, 'Keep any visible vial sticker as', 'Do not show a vial. Keep');
+  t = swapAll(t, 'VIAL LABEL LOCK (MANDATORY): If a vial is visible, the sticker has exactly two lines: peptide name, then 10ml. No milligram marks, no per-milliliter marks, no extra numbers.', '');
+  t = swapAll(t, 'Keep any visible vial sticker', 'Do not show a vial');
   t = swapAll(t, 'if a vial is visible keep the catalog vial sticker unchanged', '');
   t = swapAll(t, 'if a vial is visible', 'if a second pen is visible');
   t = swapAll(t, 'black 3ml Pen', "white '10mg' badge");

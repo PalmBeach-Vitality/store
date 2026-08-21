@@ -167,11 +167,20 @@ function sliceBefore(t, mark) {
 
 function extractEnv(labItem, sceneBrief) {
   var t = String(labItem || '');
-  var afterPeople = sliceAfter(t, 'No people.');
-  if (afterPeople) {
-    var env = sliceBefore(afterPeople, 'PRODUCT HERO').trim();
-    if (env) return env;
+  var endMark = 'No burn-in captions except the catalog label itself.';
+  while (t.indexOf('HARD OUTPUT LOCK (READ FIRST):') === 0 || t.indexOf('LABEL:') === 0) {
+    var i = t.indexOf(endMark);
+    if (i === -1) break;
+    t = t.slice(i + endMark.length).trim();
   }
+  var env = sliceBefore(t, 'PRODUCT HERO').trim();
+  while (env.indexOf('cradled by two hands') !== -1) {
+    env = env.split('cradled by two hands').join('icon only with no hands');
+  }
+  while (env.indexOf('hands-and-DNA logo') !== -1) {
+    env = env.split('hands-and-DNA logo').join('DNA helix icon with no hands');
+  }
+  if (env && env.indexOf('LABEL:') !== 0 && env.indexOf('HARD OUTPUT LOCK') !== 0) return env;
   return String(sceneBrief || '').trim();
 }
 
@@ -203,7 +212,12 @@ for (var i = 0; i < items.length; i++) {
   var family = familyFor(name, row.lab_item_id);
   var lock = catalogLock(name, accent, family);
   var env = extractEnv(row.lab_item, row.scene_brief);
-  var heroPose = String(row.hero_style || '').trim();
+  var heroPose =
+    'catalog injector — matte white, white clip-cap ON, white ridged dial, ' +
+    accent +
+    ' DNA helix icon (no hands) + name + 10mg badge, ' +
+    accent +
+    ' plunger tip';
   var labItem =
     lock +
     ' ' +
@@ -280,11 +294,7 @@ for (var i = 0; i < items.length; i++) {
       video_prompt: videoPrompt,
       video_motion_prompt: motion,
       still_edit_prompt: catalogStillEdit(name, accent, family),
-      hero_style: 'catalog injector — matte white, white clip-cap ON, white ridged dial, ' +
-        accent +
-        ' DNA helix icon (no hands) + name + 10mg badge, ' +
-        accent +
-        ' plunger tip',
+      hero_style: heroPose,
       still_n: '1',
     },
   });
