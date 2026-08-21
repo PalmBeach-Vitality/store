@@ -63,23 +63,40 @@ SCENE3_FIELDS = [
     "last_used_date",
 ]
 
-# Sheet 9 quality line, pens-only (no vial-or-pen dual language)
-QUALITY = (
-    "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
-    "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
-    "exactly one white matte insulin-style 3ml research pen, product count equals 1, no second pen, no vial, "
-    "no product pair, no duplicate products, one container only, cap on, orange ridged dial"
-)
+METABOLIC_NAMES = {"Semaglutide", "Tirzepatide", "Retatrutide"}
 
-STILL_EDIT = (
-    "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
-    "with exactly ONE white matte plastic insulin-style 3ml injectable pen. Make the barrel 10-20% longer "
-    "(full-length elongated injector, not stubby/compact). Cap ON with white "
-    "pocket clip. Small rectangular barrel window only (not a tall glass chamber). Bright orange "
-    "ridged dose-dial on the end opposite the cap. Label: bright BLUE DNA helix + orange compound "
-    "name + orange badge '3ml pen' only. DELETE burgundy vial branding, palm trees, milligram dosage, extra pens, "
-    "vials, needles, syringes, scales, trays. After the edit: count exactly 1 white pen, zero vials. Cap on."
-)
+
+def accent_for(name: str) -> str:
+    return "cobalt blue" if name in METABOLIC_NAMES else "crimson red"
+
+
+def family_for(name: str) -> str:
+    return "metabolic" if name in METABOLIC_NAMES else "peptide"
+
+
+def quality_line(accent: str) -> str:
+    return (
+        "ultra detailed, extremely detailed, hyper-detailed, razor sharp focus, tack sharp, "
+        "crystal clear, ultra sharp, 8k resolution, photorealistic, hyperrealistic, ultra realistic, HDR, "
+        "exactly one matte white catalog insulin-style research pen, product count equals 1, no second pen, no vial, "
+        "no product pair, no duplicate products, one container only, cap on, white ridged dial, "
+        f"{accent} circular plunger tip, no orange"
+    )
+
+
+def still_edit_line(name: str) -> str:
+    accent = accent_for(name)
+    family = family_for(name)
+    return (
+        "CRITICAL PRODUCT FIX: Replace any silver/metal/glass-vial-like object or chrome claw stand "
+        "with exactly ONE matte white catalog insulin-style injectable pen. Cap ON with white "
+        "pocket clip. White ridged gear-like dose dial (not colored). Small flat circular plunger tip "
+        f"in {accent}. Logo ABOVE the name: {accent} DNA double-helix cradled by two hands. "
+        f"Name '{name}' large bold {accent} sans-serif. Solid {accent} rectangle badge with white '10mg'. "
+        "Fine-print black lines under the name. Vertical label text: For Research Purposes Only. "
+        f"This is a {family} pen — {accent} text and logo. DELETE orange, burgundy vial branding, "
+        "palm trees, extra pens, vials, needles, syringes, scales, trays. After the edit: count exactly 1 white pen, zero vials. Cap on."
+    )
 
 CAPTION_LOCK = (
     "For laboratory research use only. Not for human use or consumption. "
@@ -87,75 +104,75 @@ CAPTION_LOCK = (
     "Captions only — never burn this into the image or Grok prompt."
 )
 
-# Same physical pen in every row. Only pose / surface change.
-# Hardware: white insulin-style injector (not a glass vial, not brushed silver).
+# Same physical pen in every row. Only pose / surface / compound-name color change.
+# Hardware: catalog injector (not a glass vial, not brushed silver, not orange).
 PEN_HARDWARE = (
-    "white matte plastic insulin-style 3ml injectable pen; body 10-20% longer than a stubby travel pen "
-    "(elongated barrel, adult full-length injector, not compact/short); white cap with white pocket clip ON "
-    "covering the tip; small rectangular transparent barrel window beside the label "
-    "(a glimpse of liquid/mechanism only — NOT a tall glass reservoir, NOT most of the body as glass); "
-    "bright orange ridged dose-dial / injection button on the end opposite the cap"
+    "smooth matte white cylindrical insulin-style injectable research pen; matching white matte cap ON "
+    "with integrated white pocket clip covering the tip; white ridged gear-like dose dial "
+    "(NOT colored, NOT orange); small flat circular plunger tip at the bottom of the dial in the accent color; "
+    "small rectangular transparent barrel window beside the label "
+    "(a glimpse of liquid/mechanism only — NOT a tall glass reservoir, NOT most of the body as glass)"
 )
 
 PEN_FORMS: list[tuple[str, str]] = [
     (
-        "white matte insulin-style 3ml research pen lying horizontally on a light reflective surface",
+        "matte white catalog insulin-style research pen lying horizontally on a light reflective surface",
         PEN_HARDWARE + "; catalog product still, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen three-quarter catalog view",
+        "matte white catalog insulin-style research pen three-quarter catalog view",
         PEN_HARDWARE + "; soft reflection, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen on mirrored chrome plate",
+        "matte white catalog insulin-style research pen on mirrored chrome plate",
         PEN_HARDWARE + "; hard specular highlights, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen barrel-window close-up",
+        "matte white catalog insulin-style research pen barrel-window close-up",
         PEN_HARDWARE + "; small window readable, shallow depth, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen on matte white seamless paper",
+        "matte white catalog insulin-style research pen on matte white seamless paper",
         PEN_HARDWARE + "; plain white backdrop, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen edge-lit silhouette",
-        PEN_HARDWARE + "; rim light outlining the white body and orange dial, cap on",
+        "matte white catalog insulin-style research pen edge-lit silhouette",
+        PEN_HARDWARE + "; rim light outlining the white body and accent plunger tip, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen low-angle hero",
+        "matte white catalog insulin-style research pen low-angle hero",
         PEN_HARDWARE + "; premium catalog angle, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen on frosted glass platform",
+        "matte white catalog insulin-style research pen on frosted glass platform",
         PEN_HARDWARE + "; soft reflection beneath, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen label-facing catalog",
+        "matte white catalog insulin-style research pen label-facing catalog",
         PEN_HARDWARE + "; label fully readable, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen slight diagonal on acrylic",
+        "matte white catalog insulin-style research pen slight diagonal on acrylic",
         PEN_HARDWARE + "; one pen only, no stand claw, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen on dark matte acrylic",
+        "matte white catalog insulin-style research pen on dark matte acrylic",
         PEN_HARDWARE + "; white body contrast, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen orange-dial macro",
-        PEN_HARDWARE + "; orange ridged dial in frame, cap on",
+        "matte white catalog insulin-style research pen plunger-tip macro",
+        PEN_HARDWARE + "; accent-color circular plunger tip in frame, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen clip-and-cap detail",
+        "matte white catalog insulin-style research pen clip-and-cap detail",
         PEN_HARDWARE + "; white pocket clip visible, cap on",
     ),
     (
-        "white matte insulin-style 3ml research pen on linen lab wipe",
+        "matte white catalog insulin-style research pen on linen lab wipe",
         PEN_HARDWARE + "; product only, cap on",
     ),
     (
-        "single white matte insulin-style 3ml Palm Beach Vitality research pen",
+        "single matte white catalog insulin-style Palm Beach Vitality research pen",
         PEN_HARDWARE + "; no chrome claw stand, no vial, cap on",
     ),
 ]
@@ -252,34 +269,42 @@ def liquid_detail(name: str, form: str) -> str:
 
 
 def pen_lock(name: str) -> str:
+    accent = accent_for(name)
+    family = family_for(name)
     return (
-        f"HARD OUTPUT LOCK (READ FIRST): Render exactly 1 white matte plastic insulin-style "
-        f"Palm Beach Vitality 3ml injectable pen labeled '{name}'. Barrel is 10-20% longer than a short "
-        f"travel pen — full-length elongated white injector, not stubby or compact. This is a medical injection pen, "
-        f"NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome claw stand. "
-        f"Product count = 1. White cap ON with white pocket clip covering the tip — never removed, "
-        f"never sitting beside the pen, never showing a needle. Bright orange ridged dose-dial on "
-        f"the opposite end. No second pen. No vial. No syringe. No people."
+        "HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render exactly 1 "
+        f"smooth matte white cylindrical insulin-style Palm Beach Vitality research pen labeled '{name}'. "
+        "This is a medical injection pen, NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, "
+        "NOT a chrome claw stand. Product count = 1. White matte cap ON with integrated white pocket clip "
+        "covering the tip — never removed, never sitting beside the pen, never showing a needle. "
+        "White ridged gear-like dose dial (NOT colored, NOT orange). Small flat circular plunger tip "
+        f"at the bottom of the dial in {accent}. No second pen. No vial. No syringe. No people. "
+        "COLOR LOCK: Peptide pens = crimson red text + logo. Metabolic pens "
+        "(Semaglutide / Tirzepatide / Retatrutide only) = cobalt blue text + logo. "
+        f"This pen is {family} / {accent}. FORBIDDEN: orange anywhere."
     )
 
 
 def closing_lock() -> str:
     return (
         " HARD OUTPUT LOCK (FINAL CHECK): Count every pen and vial. Total product containers must be "
-        "exactly 1 — the single capped research pen. If 2+, remove extras. No vials. COUNT = 1. Cap on."
+        "exactly 1 — the single capped catalog pen. If 2+, remove extras. No vials. COUNT = 1. "
+        "Cap on. White dial. Accent plunger tip. No orange."
     )
 
 
 def brand_label(name: str) -> str:
+    accent = accent_for(name)
     return (
-        "LABEL (MANDATORY, printed ONCE): clean white wrap-around barrel label in landscape along the pen. "
-        "Far left: stylized bright BLUE DNA double-helix icon (not burgundy vial branding). "
-        f"Next: exact compound name '{name}' in large bold ORANGE sans-serif (Helvetica/Arial), left-aligned. "
-        "To the right of the name: a solid ORANGE rounded-rectangle badge with white text exactly '3ml pen'. "
-        f"The only readable words on the entire pen are '{name}' and '3ml pen'. "
-        "FORBIDDEN on the label and anywhere in frame: milligram dosage, milligram-per-milliliter, "
-        "milligram-per-vial, concentration numbers, burgundy vial branding, palm tree, research-use disclaimer, "
-        "subcutaneous, extra class names, any other words."
+        "LABEL (MANDATORY): clean white wrap-around barrel label. "
+        f"Logo ABOVE the name: {accent} DNA double-helix cradled by two hands "
+        "(not maroon vial DNA, not a lone helix with no hands). "
+        f"Exact compound name '{name}' in large bold {accent} sans-serif (Helvetica/Arial). "
+        f"Solid {accent} rectangle badge with white text exactly '10mg'. "
+        "Small dense black/dark-grey fine-print lines under the name. "
+        "Vertical side text on the label: For Research Purposes Only. "
+        "FORBIDDEN: orange DNA, orange name, orange badge, orange dial, orange anywhere, "
+        "burgundy vial branding, palm tree, extra class names, poster overlays."
     )
 
 
@@ -361,8 +386,8 @@ def lab_item_paragraph(scene: dict) -> str:
         f"{brand_label(name)} "
         f"Lighting: {scene['lighting']}. "
         "Empty of people; no clinical procedure staging; no needles. "
-        "No research-use disclaimer, captions, watermarks, palm tree, or burn-in text in frame "
-        f"except '{name}' and '3ml pen' on the pen label once."
+        "No poster overlay, captions, watermarks, palm tree, or burn-in text in frame "
+        f"except the catalog label ('{name}', '10mg', hands-and-DNA logo, vertical For Research Purposes Only)."
         f"{closing_lock()}"
     )
 
@@ -401,7 +426,7 @@ def video_prompt(scene: dict, lab_item: str, material: str) -> str:
         "vials, second pens, silver vial-pens, chrome claw stands, scales, trays, watermarks, "
         "lower-thirds, scene titles, burn-in text. "
         "Do NOT render prompt metadata as visible text. "
-        f"Quality: {QUALITY}. "
+        f"Quality: {quality_line(accent_for(name))}. "
         "No treatment, cure, dosage-for-humans, or clinical outcome claims as readable text. "
         "Do not print research-use disclaimers, legal footnotes, or caption bars in the frame."
         f"{closing_lock()}"
@@ -426,13 +451,13 @@ def motion_prompt(scene: dict) -> str:
         f"Slow cinematic camera: {move}. "
         f"Shot {shot['shot_family']}, angle {shot['camera_angle']}, "
         f"direction {shot['camera_direction']}. "
-        f"Keep the exact same single white insulin-style '{name}' 3ml pen (same 10-20% longer full-length barrel), orange dial, "
-        "blue DNA icon, materials, and lighting. "
+        f"Keep the exact same single matte white catalog '{name}' pen, white ridged dial, "
+        f"{accent_for(name)} plunger tip, {accent_for(name)} hands-and-DNA logo, materials, and lighting. "
         "Cap stays ON. No orbit. No new objects. No second pen. No vial, people, needles, "
-        "watermarks, burn-in, or on-screen disclaimers. "
+        "watermarks, poster overlays, or orange paint. "
         f"{glow}"
         "Liquid does not change level — pre-filled and static. "
-        f"Keep label words '{name}' and '3ml pen' unchanged, once only. No milligram dosage text."
+        f"Keep label words '{name}' and '10mg' and vertical For Research Purposes Only unchanged."
     )
 
 
@@ -457,16 +482,17 @@ def map_to_sheet9(scene: dict, fields: list[str]) -> dict:
             "framing": shot["framing"],
             "scene_brief": scene["scene_brief"],
             "quality_var_count": 12,
-            "quality_suffix": QUALITY,
+            "quality_suffix": quality_line(accent_for(scene["compound_name"])),
             "aspect_ratio": "9:16",
             "duration_seconds": 15,
             "resolution": "1080p",
             "model_still": "grok-imagine-image-2.0",
             "model_video": "grok-imagine-video-1.5",
             "still_resolution": "2k",
+            "still_n": 1,
             "video_prompt": video_prompt(scene, lab_item, material),
             "video_motion_prompt": motion_prompt(scene),
-            "still_edit_prompt": STILL_EDIT,
+            "still_edit_prompt": still_edit_line(scene["compound_name"]),
             "status": "Active",
             "times_used": 0,
             "last_used_at": "",
@@ -491,6 +517,8 @@ def main() -> None:
     fields9 = sheet9_fields()
     if "creation_id" not in fields9 or "video_prompt" not in fields9:
         raise SystemExit("could not read Sheet 9 columns from 9-lab-item-creations-500.csv")
+    if "still_n" not in fields9:
+        fields9 = fields9 + ["still_n"]
     with CSV3.open(newline="", encoding="utf-8") as f:
         header3 = list(csv.DictReader(f).fieldnames or [])
     if header3 != SCENE3_FIELDS:
@@ -513,18 +541,25 @@ def main() -> None:
             raise SystemExit(f"non-GLOW blue: {r['compound_name']}")
         if "chem_studio" in r["category"] or "molecule" in vp:
             raise SystemExit("molecule leakage")
-        if "3ml pen" not in r["video_prompt"]:
-            raise SystemExit(f"missing 3ml pen badge: {r['creation_id']}")
-        if re.search(r"\d\s*mg(?:/ml|/vial)?\b", r["video_prompt"], re.I):
+        if "'10mg'" not in r["video_prompt"] and "exactly '10mg'" not in r["video_prompt"]:
+            raise SystemExit(f"missing 10mg badge: {r['creation_id']}")
+        if re.search(r"bright orange ridged|large bold orange|solid orange rounded", vp):
+            raise SystemExit(f"orange leaked: {r['creation_id']}")
+        accent = accent_for(r["compound_name"])
+        if accent not in r["video_prompt"]:
+            raise SystemExit(f"missing {accent} on {r['creation_id']}")
+        if re.search(r"\d\s*mg/(?:ml|vial)\b", r["video_prompt"], re.I):
             raise SystemExit(f"mg/ml leaked: {r['creation_id']}")
         if "dark maroon" in vp:
             raise SystemExit(f"maroon leaked: {r['creation_id']}")
         if "small palm mark" in vp:
             raise SystemExit(f"palm mark leaked: {r['creation_id']}")
-        if "insulin-style" not in vp and "white matte" not in vp:
+        if "insulin-style" not in vp and "matte white" not in vp and "white matte" not in vp:
             raise SystemExit(f"missing white insulin-style hardware: {r['creation_id']}")
-        if "10-20%" not in r["video_prompt"] and "full-length" not in vp:
-            raise SystemExit(f"missing longer-pen proportion: {r['creation_id']}")
+        if "pocket clip" not in vp:
+            raise SystemExit(f"missing pocket clip: {r['creation_id']}")
+        if "10mg" not in r["video_prompt"]:
+            raise SystemExit(f"missing 10mg badge: {r['creation_id']}")
         if len(r["video_prompt"]) > PROMPT_MAX:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
 
