@@ -374,11 +374,20 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
      * Checkout fields / description.
      */
     public function payment_fields() {
+        $steps = array(
+            __('Scan the QR code or copy the Bitcoin address below.', 'palmbeach-vitality'),
+            __('Send the live Bitcoin amount shown (it updates with the USD rate).', 'palmbeach-vitality'),
+            __('Place your order. You will receive a confirmation email. We ship after the payment confirms (within 24 hours).', 'palmbeach-vitality'),
+        );
         echo '<div class="pbv-btc-payment-fields">';
         echo '<ol class="pbv-btc-payment-fields__steps">';
-        echo '<li>' . esc_html__('Scan the QR code or copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
-        echo '<li>' . esc_html__('Send the live Bitcoin amount shown (it updates with the USD rate).', 'palmbeach-vitality') . '</li>';
-        echo '<li>' . esc_html__('Place your order. We ship after the payment confirms.', 'palmbeach-vitality') . '</li>';
+        foreach ($steps as $i => $step) {
+            $n = (string) ($i + 1);
+            echo '<li class="pbv-btc-payment-fields__step">';
+            echo '<span class="pbv-btc-payment-fields__num" aria-hidden="true">' . esc_html($n) . '.</span>';
+            echo '<span class="pbv-btc-payment-fields__text">' . esc_html($step) . '</span>';
+            echo '</li>';
+        }
         echo '</ol>';
         self::render_live_conversion(self::current_usd_total(), 'full');
         $this->render_address_copy_box($this->receiving_address());
