@@ -1,0 +1,51 @@
+Type,SKU,Name,Categories,Regular price,Published
+simple,PBV-TA-1,TA-1,Peptides,110.00,1
+simple,PBV-AOD-9604,AOD-9604,Peptides,110.00,1
+simple,PBV-MELONOTAN,Melonotan,Peptides,85.00,1
+simple,PBV-RETATRUTIDE,Retatrutide 60mg,Weight Loss,500.00,0
+simple,PBV-TIRZEPATIDE,Tirzepatide 100mg,Weight Loss,600.00,0
+simple,PBV-SEMAGLUTIDE,Semaglutide 25mg,Weight Loss,400.00,0
+simple,PBV-KLOW-PEN,KLOW Pen,Peptide Pens,230.00,1
+simple,PBV-MOTS-C,MOTS-C Pen,Peptide Pens,160.00,1
+simple,PBV-NAD,NAD+ Pen 1000mg,Peptide Pens,180.00,0
+simple,PBV-PT-141-PEN,PT-141 Pen,Peptide Pens,150.00,0
+simple,PBV-SEMAX-PEN,Semax Pen,Peptide Pens,150.00,1
+simple,PBV-SELANK-PEN,Selank Pen,Peptide Pens,150.00,1
+simple,PBV-SERMORELIN-PEN,Sermorelin Pen,Peptide Pens,170.00,1
+simple,PBV-TA-2,TA-1,Peptide Pens,175.00,1
+simple,PBV-TESAMORELIN-10MG-PEN,Tesamorelin 10mg Pen,Peptide Pens,150.00,0
+simple,PBV-TESAMORELIN-30MG-PEN,Tesamorelin 30mg Pen,Peptide Pens,180.00,0
+simple,PBV-TESAMORELIN-IPAMORELIN-PEN,Tesamorelin/Ipamorelin Pen,Peptide Pens,210.00,0
+simple,PBV-WOLVERINE-PEN,Wolverine Pen,Peptide Pens,150.00,1
+simple,PBV-CJC-IPAMORELIN-1,CJC/Ipamorelin Pen,Peptide Pens,195.00,1
+simple,PBV-DSIP-PEN,DSIP Pen,Peptide Pens,200.00,1
+simple,PBV-GHK-CU-PEN,GHK-Cu Pen,Peptide Pens,150.00,1
+simple,PBV-5-AMINO-MQ-PEN,5 Amino MQ Pen,Peptide Pens,180.00,1
+simple,PBV-GLOW-PEN,GLOW Pen,Peptide Pens,230.00,1
+simple,PBV-SS-31-PEN,SS-31 Pen,Peptide Pens,200.00,1
+simple,PBV-KPV,KPV Pen,Peptide Pens,175.00,1
+simple,PBV-SEMAGLUTIDE-50MG,Semaglutide 50mg,Weight Loss,550.00,0
+simple,PBV-RETATRUTIDE-100MG,Retatrutide 100mg,Weight Loss,600.00,0
+simple,PBV-RETATRUTIDE-200MG,Retatrutide 200mg,Weight Loss,1200.00,0
+simple,PBV-TIRZEPATIDE-200MG,Tirzepatide 200mg,Weight Loss,1150.00,0
+simple,PBV-SEMAGLUTIDE-1-5MG-PEN,Semaglutide 1.5mg Pen,Weight Loss Pens,100.00,0
+simple,PBV-SEMAGLUTIDE-3-5MG-PEN,Semaglutide 3.5mg Pen,Weight Loss Pens,110.00,0
+simple,PBV-SEMAGLUTIDE-5-5MG-PEN,Semaglutide 5.5mg Pen,Weight Loss Pens,125.00,0
+simple,PBV-SEMAGLUTIDE-7-5MG-PEN,Semaglutide 7.5mg Pen,Weight Loss Pens,145.00,0
+simple,PBV-SEMAGLUTIDE-10MG-PEN,Semaglutide 10mg Pen,Weight Loss Pens,210.00,0
+simple,PBV-SEMAGLUTIDE-15MG-PEN,Semaglutide 15mg Pen,Weight Loss Pens,240.00,0
+simple,PBV-TIRZEPATIDE-10MG-PEN,Tirzepatide 10mg Pen,Weight Loss Pens,120.00,0
+simple,PBV-TIRZEPATIDE-20MG-PEN,Tirzepatide 20mg Pen,Weight Loss Pens,220.00,0
+simple,PBV-TIRZEPATIDE-30MG-PEN,Tirzepatide 30mg Pen,Weight Loss Pens,310.00,1
+simple,PBV-TIRZEPATIDE-40MG-PEN,Tirzepatide 40mg Pen,Weight Loss Pens,380.00,1
+simple,PBV-NAD-1,NAD+ 1000mg,Peptides,120.00,1
+simple,PBV-TIRZEPATIDE-40MG-PEN-COPY,Tirzepatide 60mg Pen,Weight Loss Pens,400.00,1
+simple,PBV-BPC-157-20MG,BPC-157 20mg,Peptides,170.00,1
+simple,PBV-TIRZEPATIDE-50MG-PEN,Tirzepatide 50mg Pen,Weight Loss Pens,420.00,1
+simple,PBV-RETATRUTRIDE-8MG-PEN,Retatrutride 8mg Pen,Weight Loss Pens,160.00,1
+simple,PBV-RETATRUTRIDE-16MG-PEN,Retatrutride 16mg Pen,Weight Loss Pens,199.00,1
+simple,PBV-RETATRUTRIDE-24MG-PEN,Retatrutride 24mg Pen,Weight Loss Pens,249.00,1
+simple,PBV-RETATRUTRIDE-32MG-PEN,Retatrutride 32mg Pen,Weight Loss Pens,299.00,1
+simple,PBV-RETATRUTRIDE-40MG-PEN,Retatrutride 40mg Pen,Weight Loss Pens,319.00,1
+simple,PBV-NAD-500MG,NAD+ 500mg,Peptides,90.00,1
+simple,PBV-NAD-PEN-500MG,NAD+ Pen 500mg,Peptide Pens,100.00,1
