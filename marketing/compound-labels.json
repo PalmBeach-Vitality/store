@@ -1,0 +1,33 @@
+{
+  "count": 27,
+  "labels": [
+    "5-Amino-1MQ",
+    "AOD-9604",
+    "BPC-157",
+    "BPC-157/TB-500",
+    "Cagrilinitide",
+    "CJC",
+    "CJC (no DAC)/Ipamorelin",
+    "DSIP",
+    "GHK-Cu",
+    "GLOW",
+    "KLOW",
+    "KPV",
+    "Melanotan 2",
+    "MOTS-C",
+    "NAD+",
+    "PT-141",
+    "Retatrutide",
+    "Selank",
+    "Semaglutide",
+    "SEMAX",
+    "Sermorelin",
+    "SS-31",
+    "TA-1",
+    "TB-500",
+    "Tesamorelin",
+    "Tesamorelin/Ipamorelin",
+    "Tirzepatide"
+  ],
+  "rule": "Any subject with a readable product label must use one of these compound names."
+}

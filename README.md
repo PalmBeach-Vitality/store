@@ -1,9 +1,9 @@
-# Palm Beach Peptides Website
+# Palm Beach Vitality .COM
 
-A modern, professional multi-page website designed to closely match the structure, tone, and features of [East Coast Peptides (ecwlw.com)](https://ecwlw.com/).
+B2b Brand (wholesale)
 
 ## Brand
-**Palm Beach Peptides** — Precision. Purity. Palm Beach Made.
+**Palm Beach Vitality** — Precision. Purity. Palm Beach Made.
 
 Premium American-made peptides for researchers, clinics, and B2B brands.
 
@@ -11,6 +11,7 @@ Premium American-made peptides for researchers, clinics, and B2B brands.
 - **Products** — Full catalog with filters (Growth Factors, Metabolic, Cognitive, Hormonal, Immune, Stacks)
 - **About** — Company story, manufacturing standards, timeline, principles
 - **Research** — Research library with guides
+- **Protocols** — Interactive dosage / reconstitution calculator for catalog peptides
 - **FAQ** — Comprehensive frequently asked questions
 - **Wholesale** — B2B program benefits + application form
 - **Contact** — Contact form + dedicated Get Pricing section
@@ -66,7 +67,7 @@ All pages are fully linked and mobile-responsive. No build step required (uses T
 ## Tech
 - Pure HTML + Tailwind CSS (via CDN)
 - Inter + Playfair Display fonts
-- Vanilla JS for mobile menu + product filters
+- Vanilla JS for mobile menu, product filters, and the protocol calculator
 - Fully static — ready for Netlify, Vercel, GitHub Pages, or any host
 
 ## Customization Notes

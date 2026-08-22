@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peptide Dosage Protocol Calculator — Palm Beach Peptides</title>
+  <meta name="description" content="Interactive research protocol calculator for Palm Beach Peptides. Reconstitution math, syringe units, and literature-referenced dosing ranges for laboratory use.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 950: '#050A14', 900: '#0A1628', 800: '#0F1F38', 700: '#162A4A', 600: '#1E3A5F', 100: '#E8EEF5' },
+            teal: { 400: '#2DD4BF', 500: '#14B8A6', 600: '#0D9488', 700: '#0F766E', 100: '#CCFBF1' },
+            gold: { 400: '#FBBF24', 500: '#D4AF37', 600: '#B8962E' },
+            sand: { 50: '#FDFBF7', 100: '#F8F4EC', 200: '#F0E9D8' }
+          },
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'], display: ['Playfair Display', 'Georgia', 'serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --navy: #0A1628;
+      --teal: #0D9488;
+      --teal-bright: #2DD4BF;
+      --sand: #FDFBF7;
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .btn-primary { background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%); transition: all 0.3s ease; }
+    .btn-primary:hover { background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%); transform: translateY(-1px); box-shadow: 0 10px 25px -5px rgba(13, 148, 136, 0.4); }
+    .nav-link { position: relative; }
+    .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1.5px; background: #2DD4BF; transition: width 0.3s ease; }
+    .nav-link:hover::after { width: 100%; }
+    .app-shell {
+      background:
+        radial-gradient(ellipse 80% 50% at 10% 0%, rgba(13, 148, 136, 0.08), transparent 55%),
+        radial-gradient(ellipse 60% 40% at 90% 10%, rgba(10, 22, 40, 0.06), transparent 50%),
+        linear-gradient(180deg, #FDFBF7 0%, #F8F4EC 100%);
+    }
+    .peptide-chip {
+      transition: all 0.2s ease;
+      border: 1px solid #F0E9D8;
+    }
+    .peptide-chip:hover { border-color: #14B8A6; transform: translateY(-1px); }
+    .peptide-chip.active {
+      background: #0A1628;
+      color: white;
+      border-color: #0A1628;
+      box-shadow: 0 8px 20px -8px rgba(10, 22, 40, 0.45);
+    }
+    .result-panel {
+      background: linear-gradient(160deg, #0A1628 0%, #0F1F38 55%, #162A4A 100%);
+    }
+    .metric-value {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .fade-in {
+      animation: fadeUp 0.45s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .syringe-track {
+      background: linear-gradient(90deg, rgba(45,212,191,0.25), rgba(45,212,191,0.05));
+      overflow: hidden;
+    }
+    .syringe-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0D9488, #2DD4BF);
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+    .field:focus-within { border-color: #14B8A6; box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.15); }
+    @media print {
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      body { background: white; }
+      .result-panel { background: #0A1628 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+    .print-only { display: none; }
+  </style>
+</head>
+<body class="bg-sand-50 text-navy-900 antialiased">
+
+  <!-- Top Bar -->
+  <div class="bg-navy-950 text-white text-xs py-2 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <span class="text-teal-400 font-medium tracking-wide">🇺🇸 USA Manufactured · 99.9% Purity · COA on Every Order</span>
+      <div class="hidden sm:flex gap-6 text-gray-300">
+        <a href="../wholesale/index.html" class="hover:text-teal-400 transition">Wholesale Accounts</a>
+        <a href="../contact/index.html" class="hover:text-teal-400 transition">Support</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-sand-200 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <a href="../index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-navy-900 to-teal-700 flex items-center justify-center shadow-lg">
+            <span class="text-white font-bold text-lg tracking-tighter">PB</span>
+          </div>
+          <div>
+            <div class="font-display font-bold text-xl text-navy-900 leading-none tracking-tight group-hover:text-teal-700 transition">Palm Beach</div>
+            <div class="text-[10px] uppercase tracking-[0.2em] text-teal-600 font-semibold">Peptides</div>
+          </div>
+        </a>
+        <nav class="hidden lg:flex items-center gap-7">
+          <a href="../products/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">Products</a>
+          <a href="../about/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">About</a>
+          <a href="../research/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">Research</a>
+          <a href="index.html" class="nav-link text-sm font-medium text-teal-600">Protocols</a>
+          <a href="../faq/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">FAQ</a>
+          <a href="../wholesale/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">Wholesale</a>
+          <a href="../contact/index.html" class="nav-link text-sm font-medium text-navy-800 hover:text-teal-600">Contact</a>
+          <a href="../contact/index.html#pricing" class="btn-primary text-white text-sm font-semibold px-5 py-2.5 rounded-lg shadow-md">Get Pricing</a>
+        </nav>
+        <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-md text-navy-800 hover:bg-sand-100" aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden lg:hidden bg-white border-t border-sand-200">
+      <div class="px-4 py-4 space-y-1">
+        <a href="../products/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">Products</a>
+        <a href="../about/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">About</a>
+        <a href="../research/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">Research</a>
+        <a href="index.html" class="block px-3 py-2.5 rounded-lg text-teal-700 font-medium bg-teal-50">Protocols</a>
+        <a href="../faq/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">FAQ</a>
+        <a href="../wholesale/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">Wholesale</a>
+        <a href="../contact/index.html" class="block px-3 py-2.5 rounded-lg text-navy-800 font-medium hover:bg-teal-50 hover:text-teal-700">Contact</a>
+        <a href="../contact/index.html#pricing" class="block mt-2 text-center btn-primary text-white font-semibold px-5 py-3 rounded-lg">Get Pricing</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="bg-navy-900 text-white py-14 lg:py-16 relative overflow-hidden no-print">
+    <div class="absolute inset-0 opacity-30 pointer-events-none" style="background: radial-gradient(circle at 20% 30%, rgba(45,212,191,0.25), transparent 40%), radial-gradient(circle at 80% 70%, rgba(212,175,55,0.12), transparent 35%);"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <p class="text-teal-400 font-semibold text-sm tracking-widest uppercase mb-3">Palm Beach Peptides</p>
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">Dosage Protocol Calculator</h1>
+      <p class="text-gray-300 text-lg max-w-2xl">Select a compound, set reconstitution inputs, and generate a clear research protocol card — concentration, draw volume, syringe units, and vial yield.</p>
+      <div class="mt-6 flex flex-wrap gap-3 text-sm">
+        <span class="px-3 py-1 rounded-full bg-white/10 text-teal-300">Research use only</span>
+        <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300">U-100 syringe math</span>
+        <span class="px-3 py-1 rounded-full bg-white/10 text-gray-300">Catalog compounds</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="app-shell py-10 lg:py-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- Disclaimer -->
+      <div class="mb-8 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 no-print">
+        <strong>Research Use Only.</strong> This tool provides laboratory reconstitution math and literature-referenced research ranges. It is not medical advice, not a prescription protocol, and not for human consumption. Follow your institution’s SOPs and applicable regulations.
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+
+        <!-- Left: Inputs -->
+        <div class="lg:col-span-7 space-y-6">
+
+          <!-- Peptide picker -->
+          <section class="bg-white rounded-2xl border border-sand-200 p-5 sm:p-6 shadow-sm">
+            <div class="flex flex-wrap items-end justify-between gap-3 mb-4">
+              <div>
+                <h2 class="font-display text-2xl font-bold text-navy-900">1. Choose Compound</h2>
+                <p class="text-sm text-gray-600 mt-1">Catalog peptides with reference research ranges.</p>
+              </div>
+              <label class="text-sm text-gray-600">
+                <span class="sr-only">Filter category</span>
+                <select id="category-filter" class="rounded-lg border border-sand-200 bg-sand-50 px-3 py-2 text-sm text-navy-900 focus:outline-none focus:ring-2 focus:ring-teal-500/30">
+                  <option value="all">All categories</option>
+                  <option value="growth">Growth Factors</option>
+                  <option value="metabolic">Metabolic</option>
+                  <option value="cognitive">Cognitive</option>
+                  <option value="hormonal">Hormonal</option>
+                  <option value="immune">Immune</option>
+                  <option value="stacks">Stacks</option>
+                </select>
+              </label>
+            </div>
+            <div id="peptide-grid" class="flex flex-wrap gap-2"></div>
+          </section>
+
+          <!-- Protocol reference -->
+          <section id="protocol-card" class="bg-white rounded-2xl border border-sand-200 p-5 sm:p-6 shadow-sm fade-in">
+            <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
+              <div>
+                <p id="peptide-category" class="text-xs font-bold uppercase tracking-wider text-teal-700 mb-1">Growth Factors</p>
+                <h2 id="peptide-name" class="font-display text-2xl font-bold text-navy-900">BPC-157</h2>
+                <p id="peptide-subtitle" class="text-sm text-gray-500 mt-1">Body Protection Compound-157</p>
+              </div>
+              <a id="product-link" href="../products/index.html#bpc-157" class="text-sm font-semibold text-teal-700 hover:text-teal-600">View in catalog →</a>
+            </div>
+            <p id="peptide-summary" class="text-sm text-gray-600 mb-5">Pentadecapeptide studied for tissue repair, gut integrity, and angiogenesis models.</p>
+            <div class="grid sm:grid-cols-3 gap-3 mb-5">
+              <div class="rounded-xl bg-sand-50 border border-sand-200 p-4">
+                <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Typical dose range</p>
+                <p id="ref-dose" class="font-semibold text-navy-900">250–500 mcg</p>
+              </div>
+              <div class="rounded-xl bg-sand-50 border border-sand-200 p-4">
+                <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Frequency</p>
+                <p id="ref-frequency" class="font-semibold text-navy-900">1–2× daily</p>
+              </div>
+              <div class="rounded-xl bg-sand-50 border border-sand-200 p-4">
+                <p class="text-xs uppercase tracking-wider text-gray-500 mb-1">Common duration</p>
+                <p id="ref-duration" class="font-semibold text-navy-900">4–6 weeks</p>
+              </div>
+            </div>
+            <div class="rounded-xl border border-sand-200 bg-sand-50/80 p-4">
+              <p class="text-xs uppercase tracking-wider text-gray-500 mb-2">Research notes</p>
+              <p id="ref-notes" class="text-sm text-gray-700 leading-relaxed"></p>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2" id="quick-doses"></div>
+          </section>
+
+          <!-- Calculator inputs -->
+          <section class="bg-white rounded-2xl border border-sand-200 p-5 sm:p-6 shadow-sm">
+            <h2 class="font-display text-2xl font-bold text-navy-900 mb-1">2. Reconstitution Inputs</h2>
+            <p class="text-sm text-gray-600 mb-5">Enter vial content, diluent volume, and target research dose.</p>
+
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="vial-mg" class="block text-sm font-medium text-navy-800 mb-1.5">Vial amount (mg)</label>
+                <div class="field flex items-center rounded-xl border border-sand-200 bg-sand-50 overflow-hidden">
+                  <input id="vial-mg" type="number" min="0.1" step="0.1" value="5" class="w-full bg-transparent px-4 py-3 text-navy-900 focus:outline-none">
+                  <span class="pr-4 text-sm text-gray-500">mg</span>
+                </div>
+                <div id="vial-presets" class="mt-2 flex flex-wrap gap-1.5"></div>
+              </div>
+
+              <div>
+                <label for="water-ml" class="block text-sm font-medium text-navy-800 mb-1.5">Diluent volume (mL)</label>
+                <div class="field flex items-center rounded-xl border border-sand-200 bg-sand-50 overflow-hidden">
+                  <input id="water-ml" type="number" min="0.1" step="0.1" value="2" class="w-full bg-transparent px-4 py-3 text-navy-900 focus:outline-none">
+                  <span class="pr-4 text-sm text-gray-500">mL</span>
+                </div>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  <button type="button" data-water="1" class="water-preset text-xs px-2.5 py-1 rounded-md bg-sand-100 text-gray-600 hover:bg-teal-100 hover:text-teal-800">1 mL</button>
+                  <button type="button" data-water="2" class="water-preset text-xs px-2.5 py-1 rounded-md bg-sand-100 text-gray-600 hover:bg-teal-100 hover:text-teal-800">2 mL</button>
+                  <button type="button" data-water="2.5" class="water-preset text-xs px-2.5 py-1 rounded-md bg-sand-100 text-gray-600 hover:bg-teal-100 hover:text-teal-800">2.5 mL</button>
+                  <button type="button" data-water="5" class="water-preset text-xs px-2.5 py-1 rounded-md bg-sand-100 text-gray-600 hover:bg-teal-100 hover:text-teal-800">5 mL</button>
+                </div>
+              </div>
+
+              <div>
+                <label for="dose-mcg" class="block text-sm font-medium text-navy-800 mb-1.5">Desired dose</label>
+                <div class="field flex items-center rounded-xl border border-sand-200 bg-sand-50 overflow-hidden">
+                  <input id="dose-mcg" type="number" min="1" step="1" value="250" class="w-full bg-transparent px-4 py-3 text-navy-900 focus:outline-none">
+                  <select id="dose-unit" class="bg-transparent border-l border-sand-200 px-3 py-3 text-sm text-gray-600 focus:outline-none">
+                    <option value="mcg">mcg</option>
+                    <option value="mg">mg</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="syringe-type" class="block text-sm font-medium text-navy-800 mb-1.5">Syringe type</label>
+                <div class="field rounded-xl border border-sand-200 bg-sand-50 overflow-hidden">
+                  <select id="syringe-type" class="w-full bg-transparent px-4 py-3 text-navy-900 focus:outline-none">
+                    <option value="100">U-100 insulin (100 units = 1 mL)</option>
+                    <option value="50">U-50 insulin (50 units = 0.5 mL)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Right: Results -->
+        <aside class="lg:col-span-5 lg:sticky lg:top-28 space-y-4">
+          <section id="results" class="result-panel rounded-2xl p-6 text-white shadow-xl fade-in">
+            <div class="flex items-start justify-between gap-3 mb-6">
+              <div>
+                <p class="text-teal-400 text-xs font-bold uppercase tracking-[0.18em] mb-2">Protocol Output</p>
+                <h2 class="font-display text-2xl font-bold" id="result-title">BPC-157</h2>
+              </div>
+              <span class="text-[10px] uppercase tracking-wider px-2 py-1 rounded bg-white/10 text-teal-300">Live</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <p class="text-xs text-gray-400 mb-1">Concentration</p>
+                <p class="metric-value text-xl font-bold" id="out-concentration">—</p>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <p class="text-xs text-gray-400 mb-1">Draw volume</p>
+                <p class="metric-value text-xl font-bold" id="out-volume">—</p>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <p class="text-xs text-gray-400 mb-1">Syringe units</p>
+                <p class="metric-value text-xl font-bold text-teal-400" id="out-units">—</p>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-4">
+                <p class="text-xs text-gray-400 mb-1">Doses / vial</p>
+                <p class="metric-value text-xl font-bold" id="out-doses">—</p>
+              </div>
+            </div>
+
+            <div class="mb-6">
+              <div class="flex justify-between text-xs text-gray-400 mb-2">
+                <span>Syringe fill (relative)</span>
+                <span id="syringe-label">0 / 100 units</span>
+              </div>
+              <div class="syringe-track h-3 rounded-full">
+                <div id="syringe-fill" class="syringe-fill rounded-full" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-black/20 border border-white/10 p-4 mb-6">
+              <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">Suggested protocol summary</p>
+              <p id="protocol-summary" class="text-sm text-gray-200 leading-relaxed"></p>
+            </div>
+
+            <div class="flex flex-wrap gap-2 no-print">
+              <button id="copy-btn" type="button" class="btn-primary flex-1 min-w-[140px] text-white text-sm font-semibold px-4 py-3 rounded-xl">Copy summary</button>
+              <button id="print-btn" type="button" class="flex-1 min-w-[140px] text-sm font-semibold px-4 py-3 rounded-xl border border-white/20 text-white hover:bg-white/10 transition">Print card</button>
+            </div>
+            <p id="copy-status" class="mt-3 text-xs text-teal-300 min-h-[1rem] no-print" aria-live="polite"></p>
+          </section>
+
+          <section class="bg-white rounded-2xl border border-sand-200 p-5 shadow-sm no-print">
+            <h3 class="font-semibold text-navy-900 mb-2">How the math works</h3>
+            <ul class="text-sm text-gray-600 space-y-2">
+              <li><strong>Concentration</strong> = vial mg ÷ diluent mL</li>
+              <li><strong>Volume</strong> = dose ÷ concentration</li>
+              <li><strong>U-100 units</strong> = mL × 100</li>
+            </ul>
+            <p class="text-xs text-gray-500 mt-3">Need reconstitution technique? See the <a href="../research/peptide-reconstitution.html" class="text-teal-700 font-medium hover:text-teal-600">Reconstitution Guide</a>.</p>
+          </section>
+        </aside>
+      </div>
+
+      <!-- Related -->
+      <section class="mt-12 grid sm:grid-cols-3 gap-4 no-print">
+        <a href="../research/peptide-reconstitution.html" class="block rounded-2xl border border-sand-200 bg-white p-5 hover:border-teal-400 transition">
+          <p class="text-xs font-bold uppercase tracking-wider text-teal-700 mb-2">Guide</p>
+          <h3 class="font-display font-bold text-navy-900 mb-1">Reconstitution</h3>
+          <p class="text-sm text-gray-600">Solvent selection and handling steps.</p>
+        </a>
+        <a href="../research/peptide-storage.html" class="block rounded-2xl border border-sand-200 bg-white p-5 hover:border-teal-400 transition">
+          <p class="text-xs font-bold uppercase tracking-wider text-teal-700 mb-2">Guide</p>
+          <h3 class="font-display font-bold text-navy-900 mb-1">Storage</h3>
+          <p class="text-sm text-gray-600">Lyophilized and in-solution best practices.</p>
+        </a>
+        <a href="../products/index.html" class="block rounded-2xl border border-sand-200 bg-white p-5 hover:border-teal-400 transition">
+          <p class="text-xs font-bold uppercase tracking-wider text-teal-700 mb-2">Catalog</p>
+          <h3 class="font-display font-bold text-navy-900 mb-1">Shop peptides</h3>
+          <p class="text-sm text-gray-600">USA-made compounds with COAs.</p>
+        </a>
+      </section>
+    </div>
+  </main>
+
+  <!-- Print-only header -->
+  <div class="print-only p-6">
+    <p class="text-sm uppercase tracking-widest text-teal-700 font-semibold">Palm Beach Peptides — Research Protocol Card</p>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-navy-950 text-gray-400 pt-12 pb-8 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row justify-between gap-6 mb-8">
+        <div>
+          <div class="font-display font-bold text-lg text-white">Palm Beach Peptides</div>
+          <p class="text-sm mt-2 max-w-md">Precision. Purity. Palm Beach Made. All products intended for research purposes only.</p>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+          <a href="../products/index.html" class="hover:text-teal-400">Products</a>
+          <a href="../research/index.html" class="hover:text-teal-400">Research</a>
+          <a href="index.html" class="hover:text-teal-400">Protocols</a>
+          <a href="../contact/index.html" class="hover:text-teal-400">Contact</a>
+        </div>
+      </div>
+      <div class="border-t border-navy-800 pt-6">
+        <p class="text-xs text-gray-500">© 2026 Palm Beach Peptides. Research use only. Not for human consumption. Not medical advice.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const PEPTIDES = [
+      {
+        id: 'bpc-157',
+        name: 'BPC-157',
+        subtitle: 'Body Protection Compound-157',
+        category: 'growth',
+        categoryLabel: 'Growth Factors',
+        summary: 'Pentadecapeptide studied for tissue repair, gut integrity, and angiogenesis models.',
+        vialSizes: [5, 10, 25],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [250, 500],
+        refDose: '250–500 mcg',
+        refFrequency: '1–2× daily',
+        refDuration: '4–6 weeks',
+        notes: 'Often paired with TB-500 in recovery research stacks. Split dosing is common in published experimental designs.'
+      },
+      {
+        id: 'tb-500',
+        name: 'TB-500',
+        subtitle: 'Thymosin Beta-4 Fragment',
+        category: 'growth',
+        categoryLabel: 'Growth Factors',
+        summary: 'Studied for actin regulation, tissue remodeling, and recovery applications.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 2000,
+        doseUnit: 'mcg',
+        quickDoses: [2000, 2500],
+        refDose: '2–2.5 mg',
+        refFrequency: '2× weekly (loading), then weekly',
+        refDuration: '4–6 weeks',
+        notes: 'Literature protocols often use a higher loading phase followed by a maintenance cadence.'
+      },
+      {
+        id: 'ghk-cu',
+        name: 'GHK-Cu',
+        subtitle: 'Copper Peptide',
+        category: 'growth',
+        categoryLabel: 'Growth Factors',
+        summary: 'Tripeptide-copper complex researched for skin, hair, and wound-healing pathways.',
+        vialSizes: [50, 100],
+        defaultVial: 50,
+        defaultWater: 5,
+        defaultDoseMcg: 1000,
+        doseUnit: 'mcg',
+        quickDoses: [1000, 2000],
+        refDose: '1–2 mg',
+        refFrequency: 'Daily',
+        refDuration: '4–8 weeks',
+        notes: 'Higher vial sizes are typical; adjust diluent to keep draw volumes practical on a U-100 syringe.'
+      },
+      {
+        id: 'semaglutide',
+        name: 'Semaglutide',
+        subtitle: 'GLP-1 Receptor Agonist',
+        category: 'metabolic',
+        categoryLabel: 'Metabolic',
+        summary: 'GLP-1 analog widely used in metabolic and glycemic regulation research.',
+        vialSizes: [2, 5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [250, 500, 1000],
+        refDose: '0.25–2.4 mg',
+        refFrequency: 'Once weekly',
+        refDuration: 'Titration schedule',
+        notes: 'Research designs commonly escalate dose over weeks. Start at the low end of the reference range.'
+      },
+      {
+        id: 'tirzepatide',
+        name: 'Tirzepatide',
+        subtitle: 'Dual GIP/GLP-1 Agonist',
+        category: 'metabolic',
+        categoryLabel: 'Metabolic',
+        summary: 'Dual agonist for advanced metabolic pathway research.',
+        vialSizes: [5, 10, 15],
+        defaultVial: 10,
+        defaultWater: 2,
+        defaultDoseMcg: 2500,
+        doseUnit: 'mcg',
+        quickDoses: [2500, 5000, 7500],
+        refDose: '2.5–15 mg',
+        refFrequency: 'Once weekly',
+        refDuration: 'Titration schedule',
+        notes: 'Stepwise titration is standard in published metabolic study designs.'
+      },
+      {
+        id: 'retatrutide',
+        name: 'Retatrutide',
+        subtitle: 'Triple Agonist (GLP-1/GIP/Glucagon)',
+        category: 'metabolic',
+        categoryLabel: 'Metabolic',
+        summary: 'Emerging multi-receptor agonist for comprehensive metabolic studies.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 1000,
+        doseUnit: 'mcg',
+        quickDoses: [1000, 2000, 4000],
+        refDose: '1–8 mg',
+        refFrequency: 'Once weekly',
+        refDuration: 'Titration schedule',
+        notes: 'Still emerging in literature — treat ranges as provisional research references only.'
+      },
+      {
+        id: 'aod-9604',
+        name: 'AOD-9604',
+        subtitle: 'HGH Fragment 176-191',
+        category: 'metabolic',
+        categoryLabel: 'Metabolic',
+        summary: 'Studied for fat metabolism and body composition research.',
+        vialSizes: [2, 5],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 300,
+        doseUnit: 'mcg',
+        quickDoses: [300, 500],
+        refDose: '300–500 mcg',
+        refFrequency: 'Daily',
+        refDuration: '4–12 weeks',
+        notes: 'Often administered in fasting experimental conditions in published protocols.'
+      },
+      {
+        id: 'semax',
+        name: 'Semax',
+        subtitle: 'ACTH-Derived Heptapeptide',
+        category: 'cognitive',
+        categoryLabel: 'Cognitive',
+        summary: 'Neuroprotective and cognitive enhancement research applications.',
+        vialSizes: [30, 60],
+        defaultVial: 30,
+        defaultWater: 3,
+        defaultDoseMcg: 300,
+        doseUnit: 'mcg',
+        quickDoses: [200, 300, 600],
+        refDose: '200–600 mcg',
+        refFrequency: '1–2× daily',
+        refDuration: '10–30 days',
+        notes: 'Intranasal and injectable research routes both appear in literature; confirm route for your model.'
+      },
+      {
+        id: 'selank',
+        name: 'Selank',
+        subtitle: 'Tuftsin Analog',
+        category: 'cognitive',
+        categoryLabel: 'Cognitive',
+        summary: 'Anxiolytic and nootropic research peptide with immunomodulatory interest.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [200, 250, 300],
+        refDose: '200–300 mcg',
+        refFrequency: '1–2× daily',
+        refDuration: '2–4 weeks',
+        notes: 'Frequently studied alongside Semax in cognitive research designs.'
+      },
+      {
+        id: 'ipamorelin',
+        name: 'Ipamorelin',
+        subtitle: 'Growth Hormone Secretagogue',
+        category: 'hormonal',
+        categoryLabel: 'Hormonal',
+        summary: 'Selective GH secretagogue for growth hormone release mechanism studies.',
+        vialSizes: [2, 5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 200,
+        doseUnit: 'mcg',
+        quickDoses: [100, 200, 300],
+        refDose: '100–300 mcg',
+        refFrequency: '1–3× daily',
+        refDuration: '8–12 weeks',
+        notes: 'Commonly stacked with CJC-1295 (no-DAC) in GH-axis research protocols.'
+      },
+      {
+        id: 'cjc-1295',
+        name: 'CJC-1295 (DAC)',
+        subtitle: 'GHRH Analog',
+        category: 'hormonal',
+        categoryLabel: 'Hormonal',
+        summary: 'Long-acting GHRH analog for sustained GH research models.',
+        vialSizes: [2, 5],
+        defaultVial: 2,
+        defaultWater: 2,
+        defaultDoseMcg: 1000,
+        doseUnit: 'mcg',
+        quickDoses: [1000, 2000],
+        refDose: '1–2 mg',
+        refFrequency: '1–2× weekly',
+        refDuration: '8–12 weeks',
+        notes: 'DAC version has extended half-life; dosing cadence differs from non-DAC CJC.'
+      },
+      {
+        id: 'tesamorelin',
+        name: 'Tesamorelin',
+        subtitle: 'GHRH Analog',
+        category: 'hormonal',
+        categoryLabel: 'Hormonal',
+        summary: 'Studied for visceral fat reduction and GH axis research.',
+        vialSizes: [2, 5],
+        defaultVial: 2,
+        defaultWater: 2,
+        defaultDoseMcg: 1000,
+        doseUnit: 'mcg',
+        quickDoses: [1000, 2000],
+        refDose: '1–2 mg',
+        refFrequency: 'Daily',
+        refDuration: '8–26 weeks',
+        notes: 'Longer study durations are common in visceral-adipose research literature.'
+      },
+      {
+        id: 'kpv',
+        name: 'KPV',
+        subtitle: 'α-MSH Fragment',
+        category: 'immune',
+        categoryLabel: 'Immune',
+        summary: 'Anti-inflammatory and gut barrier research peptide.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 200,
+        doseUnit: 'mcg',
+        quickDoses: [200, 500],
+        refDose: '200–500 mcg',
+        refFrequency: '1–2× daily',
+        refDuration: '2–6 weeks',
+        notes: 'Often included in multi-peptide recovery stacks (e.g., KLOW).'
+      },
+      {
+        id: 'nad',
+        name: 'NAD+',
+        subtitle: 'Nicotinamide Adenine Dinucleotide',
+        category: 'immune',
+        categoryLabel: 'Immune',
+        summary: 'Critical coenzyme for cellular energy and longevity research.',
+        vialSizes: [100, 500],
+        defaultVial: 100,
+        defaultWater: 5,
+        defaultDoseMcg: 50000,
+        doseUnit: 'mcg',
+        quickDoses: [50000, 100000],
+        refDose: '50–100+ mg',
+        refFrequency: '1–3× weekly',
+        refDuration: 'Protocol-dependent',
+        notes: 'Dose units are much larger than most peptides — confirm mcg/mg conversion carefully.'
+      },
+      {
+        id: 'wolverine',
+        name: 'Wolverine',
+        subtitle: 'BPC-157 + TB-500',
+        category: 'stacks',
+        categoryLabel: 'Stacks',
+        summary: 'Synergistic recovery stack for tissue repair research.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [250, 500],
+        refDose: 'BPC 250–500 mcg + TB 2–2.5 mg',
+        refFrequency: 'BPC daily / TB 2× weekly',
+        refDuration: '4–6 weeks',
+        notes: 'Calculator defaults to BPC component math. Run TB-500 separately for the second vial if needed.'
+      },
+      {
+        id: 'glow',
+        name: 'GLOW',
+        subtitle: 'BPC-157 + TB-500 + GHK-Cu',
+        category: 'stacks',
+        categoryLabel: 'Stacks',
+        summary: 'Skin, recovery, and regeneration multi-peptide stack.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [250, 500],
+        refDose: 'Per-component research ranges',
+        refFrequency: 'Component-specific',
+        refDuration: '4–8 weeks',
+        notes: 'Calculate each vial independently for accurate syringe units across the stack.'
+      },
+      {
+        id: 'klow',
+        name: 'KLOW',
+        subtitle: 'KPV + BPC-157 + TB-500 + GHK-Cu',
+        category: 'stacks',
+        categoryLabel: 'Stacks',
+        summary: 'Advanced multi-pathway recovery and anti-inflammatory stack.',
+        vialSizes: [5, 10],
+        defaultVial: 5,
+        defaultWater: 2,
+        defaultDoseMcg: 250,
+        doseUnit: 'mcg',
+        quickDoses: [250, 500],
+        refDose: 'Per-component research ranges',
+        refFrequency: 'Component-specific',
+        refDuration: '4–8 weeks',
+        notes: 'Use individual compound calculations for each peptide in the kit.'
+      }
+    ];
+
+    let activeId = 'bpc-157';
+
+    const els = {
+      grid: document.getElementById('peptide-grid'),
+      category: document.getElementById('category-filter'),
+      vial: document.getElementById('vial-mg'),
+      water: document.getElementById('water-ml'),
+      dose: document.getElementById('dose-mcg'),
+      doseUnit: document.getElementById('dose-unit'),
+      syringe: document.getElementById('syringe-type'),
+      vialPresets: document.getElementById('vial-presets'),
+      quickDoses: document.getElementById('quick-doses'),
+      copyBtn: document.getElementById('copy-btn'),
+      printBtn: document.getElementById('print-btn'),
+      copyStatus: document.getElementById('copy-status')
+    };
+
+    function getActive() {
+      return PEPTIDES.find(p => p.id === activeId) || PEPTIDES[0];
+    }
+
+    function formatNumber(n, digits = 2) {
+      if (!Number.isFinite(n)) return '—';
+      if (Math.abs(n) >= 100) return n.toFixed(1).replace(/\.0$/, '');
+      if (Math.abs(n) >= 10) return n.toFixed(Math.min(digits, 2)).replace(/\.?0+$/, '');
+      return parseFloat(n.toFixed(digits)).toString();
+    }
+
+    function doseInMcg() {
+      const raw = parseFloat(els.dose.value);
+      if (!Number.isFinite(raw) || raw <= 0) return NaN;
+      return els.doseUnit.value === 'mg' ? raw * 1000 : raw;
+    }
+
+    function renderChips() {
+      const filter = els.category.value;
+      const list = PEPTIDES.filter(p => filter === 'all' || p.category === filter);
+      els.grid.innerHTML = list.map(p => `
+        <button type="button" class="peptide-chip px-3 py-2 rounded-lg text-sm font-medium ${p.id === activeId ? 'active' : 'bg-white text-navy-800'}" data-id="${p.id}">
+          ${p.name}
+        </button>
+      `).join('');
+    }
+
+    function renderProtocolCard() {
+      const p = getActive();
+      document.getElementById('peptide-category').textContent = p.categoryLabel;
+      document.getElementById('peptide-name').textContent = p.name;
+      document.getElementById('peptide-subtitle').textContent = p.subtitle;
+      document.getElementById('peptide-summary').textContent = p.summary;
+      document.getElementById('ref-dose').textContent = p.refDose;
+      document.getElementById('ref-frequency').textContent = p.refFrequency;
+      document.getElementById('ref-duration').textContent = p.refDuration;
+      document.getElementById('ref-notes').textContent = p.notes;
+      document.getElementById('product-link').href = `../products/index.html#${p.id}`;
+      document.getElementById('result-title').textContent = p.name;
+
+      els.vialPresets.innerHTML = p.vialSizes.map(size => `
+        <button type="button" data-vial="${size}" class="vial-preset text-xs px-2.5 py-1 rounded-md bg-sand-100 text-gray-600 hover:bg-teal-100 hover:text-teal-800">${size} mg</button>
+      `).join('');
+
+      els.quickDoses.innerHTML = `
+        <span class="text-xs text-gray-500 self-center mr-1">Quick dose:</span>
+        ${p.quickDoses.map(d => {
+          const label = d >= 1000 ? `${formatNumber(d / 1000, 2)} mg` : `${d} mcg`;
+          return `<button type="button" data-dose="${d}" class="quick-dose text-xs px-2.5 py-1 rounded-md border border-teal-200 text-teal-800 bg-teal-50 hover:bg-teal-100">${label}</button>`;
+        }).join('')}
+      `;
+    }
+
+    function applyPeptideDefaults(p) {
+      els.vial.value = p.defaultVial;
+      els.water.value = p.defaultWater;
+      if (p.defaultDoseMcg >= 1000 && p.defaultDoseMcg % 1000 === 0) {
+        els.doseUnit.value = 'mg';
+        els.dose.value = p.defaultDoseMcg / 1000;
+      } else {
+        els.doseUnit.value = 'mcg';
+        els.dose.value = p.defaultDoseMcg;
+      }
+    }
+
+    function calculate() {
+      const p = getActive();
+      const vialMg = parseFloat(els.vial.value);
+      const waterMl = parseFloat(els.water.value);
+      const doseMcg = doseInMcg();
+      const syringeScale = parseInt(els.syringe.value, 10); // units per mL equivalent for U-100 = 100
+
+      const outConc = document.getElementById('out-concentration');
+      const outVol = document.getElementById('out-volume');
+      const outUnits = document.getElementById('out-units');
+      const outDoses = document.getElementById('out-doses');
+      const summary = document.getElementById('protocol-summary');
+      const fill = document.getElementById('syringe-fill');
+      const syringeLabel = document.getElementById('syringe-label');
+
+      if (![vialMg, waterMl, doseMcg].every(n => Number.isFinite(n) && n > 0)) {
+        outConc.textContent = '—';
+        outVol.textContent = '—';
+        outUnits.textContent = '—';
+        outDoses.textContent = '—';
+        summary.textContent = 'Enter valid vial amount, diluent volume, and dose to generate protocol math.';
+        fill.style.width = '0%';
+        syringeLabel.textContent = `0 / ${syringeScale} units`;
+        return;
+      }
+
+      const concentrationMcgPerMl = (vialMg * 1000) / waterMl;
+      const volumeMl = doseMcg / concentrationMcgPerMl;
+      // U-100: 100 units/mL. U-50 syringes are still calibrated as 100 units/mL but max 50 units (0.5 mL).
+      const units = volumeMl * 100;
+      const maxUnits = syringeScale;
+      const dosesPerVial = (vialMg * 1000) / doseMcg;
+
+      const concMgMl = concentrationMcgPerMl / 1000;
+      outConc.textContent = `${formatNumber(concMgMl, 3)} mg/mL`;
+      outVol.textContent = volumeMl < 0.01 ? `${formatNumber(volumeMl * 1000, 1)} µL` : `${formatNumber(volumeMl, 3)} mL`;
+      outUnits.textContent = `${formatNumber(units, 1)} u`;
+      outDoses.textContent = formatNumber(dosesPerVial, 1);
+
+      const pct = Math.max(0, Math.min(100, (units / maxUnits) * 100));
+      fill.style.width = `${pct}%`;
+      syringeLabel.textContent = `${formatNumber(units, 1)} / ${maxUnits} units`;
+
+      const doseLabel = els.doseUnit.value === 'mg'
+        ? `${formatNumber(parseFloat(els.dose.value), 3)} mg`
+        : `${formatNumber(parseFloat(els.dose.value), 1)} mcg`;
+
+      let warning = '';
+      if (units > maxUnits) {
+        warning = ` Draw exceeds a ${maxUnits}-unit syringe — use a larger syringe, split draws, or increase diluent.`;
+      }
+
+      summary.textContent = `${p.name}: reconstitute ${formatNumber(vialMg, 2)} mg in ${formatNumber(waterMl, 2)} mL diluent → ${formatNumber(concMgMl, 3)} mg/mL. For a ${doseLabel} research dose, draw ${formatNumber(units, 1)} units (${formatNumber(volumeMl, 3)} mL) on a U-100 scale. Approx. ${formatNumber(dosesPerVial, 1)} doses/vial. Reference cadence: ${p.refFrequency}; typical duration: ${p.refDuration}.${warning}`;
+    }
+
+    function selectPeptide(id, useDefaults = true) {
+      activeId = id;
+      const p = getActive();
+      renderChips();
+      renderProtocolCard();
+      if (useDefaults) applyPeptideDefaults(p);
+      calculate();
+      document.getElementById('protocol-card').classList.remove('fade-in');
+      void document.getElementById('protocol-card').offsetWidth;
+      document.getElementById('protocol-card').classList.add('fade-in');
+    }
+
+    function buildCopyText() {
+      const p = getActive();
+      return [
+        `Palm Beach Peptides — Research Protocol Summary`,
+        `Compound: ${p.name} (${p.subtitle})`,
+        `Reference dose: ${p.refDose}`,
+        `Frequency: ${p.refFrequency}`,
+        `Duration: ${p.refDuration}`,
+        ``,
+        document.getElementById('protocol-summary').textContent,
+        ``,
+        `Research use only. Not for human consumption. Not medical advice.`
+      ].join('\n');
+    }
+
+    // Events
+    els.grid.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-id]');
+      if (!btn) return;
+      selectPeptide(btn.dataset.id, true);
+    });
+
+    els.category.addEventListener('change', () => {
+      renderChips();
+      const visible = [...els.grid.querySelectorAll('[data-id]')].map(b => b.dataset.id);
+      if (!visible.includes(activeId) && visible.length) selectPeptide(visible[0], true);
+    });
+
+    els.vialPresets.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-vial]');
+      if (!btn) return;
+      els.vial.value = btn.dataset.vial;
+      calculate();
+    });
+
+    els.quickDoses.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-dose]');
+      if (!btn) return;
+      const mcg = parseFloat(btn.dataset.dose);
+      if (mcg >= 1000 && mcg % 1000 === 0) {
+        els.doseUnit.value = 'mg';
+        els.dose.value = mcg / 1000;
+      } else {
+        els.doseUnit.value = 'mcg';
+        els.dose.value = mcg;
+      }
+      calculate();
+    });
+
+    document.querySelectorAll('.water-preset').forEach(btn => {
+      btn.addEventListener('click', () => {
+        els.water.value = btn.dataset.water;
+        calculate();
+      });
+    });
+
+    ['vial', 'water', 'dose', 'doseUnit', 'syringe'].forEach(key => {
+      els[key].addEventListener('input', calculate);
+      els[key].addEventListener('change', calculate);
+    });
+
+    els.copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(buildCopyText());
+        els.copyStatus.textContent = 'Copied to clipboard.';
+      } catch {
+        els.copyStatus.textContent = 'Copy failed — select the summary text manually.';
+      }
+      setTimeout(() => { els.copyStatus.textContent = ''; }, 2500);
+    });
+
+    els.printBtn.addEventListener('click', () => window.print());
+
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Deep link: ?peptide=semaglutide
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get('peptide');
+    if (requested && PEPTIDES.some(p => p.id === requested)) {
+      activeId = requested;
+    }
+
+    renderChips();
+    renderProtocolCard();
+    applyPeptideDefaults(getActive());
+    calculate();
+  </script>
+</body>
+</html>

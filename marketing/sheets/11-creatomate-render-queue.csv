@@ -1,0 +1,6 @@
+queue_id,rank,status,public_video_url,compound_name,creation_id,notes,creatomate_render_id,creatomate_url,creatomate_snapshot_url,times_used,last_used_at,created_at
+PBVita-CMQ-001,1,Ready,,,,"Paste a public direct .mp4 URL (catbox/R2/B2). Not vidgen. Not Drive /view. No music in Creatomate.",,,,0,,
+PBVita-CMQ-002,2,Ready,,,,,,,0,,
+PBVita-CMQ-003,3,Ready,,,,,,,0,,
+PBVita-CMQ-004,4,Ready,,,,,,,0,,
+PBVita-CMQ-005,5,Ready,,,,,,,0,,

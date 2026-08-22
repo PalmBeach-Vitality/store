@@ -1,0 +1,103 @@
+variable,tier,status
+ultra detailed,lab_preferred,Active
+extremely detailed,lab_preferred,Active
+intricate details,optional,Active
+hyper-detailed,lab_preferred,Active
+meticulous detail,optional,Active
+fine micro details,optional,Active
+exquisite detail,optional,Active
+razor sharp focus,lab_preferred,Active
+tack sharp,lab_preferred,Active
+crystal clear,lab_preferred,Active
+ultra sharp,lab_preferred,Active
+perfect clarity,optional,Active
+8k resolution,lab_preferred,Active
+16k resolution,optional,Active
+ultra high resolution,optional,Active
+maximum resolution,optional,Active
+masterpiece,optional,Active
+best quality,optional,Active
+highest quality,optional,Active
+award-winning,optional,Active
+professional photography,lab_preferred,Active
+photorealistic,lab_preferred,Active
+hyperrealistic,lab_preferred,Active
+ultra realistic,lab_preferred,Active
+lifelike realism,optional,Active
+cinematic,optional,Active
+cinematic lighting,lab_preferred,Active
+dramatic lighting,lab_preferred,Active
+volumetric lighting,lab_preferred,Active
+soft diffused lighting,lab_preferred,Active
+golden hour lighting,optional,Active
+studio lighting,lab_preferred,Active
+rim lighting,lab_preferred,Active
+god rays,optional,Active
+atmospheric lighting,optional,Active
+high dynamic range,lab_preferred,Active
+HDR,lab_preferred,Active
+rich contrast,lab_preferred,Active
+perfect exposure,lab_preferred,Active
+vibrant colors,optional,Active
+rich saturated colors,optional,Active
+deep color grading,optional,Active
+cinematic color grade,optional,Active
+filmic color palette,optional,Active
+luxurious color tones,optional,Active
+beautiful color harmony,optional,Active
+shallow depth of field,lab_preferred,Active
+creamy bokeh,lab_preferred,Active
+smooth bokeh,optional,Active
+perfect composition,lab_preferred,Active
+dynamic composition,optional,Active
+balanced composition,optional,Active
+rule of thirds,optional,Active
+elegant framing,lab_preferred,Active
+visually stunning,optional,Active
+eye-catching,optional,Active
+aesthetically pleasing,optional,Active
+visually striking,optional,Active
+breathtaking,avoid,Paused
+mesmerizing,avoid,Paused
+captivating,avoid,Paused
+gorgeous,avoid,Paused
+elegant,optional,Active
+sophisticated,optional,Active
+luxurious,optional,Active
+premium aesthetic,lab_preferred,Active
+polished look,lab_preferred,Active
+clean and crisp,lab_preferred,Active
+refined details,lab_preferred,Active
+high fidelity,lab_preferred,Active
+ultra high fidelity,optional,Active
+realistic textures,lab_preferred,Active
+intricate textures,lab_preferred,Active
+detailed surface texture,lab_preferred,Active
+subsurface scattering,optional,Active
+perfect skin texture,avoid,Paused
+natural materials,optional,Active
+global illumination,lab_preferred,Active
+ambient occlusion,lab_preferred,Active
+soft shadows,lab_preferred,Active
+realistic reflections,lab_preferred,Active
+ray tracing quality,optional,Active
+octane render,optional,Active
+unreal engine 5 quality,optional,Active
+cinema 4d render,optional,Active
+vray quality,optional,Active
+medium format look,lab_preferred,Active
+Hasselblad quality,optional,Active
+Leica aesthetic,optional,Active
+DSLR sharpness,lab_preferred,Active
+film grain subtle,optional,Active
+analog film look,optional,Active
+Kodak Portra tones,optional,Active
+Fujifilm color science,optional,Active
+moody atmosphere,optional,Active
+dreamy atmosphere,avoid,Paused
+ethereal glow,avoid,Paused
+soft glow,optional,Active
+luminous,optional,Active
+radiant,optional,Active
+high-end commercial look,lab_preferred,Active
+editorial photography style,lab_preferred,Active
