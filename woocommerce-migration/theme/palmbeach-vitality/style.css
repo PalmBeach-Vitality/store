@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.60
+Version: 2.10.61
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -2074,6 +2074,139 @@ body.pbv-lead-popup-open {
   font-size: 0.78rem;
   line-height: 1.4;
   color: #64748b;
+}
+
+.pbv-btc-rate-row th,
+.pbv-btc-rate-row td {
+  vertical-align: top;
+}
+
+.pbv-btc-rate {
+  margin: 0 0 0.85rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.pbv-btc-rate--compact {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pbv-btc-rate__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.pbv-btc-rate__usd {
+  margin: 0 0 0.45rem;
+  font-size: 0.86rem;
+  color: #334155;
+}
+
+.pbv-btc-rate__btc-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.45rem;
+}
+
+.pbv-btc-rate--compact .pbv-btc-rate__btc-row {
+  display: block;
+}
+
+.pbv-btc-rate__value {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  padding: 0.5rem 0.6rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.3rem;
+}
+
+.pbv-btc-rate--compact .pbv-btc-rate__value {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.pbv-btc-rate__btc {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #111;
+}
+
+.pbv-btc-rate--compact .pbv-btc-rate__btc {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 1rem;
+}
+
+.pbv-btc-rate__unit {
+  align-self: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.pbv-btc-rate__meta,
+.pbv-btc-rate__updated,
+.pbv-btc-rate__status {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #64748b;
+}
+
+.pbv-btc-rate__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-right: 0.25rem;
+  color: #047857;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.pbv-btc-rate__live::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: pbv-btc-pulse 1.6s ease-out infinite;
+}
+
+.pbv-btc-rate.is-error .pbv-btc-rate__status {
+  color: #b45309;
+}
+
+@keyframes pbv-btc-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 0.4rem rgba(16, 185, 129, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 .pbv-btc-instructions {

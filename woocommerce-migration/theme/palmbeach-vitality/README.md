@@ -1,4 +1,4 @@
-# Palm Beach Vitality theme (v2.10.60)
+# Palm Beach Vitality theme (v2.10.61)
 
 WooCommerce storefront matched to your Shopify Horizon homepage:
 

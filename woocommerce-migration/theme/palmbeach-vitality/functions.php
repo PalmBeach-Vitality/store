@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.60');
+define('PBV_THEME_VERSION', '2.10.61');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -2189,4 +2189,44 @@ function pbv_register_bitcoin_gateway($gateways) {
     return $gateways;
 }
 add_filter('woocommerce_payment_gateways', 'pbv_register_bitcoin_gateway');
+
+/**
+ * Live Bitcoin / USD conversion row on the checkout totals table.
+ */
+function pbv_checkout_btc_conversion_row() {
+    if (!function_exists('is_checkout') || !is_checkout() || is_order_received_page()) {
+        return;
+    }
+    pbv_load_bitcoin_gateway();
+    if (!class_exists('WC_Gateway_PBV_Bitcoin', false)) {
+        return;
+    }
+    echo '<tr class="pbv-btc-rate-row">';
+    echo '<th>' . esc_html__('Bitcoin (BTC)', 'palmbeach-vitality') . '</th>';
+    echo '<td>';
+    WC_Gateway_PBV_Bitcoin::render_live_conversion(
+        WC_Gateway_PBV_Bitcoin::current_usd_total(),
+        'compact'
+    );
+    echo '</td>';
+    echo '</tr>';
+}
+add_action('woocommerce_review_order_after_order_total', 'pbv_checkout_btc_conversion_row');
+
+/**
+ * Public live BTC/USD rate for the checkout converter.
+ */
+function pbv_ajax_btc_usd_rate() {
+    pbv_load_bitcoin_gateway();
+    if (!class_exists('WC_Gateway_PBV_Bitcoin', false)) {
+        wp_send_json_error(array('message' => 'Bitcoin gateway unavailable.'), 500);
+    }
+    $rate = WC_Gateway_PBV_Bitcoin::fetch_spot_usd();
+    if (is_wp_error($rate)) {
+        wp_send_json_error(array('message' => $rate->get_error_message()), 503);
+    }
+    wp_send_json_success($rate);
+}
+add_action('wp_ajax_pbv_btc_usd_rate', 'pbv_ajax_btc_usd_rate');
+add_action('wp_ajax_nopriv_pbv_btc_usd_rate', 'pbv_ajax_btc_usd_rate');
 

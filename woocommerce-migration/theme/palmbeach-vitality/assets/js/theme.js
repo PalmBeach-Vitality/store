@@ -343,6 +343,192 @@
     }, 100);
   })();
 
+  (function initBtcUsdRate() {
+    var REFRESH_MS = 30000;
+    var pollTimer = null;
+    var ageTimer = null;
+    var lastRate = null;
+
+    function boxes() {
+      return document.querySelectorAll("[data-pbv-btc-rate]");
+    }
+
+    function formatUsd(n) {
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 2,
+      }).format(n);
+    }
+
+    function formatBtc(n) {
+      return n.toFixed(8);
+    }
+
+    function parseUsdFromText(text) {
+      var cleaned = String(text || "").replace(/[^0-9.]/g, "");
+      var n = parseFloat(cleaned);
+      return n > 0 ? n : 0;
+    }
+
+    function latestUsd(box) {
+      var compact = document.querySelector(".pbv-btc-rate-row [data-pbv-btc-rate]");
+      if (compact) {
+        var fromCompact = parseFloat(compact.getAttribute("data-usd-total") || "");
+        if (fromCompact > 0) return fromCompact;
+      }
+      var fromBox = parseFloat(box.getAttribute("data-usd-total") || "");
+      if (fromBox > 0) return fromBox;
+      var totalEl = document.querySelector(".order-total .woocommerce-Price-amount, .order-total .amount");
+      if (totalEl) return parseUsdFromText(totalEl.textContent);
+      return 0;
+    }
+
+    function setStatus(box, message, isError) {
+      var status = box.querySelector("[data-pbv-btc-status]");
+      box.classList.toggle("is-error", !!isError);
+      if (!status) return;
+      status.textContent = message || "";
+      status.hidden = !message;
+    }
+
+    function ageLabel(fetchedAt) {
+      var seconds = Math.max(0, Math.round((Date.now() - fetchedAt) / 1000));
+      if (seconds < 5) return "Updated just now";
+      if (seconds < 60) return "Updated " + seconds + "s ago";
+      return "Updated " + Math.round(seconds / 60) + "m ago";
+    }
+
+    function applyRate(rate) {
+      lastRate = rate;
+      boxes().forEach(function (box) {
+        var usd = latestUsd(box);
+        var amountEl = box.querySelector("[data-pbv-btc-amount]");
+        var spotEl = box.querySelector("[data-pbv-btc-spot]");
+        var updatedEl = box.querySelector("[data-pbv-btc-updated]");
+        var liveEl = box.querySelector("[data-pbv-btc-live]");
+        if (!(usd > 0) || !(rate.usdPerBtc > 0)) {
+          if (amountEl) amountEl.textContent = "—";
+          if (liveEl) liveEl.hidden = true;
+          setStatus(box, "Live Bitcoin rate unavailable. Use your wallet’s current USD conversion for the checkout total.", true);
+          return;
+        }
+        var btc = usd / rate.usdPerBtc;
+        if (amountEl) amountEl.textContent = formatBtc(btc);
+        if (spotEl) spotEl.textContent = "1 BTC = " + formatUsd(rate.usdPerBtc) + " · " + rate.source;
+        if (updatedEl) updatedEl.textContent = ageLabel(rate.fetchedAt);
+        if (liveEl) liveEl.hidden = false;
+        setStatus(box, "", false);
+      });
+    }
+
+    function refreshAges() {
+      if (!lastRate) return;
+      boxes().forEach(function (box) {
+        var updatedEl = box.querySelector("[data-pbv-btc-updated]");
+        if (updatedEl && lastRate.fetchedAt) {
+          updatedEl.textContent = ageLabel(lastRate.fetchedAt);
+        }
+      });
+    }
+
+    function readJson(res) {
+      return res.json().then(function (data) {
+        if (!res.ok) throw new Error("http");
+        return data;
+      });
+    }
+
+    function fromCoinbase() {
+      return fetch("https://api.coinbase.com/v2/prices/BTC-USD/spot", { cache: "no-store" })
+        .then(readJson)
+        .then(function (data) {
+          var n = parseFloat(data && data.data && data.data.amount);
+          if (!(n > 0)) throw new Error("coinbase");
+          return { usdPerBtc: n, source: "Coinbase", fetchedAt: Date.now() };
+        });
+    }
+
+    function fromKraken() {
+      return fetch("https://api.kraken.com/0/public/Ticker?pair=XBTUSD", { cache: "no-store" })
+        .then(readJson)
+        .then(function (data) {
+          var n = parseFloat(
+            data &&
+              data.result &&
+              ((data.result.XXBTZUSD && data.result.XXBTZUSD.c && data.result.XXBTZUSD.c[0]) ||
+                (data.result.XBTUSD && data.result.XBTUSD.c && data.result.XBTUSD.c[0]))
+          );
+          if (!(n > 0)) throw new Error("kraken");
+          return { usdPerBtc: n, source: "Kraken", fetchedAt: Date.now() };
+        });
+    }
+
+    function fromBinance() {
+      return fetch("https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT", { cache: "no-store" })
+        .then(readJson)
+        .then(function (data) {
+          var n = parseFloat(data && data.price);
+          if (!(n > 0)) throw new Error("binance");
+          return { usdPerBtc: n, source: "Binance", fetchedAt: Date.now() };
+        });
+    }
+
+    function fromWp() {
+      var url = (cfg.ajaxUrl || "/wp-admin/admin-ajax.php") + "?action=pbv_btc_usd_rate";
+      return fetch(url, { credentials: "same-origin", cache: "no-store" })
+        .then(readJson)
+        .then(function (data) {
+          var payload = data && data.success ? data.data : null;
+          var n = parseFloat(payload && payload.usd_per_btc);
+          if (!(n > 0)) throw new Error("wp");
+          return {
+            usdPerBtc: n,
+            source: payload.source || "Live rate",
+            fetchedAt: Date.now(),
+          };
+        });
+    }
+
+    function refresh() {
+      if (!boxes().length) return;
+      fromCoinbase()
+        .catch(fromKraken)
+        .catch(fromBinance)
+        .catch(fromWp)
+        .then(applyRate)
+        .catch(function () {
+          lastRate = null;
+          boxes().forEach(function (box) {
+            var amountEl = box.querySelector("[data-pbv-btc-amount]");
+            var liveEl = box.querySelector("[data-pbv-btc-live]");
+            if (amountEl) amountEl.textContent = "—";
+            if (liveEl) liveEl.hidden = true;
+            setStatus(
+              box,
+              "Live Bitcoin rate unavailable. Use your wallet’s current USD conversion for the checkout total.",
+              true
+            );
+          });
+        });
+    }
+
+    function start() {
+      if (!boxes().length) return;
+      refresh();
+      if (pollTimer) window.clearInterval(pollTimer);
+      pollTimer = window.setInterval(refresh, REFRESH_MS);
+      if (!ageTimer) {
+        ageTimer = window.setInterval(refreshAges, 1000);
+      }
+    }
+
+    start();
+    if (window.jQuery) {
+      window.jQuery(document.body).on("updated_checkout updated_wc_div", start);
+    }
+  })();
+
   document.addEventListener("click", function (event) {
     var btn = event.target.closest("[data-pbv-copy]");
     if (!btn) return;

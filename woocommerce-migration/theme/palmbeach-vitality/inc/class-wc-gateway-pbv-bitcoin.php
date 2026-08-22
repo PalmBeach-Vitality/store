@@ -78,6 +78,148 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
     }
 
     /**
+     * Live BTC/USD spot from Coinbase, then Kraken. Cached 20s. No invented rate.
+     *
+     * @return array{usd_per_btc:float,source:string,fetched_at:int}|WP_Error
+     */
+    public static function fetch_spot_usd() {
+        $cached = get_transient('pbv_btc_usd_spot');
+        if (is_array($cached) && isset($cached['usd_per_btc']) && (float) $cached['usd_per_btc'] > 0) {
+            return $cached;
+        }
+
+        $sources = array(
+            'Coinbase' => 'https://api.coinbase.com/v2/prices/BTC-USD/spot',
+            'Kraken'   => 'https://api.kraken.com/0/public/Ticker?pair=XBTUSD',
+            'Binance'  => 'https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT',
+        );
+
+        $errors = array();
+        foreach ($sources as $source => $url) {
+            $response = wp_remote_get(
+                $url,
+                array(
+                    'timeout' => 8,
+                    'headers' => array('Accept' => 'application/json'),
+                )
+            );
+            if (is_wp_error($response)) {
+                $errors[] = $source . ': ' . $response->get_error_message();
+                continue;
+            }
+            $code = (int) wp_remote_retrieve_response_code($response);
+            $body = (string) wp_remote_retrieve_body($response);
+            if ($code < 200 || $code >= 300 || $body === '') {
+                $errors[] = $source . ': HTTP ' . $code;
+                continue;
+            }
+            $usd = self::parse_spot_usd($source, $body);
+            if ($usd <= 0) {
+                $errors[] = $source . ': could not read a USD price';
+                continue;
+            }
+            $data = array(
+                'usd_per_btc' => $usd,
+                'source'      => $source,
+                'fetched_at'  => time(),
+            );
+            set_transient('pbv_btc_usd_spot', $data, 20);
+            return $data;
+        }
+
+        return new WP_Error(
+            'pbv_btc_rate',
+            'Live Bitcoin USD rate unavailable. ' . implode(' | ', $errors)
+        );
+    }
+
+    /**
+     * @param string $source Source name.
+     * @param string $body   Raw JSON.
+     * @return float
+     */
+    protected static function parse_spot_usd($source, $body) {
+        $json = json_decode($body, true);
+        if (!is_array($json)) {
+            return 0.0;
+        }
+        if ($source === 'Coinbase') {
+            return isset($json['data']['amount']) ? (float) $json['data']['amount'] : 0.0;
+        }
+        if ($source === 'Kraken') {
+            if (isset($json['result']['XXBTZUSD']['c'][0])) {
+                return (float) $json['result']['XXBTZUSD']['c'][0];
+            }
+            if (isset($json['result']['XBTUSD']['c'][0])) {
+                return (float) $json['result']['XBTUSD']['c'][0];
+            }
+        }
+        if ($source === 'Binance' && isset($json['price'])) {
+            return (float) $json['price'];
+        }
+        return 0.0;
+    }
+
+    /**
+     * Cart / order total in store currency (USD on this store).
+     *
+     * @param mixed $order Optional WC_Order.
+     * @return float
+     */
+    public static function current_usd_total($order = null) {
+        if (is_a($order, 'WC_Order')) {
+            return (float) $order->get_total();
+        }
+        if (function_exists('WC') && WC()->cart) {
+            return (float) WC()->cart->get_total('edit');
+        }
+        return 0.0;
+    }
+
+    /**
+     * Live conversion box (checkout totals, Bitcoin method, thank-you).
+     *
+     * @param float  $usd_total USD amount to convert.
+     * @param string $variant   compact|full.
+     */
+    public static function render_live_conversion($usd_total, $variant = 'full') {
+        $usd_total = round((float) $usd_total, 2);
+        $variant   = $variant === 'compact' ? 'compact' : 'full';
+        $id        = 'pbv-btc-amt-' . wp_unique_id();
+        $classes   = 'pbv-btc-rate pbv-btc-rate--' . $variant;
+
+        echo '<div class="' . esc_attr($classes) . '" data-pbv-btc-rate data-usd-total="' . esc_attr((string) $usd_total) . '">';
+        if ($variant === 'full') {
+            echo '<p class="pbv-btc-rate__label">' . esc_html__('Live Bitcoin conversion', 'palmbeach-vitality') . '</p>';
+            echo '<p class="pbv-btc-rate__usd">' . esc_html(
+                sprintf(
+                    /* translators: %s: formatted USD total */
+                    __('Checkout total: %s', 'palmbeach-vitality'),
+                    '$' . number_format($usd_total, 2)
+                )
+            ) . '</p>';
+        }
+        echo '<div class="pbv-btc-rate__btc-row">';
+        echo '<div class="pbv-btc-rate__value">';
+        echo '<code class="pbv-btc-rate__btc" id="' . esc_attr($id) . '" data-pbv-btc-amount>—</code>';
+        echo '<span class="pbv-btc-rate__unit"> BTC</span>';
+        echo '</div>';
+        if ($variant === 'full') {
+            echo '<button type="button" class="pbv-btc-copy__btn" data-pbv-copy="' . esc_attr($id) . '">';
+            echo esc_html__('Copy amount', 'palmbeach-vitality');
+            echo '</button>';
+        }
+        echo '</div>';
+        echo '<p class="pbv-btc-rate__meta">';
+        echo '<span class="pbv-btc-rate__live" data-pbv-btc-live hidden>' . esc_html__('Live', 'palmbeach-vitality') . '</span> ';
+        echo '<span data-pbv-btc-spot></span>';
+        echo '</p>';
+        echo '<p class="pbv-btc-rate__updated" data-pbv-btc-updated></p>';
+        echo '<p class="pbv-btc-rate__status" data-pbv-btc-status>' . esc_html__('Loading live rate…', 'palmbeach-vitality') . '</p>';
+        echo '</div>';
+    }
+
+    /**
      * Admin settings fields.
      */
     public function init_form_fields() {
@@ -215,7 +357,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             echo '</a>';
         }
         echo '</div>';
-        echo '<p class="pbv-btc-platforms__hint">' . esc_html__('Paste the address above, send the exact checkout total, then place your order.', 'palmbeach-vitality') . '</p>';
+        echo '<p class="pbv-btc-platforms__hint">' . esc_html__('Paste the address above, send the live Bitcoin amount shown, then place your order.', 'palmbeach-vitality') . '</p>';
         echo '</div>';
     }
 
@@ -226,9 +368,10 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         echo '<div class="pbv-btc-payment-fields">';
         echo '<ol class="pbv-btc-payment-fields__steps">';
         echo '<li>' . esc_html__('Copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
-        echo '<li>' . esc_html__('Open a Bitcoin platform and send the exact checkout total.', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('Send the live Bitcoin amount shown (it updates with the USD rate).', 'palmbeach-vitality') . '</li>';
         echo '<li>' . esc_html__('Place your order. We ship after the payment confirms.', 'palmbeach-vitality') . '</li>';
         echo '</ol>';
+        self::render_live_conversion(self::current_usd_total(), 'full');
         $this->render_address_copy_box($this->receiving_address());
         echo '</div>';
     }
@@ -253,8 +396,16 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         $address = $this->receiving_address();
         if ($address !== '') {
             $order->update_meta_data('_pbv_btc_address', $address);
-            $order->save();
         }
+        $rate = self::fetch_spot_usd();
+        if (!is_wp_error($rate)) {
+            $usd = (float) $order->get_total();
+            $btc = $usd / (float) $rate['usd_per_btc'];
+            $order->update_meta_data('_pbv_btc_usd_rate', (string) $rate['usd_per_btc']);
+            $order->update_meta_data('_pbv_btc_amount', number_format($btc, 8, '.', ''));
+            $order->update_meta_data('_pbv_btc_rate_source', (string) $rate['source']);
+        }
+        $order->save();
 
         wc_reduce_stock_levels($order_id);
         if (WC()->cart) {
@@ -313,11 +464,17 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             $address = $this->receiving_address();
         }
         $total = $order->get_formatted_order_total();
+        $snap_btc  = (string) $order->get_meta('_pbv_btc_amount');
+        $snap_rate = (string) $order->get_meta('_pbv_btc_usd_rate');
 
         if ($plain_text) {
             echo "\n" . esc_html__('Bitcoin (BTC) payment', 'palmbeach-vitality') . "\n\n";
-            echo esc_html__('Send the exact order total in Bitcoin (BTC) to this address:', 'palmbeach-vitality') . "\n";
+            echo esc_html__('Send Bitcoin (BTC) to this address:', 'palmbeach-vitality') . "\n";
             echo esc_html__('Order total:', 'palmbeach-vitality') . ' ' . esc_html(wp_strip_all_tags($total)) . "\n";
+            if ($snap_btc !== '' && $snap_rate !== '') {
+                echo esc_html__('Bitcoin amount at checkout:', 'palmbeach-vitality') . ' ' . esc_html($snap_btc) . " BTC\n";
+                echo esc_html__('Rate at checkout:', 'palmbeach-vitality') . ' 1 BTC = $' . esc_html(number_format((float) $snap_rate, 2)) . "\n";
+            }
             if ($address !== '') {
                 echo esc_html__('BTC address:', 'palmbeach-vitality') . ' ' . esc_html($address) . "\n";
             }
@@ -326,8 +483,12 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
 
         echo '<div class="pbv-btc-instructions">';
         echo '<h3>' . esc_html__('Bitcoin (BTC) payment', 'palmbeach-vitality') . '</h3>';
-        echo '<p>' . esc_html__('Send the exact order total in Bitcoin (BTC) to this address. We ship after the payment confirms.', 'palmbeach-vitality') . '</p>';
+        echo '<p>' . esc_html__('Send the live Bitcoin amount below to this address. We ship after the payment confirms.', 'palmbeach-vitality') . '</p>';
         echo '<p><strong>' . esc_html__('Order total:', 'palmbeach-vitality') . '</strong> ' . wp_kses_post($total) . '</p>';
+        if ($snap_btc !== '') {
+            echo '<p><strong>' . esc_html__('Bitcoin amount at checkout:', 'palmbeach-vitality') . '</strong> ' . esc_html($snap_btc) . ' BTC</p>';
+        }
+        self::render_live_conversion((float) $order->get_total(), 'full');
         $this->render_address_copy_box($address);
         echo '</div>';
     }
