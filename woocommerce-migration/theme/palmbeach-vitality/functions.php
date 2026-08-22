@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.64');
+define('PBV_THEME_VERSION', '2.10.65');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -1634,26 +1634,66 @@ function pbv_dedupe_menu_items($menu_id, $titles) {
 }
 
 /**
- * Show order numbers as 6 digits (e.g. 000142). Longer IDs stay as-is.
+ * Sequential store order numbers starting at 10000.
+ *
+ * New orders get 10000, 10001, 10002, … stored in order meta.
+ * Existing orders without a stored number keep their WooCommerce ID display.
  *
  * @param string $order_number Order number.
  * @param mixed  $order        Order object.
  * @return string
  */
-function pbv_six_digit_order_number($order_number, $order = null) {
-    $raw = preg_replace('/\D+/', '', (string) $order_number);
-    if ($raw === '' && is_object($order) && method_exists($order, 'get_id')) {
-        $raw = (string) (int) $order->get_id();
-    }
-    if ($raw === '') {
+function pbv_sequential_order_number($order_number, $order = null) {
+    if (!is_object($order) || !method_exists($order, 'get_meta')) {
         return (string) $order_number;
     }
-    if (strlen($raw) >= 6) {
-        return $raw;
+    $custom = trim((string) $order->get_meta('_pbv_order_number'));
+    if ($custom !== '' && ctype_digit($custom)) {
+        return $custom;
     }
-    return str_pad($raw, 6, '0', STR_PAD_LEFT);
+    return (string) $order_number;
 }
-add_filter('woocommerce_order_number', 'pbv_six_digit_order_number', 20, 2);
+add_filter('woocommerce_order_number', 'pbv_sequential_order_number', 20, 2);
+
+/**
+ * Next public order number (starts at 10000).
+ *
+ * @return int
+ */
+function pbv_next_order_number_value() {
+    $next = (int) get_option('pbv_next_order_number', 10000);
+    if ($next < 10000) {
+        $next = 10000;
+    }
+    return $next;
+}
+
+/**
+ * Assign the next sequential order number when an order is created.
+ *
+ * @param int $order_id Order ID.
+ */
+function pbv_assign_sequential_order_number($order_id) {
+    $order_id = (int) $order_id;
+    if ($order_id <= 0 || !function_exists('wc_get_order')) {
+        return;
+    }
+    $order = wc_get_order($order_id);
+    if (!$order) {
+        return;
+    }
+    $existing = trim((string) $order->get_meta('_pbv_order_number'));
+    if ($existing !== '' && ctype_digit($existing)) {
+        return;
+    }
+
+    $next = pbv_next_order_number_value();
+    $order->update_meta_data('_pbv_order_number', (string) $next);
+    $order->save();
+    update_option('pbv_next_order_number', $next + 1, false);
+}
+add_action('woocommerce_checkout_order_processed', 'pbv_assign_sequential_order_number', 5, 1);
+add_action('woocommerce_new_order', 'pbv_assign_sequential_order_number', 5, 1);
 
 /**
  * Use custom policy checkboxes instead of the default single Terms box.
