@@ -169,6 +169,54 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         echo '</button>';
         echo '</div>';
         echo '</div>';
+        $this->render_platform_links();
+    }
+
+    /**
+     * Five BTC platforms customers can open to send payment.
+     *
+     * @return array<int, array{label:string,url:string}>
+     */
+    protected function payment_platforms() {
+        return array(
+            array(
+                'label' => 'Coinbase',
+                'url'   => 'https://www.coinbase.com/',
+            ),
+            array(
+                'label' => 'Cash App',
+                'url'   => 'https://cash.app/',
+            ),
+            array(
+                'label' => 'Strike',
+                'url'   => 'https://strike.me/',
+            ),
+            array(
+                'label' => 'Kraken',
+                'url'   => 'https://www.kraken.com/',
+            ),
+            array(
+                'label' => 'Binance',
+                'url'   => 'https://www.binance.com/',
+            ),
+        );
+    }
+
+    /**
+     * Links to send Bitcoin from common platforms.
+     */
+    protected function render_platform_links() {
+        echo '<div class="pbv-btc-platforms">';
+        echo '<p class="pbv-btc-platforms__label">' . esc_html__('Send Bitcoin from:', 'palmbeach-vitality') . '</p>';
+        echo '<div class="pbv-btc-platforms__list">';
+        foreach ($this->payment_platforms() as $platform) {
+            echo '<a class="pbv-btc-platforms__link" href="' . esc_url($platform['url']) . '" target="_blank" rel="noopener noreferrer">';
+            echo esc_html($platform['label']);
+            echo '</a>';
+        }
+        echo '</div>';
+        echo '<p class="pbv-btc-platforms__hint">' . esc_html__('Paste the address above, send the exact checkout total, then place your order.', 'palmbeach-vitality') . '</p>';
+        echo '</div>';
     }
 
     /**
@@ -178,7 +226,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         echo '<div class="pbv-btc-payment-fields">';
         echo '<ol class="pbv-btc-payment-fields__steps">';
         echo '<li>' . esc_html__('Copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
-        echo '<li>' . esc_html__('Send the exact checkout total in Bitcoin (BTC).', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('Open a Bitcoin platform and send the exact checkout total.', 'palmbeach-vitality') . '</li>';
         echo '<li>' . esc_html__('Place your order. We ship after the payment confirms.', 'palmbeach-vitality') . '</li>';
         echo '</ol>';
         $this->render_address_copy_box($this->receiving_address());
