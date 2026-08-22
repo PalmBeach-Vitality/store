@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.65');
+define('PBV_THEME_VERSION', '2.10.66');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -1634,9 +1634,9 @@ function pbv_dedupe_menu_items($menu_id, $titles) {
 }
 
 /**
- * Sequential store order numbers starting at 10000.
+ * Sequential store order numbers starting at 10308.
  *
- * New orders get 10000, 10001, 10002, … stored in order meta.
+ * New orders get 10308, 10309, 10310, … stored in order meta.
  * Existing orders without a stored number keep their WooCommerce ID display.
  *
  * @param string $order_number Order number.
@@ -1656,14 +1656,25 @@ function pbv_sequential_order_number($order_number, $order = null) {
 add_filter('woocommerce_order_number', 'pbv_sequential_order_number', 20, 2);
 
 /**
- * Next public order number (starts at 10000).
+ * First public order number in the sequence.
+ *
+ * @return int
+ */
+function pbv_order_number_start() {
+    return 10308;
+}
+
+/**
+ * Next public order number (starts at 10308).
  *
  * @return int
  */
 function pbv_next_order_number_value() {
-    $next = (int) get_option('pbv_next_order_number', 10000);
-    if ($next < 10000) {
-        $next = 10000;
+    $start = pbv_order_number_start();
+    $next  = (int) get_option('pbv_next_order_number', $start);
+    // Lift older theme defaults (e.g. 10000) up to the live starting number.
+    if ($next < $start) {
+        $next = $start;
     }
     return $next;
 }
