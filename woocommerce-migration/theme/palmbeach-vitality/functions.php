@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.68');
+define('PBV_THEME_VERSION', '2.10.69');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -28,6 +28,7 @@ require_once get_template_directory() . '/inc/seo.php';
 require_once get_template_directory() . '/inc/google-signin.php';
 require_once get_template_directory() . '/inc/order-sms.php';
 require_once get_template_directory() . '/inc/welcome-discount.php';
+require_once get_template_directory() . '/inc/referral-notify.php';
 require_once get_template_directory() . '/inc/homepage-shop.php';
 require_once get_template_directory() . '/inc/email-subscribers.php';
 
