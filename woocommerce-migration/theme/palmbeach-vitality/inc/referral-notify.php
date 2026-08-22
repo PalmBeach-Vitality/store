@@ -2,8 +2,8 @@
 /**
  * Email the sales receipt to a rep when a referral coupon is used at checkout.
  *
- * Default trigger: coupon AS-1010. Set the rep address under
- * Appearance → Customize → Palm Beach Vitality → Referral rep email.
+ * Default trigger: coupon AS-1010 → A_broski@outlook.com.
+ * Override under Appearance → Customize → Palm Beach Vitality if needed.
  *
  * Uses the WooCommerce “New order” email (same sales receipt staff already get).
  * That email must stay enabled under WooCommerce → Settings → Emails.
@@ -43,7 +43,10 @@ function pbv_referral_coupon_code() {
  * @return string
  */
 function pbv_referral_rep_email() {
-    $email = sanitize_email((string) get_theme_mod('pbv_referral_rep_email', ''));
+    $email = sanitize_email((string) get_theme_mod('pbv_referral_rep_email', 'A_broski@outlook.com'));
+    if (!is_email($email)) {
+        $email = 'A_broski@outlook.com';
+    }
     return is_email($email) ? $email : '';
 }
 
@@ -104,12 +107,12 @@ function pbv_referral_notify_customize_register($wp_customize) {
     ));
 
     $wp_customize->add_setting('pbv_referral_rep_email', array(
-        'default'           => '',
+        'default'           => 'A_broski@outlook.com',
         'sanitize_callback' => 'sanitize_email',
     ));
     $wp_customize->add_control('pbv_referral_rep_email', array(
         'label'       => __('Referral rep email', 'palmbeach-vitality'),
-        'description' => __('Receives the WooCommerce New Order / sales receipt only when the referral coupon is used. Leave blank to disable.', 'palmbeach-vitality'),
+        'description' => __('Receives the WooCommerce New Order / sales receipt only when the referral coupon is used. Default: A_broski@outlook.com.', 'palmbeach-vitality'),
         'section'     => 'pbv_storefront',
         'type'        => 'email',
     ));
