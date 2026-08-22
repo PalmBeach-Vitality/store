@@ -54,10 +54,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         $this->init_settings();
 
         $this->title        = $this->get_option('title', __('Bitcoin ($BTC)', 'palmbeach-vitality'));
-        $this->description  = $this->get_option(
-            'description',
-            __('Pay with Bitcoin. After placing your order you will receive payment instructions, including our BTC address and the exact amount due.', 'palmbeach-vitality')
-        );
+        $this->description  = '';
         $this->instructions = (string) $this->get_option('instructions', '');
         $this->btc_address  = (string) $this->get_option('btc_address', '');
         $this->enabled      = $this->get_option('enabled', 'yes');
@@ -77,6 +74,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
         add_action('woocommerce_thankyou_' . $this->id, array($this, 'thankyou_page'));
         add_action('woocommerce_email_before_order_table', array($this, 'email_instructions'), 10, 3);
+        add_filter('woocommerce_gateway_description', array($this, 'filter_checkout_description'), 10, 2);
     }
 
     /**
@@ -101,13 +99,13 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
                 'title'       => __('Description', 'palmbeach-vitality'),
                 'type'        => 'textarea',
                 'description' => __('Shown under the payment method on checkout.', 'palmbeach-vitality'),
-                'default'     => __('Pay with Bitcoin. After placing your order you will receive payment instructions, including our BTC address and the exact amount due.', 'palmbeach-vitality'),
+                'default'     => __('Pay with Bitcoin (BTC). Copy the address below, send the exact checkout total, then place your order.', 'palmbeach-vitality'),
             ),
             'btc_address' => array(
                 'title'       => __('BTC receiving address', 'palmbeach-vitality'),
                 'type'        => 'text',
-                'description' => __('Your Bitcoin wallet address. Shown on the order confirmation and in customer emails. Leave blank until ready — customers still see Bitcoin as a payment option with setup notice.', 'palmbeach-vitality'),
-                'default'     => '',
+                'description' => __('Your Bitcoin wallet address. Shown at checkout, on the order confirmation, and in customer emails.', 'palmbeach-vitality'),
+                'default'     => '38YWdZdVPES6SRc45E4HvdCwqfMwjH3wGw',
                 'desc_tip'    => true,
             ),
             'instructions' => array(
@@ -125,25 +123,65 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
     }
 
     /**
+     * Hide the saved WooCommerce description (it still says the address arrives after checkout).
+     *
+     * @param string $description Gateway description.
+     * @param string $gateway_id  Gateway id.
+     * @return string
+     */
+    public function filter_checkout_description($description, $gateway_id) {
+        if ($gateway_id === $this->id) {
+            return '';
+        }
+        return $description;
+    }
+
+    /**
+     * BTC address shown at checkout (settings, then the live store wallet).
+     *
+     * @return string
+     */
+    protected function receiving_address() {
+        $addr = trim((string) $this->btc_address);
+        if ($addr !== '') {
+            return $addr;
+        }
+        return '38YWdZdVPES6SRc45E4HvdCwqfMwjH3wGw';
+    }
+
+    /**
+     * Address row with one-click copy.
+     *
+     * @param string $address BTC address.
+     */
+    protected function render_address_copy_box($address) {
+        $address = trim((string) $address);
+        if ($address === '') {
+            return;
+        }
+        $id = 'pbv-btc-addr-' . wp_unique_id();
+        echo '<div class="pbv-btc-copy">';
+        echo '<p class="pbv-btc-copy__label">' . esc_html__('Receiving address', 'palmbeach-vitality') . '</p>';
+        echo '<div class="pbv-btc-copy__row">';
+        echo '<code class="pbv-btc-copy__address" id="' . esc_attr($id) . '">' . esc_html($address) . '</code>';
+        echo '<button type="button" class="pbv-btc-copy__btn" data-pbv-copy="' . esc_attr($id) . '">';
+        echo esc_html__('Copy', 'palmbeach-vitality');
+        echo '</button>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    /**
      * Checkout fields / description.
      */
     public function payment_fields() {
-        if ($this->description) {
-            echo wpautop(wp_kses_post($this->description));
-        }
-
         echo '<div class="pbv-btc-payment-fields">';
-        echo '<p class="pbv-btc-payment-fields__hint">';
-        echo esc_html__(
-            'You will receive the BTC amount and payment address on the next screen after you place your order.',
-            'palmbeach-vitality'
-        );
-        echo '</p>';
-        if ($this->btc_address) {
-            echo '<p class="pbv-btc-payment-fields__address"><strong>';
-            echo esc_html__('Receiving address:', 'palmbeach-vitality');
-            echo '</strong> <code>' . esc_html($this->btc_address) . '</code></p>';
-        }
+        echo '<ol class="pbv-btc-payment-fields__steps">';
+        echo '<li>' . esc_html__('Copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('Send the exact checkout total in Bitcoin (BTC).', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('Place your order. We ship after the payment confirms.', 'palmbeach-vitality') . '</li>';
+        echo '</ol>';
+        $this->render_address_copy_box($this->receiving_address());
         echo '</div>';
     }
 
@@ -164,8 +202,9 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             __('Awaiting Bitcoin ($BTC) payment.', 'palmbeach-vitality')
         );
 
-        if ($this->btc_address) {
-            $order->update_meta_data('_pbv_btc_address', $this->btc_address);
+        $address = $this->receiving_address();
+        if ($address !== '') {
+            $order->update_meta_data('_pbv_btc_address', $address);
             $order->save();
         }
 
@@ -221,35 +260,27 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             return;
         }
 
-        $address = $this->btc_address ? $this->btc_address : (string) $order->get_meta('_pbv_btc_address');
-        $total   = $order->get_formatted_order_total();
+        $address = (string) $order->get_meta('_pbv_btc_address');
+        if ($address === '') {
+            $address = $this->receiving_address();
+        }
+        $total = $order->get_formatted_order_total();
 
         if ($plain_text) {
-            echo "\n" . esc_html__('Bitcoin ($BTC) payment', 'palmbeach-vitality') . "\n\n";
-            if ($this->instructions) {
-                echo esc_html(wp_strip_all_tags($this->instructions)) . "\n\n";
-            }
+            echo "\n" . esc_html__('Bitcoin (BTC) payment', 'palmbeach-vitality') . "\n\n";
+            echo esc_html__('Send the exact order total in Bitcoin (BTC) to this address:', 'palmbeach-vitality') . "\n";
             echo esc_html__('Order total:', 'palmbeach-vitality') . ' ' . esc_html(wp_strip_all_tags($total)) . "\n";
-            if ($address) {
+            if ($address !== '') {
                 echo esc_html__('BTC address:', 'palmbeach-vitality') . ' ' . esc_html($address) . "\n";
-            } else {
-                echo esc_html__('We will email your BTC payment address shortly.', 'palmbeach-vitality') . "\n";
             }
             return;
         }
 
         echo '<div class="pbv-btc-instructions">';
-        echo '<h3>' . esc_html__('Bitcoin ($BTC) payment', 'palmbeach-vitality') . '</h3>';
-        if ($this->instructions) {
-            echo wpautop(wp_kses_post($this->instructions));
-        }
+        echo '<h3>' . esc_html__('Bitcoin (BTC) payment', 'palmbeach-vitality') . '</h3>';
+        echo '<p>' . esc_html__('Send the exact order total in Bitcoin (BTC) to this address. We ship after the payment confirms.', 'palmbeach-vitality') . '</p>';
         echo '<p><strong>' . esc_html__('Order total:', 'palmbeach-vitality') . '</strong> ' . wp_kses_post($total) . '</p>';
-        if ($address) {
-            echo '<p><strong>' . esc_html__('BTC address:', 'palmbeach-vitality') . '</strong> ';
-            echo '<code class="pbv-btc-instructions__address">' . esc_html($address) . '</code></p>';
-        } else {
-            echo '<p>' . esc_html__('We will email your BTC payment address shortly.', 'palmbeach-vitality') . '</p>';
-        }
+        $this->render_address_copy_box($address);
         echo '</div>';
     }
 }

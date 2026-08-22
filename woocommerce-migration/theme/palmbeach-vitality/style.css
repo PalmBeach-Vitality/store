@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.58
+Version: 2.10.59
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1973,22 +1973,63 @@ body.pbv-lead-popup-open {
   margin: 0.35rem 0 0;
 }
 
-.pbv-btc-payment-fields__hint {
-  margin: 0 0 0.45rem;
+.pbv-btc-payment-fields__steps {
+  margin: 0 0 0.75rem 1.15rem;
+  padding: 0;
   font-size: 0.9rem;
+  line-height: 1.5;
   color: #334155;
 }
 
-.pbv-btc-payment-fields__address code,
-.pbv-btc-instructions__address {
-  display: inline-block;
-  margin-top: 0.2rem;
-  padding: 0.2rem 0.4rem;
+.pbv-btc-payment-fields__steps li {
+  margin: 0 0 0.3rem;
+}
+
+.pbv-btc-copy {
+  margin: 0.35rem 0 0;
+}
+
+.pbv-btc-copy__label {
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.pbv-btc-copy__row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.45rem;
+}
+
+.pbv-btc-copy__address {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.6rem;
   background: #f8fafc;
   border: 1px solid #e2e8f0;
   border-radius: 0.3rem;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
+  line-height: 1.4;
   word-break: break-all;
+}
+
+.pbv-btc-copy__btn {
+  flex: 0 0 auto;
+  border: 1px solid #111;
+  border-radius: 0.3rem;
+  background: #111;
+  color: #fff;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--pbv-font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pbv-btc-copy__btn:hover {
+  background: #333;
 }
 
 .pbv-btc-instructions {
@@ -2042,5 +2083,23 @@ body.pbv-lead-popup-open {
   color: var(--pbv-fg);
   background: var(--pbv-soft);
   border-left: 3px solid var(--pbv-line);
+}
+
+.pbv-welcome-coupon-hint__link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+}
+
+.pbv-welcome-coupon-hint__link:hover {
+  color: #111;
 }
 

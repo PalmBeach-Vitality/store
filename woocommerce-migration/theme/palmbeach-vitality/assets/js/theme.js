@@ -342,4 +342,38 @@
       if (render() || tries > 40) window.clearInterval(timer);
     }, 100);
   })();
+
+  document.addEventListener("click", function (event) {
+    var btn = event.target.closest("[data-pbv-copy]");
+    if (!btn) return;
+    var target = document.getElementById(btn.getAttribute("data-pbv-copy") || "");
+    if (!target) return;
+    var text = (target.textContent || "").trim();
+    if (!text) return;
+    var label = btn.textContent;
+    function copied() {
+      btn.textContent = "Copied";
+      window.setTimeout(function () {
+        btn.textContent = label;
+      }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(copied).catch(function () {
+        btn.textContent = label;
+      });
+      return;
+    }
+    var field = document.createElement("textarea");
+    field.value = text;
+    field.setAttribute("readonly", "");
+    field.style.position = "absolute";
+    field.style.left = "-9999px";
+    document.body.appendChild(field);
+    field.select();
+    try {
+      document.execCommand("copy");
+      copied();
+    } catch (e) {}
+    document.body.removeChild(field);
+  });
 })();

@@ -420,17 +420,10 @@ function pbv_checkout_welcome_coupon_hint() {
     if (!function_exists('is_checkout') || !is_checkout()) {
         return;
     }
-    echo '<p class="pbv-welcome-coupon-hint">'
-        . esc_html(
-            sprintf(
-                /* translators: 1: welcome code, 2: welcome %, 3: stack code, 4: stack % */
-                __('Have a code? New-client %1$s = %2$d%% off (first order, one use) stacks with %3$s (%4$d%%).', 'palmbeach-vitality'),
-                PBV_WELCOME_COUPON_CODE,
-                (int) PBV_WELCOME_COUPON_PERCENT,
-                PBV_STACK_COUPON_CODE,
-                (int) PBV_STACK_COUPON_PERCENT
-            )
-        )
-        . '</p>';
+    echo '<p class="pbv-welcome-coupon-hint">';
+    echo '<button type="button" class="pbv-welcome-coupon-hint__link" data-lead-popup-open>';
+    echo esc_html__('Click here to subscribe to our weekly newsletter and receive a discount code.', 'palmbeach-vitality');
+    echo '</button>';
+    echo '</p>';
 }
 add_action('woocommerce_before_checkout_form', 'pbv_checkout_welcome_coupon_hint', 8);
