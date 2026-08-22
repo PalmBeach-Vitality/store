@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.61
+Version: 2.10.62
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -1983,6 +1983,59 @@ body.pbv-lead-popup-open {
 
 .pbv-btc-payment-fields__steps li {
   margin: 0 0 0.3rem;
+}
+
+.pbv-btc-pay {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 0.85rem 0 0;
+}
+
+.pbv-btc-qr {
+  flex: 0 0 auto;
+  margin: 0;
+  text-align: center;
+}
+
+.pbv-btc-qr__code {
+  width: 168px;
+  height: 168px;
+  padding: 0.4rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.pbv-btc-qr__code img,
+.pbv-btc-qr__code canvas,
+.pbv-btc-qr__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pbv-btc-qr__caption {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.pbv-btc-pay .pbv-btc-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .pbv-btc-pay {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pbv-btc-pay .pbv-btc-copy {
+    width: 100%;
+  }
 }
 
 .pbv-btc-copy {

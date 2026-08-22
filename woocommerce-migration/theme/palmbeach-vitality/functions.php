@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.61');
+define('PBV_THEME_VERSION', '2.10.62');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
@@ -163,10 +163,24 @@ function pbv_assets() {
         null
     );
     wp_enqueue_style('pbv-theme', get_stylesheet_uri(), array('pbv-fonts'), PBV_THEME_VERSION);
+    $theme_deps = array();
+    if (
+        (function_exists('is_checkout') && is_checkout())
+        || (function_exists('is_wc_endpoint_url') && is_wc_endpoint_url('order-received'))
+    ) {
+        wp_enqueue_script(
+            'pbv-qrcode',
+            get_template_directory_uri() . '/assets/js/qrcode.min.js',
+            array(),
+            '1.0.0',
+            true
+        );
+        $theme_deps[] = 'pbv-qrcode';
+    }
     wp_enqueue_script(
         'pbv-theme',
         get_template_directory_uri() . '/assets/js/theme.js',
-        array(),
+        $theme_deps,
         PBV_THEME_VERSION,
         true
     );

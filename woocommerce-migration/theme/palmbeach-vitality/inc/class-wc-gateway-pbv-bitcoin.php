@@ -302,6 +302,14 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             return;
         }
         $id = 'pbv-btc-addr-' . wp_unique_id();
+        $qr = get_template_directory_uri() . '/assets/images/btc-qr.png';
+        echo '<div class="pbv-btc-pay">';
+        echo '<figure class="pbv-btc-qr" data-pbv-btc-qr data-btc-address="' . esc_attr($address) . '">';
+        echo '<div class="pbv-btc-qr__code" data-pbv-btc-qr-target>';
+        echo '<img class="pbv-btc-qr__img" src="' . esc_url($qr) . '" width="168" height="168" alt="' . esc_attr__('Scan to send Bitcoin', 'palmbeach-vitality') . '">';
+        echo '</div>';
+        echo '<figcaption class="pbv-btc-qr__caption">' . esc_html__('Scan to pay', 'palmbeach-vitality') . '</figcaption>';
+        echo '</figure>';
         echo '<div class="pbv-btc-copy">';
         echo '<p class="pbv-btc-copy__label">' . esc_html__('Receiving address', 'palmbeach-vitality') . '</p>';
         echo '<div class="pbv-btc-copy__row">';
@@ -309,6 +317,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         echo '<button type="button" class="pbv-btc-copy__btn" data-pbv-copy="' . esc_attr($id) . '">';
         echo esc_html__('Copy', 'palmbeach-vitality');
         echo '</button>';
+        echo '</div>';
         echo '</div>';
         echo '</div>';
         $this->render_platform_links();
@@ -357,7 +366,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             echo '</a>';
         }
         echo '</div>';
-        echo '<p class="pbv-btc-platforms__hint">' . esc_html__('Paste the address above, send the live Bitcoin amount shown, then place your order.', 'palmbeach-vitality') . '</p>';
+        echo '<p class="pbv-btc-platforms__hint">' . esc_html__('Scan the QR or paste the address, send the live Bitcoin amount shown, then place your order.', 'palmbeach-vitality') . '</p>';
         echo '</div>';
     }
 
@@ -367,7 +376,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
     public function payment_fields() {
         echo '<div class="pbv-btc-payment-fields">';
         echo '<ol class="pbv-btc-payment-fields__steps">';
-        echo '<li>' . esc_html__('Copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
+        echo '<li>' . esc_html__('Scan the QR code or copy the Bitcoin address below.', 'palmbeach-vitality') . '</li>';
         echo '<li>' . esc_html__('Send the live Bitcoin amount shown (it updates with the USD rate).', 'palmbeach-vitality') . '</li>';
         echo '<li>' . esc_html__('Place your order. We ship after the payment confirms.', 'palmbeach-vitality') . '</li>';
         echo '</ol>';

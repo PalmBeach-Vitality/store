@@ -529,6 +529,34 @@
     }
   })();
 
+  (function initBtcQr() {
+    function paint() {
+      document.querySelectorAll("[data-pbv-btc-qr]").forEach(function (wrap) {
+        var address = (wrap.getAttribute("data-btc-address") || "").trim();
+        var target = wrap.querySelector("[data-pbv-btc-qr-target]");
+        if (!address || !target) return;
+        var uri = "bitcoin:" + address;
+        if (wrap.getAttribute("data-qr-uri") === uri) return;
+        wrap.setAttribute("data-qr-uri", uri);
+        if (!window.QRCode) return;
+        target.innerHTML = "";
+        new QRCode(target, {
+          text: uri,
+          width: 152,
+          height: 152,
+          colorDark: "#111111",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M,
+        });
+      });
+    }
+
+    paint();
+    if (window.jQuery) {
+      window.jQuery(document.body).on("updated_checkout updated_wc_div", paint);
+    }
+  })();
+
   document.addEventListener("click", function (event) {
     var btn = event.target.closest("[data-pbv-copy]");
     if (!btn) return;
