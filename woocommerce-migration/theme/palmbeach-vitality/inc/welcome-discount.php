@@ -355,7 +355,7 @@ function pbv_intro_email_html($shop_url, $logo_url, $bg_url = '') {
                 </tr>
                 <tr>
                   <td style="padding:24px 34px 32px;background:#0c121a;border-top:1px solid #1a2430;">
-                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.65;color:#7f93a3;">Palm Beach Vitality · Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write sales@palmbeach-vitality.com.</p>
+                    <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.65;color:#7f93a3;">Palm Beach Vitality · Palm Beach County, Florida<br>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.<br>Questions? Reply to this email or write info@palmbeach-vitality.com.</p>
                   </td>
                 </tr>
               </table>
@@ -388,7 +388,7 @@ function pbv_intro_email_text($shop_url) {
         . "- A direct line to the team\n\n"
         . "Explore the catalog: {$shop_url}\n\n"
         . "All products are intended for research purposes only. Not for human consumption.\n"
-        . "Questions? Reply to this email or write sales@palmbeach-vitality.com.\n";
+        . "Questions? Reply to this email or write info@palmbeach-vitality.com.\n";
 }
 
 /**
@@ -404,7 +404,7 @@ function pbv_mail_intro_email_to_subscriber($email) {
     $subject = 'Welcome to the inner circle — Palm Beach Vitality';
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'Reply-To: sales@palmbeach-vitality.com',
+        'Reply-To: Palm Beach Vitality <info@palmbeach-vitality.com>',
     );
     $from = function_exists('pbv_authenticated_from_address') ? pbv_authenticated_from_address() : '';
     if ($from !== '') {

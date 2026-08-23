@@ -200,7 +200,8 @@ function pbv_mailpoet_align_sender() {
     if (!pbv_should_touch_mailpoet() || !class_exists('\MailPoet\Settings\SettingsController', false)) {
         return;
     }
-    if (get_option('pbv_mailpoet_sender_set')) {
+    // v2: reply-to info@ (was sales@).
+    if (get_option('pbv_mailpoet_sender_set') === '2') {
         return;
     }
     $from = function_exists('pbv_authenticated_from_address') ? pbv_authenticated_from_address() : '';
@@ -220,10 +221,10 @@ function pbv_mailpoet_align_sender() {
             'reply_to',
             array(
                 'name'    => 'Palm Beach Vitality',
-                'address' => 'sales@palmbeach-vitality.com',
+                'address' => 'info@palmbeach-vitality.com',
             )
         );
-        update_option('pbv_mailpoet_sender_set', 1, false);
+        update_option('pbv_mailpoet_sender_set', '2', false);
     } catch (\Throwable $e) {
         return;
     }
