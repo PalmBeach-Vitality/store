@@ -27,6 +27,8 @@ pick_creation
   → sheets_update_creation
 ```
 
+To **skip** the edit (no IF): disable the four edit nodes and enable `skip_still_edit` (`save_still_url` → `skip_still_edit` → `prep_grok_video_start`). Do not leave both paths on. See `n8n-vid-gen-lab-scenes.md`.
+
 Delete / unwired / disabled: `choose_still_path`, `normalize_still_path`, `switch_still_path`, `if_still_edit`, `if_video_ready`, any IF for still edit.
 
 ---

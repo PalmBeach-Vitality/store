@@ -17,11 +17,14 @@ When clicking ‘Execute workflow’
   → pick_creation                    least-used Sheet 9 row
   → grok_imagine_reel_still          first still
   → save_still_url                   raw still URL
-  → still_edit_instructions          YOUR edit prompt (see below)
+  → still_edit_instructions          edit desk
   → prep_still_edit
   → grok_imagine_edit_still          apply the edit
   → save_edited_still_url            edited still URL
   → prep_grok_video_start
+
+skip (optional, off by default):
+  save_still_url → skip_still_edit → prep_grok_video_start
   → grok_video_start
   → wait_video                       200s
   → grok_video_poll
@@ -29,7 +32,35 @@ When clicking ‘Execute workflow’
   → sheets_update_creation           times_used + last_used_at
 ```
 
-Video always uses the **edited** still, not the raw one.
+**Edit desk:** `still_edit_instructions`  
+**Skip desk:** `skip_still_edit` (off by default)
+
+Do not leave both **on**. That sends two videos.
+
+---
+
+## Edit the still — use `still_edit_instructions`
+
+This is the only node you type in.
+
+1. Keep **`skip_still_edit` disabled** (grey).
+2. Keep these **on**: `still_edit_instructions` → `prep_still_edit` → `grok_imagine_edit_still` → `save_edited_still_url`.
+3. Put the edit on Sheet 9 `still_edit_prompt`, **or** open `still_edit_instructions` → `still_edit_prompt` → **fx OFF** → paste.
+4. Execute.
+
+---
+
+## Skip the edit — use `skip_still_edit`
+
+1. **Disable** (turn off) these four:
+   - `still_edit_instructions`
+   - `prep_still_edit`
+   - `grok_imagine_edit_still`
+   - `save_edited_still_url`
+2. **Enable** `skip_still_edit` (click it → toggle Disabled off).
+3. Execute. Video uses the raw still from `save_still_url`.
+
+To go back to editing: disable `skip_still_edit` again and turn the four edit nodes back on.
 
 ---
 
