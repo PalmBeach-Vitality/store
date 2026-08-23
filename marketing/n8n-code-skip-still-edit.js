@@ -3,8 +3,8 @@
 // After: save_still_url
 // Before: prep_grok_video_start
 //
-// DISABLED when you want a still edit.
-// Enable this and disable still_edit_instructions to send the raw still to video.
-// Do not leave this ON at the same time as still_edit_instructions — that starts two videos.
+// Ready and enabled. Leave it unwired for an edit run.
+// To skip: disconnect save_still_url from still_edit_instructions,
+// then wire save_still_url → this node. Do not leave both wires on.
 
 return $input.all();
