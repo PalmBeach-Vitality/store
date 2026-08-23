@@ -2,6 +2,9 @@
 
 One-shot write onto `13-chem-breakdown-54`. Archive after Execute. Do **not** Publish.
 
+**Overlay (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/A1577eOZTQ2bz8so  
+Manual execution **1537** succeeded — wrote `model_video` = `kling-v3` onto all 54 rows. Workflow is archived.
+
 **Daily reader:** `peptide_molecule_vid_gen` (`EcGTbpZ9VG3C69pq`) — unpublished.  
 **Code:** `marketing/n8n-code-overlay-molecule-kling.js`
 
