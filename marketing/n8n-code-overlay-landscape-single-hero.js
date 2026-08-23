@@ -181,7 +181,6 @@ for (var i = 0; i < items.length; i++) {
   out.push({
     json: {
       creation_id: requireId(row),
-      category: cat,
       material_detail: prefixLock(material),
       hero_style: prefixLock(hero),
       scene_brief: prefixLock(scene),
