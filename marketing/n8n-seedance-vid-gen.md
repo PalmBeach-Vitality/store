@@ -16,7 +16,7 @@
 | **Seedance 2.5** | Live | Live on **fal.ai** (`bytedance/seedance-2.5/text-to-video`, I2V, reference-to-video). Native duration **4–30s**. |
 | **Seedance 2.0** | Live | Live on **fal.ai** + BytePlus ModelArk |
 
-Standalone hyperrealistic T2V (sheets-only, no Grok still): **`seedance_25_vid_gen`** — see `n8n-seedance-25-vid-gen.md`. This file remains the older I2V-from-Grok-still wire.
+Standalone hyperrealistic T2V (sheets-only, no Grok still): **`seedance_25_vid_gen`** is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred. This file remains the older I2V-from-Grok-still wire.
 
 ---
 
