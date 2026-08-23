@@ -22,7 +22,7 @@ pick_creation (least-used + new shot_family)
   → sheets_update_creation
 ```
 
-**Video model:** ByteDance **Seedance** (newest = **2.5**; ship on **2.0 via fal** until 2.5 API is in your catalog). See `n8n-seedance-vid-gen.md`.
+**Video model:** ByteDance **Seedance 2.5** is live on fal. Daily I2V notes: `n8n-seedance-vid-gen.md`. Standalone hyperrealistic T2V (sheets-only): `seedance_25_vid_gen` / `n8n-seedance-25-vid-gen.md`.
 
 ### B — `PBVita — Creatomate Package` (separate)
 
@@ -88,6 +88,18 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
+### G — `seedance_25_vid_gen` (separate)
+
+Hyperrealistic **30s** Seedance 2.5 **text-to-video**. All prompts and generate params from Sheet **`17-seedance-25-t2v`**. Not Grok. Not Creatomate. Linear — no Switch/IF.
+
+```text
+get_seedance_scenes → filter Active → pick_seedance_scene
+  → fal_seedance_generate → save_video_url → sheets_update_seedance
+```
+
+See `n8n-seedance-25-vid-gen.md`. Native fal max is 30s (not 60).  
+Live unpublished: https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -107,7 +119,8 @@ See `n8n-camera-diversity-plan.md`.
 - Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
-- Seedance video: `n8n-seedance-vid-gen.md`  
+- Seedance 2.5 T2V (sheets-only): `n8n-seedance-25-vid-gen.md`  
+- Seedance I2V notes: `n8n-seedance-vid-gen.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
