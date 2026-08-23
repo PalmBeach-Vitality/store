@@ -43,6 +43,8 @@ Unpublished. Google Sheets account + fal.ai account are attached.
 3. Do **not** Publish until one row looks right.
 4. One 30s 720p clip is expensive — do not batch-fire.
 
+Pick-only smoke (fal disabled) exec `1525`: sheet read + filter + pick `SD25-001` succeeded (`model_video` / `30` / `720p` / `9:16` / `audio=false` all from the sheet). Fal was re-enabled after. Overlay exec `1523` wrote the 27 rows, then archived.
+
 ---
 
 ## Node 1 — `manual_trigger`
@@ -168,4 +170,4 @@ CSV: https://github.com/PalmBeach-Vitality/store/blob/cursor/seedance-25-sheets-
 - Pick: `n8n-code-pick-seedance-25.js`  
 - Save URL: `n8n-code-save-seedance-25-url.js`  
 - Builder: `scripts/build_seedance_25_t2v.py`  
-- Overlay (one-shot, archive after): `n8n-code-overlay-seedance-25-sheet.js`  
+- Overlay (one-shot, archived after exec `1523`): `n8n-code-overlay-seedance-25-sheet.js` — 27 Active rows are on the live workbook (`SD25-001` … `SD25-027`).  

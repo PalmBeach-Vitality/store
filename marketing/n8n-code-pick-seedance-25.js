@@ -55,7 +55,8 @@ function capPrompt(text) {
 }
 
 function parseAudio(raw, creationId) {
-  var s = String(raw || '').trim().toLowerCase();
+  if (raw === false || raw === true) return raw;
+  var s = String(raw === undefined || raw === null ? '' : raw).trim().toLowerCase();
   if (s === 'false' || s === '0' || s === 'no' || s === 'off') return false;
   if (s === 'true' || s === '1' || s === 'yes' || s === 'on') return true;
   throw new Error(
