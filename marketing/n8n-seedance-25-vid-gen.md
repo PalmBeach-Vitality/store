@@ -1,6 +1,7 @@
 # seedance_25_vid_gen
 
-**New workflow** — hyperrealistic **text-to-video** from a Google Sheet.  
+**New workflow** — hyperrealistic **text-to-video** from a Google Sheet for **palmbeach-rx.com**.  
+**Not** the vitality.store daily paths. A separate `palmbeach-vitality.store` Seedance T2V workflow is deferred.  
 **Not** Grok stills. **Not** Creatomate. **Not** vial / pen / molecule daily paths. **No Switch / IF.**
 
 DeepSeek has no official video API. This is ByteDance **Seedance 2.5** on fal (`bytedance/seedance-2.5/text-to-video`), already planned in `GOAL.md`.

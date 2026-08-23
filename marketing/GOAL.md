@@ -22,7 +22,7 @@ pick_creation (least-used + new shot_family)
   → sheets_update_creation
 ```
 
-**Video model:** ByteDance **Seedance 2.5** is live on fal. Daily I2V notes: `n8n-seedance-vid-gen.md`. Standalone hyperrealistic T2V (sheets-only): `seedance_25_vid_gen` / `n8n-seedance-25-vid-gen.md`.
+**Video model:** ByteDance **Seedance 2.5** is live on fal. Daily I2V notes: `n8n-seedance-vid-gen.md`. Standalone hyperrealistic T2V (sheets-only): `seedance_25_vid_gen` is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred.
 
 ### B — `PBVita — Creatomate Package` (separate)
 
@@ -88,9 +88,9 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
-### G — `seedance_25_vid_gen` (separate)
+### G — `seedance_25_vid_gen` (palmbeach-rx.com)
 
-Hyperrealistic **30s** Seedance 2.5 **text-to-video**. All prompts and generate params from Sheet **`17-seedance-25-t2v`**. Not Grok. Not Creatomate. Linear — no Switch/IF.
+Hyperrealistic **30s** Seedance 2.5 **text-to-video** for **palmbeach-rx.com**. All prompts and generate params from Sheet **`17-seedance-25-t2v`**. Not Grok. Not Creatomate. Linear — no Switch/IF. Do **not** point this at vitality.store daily sheets. A separate `palmbeach-vitality.store` Seedance T2V workflow is deferred.
 
 ```text
 get_seedance_scenes → filter Active → pick_seedance_scene
