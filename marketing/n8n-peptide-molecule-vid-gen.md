@@ -44,11 +44,12 @@ manual_trigger
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Overlay `model_video` to `kling-v3` (`marketing/n8n-overlay-molecule-kling.md`). Daily `pick_molecule_creation` is not rewritten.
-3. Add n8n Variables (Settings → Variables):
+3. Official Kling is **not** Header Auth (Grok is). Do **not** attach `XAI Grok` or any Header Auth to `kling_i2v_start` / `kling_i2v_poll`. Authentication on those two nodes is **None**. Prep already sends `Authorization: Bearer <jwt>`.
+4. Add n8n Variables (Settings → Variables) — this is where the key goes:
    - `KLING_ACCESS_KEY` = Kling console **Access Key**
    - `KLING_SECRET_KEY` = Kling console **Secret Key**
-   Official Kling is two keys. Prep mints a 30-minute HS256 JWT each run (`iss` = Access Key).
-4. Test with **Execute workflow** (manual). Do not Publish until one row looks right. Do not fire a paid Kling clip until you want one.
+   Official Kling is two keys. Prep mints a 30-minute HS256 JWT each run (`iss` = Access Key). A static Header Auth Bearer will 401 once it expires (about 30 minutes), and a raw Access Key is not a Bearer token.
+5. Test with **Execute workflow** (manual). Do not Publish until one row looks right. Do not fire a paid Kling clip until you want one.
 
 ---
 
@@ -174,7 +175,7 @@ Throws if `model_video` is still a Grok name, or if the two Variables are missin
 |---|---|---|
 | Method | — | `POST` |
 | URL | **OFF** | `https://api.klingai.com/v1/videos/image2video` |
-| Authentication | — | None (JWT is minted per run) |
+| Authentication | — | **None** — not Header Auth |
 | Send Headers | — | **ON** |
 | Header `Authorization` | **ON** | `={{ 'Bearer ' + $json.kling_jwt }}` |
 | Send Body | — | **ON** |
