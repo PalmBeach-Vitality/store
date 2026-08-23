@@ -29,6 +29,8 @@ pick_creation
 
 To **skip** the edit (no IF): disconnect `save_still_url` from `still_edit_instructions` and wire `save_still_url` → `skip_still_edit`. Do not leave both wires on. See `n8n-vid-gen-lab-scenes.md`.
 
+**Mute:** `prep_grok_video_start` sends `audio: false` and prefixes sheet motion with a silent lock. No music or SFX.
+
 Delete / unwired / disabled: `choose_still_path`, `normalize_still_path`, `switch_still_path`, `if_still_edit`, `if_video_ready`, any IF for still edit.
 
 ---

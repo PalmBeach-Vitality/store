@@ -33,6 +33,8 @@ When clicking ‘Execute workflow’
 **Skip:** disconnect that wire, connect `save_still_url` → `skip_still_edit`.  
 Do not leave **both** wires on. That sends two videos.
 
+**Mute:** clips are silent. `prep_grok_video_start` sends `audio: false` and prefixes the sheet `video_motion_prompt` with a silent lock (same as pen / molecule). Camera and vial motion stay on the sheet. Do not rewrite `pick_creation`.
+
 ---
 
 ## Edit the still — `still_edit_instructions`
@@ -100,6 +102,7 @@ Use this when you want to see the raw still before you commit the edit / video.
 | `still_edit_instructions` | **This is the edit desk.** `still_url` fx **ON** from the raw still. `still_edit_prompt` fx **ON** from the sheet unless you turn it **OFF** for a one-run paste. |
 | `prep_still_edit` | Builds the xAI edit body. Paste: `n8n-code-prep-still-edit.js`. |
 | `save_edited_still_url` | Writes the edited `https` URL. Include Other Fields **ON**. |
+| `prep_grok_video_start` | Builds the xAI video body. Paste: `n8n-code-prep-grok-video-start.js`. Mutes the clip (`audio: false` + silent lock). |
 | `sheets_update_creation` | Match `creation_id`. Writes `times_used` + `last_used_at` only. |
 
 ---
