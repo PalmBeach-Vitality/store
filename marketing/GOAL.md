@@ -24,6 +24,8 @@ pick_creation (least-used + new shot_family)
 
 **Video model:** ByteDance **Seedance** (newest = **2.5**; ship on **2.0 via fal** until 2.5 API is in your catalog). See `n8n-seedance-vid-gen.md`.
 
+Live lab daily (Grok still → edit → Grok video) is **`Vid_gen_lab_scenes -9-lab-items-creations-500`**. Edit the still *before* video: `n8n-vid-gen-lab-scenes.md`.
+
 ### B — `PBVita — Creatomate Package` (separate)
 
 Copy `get_reel_text` → `save_creatomate_url` (+ any `sheets_append_reel`) into a new workflow.  
