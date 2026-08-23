@@ -2,6 +2,9 @@
 
 One-shot write onto `500_Peptide_Wellness_Reel_Scenes`. Archive after Execute. Do **not** Publish.
 
+**Overlay (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/VeBWei22Oyv06qDg  
+Manual execution **1535** succeeded — wrote the COUNT=1 spotlight onto `pen_3ml` + `vial_10ml` + `set_environment`. Workflow is archived.
+
 **Daily reader:** `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` (`Kc2HqqjSyiKs87qy`) — sheets-only, unpublished.  
 **Code:** `marketing/n8n-code-overlay-landscape-single-hero.js`
 
