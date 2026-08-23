@@ -11,7 +11,7 @@
 **Vibe (mandatory):** dark cinematic 3D **medical animation of a cellular chemical reaction** — living cells + amino acids forming peptide bonds at microscopic scale. Not a sunlit studio. Not a glass pedestal. Not the pen workflow. **No logo. No text. No sound** (add those after vid gen).
 
 **Still:** Grok Imagine Image (`model_still` on the sheet).  
-**Video:** official Kling image-to-video (`model_video` on the sheet, overlay writes `kling-v3`). Clip is muted (`sound: "off"` + silent motion). Kling 3 holds the sheet’s existing 15s duration, so the old Grok 15+10 extend dance is disabled.
+**Video:** kie.ai Kling image-to-video (`model_video` on the sheet, overlay writes `kling-3.0-omni/image-to-video`). Clip is muted (`audio: false` + silent motion). Omni I2V holds the sheet’s existing 15s / 1080p, so the old Grok 15+10 extend dance is disabled.
 
 Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen-creations-150`. Do not mix sheets.
 
@@ -43,12 +43,9 @@ manual_trigger
 ## After import / before Execute
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
-2. Overlay `model_video` to `kling-v3` (`marketing/n8n-overlay-molecule-kling.md`). Daily `pick_molecule_creation` is not rewritten.
-3. Official Kling is **not** Header Auth (Grok is). Do **not** attach `XAI Grok` or any Header Auth to `kling_i2v_start` / `kling_i2v_poll`. Authentication on those two nodes is **None**. Prep already sends `Authorization: Bearer <jwt>`.
-4. Add n8n Variables (Settings → Variables) — this is where the key goes:
-   - `KLING_ACCESS_KEY` = Kling console **Access Key**
-   - `KLING_SECRET_KEY` = Kling console **Secret Key**
-   Official Kling is two keys. Prep mints a 30-minute HS256 JWT each run (`iss` = Access Key). A static Header Auth Bearer will 401 once it expires (about 30 minutes), and a raw Access Key is not a Bearer token.
+2. Overlay `model_video` to `kling-3.0-omni/image-to-video` (`marketing/n8n-overlay-molecule-kling.md`). Daily `pick_molecule_creation` is not rewritten.
+3. The key Salvatore entered is **one** Bearer API key. There is **no Secret Key**. Official Kling Access Key + Secret Key JWT is the wrong path for this key.
+4. `kling_i2v_start` and `kling_i2v_poll` send Header `Authorization: Bearer <that one key>`. Authentication on those two nodes is **None** (the header is on the node). Do **not** attach `XAI Grok`.
 5. Test with **Execute workflow** (manual). Do not Publish until one row looks right. Do not fire a paid Kling clip until you want one.
 
 ---
@@ -100,7 +97,7 @@ Paste: `marketing/n8n-code-pick-molecule-creation.js`
 
 Picks the next **unused** row by `rank`. A row is used if `times_used > 0` or `last_used_at` is set.
 
-**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `model_still` = `grok-imagine-image-2.0`, `model_video` = `kling-v3`
+**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `model_still` = `grok-imagine-image-2.0`, `model_video` = `kling-3.0-omni/image-to-video`
 
 ---
 
@@ -151,18 +148,18 @@ Include Other Input Fields: **ON**
 
 Paste: `marketing/n8n-code-prep-molecule-video-start.js`
 
-Mints the Kling JWT from n8n Variables. Builds `kling_i2v_body_json`:
+Builds `kling_i2v_body_json` for kie `createTask`:
 
-- `model_name` = sheet `model_video`
-- `image` = Grok `still_url`
-- `prompt` = silent-locked `video_motion_prompt` (Kling max 2500)
-- `duration` = sheet `duration_seconds` as a string
-- `mode` = `pro` when sheet `resolution` is `1080p`, `std` when `720p`
-- `sound` = `off`
+- `model` = sheet `model_video`
+- `input.image_urls` = `[Grok still_url]`
+- `input.prompt` = silent-locked `video_motion_prompt` (omni max 3072)
+- `input.duration` = sheet `duration_seconds` (integer 3–15)
+- `input.resolution` = sheet `resolution` (`720p` / `1080p` / `4k`)
+- `input.audio` = `false`
 
-Throws if `model_video` is still a Grok name, or if the two Variables are missing.
+Throws if `model_video` is empty or still a Grok name. Does **not** mint a JWT. Does **not** need a Secret Key.
 
-**Check:** `still_url` https + `kling_jwt` + `kling_i2v_body_json`
+**Check:** `still_url` https + `kling_i2v_body_json`
 
 ---
 
@@ -174,16 +171,16 @@ Throws if `model_video` is still a Grok name, or if the two Variables are missin
 | Setting | fx | Value |
 |---|---|---|
 | Method | — | `POST` |
-| URL | **OFF** | `https://api.klingai.com/v1/videos/image2video` |
-| Authentication | — | **None** — not Header Auth |
+| URL | **OFF** | `https://api.kie.ai/api/v1/jobs/createTask` |
+| Authentication | — | **None** — header is on the node |
 | Send Headers | — | **ON** |
-| Header `Authorization` | **ON** | `={{ 'Bearer ' + $json.kling_jwt }}` |
+| Header `Authorization` | **OFF** | `Bearer <the one API key>` |
 | Send Body | — | **ON** |
 | Body Content Type | — | **Raw** |
 | Content Type | **OFF** | `application/json` |
 | Body | **ON** | `={{ $json.kling_i2v_body_json }}` |
 
-**Check:** `data.task_id`. Clip is **muted**. Add sound later.
+**Check:** `data.taskId`. Clip is **muted**. Add sound later. Do **not** attach `XAI Grok`.
 
 ---
 
@@ -210,31 +207,26 @@ Must be **enabled**.
 | Setting | fx | Value |
 |---|---|---|
 | Method | — | `GET` |
-| URL | **ON** | `={{ 'https://api.klingai.com/v1/videos/image2video/' + $('kling_i2v_start').first().json.data.task_id }}` |
-| Authentication | — | **None** — not Header Auth |
+| URL | **ON** | `={{ 'https://api.kie.ai/api/v1/jobs/recordInfo?taskId=' + $('kling_i2v_start').first().json.data.taskId }}` |
+| Authentication | — | **None** — header is on the node |
 | Send Headers | — | **ON** |
-| Header `Authorization` | **ON** | `={{ 'Bearer ' + $('prep_molecule_video_start').first().json.kling_jwt }}` |
+| Header `Authorization` | **OFF** | `Bearer <the same one API key>` |
 | Send Body | — | **OFF** |
 
-**Check:** `data.task_status` = `succeed` + `data.task_result.videos[0].url`. If still `processing`, raise wait.
+**Check:** `data.state` = `success` + `data.resultJson` has `resultUrls[0]`. If still `generating` / `waiting` / `queuing`, raise wait.
 
 ---
 
 ## Node 11 — `save_video_url`
 
-**Type:** Edit Fields  
-**Before → this → After:** `kling_i2v_poll` → **save_video_url** → `sheets_update_chem`  
-Include Other Input Fields: **ON**
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `kling_i2v_poll` → **save_video_url** → `sheets_update_chem`
 
-| Name | fx | Value |
-|---|---|---|
-| `video_url` | **ON** | `={{ $json.data.task_result.videos[0].url }}` |
-| `still_url` | **ON** | `={{ $('save_still_url').first().json.still_url }}` |
-| `creation_id` | **ON** | `={{ $('pick_molecule_creation').first().json.creation_id }}` |
-| `compound_name` | **ON** | `={{ $('pick_molecule_creation').first().json.compound_name }}` |
-| `created_at` | **ON** | `={{ $now.toISO() }}` |
-| `duration_seconds` | **ON** | `={{ $('pick_molecule_creation').first().json.duration_seconds }}` |
-| `request_id` | **ON** | `={{ $('kling_i2v_start').first().json.data.task_id }}` |
+Paste: `marketing/n8n-code-save-molecule-video-url.js`
+
+Throws if `data.state` is not `success` or `resultUrls[0]` is missing.
+
+**Check:** `video_url` https + `request_id` = kie `taskId`
 
 ---
 
@@ -262,4 +254,5 @@ Marks the row used **after** the video so a failed Kling job does not burn the r
 - Sheet: `marketing/sheets/13-chem-breakdown-54.csv`
 - Pick: `marketing/n8n-code-pick-molecule-creation.js`
 - Prep video: `marketing/n8n-code-prep-molecule-video-start.js`
+- Save video: `marketing/n8n-code-save-molecule-video-url.js`
 - Overlay: `marketing/n8n-overlay-molecule-kling.md`

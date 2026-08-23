@@ -3,12 +3,12 @@
 // Mode: Run Once for All Items. Execute Once = OFF
 // After: get_chem_creations  Before: sheets_update_model_video
 //
-// Salvatore: switch molecule vid-gen video to official Kling I2V.
+// Salvatore: molecule video is kie.ai Kling I2V (one Bearer API key).
 // Writes model_video only onto 13-chem-breakdown-54.
 // Does NOT emit times_used / last_used_at / still_url / video_url.
 // Does NOT rewrite daily pick_molecule_creation.
 
-var MODEL_VIDEO = 'kling-v3';
+var MODEL_VIDEO = 'kling-3.0-omni/image-to-video';
 
 var rows = $input.all().map(function (i) {
   return i.json;

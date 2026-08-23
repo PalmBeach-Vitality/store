@@ -1,24 +1,21 @@
-# Overlay: Sheet 13 video model → Kling
+# Overlay: Sheet 13 video model → kie Kling I2V
 
 One-shot write onto `13-chem-breakdown-54`. Archive after Execute. Do **not** Publish.
-
-**Overlay (archived after execute):** https://stockjohnson.app.n8n.cloud/workflow/A1577eOZTQ2bz8so  
-Manual execution **1537** succeeded — wrote `model_video` = `kling-v3` onto all 54 rows. Workflow is archived.
 
 **Daily reader:** `peptide_molecule_vid_gen` (`EcGTbpZ9VG3C69pq`) — unpublished.  
 **Code:** `marketing/n8n-code-overlay-molecule-kling.js`
 
-Salvatore: molecule **video** is official Kling image-to-video. Grok still stays.
+Salvatore: molecule **video** is kie.ai Kling image-to-video (one Bearer API key). There is **no Secret Key**. Grok still stays.
 
 ## What it changes
 
 | Column | New value |
 |---|---|
-| `model_video` | `kling-v3` |
+| `model_video` | `kling-3.0-omni/image-to-video` |
 
 Does **not** touch `times_used`, URLs, prompts, duration, or `model_still`.
 
-`kling-v3` is the official I2V model that can hold the sheet’s existing `duration_seconds` = 15. Older Kling I2V models only accept 5 or 10.
+`kling-3.0-omni/image-to-video` is the kie I2V model that can hold the sheet’s existing `duration_seconds` = 15 and `resolution` = `1080p`.
 
 ## Wire
 
@@ -31,4 +28,4 @@ Manual Trigger
 
 ## After overlay
 
-Existing stills do not change. Re-Execute `peptide_molecule_vid_gen` from `get_chem_creations` after the two n8n Variables are set. Do **not** Publish. Do **not** fire a paid Kling clip until you want one.
+Existing stills do not change. Re-Execute `peptide_molecule_vid_gen` from `get_chem_creations` after the two Kling HTTP nodes have the Bearer header. Do **not** Publish. Do **not** fire a paid Kling clip until you want one.
