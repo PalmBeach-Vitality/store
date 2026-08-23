@@ -211,7 +211,7 @@ Must be **enabled**.
 |---|---|---|
 | Method | — | `GET` |
 | URL | **ON** | `={{ 'https://api.klingai.com/v1/videos/image2video/' + $('kling_i2v_start').first().json.data.task_id }}` |
-| Authentication | — | None |
+| Authentication | — | **None** — not Header Auth |
 | Send Headers | — | **ON** |
 | Header `Authorization` | **ON** | `={{ 'Bearer ' + $('prep_molecule_video_start').first().json.kling_jwt }}` |
 | Send Body | — | **OFF** |
