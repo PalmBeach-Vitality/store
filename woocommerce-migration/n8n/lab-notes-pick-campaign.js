@@ -55,6 +55,7 @@ var instagram_url = must(pick, ['instagram_url'], 'instagram_url');
 var tiktok_url = must(pick, ['tiktok_url'], 'tiktok_url');
 var test_email = must(pick, ['test_email'], 'test_email').toLowerCase();
 var delay_seconds = Number(must(pick, ['delay_seconds'], 'delay_seconds'));
+// Sheet from_email stays info@ (Reply-To brand). Gmail From is always sales@. Leave it.
 if (from_email !== 'info@palmbeach-vitality.com') {
   throw new Error('pick_campaign: from_email must be info@palmbeach-vitality.com. Got: ' + from_email);
 }

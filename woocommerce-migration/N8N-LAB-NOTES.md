@@ -4,11 +4,11 @@
 
 MailPoet stays a **list only**. Do **not** send Lab Notes (or any marketing) through MailPoet Sending Service. WordPress.com `wp_mail` is also out — DMARC will fail.
 
-This path is the same authenticated Workspace send that already works for the welcome email: n8n → **Gmail account 2** (`IVBMByCjDhHJYhXB`) logged in as **sales@palmbeach-vitality.com**. The Gmail **Send** node ignores the mailbox default unless **fromAlias** is set. Lab Notes sets `fromAlias` from the sheet `from_email` (`info@palmbeach-vitality.com`). `info@` is already a verified Send mail as alias on `sales@`.
+This path is the same authenticated Workspace send that already works for the welcome email: n8n → **Gmail account 2** (`IVBMByCjDhHJYhXB`) logged in as **sales@palmbeach-vitality.com**. The Gmail Send node stamps **From** as that mailbox. Leave it. **Reply-To** is `info@palmbeach-vitality.com`. Do not try `fromAlias`, Send mail as, or a Gmail API HTTP node to force `info@` — those do not change the envelope.
 
 | | |
 |---|---|
-| Send workflow | [`Vitality.store_newsletter_send`](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) (id `J4ZmB8VsgynkWsVt`) — **unpublished** until the inbox check passes |
+| Send workflow | [`Vitality.store_newsletter_send`](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) (id `J4ZmB8VsgynkWsVt`) — **unpublished** until you ask to publish |
 | List workflow | [`Vitality.store_lab_notes_list`](https://stockjohnson.app.n8n.cloud/workflow/pY2SCaWGf9QPDB90) (id `pY2SCaWGf9QPDB90`) — **published** |
 | Campaigns sheet | [Vitality.store_lab_notes_campaigns](https://docs.google.com/spreadsheets/d/1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc/edit) (weekly layout) |
 | Subscriber list | [Vitality.store_subscriber_list](https://docs.google.com/spreadsheets/d/1pqqDnTmpl4konPrwWKZ3jd1kGhINcuhi_jFo1aOZ5Yw/edit) |
@@ -18,20 +18,17 @@ This path is the same authenticated Workspace send that already works for the we
 
 SDK sources: [`n8n/Vitality.store_newsletter_send.sdk.js`](./n8n/Vitality.store_newsletter_send.sdk.js), [`n8n/lab-notes-pick-campaign.js`](./n8n/lab-notes-pick-campaign.js), [`n8n/lab-notes-build-send-list.js`](./n8n/lab-notes-build-send-list.js), [`n8n/Vitality.store_lab_notes_list.sdk.js`](./n8n/Vitality.store_lab_notes_list.sdk.js).
 
-## What you click first (inbox check)
+## Inbox check (done)
 
-1. `info@palmbeach-vitality.com` is already a verified **Send mail as** alias on `sales@` (and is the Gmail default). n8n still needs **fromAlias** on the Send node — changing the default alone does not change From.
-2. Open [LN-TEST-001](https://docs.google.com/spreadsheets/d/1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc/edit). Set status to `test`. `test_email` is `sales@palmbeach-vitality.com`.
-3. Open [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt). Confirm **send_lab_notes** uses credential **Gmail account 2** and Options → **From alias** = `{{ $json.from_email }}`.
-4. Click **Test workflow**. It sends **one** email to `sales@` only. Wait ~12 seconds, then it marks the row `tested`.
-5. Open that message → **⋮ → Show original**. You want:
-   - `From: Palm Beach Vitality <info@palmbeach-vitality.com>`
-   - `Reply-To: info@palmbeach-vitality.com`
-   - `SPF: PASS`, `DKIM: PASS` with `d=palmbeach-vitality.com`, `DMARC: PASS`
-   - Primary inbox, not spam
-6. Only after that: `LN-001` already has the Aug 28 mockup copy as `draft`. Set it to `test`, run the send workflow, then `ready` for the list.
+`LN-TEST-001` landed in the `sales@` inbox. Accepted headers:
 
-Do **not** Publish the send workflow until you are happy clicking Test by hand. Publishing is for later (a schedule), not for the first issues.
+- `From: Palm Beach Vitality <sales@palmbeach-vitality.com>`
+- `Reply-To: info@palmbeach-vitality.com`
+- `mailed-by: palmbeach-vitality.com`
+
+Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
+
+Next issue when you want it: set `LN-001` to `test`, run [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) by hand, then `ready` for the list. After a run the row becomes `tested` / `sent` — reset to `test` before another test.
 
 ## Where you write the newsletter
 
@@ -43,7 +40,7 @@ Format in the cells: **plain text**. New paragraph = **Alt+Enter** inside the ce
 
 ## Campaign sheet fields
 
-Empty cells fail. Placeholder draft copy (`write the …`) also fails. Do not leave `from_email` / `reply_to` as anything except `info@palmbeach-vitality.com`.
+Empty cells fail. Placeholder draft copy (`write the …`) also fails. Sheet `from_email` / `reply_to` stay `info@palmbeach-vitality.com` (Reply-To). Gmail **From** is always `sales@`.
 
 | Column | Required | Notes |
 |---|---|---|
@@ -52,7 +49,7 @@ Empty cells fail. Placeholder draft copy (`write the …`) also fails. Do not le
 | `subject` | yes | Gmail subject. Short, not shouty |
 | `preview_text` | yes | Hidden inbox preheader |
 | `from_name` | yes | `Palm Beach Vitality` |
-| `from_email` | yes | Must be `info@palmbeach-vitality.com` |
+| `from_email` | yes | Must be `info@palmbeach-vitality.com` (sheet field; Gmail From is still `sales@`) |
 | `reply_to` | yes | Must be `info@palmbeach-vitality.com` |
 | `issue_line` | yes | Purple bar, e.g. `Weekly Research Update  ·  August 28, 2026` |
 | `header_image_url` | yes | HTTPS image. Default is the Lab Notes sunset header in this repo |
@@ -78,7 +75,7 @@ Empty cells fail. Placeholder draft copy (`write the …`) also fails. Do not le
 ## Why this stays out of spam
 
 - Authenticated Google Workspace send (same SPF/DKIM as welcome). Not MailPoet. Not WordPress.com.
-- From / Reply-To **info@** (marketing), not a mismatch with `sales@`.
+- From **sales@** (Workspace mailbox). Reply-To **info@**. Same SPF/DKIM domain.
 - **One recipient per message.** No BCC blast.
 - **Pause between sends** from the sheet (`delay_seconds`).
 - Skips `unsubscribed` and anyone already `sent` for that `campaign_id`.
@@ -132,7 +129,7 @@ manual_trigger → **get_campaigns** → filter_sendable
 filter_sendable → **pick_campaign** → get_sends
 
 - Prefers `status=test` over `ready`
-- Throws if `from_email` / `reply_to` are not `info@palmbeach-vitality.com`
+- Throws if sheet `from_email` / `reply_to` are not `info@palmbeach-vitality.com` (Reply-To). Gmail From is still `sales@`.
 - Throws if `delay_seconds` &lt; 5
 - Throws if the row still has “write the …” placeholder copy
 
@@ -145,8 +142,8 @@ send_one_at_a_time → **send_lab_notes** → log_sent_fields
 - Subject: `{{ $json.subject }}`
 - Email Type: HTML
 - Sender Name: `{{ $json.from_name }}`
-- Reply To: `{{ $json.reply_to }}`
-- From alias: `{{ $json.from_email }}` (must be `info@palmbeach-vitality.com`)
+- Reply To: `{{ $json.reply_to }}` (`info@`)
+- From: Gmail account 2 mailbox (`sales@`). Leave it. No fromAlias.
 - Append n8n attribution: **off**
 - On error: continue (log `failed`, keep going)
 
@@ -206,6 +203,6 @@ If the sheet is missing people who only live in MailPoet:
 
 ## After the inbox check
 
-When you want a monthly schedule (automation #2): add a Schedule Trigger to the send workflow, keep `status=ready` as the gate, then Publish. Do not schedule until `LN-TEST-001` passed Show original.
+When you want a monthly schedule (automation #2): add a Schedule Trigger to the send workflow, keep `status=ready` as the gate, then Publish. Do not schedule until you ask.
 
 If you want failure alerts (email/Slack when a production run dies), say whether you prefer a shared Error Trigger workflow or an Error Trigger inside this one — I will not turn that on silently.

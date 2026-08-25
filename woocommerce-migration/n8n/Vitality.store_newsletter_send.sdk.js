@@ -1,7 +1,7 @@
 import { workflow, node, trigger, sticky, newCredential, splitInBatches, nextBatch, expr } from '@n8n/workflow-sdk';
 
 // Live weekly HTML: n8n/lab-notes-pick-campaign.js + n8n/lab-notes-build-send-list.js
-// Gmail Send uses options.fromAlias = sheet from_email (info@). Default Send mail as is not enough.
+// Gmail From is the OAuth mailbox (sales@). Leave it. Reply-To is sheet reply_to (info@).
 
 const sheetsCred = { googleSheetsOAuth2Api: newCredential('Google Sheets account') };
 const gmailCred = { gmailOAuth2: newCredential('Gmail account 2') };
@@ -223,8 +223,7 @@ const sendLabNotes = node({
       options: {
         senderName: expr('{{ $json.from_name }}'),
         appendAttribution: false,
-        replyTo: expr('{{ $json.reply_to }}'),
-        fromAlias: expr('{{ $json.from_email }}')
+        replyTo: expr('{{ $json.reply_to }}')
       }
     },
     credentials: gmailCred
@@ -389,7 +388,7 @@ const markCampaign = node({
 });
 
 const note = sticky(
-  '# Vitality.store_newsletter_send (unpublished)\n\n**Weekly HTML** matching the Aug 21 mockup. Copy lives in the campaigns SHEET, not this canvas. Do not use MailPoet Sending Service.\n\nGmail Send uses fromAlias = sheet from_email (info@). Changing the Send mail as default is not enough — the node ignores it unless fromAlias is set.\n\n1. status=test → only test_email (start here).\n2. status=ready → subscribed rows, 1 email at a time, wait delay_seconds.\n3. From / Reply-To must be info@palmbeach-vitality.com.\n4. Write issue_line, industry, spotlight, status_box, and 3 research links. Alt+Enter for a new paragraph.\n5. Empty cells throw. Placeholder “write the …” copy throws.',
+  '# Vitality.store_newsletter_send (unpublished)\n\n**Weekly HTML** matching the Aug 21 mockup. Copy lives in the campaigns SHEET, not this canvas. Do not use MailPoet Sending Service.\n\nFrom is sales@palmbeach-vitality.com (Gmail account 2). Leave it. Reply-To is info@. Do not try fromAlias, Send mail as, or Gmail API HTTP to force info@.\n\n1. status=test → only test_email (start here).\n2. status=ready → subscribed rows, 1 email at a time, wait delay_seconds.\n3. Reply-To must be info@palmbeach-vitality.com.\n4. Write issue_line, industry, spotlight, status_box, and 3 research links. Alt+Enter for a new paragraph.\n5. Empty cells throw. Placeholder “write the …” copy throws.',
   [startTrigger, getCampaigns],
   { color: 4 }
 );
