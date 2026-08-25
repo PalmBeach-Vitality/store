@@ -4,7 +4,7 @@
 
 MailPoet stays a **list only**. Do **not** send Lab Notes (or any marketing) through MailPoet Sending Service. WordPress.com `wp_mail` is also out — DMARC will fail.
 
-This path is the same authenticated Gmail send that already works for the welcome email: n8n → **Gmail account 2** (`IVBMByCjDhHJYhXB`) logged in as **sales@palmbeach-vitality.com**, **Send mail as** / Reply-To **info@palmbeach-vitality.com**.
+This path is the same authenticated Workspace send that already works for the welcome email: n8n → **Gmail account 2** (`IVBMByCjDhHJYhXB`) logged in as **sales@palmbeach-vitality.com**. The n8n Gmail node has **no From field** and always stamps `sales@`, so Lab Notes POSTs a raw MIME message to the Gmail API with **From: info@palmbeach-vitality.com**. `info@` must stay a verified **Send mail as** alias on `sales@`.
 
 | | |
 |---|---|
@@ -21,13 +21,12 @@ SDK sources: [`n8n/Vitality.store_newsletter_send.sdk.js`](./n8n/Vitality.store_
 ## What you click first (inbox check)
 
 1. In Gmail as **sales@** → ⚙️ → **See all settings** → **Accounts and Import** → **Send mail as**:
-   - `info@palmbeach-vitality.com` must exist (you already tested Send mail as).
-   - Set **info@** as the **default**. n8n’s Gmail node has no From field — it uses that default. Name: **Palm Beach Vitality**.
-2. Open [LN-TEST-001](https://docs.google.com/spreadsheets/d/1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc/edit). Status is already `test`. `test_email` is `sales@palmbeach-vitality.com`.
-3. Open [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt). Confirm **send_lab_notes** uses credential **Gmail account 2**.
+   - `info@palmbeach-vitality.com` must exist as a verified alias (Name: **Palm Beach Vitality**). Changing the *default* does not matter — the Gmail node ignores it.
+2. Open [LN-TEST-001](https://docs.google.com/spreadsheets/d/1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc/edit). Set status to `test`. `test_email` is `sales@palmbeach-vitality.com`.
+3. Open [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt). Confirm **send_lab_notes** is the Gmail API HTTP Request using credential **Gmail account 2**.
 4. Click **Test workflow**. It sends **one** email to `sales@` only. Wait ~12 seconds, then it marks the row `tested`.
 5. Open that message → **⋮ → Show original**. You want:
-   - `From: Palm Beach Vitality <info@palmbeach-vitality.com>` (or sales@ if Send mail as is not default yet — fix step 1)
+   - `From: Palm Beach Vitality <info@palmbeach-vitality.com>`
    - `Reply-To: info@palmbeach-vitality.com`
    - `SPF: PASS`, `DKIM: PASS` with `d=palmbeach-vitality.com`, `DMARC: PASS`
    - Primary inbox, not spam
@@ -105,9 +104,11 @@ get_sends → **get_subscribers** → build_send_list
 
 get_subscribers → **build_send_list** → send_one_at_a_time
 
-build_send_list → **send_one_at_a_time** → send_lab_notes
+build_send_list → **send_one_at_a_time** → encode_gmail_raw
 
-send_one_at_a_time → **send_lab_notes** → log_sent_fields
+send_one_at_a_time → **encode_gmail_raw** → send_lab_notes
+
+encode_gmail_raw → **send_lab_notes** → log_sent_fields
 
 send_lab_notes → **log_sent_fields** → append_send_log
 
@@ -138,18 +139,23 @@ filter_sendable → **pick_campaign** → get_sends
 - Throws if `delay_seconds` &lt; 5
 - Throws if the row still has “write the …” placeholder copy
 
+### encode_gmail_raw
+
+send_one_at_a_time → **encode_gmail_raw** → send_lab_notes
+
+- Builds RFC 2822 HTML mail with `From: {{ $json.from_name }} <{{ $json.from_email }}>`
+- Throws if `from_email` is not `info@palmbeach-vitality.com`
+- Source: [`n8n/lab-notes-encode-gmail-raw.js`](./n8n/lab-notes-encode-gmail-raw.js)
+
 ### send_lab_notes
 
-send_one_at_a_time → **send_lab_notes** → log_sent_fields
+encode_gmail_raw → **send_lab_notes** → log_sent_fields
 
-- Credential: **Gmail account 2** (`IVBMByCjDhHJYhXB`) — sales@ Workspace
-- Send To: `{{ $json.email }}`
-- Subject: `{{ $json.subject }}`
-- Email Type: HTML
-- Sender Name: `{{ $json.from_name }}`
-- Reply To: `{{ $json.reply_to }}`
-- Append n8n attribution: **off**
+- HTTP Request POST `https://gmail.googleapis.com/gmail/v1/users/me/messages/send`
+- Credential: **Gmail account 2** (`IVBMByCjDhHJYhXB`) — sales@ Workspace (predefined Gmail OAuth2)
+- Body field `raw`: `{{ $json.raw }}` (base64url MIME from encode_gmail_raw)
 - On error: continue (log `failed`, keep going)
+- Do **not** use the Gmail node for this send — it cannot set From and will stamp `sales@`
 
 ### pace_sends
 
