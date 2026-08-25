@@ -1,5 +1,8 @@
 import { workflow, node, trigger, sticky, newCredential, splitInBatches, nextBatch, expr } from '@n8n/workflow-sdk';
 
+// Live weekly HTML: n8n/lab-notes-pick-campaign.js + n8n/lab-notes-build-send-list.js
+// (those files match the unpublished Vitality.store_newsletter_send workflow).
+
 const sheetsCred = { googleSheetsOAuth2Api: newCredential('Google Sheets account') };
 const gmailCred = { gmailOAuth2: newCredential('Gmail account 2') };
 
@@ -20,13 +23,13 @@ const getCampaigns = node({
       documentId: {
         __rl: true,
         mode: 'id',
-        value: '1SZ2Zw2q70oqYjEoqus_IbwH7v1dALMdmo8UCkNRiCeU',
+        value: '1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc',
         cachedResultName: 'Vitality.store_lab_notes_campaigns'
       },
       sheetName: {
         __rl: true,
         mode: 'list',
-        value: '791505920',
+        value: '1259233093',
         cachedResultName: 'Untitled'
       },
       options: {}
@@ -356,13 +359,13 @@ const markCampaign = node({
       documentId: {
         __rl: true,
         mode: 'id',
-        value: '1SZ2Zw2q70oqYjEoqus_IbwH7v1dALMdmo8UCkNRiCeU',
+        value: '1rclpmXWCDVpXgWfQL-5JesB4XGjdgTlhM-bVaEd1Lhc',
         cachedResultName: 'Vitality.store_lab_notes_campaigns'
       },
       sheetName: {
         __rl: true,
         mode: 'list',
-        value: '791505920',
+        value: '1259233093',
         cachedResultName: 'Untitled'
       },
       columns: {
