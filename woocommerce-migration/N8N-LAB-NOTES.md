@@ -28,7 +28,7 @@ SDK sources: [`n8n/Vitality.store_newsletter_send.sdk.js`](./n8n/Vitality.store_
 
 Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
-Next issue when you want it: set `LN-001` to `test`, run [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) by hand, then `ready` for the list. After a run the row becomes `tested` / `sent` — reset to `test` before another test.
+`LN-001` (Aug 28 issue) was sent on Aug 25, 2026 to the 5 subscribed rows, including `sales@`. The campaign row is now `sent`. Duplicate that row for the next week.
 
 ## Where you write the newsletter
 
