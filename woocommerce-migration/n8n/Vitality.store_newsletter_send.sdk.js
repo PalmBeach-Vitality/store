@@ -1,7 +1,7 @@
 import { workflow, node, trigger, sticky, newCredential, splitInBatches, nextBatch, expr } from '@n8n/workflow-sdk';
 
 // Live weekly HTML: n8n/lab-notes-pick-campaign.js + n8n/lab-notes-build-send-list.js
-// + n8n/lab-notes-encode-gmail-raw.js (Gmail API From: info@; the Gmail node cannot set From).
+// Gmail Send uses options.fromAlias = sheet from_email (info@). Default Send mail as is not enough.
 
 const sheetsCred = { googleSheetsOAuth2Api: newCredential('Google Sheets account') };
 const gmailCred = { gmailOAuth2: newCredential('Gmail account 2') };
@@ -204,28 +204,9 @@ const sendLoop = splitInBatches({
   }
 });
 
-const encodeGmailRaw = node({
-  type: 'n8n-nodes-base.code',
-  version: 2,
-  config: {
-    name: 'encode_gmail_raw',
-    parameters: {
-      mode: 'runOnceForEachItem',
-      language: 'javaScript',
-      jsCode: "var j = $json;\nvar fromEmail = String(j.from_email || '').trim().toLowerCase();\nif (fromEmail !== 'info@palmbeach-vitality.com') {\n  throw new Error('encode_gmail_raw: from_email must be info@palmbeach-vitality.com. Got: ' + fromEmail);\n}\nvar to = String(j.email || '').trim();\nif (!to || to.indexOf('@') === -1) {\n  throw new Error('encode_gmail_raw: empty recipient email');\n}\nvar html = String(j.html || '');\nif (!html) {\n  throw new Error('encode_gmail_raw: empty html');\n}\nfunction asciiHeader(s) {\n  return String(s || '').replace(/\\r|\\n/g, ' ');\n}\nvar fromName = asciiHeader(j.from_name || 'Palm Beach Vitality');\nvar subject = asciiHeader(j.subject);\nvar replyTo = String(j.reply_to || fromEmail).trim();\nvar bodyB64 = Buffer.from(html, 'utf8').toString('base64').replace(/(.{76})/g, '$1\\r\\n');\nvar mime = 'From: ' + fromName + ' <' + fromEmail + '>\\r\\n'\n  + 'To: ' + to + '\\r\\n'\n  + 'Reply-To: ' + replyTo + '\\r\\n'\n  + 'Subject: ' + subject + '\\r\\n'\n  + 'MIME-Version: 1.0\\r\\n'\n  + 'Content-Type: text/html; charset=UTF-8\\r\\n'\n  + 'Content-Transfer-Encoding: base64\\r\\n'\n  + '\\r\\n'\n  + bodyB64;\nvar raw = Buffer.from(mime, 'utf8').toString('base64').replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/g, '');\nreturn { json: Object.assign({}, j, { raw: raw }) };\n"
-    }
-  },
-  output: [{
-    campaign_id: 'LN-TEST-001',
-    from_email: 'info@palmbeach-vitality.com',
-    email: 'sales@palmbeach-vitality.com',
-    raw: 'Zg'
-  }]
-});
-
 const sendLabNotes = node({
-  type: 'n8n-nodes-base.httpRequest',
-  version: 4.5,
+  type: 'n8n-nodes-base.gmail',
+  version: 2.2,
   config: {
     name: 'send_lab_notes',
     onError: 'continueErrorOutput',
@@ -233,17 +214,17 @@ const sendLabNotes = node({
     maxTries: 3,
     waitBetweenTries: 2000,
     parameters: {
-      method: 'POST',
-      url: 'https://gmail.googleapis.com/gmail/v1/users/me/messages/send',
-      authentication: 'predefinedCredentialType',
-      nodeCredentialType: 'gmailOAuth2',
-      sendBody: true,
-      contentType: 'json',
-      specifyBody: 'keypair',
-      bodyParameters: {
-        parameters: [
-          { name: 'raw', value: expr('{{ $json.raw }}') }
-        ]
+      resource: 'message',
+      operation: 'send',
+      sendTo: expr('{{ $json.email }}'),
+      subject: expr('{{ $json.subject }}'),
+      emailType: 'html',
+      message: expr('{{ $json.html }}'),
+      options: {
+        senderName: expr('{{ $json.from_name }}'),
+        appendAttribution: false,
+        replyTo: expr('{{ $json.reply_to }}'),
+        fromAlias: expr('{{ $json.from_email }}')
       }
     },
     credentials: gmailCred
@@ -408,7 +389,7 @@ const markCampaign = node({
 });
 
 const note = sticky(
-  '# Vitality.store_newsletter_send (unpublished)\n\n**Weekly HTML** matching the Aug 21 mockup. Copy lives in the campaigns SHEET, not this canvas. Do not use MailPoet Sending Service.\n\nThe n8n Gmail node has no From field and always stamps sales@. This workflow POSTs a raw MIME message to the Gmail API with From: info@palmbeach-vitality.com. info@ must stay a verified Send mail as alias on sales@.\n\n1. status=test → only test_email (start here).\n2. status=ready → subscribed rows, 1 email at a time, wait delay_seconds.\n3. From / Reply-To must be info@palmbeach-vitality.com.\n4. Write issue_line, industry, spotlight, status_box, and 3 research links. Alt+Enter for a new paragraph.\n5. Empty cells throw. Placeholder “write the …” copy throws.',
+  '# Vitality.store_newsletter_send (unpublished)\n\n**Weekly HTML** matching the Aug 21 mockup. Copy lives in the campaigns SHEET, not this canvas. Do not use MailPoet Sending Service.\n\nGmail Send uses fromAlias = sheet from_email (info@). Changing the Send mail as default is not enough — the node ignores it unless fromAlias is set.\n\n1. status=test → only test_email (start here).\n2. status=ready → subscribed rows, 1 email at a time, wait delay_seconds.\n3. From / Reply-To must be info@palmbeach-vitality.com.\n4. Write issue_line, industry, spotlight, status_box, and 3 research links. Alt+Enter for a new paragraph.\n5. Empty cells throw. Placeholder “write the …” copy throws.',
   [startTrigger, getCampaigns],
   { color: 4 }
 );
@@ -424,10 +405,8 @@ export default workflow('vitality-store-newsletter-send', 'Vitality.store_newsle
   .to(
     sendLoop
       .onEachBatch(
-        encodeGmailRaw.to(
-          sendLabNotes
-            .to(logSent.to(appendSendLog.to(paceSends.to(nextBatch(sendLoop)))))
-        )
+        sendLabNotes
+          .to(logSent.to(appendSendLog.to(paceSends.to(nextBatch(sendLoop)))))
       )
       .onDone(markFields.to(markCampaign))
   )
