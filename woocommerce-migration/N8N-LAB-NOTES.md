@@ -8,7 +8,7 @@ This path is the same authenticated Gmail send that already works for the welcom
 
 | | |
 |---|---|
-| Send workflow | [`Vitality.store_lab_notes_send`](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) (id `J4ZmB8VsgynkWsVt`) — **unpublished** until the inbox check passes |
+| Send workflow | [`Vitality.store_newsletter_send`](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt) (id `J4ZmB8VsgynkWsVt`) — **unpublished** until the inbox check passes |
 | List workflow | [`Vitality.store_lab_notes_list`](https://stockjohnson.app.n8n.cloud/workflow/pY2SCaWGf9QPDB90) (id `pY2SCaWGf9QPDB90`) — **published** |
 | Campaigns sheet | [Vitality.store_lab_notes_campaigns](https://docs.google.com/spreadsheets/d/1SZ2Zw2q70oqYjEoqus_IbwH7v1dALMdmo8UCkNRiCeU/edit) |
 | Subscriber list | [Vitality.store_subscriber_list](https://docs.google.com/spreadsheets/d/1pqqDnTmpl4konPrwWKZ3jd1kGhINcuhi_jFo1aOZ5Yw/edit) |
@@ -16,7 +16,7 @@ This path is the same authenticated Gmail send that already works for the welcom
 | Unsubscribe (GET) | `https://stockjohnson.app.n8n.cloud/webhook/vitality-store-lab-notes-unsubscribe?email=` |
 | Subscribe (POST) | `https://stockjohnson.app.n8n.cloud/webhook/vitality-store-lab-notes-subscribe` |
 
-SDK sources: [`n8n/Vitality.store_lab_notes_send.sdk.js`](./n8n/Vitality.store_lab_notes_send.sdk.js), [`n8n/Vitality.store_lab_notes_list.sdk.js`](./n8n/Vitality.store_lab_notes_list.sdk.js).
+SDK sources: [`n8n/Vitality.store_newsletter_send.sdk.js`](./n8n/Vitality.store_newsletter_send.sdk.js), [`n8n/Vitality.store_lab_notes_list.sdk.js`](./n8n/Vitality.store_lab_notes_list.sdk.js).
 
 ## What you click first (inbox check)
 
@@ -24,7 +24,7 @@ SDK sources: [`n8n/Vitality.store_lab_notes_send.sdk.js`](./n8n/Vitality.store_l
    - `info@palmbeach-vitality.com` must exist (you already tested Send mail as).
    - Set **info@** as the **default**. n8n’s Gmail node has no From field — it uses that default. Name: **Palm Beach Vitality**.
 2. Open [LN-TEST-001](https://docs.google.com/spreadsheets/d/1SZ2Zw2q70oqYjEoqus_IbwH7v1dALMdmo8UCkNRiCeU/edit). Status is already `test`. `test_email` is `sales@palmbeach-vitality.com`.
-3. Open [Vitality.store_lab_notes_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt). Confirm **send_lab_notes** uses credential **Gmail account 2**.
+3. Open [Vitality.store_newsletter_send](https://stockjohnson.app.n8n.cloud/workflow/J4ZmB8VsgynkWsVt). Confirm **send_lab_notes** uses credential **Gmail account 2**.
 4. Click **Test workflow**. It sends **one** email to `sales@` only. Wait ~12 seconds, then it marks the row `tested`.
 5. Open that message → **⋮ → Show original**. You want:
    - `From: Palm Beach Vitality <info@palmbeach-vitality.com>` (or sales@ if Send mail as is not default yet — fix step 1)

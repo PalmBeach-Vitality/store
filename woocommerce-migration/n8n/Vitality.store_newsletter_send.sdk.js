@@ -385,12 +385,12 @@ const markCampaign = node({
 });
 
 const note = sticky(
-  '# Lab Notes send (unpublished)\n\n**Do not use MailPoet Sending Service.**\n\nSends one campaign from `Vitality.store_lab_notes_campaigns` via Gmail account 2.\n\n1. `status=test` → only `test_email` (start here).\n2. `status=ready` → subscribed rows only, 1 email at a time, wait `delay_seconds`.\n3. From / Reply-To must be `info@palmbeach-vitality.com`.\n4. Empty sheet cells throw. Placeholder draft copy throws.\n\nIn Gmail (sales@) set **Send mail as** default to `info@`.',
+  '# Vitality.store_newsletter_send (unpublished)\n\n**Do not use MailPoet Sending Service.**\n\nSends one campaign from `Vitality.store_lab_notes_campaigns` via Gmail account 2.\n\n1. `status=test` → only `test_email` (start here).\n2. `status=ready` → subscribed rows only, 1 email at a time, wait `delay_seconds`.\n3. From / Reply-To must be `info@palmbeach-vitality.com`.\n4. Empty sheet cells throw. Placeholder draft copy throws.\n\nIn Gmail (sales@) set **Send mail as** default to `info@`.',
   [startTrigger, getCampaigns],
   { color: 4 }
 );
 
-export default workflow('vitality-store-lab-notes-send', 'Vitality.store_lab_notes_send')
+export default workflow('vitality-store-newsletter-send', 'Vitality.store_newsletter_send')
   .add(startTrigger)
   .to(getCampaigns)
   .to(filterSendable)
