@@ -1,6 +1,6 @@
 # WordPress paste: 5 product-copy fixes
 
-Live catalog copy lives in WooCommerce, not this repo. WooCommerce REST write is locked without API keys, so these have to go in **WP Admin → Products**.
+**Applied 2026-08-27** via WooCommerce REST (`WP_Consumer_Key` / `WP_Consumer_Secret`). Live product pages now show this copy. The HTML below is the record of what was written.
 
 In the product editor, switch the description to **Code / Text** (not Visual) and replace the whole Product description. Research Studies below the description can stay.
 
