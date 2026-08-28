@@ -4,11 +4,11 @@
 // After: get_pen_creations / filter Active on 14-pen-creations-150
 // Before: grok_imagine_pen_still
 //
-// Rotates by compound_name (one video per compound cycle). Sheet prompts
-// already include pen COUNT=1 + cap-ON locks — do NOT wrap vial rules.
+// SHEETS-ONLY. Copy video_prompt / video_motion_prompt / still_edit_prompt
+// from the Sheet 14 row. Do NOT wrap a look lock here — catalog crimson/cobalt
+// COUNT=1 lives on the sheet. Empty cells throw.
 
-function val(obj, names, fallback) {
-  if (fallback === undefined) fallback = '';
+function val(obj, names) {
   for (var i = 0; i < names.length; i++) {
     var n = names[i];
     if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
@@ -17,14 +17,28 @@ function val(obj, names, fallback) {
   }
   var keys = Object.keys(obj || {});
   for (var w = 0; w < names.length; w++) {
-    var want = String(names[w]).toLowerCase().replace(/\s+/g, '_');
+    var want = String(names[w]).toLowerCase().split(' ').join('_');
     for (var k = 0; k < keys.length; k++) {
-      if (keys[k].toLowerCase().replace(/\s+/g, '_') === want && String(obj[keys[k]]).trim() !== '') {
+      if (keys[k].toLowerCase().split(' ').join('_') === want && String(obj[keys[k]]).trim() !== '') {
         return obj[keys[k]];
       }
     }
   }
-  return fallback;
+  return '';
+}
+
+function must(obj, names, label, creationId) {
+  var v = val(obj, names);
+  if (v === undefined || v === null || String(v).trim() === '') {
+    throw new Error(
+      'pick_pen_creation: empty sheet field ' +
+        label +
+        ' on ' +
+        (creationId || '?') +
+        '. Overlay COUNT=1 catalog look onto Sheet 14 first.'
+    );
+  }
+  return v;
 }
 
 function isActive(status) {
@@ -33,27 +47,11 @@ function isActive(status) {
 }
 
 function capPrompt(text) {
-  var t = String(text || '').replace(/\s+/g, ' ').trim();
+  var t = String(text || '');
+  while (t.indexOf('  ') !== -1) t = t.split('  ').join(' ');
+  t = t.trim();
   if (t.length > 7900) t = t.slice(0, 7900);
   return t;
-}
-
-function penLookLock(name) {
-  var n = String(name || '').trim();
-  return (
-    "HARD OUTPUT LOCK (READ FIRST): The hero is exactly ONE white matte plastic insulin-style injectable research pen " +
-    "(medical injection pen), NOT a glass vial, NOT brushed-silver metal, NOT a perfume cartridge, NOT a chrome display claw. " +
-    "PROPORTION: the pen body must be 10-20% longer than a stubby travel pen — full-length elongated adult injector, not compact, not short. Stretch the white barrel, keep diameter the same. " +
-    "Body: smooth matte white plastic cylinder, elongated. Left: white plastic cap WITH a white pocket clip — cap ON covering the tip, never a needle. " +
-    "Small rectangular transparent window on the barrel beside the label (a glimpse of liquid only — not a tall glass reservoir). " +
-    "Right: bright orange ridged dose-dial / injection button matching the orange on the label. " +
-    "LABEL: white wrap-around. Far left bright BLUE DNA double-helix icon. Then '" +
-    n +
-    "' in large bold ORANGE sans-serif. Then a solid ORANGE rounded-rectangle badge with white text exactly '3ml pen'. " +
-    "The only readable words on the entire pen are '" +
-    n +
-    "' and '3ml pen'. FORBIDDEN: milligram dosage, milligram-per-milliliter, milligram-per-vial, concentration numbers, burgundy vial branding, palm tree, extra words. Product count = 1. No vial. No second pen."
-  );
 }
 
 var creations = $input.all().map(function (i) {
@@ -68,8 +66,8 @@ if (!creations.length) {
 
 var scored = creations
   .map(function (c) {
-    var rankNum = Number(val(c, ['rank', 'creation_rank'], 0));
-    var creation_id = String(val(c, ['creation_id', 'creationId'], '')).trim();
+    var rankNum = Number(val(c, ['rank', 'creation_rank']));
+    var creation_id = String(val(c, ['creation_id', 'creationId'])).trim();
     if (!creation_id && rankNum > 0) {
       creation_id = 'PBVita-Pen-' + String(rankNum).padStart(3, '0');
     }
@@ -79,7 +77,7 @@ var scored = creations
       lab_item_id: val(c, ['lab_item_id']),
       lab_item: val(c, ['lab_item']),
       material_detail: val(c, ['material_detail']),
-      compound_name: String(val(c, ['compound_name'], '')).trim(),
+      compound_name: String(val(c, ['compound_name'])).trim(),
       shot_family: val(c, ['shot_family']),
       camera_angle: val(c, ['camera_angle']),
       camera_direction: val(c, ['camera_direction']),
@@ -87,24 +85,25 @@ var scored = creations
       category: val(c, ['category', 'scene_category']),
       scene_brief: val(c, ['scene_brief']),
       quality_suffix: val(c, ['quality_suffix']),
-      quality_var_count: val(c, ['quality_var_count'], ''),
-      aspect_ratio: val(c, ['aspect_ratio']) || '9:16',
-      duration_seconds: Number(val(c, ['duration_seconds', 'duration'], 15)) || 15,
-      resolution: val(c, ['resolution']) || '1080p',
-      model_still: val(c, ['model_still']) || 'grok-imagine-image-2.0',
-      model_video: val(c, ['model_video']) || 'grok-imagine-video-1.5',
-      still_resolution: val(c, ['still_resolution']) || '2k',
+      quality_var_count: val(c, ['quality_var_count']),
+      aspect_ratio: val(c, ['aspect_ratio']),
+      duration_seconds: val(c, ['duration_seconds', 'duration']),
+      resolution: val(c, ['resolution']),
+      model_still: val(c, ['model_still']),
+      model_video: val(c, ['model_video']),
+      still_resolution: val(c, ['still_resolution']),
+      still_n: val(c, ['still_n']),
       video_prompt: capPrompt(val(c, ['video_prompt'])),
       video_motion_prompt: capPrompt(val(c, ['video_motion_prompt'])),
-      still_edit_prompt: String(val(c, ['still_edit_prompt'], '')).trim(),
+      still_edit_prompt: String(val(c, ['still_edit_prompt'])).trim(),
       surface: val(c, ['surface']),
       lighting: val(c, ['lighting']),
       camera_move: val(c, ['camera_move']),
       color_grade: val(c, ['color_grade']),
       hero_style: val(c, ['hero_style']),
-      status: val(c, ['status'], 'Active'),
-      times_used: Number(val(c, ['times_used'], 0)) || 0,
-      last_used_at: String(val(c, ['last_used_at'], '')),
+      status: val(c, ['status']) || 'Active',
+      times_used: Number(val(c, ['times_used'])) || 0,
+      last_used_at: String(val(c, ['last_used_at'])),
     };
   })
   .filter(function (c) {
@@ -119,11 +118,9 @@ if (!scored.length) {
 }
 
 var compoundTimes = {};
-var lastAt = {};
 scored.forEach(function (c) {
   var k = c.compound_name;
   compoundTimes[k] = (compoundTimes[k] || 0) + c.times_used;
-  if (String(c.last_used_at || '') > String(lastAt[k] || '')) lastAt[k] = c.last_used_at;
 });
 
 var previouslyUsed = scored
@@ -168,8 +165,27 @@ scored.sort(function (a, b) {
 });
 
 var pick = scored[0];
-var look = penLookLock(pick.compound_name);
-var videoPrompt = capPrompt(look + ' ' + pick.video_prompt);
+must(pick, ['video_prompt'], 'video_prompt', pick.creation_id);
+must(pick, ['video_motion_prompt'], 'video_motion_prompt', pick.creation_id);
+must(pick, ['still_edit_prompt'], 'still_edit_prompt', pick.creation_id);
+must(pick, ['aspect_ratio'], 'aspect_ratio', pick.creation_id);
+must(pick, ['duration_seconds', 'duration'], 'duration_seconds', pick.creation_id);
+must(pick, ['resolution'], 'resolution', pick.creation_id);
+must(pick, ['model_still'], 'model_still', pick.creation_id);
+must(pick, ['model_video'], 'model_video', pick.creation_id);
+must(pick, ['still_resolution'], 'still_resolution', pick.creation_id);
+must(pick, ['still_n'], 'still_n', pick.creation_id);
+
+var duration = Number(pick.duration_seconds);
+if (!duration) {
+  throw new Error('pick_pen_creation: duration_seconds is not a number on ' + pick.creation_id);
+}
+var stillN = Number(pick.still_n);
+if (!stillN) {
+  throw new Error('pick_pen_creation: still_n is not a number on ' + pick.creation_id);
+}
+
+var videoPrompt = capPrompt(pick.video_prompt);
 
 return [
   {
@@ -190,20 +206,16 @@ return [
       quality_suffix: pick.quality_suffix,
       quality_var_count: pick.quality_var_count,
       aspect_ratio: pick.aspect_ratio,
-      duration_seconds: pick.duration_seconds,
+      duration_seconds: duration,
       resolution: pick.resolution,
       model_still: pick.model_still,
       model_video: pick.model_video,
       still_resolution: pick.still_resolution,
+      still_n: stillN,
       video_prompt: videoPrompt,
       video_prompt_len: videoPrompt.length,
-      video_motion_prompt: capPrompt(
-        "Silent video. No soundtrack. Keep the exact same white insulin-style pen, 10-20% longer full-length barrel, orange dial, blue DNA, orange '" +
-          pick.compound_name +
-          "' and orange '3ml pen' badge. Cap ON. No milligram dosage text. " +
-          pick.video_motion_prompt
-      ),
-      still_edit_prompt: capPrompt(look + ' ' + pick.still_edit_prompt),
+      video_motion_prompt: capPrompt(pick.video_motion_prompt),
+      still_edit_prompt: capPrompt(pick.still_edit_prompt),
       surface: pick.surface,
       lighting: pick.lighting,
       camera_move: pick.camera_move,

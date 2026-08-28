@@ -1,23 +1,20 @@
 # peptide_pen_vid_gen
 
-**New workflow** — pens-only catalog videos.  
-**Not** the lab-vial daily path. **Not** molecules. **Not** Creatomate. **No Switch / IF.**
+Pens-only catalog videos. **Not** the lab-vial daily path. **Not** molecules. **Not** Creatomate. **No Switch / IF.**
 
-**Sheet:** `14-pen-creations-150` (**columns from** `9-lab-item-creations-500`, not Sheet 13)  
-**Name the workflow exactly:** `peptide_pen_vid_gen`  
-**Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB  
-**Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
+**Sheet:** `14-pen-creations-150` (columns from `9-lab-item-creations-500`)  
+**Name:** `peptide_pen_vid_gen`  
+**Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB
 
-**Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear.
+**1 pen / 1 compound.** White matte longer barrel, white clip-cap ON, white ridged dial (not orange). Peptide = crimson red DNA + name + `10mg` badge. Metabolic (Semaglutide / Tirzepatide / Retatrutide) = cobalt blue. DNA helix icon only — no hands. Vertical label: For Research Purposes Only. Look lives on Sheet 14. `pick_pen_creation` is sheets-only.
 
-**Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
+Same still-edit option as `Vid_gen_lab_scenes -9-lab-items-creations-500`: swap the `save_still_url` wire — `still_edit_instructions` to edit, `skip_still_edit` to skip. Do not leave both wires on.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 
 ---
 
-## Wire (linear)
+## Wire (linear) — edit still (default)
 
 ```text
 manual_trigger
@@ -26,6 +23,10 @@ manual_trigger
   → pick_pen_creation
   → grok_imagine_pen_still
   → save_still_url
+  → still_edit_instructions
+  → prep_still_edit
+  → grok_imagine_edit_still
+  → save_edited_still_url
   → prep_pen_video_start
   → grok_video_start
   → wait_video
@@ -34,15 +35,7 @@ manual_trigger
   → sheets_update_pen
 ```
 
----
-
-## After import
-
-Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header auth are attached.
-
-1. Do **not** replace `3-image-scenes-150` (Buffer tab stays header-only).
-2. Do not point this workflow at `9-lab-item-creations-500` (mixed lab) or `13-chem-breakdown-54` (molecules).
-3. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
+`skip_still_edit` stays on the canvas, **unwired**. To skip: disconnect `save_still_url` from `still_edit_instructions`. Wire `save_still_url` → `skip_still_edit` → `prep_pen_video_start`.
 
 ---
 
@@ -60,7 +53,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 | Setting | fx | Value |
 |---|---|---|
 | Operation | — | Get Row(s) |
-| Document | — | **By ID** (your workbook) |
+| Document | — | **By ID** (Sheet 14 workbook) |
 | Sheet | **OFF** | `14-pen-creations-150` |
 | Return All | — | **ON** |
 
@@ -86,9 +79,9 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 Paste: `marketing/n8n-code-pick-pen-creation.js`
 
-Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
+Rotates **compound_name** (never the last **5** used compounds). Empty sheet cells throw. Does not wrap a look lock.
 
-**Check:** `compound_name`, `video_prompt_len` (~4500), `model_still` = `grok-imagine-image-2.0`
+**Check:** `compound_name`, `video_prompt` starts with `Render exactly ONE`, `still_edit_prompt`, `model_still` from the sheet.
 
 ---
 
@@ -107,7 +100,7 @@ Rotates **compound_name** (never the last **5** used compounds). Sheet rows are 
 | JSON | **ON** | see below |
 
 ```text
-={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: 1, aspect_ratio: $json.aspect_ratio || '9:16', resolution: $json.still_resolution || '2k' }) }}
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: Number($json.still_n), aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
 ```
 
 **Check:** `$json.data[0].url` — one capped pen, no vial, no second pen.
@@ -117,7 +110,7 @@ Rotates **compound_name** (never the last **5** used compounds). Sheet rows are 
 ## Node 6 — `save_still_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_imagine_pen_still` → **save_still_url** → `prep_pen_video_start`  
+**Before → this → After:** `grok_imagine_pen_still` → **save_still_url** → `still_edit_instructions`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -126,24 +119,91 @@ Include Other Input Fields: **ON**
 | `creation_id` | **ON** | `={{ $('pick_pen_creation').first().json.creation_id }}` |
 | `compound_name` | **ON** | `={{ $('pick_pen_creation').first().json.compound_name }}` |
 | `video_motion_prompt` | **ON** | `={{ $('pick_pen_creation').first().json.video_motion_prompt }}` |
-| `model_video` | **ON** | `={{ $('pick_pen_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
-| `duration_seconds` | **ON** | `={{ $('pick_pen_creation').first().json.duration_seconds \|\| 15 }}` |
-| `resolution` | **ON** | `={{ $('pick_pen_creation').first().json.resolution \|\| '1080p' }}` |
+| `still_edit_prompt` | **ON** | `={{ $('pick_pen_creation').first().json.still_edit_prompt }}` |
+| `model_video` | **ON** | `={{ $('pick_pen_creation').first().json.model_video }}` |
+| `duration_seconds` | **ON** | `={{ $('pick_pen_creation').first().json.duration_seconds }}` |
+| `resolution` | **ON** | `={{ $('pick_pen_creation').first().json.resolution }}` |
 
 ---
 
-## Node 7 — `prep_pen_video_start`
+## Node 7 — `still_edit_instructions`
+
+**Type:** Edit Fields  
+**Before → this → After:** `save_still_url` → **still_edit_instructions** → `prep_still_edit`  
+Include Other Input Fields: **ON**
+
+Default maps Sheet 14 `still_edit_prompt`. After the still generates, type over this field for a one-off edit, then Execute from this node.
+
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | **ON** | `={{ $json.still_url }}` |
+| `still_edit_prompt` | **ON** | `={{ $json.still_edit_prompt }}` |
+| `creation_id` | **ON** | `={{ $json.creation_id }}` |
+
+---
+
+## Node 8 — `prep_still_edit`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `save_still_url` → **prep_pen_video_start** → `grok_video_start`
+**Before → this → After:** `still_edit_instructions` → **prep_still_edit** → `grok_imagine_edit_still`
+
+Paste: `marketing/n8n-code-prep-pen-still-edit.js`
+
+**Check:** `still_edit_body_json` + https `source_still_url`. This-run Set prompt wins, then Sheet 14. Empty throws.
+
+---
+
+## Node 9 — `grok_imagine_edit_still`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_still_edit` → **grok_imagine_edit_still** → `save_edited_still_url`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | `POST` |
+| URL | **OFF** | `https://api.x.ai/v1/images/edits` |
+| Authentication | — | same xAI Header Auth |
+| Send Body | — | **ON** |
+| Body Content Type | — | **JSON** |
+| JSON | **ON** | `={{ $json.still_edit_body_json }}` |
+
+---
+
+## Node 10 — `save_edited_still_url`
+
+**Type:** Edit Fields  
+**Before → this → After:** `grok_imagine_edit_still` → **save_edited_still_url** → `prep_pen_video_start`  
+Include Other Input Fields: **ON**
+
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | **ON** | `={{ $('grok_imagine_edit_still').first().json.data[0].url }}` |
+
+---
+
+## Node 11 — `skip_still_edit`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `save_still_url` → **skip_still_edit** → `prep_pen_video_start` *(skip runs only)*
+
+Leave **unwired** for an edit run. Body: `return $input.all();`
+
+---
+
+## Node 12 — `prep_pen_video_start`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `save_edited_still_url` (edit) or `skip_still_edit` (skip) → **prep_pen_video_start** → `grok_video_start`
 
 Paste: `marketing/n8n-code-prep-pen-video-start.js`
+
+Prefers edited still URL, then `save_still_url`, then original imagine. Mute: `audio: false`.
 
 **Check:** `still_url` https + `grok_video_body_json`
 
 ---
 
-## Node 8 — `grok_video_start`
+## Node 13 — `grok_video_start`
 
 **Type:** HTTP Request  
 **Before → this → After:** `prep_pen_video_start` → **grok_video_start** → `wait_video`
@@ -158,11 +218,11 @@ Paste: `marketing/n8n-code-prep-pen-video-start.js`
 | Content Type | **OFF** | `application/json` |
 | Body | **ON** | `={{ $json.grok_video_body_json }}` |
 
-**Check:** `request_id`. Clip is **muted** (`audio: false` + silent motion). Add sound later.
+**Check:** `request_id`. Clip is **muted**.
 
 ---
 
-## Node 9 — `wait_video`
+## Node 14 — `wait_video`
 
 **Type:** Wait  
 **Before → this → After:** `grok_video_start` → **wait_video** → `grok_video_poll`
@@ -177,7 +237,7 @@ Must be **enabled**.
 
 ---
 
-## Node 10 — `grok_video_poll`
+## Node 15 — `grok_video_poll`
 
 **Type:** HTTP Request  
 **Before → this → After:** `wait_video` → **grok_video_poll** → `save_video_url`
@@ -189,11 +249,9 @@ Must be **enabled**.
 | Authentication | — | same xAI |
 | Send Body | — | **OFF** |
 
-**Check:** `status` done/succeeded + video URL. If pending, raise wait.
-
 ---
 
-## Node 11 — `save_video_url`
+## Node 16 — `save_video_url`
 
 **Type:** Edit Fields  
 **Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_pen`  
@@ -201,15 +259,15 @@ Include Other Input Fields: **ON**
 
 | Name | fx | Value |
 |---|---|---|
-| `video_url` | **ON** | `={{ $json.video.url \|\| $json.url }}` |
-| `still_url` | **ON** | `={{ $('save_still_url').first().json.still_url }}` |
+| `video_url` | **ON** | `={{ $json.video.url || $json.url }}` |
+| `still_url` | **ON** | `={{ $('prep_pen_video_start').first().json.still_url }}` |
 | `creation_id` | **ON** | `={{ $('pick_pen_creation').first().json.creation_id }}` |
 | `compound_name` | **ON** | `={{ $('pick_pen_creation').first().json.compound_name }}` |
 | `created_at` | **ON** | `={{ $now.toISO() }}` |
 
 ---
 
-## Node 12 — `sheets_update_pen`
+## Node 17 — `sheets_update_pen`
 
 **Type:** Google Sheets → Update  
 **Before → this → After:** `save_video_url` → **sheets_update_pen** → (end)
@@ -226,18 +284,11 @@ Include Other Input Fields: **ON**
 
 ---
 
-## Importable JSON
-
-`marketing/workflows/peptide_pen_vid_gen.json`  
-n8n: **Import from File** → name stays `peptide_pen_vid_gen` → attach credentials → set Sheet document ID.
-
----
-
 ## Related
 
-- Sheet 9 columns (output): `marketing/sheets/14-pen-creations-150.csv`
-- Pen input *field names* (do not overwrite that tab): `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting` from `3-image-scenes-150`
-- Builder: `marketing/scripts/build_pen_creations_from_image_scenes.py`
+- Sheet 14: `marketing/sheets/14-pen-creations-150.csv`
+- COUNT=1 overlay (one-shot): `marketing/scripts/overlay_pen_count1.py` + `marketing/n8n-code-overlay-pen-count1.js`
 - Pick: `marketing/n8n-code-pick-pen-creation.js`
+- Still edit: `marketing/n8n-code-prep-pen-still-edit.js`
 - Prep video: `marketing/n8n-code-prep-pen-video-start.js`
-- Sister workflow: `peptide_molecule_vid_gen` / Sheet 13 (do not mix)
+- Sister: `Vid_gen_lab_scenes -9-lab-items-creations-500` (same still-edit wire swap)
