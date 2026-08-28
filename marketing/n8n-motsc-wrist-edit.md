@@ -48,6 +48,28 @@ Do **not** archive this workflow. Do **not** Publish. Test with Execute.
 
 FILM-001 keeper (`picked_url`, n8n exec 1592): `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-17707263-9730-9dde-934b-32637210c022-df6984b8.jpeg`
 
+---
+
+## FILM-003 identity_side lock (one-shot, then archive)
+
+Exec 1596 put the device on the bicep / across the chest, added extra limbs, and made a round watch. `still_prompt` + `still_edit_prompt` on FILM-003 now lock: true **left** profile, left arm hanging at her side, device on the **left wrist joint**, **square** housing/screen, exactly two arms / two hands.
+
+```text
+manual_trigger → get_film_stills → overlay_film003_lock → sheets_update_film003
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film003_lock`
+
+**Before → this → After:** `get_film_stills` → **overlay_film003_lock** → `sheets_update_film003`
+
+Code: `marketing/n8n-code-overlay-film003-lock.js`. Does not write `times_used` / `last_used_at` / `take_urls`.
+
+**Before → this → After:** `overlay_film003_lock` → **sheets_update_film003** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
+
+To regenerate FILM-003, set `times_used` back to 0 and Execute the factory. Do not Publish.
+
 `edit_film001_wrist_stills`
 
 ```text
