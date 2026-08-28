@@ -165,14 +165,24 @@ Match `still_id`. Write `take_urls` only. Do not touch `times_used`.
 
 ---
 
-## Planet establish — otherworldly Palm Beach
+## FILM-014 alien-galaxy coast (one-shot, then archive)
 
-`planet_establish` (FILM-014) is a recognizable luxury beach that is clearly another planet: sugar-white sand, turquoise shallows, royal palms, twin moons, golden bioluminescent horizon. Not Earth Miami, not a rust-red canyon.
+FILM-014 looked too much like Earth and the shared “except the vial label / wrist-device screen” closer invited people and vials.
 
-Crash / alien / warp rows that reused the old canyon planet lock are updated to the same coast so the film stays one world.
-
-Overlay Code: `marketing/n8n-code-overlay-planet-beach.js`
+Lock: **alien-galaxy** luxury coast — iridescent lilac-gold sand, glass-veined bioluminescent trees that are **not** Earth palms, twin huge moons. **NO people, NO vials.** Same coast language on FILM-015 / 016 / 020 / 021 / 025.
 
 ```text
-manual_trigger → get_film_stills → overlay_planet_beach → sheets_update_wrist_lock
+manual_trigger → get_film_stills → overlay_film014_planet → sheets_update_planet
 ```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film014_planet`
+
+**Before → this → After:** `get_film_stills` → **overlay_film014_planet** → `sheets_update_planet`
+
+Code: `marketing/n8n-code-overlay-film014-planet.js`. FILM-014 also clears `take_urls` and sets `times_used` to 0 so the factory re-picks it. Does not write `picked_url`.
+
+**Before → this → After:** `overlay_film014_planet` → **sheets_update_planet** → `end`
+
+Match `still_id`. Map `still_prompt` (plus `still_edit_prompt` / `take_urls` / `times_used` on FILM-014).
+
+Executed unpublished overlay `MC17nMDEWfA3VMUJ` (n8n exec **1615**), then archived. Factory `qZ7qU8LVwVXAXyaL` regenerated FILM-014 as exec **1616**. Do not publish.
