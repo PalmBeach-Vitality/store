@@ -70,6 +70,34 @@ Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
 
 To regenerate FILM-003, set `times_used` back to 0 and Execute the factory. Do not Publish.
 
+---
+
+## FILM-004 square left-wrist device lock (one-shot, then archive)
+
+FILM-004 keeper (`picked_url`): `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-a634dcd1-992e-9e5e-b1d6-16bab41767f8-637a386c.png`
+
+Close-ups must match that rectangular blocky gunmetal box. **NO ROUND SHAPES.** Device is **ALWAYS on her left hand / left wrist**.
+
+Locks `still_prompt` + `still_edit_prompt` on FILM-001/002/003/004/005/006/019/021. Does not write `times_used` / `last_used_at` / `take_urls` / `picked_url`.
+
+Executed as unpublished overlay `NP1hgiSAz9GyuAVs` (n8n exec **1601**), then archived. Factory `qZ7qU8LVwVXAXyaL` unchanged. Next unused still after FILM-004 is **FILM-005**.
+
+```text
+manual_trigger → get_film_stills → overlay_film004_device_lock → sheets_update_device_lock
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film004_device_lock`
+
+Same Document / tab as the factory.
+
+**Before → this → After:** `get_film_stills` → **overlay_film004_device_lock** → `sheets_update_device_lock`
+
+Code: `marketing/n8n-code-overlay-film004-device-lock.js`. Mode: Run Once for All Items.
+
+**Before → this → After:** `overlay_film004_device_lock` → **sheets_update_device_lock** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
+
 `edit_film001_wrist_stills`
 
 ```text
