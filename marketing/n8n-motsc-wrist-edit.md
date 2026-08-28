@@ -46,6 +46,8 @@ Live: [`edit_film001_wrist_stills`](https://stockjohnson.app.n8n.cloud/workflow/
 
 Do **not** archive this workflow. Do **not** Publish. Test with Execute.
 
+FILM-001 keeper (`picked_url`, n8n exec 1592): `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-17707263-9730-9dde-934b-32637210c022-df6984b8.jpeg`
+
 `edit_film001_wrist_stills`
 
 ```text
