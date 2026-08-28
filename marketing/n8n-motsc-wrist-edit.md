@@ -98,6 +98,28 @@ Code: `marketing/n8n-code-overlay-film004-device-lock.js`. Mode: Run Once for Al
 
 Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
 
+---
+
+## FILM-010 sleek large ship (one-shot, then archive)
+
+FILM-010 was a tiny white shuttle with hands / vials / wrist devices. The old closer (“except the vial label and the wrist-device screen”) invited those props.
+
+Lock: **much larger** dark gunmetal arrowhead interceptor (tiny cockpit vs hull, cyan-blue strips, twin circular engines). **NO other objects.** Same hull on FILM-009 / 015 / 020 / 025 so the film stays one ship.
+
+```text
+manual_trigger → get_film_stills → overlay_film010_ship → sheets_update_ship
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film010_ship`
+
+**Before → this → After:** `get_film_stills` → **overlay_film010_ship** → `sheets_update_ship`
+
+Code: `marketing/n8n-code-overlay-film010-ship.js`. Does not write `times_used` / `take_urls` / `picked_url`.
+
+**Before → this → After:** `overlay_film010_ship` → **sheets_update_ship** → `end`
+
+Match `still_id`. Map `still_prompt` (and `still_edit_prompt` on FILM-009/010). Executed unpublished overlay `9wSQqyOVEoIDEyBR` (n8n exec **1607**), then archived. Factory `qZ7qU8LVwVXAXyaL` unchanged.
+
 `edit_film001_wrist_stills`
 
 ```text
