@@ -84,3 +84,17 @@ Code: `marketing/n8n-code-collect-edited-takes.js`
 **Before → this → After:** `collect_edited_takes` → **sheets_update_still** → `end`
 
 Match `still_id`. Write `take_urls` only. Do not touch `times_used`.
+
+---
+
+## Planet establish — otherworldly Palm Beach
+
+`planet_establish` (FILM-014) is a recognizable luxury beach that is clearly another planet: sugar-white sand, turquoise shallows, royal palms, twin moons, golden bioluminescent horizon. Not Earth Miami, not a rust-red canyon.
+
+Crash / alien / warp rows that reused the old canyon planet lock are updated to the same coast so the film stays one world.
+
+Overlay Code: `marketing/n8n-code-overlay-planet-beach.js`
+
+```text
+manual_trigger → get_film_stills → overlay_planet_beach → sheets_update_wrist_lock
+```
