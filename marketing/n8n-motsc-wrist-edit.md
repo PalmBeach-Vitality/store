@@ -42,6 +42,10 @@ Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls` from `$js
 
 ## FILM-001 still edit (unpublished)
 
+Live: [`edit_film001_wrist_stills`](https://stockjohnson.app.n8n.cloud/workflow/AYlmzLYoUnGrV3pW) `AYlmzLYoUnGrV3pW`
+
+Do **not** archive this workflow. Do **not** Publish. Test with Execute.
+
 `edit_film001_wrist_stills`
 
 ```text
