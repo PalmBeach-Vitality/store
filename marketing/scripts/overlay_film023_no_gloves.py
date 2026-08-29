@@ -10,11 +10,11 @@ ROOT = Path(__file__).resolve().parents[1]
 CSV_PATH = ROOT / "sheets" / "18-motsc-film-stills.csv"
 
 TAKES_023 = (
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-37a7932d-49f1-976f-be11-a61da1fe983f-c3784331.png | "
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-37a7932d-49f1-976f-be11-a61da1fe983f-36ff434c.png | "
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-37a7932d-49f1-976f-be11-a61da1fe983f-5a736298.png | "
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-37a7932d-49f1-976f-be11-a61da1fe983f-2540a7b6.png | "
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-37a7932d-49f1-976f-be11-a61da1fe983f-0f89605c.png"
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-3f7680cc.png | "
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-cec66435.png | "
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-78018cb3.png | "
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-490e8b55.png | "
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-87a59835.png"
 )
 
 VIAL = (
@@ -96,7 +96,7 @@ def main() -> None:
             row["still_edit_prompt"] = EDIT_023
             row["take_urls"] = TAKES_023
             row["times_used"] = "1"
-            row["last_used_at"] = "2026-08-29T16:46:13.706-04:00"
+            row["last_used_at"] = "2026-08-29T17:31:58.959-04:00"
             locked += 1
         elif sid == "FILM-024":
             row["still_prompt"] = STILL_024

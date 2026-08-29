@@ -311,22 +311,34 @@ Executed unpublished overlay `EacQLzdwZdEbKhqW` (n8n exec **1643**), then archiv
 
 ## FILM-023 handoff: no gloves + watch-orientation device
 
-Factory exec **1639** (`...-37a7932d-...`) and **1642** (`...-91c9b8d3-...`) FILM-023 takes are no good: tactical gloves and the square device rotated the wrong way. Sal: no gloves; device in the correct FILM-004 watch orientation. Do **not** run the factory or `edit_one_still`.
+Factory exec **1639** (`...-37a7932d-...`), **1642** (`...-91c9b8d3-...`), and **1647** (`...-cb15c471-...`) FILM-023 takes are no good: tactical gloves. **1647 ran on the old gloved prompt** after the first lock write. Do **not** run the factory or `edit_one_still` to fix this.
 
-Locks **FILM-023 / 024**. Writes `still_prompt` + `still_edit_prompt` only. Does not write `take_urls` / `times_used` / `picked_url`.
+Locks **FILM-023 / 024**, then generates **FILM-023 only** from the locked sheet row and **replaces** `take_urls`.
 
 ```text
-manual_trigger → get_film_stills → overlay_film023_no_gloves → sheets_update_hands
+manual_trigger → get_film_stills → overlay_film023_no_gloves → sheets_update_hands → get_film_stills_locked → pick_film023 → grok_imagine_still → save_film023_takes → sheets_update_takes
 ```
 
 **Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_no_gloves`
 
 **Before → this → After:** `get_film_stills` → **overlay_film023_no_gloves** → `sheets_update_hands`
 
-Code: `marketing/n8n-code-overlay-film023-no-gloves.js`. Mode: Run Once for All Items.
+**Before → this → After:** `overlay_film023_no_gloves` → **sheets_update_hands** → `get_film_stills_locked`
 
-**Before → this → After:** `overlay_film023_no_gloves` → **sheets_update_hands** → `end`
+**Before → this → After:** `sheets_update_hands` → **get_film_stills_locked** → `pick_film023`
 
-Match `still_id`. Map `still_prompt` and `still_edit_prompt`.
+**Before → this → After:** `get_film_stills_locked` → **pick_film023** → `grok_imagine_still`
 
-Executed unpublished overlay `SIcUvsqnUfIerOYf` (n8n exec **1644**), then archived. Live Sheet 18 and the repo CSV now both have the no-gloves / watch-orientation lock. Do not publish. Factory unchanged.
+Code: `marketing/n8n-code-overlay-film023-no-gloves.js` + `marketing/n8n-code-overlay-film023-pick.js`. Mode: Run Once for All Items. `pick_film023` throws if the sheet still says `gloved open palm`.
+
+**Before → this → After:** `pick_film023` → **grok_imagine_still** → `save_film023_takes`
+
+**Before → this → After:** `grok_imagine_still` → **save_film023_takes** → `sheets_update_takes`
+
+Code: `marketing/n8n-code-overlay-film023-save.js`. Replaces `take_urls` (does not keep the gloved factory set).
+
+**Before → this → After:** `save_film023_takes` → **sheets_update_takes** → `end`
+
+Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls`, `times_used`, `last_used_at`. Does not write `picked_url`.
+
+Executed unpublished overlay `33T8E18wBN4nHRQO` (n8n exec **1648**), then archived. Live Sheet 18 and the repo CSV now both have the no-gloves lock plus the new `...-d82e216e-...` takes. Do not publish. Factory unchanged.
