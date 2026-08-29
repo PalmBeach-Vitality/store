@@ -84,17 +84,23 @@ enter_compound → get_caption_science → match_compound
 
 See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
 
-### G — `custom_vid_gen 1.5 -18-motsc-film-stills` (MOTS-C film I2V)
+### G — MOTS-C film I2V stack (Sheet 18)
 
-Locked film keepers → Grok Imagine Video **1.5** (not Seedance). Sheets-only motion from Sheet 18. Unpublished.
+Locked film keepers → **per-beat** I2V. Four unpublished linear workflows. No Switch. No Creatomate. CapCut stays manual.
+
+| Workflow | Model | Beats |
+|---|---|---|
+| `film_i2v_seedance` | Seedance 2.5 (fal) | flyover, walk, handoff, vial-into-engine |
+| `film_i2v_kling` | Kling 3.0 Pro (fal) | crash, liftoff + warp |
+| `film_i2v_veo` | Veo 3.1 (fal) | cockpit / face / product close-ups |
+| `film_i2v_runway` | Runway Gen-4.5 | identity-lock backup — key later |
 
 ```text
-get_film_stills → pick_film_still → prep_film_video_start
-  → grok_video_start → wait_video → grok_video_poll
+get_film_stills → pick_film_still → fal_i2v_generate
   → save_film_video_url → sheets_update_still
 ```
 
-See `n8n-motsc-film-video.md`.
+See `n8n-motsc-film-i2v-stack.md`. Old Grok 1.5 factory stays unpublished and unused.
 
 ### F — `sheet_format_as_tables` (one-shot)
 
