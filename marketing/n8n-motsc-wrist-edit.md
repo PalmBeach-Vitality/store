@@ -470,3 +470,28 @@ Code: `marketing/n8n-code-overlay-film023-save-edits.js`. Replaces `take_urls` w
 Match `still_id`. Map `take_urls`, `still_edit_prompt`, `picked_url`, `times_used`, `last_used_at`.
 
 Lock overlay `zIaZ78r1hCcMIz0y` exec **1657**, then archived. `edit_one_still` exec **1658** (n=5) from `film023-handoff-source.jpg` / Drive `vial_handoff_23.jpg`. Appended five jpeg edits onto `take_urls`. `picked_url` stays the source still. Do not publish. Factory unchanged.
+
+## FILM-023 / 024 FINAL keepers
+
+Sal: these two Drive stills are **final**. Do not regenerate. Do not edit.
+
+| still | Drive file | Drive id | repo |
+|---|---|---|---|
+| FILM-023 | `vial_handoff_23.jpg` | `1txVArsVTgZ7iflHIu1RKJRFWqoK2HkaS` | `marketing/stills/film023-handoff-source.jpg` |
+| FILM-024 | `vial_recharge_24.jpg` | `1Dq_XAU10Me4D7pXEqcraQacQRKqUxu0j` | `marketing/stills/film024-recharge-source.jpg` |
+
+Repo CSV `picked_url` + `times_used=1` so the factory will not re-pick them. `still_edit_prompt` = FINAL keeper. Does not rewrite `still_prompt`.
+
+Sheet write is a one-shot overlay (`marketing/n8n-code-overlay-film023-024-final.js`). **Do not run it unless Sal says yes.**
+
+```text
+manual_trigger → get_film_stills → overlay_film023_024_final → sheets_update_keepers
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_024_final`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_024_final** → `sheets_update_keepers`
+
+**Before → this → After:** `overlay_film023_024_final` → **sheets_update_keepers** → `end`
+
+Match `still_id`. Map `picked_url`, `still_edit_prompt`, `times_used`. FILM-024 also maps `take_urls`.
