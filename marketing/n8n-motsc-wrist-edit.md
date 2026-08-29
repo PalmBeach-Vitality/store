@@ -384,3 +384,5 @@ Code: `marketing/n8n-code-overlay-film023-match-005.js`. Writes `still_prompt` +
 **Before → this → After:** `overlay_film023_match_005` → **sheets_update_orient** → `end`
 
 Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
+
+Executed unpublished overlay `SBr6WtESGsBHb7gL` (n8n exec **1651**), then archived. `edit_one_still` exec **1652** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Do not publish. Factory unchanged.
