@@ -361,4 +361,6 @@ Code: `marketing/n8n-code-overlay-film023-pick-keeper.js`. Writes `picked_url` +
 
 **Before → this → After:** `overlay_film023_pick_keeper` → **sheets_update_pick** → `end`
 
-Match `still_id`. Does not rewrite `still_prompt` / `take_urls` / `times_used`. Do not publish. Factory unchanged.
+Match `still_id`. Does not rewrite `still_prompt` / `take_urls` / `times_used`.
+
+Executed unpublished overlay `gV9m2NVtE3VoXbHh` (n8n exec **1649**), then archived. Do not publish. Factory unchanged. `edit_one_still` is ready when you want the orientation fix.
