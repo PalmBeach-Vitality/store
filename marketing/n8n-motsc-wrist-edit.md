@@ -288,3 +288,27 @@ Code: `marketing/n8n-code-overlay-film021-light-damage.js`. Mode: Run Once for A
 Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `picked_url`.
 
 Executed unpublished overlay `VQdWUHAlhzNmarPa` (n8n exec **1640**), then archived. Do not publish. Do not run `edit_one_still` from this overlay.
+
+---
+
+## FILM-023 handoff: no gloves + watch-orientation device
+
+Factory exec **1639** FILM-023 takes (`...-37a7932d-...`) are no good: tactical gloves and the square device rotated the wrong way (90°, along the forearm, or a medical HUD). Sal: no gloves; device in the correct FILM-004 watch orientation. Do **not** run the factory or `edit_one_still`.
+
+Locks **FILM-023 / 024**. Writes `still_prompt` + `still_edit_prompt` only. Does not write `take_urls` / `times_used` / `picked_url`.
+
+```text
+manual_trigger → get_film_stills → overlay_film023_no_gloves → sheets_update_hands
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_no_gloves`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_no_gloves** → `sheets_update_hands`
+
+Code: `marketing/n8n-code-overlay-film023-no-gloves.js`. Mode: Run Once for All Items.
+
+**Before → this → After:** `overlay_film023_no_gloves` → **sheets_update_hands** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt`.
+
+Do not publish. Do not execute this overlay unless Sal asks to write Sheet 18. Factory unchanged.
