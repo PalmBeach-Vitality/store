@@ -209,4 +209,26 @@ Code: `marketing/n8n-code-overlay-film018-013-core.js`. Does not write `picked_u
 
 Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls`, `times_used`.
 
-Executed unpublished overlay `7SDKI94KEmH0Khkk` (n8n exec **1627**), then archived. Next factory Execute regenerates FILM-018. Do not publish.
+Executed unpublished overlay `7SDKI94KEmH0Khkk` (n8n exec **1627**), then archived. Factory exec **1628** regenerated FILM-018 on the metal core. Do not publish.
+
+---
+
+## FILM-018 reseat vial in core (edit, do not regenerate)
+
+Exec **1628** metal-core takes are keepers for the well, but the vial hovers or sits on the rim. Fix that on `edit_one_still` — do not reset `times_used`.
+
+```text
+manual_trigger → get_film_stills → overlay_film018_vial_seat → sheets_update_seat
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film018_vial_seat`
+
+**Before → this → After:** `get_film_stills` → **overlay_film018_vial_seat** → `sheets_update_seat`
+
+Code: `marketing/n8n-code-overlay-film018-vial-seat.js`. Writes `still_prompt` + `still_edit_prompt` only.
+
+**Before → this → After:** `overlay_film018_vial_seat` → **sheets_update_seat** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt`.
+
+Paste a keeper URL into unpublished `edit_one_still` `AP4VUchmUDV9TW8q` with Sheet 18 `still_edit_prompt`. Do not publish.
