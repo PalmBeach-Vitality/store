@@ -264,3 +264,27 @@ Then unpublished `edit_one_still` `AP4VUchmUDV9TW8q` on that keeper.
 Executed unpublished overlay `LXLuq3CRPzgzkmCZ` (n8n exec **1631**), then archived. `edit_one_still` exec **1632** (n=3) barely rotated the device. Exec **1633** (n=4, stronger watch-reading pose) from the same keeper.
 
 Working keeper is now `...-13d57662.jpeg`. Overlay `otHmKSnCMyUtEe5a` exec **1636** wrote `picked_url` + rotate-text prompt, then archived. `edit_one_still` exec **1635** (n=4) from that keeper. Grok still renders MOTS-C LOW camera-upright. Do not publish.
+
+---
+
+## FILM-021 pick + light ship damage (crash scenes)
+
+Sheet 18 pick `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-8b66d32b-6ae2-9f50-941f-07875a234619-7910d329.png` (FILM-021 take 3). The generated ship is a torn-open wreck. Sal: ship should only look slightly damaged — not a complete wreck — and no major damage in this shot or any other crash scenes.
+
+Locks **FILM-015 / 020 / 021 / 022 / 025**. Writes `still_prompt`, `still_edit_prompt`, `picked_url` (021 only). Does not write `take_urls` / `times_used`. Factory unchanged.
+
+```text
+manual_trigger → get_film_stills → overlay_film021_light_damage → sheets_update_damage
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film021_light_damage`
+
+**Before → this → After:** `get_film_stills` → **overlay_film021_light_damage** → `sheets_update_damage`
+
+Code: `marketing/n8n-code-overlay-film021-light-damage.js`. Mode: Run Once for All Items.
+
+**Before → this → After:** `overlay_film021_light_damage` → **sheets_update_damage** → `end`
+
+Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `picked_url`.
+
+Do not publish. Archive after execute. Do not run `edit_one_still` from this overlay.
