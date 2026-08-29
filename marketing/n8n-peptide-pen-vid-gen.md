@@ -30,6 +30,7 @@ manual_trigger
   → grok_video_start
   → wait_video
   → grok_video_poll
+  → assert_video_ok
   → save_video_url
   → sheets_update_pen
 ```
@@ -193,10 +194,23 @@ Must be **enabled**.
 
 ---
 
+## Node 10b — `assert_video_ok`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `grok_video_poll` → **assert_video_ok** → `save_video_url`
+
+Paste: `marketing/n8n-code-assert-video-ok.js`
+
+Throws if poll `status` is failed / no `video.url`. That stops `sheets_update_pen` from incrementing `times_used` on a dead still.
+
+**Pin trap:** `grok_imagine_pen_still` can stay pinned to a *different* expired `imgen.x.ai` URL. Unpin it before a full video Execute, or video will 404 even when a newer still (from a still-only run) is still live.
+
+---
+
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_pen`  
+**Before → this → After:** `assert_video_ok` → **save_video_url** → `sheets_update_pen`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
