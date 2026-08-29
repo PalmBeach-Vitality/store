@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CSV_PATH = ROOT / "sheets" / "18-motsc-film-stills.csv"
 
 PICKED = (
-    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-b2f7e139-d98d-9030-8862-3614b91f5719-4d9f0046.png"
+    "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-97eff08a-b0a1-99eb-86f1-bc1d1a62b8c2-13d57662.jpeg"
 )
 TAKES_1630 = (
     "https://imgen.x.ai/xai-imgen/xai-tmp-imgen-b2f7e139-d98d-9030-8862-3614b91f5719-e5f630cf.png | "
@@ -35,11 +35,10 @@ STILL_019 = (
     "— never a gauntlet, never a forearm tank, never a prosthetic, never replacing "
     "the hand, never covering the fingers. She stands at the FILM-013 engine core "
     "and looks DOWN at her raised left wrist: chin tucked, eyes on the device, she "
-    "is reading the screen. The square screen faces HER face, tilted toward her "
-    "eyes — NOT facing the camera, NOT a face-on product shot pointed at the lens. "
-    "Camera sees the device in 3/4 from above as she reads it. The screen flashes "
-    "an almost-empty amber-red bar and blocky uppercase MOTS-C LOW, text tack "
-    "sharp and still readable from that high 3/4 angle. Left hand and fingers "
+    "is reading the screen. The square screen and the glowing MOTS-C LOW text face "
+    "HER — right-side-up for her eyes, upside-down or edge-on to the camera. NOT a "
+    "face-on product shot pointed at the lens. Camera sees the SIDE and TOP EDGE of "
+    "the square box as she reads it. Left hand and fingers "
     "still fully visible. BACKGROUND must be that SAME FILM-013 core — circular "
     "brushed-metal well, concentric rings, dim gold radial vein conduits, red "
     "warning glow — slightly out of focus behind her. NOT a different cockpit. "
@@ -49,16 +48,14 @@ STILL_019 = (
     "no watermarks, no people other than the astronaut."
 )
 EDIT_019 = (
-    "Keep this EXACT woman, face, hair, flight suit, Palm Beach chest patch, and "
-    "the circular brushed-metal core behind her. Do not change her face. Do not "
-    "add any engraved text on the core. CHANGE the left-arm pose: she lifts the "
-    "square wrist computer up toward her face like a person reading a watch. Her "
-    "chin tucks. Her eyes lock on the screen. Rotate the left wrist so the square "
-    "screen points at HER eyes — the device must NOT face out at the camera. From "
-    "the camera we see the SIDE and TOP EDGE of the square gunmetal box. Only a "
-    "sliver or steep 3/4 of the amber MOTS-C LOW screen is visible as she reads it. "
-    "Left hand, palm, fingers, and thumb stay fully visible past the strap. No "
-    "round shapes. No extra people. No readable text on the core."
+    "Keep this EXACT woman, face, hair, pose, flight suit, Palm Beach chest patch, "
+    "and circular brushed-metal core. Do not change her face. Do not move her left "
+    "arm. Do not take the device off her left wrist. ONLY rotate the square "
+    "wrist-computer screen 180 degrees so the glowing MOTS-C LOW text faces HER "
+    "and is right-side-up for her eyes. From the camera the letters should appear "
+    "upside-down or edge-on — she is reading it, the audience is not. The square "
+    "housing stays on her LEFT wrist. Left hand, fingers, and thumb stay visible. "
+    "No handheld prop. No engraved text on the core. No extra people."
 )
 TAKES_AFTER_1632 = (
     TAKES_1630
