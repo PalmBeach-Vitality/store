@@ -468,3 +468,5 @@ Code: `marketing/n8n-code-overlay-film023-save-edits.js`. Replaces `take_urls` w
 **Before → this → After:** `save_film023_edits` → **sheets_update_takes** → `end`
 
 Match `still_id`. Map `take_urls`, `still_edit_prompt`, `picked_url`, `times_used`, `last_used_at`.
+
+Lock overlay `zIaZ78r1hCcMIz0y` exec **1657**, then archived. `edit_one_still` exec **1658** (n=5) from `film023-handoff-source.jpg` / Drive `vial_handoff_23.jpg`. Appended five jpeg edits onto `take_urls`. `picked_url` stays the source still. Do not publish. Factory unchanged.
