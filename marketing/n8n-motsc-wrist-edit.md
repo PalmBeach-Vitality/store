@@ -289,6 +289,22 @@ Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `picked_url`.
 
 Executed unpublished overlay `VQdWUHAlhzNmarPa` (n8n exec **1640**), then archived. Do not publish. Do not run `edit_one_still` from this overlay.
 
+Sal: **FILM-015 and FILM-020 are keepers** — they already show only minor hull damage. Do not regenerate or edit those stills. Overlay `overlay_film015_020_keepers` confirms `picked_url` and sets FILM-015 `times_used` so the factory will not re-pick it.
+
+```text
+manual_trigger → get_film_stills → overlay_film015_020_keepers → sheets_update_keepers
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film015_020_keepers`
+
+**Before → this → After:** `get_film_stills` → **overlay_film015_020_keepers** → `sheets_update_keepers`
+
+Code: `marketing/n8n-code-overlay-film015-020-keepers.js`. Mode: Run Once for All Items.
+
+**Before → this → After:** `overlay_film015_020_keepers` → **sheets_update_keepers** → `end`
+
+Match `still_id`. Map `picked_url`, `still_edit_prompt`, `times_used`. Does not rewrite `still_prompt`.
+
 ---
 
 ## FILM-023 handoff: no gloves + watch-orientation device
