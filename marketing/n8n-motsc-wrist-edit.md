@@ -404,3 +404,5 @@ Code: `marketing/n8n-code-overlay-film023-device-on-top.js`. Writes `still_promp
 **Before → this → After:** `overlay_film023_device_on_top` → **sheets_update_top** → `end`
 
 Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
+
+Executed unpublished overlay `m9Y3ep0RiA796jRt` (n8n exec **1653**), then archived. `edit_one_still` exec **1654** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits. Grok left the box on the inner / underside of the wrist. Did not change `picked_url`. Do not publish. Factory unchanged.
