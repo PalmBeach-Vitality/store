@@ -234,3 +234,29 @@ Match `still_id`. Map `still_prompt` and `still_edit_prompt`.
 Paste a keeper URL into unpublished `edit_one_still` `AP4VUchmUDV9TW8q` with Sheet 18 `still_edit_prompt`. Do not publish.
 
 Executed unpublished overlay `PvmZPKO21uqbFTNW` (n8n exec **1629**), then archived. Do not publish.
+
+---
+
+## FILM-019 look at the device (edit keeper)
+
+Factory exec **1630** FILM-019 keeper `...-4d9f0046.png`: she glances aside and the square device faces the camera. She should be **reading** it; the screen faces **her**, not out.
+
+```text
+manual_trigger → get_film_stills → overlay_film019_look_device → sheets_update_look
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film019_look_device`
+
+**Before → this → After:** `get_film_stills` → **overlay_film019_look_device** → `sheets_update_look`
+
+Code: `marketing/n8n-code-overlay-film019-look-device.js`. Writes `still_prompt`, `still_edit_prompt`, `picked_url`. Does not write `times_used` / `take_urls`.
+
+**Before → this → After:** `overlay_film019_look_device` → **sheets_update_look** → `end`
+
+Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `picked_url`.
+
+Then unpublished `edit_one_still` `AP4VUchmUDV9TW8q` on that keeper.
+
+**Before → this → After:** `unwired` → **edit_form** → `get_film_stills`
+
+`still_id` = `FILM-019`. `source_url` = the keeper. `still_edit_prompt` from the sheet. Do not publish.
