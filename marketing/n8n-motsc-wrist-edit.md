@@ -480,7 +480,7 @@ FILM-023 keeper was updated again to Sal's latest handoff still (same repo path,
 | still | Drive file | Drive id | repo |
 |---|---|---|---|
 | FILM-023 | `vial_handoff_23.jpg` + latest upload | `1txVArsVTgZ7iflHIu1RKJRFWqoK2HkaS` | `marketing/stills/film023-handoff-source.jpg` |
-| FILM-024 | `vial_recharge_24.jpg` | `1Dq_XAU10Me4D7pXEqcraQacQRKqUxu0j` | `marketing/stills/film024-recharge-source.jpg` |
+| FILM-024 | `vial_recharge_24.jpg` + latest upload | `1Dq_XAU10Me4D7pXEqcraQacQRKqUxu0j` | `marketing/stills/film024-recharge-source.jpg` |
 
 Repo CSV `picked_url` + `times_used=1` so the factory will not re-pick them. `still_edit_prompt` = FINAL keeper. Does not rewrite `still_prompt`.
 

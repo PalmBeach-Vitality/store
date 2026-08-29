@@ -29,7 +29,7 @@ var PICKED_024 =
 var EDIT_023 =
   'FINAL keeper: vial_handoff_23 (updated). Do not regenerate. Do not edit.';
 var EDIT_024 =
-  'FINAL keeper: vial_recharge_24. Do not regenerate. Do not edit.';
+  'FINAL keeper: vial_recharge_24 (updated). Do not regenerate. Do not edit.';
 
 var rows = $input.all().map(function (i) {
   return i.json;

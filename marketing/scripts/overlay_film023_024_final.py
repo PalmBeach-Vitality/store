@@ -11,7 +11,7 @@ PICKED_024 = (
     "cursor/film018-match-013-core-4c4b/marketing/stills/film024-recharge-source.jpg"
 )
 EDIT_023 = "FINAL keeper: vial_handoff_23 (updated). Do not regenerate. Do not edit."
-EDIT_024 = "FINAL keeper: vial_recharge_24. Do not regenerate. Do not edit."
+EDIT_024 = "FINAL keeper: vial_recharge_24 (updated). Do not regenerate. Do not edit."
 
 
 def apply_row(row):
