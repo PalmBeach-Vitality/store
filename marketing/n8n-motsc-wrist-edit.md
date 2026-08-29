@@ -186,3 +186,27 @@ Code: `marketing/n8n-code-overlay-film014-planet.js`. FILM-014 also clears `take
 Match `still_id`. Map `still_prompt` (plus `still_edit_prompt` / `take_urls` / `times_used` on FILM-014).
 
 Executed unpublished overlay `MC17nMDEWfA3VMUJ` (n8n exec **1615**), then archived. Factory `qZ7qU8LVwVXAXyaL` regenerated FILM-014 as exec **1616**. Do not publish.
+
+---
+
+## FILM-018 / FILM-019 match FILM-013 core (one-shot, then archive)
+
+Factory exec **1626** generated FILM-018 (`key_a1_vial_dimming`) with a crystal socket / hose nest. That is not the FILM-013 circular brushed-metal well.
+
+Lock 018 + 019 to the FILM-013 core: concentric charcoal rings, hex bolts, gold conduits as radial metal veins. **No crystal ring, no hose nest, no radar HUD hero.** FILM-018 also clears `take_urls` and sets `times_used` to 0 so the factory re-picks it.
+
+```text
+manual_trigger → get_film_stills → overlay_film018_013_core → sheets_update_core
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film018_013_core`
+
+**Before → this → After:** `get_film_stills` → **overlay_film018_013_core** → `sheets_update_core`
+
+Code: `marketing/n8n-code-overlay-film018-013-core.js`. Does not write `picked_url` / `last_used_at`.
+
+**Before → this → After:** `overlay_film018_013_core` → **sheets_update_core** → `end`
+
+Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls`, `times_used`.
+
+Do not publish. After the overlay, Execute the film factory once to regenerate FILM-018.
