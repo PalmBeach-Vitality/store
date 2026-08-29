@@ -342,3 +342,23 @@ Code: `marketing/n8n-code-overlay-film023-save.js`. Replaces `take_urls` (does n
 Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls`, `times_used`, `last_used_at`. Does not write `picked_url`.
 
 Executed unpublished overlay `33T8E18wBN4nHRQO` (n8n exec **1648**), then archived. Live Sheet 18 and the repo CSV now both have the no-gloves lock plus the new `...-d82e216e-...` takes. Do not publish. Factory unchanged.
+
+---
+
+## FILM-023 keeper pick
+
+Sal picked 1648 take `...-490e8b55.png`. Wrist device is the wrong orientation; that is an **edit**, not a regen.
+
+```text
+manual_trigger → get_film_stills → overlay_film023_pick_keeper → sheets_update_pick
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_pick_keeper`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_pick_keeper** → `sheets_update_pick`
+
+Code: `marketing/n8n-code-overlay-film023-pick-keeper.js`. Writes `picked_url` + wrist-orientation `still_edit_prompt` only.
+
+**Before → this → After:** `overlay_film023_pick_keeper` → **sheets_update_pick** → `end`
+
+Match `still_id`. Does not rewrite `still_prompt` / `take_urls` / `times_used`. Do not publish. Factory unchanged.
