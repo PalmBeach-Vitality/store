@@ -363,4 +363,6 @@ Code: `marketing/n8n-code-overlay-film023-pick-keeper.js`. Writes `picked_url` +
 
 Match `still_id`. Does not rewrite `still_prompt` / `take_urls` / `times_used`.
 
-Executed unpublished overlay `gV9m2NVtE3VoXbHh` (n8n exec **1649**), then archived. Do not publish. Factory unchanged. `edit_one_still` is ready when you want the orientation fix.
+Executed unpublished overlay `gV9m2NVtE3VoXbHh` (n8n exec **1649**), then archived. Do not publish. Factory unchanged.
+
+`edit_one_still` exec **1650** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Grok barely rotated the device on most takes; take 2 (`...-6400f178.jpeg`) is the one that pointed MOTS-C toward the fingers, and it also stamped FILM-004 on the screen.
