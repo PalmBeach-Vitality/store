@@ -10,8 +10,13 @@ PICKED_024 = (
     "https://raw.githubusercontent.com/PalmBeach-Vitality/store/"
     "cursor/film018-match-013-core-4c4b/marketing/stills/film024-recharge-source.jpg"
 )
+PICKED_025 = (
+    "https://raw.githubusercontent.com/PalmBeach-Vitality/store/"
+    "cursor/film018-match-013-core-4c4b/marketing/stills/film025-takeoff-source.png"
+)
 EDIT_023 = "FINAL keeper: vial_handoff_23 (updated). Do not regenerate. Do not edit."
 EDIT_024 = "FINAL keeper: vial_recharge_24 (updated). Do not regenerate. Do not edit."
+EDIT_025 = "FINAL keeper: spaceship_takeoff_25. Do not regenerate. Do not edit."
 
 
 def apply_row(row):
@@ -24,6 +29,11 @@ def apply_row(row):
         row["picked_url"] = PICKED_024
         row["take_urls"] = PICKED_024
         row["still_edit_prompt"] = EDIT_024
+        row["times_used"] = "1"
+    if sid == "FILM-025":
+        row["picked_url"] = PICKED_025
+        row["take_urls"] = PICKED_025
+        row["still_edit_prompt"] = EDIT_025
         row["times_used"] = "1"
     return row
 

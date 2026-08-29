@@ -471,9 +471,9 @@ Match `still_id`. Map `take_urls`, `still_edit_prompt`, `picked_url`, `times_use
 
 Lock overlay `zIaZ78r1hCcMIz0y` exec **1657**, then archived. `edit_one_still` exec **1658** (n=5) from `film023-handoff-source.jpg` / Drive `vial_handoff_23.jpg`. Appended five jpeg edits onto `take_urls`. `picked_url` stays the source still. Do not publish. Factory unchanged.
 
-## FILM-023 / 024 FINAL keepers
+## FILM-023 / 024 / 025 FINAL keepers
 
-Sal: these two Drive stills are **final**. Do not regenerate. Do not edit.
+Sal: these Drive stills are **final**. Do not regenerate. Do not edit.
 
 FILM-023 keeper was updated again to Sal's latest handoff still (same repo path, new pixels).
 
@@ -481,8 +481,11 @@ FILM-023 keeper was updated again to Sal's latest handoff still (same repo path,
 |---|---|---|---|
 | FILM-023 | `vial_handoff_23.jpg` + latest upload | `1txVArsVTgZ7iflHIu1RKJRFWqoK2HkaS` | `marketing/stills/film023-handoff-source.jpg` |
 | FILM-024 | `vial_recharge_24.jpg` + latest upload | `1Dq_XAU10Me4D7pXEqcraQacQRKqUxu0j` | `marketing/stills/film024-recharge-source.jpg` |
+| FILM-025 | `spaceship_takeoff_25.png` | `1eKM6bMM4IMFT743xyxA3vRYT1h8CI7qs` | `marketing/stills/film025-takeoff-source.png` |
 
 Repo CSV `picked_url` + `times_used=1` so the factory will not re-pick them. `still_edit_prompt` = FINAL keeper. Does not rewrite `still_prompt`.
+
+FILM-025 `picked_url` / `take_urls`: `https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/film018-match-013-core-4c4b/marketing/stills/film025-takeoff-source.png`
 
 Sheet write is a one-shot overlay (`marketing/n8n-code-overlay-film023-024-final.js`). **Do not run it unless Sal says yes.**
 
@@ -496,4 +499,4 @@ manual_trigger → get_film_stills → overlay_film023_024_final → sheets_upda
 
 **Before → this → After:** `overlay_film023_024_final` → **sheets_update_keepers** → `end`
 
-Match `still_id`. Map `picked_url`, `still_edit_prompt`, `times_used`. FILM-024 also maps `take_urls`.
+Match `still_id`. Map `picked_url`, `still_edit_prompt`, `times_used`. FILM-024 and FILM-025 also map `take_urls`.
