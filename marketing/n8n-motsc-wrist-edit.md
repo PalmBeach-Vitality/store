@@ -365,4 +365,22 @@ Match `still_id`. Does not rewrite `still_prompt` / `take_urls` / `times_used`.
 
 Executed unpublished overlay `gV9m2NVtE3VoXbHh` (n8n exec **1649**), then archived. Do not publish. Factory unchanged.
 
-`edit_one_still` exec **1650** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Grok barely rotated the device on most takes; take 2 (`...-6400f178.jpeg`) is the one that pointed MOTS-C toward the fingers, and it also stamped FILM-004 on the screen.
+`edit_one_still` exec **1650** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Those edits rotated MOTS-C toward the fingers (and stamped FILM-004). **Wrong direction.** FILM-005 / FILM-006 have TOP of MOTS-C toward the forearm / elbow.
+
+## FILM-023 match 005/006 orientation
+
+Same device as the hero close-ups. TOP of MOTS-C toward the forearm / elbow, BOTTOM toward the fingers. Not a special handoff orientation.
+
+```text
+manual_trigger → get_film_stills → overlay_film023_match_005 → sheets_update_orient
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_match_005`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_match_005** → `sheets_update_orient`
+
+Code: `marketing/n8n-code-overlay-film023-match-005.js`. Writes `still_prompt` + `still_edit_prompt` on FILM-023 / 024. Does not write `take_urls` / `times_used` / `picked_url`.
+
+**Before → this → After:** `overlay_film023_match_005` → **sheets_update_orient** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.

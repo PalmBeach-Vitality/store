@@ -31,10 +31,11 @@ DEVICE = (
     "blocky SQUARE gunmetal box strapped exactly onto the BACK (dorsal / outer "
     "side) of her LEFT wrist bone, housing no wider than the wrist. Square "
     "housing, square amber-orange screen with only slightly rounded corners, "
-    "square or rectangular buttons and sliders on the SIDES of the box. Watch "
-    "orientation: the screen sits on the back of the wrist facing OUT, not "
-    "toward the palm. The TOP of the screen (MOTS-C text) points toward her "
-    "fingers; the BOTTOM of the screen points toward her forearm. NOT rotated "
+    "square or rectangular buttons and sliders on the SIDES of the box. SAME "
+    "screen orientation as FILM-005 and FILM-006: the screen sits on the back "
+    "of the wrist facing OUT, not toward the palm. The TOP of the screen "
+    "(MOTS-C text) points toward her forearm / elbow; the BOTTOM of the "
+    "screen points toward her fingers. NOT rotated "
     "90 degrees. NOT sideways toward the thumb. NOT a long rectangle running "
     "along the forearm. NOT on the inner wrist. NOT a face-on product shot "
     "pointed at the camera. Screen shows only the square amber-orange MOTS-C "
@@ -67,19 +68,21 @@ STILL_024 = (
     "No logos, no captions, no watermarks. No faces. No extra people. No gloves."
 )
 EDIT_023 = (
-    "Keep this exact handoff camera, vial, and alien pearl-white fingers. "
-    "REMOVE every glove. The astronaut hand must be BARE LEFT skin — palm, "
-    "fingers, thumb visible. Put the FILM-004 square gunmetal wrist computer "
-    "on the BACK of her LEFT wrist in watch orientation: screen faces out "
-    "from the dorsal wrist, MOTS-C text toward the fingers, not rotated 90 "
-    "degrees, not along the forearm, not a medical HUD. No gloves."
+    "Keep this exact handoff camera, vial, alien pearl-white fingers, and BARE "
+    "LEFT astronaut palm. Do not add gloves. ONLY rotate the square gunmetal "
+    "wrist device to match FILM-005 and FILM-006: screen on the BACK of the "
+    "LEFT wrist, TOP of the MOTS-C text toward the forearm / elbow, BOTTOM of "
+    "the MOTS-C text toward the fingers. Screen text stays MOTS-C only — do "
+    "not print FILM-004 or any other extra words. NOT rotated 90 degrees. NOT "
+    "sideways toward the thumb. NOT a long rectangle along the forearm. NOT a "
+    "medical HUD. No other changes."
 )
 EDIT_024 = (
     "Keep this exact insert camera and vial. REMOVE every glove. Bare LEFT "
-    "hand only. FILM-004 square device on the BACK of her LEFT wrist, watch "
-    "orientation: MOTS-C text toward the fingers, not rotated 90 degrees. "
-    "Seat the vial in the FILM-013 circular brushed-metal well, not a crystal "
-    "socket. No gloves."
+    "hand only. Square device on the BACK of her LEFT wrist, SAME orientation "
+    "as FILM-005 / FILM-006: MOTS-C text toward the forearm / elbow, bottom "
+    "toward the fingers, not rotated 90 degrees. Seat the vial in the "
+    "FILM-013 circular brushed-metal well, not a crystal socket. No gloves."
 )
 
 

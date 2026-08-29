@@ -25,7 +25,7 @@ var PICKED_023 =
   'https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d82e216e-d3b1-98b6-9381-e1ab94aba593-490e8b55.png';
 
 var EDIT_023 =
-  'Keep this exact handoff camera, vial, alien pearl-white fingers, and BARE LEFT astronaut palm. Do not add gloves. ONLY rotate the square gunmetal wrist device into FILM-004 watch orientation: screen on the BACK of the LEFT wrist facing out, TOP of the MOTS-C text toward the fingers, BOTTOM toward the forearm. NOT rotated 90 degrees. NOT sideways toward the thumb. NOT a long rectangle along the forearm. NOT a medical HUD. No other changes.';
+  'Keep this exact handoff camera, vial, alien pearl-white fingers, and BARE LEFT astronaut palm. Do not add gloves. ONLY rotate the square gunmetal wrist device to match FILM-005 and FILM-006: screen on the BACK of the LEFT wrist, TOP of the MOTS-C text toward the forearm / elbow, BOTTOM of the MOTS-C text toward the fingers. Screen text stays MOTS-C only — do not print FILM-004 or any other extra words. NOT rotated 90 degrees. NOT sideways toward the thumb. NOT a long rectangle along the forearm. NOT a medical HUD. No other changes.';
 
 var rows = $input.all().map(function (i) {
   return i.json;
