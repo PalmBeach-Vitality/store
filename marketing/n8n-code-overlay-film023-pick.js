@@ -1,11 +1,11 @@
 // n8n Code node: pick_film023
-// Workflow: overlay_film023_bare_hand_gen (one-shot, then archive)
+// Workflow: overlay_film023_regen_from_prompt (one-shot, then archive)
 // Mode: Run Once for All Items
-// After: get_film_stills_locked
+// After: get_film_stills
 // Before: grok_imagine_still
 //
-// Force FILM-023 only. Prompt must already be the no-gloves lock on the sheet.
-// Empty cell = throw. Do not invent a fallback prompt.
+// Force FILM-023 only. Generate from the locked still_prompt.
+// Do not edit an existing still. Empty cell = throw.
 
 function val(obj, names) {
   obj = obj || {};
@@ -37,7 +37,7 @@ var rows = $input.all().map(function (i) {
 });
 
 if (!rows.length) {
-  throw new Error('pick_film023: no rows from get_film_stills_locked.');
+  throw new Error('pick_film023: no rows from get_film_stills.');
 }
 
 var pick = null;
@@ -59,6 +59,14 @@ if (prompt.indexOf('gloved open palm') !== -1) {
 }
 if (prompt.indexOf('NO gloves') === -1 || prompt.indexOf('BARE LEFT') === -1) {
   throw new Error('pick_film023: still_prompt missing no-gloves lock. Refusing to generate.');
+}
+if (
+  prompt.indexOf('TOP of her LEFT wrist') === -1 ||
+  prompt.indexOf('NEVER underneath') === -1
+) {
+  throw new Error(
+    'pick_film023: still_prompt missing device-on-top lock (TOP of her LEFT wrist / NEVER underneath). Refusing to generate.'
+  );
 }
 
 var model = requireField(pick, 'model_still', 'FILM-023');

@@ -1,10 +1,11 @@
 // n8n Code node: save_film023_takes
-// Workflow: overlay_film023_bare_hand_gen (one-shot, then archive)
+// Workflow: overlay_film023_regen_from_prompt (one-shot, then archive)
 // Mode: Run Once for All Items
 // After: grok_imagine_still
 // Before: sheets_update_takes
 //
-// REPLACE take_urls with this run only. Do not keep the gloved factory takes.
+// REPLACE take_urls with this generate run only. Clear picked_url.
+// Do not keep underside-device takes. Do not append.
 
 function firstJson(name) {
   try {
@@ -46,6 +47,7 @@ return [
       take_count_this_run: urls.length,
       times_used: (Number(pick.still_times_used) || 0) + 1,
       last_used_at: $now.toISO(),
+      picked_url: '',
     },
   },
 ];

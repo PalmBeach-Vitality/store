@@ -406,3 +406,31 @@ Code: `marketing/n8n-code-overlay-film023-device-on-top.js`. Writes `still_promp
 Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
 
 Executed unpublished overlay `m9Y3ep0RiA796jRt` (n8n exec **1653**), then archived. `edit_one_still` exec **1654** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits. Grok left the box on the inner / underside of the wrist. Did not change `picked_url`. Do not publish. Factory unchanged.
+
+**Do not edit a FILM-023 still that already has the device on the inner / underside of the wrist.** Generate a new still from the locked `still_prompt`. Editing a known-wrong 023 still keeps the box there.
+
+## FILM-023 regen from locked prompt
+
+```text
+manual_trigger → get_film_stills → pick_film023 → grok_imagine_still → save_film023_takes → sheets_update_takes
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `pick_film023`
+
+**Before → this → After:** `get_film_stills` → **pick_film023** → `grok_imagine_still`
+
+Code: `marketing/n8n-code-overlay-film023-pick.js`. Mode: Run Once for All Items. Throws if the sheet is missing `NO gloves` / `BARE LEFT` / `TOP of her LEFT wrist` / `NEVER underneath`.
+
+**Before → this → After:** `pick_film023` → **grok_imagine_still** → `save_film023_takes`
+
+POST `https://api.x.ai/v1/images/generations`. Body `={{ $json.still_body_json }}` from the sheet row. XAI Grok. Timeout 180000.
+
+**Before → this → After:** `grok_imagine_still` → **save_film023_takes** → `sheets_update_takes`
+
+Code: `marketing/n8n-code-overlay-film023-save.js`. **Replaces** `take_urls`. Clears `picked_url`. Increments `times_used`.
+
+**Before → this → After:** `save_film023_takes` → **sheets_update_takes** → `end`
+
+Match `still_id`. Map `take_urls`, `times_used`, `last_used_at`, `picked_url`.
+
+Executed unpublished overlay `BLYr0bBRFOrvq56W` (n8n exec **1655**, n=5 from locked `still_prompt`), then archived. Replaced `take_urls` with `...-8f8a2c44-...`. Cleared `picked_url`. Did not edit the old keeper. All five still sat the box on the inner wrist. Do not publish. Factory unchanged. Do not run `edit_one_still` on these takes.
