@@ -263,4 +263,4 @@ Then unpublished `edit_one_still` `AP4VUchmUDV9TW8q` on that keeper.
 
 Executed unpublished overlay `LXLuq3CRPzgzkmCZ` (n8n exec **1631**), then archived. `edit_one_still` exec **1632** (n=3) barely rotated the device. Exec **1633** (n=4, stronger watch-reading pose) from the same keeper.
 
-Working keeper is now `...-13d57662.jpeg`. Next edit rotates the MOTS-C LOW text 180° so it is right-side-up for her, upside-down or edge-on to the camera. Do not publish.
+Working keeper is now `...-13d57662.jpeg`. Overlay `otHmKSnCMyUtEe5a` exec **1636** wrote `picked_url` + rotate-text prompt, then archived. `edit_one_still` exec **1635** (n=4) from that keeper. Grok still renders MOTS-C LOW camera-upright. Do not publish.

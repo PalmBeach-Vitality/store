@@ -83,6 +83,10 @@ def main() -> None:
             + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-97eff08a-b0a1-99eb-86f1-bc1d1a62b8c2-13d57662.jpeg"
             + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d4fdea06-7fcd-9d10-8752-3b12ab87371d-be2d2113.jpeg"
             + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-98f8e437-d608-9c33-aab4-9a7a0e8ec4de-84da06a6.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-2a7e5bc4-98ba-91a2-99a7-6a9a2ed31fe3-6dba7324.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-3a65f6f8-e8f8-9958-9997-0855099bbeba-20ad4364.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-aca88bfa-ecde-90bc-b867-ff10d07895d9-fc2b8ec8.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-bb4ce8d0-70cc-909e-b486-fe7507070463-08632928.jpeg"
         )
         row["times_used"] = "1"
         row["last_used_at"] = "2026-08-29T14:31:22.449-04:00"
