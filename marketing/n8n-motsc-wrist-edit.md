@@ -434,3 +434,37 @@ Code: `marketing/n8n-code-overlay-film023-save.js`. **Replaces** `take_urls`. Cl
 Match `still_id`. Map `take_urls`, `times_used`, `last_used_at`, `picked_url`.
 
 Executed unpublished overlay `BLYr0bBRFOrvq56W` (n8n exec **1655**, n=5 from locked `still_prompt`), then archived. Replaced `take_urls` with `...-8f8a2c44-...`. Cleared `picked_url`. Did not edit the old keeper. All five still sat the box on the inner wrist. Do not publish. Factory unchanged. Do not run `edit_one_still` on these takes.
+
+## FILM-023 use Sal's vial_handoff_23
+
+Sal's `vial_handoff_23.jpg` (Drive `1txVArsVTgZ7iflHIu1RKJRFWqoK2HkaS`) is the FILM-023 source. Watch sit is already on TOP (band / edge at bottom-left). Do **not** edit the old underside stills. Edit **from this image** only.
+
+```text
+manual_trigger → get_film_stills → overlay_film023_use_this → sheets_update_lock → get_film_stills_locked → prep_film023_edit → grok_imagine_edit_still → save_film023_edits → sheets_update_takes
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_use_this`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_use_this** → `sheets_update_lock`
+
+Code: `marketing/n8n-code-overlay-film023-use-this.js`. Writes `still_prompt`, `still_edit_prompt`, `picked_url`, `take_urls`.
+
+**Before → this → After:** `overlay_film023_use_this` → **sheets_update_lock** → `get_film_stills_locked`
+
+**Before → this → After:** `sheets_update_lock` → **get_film_stills_locked** → `prep_film023_edit`
+
+**Before → this → After:** `get_film_stills_locked` → **prep_film023_edit** → `grok_imagine_edit_still`
+
+Code: `marketing/n8n-code-overlay-film023-prep-edit.js`. Source = sheet `picked_url`. Throws on the old underside URLs.
+
+**Before → this → After:** `prep_film023_edit` → **grok_imagine_edit_still** → `save_film023_edits`
+
+POST `https://api.x.ai/v1/images/edits`. Body `={{ $json.still_edit_body_json }}`. XAI Grok. Timeout 180000.
+
+**Before → this → After:** `grok_imagine_edit_still` → **save_film023_edits** → `sheets_update_takes`
+
+Code: `marketing/n8n-code-overlay-film023-save-edits.js`. Replaces `take_urls` with source + edits. Keeps `picked_url`.
+
+**Before → this → After:** `save_film023_edits` → **sheets_update_takes** → `end`
+
+Match `still_id`. Map `take_urls`, `still_edit_prompt`, `picked_url`, `times_used`, `last_used_at`.
