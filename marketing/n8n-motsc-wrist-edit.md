@@ -487,7 +487,7 @@ Repo CSV `picked_url` + `times_used=1` so the factory will not re-pick them. `st
 
 FILM-025 `picked_url` / `take_urls`: `https://raw.githubusercontent.com/PalmBeach-Vitality/store/cursor/film018-match-013-core-4c4b/marketing/stills/film025-takeoff-source.png`
 
-Sheet write is a one-shot overlay (`marketing/n8n-code-overlay-film023-024-final.js`). **Do not run it unless Sal says yes.**
+Sheet write overlay [`overlay_film023_024_final`](https://stockjohnson.app.n8n.cloud/workflow/is5M4CkGNrjCPiY5) `is5M4CkGNrjCPiY5` exec **1660** wrote FILM-023 / 024 / 025 `picked_url` + `take_urls`. Exec **1661** wrote I2V columns on all 25 rows. Unpublished. Do not publish.
 
 ```text
 manual_trigger → get_film_stills → overlay_film023_024_final → sheets_update_keepers

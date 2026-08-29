@@ -5,9 +5,8 @@
 // Before: sheets_update_keepers
 //
 // Sal: vial_handoff_23, vial_recharge_24, spaceship_takeoff_25 are FINAL keepers.
-// Writes picked_url, still_edit_prompt, times_used.
-// FILM-024 / FILM-025 also write take_urls. Does not rewrite still_prompt.
-// DO NOT RUN unless Sal says yes.
+// Writes picked_url, take_urls, still_edit_prompt, times_used.
+// Does not rewrite still_prompt.
 
 function squeeze(s) {
   var t = String(s || '');
@@ -53,6 +52,7 @@ for (var i = 0; i < rows.length; i++) {
       json: {
         still_id: stillId,
         picked_url: PICKED_023,
+        take_urls: PICKED_023,
         still_edit_prompt: capPrompt(EDIT_023),
         times_used: '1',
       },

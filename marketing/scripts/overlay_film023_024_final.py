@@ -23,6 +23,7 @@ def apply_row(row):
     sid = row.get("still_id")
     if sid == "FILM-023":
         row["picked_url"] = PICKED_023
+        row["take_urls"] = PICKED_023
         row["still_edit_prompt"] = EDIT_023
         row["times_used"] = "1"
     if sid == "FILM-024":
