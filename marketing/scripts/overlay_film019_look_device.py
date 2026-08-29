@@ -50,13 +50,21 @@ STILL_019 = (
 )
 EDIT_019 = (
     "Keep this EXACT woman, face, hair, flight suit, Palm Beach chest patch, and "
-    "FILM-013 circular brushed-metal core behind her. Do not change her face. Do "
-    "not redesign the square LEFT-wrist device. Turn her head and eyes DOWN so she "
-    "is looking at the wrist computer — she is reading it, not glancing aside, not "
-    "looking at camera. Rotate her left wrist so the square amber-orange screen "
-    "faces HER face, not the camera. The device must NOT face out toward the lens. "
-    "We see it in 3/4 from above as she reads MOTS-C LOW. Left hand, palm, fingers, "
-    "and thumb stay fully visible past the strap. No round shapes. No extra people."
+    "the circular brushed-metal core behind her. Do not change her face. Do not "
+    "add any engraved text on the core. CHANGE the left-arm pose: she lifts the "
+    "square wrist computer up toward her face like a person reading a watch. Her "
+    "chin tucks. Her eyes lock on the screen. Rotate the left wrist so the square "
+    "screen points at HER eyes — the device must NOT face out at the camera. From "
+    "the camera we see the SIDE and TOP EDGE of the square gunmetal box. Only a "
+    "sliver or steep 3/4 of the amber MOTS-C LOW screen is visible as she reads it. "
+    "Left hand, palm, fingers, and thumb stay fully visible past the strap. No "
+    "round shapes. No extra people. No readable text on the core."
+)
+TAKES_AFTER_1632 = (
+    TAKES_1630
+    + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-8853ecc9-71c3-9a38-8e1c-0fad6da2c306-5790c9d7.jpeg"
+    + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-985c0b9b-94c9-9c40-99c8-e77c44a830f5-46de5d90.jpeg"
+    + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-3074a60b-2516-94a5-8b58-e0483160c9d9-45eda879.jpeg"
 )
 
 
@@ -72,7 +80,13 @@ def main() -> None:
         row["still_prompt"] = STILL_019
         row["still_edit_prompt"] = EDIT_019
         row["picked_url"] = PICKED
-        row["take_urls"] = TAKES_1630
+        row["take_urls"] = (
+            TAKES_AFTER_1632
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-a7fec17c-279d-9a44-bd5d-06f80669befc-5ada7371.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-97eff08a-b0a1-99eb-86f1-bc1d1a62b8c2-13d57662.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-d4fdea06-7fcd-9d10-8752-3b12ab87371d-be2d2113.jpeg"
+            + " | https://imgen.x.ai/xai-imgen/xai-tmp-imgen-98f8e437-d608-9c33-aab4-9a7a0e8ec4de-84da06a6.jpeg"
+        )
         row["times_used"] = "1"
         row["last_used_at"] = "2026-08-29T14:31:22.449-04:00"
         locked += 1

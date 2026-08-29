@@ -260,3 +260,5 @@ Then unpublished `edit_one_still` `AP4VUchmUDV9TW8q` on that keeper.
 **Before → this → After:** `unwired` → **edit_form** → `get_film_stills`
 
 `still_id` = `FILM-019`. `source_url` = the keeper. `still_edit_prompt` from the sheet. Do not publish.
+
+Executed unpublished overlay `LXLuq3CRPzgzkmCZ` (n8n exec **1631**), then archived. `edit_one_still` exec **1632** (n=3) barely rotated the device. Exec **1633** (n=4, stronger watch-reading pose) from the same keeper. Do not publish.
