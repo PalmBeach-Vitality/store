@@ -385,4 +385,22 @@ Code: `marketing/n8n-code-overlay-film023-match-005.js`. Writes `still_prompt` +
 
 Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
 
-Executed unpublished overlay `SBr6WtESGsBHb7gL` (n8n exec **1651**), then archived. `edit_one_still` exec **1652** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Do not publish. Factory unchanged.
+Executed unpublished overlay `SBr6WtESGsBHb7gL` (n8n exec **1651**), then archived. `edit_one_still` exec **1652** (n=4) from keeper `...-490e8b55.png`. Appended four jpeg edits onto `take_urls`. Did not change `picked_url`. Those takes still sat the box **underneath** the wrist. Do not publish. Factory unchanged.
+
+## FILM-023 device on TOP of the wrist
+
+FILM-005 / FILM-006 sit on the **TOP** of the left wrist (back / dorsal), like a watch. The 023 handoff is palm-up, so the box belongs on the far side of the wrist — never on the inner / underside.
+
+```text
+manual_trigger → get_film_stills → overlay_film023_device_on_top → sheets_update_top
+```
+
+**Before → this → After:** `manual_trigger` → **get_film_stills** → `overlay_film023_device_on_top`
+
+**Before → this → After:** `get_film_stills` → **overlay_film023_device_on_top** → `sheets_update_top`
+
+Code: `marketing/n8n-code-overlay-film023-device-on-top.js`. Writes `still_prompt` + `still_edit_prompt` on FILM-023 / 024. Does not write `take_urls` / `times_used` / `picked_url`.
+
+**Before → this → After:** `overlay_film023_device_on_top` → **sheets_update_top** → `end`
+
+Match `still_id`. Map `still_prompt` and `still_edit_prompt` only.
