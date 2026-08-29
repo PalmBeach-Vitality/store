@@ -209,4 +209,4 @@ Code: `marketing/n8n-code-overlay-film018-013-core.js`. Does not write `picked_u
 
 Match `still_id`. Map `still_prompt`, `still_edit_prompt`, `take_urls`, `times_used`.
 
-Do not publish. After the overlay, Execute the film factory once to regenerate FILM-018.
+Executed unpublished overlay `7SDKI94KEmH0Khkk` (n8n exec **1627**), then archived. Next factory Execute regenerates FILM-018. Do not publish.
