@@ -88,6 +88,8 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Locked film keepers → **per-beat** I2V. Four unpublished linear workflows. No Switch. No Creatomate. CapCut stays manual.
 
+**Finished film: 60–90s** (aim ~75s). Not 45s. Raw stack is 228s (11×8s Veo + 14×10s Seedance/Kling) so the cut has coverage. Daily catalog reels stay 45–60s.
+
 | Workflow | Model | Beats |
 |---|---|---|
 | `film_i2v_seedance` | Seedance 2.5 (fal) | flyover, walk, handoff, vial-into-engine |
