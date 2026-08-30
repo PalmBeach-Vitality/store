@@ -44,6 +44,7 @@ var input = inputItem.json || {};
 var pick = firstJson('pick_creation');
 if (!Object.keys(pick).length) pick = firstJson('pick_pen_creation');
 var instructions = firstJson('still_edit_instructions');
+var urlInput = firstJson('still_url_input');
 var saveStill = firstJson('save_still_url');
 var imagine = firstJson('grok_imagine_reel_still');
 if (!Object.keys(imagine).length) imagine = firstJson('grok_imagine_pen_still');
@@ -51,6 +52,7 @@ if (!Object.keys(imagine).length) imagine = firstJson('grok_imagine_pen_still');
 var sourceStill = httpsUrl(
   val(input, ['still_url', 'source_still_url']) ||
     val(instructions, ['still_url']) ||
+    val(urlInput, ['still_url']) ||
     val(saveStill, ['still_url']) ||
     (input.data && input.data[0] && input.data[0].url) ||
     (imagine.data && imagine.data[0] && imagine.data[0].url)
