@@ -91,7 +91,7 @@ Locked film keepers → **per-beat** I2V. Four unpublished linear workflows. No 
 | Workflow | Model | Beats |
 |---|---|---|
 | `film_i2v_seedance` | Seedance 2.5 (fal) | flyover, walk, handoff, vial-into-engine |
-| `film_i2v_kling` | Kling 3.0 Pro (fal) | crash, liftoff + warp |
+| `film_i2v_kling` | Kling 3.0 Pro (existing fal.ai account) | crash, liftoff + warp |
 | `film_i2v_veo` | Veo 3.1 (fal) | cockpit / face / product close-ups |
 | `film_i2v_runway` | Runway Gen-4.5 | identity-lock backup — key later |
 

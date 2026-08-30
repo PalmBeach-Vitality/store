@@ -128,7 +128,7 @@ const howto = node({
   config: {
     name: 'film_i2v_howto',
     parameters: {
-      content: "## film_i2v_kling (unpublished)\nOne Execute = next Active kling row with picked_url and empty video_url.\nKling 3.0 Pro I2V on fal. Crash / warp. No Creatomate. Do not Publish. Do not Execute until Sal says yes.",
+      content: "## film_i2v_kling (unpublished)\nOne Execute = next Active kling row (015 / 020 / 025).\nUses existing fal.ai account for Kling 3.0 Pro I2V. No official Kling key.\nCrash / warp. No Creatomate. Do not Publish. Hold until Sal says yes.",
       height: 280,
       width: 760,
       color: 4,

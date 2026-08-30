@@ -15,7 +15,7 @@ One Execute = one still = one API. No Switch. Model comes from Sheet 18 `video_p
 
 Sheet rewrite overlay (already run, exec 1662): [overlay_film_i2v_stack](https://stockjohnson.app.n8n.cloud/workflow/C49rcawlZ8VImoG1) `C49rcawlZ8VImoG1`
 
-Seedance / Kling / Veo use the existing **fal.ai account**. Runway nodes are wired; attach the Runway key later (no credential on those HTTP nodes yet).
+Seedance / Kling / Veo use the existing **fal.ai account** (`fal.ai account`). Kling does **not** need a separate official Kling key. Runway nodes are wired; attach the Runway key later (no credential on those HTTP nodes yet).
 
 ## Seedance / Kling / Veo
 
