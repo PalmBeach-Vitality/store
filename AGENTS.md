@@ -13,6 +13,18 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 - **Do NOT edit, push to, or deploy `www.palmbeach-vitality.com`.** That site lives in a separate repo (`PalmBeach-Vitality/pep`) and is handled by a different agent.
 - If a request is clearly for vitality.com / the `pep` repo, refuse and tell the user to use the .com agent instead. Do not apply .com product-landing or marketing-page work here by mistake.
 
+### Repo map
+`store` and `pep` stay **separate**. They look similar. They are two sites, two domains, two agents.
+
+```mermaid
+flowchart LR
+  subgraph keep [Keep separate]
+    pep["pep\nwww.palmbeach-vitality.com\nB2C peptide site"]
+    store["store\nwww.palmbeach-vitality.store\nB2B + Woo kit + n8n"]
+  end
+  pep -.->|Shop matching SKUs| store
+```
+
 - The public site files are **pure static HTML**. There is no build step, no package manager, no `package.json`, and no dependencies to install for those pages. Tailwind is loaded from a CDN at runtime.
 - There are **no lint, test, or build commands**. Do not look for them.
 - Pages live in per-route folders as `index.html` (e.g. `products/index.html`, `contact/index.html`) plus article pages under `research/`.
