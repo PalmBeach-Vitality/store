@@ -1,7 +1,7 @@
 # Sheets-only vid gen (no hardcoded creative inputs)
 
-**Rule:** prompts, cameras, edit text, models, duration, resolution, aspect — **all from Google Sheets**.  
-Nodes only map sheet fields, call APIs, or write results back.
+**Rule (Salvatore):** no hardcoding unless he **explicitly** asks to hardcode a specific value. Prompts, cameras, edit text, models, duration, resolution, aspect, `n`, audio, wait — **all from Google Sheets**.  
+Nodes only map sheet fields, call APIs, or write results back. Empty cell → throw. No `|| '9:16'` / `|| 15` / `|| '1080p'` fallbacks.
 
 **Allowed non-sheet values:** runtime URLs from API responses (`still_url`, `video_url`, `request_id`).
 
@@ -29,7 +29,7 @@ get_reel_creations → filter Active → pick_creation
 Still body from `pick_creation` sheet fields:
 
 ```text
-={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: 1, aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: Number($json.still_n), aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
 ```
 
 ---
