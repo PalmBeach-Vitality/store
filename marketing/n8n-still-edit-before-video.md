@@ -11,19 +11,16 @@
 ```text
 pick_creation
   → grok_imagine_reel_still
-  → flag_still_edit                 ← CODE_STILL_EDIT_PROMPT (only place to tweak)
-  → prep_still_edit
-  → grok_imagine_edit_still
   → save_still_url
+  → still_edit_instructions         ← TYPE the edit here
+  → download_still                  ← GET still_url as file (imgen URLs expire / 404)
+  → prep_still_edit                 ← data URI, never imgen.x.ai
+  → grok_imagine_edit_still
+  → save_edited_still_url
   → prep_grok_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
-  → save_video_url
-  → sheets_update_creation
 ```
 
-Delete / unwired: `choose_still_path`, `normalize_still_path`, `switch_still_path`, any IF for still edit.
+xAI `/v1/images/edits` cannot fetch `imgen.x.ai` (400 `invalid_image` / 404). Download the still in this run and send a `data:image/...;base64,` URL.
 
 ---
 
@@ -43,9 +40,9 @@ Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you need a custom tweak. Defau
 ## Node 2 — `prep_still_edit`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `flag_still_edit` → **prep_still_edit** → `grok_imagine_edit_still`
+**Before → this → After:** `download_still` → **prep_still_edit** → `grok_imagine_edit_still`
 
-Paste: https://github.com/PalmBeach-Vitality/store/blob/cursor/creatomate-url-set-workflow-4c4b/marketing/n8n-code-prep-still-edit.js
+Paste: `marketing/n8n-code-prep-still-edit.js`
 
 **Check:** `still_edit_body_json` + `source_still_url`
 

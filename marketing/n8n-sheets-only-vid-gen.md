@@ -112,7 +112,8 @@ Daily path keeps its own `save_still_url` after Grok (`still_url = $json.data[0]
 
 - `if_still_edit` — sheet `still_edit_prompt` not empty  
 - `prep_still_edit` — `n8n-code-prep-still-edit.js`  
-- `grok_imagine_edit_still` — JSON `={{ $json.still_edit_body_json }}`  
+- `download_still` — GET `$json.still_url` as a file (imgen.x.ai expires; xAI edits 404 those URLs)
+- `grok_imagine_edit_still` — JSON `={{ $json.still_edit_body_json }}` (data URI, not the temp URL)  
 - `save_edited_still_url` → `prep_grok_video_start` → `grok_video_start`
 
 Prep video body (sheets only):
