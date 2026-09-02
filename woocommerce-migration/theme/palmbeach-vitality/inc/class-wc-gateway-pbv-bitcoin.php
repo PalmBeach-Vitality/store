@@ -75,6 +75,21 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         add_action('woocommerce_thankyou_' . $this->id, array($this, 'thankyou_page'));
         add_action('woocommerce_email_before_order_table', array($this, 'email_instructions'), 10, 3);
         add_filter('woocommerce_gateway_description', array($this, 'filter_checkout_description'), 10, 2);
+        add_filter('woocommerce_email_styles', array($this, 'email_styles'));
+    }
+
+    /**
+     * Extra CSS for the customer order email Bitcoin block.
+     *
+     * @param string $css Email CSS.
+     * @return string
+     */
+    public function email_styles($css) {
+        $css .= '
+.pbv-btc-email h2 { margin: 0 0 12px; font-size: 18px; }
+.pbv-btc-email a { color: #0b57d0; }
+';
+        return $css;
     }
 
     /**
@@ -462,11 +477,78 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         if (!$order->has_status('on-hold')) {
             return;
         }
-        $this->output_payment_instructions($order->get_id(), $plain_text);
+        if ($plain_text) {
+            $this->output_payment_instructions($order->get_id(), true);
+            return;
+        }
+        $this->output_email_html_instructions($order);
     }
 
     /**
-     * Shared instructions markup.
+     * Email-safe HTML for Gmail and other clients (no JS, no flex layout).
+     *
+     * @param WC_Order $order Order.
+     */
+    protected function output_email_html_instructions($order) {
+        $address = (string) $order->get_meta('_pbv_btc_address');
+        if ($address === '') {
+            $address = $this->receiving_address();
+        }
+        $total     = $order->get_formatted_order_total();
+        $snap_btc  = trim((string) $order->get_meta('_pbv_btc_amount'));
+        $snap_rate = (string) $order->get_meta('_pbv_btc_usd_rate');
+        $snap_src  = (string) $order->get_meta('_pbv_btc_rate_source');
+        $qr        = get_template_directory_uri() . '/assets/images/btc-qr.png';
+
+        $text = 'font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.5;color:#111111;';
+        $box  = 'font-family:Menlo,Consolas,Monaco,monospace;font-size:18px;line-height:1.4;color:#111111;background:#f5f5f5;border:1px solid #dddddd;padding:14px 16px;word-break:break-all;';
+
+        echo '<div class="pbv-btc-email" style="margin:0 0 28px;padding:0;">';
+        echo '<h2 style="' . $text . 'font-size:18px;font-weight:700;margin:0 0 12px;">' . esc_html__('Bitcoin (BTC) payment', 'palmbeach-vitality') . '</h2>';
+        echo '<p style="' . $text . 'margin:0 0 16px;">' . esc_html__('Send the exact Bitcoin amount below to this address. Select the amount or address, then copy. We ship after the payment confirms.', 'palmbeach-vitality') . '</p>';
+
+        echo '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;border-collapse:collapse;">';
+        echo '<tr><td style="' . $text . 'padding:0 0 6px;"><strong>' . esc_html__('Order total', 'palmbeach-vitality') . '</strong></td></tr>';
+        echo '<tr><td style="' . $text . 'padding:0 0 16px;">' . wp_kses_post($total) . '</td></tr>';
+
+        echo '<tr><td style="' . $text . 'padding:0 0 6px;"><strong>' . esc_html__('Copy this amount', 'palmbeach-vitality') . '</strong></td></tr>';
+        if ($snap_btc !== '') {
+            echo '<tr><td style="' . $box . '">' . esc_html($snap_btc) . '</td></tr>';
+            echo '<tr><td style="' . $text . 'font-size:12px;color:#555555;padding:6px 0 16px;">BTC</td></tr>';
+        } else {
+            echo '<tr><td style="' . $text . 'padding:0 0 16px;">' . esc_html__('Send the USD order total above as Bitcoin using your wallet’s current conversion.', 'palmbeach-vitality') . '</td></tr>';
+        }
+
+        if ($snap_rate !== '') {
+            $rate_line = '1 BTC = $' . number_format((float) $snap_rate, 2);
+            if ($snap_src !== '') {
+                $rate_line .= ' · ' . $snap_src;
+            }
+            echo '<tr><td style="' . $text . 'font-size:12px;color:#555555;padding:0 0 16px;">' . esc_html__('Rate at checkout:', 'palmbeach-vitality') . ' ' . esc_html($rate_line) . '</td></tr>';
+        }
+
+        echo '<tr><td style="' . $text . 'padding:0 0 6px;"><strong>' . esc_html__('BTC address', 'palmbeach-vitality') . '</strong></td></tr>';
+        echo '<tr><td style="' . $box . '">' . esc_html($address) . '</td></tr>';
+        echo '</table>';
+
+        if ($address !== '') {
+            echo '<p style="margin:16px 0 8px;"><img src="' . esc_url($qr) . '" width="168" height="168" alt="' . esc_attr__('Scan to send Bitcoin', 'palmbeach-vitality') . '" style="display:block;border:0;width:168px;height:168px;"></p>';
+        }
+
+        echo '<p style="' . $text . 'margin:20px 0 8px;"><strong>' . esc_html__('Pay with:', 'palmbeach-vitality') . '</strong></p>';
+        echo '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">';
+        foreach ($this->payment_platforms() as $platform) {
+            echo '<tr><td style="' . $text . 'font-size:15px;padding:6px 0;">';
+            echo '<a href="' . esc_url($platform['url']) . '" style="color:#0b57d0;text-decoration:underline;">' . esc_html($platform['label']) . '</a>';
+            echo '</td></tr>';
+        }
+        echo '</table>';
+        echo '<p style="' . $text . 'font-size:13px;color:#555555;margin:12px 0 0;">' . esc_html__('Open your wallet, paste the address, send the Bitcoin amount shown above, then we will ship after the payment confirms.', 'palmbeach-vitality') . '</p>';
+        echo '</div>';
+    }
+
+    /**
+     * Shared instructions markup (thank-you page and plain-text email).
      *
      * @param int  $order_id   Order ID.
      * @param bool $plain_text Plain text mode.
@@ -481,7 +563,7 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
         if ($address === '') {
             $address = $this->receiving_address();
         }
-        $total = $order->get_formatted_order_total();
+        $total     = $order->get_formatted_order_total();
         $snap_btc  = (string) $order->get_meta('_pbv_btc_amount');
         $snap_rate = (string) $order->get_meta('_pbv_btc_usd_rate');
 
@@ -490,11 +572,15 @@ class WC_Gateway_PBV_Bitcoin extends WC_Payment_Gateway {
             echo esc_html__('Send Bitcoin (BTC) to this address:', 'palmbeach-vitality') . "\n";
             echo esc_html__('Order total:', 'palmbeach-vitality') . ' ' . esc_html(wp_strip_all_tags($total)) . "\n";
             if ($snap_btc !== '' && $snap_rate !== '') {
-                echo esc_html__('Bitcoin amount at checkout:', 'palmbeach-vitality') . ' ' . esc_html($snap_btc) . " BTC\n";
-                echo esc_html__('Rate at checkout:', 'palmbeach-vitality') . ' 1 BTC = $' . esc_html(number_format((float) $snap_rate, 2)) . "\n";
+                echo esc_html__('Copy this amount:', 'palmbeach-vitality') . ' ' . esc_html($snap_btc) . "\n";
+            echo esc_html__('Rate at checkout:', 'palmbeach-vitality') . ' 1 BTC = $' . esc_html(number_format((float) $snap_rate, 2)) . "\n";
             }
             if ($address !== '') {
                 echo esc_html__('BTC address:', 'palmbeach-vitality') . ' ' . esc_html($address) . "\n";
+            }
+            echo "\n" . esc_html__('Pay with:', 'palmbeach-vitality') . "\n";
+            foreach ($this->payment_platforms() as $platform) {
+                echo esc_html($platform['label']) . ': ' . esc_html($platform['url']) . "\n";
             }
             return;
         }
