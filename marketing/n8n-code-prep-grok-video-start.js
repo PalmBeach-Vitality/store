@@ -1,10 +1,17 @@
-// n8n Code node: prep_grok_video_start
+// n8n Code node name: prep_grok_video_start
+// Workflow: Vid_gen_lab_scenes -9-lab-items-creations-500
 // Mode: Run Once for All Items
-// After: save_edited_still_url
+// After: save_edited_still_url  (edit)  or  skip_still_edit  (skip)
 // Before: grok_video_start
 //
-// SHEETS-ONLY: model / motion / duration / resolution from Sheet via pick_creation / map_sheet_fields.
-// still_url is runtime from save_edited_still_url.
+// HARD RULE: every video generation parameter comes from the sheet via pick_creation.
+// This node must not invent camera, motion, model, duration, aspect_ratio, or resolution.
+// Do not append vial lock. Do not truncate. Do not default to push-in.
+// still_url may come from Imagine / save_still_url (not a sheet camera param).
+//
+// MUTE (Salvatore asked): Grok Imagine Video 1.5 muxes audio by default.
+// Keep audio: false and prefix the sheet motion with a silent lock.
+// Do not rewrite pick_creation or Sheet 9 video_motion_prompt.
 
 function firstJson(name) {
   try {
@@ -14,131 +21,140 @@ function firstJson(name) {
   }
 }
 
-function val(obj, names, fallback) {
-  if (fallback === undefined) fallback = '';
+function val(obj, names) {
+  obj = obj || {};
   for (var i = 0; i < names.length; i++) {
     var n = names[i];
-    if (obj && obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
+    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
       return obj[n];
     }
-  }
-  return fallback;
-}
-
-function pickHttpsUrl(list) {
-  for (var i = 0; i < list.length; i++) {
-    var s = String(list[i] || '').trim();
-    if (/^https:\/\//i.test(s)) return s;
   }
   return '';
 }
 
-var input = ($input.first() && $input.first().json) || {};
-var sheet = firstJson('map_sheet_fields');
-if (!Object.keys(sheet).length) sheet = firstJson('pick_creation');
-if (!Object.keys(sheet).length) sheet = firstJson('import_still_from_sheet');
-var editedStill = firstJson('save_edited_still_url');
-var editInstructions = firstJson('still_edit_instructions');
-var importStill = firstJson('import_still_url');
-var stillNode = firstJson('save_still_url');
-var imagine = firstJson('grok_imagine_reel_still');
-var editHttp = firstJson('grok_imagine_edit_still');
+function pickUrl(obj) {
+  if (!obj || typeof obj !== 'object') return '';
+  var candidates = [
+    obj.still_url,
+    obj.reel_still_url,
+    obj.save_still_url,
+    obj.data && obj.data[0] && obj.data[0].url,
+    obj.url,
+  ];
+  for (var i = 0; i < candidates.length; i++) {
+    var c = candidates[i];
+    if (typeof c === 'string' && /^https:\/\//i.test(c.trim())) return c.trim();
+  }
+  return '';
+}
 
-var stillResolved = pickHttpsUrl([
-  // Prefer THIS run's edit output first (never an old scale still)
-  editHttp.data && editHttp.data[0] && editHttp.data[0].url,
-  val(input, ['still_url', 'source_still_url', 'edited_still_url']),
-  input.data && input.data[0] && input.data[0].url,
-  input.url,
-  val(editedStill, ['still_url']),
-  editedStill.data && editedStill.data[0] && editedStill.data[0].url,
-  val(stillNode, ['still_url']),
-  stillNode.data && stillNode.data[0] && stillNode.data[0].url,
-  // Original generate still is LAST resort only
-  imagine.data && imagine.data[0] && imagine.data[0].url,
-]);
+function requireFromSheet(label, value, creationId) {
+  var s = String(value == null ? '' : value).trim();
+  if (!s) {
+    throw new Error(
+      'HARD RULE: ' +
+        label +
+        ' must come from the sheet (creation_id=' +
+        (creationId || '?') +
+        '). This node will not invent it.'
+    );
+  }
+  return s;
+}
 
-var motion = String(
-  val(input, ['video_motion_prompt']) ||
-    val(stillNode, ['video_motion_prompt']) ||
-    val(editedStill, ['video_motion_prompt']) ||
-    val(sheet, ['video_motion_prompt']) ||
-    val(importStill, ['video_motion_prompt'], '')
-).trim();
+function aspectFromSheet(raw, creationId) {
+  var s = requireFromSheet('aspect_ratio', raw, creationId)
+    .replace(/\u2236/g, ':')
+    .replace(/[ \t\n\r]+/g, '');
+  if (/^\d+:\d+$/.test(s)) return s;
+  // Google Sheets may coerce 9:16 to a time serial (9:16 AM = 0.38611...)
+  var n = Number(String(raw).trim());
+  if (Number.isFinite(n) && n > 0 && n < 1) {
+    var totalMins = Math.round(n * 24 * 60);
+    var h = Math.floor(totalMins / 60);
+    var m = totalMins % 60;
+    return h + ':' + String(m).padStart(2, '0');
+  }
+  throw new Error(
+    'HARD RULE: aspect_ratio on the sheet must be like 9:16 (creation_id=' +
+      creationId +
+      ', got ' +
+      raw +
+      ')'
+  );
+}
 
-var modelVideo = String(
-  val(input, ['model_video']) ||
-    val(stillNode, ['model_video']) ||
-    val(editedStill, ['model_video']) ||
-    val(sheet, ['model_video']) ||
-    val(importStill, ['model_video'], '') ||
-    'grok-imagine-video-1.5'
-).trim();
+var input = $json && typeof $json === 'object' ? $json : {};
+var pick = firstJson('pick_creation');
+var stillUrl =
+  pickUrl(firstJson('grok_imagine_edit_still')) ||
+  pickUrl(firstJson('save_edited_still_url')) ||
+  pickUrl(input) ||
+  pickUrl(firstJson('save_still_url')) ||
+  pickUrl(firstJson('grok_imagine_reel_still'));
+if (!stillUrl) {
+  throw new Error('prep_grok_video_start: still_url missing — run save_still_url first');
+}
 
-var duration = Number(
-  val(input, ['duration_seconds', 'duration']) ||
-    val(stillNode, ['duration_seconds']) ||
-    val(editedStill, ['duration_seconds']) ||
-    val(sheet, ['duration_seconds']) ||
-    val(importStill, ['duration_seconds'], 0) ||
-    15
+var creationId = String(val(pick, ['creation_id']) || val(input, ['creation_id']) || '');
+
+function sheetField(names, label) {
+  // pick_creation first, then current item. NEVER get_reel_creations (that is sheet row 1).
+  var v = val(pick, names);
+  if (!String(v).trim()) v = val(input, names);
+  return requireFromSheet(label, v, creationId);
+}
+
+var motion = sheetField(['video_motion_prompt', 'videoMotionPrompt'], 'video_motion_prompt');
+var modelVideo = sheetField(['model_video', 'modelVideo'], 'model_video');
+var durationRaw = sheetField(
+  ['duration_seconds', 'durationSeconds', 'duration'],
+  'duration_seconds'
 );
-
-var resolution = String(
-  val(input, ['resolution']) ||
-    val(stillNode, ['resolution']) ||
-    val(editedStill, ['resolution']) ||
-    val(sheet, ['resolution']) ||
-    val(importStill, ['resolution'], '') ||
-    '1080p'
-).trim();
-
-if (!stillResolved) {
+var duration = Number(durationRaw);
+if (!Number.isFinite(duration) || duration <= 0) {
   throw new Error(
-    'prep_grok_video_start: still_url must be https from save_still_url / grok_imagine_edit_still.'
+    'HARD RULE: duration_seconds on the sheet must be a positive number (creation_id=' +
+      creationId +
+      ', got ' +
+      durationRaw +
+      ')'
   );
 }
-if (!motion) {
-  throw new Error(
-    'prep_grok_video_start: video_motion_prompt missing from Sheet (pick_creation). ' +
-      'On save_still_url set video_motion_prompt from pick_creation.'
-  );
-}
+var resolution = sheetField(['resolution'], 'resolution');
+var aspect = aspectFromSheet(
+  val(pick, ['aspect_ratio', 'aspectRatio']) || val(input, ['aspect_ratio', 'aspectRatio']),
+  creationId
+);
+var cameraMove = sheetField(['camera_move', 'cameraMove', 'camera'], 'camera_move');
 
-if (motion.length > 700) {
-  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
-}
+var SILENT_LOCK =
+  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ';
+var motionForGrok = SILENT_LOCK + motion;
 
 var body = {
   model: modelVideo,
-  prompt: motion,
-  image: { url: stillResolved },
+  prompt: motionForGrok,
+  image: { url: stillUrl },
   duration: duration,
+  aspect_ratio: aspect,
   resolution: resolution,
+  audio: false,
 };
-
-var grok_video_body_json = JSON.stringify(body);
 
 return [
   {
-    json: {
-      still_url: stillResolved,
-      video_motion_prompt: motion,
+    json: Object.assign({}, input, {
+      still_url: stillUrl,
+      reel_still_url: stillUrl,
+      video_motion_prompt: motionForGrok,
       model_video: modelVideo,
       duration_seconds: duration,
       resolution: resolution,
-      creation_id: String(
-        val(input, ['creation_id']) ||
-          val(editedStill, ['creation_id']) ||
-          val(sheet, ['creation_id']) ||
-          val(importStill, ['creation_id']) ||
-          val(stillNode, ['creation_id'], '')
-      ),
-      camera_move: String(val(sheet, ['camera_move']) || val(importStill, ['camera_move'], '')),
-      shot_family: String(val(sheet, ['shot_family']) || val(importStill, ['shot_family'], '')),
-      grok_video_body_json: grok_video_body_json,
-      _debug_prompt_len: motion.length,
-      _debug_still_host: stillResolved.split('/')[2] || '',
-    },
+      aspect_ratio: aspect,
+      camera_move: cameraMove,
+      audio: false,
+      grok_video_body_json: JSON.stringify(body),
+    }),
   },
 ];
