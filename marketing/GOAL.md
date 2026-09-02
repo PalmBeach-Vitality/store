@@ -84,6 +84,18 @@ enter_compound → get_caption_science → match_compound
 
 See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
 
+### G — `custom_vid_gen 1.5 -18-motsc-film-stills` (MOTS-C film I2V)
+
+Locked film keepers → Grok Imagine Video **1.5** (not Seedance). Sheets-only motion from Sheet 18. Unpublished.
+
+```text
+get_film_stills → pick_film_still → prep_film_video_start
+  → grok_video_start → wait_video → grok_video_poll
+  → save_film_video_url → sheets_update_still
+```
+
+See `n8n-motsc-film-video.md`.
+
 ### F — `sheet_format_as_tables` (one-shot)
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
