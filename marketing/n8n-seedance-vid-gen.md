@@ -9,14 +9,14 @@
 
 ---
 
-## Status (as of 2026-08-04)
+## Status (as of 2026-08-23)
 
 | Model | Product | Public API |
 |---|---|---|
-| **Seedance 2.5** | Live on Jimeng / Doubao Pro | **Opens ~Aug 7, 2026** (BytePlus / Volcengine Ark) |
+| **Seedance 2.5** | Live | Live on **fal.ai** (`bytedance/seedance-2.5/text-to-video`, I2V, reference-to-video). Native duration **4–30s**. |
 | **Seedance 2.0** | Live | Live on **fal.ai** + BytePlus ModelArk |
 
-**Ship the n8n wire now on Seedance 2.0 (fal).** When 2.5 appears in your fal / BytePlus catalog, change only the model / endpoint string — same submit → wait → poll → save shape.
+Standalone hyperrealistic T2V (sheets-only, no Grok still): **`seedance_25_vid_gen`** is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred. This file remains the older I2V-from-Grok-still wire.
 
 ---
 
