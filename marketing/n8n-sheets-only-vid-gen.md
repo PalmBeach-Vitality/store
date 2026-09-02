@@ -5,6 +5,8 @@ Nodes only map sheet fields, call APIs, or write results back.
 
 **Allowed non-sheet values:** runtime URLs from API responses (`still_url`, `video_url`, `request_id`).
 
+Live lab workflow **`Vid_gen_lab_scenes -9-lab-items-creations-500`** (`C4BkmmISpTMmgnAg`) is unpublished. Daily Execute starts at `get_reel_creations` — leftover caption nodes (`GROK_API`, `Edit Fields1`, `Prep_day_variant`) are disabled so they cannot inject hardcoded prompts. Still HTTP uses the sheet stringify above. `pick_creation` copies `video_prompt` / `still_edit_prompt` from the row and caps at 7900 (xAI max 8000). Empty required cells throw. Do not Publish; test with Execute.
+
 ---
 
 ## Sheet tabs
@@ -26,10 +28,10 @@ get_reel_creations → filter Active → pick_creation
   → prep_grok_video_start → grok_video_start → …
 ```
 
-Still body from `pick_creation` sheet fields:
+Still body from `pick_creation` sheet fields (do not hardcode `n`, model, aspect, or prompt):
 
 ```text
-={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: 1, aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
 ```
 
 ---
