@@ -7,7 +7,7 @@
 - Clear colorless liquid for all compounds EXCEPT GLOW (bright blue liquid only)
 
 Safe to re-run. Patches lab_item, video_prompt, material_detail, scene_brief,
-video_motion_prompt, still_edit_prompt.
+    still_edit_prompt. Leaves video_motion_prompt alone (CAP LOCK / I2V motion).
 """
 
 from __future__ import annotations
@@ -57,12 +57,13 @@ OLD_STATE = re.compile(
     re.I | re.S,
 )
 
+# video_motion_prompt is owned by shorten_video_motion_prompts.py (CAP LOCK).
+# Do not inject VIAL STATE / "uncapping to fill" into I2V motion.
 TEXT_KEYS = (
     "lab_item",
     "video_prompt",
     "material_detail",
     "scene_brief",
-    "video_motion_prompt",
     "still_edit_prompt",
     "product_hero",
     "product_form_detail",
