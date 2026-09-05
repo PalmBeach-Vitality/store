@@ -90,7 +90,7 @@ Converts marketing Google Sheets into Tables (table menu + header dropdowns) via
 
 ### G — `overlay_film_beach_entry` (one-shot)
 
-Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they are still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `edit_film_beach_entry` still-edits the current keepers. See `n8n-film-001-004-beach-entry.md`.
+Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they were still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `gen_film_beach_stills` generates new keepers from the sheet `still_prompt`. See `n8n-film-001-004-beach-entry.md`.
 
 ## Shot diversity
 

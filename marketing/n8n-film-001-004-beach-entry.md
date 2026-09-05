@@ -4,11 +4,11 @@ Sheet 18 never remade **FILM-001** or **FILM-004** onto the FILM-014 beach. Live
 
 **FILM-020** is a shoreline plunge with a thin heat-glow — not space → high-speed entry with heavy atmospheric burn-up.
 
-This overlay writes prompts only. Still pixels come from `edit_film_beach_entry` (Grok edit of the current `picked_url`). I2V stays on the existing Veo / Kling workflows after a new keeper is picked.
+This overlay writes prompts only. Current `picked_url` keepers for 001 / 004 are dead catbox / imgen tmp links (404). Still pixels come from `gen_film_beach_stills` (Grok generate from sheet `still_prompt`). `edit_film_beach_entry` is there for later, once a live source URL exists. I2V stays on the existing Veo / Kling workflows after a new keeper is picked.
 
 ```text
 overlay_film_beach_entry
-  → edit_film_beach_entry (Grok still-edit from sheet still_edit_prompt)
+  → gen_film_beach_stills (Grok generate from sheet still_prompt)
   → pick keeper → write picked_url
   → film_i2v_veo (001 / 004) and film_i2v_kling (020)
 ```
@@ -63,9 +63,37 @@ Google Sheets **Update**, match `still_id`, auto-map the four fields.
 
 ---
 
+## Still generate — `gen_film_beach_stills`
+
+Manual one-shot. Unpublished. Run **after** the overlay. Current 001 / 004 `picked_url` keepers 404.
+
+`manual_trigger` → **get_film_stills** → **prep_beach_gens** → **grok_imagine_still** → **collect_beach_gens** → **sheets_update_still**
+
+Sheets-only: `still_prompt`, `model_still`, `aspect_ratio`, `n`, and `still_resolution` come from Sheet 18. Empty prompt fails. Does not invent a fallback. Appends new URLs onto `take_urls`. Does **not** write `picked_url`.
+
+### prep_beach_gens
+
+**Before → this → After:** `get_film_stills` → **prep_beach_gens** → `grok_imagine_still`
+
+`marketing/n8n-code-prep-beach-gens.js`. Emits `n` items per still (3 / 3 / 4).
+
+### grok_imagine_still
+
+**Before → this → After:** `prep_beach_gens` → **grok_imagine_still** → `collect_beach_gens`
+
+`POST https://api.x.ai/v1/images/generations`. Body `={{ $json.still_gen_body_json }}`. Credential **XAI Grok** (`z1BIQ5TSRwkwn4UG`). Timeout 180s.
+
+### collect_beach_gens
+
+**Before → this → After:** `grok_imagine_still` → **collect_beach_gens** → **sheets_update_still**
+
+`marketing/n8n-code-collect-beach-gens.js`. Groups by `still_id`.
+
+---
+
 ## Still edit — `edit_film_beach_entry`
 
-Manual one-shot. Unpublished. Run **after** the overlay.
+Manual one-shot. Unpublished. Run only when `picked_url` is a live https image.
 
 `manual_trigger` → **get_film_stills** → **prep_beach_edits** → **grok_imagine_edit_still** → **collect_beach_edits** → **sheets_update_still**
 
@@ -100,8 +128,20 @@ Google Sheets **Update**, match `still_id`, write `take_urls` only.
 ## After the takes
 
 1. Open the new `take_urls` for 001 / 004 / 020.
-2. Write the keeper into `picked_url`.
+2. Write the keeper into `picked_url` (`overlay_film_beach_keepers` writes the GitHub raw keepers on this branch).
 3. Run `film_i2v_veo` for 001 and 004 (Veo 3.1, 8s, 1080p).
 4. Run `film_i2v_kling` for 020 (Kling 3.0 Pro, 10s, 720p).
+
+Keepers on this branch:
+
+- `marketing/stills/film001-beach.png`
+- `marketing/stills/film004-beach.png`
+- `marketing/stills/film020-atmo-entry.png`
+
+### overlay_film_beach_keepers
+
+**Before → this → After:** `get_film_stills` → **overlay_film_beach_keepers** → `sheets_update_keepers`
+
+Writes GitHub raw `picked_url` only. `marketing/n8n-code-overlay-film-beach-keepers.js`.
 
 I2V nodes map motion / model / duration / resolution from the sheet. Do not hardcode those values in HTTP nodes.
