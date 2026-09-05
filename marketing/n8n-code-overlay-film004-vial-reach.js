@@ -4,6 +4,7 @@
 // After: get_film_stills
 // Before: sheets_update_film004
 //
+// 1080p ONLY. Never write 720p.
 // FILM-004 only. Does not touch FILM-001 (keep the Kling clip).
 // Writes the old FILM-001 beach-reach pose onto the FILM-014 coast.
 // The still is BEFORE she has the vial: empty reaching right hand. NO VIAL.
@@ -72,7 +73,7 @@ for (var i = 0; i < rows.length; i++) {
       video_provider: 'kling',
       model_video: 'kwaivgi/kling-v3.0-pro',
       duration_seconds: '5',
-      video_resolution: '720p',
+      video_resolution: '1080p',
       video_aspect_ratio: '9:16',
       audio: 'false',
       wait_seconds: '180',
