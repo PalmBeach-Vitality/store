@@ -88,6 +88,18 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
+### H — `film_sonilo_sound` (after the join)
+
+Scores the joined ~80s reel with **Sonilo** `video-to-sound` (`sound_type=music_and_sfx`). One call returns synced SFX plus a music bed, muxed into the picture. Not ElevenLabs. Not Mirelo. Not Kling’s 20s video-to-audio.
+
+```text
+get_film_stills → pick_sonilo_reel → prep_sonilo_start
+  → sonilo_start → wait_sonilo → sonilo_poll → parse_sonilo
+  → save_sonilo_url → sheets_update_sonilo
+```
+
+Prompts, host, and endpoint come from Sheet 18. See `n8n-sonilo-video-sound.md`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -111,3 +123,5 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
+- Sonilo music + SFX: `n8n-sonilo-video-sound.md`  
+
