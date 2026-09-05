@@ -63,10 +63,10 @@ for (var t = 0; t < TARGETS.length; t++) {
     throw new Error('SHEETS-ONLY: model_still missing on ' + stillId + '.');
   }
 
-  var aspectRatio = String(val(pick, ['aspect_ratio'])).trim().replace(/\u2236/g, ':');
-  if (!/^\d+:\d+$/.test(aspectRatio)) {
+  var aspectRatio = String(val(pick, ['aspect_ratio'])).trim();
+  if (aspectRatio !== '9:16') {
     throw new Error(
-      'SHEETS-ONLY: aspect_ratio must be like 9:16 on ' + stillId + ', got ' + aspectRatio
+      'SHEETS-ONLY: aspect_ratio must be 9:16 on ' + stillId + ', got ' + JSON.stringify(aspectRatio)
     );
   }
 
