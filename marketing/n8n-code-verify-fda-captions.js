@@ -85,7 +85,7 @@ function hashtags(text) {
 }
 
 function hasStoreHost(text) {
-  return /palmbeach-vitality\.store/i.test(text);
+  return String(text || '').toLowerCase().indexOf('palmbeach-vitality.store') !== -1;
 }
 
 captions.forEach(function (c) {
@@ -108,10 +108,10 @@ captions.forEach(function (c) {
   if (expected && expected.indexOf('/product/') !== -1 && c.text.indexOf(expected) === -1) {
     errors.push(c.key + ' missing product URL ' + expected);
   }
-  if (c.form === 'vial' && /\bpen catalog\b|\bpen listing\b/i.test(c.text)) {
+  if (c.form === 'vial' && (low.indexOf('pen catalog') !== -1 || low.indexOf('pen listing') !== -1)) {
     errors.push(c.key + ' vial copy must not read as a pen listing');
   }
-  if (c.form === 'pen' && /\bresearch vial\b|\blaboratory vial\b/i.test(c.text)) {
+  if (c.form === 'pen' && (low.indexOf('research vial') !== -1 || low.indexOf('laboratory vial') !== -1)) {
     errors.push(c.key + ' pen copy must not read as a vial listing');
   }
 });
