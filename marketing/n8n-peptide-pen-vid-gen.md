@@ -117,7 +117,7 @@ Rotates **compound_name** (never the last **5** used compounds). Sheet rows are 
 ## Node 6 — `save_still_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_imagine_pen_still` → **save_still_url** → `prep_pen_video_start`  
+**Before → this → After:** `grok_imagine_pen_still` → **save_still_url** → `skip_still_edit` (or `still_edit_instructions`)  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -135,11 +135,13 @@ Include Other Input Fields: **ON**
 ## Node 7 — `prep_pen_video_start`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `save_still_url` → **prep_pen_video_start** → `grok_video_start`
+**Before → this → After:** `skip_still_edit` → **prep_pen_video_start** → `grok_video_start`
 
 Paste: `marketing/n8n-code-prep-pen-video-start.js`
 
-**Check:** `still_url` https + `grok_video_body_json`
+Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws if the sheet motion still has vial / flip-off language (that morphs the pen into a vial).
+
+**Check:** `still_url` https + `grok_video_body_json` starts with `PEN LOCK`
 
 ---
 
