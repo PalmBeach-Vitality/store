@@ -2,16 +2,21 @@
 
 Fal nodes are gone. Kling, Seedance, and Veo I2V / T2V go through OpenRouter’s async video API.
 
-**Credential (one time):** n8n → Credentials → **Header Auth** named `OpenRouter`
+**Credential (one time):** n8n → Credentials → **Custom Auth (templated)** named `OpenRouter`
 
-| Field | Value |
-|---|---|
-| Header Name | `Authorization` |
-| Value | `Bearer YOUR_OPENROUTER_KEY` |
+Template:
+
+```json
+{ "headers": { "Authorization": "Bearer {{api_key}}" } }
+```
+
+Set `api_key` to the OpenRouter key (no `Bearer ` prefix — the template adds it).
 
 Get a key: [openrouter.ai/settings/keys](https://openrouter.ai/settings/keys)
 
-Attach that credential on every `openrouter_*` HTTP Request node.
+Attach that credential on every `openrouter_*` HTTP Request node (and on `openrouter_video_probe`).
+
+Probe (lists video models once the key is attached): https://stockjohnson.app.n8n.cloud/workflow/56Syu5m8DIZl6RZA
 
 ---
 
