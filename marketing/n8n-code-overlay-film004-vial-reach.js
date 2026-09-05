@@ -24,7 +24,7 @@ var BRANCH = 'cursor/film004-vial-reach-4c4b';
 var REACH_STILL =
   'https://raw.githubusercontent.com/PalmBeach-Vitality/store/' +
   BRANCH +
-  '/marketing/stills/film001-beach-reach.png';
+  '/marketing/stills/film004-reach-empty-hand.jpeg';
 
 var BEACH =
   'Alien-galaxy luxury coast — same wide empty shoreline idea as Palm Beach, but NOT Earth and NOT Florida. The sand is from another galaxy: iridescent crushed-pearl lilac-gold dunes that glow faintly, never ordinary sugar-white Florida sand. The trees are extra-terrestrial, not Earth royal palms: taller glass-veined trunks, bioluminescent teal-violet fronds, unfamiliar silhouettes against the sky. Twin oversized moons hang huge and close in a deep violet-magenta sky with alien stars. Water is turquoise with a golden bioluminescent sheen. Not Miami, not Earth, not a rust-red desert, not a canyon.';
@@ -71,7 +71,7 @@ for (var i = 0; i < rows.length; i++) {
       n: '1',
       video_provider: 'kling',
       model_video: 'kwaivgi/kling-v3.0-pro',
-      duration_seconds: '8',
+      duration_seconds: '5',
       video_resolution: '720p',
       video_aspect_ratio: '9:16',
       audio: 'false',
