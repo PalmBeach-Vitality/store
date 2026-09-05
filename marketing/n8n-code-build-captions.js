@@ -5,7 +5,7 @@
 // Before: verify_fda_captions
 //
 // 2 vial + 2 pen captions. Same science family, different form language.
-// Vial 1 matches the short catalog format Salvatore approved.
+// Hashtags are Instagram-safe: letters/numbers only (AOD-9604 → #AOD9604).
 
 function firstJson(name) {
   try {
@@ -17,6 +17,7 @@ function firstJson(name) {
 
 function toHashtag(name) {
   var raw = String(name || '')
+    .replace(/^#/, '')
     .replace(/\+/g, 'Plus')
     .replace(/[^a-zA-Z0-9]+/g, '');
   return raw ? '#' + raw : '#PeptideResearch';
@@ -37,40 +38,43 @@ if (!name) throw new Error('build_captions: compound_name missing from match_com
 var what = cleanSentence(m.science_what);
 var focus = cleanSentence(m.science_focus);
 var pathways = cleanSentence(m.science_pathways);
-var url = String(m.store_url || 'www.palmbeach-vitality.store').trim();
+var vialUrl = String(m.vial_url || '').trim();
+var penUrl = String(m.pen_url || '').trim();
+var storeUrl = String(m.store_url || vialUrl || penUrl || '').trim();
 if (!what || !focus || !pathways) {
   throw new Error('build_captions: Sheet 15 science_what / science_focus / science_pathways incomplete for ' + name);
+}
+if (!storeUrl) {
+  throw new Error('SHEETS-ONLY/build_captions: store_url / vial_url / pen_url missing from match_compound.');
 }
 
 var tags = [
   toHashtag(name),
-  '#' + String(m.tag2 || 'PeptideResearch').replace(/^#/, ''),
-  '#' + String(m.tag3 || 'CellularScience').replace(/^#/, ''),
-  '#' + String(m.tag4 || 'PeptideScience').replace(/^#/, ''),
-  '#' + String(m.tag5 || 'ResearchPeptides').replace(/^#/, ''),
+  toHashtag(m.tag2 || 'PeptideResearch'),
+  toHashtag(m.tag3 || 'CellularScience'),
+  toHashtag(m.tag4 || 'PeptideScience'),
+  toHashtag(m.tag5 || 'ResearchPeptides'),
 ].join(' ');
 
 function pack(body, cta) {
   return (body + '\n' + cta + '\n' + tags).replace(/\s+\n/g, '\n').trim();
 }
 
-// Vial 1 = approved short CTA. Vial 2 names the 10ml vial listing.
-// Pen copy stays in the same science family with different verbs + 3ml pen CTA.
 var vial1 = pack(
   name + ' is ' + what + '. Research focuses on ' + focus + '.',
-  'Explore research-grade ' + name + ' at ' + url
+  'Explore research-grade ' + name + ' at ' + (vialUrl || storeUrl)
 );
 var vial2 = pack(
   name + ' is studied as ' + what + '. Laboratory work examines ' + pathways + '.',
-  'Browse the 10ml research vial listing for ' + name + ' at ' + url
+  'Browse the research vial listing for ' + name + ' at ' + (vialUrl || storeUrl)
 );
 var pen1 = pack(
   name + ' is ' + what + '. Research maps ' + focus + '.',
-  'Explore research-grade ' + name + ' in the 3ml pen catalog at ' + url
+  'Explore research-grade ' + name + ' in the pen catalog at ' + (penUrl || storeUrl)
 );
 var pen2 = pack(
   name + ' is cataloged as ' + what + '. Laboratory work examines ' + pathways + '.',
-  'Browse the 3ml research pen listing for ' + name + ' at ' + url
+  'Browse the research pen listing for ' + name + ' at ' + (penUrl || storeUrl)
 );
 
 return [
@@ -80,7 +84,9 @@ return [
       compound_name_input: m.compound_name_input,
       match_distance: m.match_distance,
       compound_id: m.compound_id,
-      store_url: url,
+      store_url: storeUrl,
+      vial_url: vialUrl,
+      pen_url: penUrl,
       hashtag_line: tags,
       vial_caption_1: vial1,
       vial_caption_2: vial2,
