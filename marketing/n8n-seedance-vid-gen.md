@@ -9,14 +9,14 @@
 
 ---
 
-## Status (as of 2026-08-04)
+## Status (as of 2026-09-05)
 
-| Model | Product | Public API |
+Seedance (and Kling / Veo) now run through **OpenRouter** `POST /api/v1/videos`. fal.ai is retired. Canonical: `n8n-openrouter-video.md`.
+
+| Model | OpenRouter slug | Resolution |
 |---|---|---|
-| **Seedance 2.5** | Live on Jimeng / Doubao Pro | **Opens ~Aug 7, 2026** (BytePlus / Volcengine Ark) |
-| **Seedance 2.0** | Live | Live on **fal.ai** + BytePlus ModelArk |
-
-**Ship the n8n wire now on Seedance 2.0 (fal).** When 2.5 appears in your fal / BytePlus catalog, change only the model / endpoint string — same submit → wait → poll → save shape.
+| **Seedance 2.5** | `bytedance/seedance-2.5` | 480p / **720p** |
+| **Kling v3 Pro** | `kwaivgi/kling-v3.0-pro` | **720p only** |
 
 ---
 
@@ -26,11 +26,10 @@
 pick_creation
   → grok_imagine_reel_still
   → save_still_url
-  → prep_seedance_video_start     ← NEW (Code)
-  → seedance_video_start          ← NEW (HTTP)  replaces grok_video_start
-  → wait_seedance                 ← NEW (Wait)  ~180–300s
-  → seedance_video_status         ← NEW (HTTP)
-  → seedance_video_result         ← NEW (HTTP)  fal only — fetch output
+  → prep_seedance_video_start     ← OpenRouter I2V body
+  → openrouter_i2v_start          ← POST /api/v1/videos
+  → wait_i2v                      ← sheet wait_seconds
+  → openrouter_i2v_poll           ← GET until completed
   → save_video_url
   → sheets_update_creation
 ```

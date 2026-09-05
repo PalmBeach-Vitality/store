@@ -23,14 +23,26 @@ manual_trigger
   → get_chem_creations
   → filter_chem_active
   → pick_molecule_creation
-  → sheets_update_chem
   → grok_imagine_molecule_still
   → save_still_url
   → prep_molecule_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
+  → openrouter_i2v_start
+  → wait_i2v
+  → openrouter_i2v_poll
+  → prep_last_frame
+  → creatomate_last_frame
+  → wait_last_frame
+  → creatomate_last_frame_poll
+  → prep_kling_extend
+  → openrouter_i2v_extend
+  → wait_i2v_extend
+  → openrouter_i2v_extend_poll
+  → prep_creatomate_concat
+  → creatomate_concat
+  → wait_concat
+  → creatomate_poll
   → save_video_url
+  → sheets_update_chem
 ```
 
 ---
@@ -136,70 +148,24 @@ Include Other Input Fields: **ON**
 | `creation_id` | **ON** | `={{ $('pick_molecule_creation').first().json.creation_id }}` |
 | `compound_name` | **ON** | `={{ $('pick_molecule_creation').first().json.compound_name }}` |
 | `video_motion_prompt` | **ON** | `={{ $('pick_molecule_creation').first().json.video_motion_prompt }}` |
-| `model_video` | **ON** | `={{ $('pick_molecule_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
-| `duration_seconds` | **ON** | `={{ $('pick_molecule_creation').first().json.duration_seconds \|\| 15 }}` |
-| `resolution` | **ON** | `={{ $('pick_molecule_creation').first().json.resolution \|\| '1080p' }}` |
+| `model_video` | **ON** | `={{ $('pick_molecule_creation').first().json.model_video }}` |
+| `duration_seconds` | **ON** | `={{ $('pick_molecule_creation').first().json.duration_seconds }}` |
+| `resolution` | **ON** | `={{ $('pick_molecule_creation').first().json.resolution }}` |
 
 ---
 
 ## Node 7 — `prep_molecule_video_start`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `save_still_url` → **prep_molecule_video_start** → `grok_video_start`
+**Before → this → After:** `save_still_url` → **prep_molecule_video_start** → `openrouter_i2v_start`
 
 Paste: `marketing/n8n-code-prep-molecule-video-start.js`
 
-**Check:** `still_url` https + `grok_video_body_json`
+**Check:** `still_url` https + `openrouter_body_json`. `model_video` must be `kwaivgi/kling-v3.0-pro`.
 
----
+OpenRouter Kling v3 Pro is **720p only**. Sheet 13 `resolution` must be `720p`.
 
-## Node 8 — `grok_video_start`
-
-**Type:** HTTP Request  
-**Before → this → After:** `prep_molecule_video_start` → **grok_video_start** → `wait_video`
-
-| Setting | fx | Value |
-|---|---|---|
-| Method | — | `POST` |
-| URL | **OFF** | `https://api.x.ai/v1/videos/generations` |
-| Authentication | — | same xAI Header Auth |
-| Send Body | — | **ON** |
-| Body Content Type | — | **Raw** |
-| Content Type | **OFF** | `application/json` |
-| Body | **ON** | `={{ $json.grok_video_body_json }}` |
-
-**Check:** `request_id`. Clip is **muted** (`audio: false` + silent motion). Add sound later.
-
----
-
-## Node 9 — `wait_video`
-
-**Type:** Wait  
-**Before → this → After:** `grok_video_start` → **wait_video** → `grok_video_poll`
-
-| Setting | fx | Value |
-|---|---|---|
-| Resume | — | After time interval |
-| Wait Amount | **OFF** | `200` |
-| Wait Unit | — | Seconds |
-
-Must be **enabled**.
-
----
-
-## Node 10 — `grok_video_poll`
-
-**Type:** HTTP Request  
-**Before → this → After:** `wait_video` → **grok_video_poll** → `save_video_url`
-
-| Setting | fx | Value |
-|---|---|---|
-| Method | — | `GET` |
-| URL | **ON** | `={{ 'https://api.x.ai/v1/videos/' + $('grok_video_start').first().json.request_id }}` |
-| Authentication | — | same xAI |
-| Send Body | — | **OFF** |
-
-**Check:** `status` done/succeeded + video URL. If pending, raise wait.
+See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → hop 2 → Creatomate concat.
 
 ---
 
