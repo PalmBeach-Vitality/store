@@ -88,6 +88,18 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
+### G — `film_vace_join` (25-clip stitch)
+
+WaveSpeed VACE joins the 25 MOTS-C film clips. WildCut-quality seams use OpenRouter first+last frame (`seam_mode=flf2v` + `bridge_prompt`). Music/SFX later via ElevenLabs + Creatomate.
+
+```text
+overlay_film_join_25 (columns)
+  → film_i2v_* until all 25 have video_url
+  → film_vace_join (batches of 2–4) → join_url
+```
+
+See `n8n-vace-clip-join.md`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -111,3 +123,4 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
+- 25-clip VACE join + FLF2V bridges: `n8n-vace-clip-join.md`  

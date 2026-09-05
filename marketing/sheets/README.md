@@ -15,6 +15,7 @@
 | `15-caption-science-27.csv` | `15-caption-science-27` (**new** IG caption science briefs — 27 compounds; input for `peptide_caption_gen`) |
 | `16-ig-captions.csv` | `16-ig-captions` (**new** caption archive — header + appended vial/pen captions after verify) |
 | `14-pen-creations-150.csv` | `14-pen-creations-150` (**new** pens-only catalog vids — **columns copied from** `9-lab-item-creations-500`; **pen params from** `3-image-scenes-150`; 150 rows, one capped pen, no vial; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |
+| `19-film-join-25.csv` | Join-queue columns for the 25 MOTS-C film clips (also overlaid onto `18-motsc-film-stills`). VACE stitch + optional FLF2V seams — see `n8n-vace-clip-join.md` |
 | `12-import-still-queue.csv` | `12-import-still-queue` (import path — same creative columns as Sheet 9 + `still_url` + `import_id`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
