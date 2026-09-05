@@ -7,7 +7,7 @@ const howto = sticky({
       color: 4,
       width: 720,
       height: 280,
-      content: '# overlay_film001_new_still (unpublished)\n# Writes FILM-001 picked_url, tighter camera-hold motion prompt, and clears video_url.',
+      content: '# overlay_film001_new_still (unpublished)\n# Writes FILM-001 keeper still, camera-hold prompt, and Kling I2V fields.',
     },
   },
 });
