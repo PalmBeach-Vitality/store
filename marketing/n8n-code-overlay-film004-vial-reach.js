@@ -5,8 +5,8 @@
 // Before: sheets_update_film004
 //
 // FILM-004 only. Does not touch FILM-001 (keep the Kling clip).
-// Writes the old FILM-001 beach-reach pose onto the FILM-014 coast
-// with one MOTS-C vial she is reaching to grab.
+// Writes the old FILM-001 beach-reach pose onto the FILM-014 coast.
+// The still is BEFORE she has the vial: empty reaching right hand. NO VIAL.
 
 function squeeze(s) {
   var t = String(s || '');
@@ -32,29 +32,22 @@ var BEACH =
 var IDENTITY =
   'Late-20s beautiful blonde woman astronaut, long golden-blonde hair in a low ponytail, bright green eyes, light freckles, athletic build, navy-and-gold flight suit with a small circular Palm Beach chest patch, a small watch-scale retro-futuristic wrist computer strapped exactly onto her left wrist bone (the joint between forearm and hand), housing no wider than her wrist. The device is a rectangular blocky SQUARE gunmetal box: square housing, square amber-orange screen with only slightly rounded corners, square or rectangular buttons and sliders on the SIDES of the box. NO ROUND SHAPES — not a round watch, not a circular bezel, not a curved CRT, not rotary knobs, not round gauges. ALWAYS on her LEFT wrist and left hand only — never the right hand, never a disembodied prop. Her left hand, palm, fingers, and thumb stay fully visible past the device, anatomically correct. The device sits ON the left wrist like a thick rectangular smart-computer box — never a gauntlet, never a forearm tank, never a prosthetic, never replacing the hand, never covering the fingers.';
 
-var VIAL =
-  'exactly ONE clear glass Palm Beach Vitality MOTS-C injection vial, upright, pre-filled with clear liquid, bright blue flip-off cap, brushed-silver aluminum crimp over rubber septum, clean white wrap-around label with dark maroon DNA double-helix logo, MOTS-C in large bold dark maroon type once, solid dark maroon dosage bar with white mg strength, black mg/ml line, small black footer 10ml Sterile Multi-Use Vial. No second vial. No pen.';
-
 var still_prompt = capPrompt(
-  'Exact same scene as the old FILM-001 beach-reach still: 9:16 medium-close, late-20s blonde astronaut facing camera, RIGHT arm stretched toward the lens, open right hand in the near foreground reaching to GRAB one MOTS-C vial. Shallow DOF — reaching right hand slightly soft, face and suit sharp. ' +
+  'Exact same scene as the old FILM-001 beach-reach still: 9:16 medium-close, late-20s blonde astronaut facing camera, RIGHT arm stretched toward the lens, EMPTY open right hand in the near foreground reaching outward. This is BEFORE she has the vial. NO VIAL anywhere. No bottle, no glass, no cap, no label, nothing in her hand, nothing just beyond her fingertips. Shallow DOF — reaching right hand slightly soft, face and suit sharp. ' +
     IDENTITY +
-    ' Square gunmetal computer stays on her LEFT wrist — never a sports watch. ' +
-    VIAL +
-    ' The vial sits just beyond her reaching right fingertips in the foreground, upright, about to be grabbed, not already in her hand. Background is the FILM-014 alien-galaxy luxury coast only — not Earth royal palms, not an orange sunset, not a gray studio. ' +
+    ' Square gunmetal computer stays on her LEFT wrist — never a sports watch. Background is the FILM-014 alien-galaxy luxury coast only — not Earth royal palms, not an orange sunset, not a gray studio. ' +
     BEACH +
-    ' Cinematic twin-moon key light. Photoreal cinematic sci-fi commercial still, 8k, HDR, razor sharp. No readable text except the vial label and the wrist-device screen. No logos, no captions, no watermarks, no extra people.'
+    ' Cinematic twin-moon key light. Photoreal cinematic sci-fi commercial still, 8k, HDR, razor sharp. No readable text except the wrist-device screen. No logos, no captions, no watermarks, no extra people. NO VIAL.'
 );
 
 var still_edit_prompt = capPrompt(
-  'Keep this exact reach pose from old FILM-001: she faces camera, RIGHT arm stretched toward the lens, open right hand in the near foreground. Keep her face, hair, eyes, navy-and-gold flight suit, and Palm Beach chest patch. REPLACE the sports watch with the rectangular square gunmetal LEFT-wrist computer — square amber-orange screen, square side buttons, left palm and fingers visible. REPLACE the Earth-palm / orange-sunset beach with the FILM-014 alien-galaxy luxury coast: ' +
+  'Keep this exact reach pose from old FILM-001: she faces camera, RIGHT arm stretched toward the lens, EMPTY open right hand in the near foreground reaching outward. This still is BEFORE she has the vial. Do NOT add a vial. Do NOT put anything in her hand. Remove any vial, bottle, glass, cap, or label if one appears. Keep her face, hair, eyes, navy-and-gold flight suit, and Palm Beach chest patch. REPLACE the sports watch with the rectangular square gunmetal LEFT-wrist computer — square amber-orange screen, square side buttons, left palm and fingers visible. REPLACE the Earth-palm / orange-sunset beach with the FILM-014 alien-galaxy luxury coast: ' +
     BEACH +
-    ' ADD exactly one upright MOTS-C vial just beyond her reaching right fingertips, about to be grabbed, not already in her hand. ' +
-    VIAL +
-    ' Do not change her face. No extra people. No second vial.'
+    ' Empty reaching right hand only. NO VIAL. Do not change her face. No extra people.'
 );
 
 var video_motion_prompt =
-  'She reaches her right hand to the upright MOTS-C vial in the foreground and takes it. Soft alien-beach wind. Twin moons and teal-violet trees hold. Vial stays upright. Left-wrist square computer locked. Silent.';
+  'She reaches her empty right hand outward toward camera. Soft alien-beach wind. Twin moons and teal-violet trees hold. No vial in the opening frame. Left-wrist square computer locked. Silent.';
 
 var rows = $input.all().map(function (i) {
   return i.json;
