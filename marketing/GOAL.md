@@ -88,6 +88,10 @@ See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_capt
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
+### G — `overlay_film_beach_entry` (one-shot)
+
+Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they are still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `edit_film_beach_entry` still-edits the current keepers. See `n8n-film-001-004-beach-entry.md`.
+
 ## Shot diversity
 
 Each creation has unique `shot_family` + `camera_angle` + `camera_direction` + `camera_move` (500 unique moves).  
@@ -111,3 +115,4 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
+- FILM-001/004 beach + FILM-020 burn-up: `n8n-film-001-004-beach-entry.md`  
