@@ -17,12 +17,12 @@ Daily **45–60s** Instagram-ready reel:
 ```text
 pick_creation (least-used + new shot_family)
   → grok still (video_prompt, 2k, 9:16)
-  → prep_seedance_video_start → seedance_video_start (I2V, 15s, 1080p, muted)
+  → prep_openrouter_i2v → openrouter_i2v_start (I2V, 15s, muted)
   → wait → poll → save_video_url
   → sheets_update_creation
 ```
 
-**Video model:** ByteDance **Seedance** (newest = **2.5**; ship on **2.0 via fal** until 2.5 API is in your catalog). See `n8n-seedance-vid-gen.md`.
+**Video model:** OpenRouter (`kwaivgi/kling-v3.0-pro`, `bytedance/seedance-2.5`, `google/veo-3.1`). No fal.ai. See `n8n-openrouter-video.md`.
 
 ### B — `PBVita — Creatomate Package` (separate)
 
@@ -107,6 +107,7 @@ See `n8n-camera-diversity-plan.md`.
 - Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
+- OpenRouter video (replaces fal): `n8n-openrouter-video.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  

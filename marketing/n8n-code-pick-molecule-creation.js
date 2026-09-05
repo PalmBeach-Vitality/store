@@ -97,9 +97,9 @@ var scored = creations
       quality_var_count: val(c, ['quality_var_count'], ''),
       aspect_ratio: val(c, ['aspect_ratio']) || '9:16',
       duration_seconds: Number(val(c, ['duration_seconds', 'duration'], 15)) || 15,
-      resolution: val(c, ['resolution']) || '1080p',
+      resolution: val(c, ['resolution']),
       model_still: val(c, ['model_still']) || 'grok-imagine-image-2.0',
-      model_video: val(c, ['model_video']) || 'grok-imagine-video-1.5',
+      model_video: val(c, ['model_video']),
       still_resolution: val(c, ['still_resolution']) || '2k',
       video_prompt: capPrompt(val(c, ['video_prompt'])),
       video_motion_prompt: capPrompt(val(c, ['video_motion_prompt'])),
@@ -141,6 +141,26 @@ scored.sort(function (a, b) {
 });
 
 var pick = scored[0];
+if (!String(pick.model_video || '').trim()) {
+  throw new Error(
+    'SHEETS-ONLY: 13-chem-breakdown-54 missing model_video on ' +
+      pick.creation_id +
+      '. Set kwaivgi/kling-v3.0-pro.'
+  );
+}
+if (String(pick.model_video).indexOf('fal-ai/') === 0 || String(pick.model_video).indexOf('grok-imagine-video') === 0) {
+  throw new Error(
+    'Sheet 13 model_video must be an OpenRouter slug (kwaivgi/kling-v3.0-pro). Got: ' +
+      pick.model_video
+  );
+}
+if (!String(pick.resolution || '').trim()) {
+  throw new Error(
+    'SHEETS-ONLY: 13-chem-breakdown-54 missing resolution on ' +
+      pick.creation_id +
+      '. OpenRouter Kling v3 Pro is 720p only.'
+  );
+}
 var vibe = moleculeVibeLock(pick.compound_name);
 var videoPrompt = capPrompt(vibe + ' ' + pick.video_prompt);
 
