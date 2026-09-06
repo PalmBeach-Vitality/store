@@ -19,11 +19,11 @@ function capPrompt(s) {
   return s;
 }
 
-var BRANCH = 'cursor/film020-reentry-4c4b';
+var BRANCH = 'cursor/film020-space-still-4c4b';
 var SHIP_STILL =
   'https://raw.githubusercontent.com/PalmBeach-Vitality/store/' +
   BRANCH +
-  '/marketing/stills/film009-ship.jpg';
+  '/marketing/stills/film020-space-reentry.jpeg';
 
 var SHIP =
   'EXACT same interceptor as FILM-009 — copy this hull, do not invent a new ship. Elongated needle-arrowhead wedge, capital-scout scale, dark matte charcoal gunmetal plating with dense panel lines and greebles. Twin circular rear engine nacelles ONLY — two engines, never three — cool cyan-blue inner glow. Thin cyan-blue energy strips along the sides and dorsal spine. Narrow faceted cockpit canopy on the upper spine, tiny relative to the hull. One thin navy-and-gold identity stripe on the dorsal spine. No readable hull text. Not a toy, not a white shuttle, not a wreck.';
