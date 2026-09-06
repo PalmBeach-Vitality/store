@@ -11,6 +11,8 @@
 
 Everything except `18-motsc-film-stills` stays Grok Imagine Image 2.0. Film video is unchanged.
 
+Flux stills must go through OpenRouter `POST /api/v1/images`. Do not send `black-forest-labs/flux.2-max` to the xAI Grok still HTTP node.
+
 Never `grok-imagine-image` or `grok-imagine-image-quality`.
 
 Sheet source: `marketing/sheets/latest-models.csv`
