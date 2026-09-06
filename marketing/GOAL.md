@@ -2,6 +2,8 @@
 
 **Owner:** Salvatore  
 
+**Still lock:** every still and still-edit uses `grok-imagine-image-2.0` at `2k`. Never `grok-imagine-image` or `grok-imagine-image-quality`.
+
 ## The main goal
 
 Daily **45–60s** Instagram-ready reel:

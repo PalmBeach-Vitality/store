@@ -1,0 +1,2 @@
+role,model,resolution,status,notes
+still,grok-imagine-image-2.0,2k,required,Only allowed still / still-edit model. Never grok-imagine-image or grok-imagine-image-quality.

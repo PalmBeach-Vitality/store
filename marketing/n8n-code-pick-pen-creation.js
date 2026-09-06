@@ -168,6 +168,15 @@ scored.sort(function (a, b) {
 });
 
 var pick = scored[0];
+if (String(pick.model_still || '').trim() !== 'grok-imagine-image-2.0') {
+  throw new Error(
+    'STILL LOCK: model_still must be grok-imagine-image-2.0 (creation_id=' +
+      pick.creation_id +
+      ', got ' +
+      pick.model_still +
+      ').'
+  );
+}
 var look = penLookLock(pick.compound_name);
 var videoPrompt = capPrompt(look + ' ' + pick.video_prompt);
 
