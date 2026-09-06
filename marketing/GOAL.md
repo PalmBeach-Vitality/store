@@ -2,7 +2,7 @@
 
 **Owner:** Salvatore  
 
-**Still lock:** every still and still-edit uses `grok-imagine-image-2.0` at `2k`. Never `grok-imagine-image` or `grok-imagine-image-quality`.
+**Still lock:** `9-lab-item-creations-500`, `13-chem-breakdown-54`, `14-pen-creations-150`, and all other stills stay `grok-imagine-image-2.0` at `2k`. **`18-motsc-film-stills` only** may use OpenRouter `black-forest-labs/flux.2-max` (trial). Never `grok-imagine-image` or `grok-imagine-image-quality`.
 
 ## The main goal
 

@@ -2,7 +2,7 @@
 
 | File | Tab name |
 |---|---|
-| `latest-models.csv` | Still lock — `model_still` must be `grok-imagine-image-2.0` |
+| `latest-models.csv` | Still lock — Grok Imagine Image 2.0 everywhere except `18-motsc-film-stills` (Flux.2 Max trial) |
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |

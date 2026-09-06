@@ -1,6 +1,15 @@
 # Still lock
 
-Every still and still-edit uses **`grok-imagine-image-2.0`** at **`2k`**.
+| Tab | Still model | Resolution |
+|---|---|---|
+| `9-lab-item-creations-500` | `grok-imagine-image-2.0` | `2k` |
+| `13-chem-breakdown-54` | `grok-imagine-image-2.0` | `2k` |
+| `14-pen-creations-150` | `grok-imagine-image-2.0` | `2k` |
+| `12-import-still-queue` | `grok-imagine-image-2.0` | `2k` |
+| `7-unique-reel-creations-500` | `grok-imagine-image-2.0` | `2k` |
+| **`18-motsc-film-stills` only** | OpenRouter `black-forest-labs/flux.2-max` (trial) | `9:16` |
+
+Everything except `18-motsc-film-stills` stays Grok Imagine Image 2.0. Film video is unchanged.
 
 Never `grok-imagine-image` or `grok-imagine-image-quality`.
 
