@@ -4,8 +4,8 @@
 // After: get_film_stills
 // Before: sheets_update_film020
 //
-// FILM-020 only. Writes SPACE reentry still prompts + FILM-009 source still.
-// Does NOT write video_url. Does not touch FILM-001 or FILM-004.
+// FILM-020 only. Writes SPACE reentry still + 6s 1080p Kling motion.
+// Clears FILM-020 video_url so one I2V can run. Does not touch FILM-001 or FILM-004.
 
 function squeeze(s) {
   var t = String(s || '');
@@ -45,6 +45,9 @@ var still_edit_prompt = capPrompt(
     ' Wrap THIS same ship in a THICK orange-white plasma sheath, bow shock, and a long roaring fire trail. Heavy incandescent streaks. Lots of burn-up. Hull stays intact, light scoring only. This is REENTRY from space, not the crash. Do not show ground. Do not show a beach. Do not show trees. Do not show sand. Do not show water. Do not wreck the ship. Do not add a third engine. Do not add people, vials, or text.'
 );
 
+var video_motion_prompt =
+  'Exact FILM-009 interceptor on high-altitude atmospheric reentry from deep space. Starts in black space and stars, then dives into the atmosphere. Thick orange-white plasma sheath, bow shock, long fire trail. Twin cyan engines hold. Only a thin curved planetary limb with a violet-magenta atmosphere band grows below. No beach. No sand. No trees. No water. No ground. Hull stays intact. Not the crash. Not impact. Silent.';
+
 var rows = $input.all().map(function (i) {
   return i.json;
 });
@@ -62,6 +65,17 @@ for (var i = 0; i < rows.length; i++) {
       picked_url: SHIP_STILL,
       still_prompt: still_prompt,
       still_edit_prompt: still_edit_prompt,
+      video_motion_prompt: video_motion_prompt,
+      video_url: '',
+      n: '1',
+      video_provider: 'kling',
+      model_video: 'kwaivgi/kling-v3.0-pro',
+      duration_seconds: '6',
+      video_resolution: '1080p',
+      video_aspect_ratio: '9:16',
+      audio: 'false',
+      wait_seconds: '300',
+      video_start_url: 'https://openrouter.ai/api/v1/videos',
     },
   });
 }
