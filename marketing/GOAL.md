@@ -2,7 +2,7 @@
 
 **Owner:** Salvatore  
 
-**HARD RULE — prompt review gate:** Before every still, video, or edit run, the agent sends Salvatore the exact prompt/edit text and waits for OK. No exceptions. See `prompt-review-gate.md`.
+**HARD RULE — prompt review gate:** Before every still, video, or edit run, the agent sends Salvatore the exact prompt/edit text (readable in the Cursor window, no copy boxes) and waits for OK. Before every video run, also name the API and model. No exceptions. See `prompt-review-gate.md`.
 
 ## The main goal
 
