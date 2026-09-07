@@ -1,0 +1,7 @@
+tab,role,model,resolution,status,notes
+9-lab-item-creations-500,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only. Never grok-imagine-image or grok-imagine-image-quality.
+13-chem-breakdown-54,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only.
+14-pen-creations-150,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only.
+12-import-still-queue,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only.
+7-unique-reel-creations-500,still,grok-imagine-image-2.0,2k,required,Legacy library. Grok Imagine Image 2.0 only.
+18-motsc-film-stills,still,black-forest-labs/flux.2-max,9:16,trial,MOTS-C film stills only. OpenRouter Flux.2 Max. Do not use Flux on any other tab.

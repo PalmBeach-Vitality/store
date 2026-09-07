@@ -363,6 +363,15 @@ const pick = (bothDifferent.length
 if (!pick.model_still) {
   throw new Error('Sheet 9 row missing model_still for ' + pick.creation_id);
 }
+if (String(pick.model_still).trim() !== 'grok-imagine-image-2.0') {
+  throw new Error(
+    'STILL LOCK: model_still must be grok-imagine-image-2.0 (creation_id=' +
+      pick.creation_id +
+      ', got ' +
+      pick.model_still +
+      ').'
+  );
+}
 if (!pick.model_video) {
   throw new Error('Sheet 9 row missing model_video for ' + pick.creation_id);
 }

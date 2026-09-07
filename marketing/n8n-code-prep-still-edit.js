@@ -99,9 +99,15 @@ var modelStill = String(
     val(flag, ['model_still']) ||
     val(instructions, ['model_still']) ||
     val(sheet, ['model_still']) ||
-    val(importStill, ['model_still'], '') ||
-    'grok-imagine-image-2.0'
+    val(importStill, ['model_still'], '')
 ).trim();
+if (modelStill !== 'grok-imagine-image-2.0') {
+  throw new Error(
+    'STILL LOCK: model_still must be grok-imagine-image-2.0 (got ' +
+      (modelStill || 'empty') +
+      '). Fill the sheet. Do not use grok-imagine-image or grok-imagine-image-quality.'
+  );
+}
 
 var aspectRatio = String(
   val(input, ['aspect_ratio']) ||
