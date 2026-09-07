@@ -1,5 +1,7 @@
 # Sheets-only vid gen (no hardcoded creative inputs)
 
+**#1 priority:** image and video **quality**. See `vid-gen-quality-playbook.md`. Measure pixels. Do not trust a sheet label that says `2k` or `1080p`.
+
 **Rule:** prompts, cameras, edit text, models, duration, resolution, aspect — **all from Google Sheets**.  
 Nodes only map sheet fields, call APIs, or write results back.
 

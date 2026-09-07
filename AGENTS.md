@@ -4,6 +4,8 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 ## Marketing / n8n (Reel Studio)
 
+**#1 priority — image and video quality.** Always. Quality beats speed, cost, habit, and “the last model we used.” Do not ship a still or clip that is softer than the brief (measure pixels; a sheet cell that says `2k` or `1080p` is not proof). Soft first frames make soft I2V. Pick the model per shot, not per convenience. Canonical quality playbook + surveyed API opinions: `marketing/vid-gen-quality-playbook.md`.
+
 **Main goal:** daily **45–60s** reel = **Grok** unique lab-item footage (+ smooth extend) + **Creatomate** text overlays. Subjects = 500 lab items only. Canonical: `marketing/GOAL.md` + `marketing/n8n-45s-reel-grok-creatomate.md`.
 
 ## Cursor Cloud specific instructions
