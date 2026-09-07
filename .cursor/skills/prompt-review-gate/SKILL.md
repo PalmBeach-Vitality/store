@@ -1,6 +1,6 @@
 ---
 name: prompt-review-gate
-description: HARD RULE. Before every still, video, or edit generation, send Salvatore the exact prompt or edit text and wait for his OK. Use whenever planning or about to run Flux, Grok, Kling, Seedance, Veo, Runway, Sonilo, n8n overlay+gen, still_prompt, still_edit_prompt, video_motion_prompt, I2V, image edits, or retries after a bad take. No exceptions.
+description: HARD RULE. Before every still, video, or edit generation, send Salvatore the exact prompt or edit text and wait for his OK. Before every video run, also name the API and model and wait. Use whenever planning or about to run Flux, Grok, Kling, Seedance, Veo, Runway, Sonilo, n8n overlay+gen, still_prompt, still_edit_prompt, video_motion_prompt, I2V, image edits, or retries after a bad take. No exceptions.
 ---
 
 # Prompt review gate (HARD RULE)
@@ -17,12 +17,14 @@ Writing overlay *code* is fine. Executing overlay+gen is not, until he approves 
 
 ## What to send him
 
-Paste the **exact** sheet cells that will be sent, verbatim:
+Write the **exact** sheet cells in the Cursor window as normal readable text. Do **not** put prompts in copy/paste code boxes.
 
-- `still_prompt` (stills)
-- `still_edit_prompt` (edits)
-- `video_motion_prompt` / `video_prompt` (I2V)
+- still_prompt (stills)
+- still_edit_prompt (edits)
+- video_motion_prompt / video_prompt (I2V)
 - model, resolution, aspect, n, duration, source still URL
+
+**Before every video run (HARD):** name the **API** (host + path) and the **model slug** in that same message. Wait. Do not start I2V until he confirms.
 
 One message. Full text. Do not summarize and then run.
 
