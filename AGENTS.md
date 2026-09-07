@@ -6,6 +6,8 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 **Main goal:** daily **45–60s** reel = **Grok** unique lab-item footage (+ smooth extend) + **Creatomate** text overlays. Subjects = 500 lab items only. Canonical: `marketing/GOAL.md` + `marketing/n8n-45s-reel-grok-creatomate.md`.
 
+**Prompt wording:** before any still/video overlay, apply `.cursor/skills/prompt-moderation-hygiene/SKILL.md` so Flux/Kling/Grok/Seedance/Veo do not false-positive on crash/interceptor/fire/needle language. Human copy: `marketing/prompt-moderation-rulebook.md`.
+
 ## Cursor Cloud specific instructions
 
 ### Scope (do not cross)
