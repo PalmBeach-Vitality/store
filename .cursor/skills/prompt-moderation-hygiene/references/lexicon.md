@@ -70,7 +70,11 @@ Unsafe negatives (delete): `no crash`, `no blood`, `no weapons`, `no explosion`,
 | fire / burning | high | high | medium | medium | high |
 | explosion | hard | hard | high | high | hard |
 | weapon | hard | hard | high | hard | hard |
-| people / celebrity | skip (studio) | skip | skip | skip | hard |
+| people / celebrity | skip (studio) | skip | skip | skip | **host split** — person in the still → fal Veo; no people → OpenRouter Veo |
 | needle | skip (studio) | skip | skip | skip | skip |
 
 When in doubt, write the Flux/Kling column. That prompt will also pass Grok.
+
+## Veo 3.1 host (not a word swap)
+
+OpenRouter `google/veo-3.1` = non-human scenes only. fal `fal-ai/veo3.1/image-to-video` = any still with a person. Full rule: `marketing/prompt-moderation-rulebook.md` § Veo 3.1 host split.

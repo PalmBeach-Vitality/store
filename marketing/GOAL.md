@@ -109,6 +109,7 @@ See `n8n-camera-diversity-plan.md`.
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
 - Prompt blocks (Flux/Kling/Grok/Veo): `prompt-moderation-rulebook.md`  
+- Veo 3.1 host: OpenRouter `google/veo-3.1` = no people; fal `fal-ai/veo3.1/image-to-video` = human stills. See the rulebook § Veo 3.1 host split.  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  

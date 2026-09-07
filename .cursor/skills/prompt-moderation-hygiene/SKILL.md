@@ -24,6 +24,7 @@ Canonical human copy: `marketing/prompt-moderation-rulebook.md`. Swap table: `re
 3. **Do not retry the same blocked string.** Log the token, swap it, write the new cell, then run. Repeat retries of a blocked prompt are how Kling/Seedance accounts get noisy.
 4. **I2V prompts are motion-only.** The still already holds identity. `video_motion_prompt` should be camera path + speed + what stays. Restating a spicy still-prompt in I2V is how Kling blocks a clip that Grok already drew.
 5. **Sheet IDs are not prompt copy.** `key_a3_crash`, `interceptor`, `FILM-015 beach-crash ship` belong in comments, not in `still_prompt`.
+6. **Veo 3.1 host is split by people, not by taste.** No-people stills → OpenRouter `google/veo-3.1`. Any human in the still (face, body, hands, hair, suit-on-a-person, wrist, pilot) → fal `fal-ai/veo3.1/image-to-video`. The still decides. Do not send a person to OpenRouter Veo. Do not flip hosts to dodge a wording block — rewrite the sheet cell.
 
 ## Studio APIs (scan these)
 
@@ -34,7 +35,8 @@ Canonical human copy: `marketing/prompt-moderation-rulebook.md`. Swap table: `re
 | Grok I2V | `grok-imagine-video-1.5` | xAI `POST /api/v1/videos/generations` | Same family. xAI's own docs even use `"water crash down"` — Grok is not Flux. |
 | Film I2V | `kwaivgi/kling-v3.0-pro` | OpenRouter `POST /api/v1/videos` | Strict. Weapons, crash, explosion, fighter, political, NSFW. Scans **prompt and input still**. |
 | Product I2V | Seedance 2.0/2.5 | fal / OpenRouter | Semantic + English keyword lists. Identity-safe. Blocks graphic harm; also twitchy on `weapon`, `shoot`, `explode`. |
-| Physics I2V | Veo 3.1 | OpenRouter / Google | Violence, celebrities, children, brands. Generic "couldn't be submitted". |
+| Veo 3.1 — no people | `google/veo-3.1` | OpenRouter `POST /api/v1/videos` | Violence, celebrities, children, brands. Generic empty-complete / "couldn't be submitted". **No humans on this host.** |
+| Veo 3.1 — human | `fal-ai/veo3.1/image-to-video` | fal `POST /fal-ai/veo3.1/image-to-video` | Same Veo 3.1, fal safety stack. **Required** when the still has a person. FILM-001/002/003 faces completed here. |
 | Alt I2V | Runway | studio workflow URL | Moderate. Still avoid weapons/gore. |
 | Audio | Sonilo | `audio_endpoint` on the film sheet | Keep `sfx_prompt` to "match the on-screen action." No crash/explosion copy. |
 
@@ -62,7 +64,7 @@ Keep: charcoal needle-arrowhead hull, twin **cyan** engines, navy-gold dorsal st
 3. Rewrite `still_prompt` and `still_edit_prompt` on the sheet via overlay. Same picture, safer words.
 4. If I2V failed, rewrite `video_motion_prompt` to camera + motion only. Do not re-describe damage.
 5. Re-run **once**. If it still blocks, shorten: drop adjectives, drop negatives, keep identity lock + one action.
-6. Still blocked after a clean rewrite → tell Salvatore. Do not invent a different scene. Do not switch models just to dodge a filter unless he asks.
+6. Still blocked after a clean rewrite → tell Salvatore. Do not invent a different scene. Do not switch models just to dodge a filter unless he asks. Veo host is already locked by law 6 (people → fal, no people → OpenRouter). Do not flip that split because a prompt token blocked.
 
 ## Lab / pen / molecule extras
 

@@ -8,6 +8,8 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 **Prompt wording:** before any still/video overlay, apply `.cursor/skills/prompt-moderation-hygiene/SKILL.md` so Flux/Kling/Grok/Seedance/Veo do not false-positive on crash/interceptor/fire/needle language. Human copy: `marketing/prompt-moderation-rulebook.md`.
 
+**Veo 3.1 host:** OpenRouter `google/veo-3.1` for **non-human** scenes only. Any still with a person (face, body, hands, pilot) uses fal `fal-ai/veo3.1/image-to-video`. Do not mix.
+
 ## Cursor Cloud specific instructions
 
 ### Scope (do not cross)

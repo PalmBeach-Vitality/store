@@ -22,11 +22,29 @@ OpenRouter **Flux 2 Max** · 9:16 · ~1152×2048 · one FILM-009 reference image
 | Grok I2V / extend | `grok-imagine-video-1.5` / `grok-imagine-video` | xAI `POST https://api.x.ai/v1/videos/generations` (+ `/extensions`) |
 | Film I2V | `kwaivgi/kling-v3.0-pro` | OpenRouter `POST https://openrouter.ai/api/v1/videos` |
 | Product I2V | Seedance 2.0 / 2.5 | fal `queue.fal.run/bytedance/seedance-…` or OpenRouter |
-| Physics I2V | Veo 3.1 | OpenRouter / Google |
+| Veo 3.1 — no people | `google/veo-3.1` | OpenRouter `POST https://openrouter.ai/api/v1/videos` |
+| Veo 3.1 — human / face / body / hands | `fal-ai/veo3.1/image-to-video` | fal `POST https://fal.run/fal-ai/veo3.1/image-to-video` |
 | Alt I2V | Runway | film sheet `workflow_url_runway` |
 | Audio | Sonilo | film sheet `audio_endpoint` |
 
 Sheets stay the source of prompts. If a field is missing, fail — do not invent a fallback prompt in the node.
+
+## Veo 3.1 host split (hard)
+
+Same model name on the tin. Two hosts. Two safety stacks. **Do not mix them.**
+
+| Scene | Host | Sheet `model_video` | Sheet `video_start_url` |
+|---|---|---|---|
+| No people in the **still** or the motion | OpenRouter | `google/veo-3.1` | `https://openrouter.ai/api/v1/videos` |
+| Any person — face, body, hands, hair, suit-on-a-person, wrist-on-a-person, pilot | fal | `fal-ai/veo3.1/image-to-video` | `https://fal.run/fal-ai/veo3.1/image-to-video` |
+
+`video_provider` stays `veo` on both. Duration stays 4 / 6 / 8. Output stays **1080 × 1920**.
+
+Judge the **still**, not the wording. A beach portrait is fal even if `video_motion_prompt` never says `woman`. An empty cockpit, vial, pen, molecule, or ship with no person is OpenRouter.
+
+This is routing, not a filter dodge. Do not send a human still to OpenRouter Veo because fal is “the backup.” Do not send a no-people still to fal because OpenRouter filtered a word. Rewrite the sheet cell first.
+
+**Lived:** OpenRouter `google/veo-3.1` empty-completed two iols66 beach-pilot jobs (`Video generation completed with no output (content may have been filtered)`). The same face already completed on fal `fal-ai/veo3.1/image-to-video` (FILM-001 / 002 / 003, 2026-09-02).
 
 ## Lived incident — FILM-020 Flux
 
@@ -91,6 +109,6 @@ Pass when:
 
 1. Shorten. One subject, one camera, one environment. Drop the negative list except `No people, no text, no logos`.
 2. Confirm the **reference image** is clean (Kling/Flux scan it too). A wreck still as `picked_url` can block even a calm prompt.
-3. Tell Salvatore which token remains. Do not switch APIs just to dodge a filter unless he says so.
+3. Tell Salvatore which token remains. Do not switch APIs just to dodge a filter unless he says so. Veo host is already chosen by the split above — do not flip OpenRouter ↔ fal on a blocked **word**. Fix the cell.
 
 Quality rule still stands: a prompt that “works” at 720p is not a win.
