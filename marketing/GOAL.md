@@ -2,6 +2,8 @@
 
 **Owner:** Salvatore  
 
+**HARD RULE — prompt review gate:** Before every still, video, or edit run, the agent sends Salvatore the exact prompt/edit text and waits for OK. No exceptions. See `prompt-review-gate.md`.
+
 ## The main goal
 
 Daily **45–60s** Instagram-ready reel:
@@ -108,6 +110,7 @@ See `n8n-camera-diversity-plan.md`.
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
+- Prompt review gate: `prompt-review-gate.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
