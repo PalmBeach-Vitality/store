@@ -4,12 +4,15 @@
 **Surveyed:** 2026-09-07  
 **Rule:** image and video **quality is #1**. Speed, cost, habit, and “the last model we used” come after.
 
+**Delivery is 9:16 social only.** Instagram Reels / Stories / TikTok. Do not generate or recommend 16:9. In this studio, **1080p always means 1080 × 1920** (portrait). Landscape 1920 × 1080 is a miss.
+
 This note is the studio rulebook for stills + clips, plus what ~50 current articles, leaderboards, and API docs actually say. Rankings move weekly. **Job fit and measured pixels beat last week’s Elo.**
 
 ---
 
 ## Hard quality rules (do not skip)
 
+0. **9:16 or it does not ship.** `aspect_ratio` / `video_aspect_ratio` = `9:16`. ffprobe must show **width < height**. 1080p social = **1080 × 1920**. 2K social ≈ **1440 × 2560**. Kling 4K social = **2160 × 3840**. Never 1920 × 1080.
 1. **Measure, do not trust labels.** A sheet cell that says `2k` or `1080p` is not proof. Open the still. `ffprobe` the MP4. True 9:16 1080p is **1080 × 1920**. Grok Imagine Image 2.0 “2k” 9:16 has written **720 × 1280**. That is 720p. FILM-020’s last space-reentry JPEG failed this check.
 2. **The still is the cinematography.** I2V samples detail from the first frame. A soft source produces soft motion. Generate stills at **real 2K or 4K** even when the video target is 1080p.
 3. **Lock the still before spending video credits.** Produce 3+ takes. Salvatore picks a keeper. Then I2V. Do not animate a broken frame.
@@ -87,10 +90,21 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 
 ---
 
+## Social pixel lock (9:16)
+
+| Label | Width × height | Ships? |
+|---|---|---|
+| 9:16 720p | 720 × 1280 | No (soft) |
+| **9:16 1080p** | **1080 × 1920** | **Yes — Reels / TikTok** |
+| 9:16 2K | ~1440 × 2560 | Yes — stills (feeds 1080p I2V) |
+| 9:16 4K | 2160 × 3840 | Yes if the API really returns this |
+| 16:9 1080p | 1920 × 1080 | **No — landscape. Wrong product.** |
+
 ## QA before anyone calls a clip “1080p”
 
-1. Still pixels ≥ video pixels on the short side (1080 for 1080p).
-2. `ffprobe`: width × height, codec, fps. 9:16 1080p = 1080 × 1920.
+1. Aspect is 9:16 (width < height). Landscape 1920 × 1080 fails even if it says 1080p.
+2. Still pixels ≥ video pixels on the short side (1080 for 1080p).
+3. `ffprobe`: width × height, codec, fps. 9:16 1080p = 1080 × 1920.
 3. Identity: same ship / vial / pen / face from frame 1 to last frame.
 4. Motion: one intended move, no boil, no morph.
 5. If it fails, fix the **still** first, then re-roll I2V.
