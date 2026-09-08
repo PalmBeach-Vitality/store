@@ -30,7 +30,7 @@ Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
 `LN-001` (Aug 28 issue) was sent on Aug 25, 2026. `LN-002` (Aug 31 issue) was sent on Aug 31. Both rows are `sent`. Do not re-send them.
 
-`LN-003` (Sep 8 issue) is the current week. Set it to `test` first (sales@ only). After you confirm the inbox, set it to `ready` and run again for the subscribed list (6 rows as of Sep 8, including `brianrajewski@gmail.com`).
+`LN-003` (Sep 8 issue) test-sent to `sales@` on Sep 8, 2026. The campaign row is now `tested`. After you confirm the inbox, set it to `ready` and run again for the subscribed list (6 rows, including `brianrajewski@gmail.com`). Do not Publish the send workflow until you ask.
 
 ## Where you write the newsletter
 
