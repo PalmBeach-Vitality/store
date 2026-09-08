@@ -30,7 +30,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 ## Reel Studio / Creatomate
 
 - Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
-- Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
+- Still edit text is **not** a sheet writeback. Type it as Fixed on n8n `still_edit_instructions`. Column **`still_edit_prompt`** on Sheet 9/14 may still exist; vid-gen does not read or write it.
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
 - **Single hero product (CRITICAL):** exactly **one vial OR one pen** per creation image — never both, never multiples. Script: `scripts/enforce_single_vial_or_pen.py`
 - Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
