@@ -28,7 +28,9 @@ SDK sources: [`n8n/Vitality.store_newsletter_send.sdk.js`](./n8n/Vitality.store_
 
 Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
-`LN-001` (Aug 28 issue) was sent on Aug 25, 2026 to the 5 subscribed rows, including `sales@`. The campaign row is now `sent`. Duplicate that row for the next week.
+`LN-001` (Aug 28 issue) was sent on Aug 25, 2026. `LN-002` (Aug 31 issue) was sent on Aug 31. Both rows are `sent`. Do not re-send them.
+
+`LN-003` (Sep 8 issue) is the current week. Set it to `test` first (sales@ only). After you confirm the inbox, set it to `ready` and run again for the subscribed list (6 rows as of Sep 8, including `brianrajewski@gmail.com`).
 
 ## Where you write the newsletter
 
@@ -36,7 +38,7 @@ You do **not** paste a finished HTML email into n8n or Gmail. You fill **one row
 
 Format in the cells: **plain text**. New paragraph = **Alt+Enter** inside the cell. Do not paste `<html>`. Links belong in the `link_*_url` columns, not inside the body.
 
-`LN-001` is already filled with the Aug 28 issue from the mockup (`status=draft`). Duplicate that row for later weeks.
+`LN-003` is the Sep 8 issue. Duplicate that row for later weeks.
 
 ## Campaign sheet fields
 
