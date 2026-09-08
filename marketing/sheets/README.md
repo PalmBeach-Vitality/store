@@ -37,6 +37,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; dark microscopic **cellular chemical reaction** — living cells + amino acids; no logo, no text, no sound; not a vial, not a pen). `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` each have **6** staggered values so consecutive ranks never match.
 - Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one white insulin-style 3ml pen, blue DNA + orange compound name + orange `3ml pen` badge, no mg/ml, no vial). Type **GLOW**, **KLOW**, or **Wolverine** on `choose_compound` the same as any other SKU.
+- Landscape vial + pen vids: live tab **`500_Peptide_Wellness_Reel_Scenes.csv`** (not in this repo). Same type-in: **GLOW**, **KLOW**, **Wolverine**. Chemical blend strings on that sheet map to those nicknames. Do not dump the 750-row sheet into git.
 - IG captions (vial + pen): tab **`15-caption-science-27`** in, **`16-ig-captions`** out — research language only, no “human use” / “benefits of using”
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**

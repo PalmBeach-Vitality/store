@@ -11,7 +11,9 @@ Nodes only map sheet fields, call APIs, or write results back.
 
 | Tab | Role |
 |---|---|
-| `9-lab-item-creations-500` | Daily path — still prompt, motion, cameras, models, `still_edit_prompt` |
+| `9-lab-item-creations-500` | Daily lab vial path — still prompt, motion, cameras, models, `still_edit_prompt`. Type **GLOW**, **KLOW**, **Wolverine** on `choose_compound`. |
+| `14-pen-creations-150` | Pens-only path — same type-in nicknames |
+| Landscape `500_Peptide_Wellness_Reel_Scenes.csv` | Vial + pen landscape path — same type-in nicknames (chemical blend strings alias to GLOW / KLOW / Wolverine) |
 | `12-import-still-queue` | Import path — public `still_url` + motion/edit/models in the **sheet** |
 
 ---
