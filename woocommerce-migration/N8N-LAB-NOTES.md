@@ -30,7 +30,7 @@ Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
 `LN-001` (Aug 28 issue) was sent on Aug 25, 2026. `LN-002` (Aug 31 issue) was sent on Aug 31. Both rows are `sent`. Do not re-send them.
 
-`LN-003` is the Sept 11 issue from the [Aug 21 weekly Figma mockup](https://www.figma.com/design/p9xRXPzisANMpE7FZp7Bit/Palm-Beach-Vitality---Weekly-Newsletter-Mockup--Aug-21-2026-?node-id=0-1) (FDA warning letters + NCT07803250). Test to `sales@` first. After you confirm, set it to `ready` and run again for the subscribed list (6 rows, including `brianrajewski@gmail.com`). Do not Publish the send workflow until you ask.
+`LN-003` (Sept 11 issue — FDA warning letters + NCT07803250) was sent on Sep 8, 2026. The row is `sent`. Do not re-send it. Do not Publish the send workflow until you ask.
 
 ## Where you write the newsletter
 
@@ -38,7 +38,7 @@ You do **not** paste a finished HTML email into n8n or Gmail. You fill **one row
 
 Format in the cells: **plain text**. New paragraph = **Alt+Enter** inside the cell. Do not paste `<html>`. Links belong in the `link_*_url` columns, not inside the body.
 
-`LN-003` is the Sep 8 issue. Duplicate that row for later weeks.
+`LN-003` is the Sept 11 issue (sent Sep 8). Duplicate that row for later weeks; do not invent copy if you have a new Figma.
 
 ## Campaign sheet fields
 
