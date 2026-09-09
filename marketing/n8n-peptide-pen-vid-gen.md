@@ -9,7 +9,7 @@
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear.
+Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`).
 
 **Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
 
@@ -21,9 +21,11 @@ Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-
 
 ```text
 manual_trigger
+  → choose_compound
   → get_pen_creations
   → filter_pen_active
-  → pick_pen_creation
+  → alias_stack_names
+  → pull_sheet_row
   → grok_imagine_pen_still
   → save_still_url
   → prep_pen_video_start
@@ -69,7 +71,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 ## Node 3 — `filter_pen_active`
 
 **Type:** Filter  
-**Before → this → After:** `get_pen_creations` → **filter_pen_active** → `pick_pen_creation`
+**Before → this → After:** `get_pen_creations` → **filter_pen_active** → `alias_stack_names`
 
 | Parameter | fx | Value |
 |---|---|---|
@@ -79,23 +81,30 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 ---
 
-## Node 4 — `pick_pen_creation`
+## Node 4 — `alias_stack_names`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `filter_pen_active` → **pick_pen_creation** → `grok_imagine_pen_still`
+**Before → this → After:** `filter_pen_active` → **alias_stack_names** → `pull_sheet_row`
 
-Paste: `marketing/n8n-code-pick-pen-creation.js`
+Paste: `marketing/n8n-code-alias-stack-names.js`
 
-Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products.
-
-**Check:** `compound_name`, `video_prompt_len` (~4500), `model_still` = `grok-imagine-image-2.0`
+Maps catalog nicknames **GLOW**, **KLOW**, **Wolverine** onto chemical blend strings (and the reverse). Does not invent prompts.
 
 ---
 
-## Node 5 — `grok_imagine_pen_still`
+## Node 5 — `pull_sheet_row`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `alias_stack_names` → **pull_sheet_row** → `grok_imagine_pen_still`
+
+Reads `choose_compound.compound_name`. Picks the least-used Active Sheet 14 row for that match. Passes every field as-is.
+
+---
+
+## Node 6 — `grok_imagine_pen_still`
 
 **Type:** HTTP Request  
-**Before → this → After:** `pick_pen_creation` → **grok_imagine_pen_still** → `save_still_url`
+**Before → this → After:** `pull_sheet_row` → **grok_imagine_pen_still** → `save_still_url`
 
 | Setting | fx | Value |
 |---|---|---|

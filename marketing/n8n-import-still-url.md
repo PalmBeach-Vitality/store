@@ -84,7 +84,6 @@ Map **every** field the daily path uses after `pick_creation` / `save_still_url`
 | `still_resolution` | `={{ $json.still_resolution }}` |
 | `video_prompt` | `={{ $json.video_prompt }}` |
 | `video_motion_prompt` | `={{ $json.video_motion_prompt }}` |
-| `still_edit_prompt` | `={{ $json.still_edit_prompt \|\| '' }}` |
 | `status` | `={{ $json.status }}` |
 | `times_used` | `={{ Number($json.times_used \|\| 0) }}` |
 | `last_used_at` | `={{ $json.last_used_at \|\| '' }}` |
@@ -95,7 +94,7 @@ Map **every** field the daily path uses after `pick_creation` / `save_still_url`
 | `hero_style` | `={{ $json.hero_style }}` |
 | `source` | `={{ 'import_sheet' }}` |
 
-From here, **`save_still_url` / `still_edit_instructions` / `prep_grok_video_start`** should read `$json.<field>` the same way as the daily path (motion, model_video, duration, resolution, still_edit_prompt, cameras).
+From here, **`save_still_url` / `still_edit_instructions` / `prep_grok_video_start`** should read `$json.<field>` the same way as the daily path (motion, model_video, duration, resolution, cameras). Type `still_edit_prompt` as Fixed on `still_edit_instructions` — do not map it from the import sheet.
 
 Import skips `grok_imagine_reel_still` — `still_url` is already on the sheet.
 
