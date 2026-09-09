@@ -8,6 +8,8 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 **Prompt wording:** before any still/video overlay, apply `.cursor/skills/prompt-moderation-hygiene/SKILL.md` so Flux/Kling/Grok/Seedance/Veo do not false-positive on crash/interceptor/fire/needle language. Human copy: `marketing/prompt-moderation-rulebook.md`.
 
+**Humans in video — mandatory, no exceptions:** any time you write, rewrite, overlay, or execute a still or video generation whose frame contains a person (astronaut, face, hands, wrist, body, model, presenter), you MUST first read `.cursor/skills/prompt-moderation-hygiene/SKILL.md` and `references/human-subjects.md`, run the pre-flight gate in `SKILL.md` (look at the still, provider ↔ face rule, legal duration, lexicon scan, `references/incidents.md` repeat check), and state in your reply that the gate ran and what it decided. Do this even for a "quick" run, a re-run, a single-row test, or when Salvatore says the prompt is already fine. Never execute a face-forward human row on Veo. After the run, append the result to `references/incidents.md`. A human vid gen run without the gate is a mistake regardless of whether it passed.
+
 ## Cursor Cloud specific instructions
 
 ### Scope (do not cross)

@@ -11,9 +11,13 @@ Do **not** generate prohibited content. Do **not** recommend leetspeak, homoglyp
 
 Canonical human copy: `marketing/prompt-moderation-rulebook.md`. Swap table: `references/lexicon.md`. Human-subject rules: `references/human-subjects.md`. Every block ever seen, with the fix that passed: `references/incidents.md`.
 
+## Mandatory for humans — no exceptions
+
+If the frame contains a person (astronaut, face, hands, wrist, body, model, presenter), this skill is not optional. It applies to **writing** a `still_prompt` / `still_edit_prompt` / `video_motion_prompt`, to **overlaying** one onto a sheet, and to **executing** any still or video workflow on that row. Quick test, re-run, single row, "the prompt is already fine" — none of those skip it. Run the pre-flight gate below, say in the reply that it ran and what it decided, then run once, then log the result in `references/incidents.md`. A human gen that ran without the gate is a mistake even if it passed. This is written into `AGENTS.md` as a workspace rule.
+
 ## When to load this
 
-- **Before executing any I2V workflow on a row with a person in the still.** Run the pre-flight gate in `references/human-subjects.md` first. No gate, no run.
+- **Before writing, overlaying, or executing anything for a row with a person in the still.** Run the pre-flight gate first. No gate, no run.
 - Overlaying or editing `still_prompt` / `still_edit_prompt` / `video_motion_prompt` / `video_prompt` / `bridge_prompt` / `sfx_prompt`
 - Any gen node returns `content moderation`, `content_policy_violation`, `no_media_generated`, `respect_moderation: false`, empty `data[]`, OpenRouter `failed` + `content may have been filtered`, or Kling `task_status: failed` with a policy message
 - FILM rows whose sheet `category` contains crash / wreck / impact (those IDs stay on the sheet — they must **not** appear in the prompt)
@@ -78,6 +82,7 @@ Do this on the row that `pick_film_still` / `pick_creation` will select. It take
 4. **Confirm the motion prompt is motion-only.** No re-description of her face, body, or suit fit. Camera + beats + what holds.
 5. **Check `references/incidents.md`** for the same still or the same provider+category pair. If it blocked before and nothing changed, do not run it.
 6. Only then execute. **One** run.
+7. In the reply, report the gate in one line, e.g. `Gate: FILM-001, person in frame, face 3/4 eyes-down → kling, 5s legal, lexicon clean, no prior block on this still. Running once.`
 
 ## Blocked-run procedure
 
