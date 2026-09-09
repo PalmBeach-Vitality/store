@@ -2,6 +2,16 @@
 
 **Owner:** Salvatore  
 
+## #1 priority — image and video quality
+
+Quality is the first rule on every still and every clip. Speed, cost, habit, and the last model we used come after.
+
+- **9:16 only.** These are social clips (IG Reels / Stories / TikTok). Every still and every video is vertical. **1080p = 1080 × 1920.** Landscape 1920 × 1080 is the wrong product. Reject 16:9.
+- **Measure pixels.** A sheet cell that says `2k` or `1080p` is not proof. Open the file. `ffprobe` the MP4. True 9:16 1080p is **1080 × 1920**. True 2K 9:16 is about **1440 × 2560** (or the provider’s documented 2K vertical). **720 × 1280 is 720p** — do not call it 1080p or 2K.
+- **Still sharpness sets video sharpness.** Generate stills at real 2K+ even when the video target is 1080p. A 720p first frame cannot become a sharp 1080p I2V clip.
+- **Lock the still before spending video credits.** Produce takes, pick a keeper, then I2V. Motion prompts describe motion only — do not re-describe the scene.
+- **Native resolution on the video API.** Ask for 1080p or higher. Do not accept 720p for film / hero / catalog clips. Do not upscale a soft generate and call it done.
+- **Pick the model for the shot.** Cinematic speed/camera ≠ product identity lock ≠ photoreal physics. See `marketing/vid-gen-quality-playbook.md`.
 **HARD RULE — prompt review gate:** Before every still, video, or edit run, the agent sends Salvatore the exact prompt/edit text (readable in the Cursor window, no copy boxes) and waits for OK. Before every video run, also name the API and model. No exceptions. See `prompt-review-gate.md`.
 
 ## The main goal
@@ -165,6 +175,7 @@ See `n8n-camera-diversity-plan.md`.
 
 ## Canonical docs
 
+- Quality + vid-gen API survey: `vid-gen-quality-playbook.md`  
 - Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  

@@ -4,6 +4,9 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 ## Marketing / n8n (Reel Studio)
 
+**#1 priority — image and video quality.** Always. Quality beats speed, cost, habit, and “the last model we used.” Do not ship a still or clip that is softer than the brief (measure pixels; a sheet cell that says `2k` or `1080p` is not proof). Soft first frames make soft I2V. Pick the model per shot, not per convenience. Canonical quality playbook + surveyed API opinions: `marketing/vid-gen-quality-playbook.md`.
+
+**Social delivery is 9:16 only.** Reels / Stories / TikTok. Stills and clips are vertical. **1080p here means 1080 × 1920**, never landscape 1920 × 1080. Do not recommend or generate 16:9 for studio video.
 **HARD RULE — prompt review gate:** Before **every** still, video, or edit generation (Flux, Grok, Kling, Seedance, Veo, Runway, Sonilo, n8n overlay+gen, retries, one-offs), send Salvatore the **exact** prompt or edit text in the Cursor window (no copy/paste boxes) and wait for his OK. **Before every video run, also name the API and model and wait.** No exceptions. Skill: `.cursor/skills/prompt-review-gate/SKILL.md`. Human copy: `marketing/prompt-review-gate.md`.
 
 **Main goal:** daily **45–60s** reel = **Grok** unique lab-item footage (+ smooth extend) + **Creatomate** text overlays. Subjects = 500 lab items only. Canonical: `marketing/GOAL.md` + `marketing/n8n-45s-reel-grok-creatomate.md`.
