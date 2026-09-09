@@ -29,7 +29,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 
 ## Reel Studio / Creatomate
 
-- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
+- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`). Daily wire + edit-before-video: `n8n-vid-gen-lab-scenes.md`.
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
 - **Single hero product (CRITICAL):** exactly **one vial OR one pen** per creation image — never both, never multiples. Script: `scripts/enforce_single_vial_or_pen.py`
