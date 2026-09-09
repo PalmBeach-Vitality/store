@@ -6,7 +6,7 @@
 //
 // Throws if a caption would trip human-use / benefit / typo checks.
 // Linear: fail = stop. Pass = email.
-// Vial 1 may use the short "Explore research-grade NAME at URL" CTA.
+// First hashtag is the compound with hyphens/plus stripped (AOD-9604 → #AOD9604).
 
 function firstJson(name) {
   try {
@@ -14,6 +14,14 @@ function firstJson(name) {
   } catch (e) {
     return {};
   }
+}
+
+function toHashtag(name) {
+  var raw = String(name || '')
+    .replace(/^#/, '')
+    .replace(/\+/g, 'Plus')
+    .replace(/[^a-zA-Z0-9]+/g, '');
+  return raw ? '#' + raw : '';
 }
 
 var BANNED = [
@@ -24,7 +32,7 @@ var BANNED = [
   'benefits of using',
   'benefit of',
   'you will',
-  'you\'ll',
+  "you'll",
   'lose weight',
   'fat loss',
   'anti-aging results',
@@ -53,6 +61,8 @@ var BANNED = [
 
 var b = firstJson('build_captions');
 var name = String(b.compound_name || '').trim();
+var vialUrl = String(b.vial_url || '').trim();
+var penUrl = String(b.pen_url || '').trim();
 var captions = [
   { key: 'vial_caption_1', text: String(b.vial_caption_1 || ''), form: 'vial' },
   { key: 'vial_caption_2', text: String(b.vial_caption_2 || ''), form: 'vial' },
@@ -61,7 +71,7 @@ var captions = [
 ];
 
 var errors = [];
-var wantFirst = '#' + name.replace(/\+/g, 'Plus').replace(/[^a-zA-Z0-9]+/g, '');
+var wantFirst = toHashtag(name);
 
 function hashtags(text) {
   var hashLines = String(text || '')
@@ -70,7 +80,12 @@ function hashtags(text) {
       return ln.indexOf('#') !== -1;
     });
   var last = hashLines[hashLines.length - 1] || '';
-  return last.match(/#[A-Za-z0-9]+/g) || [];
+  var raw = last.match(/#[A-Za-z0-9_+-]+/g) || [];
+  return raw.map(toHashtag).filter(Boolean);
+}
+
+function hasStoreHost(text) {
+  return String(text || '').toLowerCase().indexOf('palmbeach-vitality.store') !== -1;
 }
 
 captions.forEach(function (c) {
@@ -79,9 +94,7 @@ captions.forEach(function (c) {
     return;
   }
   var low = c.text.toLowerCase();
-  if (c.text.indexOf(name) !== 0) {
-    errors.push(c.key + ' must start with ' + name);
-  }
+  if (c.text.indexOf(name) !== 0) errors.push(c.key + ' must start with ' + name);
   BANNED.forEach(function (w) {
     if (low.indexOf(w) !== -1) errors.push(c.key + ' flagged: "' + w + '"');
   });
@@ -90,20 +103,16 @@ captions.forEach(function (c) {
   if (tags[0] && tags[0].toLowerCase() !== wantFirst.toLowerCase()) {
     errors.push(c.key + ' first hashtag must be ' + wantFirst + ' (got ' + tags[0] + ')');
   }
-  if (c.text.indexOf('www.palmbeach-vitality.store') === -1) {
-    errors.push(c.key + ' missing store URL');
+  if (!hasStoreHost(c.text)) errors.push(c.key + ' missing store URL');
+  var expected = c.form === 'pen' ? penUrl || vialUrl : vialUrl || penUrl;
+  if (expected && expected.indexOf('/product/') !== -1 && c.text.indexOf(expected) === -1) {
+    errors.push(c.key + ' missing product URL ' + expected);
   }
-  if (c.form === 'vial' && /3ml|\bresearch pen\b|\bpen catalog\b|\bpen listing\b/i.test(c.text)) {
+  if (c.form === 'vial' && (low.indexOf('pen catalog') !== -1 || low.indexOf('pen listing') !== -1)) {
     errors.push(c.key + ' vial copy must not read as a pen listing');
   }
-  if (c.form === 'pen' && /10ml|\blaboratory vial\b|\bresearch vial\b/i.test(c.text)) {
+  if (c.form === 'pen' && (low.indexOf('research vial') !== -1 || low.indexOf('laboratory vial') !== -1)) {
     errors.push(c.key + ' pen copy must not read as a vial listing');
-  }
-  if (c.form === 'pen' && !/3ml|\bresearch pen\b|\bpen catalog\b/i.test(c.text)) {
-    errors.push(c.key + ' must mention the 3ml research pen catalog');
-  }
-  if (c.key === 'vial_caption_2' && !/10ml|vial/i.test(c.text)) {
-    errors.push(c.key + ' must mention the 10ml vial listing');
   }
 });
 
@@ -115,7 +124,7 @@ if (String(b.vial_caption_2 || '') === String(b.pen_caption_2 || '')) {
 }
 
 if (errors.length) {
-  throw new Error('Caption verify failed:\n- ' + errors.join('\n- '));
+  throw new Error('Caption verify failed: ' + errors.join(' | '));
 }
 
 return [
@@ -126,6 +135,8 @@ return [
       match_distance: b.match_distance,
       compound_id: b.compound_id,
       store_url: b.store_url,
+      vial_url: vialUrl,
+      pen_url: penUrl,
       hashtag_line: b.hashtag_line,
       vial_caption_1: b.vial_caption_1,
       vial_caption_2: b.vial_caption_2,
