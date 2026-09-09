@@ -1,0 +1,22 @@
+---
+description: Never hardcode n8n/Grok/sheet generation values unless Salvatore explicitly asks
+alwaysApply: true
+---
+
+# No hardcoding unless Salvatore asks
+
+Do **not** hardcode generation or creative values in n8n nodes, Code, HTTP bodies, Set fields, or docs-as-defaults.
+
+This includes (not exhaustive): prompts, prompt wrappers/locks, still-edit text, models (`grok-imagine-*`, chat models), `duration`, `aspect_ratio`, `resolution`, `still_resolution`, `n` / `still_n`, `audio`, wait seconds, camera/motion, compound names, captions, CTA copy, temperature, max_tokens, and `|| '9:16'` / `|| 15` / `|| '1080p'` / `|| 'grok-imagine-video-1.5'` style fallbacks.
+
+**Allowed without asking**
+
+- Runtime URLs and IDs from API responses (`still_url`, `video_url`, `request_id`)
+- Mapping sheet columns with expressions (`={{ $json.model_still }}`)
+- Which Google Sheet document/tab a Get/Update node reads (the sheet identity)
+- Filter values that match a sheet column’s own vocabulary (e.g. `status` equals `Active`)
+- API endpoint URLs (`https://api.x.ai/v1/...`) and HTTP method/auth wiring
+
+**If a sheet cell is empty:** throw a clear error. Do **not** invent a fallback.
+
+**Exception:** hardcode a value only when Salvatore **explicitly** asks to hardcode that specific value. “Make it work” or “fix the workflow” is **not** permission to hardcode.

@@ -1,21 +1,23 @@
 // n8n Code node: prep_seedance_video_start
 // Type: Code | Mode: Run Once for All Items
 // After: save_still_url
-// Before: seedance_video_start
+// Before: openrouter_i2v_start
 //
-// Builds fal.ai + BytePlus Ark bodies for Seedance I2V from today's Grok still.
+// Builds an OpenRouter Seedance I2V body from today's Grok still.
 // generate_audio: false — PBVita adds music manually after Creatomate.
 
 function firstJson(name) {
   try {
-    return $(name).first()?.json || {};
+    return $(name).first().json || {};
   } catch (e) {
     return {};
   }
 }
 
-function val(obj, names, fallback = '') {
-  for (const n of names) {
+function val(obj, names, fallback) {
+  if (fallback === undefined) fallback = '';
+  for (var i = 0; i < names.length; i++) {
+    var n = names[i];
     if (obj && obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
       return obj[n];
     }
@@ -35,111 +37,84 @@ function asciiPrompt(s) {
     .trim();
 }
 
-const input = $input.first()?.json || {};
-const stillNode = firstJson('save_still_url');
-const pick = firstJson('pick_creation');
-const imagine = firstJson('grok_imagine_reel_still');
+function requireText(value, label) {
+  var v = String(value == null ? '' : value).trim();
+  if (!v) {
+    throw new Error('SHEETS-ONLY: prep_seedance_video_start missing ' + label + '.');
+  }
+  return v;
+}
 
-const stillResolved = String(
+function assertOpenRouterModel(model) {
+  var m = String(model || '').trim();
+  if (!m) {
+    throw new Error('SHEETS-ONLY: model_video is empty. Set bytedance/seedance-2.5.');
+  }
+  if (m.indexOf('fal-ai/') === 0 || m.indexOf('fal.run/') !== -1) {
+    throw new Error('model_video is still a fal slug (' + m + '). Set bytedance/seedance-2.5.');
+  }
+  return m;
+}
+
+var input = ($input.first() && $input.first().json) || {};
+var stillNode = firstJson('save_still_url');
+var pick = firstJson('pick_creation');
+if (!pick.creation_id) pick = firstJson('pick_seedance_scene');
+var imagine = firstJson('grok_imagine_reel_still');
+
+var stillResolved = String(
   val(input, ['still_url']) ||
     val(stillNode, ['still_url']) ||
-    input?.data?.[0]?.url ||
-    stillNode?.data?.[0]?.url ||
-    imagine?.data?.[0]?.url ||
+    (input.data && input.data[0] && input.data[0].url) ||
+    (stillNode.data && stillNode.data[0] && stillNode.data[0].url) ||
+    (imagine.data && imagine.data[0] && imagine.data[0].url) ||
     ''
 ).trim();
 
-if (!/^https:\/\//i.test(stillResolved)) {
+if (stillResolved.indexOf('https://') !== 0 && stillResolved.indexOf('HTTPS://') !== 0) {
   throw new Error(
-    'prep_seedance_video_start: still_url must be a public https URL. ' +
-      'In save_still_url set still_url = {{ $json.data[0].url }} from grok_imagine_reel_still. ' +
-      'Got: ' +
+    'prep_seedance_video_start: still_url must be a public https URL. Got: ' +
       JSON.stringify(stillResolved).slice(0, 160)
   );
 }
 
-const shot_family = asciiPrompt(val(pick, ['shot_family'], 'push_in'));
-const camera_angle = asciiPrompt(val(pick, ['camera_angle'], 'eye-level'));
-const camera_direction = asciiPrompt(val(pick, ['camera_direction'], 'forward'));
-const camera_move = asciiPrompt(val(pick, ['camera_move'], 'slow push-in')).slice(0, 180);
-const compound = asciiPrompt(val(pick, ['compound_name'], ''));
-
-function stripVidDisclaimer(text) {
-  let t = String(text || '');
-  const patterns = [
-    /\s*For laboratory research use only\.?\s*/gi,
-    /\s*Not for human use or consumption\.?\s*/gi,
-    /\s*['']For Laboratory Research Use Only['']\.?\s*/gi,
-    /\s*Explicit research[- ]use only[^.]*\.?\s*/gi,
-  ];
-  for (const re of patterns) t = t.replace(re, ' ');
-  return t.replace(/\s+/g, ' ').trim();
-}
-
-const sheetMotion = stripVidDisclaimer(
-  asciiPrompt(
-    val(input, ['video_motion_prompt']) ||
-      val(stillNode, ['video_motion_prompt']) ||
-      val(pick, ['video_motion_prompt'], '')
-  )
+var motion = asciiPrompt(
+  val(input, ['video_motion_prompt']) ||
+    val(stillNode, ['video_motion_prompt']) ||
+    val(pick, ['video_motion_prompt'], '')
 );
-
-let motion = sheetMotion;
-if (!motion || motion.length > 700) {
-  motion = asciiPrompt(
-    `Slow cinematic camera: ${camera_move}. ` +
-      `Shot ${shot_family}, angle ${camera_angle}, direction ${camera_direction}. ` +
-      `Keep the exact same laboratory research scene, materials, and lighting. ` +
-      `No orbit. No new objects. No duplicate props. No repeated text or graphics. ` +
-      `No people, hands, faces, needles, text watermarks, or burn-in. ` +
-      `Silent / no soundtrack. No on-screen disclaimer or caption text.`
-  );
+if (!motion) {
+  throw new Error('SHEETS-ONLY: video_motion_prompt missing from the picked row.');
 }
 
-if (compound) {
-  motion += ` Keep label '${compound}' unchanged if visible, printed once only.`;
+var model = assertOpenRouterModel(val(input, ['model_video']) || val(pick, ['model_video']) || val(stillNode, ['model_video']));
+var duration = Number(val(input, ['duration_seconds']) || val(pick, ['duration_seconds']));
+if (!isFinite(duration) || duration < 4 || duration > 30) {
+  throw new Error('SHEETS-ONLY: duration_seconds must be 4–30 for OpenRouter Seedance 2.5.');
 }
+var resolution = requireText(val(input, ['resolution']) || val(pick, ['resolution']), 'resolution');
+var aspect = requireText(val(input, ['aspect_ratio']) || val(pick, ['aspect_ratio']), 'aspect_ratio');
+var waitSeconds = Number(val(input, ['wait_seconds']) || val(pick, ['wait_seconds'], 180));
+if (!isFinite(waitSeconds) || waitSeconds < 1) waitSeconds = 180;
 
-motion = stripVidDisclaimer(motion);
+var audioRaw = val(input, ['audio', 'generate_audio']) || val(pick, ['audio', 'generate_audio'], false);
+var generate_audio = audioRaw === true || String(audioRaw).toLowerCase() === 'true';
 
-if (motion.length > 700) {
-  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
-}
-
-// --- fal.ai Seedance 2.0 I2V (live today). Swap endpoint to 2.5 when listed. ---
-const falBody = {
+var body = {
+  model: model,
   prompt: motion,
-  image_url: stillResolved,
-  aspect_ratio: '9:16',
-  resolution: '1080p',
-  duration: '15',
-  generate_audio: false,
-  bitrate_mode: 'standard',
-};
-
-// --- BytePlus ModelArk (Seedance 2.0 today; replace model with console 2.5 ID later) ---
-const arkModel =
-  String(val(input, ['seedance_ark_model'], 'dreamina-seedance-2-0-260128')).trim() ||
-  'dreamina-seedance-2-0-260128';
-
-const arkBody = {
-  model: arkModel,
-  content: [
-    { type: 'text', text: motion },
+  duration: duration,
+  resolution: resolution,
+  aspect_ratio: aspect,
+  generate_audio: generate_audio,
+  frame_images: [
     {
       type: 'image_url',
       image_url: { url: stillResolved },
-      role: 'first_frame',
+      frame_type: 'first_frame',
     },
   ],
-  ratio: '9:16',
-  resolution: '1080p',
-  duration: 15,
-  generate_audio: false,
 };
-
-const seedance_fal_body_json = JSON.stringify(falBody);
-const seedance_ark_body_json = JSON.stringify(arkBody);
 
 return [
   {
@@ -147,19 +122,15 @@ return [
       still_url: stillResolved,
       video_motion_prompt: motion,
       creation_id: String(val(pick, ['creation_id']) || val(stillNode, ['creation_id'], '')),
-      camera_move,
-      shot_family,
-      camera_angle,
-      camera_direction,
-      compound_name: compound,
-      seedance_provider_hint: 'fal',
-      seedance_fal_endpoint: 'bytedance/seedance-2.0/image-to-video',
-      seedance_fal_body_json,
-      seedance_ark_model: arkModel,
-      seedance_ark_body_json,
-      _debug_prompt_len: motion.length,
-      _debug_still_host: stillResolved.split('/')[2] || '',
-      _debug_fal_preview: seedance_fal_body_json.slice(0, 240),
+      compound_name: asciiPrompt(val(pick, ['compound_name'], '')),
+      model_video: model,
+      duration_seconds: duration,
+      resolution: resolution,
+      aspect_ratio: aspect,
+      generate_audio: generate_audio,
+      wait_seconds: waitSeconds,
+      openrouter_url: 'https://openrouter.ai/api/v1/videos',
+      openrouter_body_json: JSON.stringify(body),
     },
   },
 ];
