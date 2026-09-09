@@ -2,6 +2,8 @@
 
 **Owner:** Salvatore  
 
+**HARD RULE — prompt review gate:** Before every still, video, or edit run, the agent sends Salvatore the exact prompt/edit text (readable in the Cursor window, no copy boxes) and waits for OK. Before every video run, also name the API and model. No exceptions. See `prompt-review-gate.md`.
+
 ## The main goal
 
 Daily **45–60s** Instagram-ready reel:
@@ -169,6 +171,7 @@ See `n8n-camera-diversity-plan.md`.
 - Seedance 2.5 T2V (sheets-only): `n8n-seedance-25-vid-gen.md`  
 - Seedance I2V notes: `n8n-seedance-vid-gen.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
+- Prompt review gate: `prompt-review-gate.md`  
 - Prompt blocks (Flux/Kling/Grok/Veo): `prompt-moderation-rulebook.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
