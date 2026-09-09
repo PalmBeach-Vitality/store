@@ -118,7 +118,7 @@ save_still_url → **still_edit_instructions** → download_still → prep_still
 
 - `prep_still_edit` — `n8n-code-prep-still-edit.js` (throws if the Set field is empty; no sheet fallback)  
 - `grok_imagine_edit_still` — JSON `={{ $json.still_edit_body_json }}`  
-- `save_edited_still_url` → `prep_grok_video_start` → `grok_video_start`
+- `grok_imagine_edit_still` → `prep_grok_video_start` → `grok_video_start`
 
 Prep video body (sheets only):
 
