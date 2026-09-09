@@ -14,10 +14,6 @@ Reference look (mandatory when a vial appears):
 
 Replaces older "crimped aluminum + rubber only / no plastic caps" language.
 Safe to re-run.
-
-After packaging replacements, catalog mg / mg/ml locks from
-`overlay_lab_vial_dosages.py` are re-applied so this script does not revert
-exact `'10mg'` / `'1 mg/ml'` text back to the generic “white mg strength” phrase.
 """
 
 from __future__ import annotations
@@ -25,9 +21,13 @@ from __future__ import annotations
 import csv
 import json
 import re
+import sys
 from pathlib import Path
 
-from overlay_lab_vial_dosages import patch_row as apply_catalog_vial_dose
+SCRIPTS_DIR = Path(__file__).resolve().parent
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
+from lock_vial_dosages import load_catalog, process_row as lock_dose_row
 
 ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
@@ -39,6 +39,7 @@ CSV_PATHS = [
     SHEETS / "8-lab-items-250.csv",
     SHEETS / "12-import-still-queue.csv",
     SHEETS / "3-image-scenes-150.csv",
+    SHEETS / "500_Peptide_Wellness_Reel_Scenes.csv",
 ]
 JSON_PATHS = [
     ROOT / "pbvita-500-lab-item-creations.json",
@@ -222,8 +223,18 @@ def patch_row(row: dict) -> bool:
         if new != old:
             row[key] = new
             changed = True
-    if apply_catalog_vial_dose(row):
+    catalog = getattr(patch_row, "_catalog", None)
+    if catalog is None:
+        catalog = load_catalog()
+        patch_row._catalog = catalog  # type: ignore[attr-defined]
+    locked, _info = lock_dose_row(row, catalog)
+    if locked is not row:
+        row.update(locked)
         changed = True
+    else:
+        # lock_dose_row mutates in place
+        if _info and _info.get("changed"):
+            changed = True
     return changed
 
 
