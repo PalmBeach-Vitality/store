@@ -1,12 +1,14 @@
-# MOTS-C film I2V — `custom_vid_gen 1.5 -18-motsc-film-stills`
+# MOTS-C film I2V — Grok 1.5 factory (superseded)
 
 Unpublished. Do **not** Publish. Do **not** mix Creatomate. Do **not** regenerate locked keepers.
+
+**Superseded by the per-beat stack.** Use `n8n-motsc-film-i2v-stack.md` (`film_i2v_seedance` / `film_i2v_kling` / `film_i2v_veo` / `film_i2v_runway`). This Grok 1.5 factory stays in n8n but is unused.
 
 n8n: [`custom_vid_gen 1.5 -18-motsc-film-stills`](https://stockjohnson.app.n8n.cloud/workflow/qZ7qU8LVwVXAXyaL) `qZ7qU8LVwVXAXyaL`
 
 Live sheet: [18-motsc-film-stills](https://docs.google.com/spreadsheets/d/1ChDI33MVdCwGXcPDBvETRoc5xY8DEgZS3KU5VC09dnU/edit#gid=1628285227)
 
-**Model:** Grok Imagine Video **1.5** (I2V from `picked_url`). Seedance 2.5 stays on its own workflow. Empty sheet cells throw.
+**Model (legacy):** Grok Imagine Video **1.5**. Sheet 18 now assigns Seedance / Kling / Veo per beat. Empty sheet cells throw.
 
 ```text
 manual_trigger
