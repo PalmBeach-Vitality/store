@@ -1,0 +1,75 @@
+{
+  "source": "Palm Beach - Vitality price list (Drive) + Salvatore confirmations. Concentration = catalog mg / catalog ml unless noted.",
+  "price_list_id": "1Ir4-Kf5KdXreMuQewe1CEBkUloqlcjgeoELIZzTtWGQ",
+  "peptide_list_id": "1_Qh39YX-ds-2qDiH1T84Hs1fTJC0b9ZOuu1x0q0QSTE",
+  "display": {
+    "mg": "maroon dosage bar, white text",
+    "conc": "black concentration line under the bar",
+    "footer": "10ml Sterile Multi-Use Vial"
+  },
+  "labels": {
+    "AOD-9604": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "BPC-157": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "BPC-157 20mg": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "BPC-157/TB-500": { "mg": "10mg/10mg", "conc": "1mg/1mg/ml", "vol": "10ml" },
+    "Wolverine": { "mg": "10mg/10mg", "conc": "1mg/1mg/ml", "vol": "10ml" },
+    "Cagrilintide": { "mg": "25mg", "conc": "5 mg/ml", "vol": "5ml" },
+    "Cagrilinitide": { "mg": "25mg", "conc": "5 mg/ml", "vol": "5ml" },
+    "CJC": { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" },
+    "CJC/Ipamorelin": { "mg": "10mg/10mg", "conc": "1mg/1mg/ml", "vol": "10ml" },
+    "GHK-Cu": { "mg": "50mg", "conc": "5 mg/ml", "vol": "10ml" },
+    "GLOW": { "mg": "10/10/50mg", "conc": "1mg/1mg/5mg/ml", "vol": "10ml" },
+    "Ipamorelin": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "KLOW": { "mg": "10/10/10/50mg", "conc": "1mg/1mg/1mg/10mg/ml", "vol": "10ml" },
+    "Melanotan 2": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Melonotan": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "MOTS-C": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "NAD+": { "mg": "1000mg", "conc": "100 mg/ml", "vol": "10ml" },
+    "PT-141": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "Retatrutide": { "mg": "60mg", "conc": "6 mg/ml", "vol": "10ml" },
+    "Selank": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Semaglutide": { "mg": "25mg", "conc": "2.5 mg/ml", "vol": "10ml" },
+    "Semax": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Sermorelin": { "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" },
+    "SS-31": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "TA-1": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Thymosin Alpha-1": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "TB-500": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
+    "Tesamorelin": { "mg": "30mg", "conc": "3 mg/ml", "vol": "10ml" },
+    "Tesamorelin/Ipamorelin": { "mg": "12mg/3mg", "conc": "4mg/1mg/ml", "vol": "3ml" },
+    "Tirzepatide": { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" }
+  },
+  "aliases": {
+    "BPC-157 / TB-500": "BPC-157/TB-500",
+    "BPC-157 / TB-500 / GHK-Cu": "GLOW",
+    "KPV / BPC-157 / TB-500 / GHK-Cu": "KLOW",
+    "CJC (no DAC)": "CJC",
+    "CJC (no DAC)/Ipamorelin": "CJC/Ipamorelin",
+    "CJC /Ipamorelin": "CJC/Ipamorelin",
+    "SEMAX": "Semax",
+    "Melonotan 2": "Melanotan 2"
+  },
+  "alt_skus": {
+    "BPC-157": [{ "mg": "20mg", "conc": "2 mg/ml", "vol": "10ml" }],
+    "MOTS-C": [{ "mg": "25mg", "conc": "5 mg/ml", "vol": "5ml" }],
+    "Retatrutide": [
+      { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" },
+      { "mg": "200mg", "conc": "20 mg/ml", "vol": "10ml" }
+    ],
+    "Tirzepatide": [{ "mg": "200mg", "conc": "20 mg/ml", "vol": "10ml" }],
+    "Semaglutide": [{ "mg": "50mg", "conc": "5 mg/ml", "vol": "10ml" }]
+  },
+  "no_vial_sku": ["5-Amino-1MQ", "DSIP", "KPV"],
+  "notes": {
+    "Sermorelin": "Price list + Salvatore 2026-09-06: 20mg / 2 mg/ml. Never 5mg.",
+    "NAD+": "Salvatore 2026-09-03: 1000mg / 100 mg/ml / 10ml. Not 500mg / 50 mg/ml.",
+    "CJC": "Price list CJC (no DAC) 10mL at 10mg/mL = 100mg total. Never 10mg / 1 mg/ml.",
+    "Cagrilintide": "Price list 5mL 25mg (5mg/mL). Never 2.5 mg/ml (that was 10ml-footer math).",
+    "GLOW": "Price list 10/10/50mg (BPC-157 / TB-500 / GHK-Cu). Never a single 10mg bar.",
+    "KLOW": "Price list 10/10/10/50mg (1mg/1mg/1mg/10mg/mL). Never a single 80mg bar.",
+    "MOTS-C": "Store hero vial is 20mg / 2 mg/ml. Price list also has 5mL 25mg (5mg/mL).",
+    "GHK-Cu": "50mg in 10ml = 5 mg/ml. Price list text saying 10mg/mL is internally inconsistent.",
+    "BPC-157": "Both 10mg / 1 mg/ml and 20mg / 2 mg/ml are catalog SKUs. Keep whichever the row already locked.",
+    "no_vial_sku": "Pen-only. Do not invent a milligram vial label."
+  }
+}

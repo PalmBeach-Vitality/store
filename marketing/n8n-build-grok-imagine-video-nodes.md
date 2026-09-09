@@ -88,8 +88,7 @@ Full paste: **`n8n-still-edit-before-video.md`** + `n8n-code-prep-still-edit.js`
 
 | Node | Role |
 |---|---|
-| `still_edit_instructions` | You type what to add/remove |
-| `if_still_edit` | Skip edit when prompt is blank |
+| `still_edit_instructions` | You type `still_edit_prompt` as Fixed (not a sheet field) |
 | `prep_still_edit` / `grok_imagine_edit_still` | xAI `/v1/images/edits` |
 | `save_edited_still_url` | Final `still_url` for video |
 
