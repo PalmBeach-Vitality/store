@@ -4,6 +4,7 @@
 // After: get_film_stills
 // Before: sheets_update_film001
 //
+// 1080p ONLY. Never write 720p.
 // Sets FILM-001 picked_url to the saved identity still, writes the tighter
 // camera-hold motion prompt, points I2V at Kling, and clears video_url.
 // Does not touch still_prompt, join columns, or other rows.
@@ -36,7 +37,7 @@ for (var i = 0; i < rows.length; i++) {
       video_provider: 'kling',
       model_video: 'kwaivgi/kling-v3.0-pro',
       duration_seconds: '8',
-      video_resolution: '720p',
+      video_resolution: '1080p',
       video_aspect_ratio: '9:16',
       audio: 'false',
       wait_seconds: '180',
