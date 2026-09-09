@@ -2,7 +2,8 @@
 /**
  * Email the sales receipt to a rep when a referral coupon is used at checkout.
  *
- * Default trigger: coupon AS-1010 → A_broski@outlook.com.
+ * Default trigger: coupons AS-1010 and AS-1515 → ari.pbvitality@gmail.com.
+ * Extra recipient is ADDED to the WooCommerce New Order email; sales@ still gets every order.
  * Override under Appearance → Customize → Palm Beach Vitality if needed.
  *
  * Uses the WooCommerce “New order” email (same sales receipt staff already get).
@@ -25,7 +26,7 @@ function pbv_referral_coupon_code_default() {
 }
 
 /**
- * Referral coupon that should notify the rep.
+ * Referral coupon that should notify the rep (Customizer / legacy single-code).
  *
  * @return string
  */
@@ -38,29 +39,60 @@ function pbv_referral_coupon_code() {
 }
 
 /**
+ * Built-in referral coupons that always notify the rep (under $250 and over $250).
+ *
+ * @return string[]
+ */
+function pbv_referral_coupon_codes_builtin() {
+    $codes = array('AS-1010', 'AS-1515');
+    if (defined('PBV_STACK_COUPON_CODE') && PBV_STACK_COUPON_CODE !== '') {
+        $codes[] = PBV_STACK_COUPON_CODE;
+    }
+    if (defined('PBV_STACK_COUPON_CODE_OVER') && PBV_STACK_COUPON_CODE_OVER !== '') {
+        $codes[] = PBV_STACK_COUPON_CODE_OVER;
+    }
+    $out = array();
+    foreach ($codes as $code) {
+        $formatted = function_exists('wc_format_coupon_code') ? wc_format_coupon_code($code) : strtolower($code);
+        if ($formatted !== '') {
+            $out[strtolower($formatted)] = $formatted;
+        }
+    }
+    return array_values($out);
+}
+
+/**
  * Rep email that receives the sales receipt for the referral coupon.
  *
  * @return string
  */
 function pbv_referral_rep_email() {
-    $email = sanitize_email((string) get_theme_mod('pbv_referral_rep_email', 'A_broski@outlook.com'));
+    $email = sanitize_email((string) get_theme_mod('pbv_referral_rep_email', 'ari.pbvitality@gmail.com'));
     if (!is_email($email)) {
-        $email = 'A_broski@outlook.com';
+        $email = 'ari.pbvitality@gmail.com';
     }
     return is_email($email) ? $email : '';
 }
 
 /**
- * Coupon code → rep email map (extend via filter for more reps later).
+ * Coupon code → rep email map.
+ *
+ * Always includes AS-1010 and AS-1515. Customizer coupon is merged in if set.
+ * Other orders do not get this extra recipient.
  *
  * @return array<string, string> Lowercase coupon code => email.
  */
 function pbv_referral_coupon_recipients() {
     $map   = array();
-    $code  = strtolower(pbv_referral_coupon_code());
     $email = pbv_referral_rep_email();
-    if ($code !== '' && $email !== '') {
-        $map[$code] = $email;
+    if ($email !== '') {
+        foreach (pbv_referral_coupon_codes_builtin() as $code) {
+            $map[strtolower($code)] = $email;
+        }
+        $custom = strtolower(pbv_referral_coupon_code());
+        if ($custom !== '') {
+            $map[$custom] = $email;
+        }
     }
 
     /**
@@ -101,18 +133,18 @@ function pbv_referral_notify_customize_register($wp_customize) {
     ));
     $wp_customize->add_control('pbv_referral_coupon_code', array(
         'label'       => __('Referral coupon code', 'palmbeach-vitality'),
-        'description' => __('When this code is used at checkout, the sales receipt is emailed to the rep. Default: AS-1010.', 'palmbeach-vitality'),
+        'description' => __('AS-1010 (under $250) and AS-1515 (over $250) always notify the rep. This field can add an extra code.', 'palmbeach-vitality'),
         'section'     => 'pbv_storefront',
         'type'        => 'text',
     ));
 
     $wp_customize->add_setting('pbv_referral_rep_email', array(
-        'default'           => 'A_broski@outlook.com',
+        'default'           => 'ari.pbvitality@gmail.com',
         'sanitize_callback' => 'sanitize_email',
     ));
     $wp_customize->add_control('pbv_referral_rep_email', array(
         'label'       => __('Referral rep email', 'palmbeach-vitality'),
-        'description' => __('Receives the WooCommerce New Order / sales receipt only when the referral coupon is used. Default: A_broski@outlook.com.', 'palmbeach-vitality'),
+        'description' => __('Receives the WooCommerce New Order / sales receipt only when AS-1010 or AS-1515 is used. sales@ still gets every order. Default: ari.pbvitality@gmail.com.', 'palmbeach-vitality'),
         'section'     => 'pbv_storefront',
         'type'        => 'email',
     ));
@@ -147,9 +179,34 @@ function pbv_referral_reps_for_order($order) {
 }
 
 /**
+ * Referral coupon codes used on this order.
+ *
+ * @param WC_Order $order Order.
+ * @return string[]
+ */
+function pbv_referral_codes_for_order($order) {
+    if (!is_a($order, 'WC_Order')) {
+        return array();
+    }
+    $map = pbv_referral_coupon_recipients();
+    if (!$map) {
+        return array();
+    }
+    $used = array();
+    foreach ($order->get_coupon_codes() as $code) {
+        $key = strtolower((string) $code);
+        if (isset($map[$key])) {
+            $used[$key] = (string) $code;
+        }
+    }
+    return array_values($used);
+}
+
+/**
  * Add the referral rep to the New Order email only when their coupon was used.
  *
  * Other orders are unchanged — the rep does not get every sale.
+ * Existing recipients (sales@) are kept.
  *
  * @param string $recipient Comma-separated recipients.
  * @param mixed  $order     Order object.
@@ -198,12 +255,13 @@ function pbv_referral_order_note($order_id) {
     if ($order->get_meta('_pbv_referral_rep_noted') === 'yes') {
         return;
     }
+    $codes = pbv_referral_codes_for_order($order);
     $order->update_meta_data('_pbv_referral_rep_noted', 'yes');
     $order->add_order_note(
         sprintf(
-            /* translators: 1: coupon code, 2: email list */
+            /* translators: 1: coupon code(s), 2: email list */
             __('Referral coupon %1$s — New Order receipt also sent to %2$s.', 'palmbeach-vitality'),
-            pbv_referral_coupon_code(),
+            implode(', ', $codes),
             implode(', ', $reps)
         )
     );

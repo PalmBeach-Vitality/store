@@ -127,7 +127,7 @@ Stops the run (no IF) if any caption has:
 - human use / benefits of using / you will / treat / cure / inject / dose / patient / supplement / …
 - missing store URL
 - not exactly 5 hashtags
-- first hashtag ≠ compound
+- first hashtag ≠ compound (`AOD-9604` → `#AOD9604`; hyphens/plus stripped)
 - vial copy that reads as a pen (or the reverse)
 - vial 1 and pen 1 identical (or vial 2 / pen 2)
 
