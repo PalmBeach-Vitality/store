@@ -46,6 +46,14 @@ Rewriting to `spacecraft`, `high-speed atmospheric descent`, `warm atmospheric g
 
 That is the whole method: **same picture, different dictionary.**
 
+## Lived incident — FILM-001 / 002 / 004 Veo (human face)
+
+Workflow `film_i2v_veo`, executions 1737, 1743, 2013, 2084, 2089 (Sep 2–7). Five runs, five blocks, three different calm prompts, two gateways (fal and OpenRouter). Cheapest one was `Camera holds. Soft coastal wind in the hair and suit. Twin moons stay. Photoreal. Silent.`
+
+fal reported `422 content_policy_violation` at `loc: body.prompt`. OpenRouter reported `failed — Video generation completed with no output (content may have been filtered)`. Neither was about the words. Google Veo scores the **input image** for photoreal person likeness (Google's *Celebrity* category, support codes `15236754` / `29310472`, allowlist-gated per Google Cloud project). Every blocked still was a head-and-shoulders, camera-facing portrait of the astronaut. Every Veo pass in the same week (wrist device, spent vial, cockpit, core, the FILM-019 eyes-down shot) had no prominent face. The one face portrait that did pass was the soft original JPEG; the sharper 2K upscales all failed.
+
+Rule that came out of it: **face-forward human rows never go to Veo.** `video_provider = kling` for those. Veo keeps the product / physics shots it already passes. If a human row must stay on Veo, the start frame is reframed — waist-up, three-quarter, eyes on the wrist — and eye contact happens in the last beat of the motion prompt, never in the still. Full rules, tables, and the FILM-001 rewrite: `.cursor/skills/prompt-moderation-hygiene/references/human-subjects.md`. Every run, blocked or passed, is logged in `references/incidents.md`.
+
 ## Laws for every sheet cell
 
 1. **Say what is in the frame.** Never name the disaster you are avoiding. Filters match tokens. `"Not the crash"` is still `crash`.
@@ -53,6 +61,9 @@ That is the whole method: **same picture, different dictionary.**
 3. **I2V is camera + motion only.** Kling and Seedance re-scan the motion prompt *and* the still. Restating “crash / fire / interceptor” in `video_motion_prompt` can block a clip whose still already exists.
 4. **Internal IDs stay off-camera.** `key_a3_crash` is a row category. It is not prompt copy. Call the ship `the FILM-009 spacecraft`.
 5. **Photography ≠ firearms.** Write `capture` / `frame` / `film still`, not `shoot`.
+6. **Diagnose word block vs image block before touching anything.** A calm camera brief that still rejects is an image block. Rewriting words for an image block is a wasted run every time.
+7. **Human rows: provider first, framing second, words third.** Face-forward → Kling. Face small and turned → Veo allowed. Duration must be legal for the provider (Veo `4/6/8`, Kling `3–15`).
+8. **Pre-flight gate before every I2V run.** Look at the still, check provider + duration, scan the lexicon, check `incidents.md` for a repeat. Then run once.
 
 ## What the public sources actually say
 
@@ -67,7 +78,10 @@ Pulled 2026-09-07. Used for **false-positive** patterns only.
 | [Vercel ai#19168](https://github.com/vercel/ai/issues/19168) | Grok image moderation is often **silent** (empty payload), not a loud 400 like Flux. |
 | [Kling policy roundups](https://anycap.ai/page/en-US/ai/kling-ai-nsfw-policy-developers) / [goenhance Kling censorship](https://www.goenhance.ai/blog/kling-ai-censorship) | Scans prompt + frames. Weapons, crash/explosion language, politics, NSFW. No adult toggle. Repeat abuse → failed tasks / account noise. |
 | [Seedance 2.0 filter notes](https://blog.picassoia.com/seedance-2-0-content-filter-what-gets-blocked-and-why) | Semantic, not only keywords. Graphic harm blocked; cinematic action often OK if you don’t describe injury. |
-| [Google Veo RAI](https://cloud.google.com/vertex-ai/generative-ai/docs/video/responsible-ai-and-usage-guidelines) | Categories: child, celebrity, sexual, violence, toxic. Generic “couldn’t be submitted.” |
+| [Google Veo RAI](https://cloud.google.com/vertex-ai/generative-ai/docs/video/responsible-ai-and-usage-guidelines) | Categories: child, celebrity, sexual, violence, toxic. Generic “couldn’t be submitted.” *Celebrity* (`15236754` / `29310472`) = “photorealistic representation of a prominent person **or** project not on the allowlist.” Filters run on **input images**, not only prompts. |
+| [Google AI forum — false Celebrity on synthetic avatars](https://discuss.ai.google.dev/t/request-allowlist-access-for-veo-3-1-vertex-ai-project-gen-lang-client-06575772/170917/1), [authorized adult portraits](https://discuss.ai.google.dev/t/veo-3-1-fast-false-celebrity-filter-on-authorized-adult-portraits-production-allowlist-review/180778), [original character avatars](https://discuss.ai.google.dev/t/request-for-allowlist/137263) | Same false positive on 100% AI-generated adult faces used as I2V start frames. Only remedy is a per-project allowlist through a Google Cloud account team — not reachable via fal or OpenRouter. |
+| [fal Veo 3.1 I2V](https://fal.ai/models/fal-ai/veo3.1/image-to-video/api) | “Safety filters are applied to both input images and generated content.” `safety_tolerance` 1–6 (default 4), `auto_fix` off by default. Durations `4s/6s/8s`. We do not raise tolerance to push a face through; we route the row. |
+| [fal Kling 3.0 Pro I2V](https://fal.ai/models/fal-ai/kling-video/v3/pro/image-to-video) | 1080p, 3–15 s, aspect from start image. No realistic-person likeness gate on synthetic adults. Face lane for FILM identity rows. |
 | [Chase Jarvis / Veo sensitive-content](https://chasejarvis.com/blog/how-to-fix-veo-3s-sensitive-content-warning/) | Auto-“enhance prompt” injects bait adjectives. We never send an LLM-rewritten prompt that we didn’t put on the sheet. `shoot` → `capture`. |
 | Kling/Seedance Reddit-style writeups | Same complaints: false positives on `battle`, `sweat`, `wet`, `fighter`, inconsistent retries. **Fix = calmer wording, not obfuscation.** |
 

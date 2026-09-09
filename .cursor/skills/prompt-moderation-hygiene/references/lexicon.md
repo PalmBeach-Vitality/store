@@ -44,6 +44,25 @@ Keep I2V short: camera path, speed, what must not change. The still already has 
 | celebrity / politician names | omit |
 | shoot the product | capture the product; catalog still |
 
+## Human subjects (FILM identity / astronaut rows)
+
+Full rules and the provider routing law: `human-subjects.md`. Wording alone does not clear a Veo face block — the start frame or the provider must change.
+
+| Do not put in the prompt | Put this instead |
+|---|---|
+| identity portrait, head and shoulders, front view, headshot, close-up on her face, beauty shot | medium shot, waist-up; body turned three-quarter to camera |
+| looking straight into the lens, direct eye contact (in the **still**) | chin tilted down, eyes on her left wrist; looking toward the shoreline — put eye contact in the motion prompt's last beat |
+| beautiful, gorgeous, stunning, sexy, hot, alluring, seductive, sultry | calm, confident, focused; describe hair, eyes, freckles, suit |
+| tight, form-fitting, skin-tight, curves, cleavage, bare, unzipped, wet suit, soaked, sweat, glistening skin | navy-and-gold flight suit; suit fabric moves in the wind |
+| chest patch (if a row has already tripped) | suit patch |
+| girl, young, teen, youthful, baby face, petite, schoolgirl | late-20s woman; adult astronaut |
+| looks like [name], resembles, supermodel, Hollywood, celebrity, famous, influencer | omit entirely |
+| strapped, restrained, bound, cuffed, shackled (device on wrist) | sits on her left wrist; wrist band; worn on the wrist bone |
+| lips parted, bite lip, lick, kiss, caress, pose, seductive glance | slight smile; glance down at the device; turns her head |
+| intense stare, angry, screaming, crying, in pain, injured, bleeding, collapse | calm, direct look; focused; curious |
+| undress, unzip, strip, remove the suit | omit |
+| "no nudity", "no children", "not a celebrity", "not sexy" | delete — negation still matches the token |
+
 ## Words that look scientific but twitch some filters
 
 | Risky | Safer if a run already blocked |
@@ -70,7 +89,10 @@ Unsafe negatives (delete): `no crash`, `no blood`, `no weapons`, `no explosion`,
 | fire / burning | high | high | medium | medium | high |
 | explosion | hard | hard | high | high | hard |
 | weapon | hard | hard | high | hard | hard |
-| people / celebrity | skip (studio) | skip | skip | skip | hard |
+| people / celebrity (lab rows) | skip (studio) | skip | skip | skip | hard |
+| synthetic adult face, camera-facing, > ~10% of frame (FILM rows) | n/a (still gen) | **passes** | passes | passes | **hard — image block, 4/4 failed** |
+| synthetic adult, face small / turned / eyes down | n/a | passes | passes | passes | passes (FILM-019) |
+| hands / wrist / device only | n/a | passes | passes | passes | passes (9/9) |
 | needle | skip (studio) | skip | skip | skip | skip |
 
-When in doubt, write the Flux/Kling column. That prompt will also pass Grok.
+When in doubt, write the Flux/Kling column. That prompt will also pass Grok. For a face-forward human row, the column that matters is the **provider**, not the wording — route it to Kling.
