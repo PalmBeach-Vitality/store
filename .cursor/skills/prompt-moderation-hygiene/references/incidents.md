@@ -9,7 +9,8 @@ Columns: date · workflow / execution · provider + model · row · start frame 
 | Date | Exec | Provider | Row | Frame | Prompt sent (abridged) | Error | Kind | What changed | Result |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-09-07 | `gen_film020_flux_2k` 2052 | OpenRouter `black-forest-labs/flux.2-max` | FILM-020 | spacecraft side profile, no people | `… beach-crash ship … Not the crash … interceptor … wreck … punches through … plasma sheath … roaring fire trail …` | `Black Forest Labs blocked this request through content moderation.` | word | `spacecraft`, `high-speed atmospheric descent`, `warm orange-white atmospheric glow`, `hull stays intact`; deleted every `Not the …` clause | passed, 1152×2048 PNG |
-| 2026-09-09 | `edit_one_still` 2124 | xAI `grok-imagine-image-2.0` | FILM-004 | empty-hand reach source → over-shoulder toward FILM-016 alien, no vial | Keep empty reach. Camera behind right shoulder. Eyes on the alien. No vial. | — | — | broke face-on / hand-to-lens; two-shot side / OTS | passed, 3 takes (Salvatore picks keeper) |
+| 2026-09-09 | `edit_one_still` 2124 | xAI `grok-imagine-image-2.0` | FILM-004 | empty-hand reach source → over-shoulder toward FILM-016 alien, no vial | Keep empty reach. Camera behind right shoulder. Eyes on the alien. No vial. | — | — | broke face-on / hand-to-lens; two-shot side / OTS | passed, 3 takes (alien rejected) |
+| 2026-09-09 | `edit_one_still` 2125 | xAI `grok-imagine-image-2.0` | FILM-004 | empty-hand reach → centered true side, no alien | True side view. Centered. Empty right-hand reach. No alien. No vial. | — | — | dropped the alien; locked side profile | passed HTTP; take is profile + centered + solo, but arms down (reach dropped) |
 
 ## I2V
 
