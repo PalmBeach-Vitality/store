@@ -3,6 +3,10 @@
 // Mode: Run Once for All Items
 // After: save_still_url
 // Before: grok_video_start
+//
+// SHEETS-ONLY for model / duration / resolution / motion.
+// still_url is runtime from grok_imagine_pen_still.
+// audio: false is the mute lock (not a look fallback).
 
 function firstJson(name) {
   try {
@@ -15,6 +19,12 @@ function firstJson(name) {
 function httpsUrl(s) {
   s = String(s || '').trim();
   return /^https:\/\//i.test(s) ? s : '';
+}
+
+function mustStr(v, label) {
+  var s = String(v || '').trim();
+  if (!s) throw new Error('prep_pen_video_start: empty ' + label);
+  return s;
 }
 
 var input = ($input.first() && $input.first().json) || {};
@@ -37,20 +47,29 @@ if (!still) {
 var motion = String(
   input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''
 ).trim();
-motion =
-  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' + motion;
-if (motion.length > 700) {
-  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
-}
 if (!motion) {
   throw new Error('prep_pen_video_start: video_motion_prompt missing from pick_pen_creation.');
 }
+if (motion.indexOf('Silent video') === -1) {
+  motion =
+    'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' + motion;
+}
+if (motion.length > 700) {
+  motion = motion.slice(0, 697).replace(/\s+\S*$/, '') + '.';
+}
 
-var modelVideo = String(
-  input.model_video || pick.model_video || saveStill.model_video || 'grok-imagine-video-1.5'
-).trim();
-var duration = Number(input.duration_seconds || pick.duration_seconds || saveStill.duration_seconds || 15) || 15;
-var resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();
+var modelVideo = mustStr(
+  input.model_video || pick.model_video || saveStill.model_video,
+  'model_video'
+);
+var duration = Number(input.duration_seconds || pick.duration_seconds || saveStill.duration_seconds);
+if (!duration) {
+  throw new Error('prep_pen_video_start: duration_seconds missing from pick_pen_creation.');
+}
+var resolution = mustStr(
+  input.resolution || pick.resolution || saveStill.resolution,
+  'resolution'
+);
 
 var body = {
   model: modelVideo,
