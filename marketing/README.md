@@ -39,5 +39,7 @@ Leave the Buffer daily workflow untouched.
 
 | File | Role |
 |---|---|
+| `vid-gen-quality-playbook.md` | **#1 rule:** image/video quality + surveyed vid-gen API opinions |
+| `GOAL.md` | Reel Studio goal + quality-first rules |
 | `n8n-creatomate-reel-studio.md` | Creatomate + n8n click-by-click (KEEP vs NEW) |
 | `sheets/4-reel-queue.csv` | Sheets tab headers for reel MP4 queue |

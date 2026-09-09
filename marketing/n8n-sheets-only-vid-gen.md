@@ -1,9 +1,11 @@
 # Sheets-only vid gen (no hardcoded creative inputs)
 
-**Rule:** prompts, cameras, edit text, models, duration, resolution, aspect — **all from Google Sheets**.  
+**Rule:** prompts, cameras, models, duration, resolution, aspect — **all from Google Sheets**.  
 Nodes only map sheet fields, call APIs, or write results back.
 
-**Allowed non-sheet values:** runtime URLs from API responses (`still_url`, `video_url`, `request_id`).
+**Exception:** `still_edit_prompt` is typed as **Fixed** on `still_edit_instructions`. It is not a sheet input and must not be written back.
+
+**Allowed non-sheet values:** runtime URLs from API responses (`still_url`, `video_url`, `request_id`), and the node-typed still edit prompt.
 
 ---
 
@@ -11,7 +13,9 @@ Nodes only map sheet fields, call APIs, or write results back.
 
 | Tab | Role |
 |---|---|
-| `9-lab-item-creations-500` | Daily path — still prompt, motion, cameras, models, `still_edit_prompt` |
+| `9-lab-item-creations-500` | Daily lab vial path — still prompt, motion, cameras, models. Type **GLOW**, **KLOW**, **Wolverine** on `choose_compound`. Still edit text is typed on `still_edit_instructions`, not this tab. |
+| `14-pen-creations-150` | Pens-only path — same type-in nicknames |
+| Landscape `500_Peptide_Wellness_Reel_Scenes.csv` | Vial + pen landscape path — same type-in nicknames (chemical blend strings alias to GLOW / KLOW / Wolverine) |
 | `12-import-still-queue` | Import path — public `still_url` + motion/edit/models in the **sheet** |
 
 ---
@@ -75,7 +79,6 @@ Edit Fields · Include Other Input Fields **ON** · all fx **ON**:
 | `still_url` | `={{ $json.still_url }}` |
 | `creation_id` | `={{ $json.creation_id }}` |
 | `video_motion_prompt` | `={{ $json.video_motion_prompt }}` |
-| `still_edit_prompt` | `={{ $json.still_edit_prompt \|\| '' }}` |
 | `model_still` | `={{ $json.model_still }}` |
 | `model_video` | `={{ $json.model_video }}` |
 | `duration_seconds` | `={{ Number($json.duration_seconds) }}` |
@@ -94,7 +97,6 @@ map_sheet_fields → **save_still_url** → still_edit_instructions
 | `still_url` | ON | `={{ $json.still_url }}` |
 | `creation_id` | ON | `={{ $json.creation_id }}` |
 | `video_motion_prompt` | ON | `={{ $json.video_motion_prompt }}` |
-| `still_edit_prompt` | ON | `={{ $json.still_edit_prompt \|\| '' }}` |
 | `model_video` | ON | `={{ $json.model_video }}` |
 | `duration_seconds` | ON | `={{ $json.duration_seconds }}` |
 | `resolution` | ON | `={{ $json.resolution }}` |
@@ -108,10 +110,13 @@ Daily path keeps its own `save_still_url` after Grok (`still_url = $json.data[0]
 
 ## Shared from `still_edit_instructions` onward
 
-`still_edit_prompt` / `video_motion_prompt` / models / duration / resolution must already be on the item from Sheet 9 (`pick_creation`) or Sheet 12 (`map_sheet_fields`).
+`video_motion_prompt` / models / duration / resolution come from the sheet. **`still_edit_prompt` does not** — type it as Fixed on `still_edit_instructions` and stop. `prep_still_edit` reads only that node.
 
-- `if_still_edit` — sheet `still_edit_prompt` not empty  
-- `prep_still_edit` — `n8n-code-prep-still-edit.js`  
+```text
+save_still_url → **still_edit_instructions** → download_still → prep_still_edit → grok_imagine_edit_still
+```
+
+- `prep_still_edit` — `n8n-code-prep-still-edit.js` (throws if the Set field is empty; no sheet fallback)  
 - `grok_imagine_edit_still` — JSON `={{ $json.still_edit_body_json }}`  
 - `save_edited_still_url` → `prep_grok_video_start` → `grok_video_start`
 

@@ -1023,8 +1023,8 @@ def load_compound_labels() -> list[str]:
         label = raw
         label = label.replace("5 AMINO MQ", "5-Amino-1MQ")
         label = re.sub(r"\s+Pen Program\s*$", "", label, flags=re.I).strip()
-        if "Wolverine" in label:
-            label = "BPC-157/TB-500"
+        if label.upper() == "WOLVERINE" or label == "BPC-157/TB-500":
+            label = "Wolverine"
         # Normalize common casing
         if label.upper() == "SEMAX":
             label = "SEMAX"
