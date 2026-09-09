@@ -1,7 +1,8 @@
 # `prep_grok_video_start` (Edit Fields) — sheets only
 
 ```text
-save_edited_still_url → **prep_grok_video_start** → grok_video_start
+grok_imagine_edit_still → **prep_grok_video_start** → grok_video_start
+skip_still_edit → **prep_grok_video_start** → grok_video_start
 ```
 
 No hardcoded motion / model / duration. All from Sheet via `map_sheet_fields` / `pick_creation`.

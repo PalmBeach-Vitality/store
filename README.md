@@ -35,19 +35,29 @@ Premium American-made peptides for researchers, clinics, and B2B brands.
 - Gold accents sparingly for premium feel
 - Clean white cards
 
-## Purpose: Backup / failover site
-This repository is a **standby copy** of the site for `www.palmbeach-vitality.store`, kept in case the primary store (Shopify) becomes unavailable. It is intentionally **not published live** — the domain still points to Shopify. The `CNAME` file already contains `www.palmbeach-vitality.store` so that going live later is only a DNS change.
+## Purpose
+1. **Static brand / content reference** for Palm Beach Peptides (HTML pages in this repo).
+2. **Shopify → WooCommerce migration kit** in [`woocommerce-migration/`](woocommerce-migration/PLAN.md) — plan, checklist, product CSV, redirects, and a WordPress theme.
+3. **Emergency failover** — GitHub Pages standby if the commerce host is down (domain normally should point at WooCommerce after cutover, not this repo).
 
-### Go-live (failover) runbook
-If you need to switch this domain over to this GitHub Pages backup:
+### Shopify → WooCommerce (primary path)
+Start here: **[`woocommerce-migration/PLAN.md`](woocommerce-migration/PLAN.md)** and **[`woocommerce-migration/CHECKLIST.md`](woocommerce-migration/CHECKLIST.md)**.
+
+This static repo cannot run WooCommerce. You need WordPress hosting. The kit provides:
+- WooCommerce product import CSV (`woocommerce-migration/data/products-woocommerce.csv`) — **merge Shopify prices before import**
+- Starter redirects (`woocommerce-migration/data/redirects.csv`)
+- Theme: `woocommerce-migration/theme/palmbeach-peptides/`
+
+### Go-live (static failover only)
+If you need this GitHub Pages backup while commerce is down:
 1. Enable Pages: repo Settings → Pages → Source "Deploy from a branch" → Branch `main`, folder `/ (root)` → Save.
-2. Repoint DNS at your registrar from Shopify to GitHub Pages:
+2. Repoint DNS at your registrar to GitHub Pages:
    - Apex `palmbeach-vitality.store` → A records `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
    - `www` → CNAME `palmbeach-vitality.github.io`
-3. In Settings → Pages, confirm the custom domain `www.palmbeach-vitality.store` verifies and "Enforce HTTPS" is enabled (may take a few minutes).
+3. Confirm custom domain `www.palmbeach-vitality.store` verifies and "Enforce HTTPS" is enabled.
 
 ### Preview without touching the domain
-To preview the backup on GitHub's own URL without any DNS change, temporarily delete the `CNAME` file, enable Pages (step 1 above), and browse `https://palmbeach-vitality.github.io/store/`.
+Temporarily delete the `CNAME` file, enable Pages, browse `https://palmbeach-vitality.github.io/store/`.
 
 ## How to View (locally)
 Simply open `index.html` in any modern browser (Chrome, Firefox, Safari, Edge), or serve the folder: `python3 -m http.server 8000` then browse `http://localhost:8000/`.

@@ -1,10 +1,7 @@
 // n8n Code node: save_video_url
-// Workflow: peptide_molecule_vid_gen
-// Mode: Run Once for All Items
-// After: kling_i2v_poll
+// After: creatomate_poll
 // Before: sheets_update_chem
-//
-// kie.ai recordInfo: data.state + data.resultJson.resultUrls[0]
+// Creatomate render url is the joined 30s clip.
 
 function firstJson(name) {
   try {
@@ -21,46 +18,38 @@ function httpsUrl(s) {
 }
 
 var poll = ($input.first() && $input.first().json) || {};
-var data = poll.data || {};
-var state = String(data.state || '').trim().toLowerCase();
-if (state !== 'success') {
+var render = Array.isArray(poll) ? poll[0] : poll;
+if (render && render[0] && render[0].id && !render.id) {
+  render = render[0];
+}
+var status = String(render.status || '').toLowerCase();
+var video = httpsUrl(render.url);
+if (status !== 'succeeded' || !video) {
   throw new Error(
-    'save_video_url: kling_i2v_poll state is ' +
-      JSON.stringify(data.state) +
-      (data.failMsg ? ' failMsg=' + data.failMsg : '') +
-      '. Raise wait_video if still generating.'
+    'save_video_url Creatomate status is ' +
+      JSON.stringify(render.status) +
+      (render.error_message ? ' error=' + render.error_message : '') +
+      '. Raise wait_concat if still rendering.'
   );
 }
 
-var parsed = {};
-try {
-  parsed = typeof data.resultJson === 'string' ? JSON.parse(data.resultJson) : data.resultJson || {};
-} catch (e) {
-  throw new Error('save_video_url: resultJson is not JSON.');
-}
-
-var video = httpsUrl(parsed.resultUrls && parsed.resultUrls[0]);
-if (!video) {
-  throw new Error('save_video_url: missing resultUrls[0] in kling_i2v_poll resultJson.');
-}
-
-var start = firstJson('kling_i2v_start');
+var prep = firstJson('prep_creatomate_concat');
 var pick = firstJson('pick_molecule_creation');
+var hop1 = firstJson('openrouter_i2v_poll');
 var saveStill = firstJson('save_still_url');
-var taskId = String((start.data && start.data.taskId) || data.taskId || '').trim();
-if (!taskId) {
-  throw new Error('save_video_url: missing data.taskId from kling_i2v_start / kling_i2v_poll.');
-}
+var taskId = String(hop1.id || hop1.generation_id || '').trim();
 
 return [
   {
     json: {
       video_url: video,
-      still_url: String(saveStill.still_url || ''),
-      creation_id: String(pick.creation_id || ''),
-      compound_name: String(pick.compound_name || ''),
+      video_url_15: String(prep.video_url_15 || ''),
+      video_url_extend: String(prep.video_url_extend || ''),
+      still_url: String(saveStill.still_url || prep.still_url || ''),
+      creation_id: String(pick.creation_id || prep.creation_id || ''),
+      compound_name: String(pick.compound_name || prep.compound_name || ''),
       created_at: $now.toISO(),
-      duration_seconds: pick.duration_seconds,
+      duration_seconds: 30,
       request_id: taskId,
     },
   },

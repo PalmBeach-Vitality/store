@@ -1,7 +1,7 @@
 # PBVita — Unique reel every run (required path)
 
 > **NORTH STAR (Salvatore):** The **only** goal of this workflow is a **unique video every day**, using the variables provided (500 creations → `video_prompt` + scene + 12 quality vars). See `marketing/GOAL.md`.  
-> **Quality:** always highest Grok Imagine — `grok-imagine-image-quality` + `resolution: "2k"`; video `grok-imagine-video-1.5` at **`1080p`** (never `720p`).
+> **Quality:** stills always `grok-imagine-image-2.0` + `resolution: "2k"`; video `grok-imagine-video-1.5` at **`1080p`** (never `720p`).
 
 **Goal:** A **different video** every workflow run (500 unique scenes).  
 **Creatomate alone cannot do this.** It only burns text onto the same `5 Facts Story` template footage.
@@ -56,7 +56,7 @@ Copy settings from live (do not invent endpoints):
 
 | Node | Model / role |
 |---|---|
-| `grok_imagine_reel_still` | `grok-imagine-image-quality` · 9:16 still |
+| `grok_imagine_reel_still` | `grok-imagine-image-2.0` · 9:16 still |
 | `grok_video_start` | `grok-imagine-video-1.5` (or whatever live uses) |
 | `wait_video` / `grok_video_poll` / `if_video_ready` | same as live |
 | `save_video_url` | maps final MP4 URL |
