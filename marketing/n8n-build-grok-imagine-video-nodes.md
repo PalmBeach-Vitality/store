@@ -39,7 +39,7 @@ Seedance docs remain available but are **not** required for this path.
 | Authentication | Header Auth → same xAI credential as `GROK_API` |
 | Send Body | ON · JSON |
 
-**Quality (required):** model from Sheet 9 `model_still` — currently **`grok-imagine-image-2.0`** + `resolution: '2k'`. Never the old fast `grok-imagine-image` or `1k` for production.
+**Quality (required):** model from Sheet 9 `model_still` — must be **`grok-imagine-image-2.0`** + `resolution: '2k'`. If the cell is empty or any other slug, fail. Never `grok-imagine-image`, `grok-imagine-image-quality`, or `1k`.
 
 **Body** (fx / Expression):
 

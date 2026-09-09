@@ -2,6 +2,7 @@
 
 **Owner:** Salvatore  
 
+**Still lock:** `9-lab-item-creations-500`, `13-chem-breakdown-54`, `14-pen-creations-150`, and all other stills stay `grok-imagine-image-2.0` at `2k`. **`18-motsc-film-stills` only** may use OpenRouter `black-forest-labs/flux.2-max` (trial). Never `grok-imagine-image` or `grok-imagine-image-quality`.
 ## #1 priority — image and video quality
 
 Quality is the first rule on every still and every clip. Speed, cost, habit, and the last model we used come after.
