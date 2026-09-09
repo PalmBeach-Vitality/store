@@ -9,6 +9,8 @@ Columns: date · workflow / execution · provider + model · row · start frame 
 | Date | Exec | Provider | Row | Frame | Prompt sent (abridged) | Error | Kind | What changed | Result |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-09-07 | `gen_film020_flux_2k` 2052 | OpenRouter `black-forest-labs/flux.2-max` | FILM-020 | spacecraft side profile, no people | `… beach-crash ship … Not the crash … interceptor … wreck … punches through … plasma sheath … roaring fire trail …` | `Black Forest Labs blocked this request through content moderation.` | word | `spacecraft`, `high-speed atmospheric descent`, `warm orange-white atmospheric glow`, `hull stays intact`; deleted every `Not the …` clause | passed, 1152×2048 PNG |
+| 2026-09-09 | `edit_one_still` 2124 | xAI `grok-imagine-image-2.0` | FILM-004 | empty-hand reach source → over-shoulder toward FILM-016 alien, no vial | Keep empty reach. Camera behind right shoulder. Eyes on the alien. No vial. | — | — | broke face-on / hand-to-lens; two-shot side / OTS | passed, 3 takes (alien rejected) |
+| 2026-09-09 | `edit_one_still` 2125 | xAI `grok-imagine-image-2.0` | FILM-004 | empty-hand reach → centered true side, no alien | True side view. Centered. Empty right-hand reach. No alien. No vial. | — | — | dropped the alien; locked side profile | passed HTTP; take is profile + centered + solo, but arms down (reach dropped) |
 
 ## I2V
 
@@ -24,3 +26,5 @@ Columns: date · workflow / execution · provider + model · row · start frame 
 | 2026-09-07 | `film_i2v_veo` 2084 | OpenRouter `google/veo-3.1` 1080p 4s | FILM-002 `iols66-hq.png` 1584×2816 | same portrait, HQ | `Locked 9:16 on this exact still. Same woman, same pose, same scene. No new action. Soft natural life only. Silent.` | `failed` — `content may have been filtered` | image | — | blocked |
 | 2026-09-07 | `film_i2v_veo` 2089 | fal Veo 3.1 1080p 4s | FILM-002 `iols66-hq.png` | same portrait, HQ | `Camera holds. Soft coastal wind in the hair and suit. Twin moons stay. Photoreal. Silent.` | 422 `content_policy_violation` `loc: body.prompt` | image | — | blocked. Third calm prompt on the same still. Confirms image block. |
 | 2026-09-09 | — | — | FILM-001 | — | rewritten still prompt (waist-up, 3/4, eyes on wrist) + 5 s Kling motion prompt, see `human-subjects.md` | — | — | provider → `kling`, framing → waist-up / eyes down, duration → 5 | **pending** — log the result here |
+
+| 2026-09-09 | `film_i2v_veo` 2123 | fal `fal-ai/veo3.1/image-to-video` 1080p 6s | FILM-001 take 2 ship-behind | eyes down, waist-up, ship in bg | `6-second clip, camera locked waist-up... locks eyes... Silent.` | — | — | overlay take 2 + 6s hold | **passed** https://v3b.fal.media/files/b/0aa9c102/BTdrbOasUrxOCxjMUSMK7_46b293be0a6344d4be47b460d3b82c18.mp4 |

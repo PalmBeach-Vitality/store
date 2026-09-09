@@ -4,10 +4,8 @@
 // After: get_film_stills
 // Before: sheets_update_film004
 //
-// 1080p ONLY. Never write 720p.
-// FILM-004 only. Does not touch FILM-001 (keep the Kling clip).
-// Writes the old FILM-001 beach-reach pose onto the FILM-014 coast.
-// The still is BEFORE she has the vial: empty reaching right hand. NO VIAL.
+// FILM-004 only. Does not touch FILM-001.
+// Centered true side view, empty-hand reach. NO ALIEN. NO VIAL (grab is FILM-023).
 
 function squeeze(s) {
   var t = String(s || '');
@@ -27,28 +25,16 @@ var REACH_STILL =
   BRANCH +
   '/marketing/stills/film004-reach-empty-hand.jpeg';
 
-var BEACH =
-  'Alien-galaxy luxury coast — same wide empty shoreline idea as Palm Beach, but NOT Earth and NOT Florida. The sand is from another galaxy: iridescent crushed-pearl lilac-gold dunes that glow faintly, never ordinary sugar-white Florida sand. The trees are extra-terrestrial, not Earth royal palms: taller glass-veined trunks, bioluminescent teal-violet fronds, unfamiliar silhouettes against the sky. Twin oversized moons hang huge and close in a deep violet-magenta sky with alien stars. Water is turquoise with a golden bioluminescent sheen. Not Miami, not Earth, not a rust-red desert, not a canyon.';
-
-var IDENTITY =
-  'Late-20s beautiful blonde woman astronaut, long golden-blonde hair in a low ponytail, bright green eyes, light freckles, athletic build, navy-and-gold flight suit with a small circular Palm Beach chest patch, a small watch-scale retro-futuristic wrist computer strapped exactly onto her left wrist bone (the joint between forearm and hand), housing no wider than her wrist. The device is a rectangular blocky SQUARE gunmetal box: square housing, square amber-orange screen with only slightly rounded corners, square or rectangular buttons and sliders on the SIDES of the box. NO ROUND SHAPES — not a round watch, not a circular bezel, not a curved CRT, not rotary knobs, not round gauges. ALWAYS on her LEFT wrist and left hand only — never the right hand, never a disembodied prop. Her left hand, palm, fingers, and thumb stay fully visible past the device, anatomically correct. The device sits ON the left wrist like a thick rectangular smart-computer box — never a gauntlet, never a forearm tank, never a prosthetic, never replacing the hand, never covering the fingers.';
-
-var still_prompt = capPrompt(
-  'Exact same scene as the old FILM-001 beach-reach still: 9:16 medium-close, late-20s blonde astronaut facing camera, RIGHT arm stretched toward the lens, EMPTY open right hand in the near foreground reaching outward. This is BEFORE she has the vial. NO VIAL anywhere. No bottle, no glass, no cap, no label, nothing in her hand, nothing just beyond her fingertips. Shallow DOF — reaching right hand slightly soft, face and suit sharp. ' +
-    IDENTITY +
-    ' Square gunmetal computer stays on her LEFT wrist — never a sports watch. Background is the FILM-014 alien-galaxy luxury coast only — not Earth royal palms, not an orange sunset, not a gray studio. ' +
-    BEACH +
-    ' Cinematic twin-moon key light. Photoreal cinematic sci-fi commercial still, 8k, HDR, razor sharp. No readable text except the wrist-device screen. No logos, no captions, no watermarks, no extra people. NO VIAL.'
+var still_edit_prompt = capPrompt(
+  'Keep this same woman, same navy flight suit, same circular Palm Beach patch, same golden-blonde low ponytail, same left-wrist square gunmetal device with the square amber-orange screen. Keep this same FILM-014 dusk coast. True side view. She is the only person in the frame. Center her in the frame, mid-thigh, standing on the shore. Her right arm reaches out along the frame, empty open right hand. Nothing in the hand. Nothing beyond the fingertips. No vial, no bottle, no glass, no cap, no label. Do not add an alien. Do not add a second person. Do not add a second figure. Remove any alien or extra person if one appears. Do not keep the front-view portrait. Do not keep her facing the lens. Do not keep the hand reaching at the camera. Camera is on her side so we see a clean profile: ear, cheek, ponytail, the reach going left or right in the frame. Eyes look along the reach, never at the lens. Face stays small. Sharp focus on the empty right hand. Left hand, palm, fingers, and thumb stay visible past the left-wrist device. Two arms, two hands. No gloves. Do not change her face into someone else.'
 );
 
-var still_edit_prompt = capPrompt(
-  'Keep this exact reach pose from old FILM-001: she faces camera, RIGHT arm stretched toward the lens, EMPTY open right hand in the near foreground reaching outward. This still is BEFORE she has the vial. Do NOT add a vial. Do NOT put anything in her hand. Remove any vial, bottle, glass, cap, or label if one appears. Keep her face, hair, eyes, navy-and-gold flight suit, and Palm Beach chest patch. REPLACE the sports watch with the rectangular square gunmetal LEFT-wrist computer — square amber-orange screen, square side buttons, left palm and fingers visible. REPLACE the Earth-palm / orange-sunset beach with the FILM-014 alien-galaxy luxury coast: ' +
-    BEACH +
-    ' Empty reaching right hand only. NO VIAL. Do not change her face. No extra people.'
+var still_prompt = capPrompt(
+  '9:16 mid-thigh still, one late-20s blonde woman centered in a true side profile on the FILM-014 dusk coast. Navy flight suit, circular Palm Beach suit patch, golden-blonde low ponytail, square gunmetal computer on the left wrist with a square amber-orange screen. Right arm reaches along the frame, empty open right hand. Eyes look along the reach. No other person. No alien. No vial. Photoreal cinematic sci-fi commercial still, 8k, HDR. No logos, no captions, no watermarks.'
 );
 
 var video_motion_prompt =
-  'She reaches her empty right hand outward toward camera. Soft alien-beach wind. Twin moons and teal-violet trees hold. No vial in the opening frame. Left-wrist square computer locked. Silent.';
+  '6-second clip, camera locked on this same centered side-profile. Same astronaut, same empty reach. Soft coastal wind in hair and suit. Eyes stay along the reach. Empty right hand holds the reach. No other person. No vial. No lock-eyes. No walk at the camera. Twin moons hold. Silent.';
 
 var rows = $input.all().map(function (i) {
   return i.json;
@@ -70,14 +56,14 @@ for (var i = 0; i < rows.length; i++) {
       video_motion_prompt: video_motion_prompt,
       video_url: '',
       n: '1',
-      video_provider: 'kling',
-      model_video: 'kwaivgi/kling-v3.0-pro',
-      duration_seconds: '5',
+      video_provider: 'veo',
+      model_video: 'fal-ai/veo3.1/image-to-video',
+      duration_seconds: '6',
       video_resolution: '1080p',
       video_aspect_ratio: '9:16',
       audio: 'false',
-      wait_seconds: '180',
-      video_start_url: 'https://openrouter.ai/api/v1/videos',
+      wait_seconds: '240',
+      video_start_url: 'https://fal.run/fal-ai/veo3.1/image-to-video',
     },
   });
 }
