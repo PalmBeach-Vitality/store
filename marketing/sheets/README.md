@@ -16,6 +16,7 @@
 | `16-ig-captions.csv` | `16-ig-captions` (**new** caption archive — header + appended vial/pen captions after verify) |
 | `14-pen-creations-150.csv` | `14-pen-creations-150` (**new** pens-only catalog vids — **columns copied from** `9-lab-item-creations-500`; **pen params from** `3-image-scenes-150`; 150 rows, one capped pen, no vial; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |
 | `19-film-join-25.csv` | Join-queue columns for the 25 MOTS-C film clips (also overlaid onto `18-motsc-film-stills`). VACE stitch + optional FLF2V seams — see `n8n-vace-clip-join.md` |
+| `18-motsc-film-stills.csv` | `18-motsc-film-stills` (MOTS-C film stills + I2V stack — `video_provider` / `model_video` per beat: Seedance 2.5, Kling 3.0, Veo 3.1; Runway Gen-4.5 optional; finished cut **60–90s**) |
 | `12-import-still-queue.csv` | `12-import-still-queue` (import path — same creative columns as Sheet 9 + `still_url` + `import_id`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
 | `11-creatomate-render-queue.csv` | optional queue (legacy); WF B prefers Set node `video_url_input` — see `n8n-creatomate-package-workflow.md` |
@@ -24,20 +25,20 @@
 
 ## Image scenes (`3-image-scenes-150`)
 
-Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`.
+Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`. Pen overlay may add `still_prompt`, `model_still`, `aspect_ratio` (`9:16`), `still_resolution`, `still_n` on **`pen_3ml_scene` only**. Do **not** rewrite `vial_10ml_scene` or `lab_scene` prompts.
 
 Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
 
 ## Reel Studio / Creatomate
 
-- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
+- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`). Daily wire + edit-before-video: `n8n-vid-gen-lab-scenes.md`.
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
 - **Single hero product (CRITICAL):** exactly **one vial OR one pen** per creation image — never both, never multiples. Script: `scripts/enforce_single_vial_or_pen.py`
-- Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
+- Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar with **catalog mg + mg/ml per compound** / volume footer — see `scripts/overlay_lab_vial_dosages.py` and `compound-vial-labels.json`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; dark microscopic **cellular chemical reaction** — living cells + amino acids; no logo, no text, no sound; not a vial, not a pen). `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` each have **6** staggered values so consecutive ranks never match.
-- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one white insulin-style 3ml pen, blue DNA + orange compound name + orange `3ml pen` badge, no mg/ml, no vial)
+- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; a **production row** of identical **longer** full-length matte white catalog pens, camera pulled back, crimson-red peptide / cobalt-blue metabolic text+logo, DNA helix icon **with no hands**, white `10mg` badge, no orange, no vial)
 - IG captions (vial + pen): tab **`15-caption-science-27`** in, **`16-ig-captions`** out — research language only, no “human use” / “benefits of using”
 - Creatomate text: tab **`10-creatomate-text-1000`**
 - Finished packages log: tab **`4-reel-queue`**
