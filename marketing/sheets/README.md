@@ -2,6 +2,7 @@
 
 | File | Tab name |
 |---|---|
+| `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB Buffer image scenes — `aspect_ratio` **3:4** feed posts, not 9:16; writeback = `last_used_date` only) |
 | `latest-models.csv` | Still lock — Grok Imagine Image 2.0 everywhere except `18-motsc-film-stills` (Flux.2 Max trial) |
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
@@ -30,6 +31,7 @@
 
 ## Image scenes (`3-image-scenes-150`)
 
+Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`, `aspect_ratio` (**3:4** — Buffer Instagram feed posts reject 9:16).
 Columns: `scene_id`, `scene_category`, `scene_name`, `lab_environment`, `camera`, `lighting`, `product_hero`, `product_form_detail`, `compound_id`, `compound_name`, `canonical_url`, `scene_brief`, `caption_lock`, `status`, `rotation_order`, `last_used_date`. Pen overlay may add `still_prompt`, `model_still`, `aspect_ratio` (`9:16`), `still_resolution`, `still_n` on **`pen_3ml_scene` only**. Do **not** rewrite `vial_10ml_scene` or `lab_scene` prompts.
 
 Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Captions come from Grok → `Parse_Grok` → `Save_render_URL`, not this sheet.
