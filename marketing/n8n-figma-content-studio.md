@@ -341,7 +341,7 @@ Skip this entire section until text queue works.
 
 1. Add **HTTP Request**
 2. Name: `Grok_Imagine`
-3. **Copy settings from the working `Grok_Imagine` node in the Buffer workflow** (same URL, auth, model `grok-imagine-image-quality`). Do not invent a new endpoint.
+3. **Copy settings from the working `Grok_Imagine` node in the Buffer workflow** (same URL, auth, model `grok-imagine-image-2.0`). Do not invent a new endpoint.
 4. Body (fx ON): paste the expression from `marketing/n8n-grok-imagine-visual-prompt.md`
 
 > Field names in that prompt use `figma_bullet_1` etc. After Parse_Grok in this workflow the fields are `bullet_1` / `bullet_2` / `bullet_3` / `cta`. Either:
