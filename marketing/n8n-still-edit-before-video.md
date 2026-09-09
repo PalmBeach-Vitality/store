@@ -1,39 +1,38 @@
 # Still edit before Grok Imagine video 1.5
 
-**Goal:** Still → hard single-hero edit → video → sheets. **No Switch. No IF.**
+**Goal:** Still → type the edit on `still_edit_instructions` → Grok edit → video. **No sheet writeback for the edit prompt.**
 
 **fx legend:** **ON** = Expression · **OFF** = Fixed
 
+`still_edit_prompt` lives on **`still_edit_instructions` only** (Fixed). Type it there and stop. Do not map it from the sheet. Sheets update nodes must not write it back.
+
 ---
 
-## Wire (linear — use this)
+## Wire (vid-gen lab / pen / landscape)
 
 ```text
-pick_creation
-  → grok_imagine_reel_still
-  → save_still_url
-  → still_edit_instructions         ← TYPE the edit here
-  → download_still                  ← GET still_url as file (imgen URLs expire / 404)
-  → prep_still_edit                 ← data URI, never imgen.x.ai
-  → grok_imagine_edit_still
-  → save_edited_still_url
-  → prep_grok_video_start
+save_still_url → **still_edit_instructions** → download_still → prep_still_edit
+  → grok_imagine_edit_still → save_edited_still_url → prep_grok_video_start → …
 ```
 
-xAI `/v1/images/edits` cannot fetch `imgen.x.ai` (400 `invalid_image` / 404). Download the still in this run and send a `data:image/...;base64,` URL.
+Skip path (leave unwired for an edit run): `save_still_url` → `skip_still_edit` → `prep_grok_video_start`
 
 ---
 
-## Node 1 — `flag_still_edit`
+## Node 1 — `still_edit_instructions`
 
-**Type:** Code · Run Once for All Items  
-**Before → this → After:** `grok_imagine_reel_still` → **flag_still_edit** → `prep_still_edit`
+**Type:** Edit Fields  
+**Before → this → After:** `save_still_url` → **still_edit_instructions** → `download_still`
 
-Paste: https://github.com/PalmBeach-Vitality/store/blob/cursor/creatomate-url-set-workflow-4c4b/marketing/n8n-code-flag-still-edit.js
+Include Other Input Fields: **ON** · include **except** `still_edit_prompt` (so the sheet field cannot leak through).
 
-Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you need a custom tweak. Default = hard COUNT=1 (delete extra vials).
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | **ON** | `={{ $json.still_url }}` |
+| `still_edit_prompt` | **OFF** | type the edit here (empty until you do) |
+| `creation_id` | **ON** | `={{ $json.creation_id }}` |
 
-**Check:** `still_edit_prompt` + https `still_url`
+**Check:** the prompt you typed is still there after Execute. It must not revert to the sheet cell.
 
 ---
 
@@ -44,7 +43,9 @@ Edit **`CODE_STILL_EDIT_PROMPT`** at the top when you need a custom tweak. Defau
 
 Paste: `marketing/n8n-code-prep-still-edit.js`
 
-**Check:** `still_edit_body_json` + `source_still_url`
+Reads `still_edit_prompt` only from `$('still_edit_instructions')`. Throws if empty. No sheet / pick / CODE fallback.
+
+**Check:** `still_edit_body_json` + data-URI image (not an `imgen.x.ai` URL)
 
 ---
 
