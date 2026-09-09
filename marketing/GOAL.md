@@ -22,7 +22,7 @@ pick_creation (least-used + new shot_family)
   → sheets_update_creation
 ```
 
-**Video model:** ByteDance **Seedance** (newest = **2.5**; ship on **2.0 via fal** until 2.5 API is in your catalog). See `n8n-seedance-vid-gen.md`.
+**Video model:** ByteDance **Seedance 2.5** is live on fal. Daily I2V notes: `n8n-seedance-vid-gen.md`. Standalone hyperrealistic T2V (sheets-only): `seedance_25_vid_gen` is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred.
 
 Live lab daily (Grok still → edit → Grok video) is **`Vid_gen_lab_scenes -9-lab-items-creations-500`**. Edit the still *before* video: `n8n-vid-gen-lab-scenes.md`.
 
@@ -113,6 +113,28 @@ Converts marketing Google Sheets into Tables (table menu + header dropdowns) via
 ### G — `overlay_film_beach_entry` (one-shot)
 
 Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they were still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `gen_film_beach_stills` generates new keepers from the sheet `still_prompt`. See `n8n-film-001-004-beach-entry.md`.
+### G — `film_vace_join` (25-clip stitch)
+
+WaveSpeed VACE joins the 25 MOTS-C film clips. WildCut-quality seams use OpenRouter first+last frame (`seam_mode=flf2v` + `bridge_prompt`). Music/SFX later via ElevenLabs + Creatomate.
+
+```text
+overlay_film_join_25 (columns)
+  → film_i2v_* until all 25 have video_url
+  → film_vace_join (batches of 2–4) → join_url
+```
+
+See `n8n-vace-clip-join.md`.
+### G — `seedance_25_vid_gen` (palmbeach-rx.com)
+
+Hyperrealistic **30s** Seedance 2.5 **text-to-video** for **palmbeach-rx.com**. All prompts and generate params from Sheet **`17-seedance-25-t2v`**. Not Grok. Not Creatomate. Linear — no Switch/IF. Do **not** point this at vitality.store daily sheets. A separate `palmbeach-vitality.store` Seedance T2V workflow is deferred.
+
+```text
+get_seedance_scenes → filter Active → pick_seedance_scene
+  → fal_seedance_generate → save_video_url → sheets_update_seedance
+```
+
+See `n8n-seedance-25-vid-gen.md`. Native fal max is 30s (not 60).  
+Live unpublished: https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH
 
 ## Shot diversity
 
@@ -133,9 +155,12 @@ See `n8n-camera-diversity-plan.md`.
 - Molecule vids: `n8n-peptide-molecule-vid-gen.md`  
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
+- Seedance 2.5 T2V (sheets-only): `n8n-seedance-25-vid-gen.md`  
+- Seedance I2V notes: `n8n-seedance-vid-gen.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
 - Prompt blocks (Flux/Kling/Grok/Veo): `prompt-moderation-rulebook.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
 - FILM-001/004 beach + FILM-020 burn-up: `n8n-film-001-004-beach-entry.md`  
+- 25-clip VACE join + FLF2V bridges: `n8n-vace-clip-join.md`  
