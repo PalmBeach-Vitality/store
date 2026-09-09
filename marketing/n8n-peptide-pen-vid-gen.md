@@ -9,11 +9,9 @@
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **a production row of identical** longer full-length matte white catalog insulin-style pens (barrel 10–20% longer than a stubby travel pen), **camera pulled back**, each pen **small in the frame**, lined up as just produced. Caps on (white clip). White ridged dial. Accent circular plunger tip. Label = **DNA helix icon only (no hands)** above the name + compound name + white **`10mg`** badge + vertical **For Research Purposes Only**. Peptide = **crimson red** text/logo. Metabolic (`Semaglutide` / `Tirzepatide` / `Retatrutide`) = **cobalt blue** text/logo. No orange. No hands near the DNA helix. Not one giant close-up.
+Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`).
 
-**Pen hardware (mandatory):** matte white plastic body, white cap + pocket clip ON, white ridged dial, accent plunger tip. Logo ABOVE the name. Not a glass vial. Not brushed silver. Not maroon vial branding. Not orange.
-
-**Look lives on the sheet.** `pick_pen_creation` copies `video_prompt` / `video_motion_prompt` / `still_edit_prompt`. Do not wrap a second lock in Code. Overlay: `n8n-overlay-catalog-pen-look.md`.
+**Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 
@@ -23,16 +21,17 @@ Exactly **a production row of identical** longer full-length matte white catalog
 
 ```text
 manual_trigger
+  → choose_compound
   → get_pen_creations
   → filter_pen_active
-  → pick_pen_creation
+  → alias_stack_names
+  → pull_sheet_row
   → grok_imagine_pen_still
   → save_still_url
   → prep_pen_video_start
   → grok_video_start
   → wait_video
   → grok_video_poll
-  → assert_video_ok
   → save_video_url
   → sheets_update_pen
 ```
@@ -72,7 +71,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 ## Node 3 — `filter_pen_active`
 
 **Type:** Filter  
-**Before → this → After:** `get_pen_creations` → **filter_pen_active** → `pick_pen_creation`
+**Before → this → After:** `get_pen_creations` → **filter_pen_active** → `alias_stack_names`
 
 | Parameter | fx | Value |
 |---|---|---|
@@ -82,23 +81,30 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 ---
 
-## Node 4 — `pick_pen_creation`
+## Node 4 — `alias_stack_names`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `filter_pen_active` → **pick_pen_creation** → `grok_imagine_pen_still`
+**Before → this → After:** `filter_pen_active` → **alias_stack_names** → `pull_sheet_row`
 
-Paste: `marketing/n8n-code-pick-pen-creation.js`
+Paste: `marketing/n8n-code-alias-stack-names.js`
 
-Rotates **compound_name** (never the last **5** used compounds). Sheet rows are staggered so any 5 consecutive ranks are 5 different products. **Sheets-only** — no `penLookLock` wrap.
-
-**Check:** `compound_name`, `video_prompt_len` (~7500–7900), `model_still` = sheet value, `still_n` present. Empty `aspect_ratio` / `duration_seconds` / `resolution` / models throw.
+Maps catalog nicknames **GLOW**, **KLOW**, **Wolverine** onto chemical blend strings (and the reverse). Does not invent prompts.
 
 ---
 
-## Node 5 — `grok_imagine_pen_still`
+## Node 5 — `pull_sheet_row`
+
+**Type:** Code · Run Once for All Items  
+**Before → this → After:** `alias_stack_names` → **pull_sheet_row** → `grok_imagine_pen_still`
+
+Reads `choose_compound.compound_name`. Picks the least-used Active Sheet 14 row for that match. Passes every field as-is.
+
+---
+
+## Node 6 — `grok_imagine_pen_still`
 
 **Type:** HTTP Request  
-**Before → this → After:** `pick_pen_creation` → **grok_imagine_pen_still** → `save_still_url`
+**Before → this → After:** `pull_sheet_row` → **grok_imagine_pen_still** → `save_still_url`
 
 | Setting | fx | Value |
 |---|---|---|
@@ -110,7 +116,7 @@ Rotates **compound_name** (never the last **5** used compounds). Sheet rows are 
 | JSON | **ON** | see below |
 
 ```text
-={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: Number($json.still_n), aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: 1, aspect_ratio: $json.aspect_ratio || '9:16', resolution: $json.still_resolution || '2k' }) }}
 ```
 
 **Check:** `$json.data[0].url` — one capped pen, no vial, no second pen.
@@ -129,9 +135,9 @@ Include Other Input Fields: **ON**
 | `creation_id` | **ON** | `={{ $('pick_pen_creation').first().json.creation_id }}` |
 | `compound_name` | **ON** | `={{ $('pick_pen_creation').first().json.compound_name }}` |
 | `video_motion_prompt` | **ON** | `={{ $('pick_pen_creation').first().json.video_motion_prompt }}` |
-| `model_video` | **ON** | `={{ $('pick_pen_creation').first().json.model_video }}` |
-| `duration_seconds` | **ON** | `={{ $('pick_pen_creation').first().json.duration_seconds }}` |
-| `resolution` | **ON** | `={{ $('pick_pen_creation').first().json.resolution }}` |
+| `model_video` | **ON** | `={{ $('pick_pen_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
+| `duration_seconds` | **ON** | `={{ $('pick_pen_creation').first().json.duration_seconds \|\| 15 }}` |
+| `resolution` | **ON** | `={{ $('pick_pen_creation').first().json.resolution \|\| '1080p' }}` |
 
 ---
 
@@ -196,23 +202,10 @@ Must be **enabled**.
 
 ---
 
-## Node 10b — `assert_video_ok`
-
-**Type:** Code · Run Once for All Items  
-**Before → this → After:** `grok_video_poll` → **assert_video_ok** → `save_video_url`
-
-Paste: `marketing/n8n-code-assert-video-ok.js`
-
-Throws if poll `status` is failed / no `video.url`. That stops `sheets_update_pen` from incrementing `times_used` on a dead still.
-
-**Pin trap:** `grok_imagine_pen_still` can stay pinned to a *different* expired `imgen.x.ai` URL. Unpin it before a full video Execute, or video will 404 even when a newer still (from a still-only run) is still live.
-
----
-
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `assert_video_ok` → **save_video_url** → `sheets_update_pen`  
+**Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_pen`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |

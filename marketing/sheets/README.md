@@ -34,6 +34,8 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 
 ## Reel Studio / Creatomate
 
+- Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`)
+- Still edit text is **not** a sheet writeback. Type it as Fixed on n8n `still_edit_instructions`. Column **`still_edit_prompt`** on Sheet 9/14 may still exist; vid-gen does not read or write it.
 - Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`). Daily wire + edit-before-video: `n8n-vid-gen-lab-scenes.md`.
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
@@ -41,6 +43,8 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar with **catalog mg + mg/ml per compound** / volume footer — see `scripts/overlay_lab_vial_dosages.py` and `compound-vial-labels.json`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; dark microscopic **cellular chemical reaction** — living cells + amino acids; no logo, no text, no sound; not a vial, not a pen). `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` each have **6** staggered values so consecutive ranks never match.
+- Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one white insulin-style 3ml pen, blue DNA + orange compound name + orange `3ml pen` badge, no mg/ml, no vial). Type **GLOW**, **KLOW**, or **Wolverine** on `choose_compound` the same as any other SKU.
+- Landscape vial + pen vids: live tab **`500_Peptide_Wellness_Reel_Scenes.csv`** (not in this repo). Same type-in: **GLOW**, **KLOW**, **Wolverine**. Chemical blend strings on that sheet map to those nicknames. Do not dump the 750-row sheet into git.
 - Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; a **production row** of identical **longer** full-length matte white catalog pens, camera pulled back, crimson-red peptide / cobalt-blue metabolic text+logo, DNA helix icon **with no hands**, white `10mg` badge, no orange, no vial)
 - IG captions (vial + pen): tab **`15-caption-science-27`** in, **`16-ig-captions`** out — research language only, no “human use” / “benefits of using”
 - Creatomate text: tab **`10-creatomate-text-1000`**
