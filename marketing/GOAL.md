@@ -108,6 +108,7 @@ See `n8n-camera-diversity-plan.md`.
 - Pen vids: `n8n-peptide-pen-vid-gen.md`  
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance video: `n8n-seedance-vid-gen.md`  
+- Prompt blocks (Flux/Kling/Grok/Veo): `prompt-moderation-rulebook.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
