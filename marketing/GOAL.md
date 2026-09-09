@@ -110,6 +110,9 @@ See `n8n-motsc-film-i2v-stack.md`. Old Grok 1.5 factory stays unpublished and un
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
 
+### G — `overlay_film_beach_entry` (one-shot)
+
+Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they were still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `gen_film_beach_stills` generates new keepers from the sheet `still_prompt`. See `n8n-film-001-004-beach-entry.md`.
 ### G — `film_vace_join` (25-clip stitch)
 
 WaveSpeed VACE joins the 25 MOTS-C film clips. WildCut-quality seams use OpenRouter first+last frame (`seam_mode=flf2v` + `bridge_prompt`). Music/SFX later via ElevenLabs + Creatomate.
@@ -159,4 +162,5 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
+- FILM-001/004 beach + FILM-020 burn-up: `n8n-film-001-004-beach-entry.md`  
 - 25-clip VACE join + FLF2V bridges: `n8n-vace-clip-join.md`  
