@@ -16,6 +16,7 @@
 | `16-ig-captions.csv` | `16-ig-captions` (**new** caption archive — header + appended vial/pen captions after verify) |
 | `17-seedance-25-t2v.csv` | `17-seedance-25-t2v` (**palmbeach-rx.com** Seedance 2.5 hyperrealistic T2V — 27 compounds; prompt / model / duration / resolution / aspect / audio / bitrate / wait on the sheet; native max 30s. Separate vitality.store T2V sheet is deferred.) |
 | `14-pen-creations-150.csv` | `14-pen-creations-150` (**new** pens-only catalog vids — **columns copied from** `9-lab-item-creations-500`; **pen params from** `3-image-scenes-150`; 150 rows, one capped pen, no vial; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |
+| `19-film-join-25.csv` | Join-queue columns for the 25 MOTS-C film clips (also overlaid onto `18-motsc-film-stills`). VACE stitch + optional FLF2V seams — see `n8n-vace-clip-join.md` |
 | `18-motsc-film-stills.csv` | `18-motsc-film-stills` (MOTS-C film stills + I2V stack — `video_provider` / `model_video` per beat: Seedance 2.5, Kling 3.0, Veo 3.1; Runway Gen-4.5 optional; finished cut **60–90s**) |
 | `12-import-still-queue.csv` | `12-import-still-queue` (import path — same creative columns as Sheet 9 + `still_url` + `import_id`) |
 | `10-creatomate-text-1000.csv` | `10-creatomate-text-1000` (Creatomate overlays: `product_name` + `mod_intro`/`mod_fact_*`) |
