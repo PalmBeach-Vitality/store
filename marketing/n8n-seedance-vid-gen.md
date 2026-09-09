@@ -9,14 +9,14 @@
 
 ---
 
-## Status (as of 2026-08-23)
+## Status (as of 2026-09-05)
 
-| Model | Product | Public API |
+Seedance (and Kling / Veo) now run through **OpenRouter** `POST /api/v1/videos`. fal.ai is retired. Canonical: `n8n-openrouter-video.md`.
+
+| Model | OpenRouter slug | Resolution |
 |---|---|---|
-| **Seedance 2.5** | Live | Live on **fal.ai** (`bytedance/seedance-2.5/text-to-video`, I2V, reference-to-video). Native duration **4–30s**. |
-| **Seedance 2.0** | Live | Live on **fal.ai** + BytePlus ModelArk |
-
-Standalone hyperrealistic T2V (sheets-only, no Grok still): **`seedance_25_vid_gen`** is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred. This file remains the older I2V-from-Grok-still wire.
+| **Seedance 2.5** | `bytedance/seedance-2.5` | 480p / **720p** |
+| **Kling v3 Pro** | `kwaivgi/kling-v3.0-pro` | **720p only** |
 
 ---
 
@@ -26,11 +26,10 @@ Standalone hyperrealistic T2V (sheets-only, no Grok still): **`seedance_25_vid_g
 pick_creation
   → grok_imagine_reel_still
   → save_still_url
-  → prep_seedance_video_start     ← NEW (Code)
-  → seedance_video_start          ← NEW (HTTP)  replaces grok_video_start
-  → wait_seedance                 ← NEW (Wait)  ~180–300s
-  → seedance_video_status         ← NEW (HTTP)
-  → seedance_video_result         ← NEW (HTTP)  fal only — fetch output
+  → prep_seedance_video_start     ← OpenRouter I2V body
+  → openrouter_i2v_start          ← POST /api/v1/videos
+  → wait_i2v                      ← sheet wait_seconds
+  → openrouter_i2v_poll           ← GET until completed
   → save_video_url
   → sheets_update_creation
 ```
