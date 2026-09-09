@@ -29,6 +29,7 @@ var COMPOUNDS = [
   'AOD-9604',
   'BPC-157',
   'BPC-157/TB-500',
+  'Wolverine',
   'Cagrilinitide',
   'CJC',
   'CJC (no DAC)/Ipamorelin',

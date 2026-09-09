@@ -1,0 +1,186 @@
+{
+  "brand": "Palm Beach Peptides",
+  "domain": "www.palmbeach-vitality.store",
+  "disclaimer": "All products intended for research purposes only. Not for human consumption. Not evaluated by the FDA.",
+  "note": "Prices intentionally blank — replace with live Shopify export values before WooCommerce import. SKUs are provisional.",
+  "categories": [
+    "Growth Factors",
+    "Metabolic",
+    "Cognitive",
+    "Hormonal",
+    "Immune",
+    "Stacks"
+  ],
+  "products": [
+    {
+      "slug": "bpc-157",
+      "name": "BPC-157",
+      "subtitle": "Body Protection Compound-157",
+      "category": "Growth Factors",
+      "purity": "99.9%",
+      "description": "Pentadecapeptide for tissue repair, gut health, and angiogenesis research.",
+      "sizes": ["5mg", "10mg", "25mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "tb-500",
+      "name": "TB-500",
+      "subtitle": "Thymosin Beta-4 Fragment",
+      "category": "Growth Factors",
+      "purity": "99.9%",
+      "description": "For actin regulation, tissue repair, and recovery research applications.",
+      "sizes": ["5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "ghk-cu",
+      "name": "GHK-Cu",
+      "subtitle": "Copper Peptide",
+      "category": "Growth Factors",
+      "purity": "99.9%",
+      "description": "Tripeptide-copper complex studied for skin, hair, and wound healing research.",
+      "sizes": ["50mg", "100mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "semaglutide",
+      "name": "Semaglutide",
+      "subtitle": "GLP-1 Receptor Agonist",
+      "category": "Metabolic",
+      "purity": "99.9%",
+      "description": "High-demand analog for metabolic and glycemic regulation research.",
+      "sizes": ["2mg", "5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "tirzepatide",
+      "name": "Tirzepatide",
+      "subtitle": "Dual GIP/GLP-1 Agonist",
+      "category": "Metabolic",
+      "purity": "99.9%",
+      "description": "Next-gen dual agonist for advanced metabolic research applications.",
+      "sizes": ["5mg", "10mg", "15mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "retatrutide",
+      "name": "Retatrutide",
+      "subtitle": "Triple Agonist (GLP-1/GIP/Glucagon)",
+      "category": "Metabolic",
+      "purity": "99.9%",
+      "description": "Emerging multi-receptor agonist for comprehensive metabolic studies.",
+      "sizes": ["5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "aod-9604",
+      "name": "AOD-9604",
+      "subtitle": "HGH Fragment 176-191",
+      "category": "Metabolic",
+      "purity": "99.9%",
+      "description": "Studied for fat metabolism and body composition research.",
+      "sizes": ["2mg", "5mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "semax",
+      "name": "Semax",
+      "subtitle": "ACTH-Derived Heptapeptide",
+      "category": "Cognitive",
+      "purity": "99.9%",
+      "description": "Neuroprotective and cognitive enhancement research applications.",
+      "sizes": ["30mg", "60mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "selank",
+      "name": "Selank",
+      "subtitle": "Tuftsin Analog",
+      "category": "Cognitive",
+      "purity": "99.9%",
+      "description": "Anxiolytic and nootropic research peptide with immunomodulatory interest.",
+      "sizes": ["5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "ipamorelin",
+      "name": "Ipamorelin",
+      "subtitle": "Growth Hormone Secretagogue",
+      "category": "Hormonal",
+      "purity": "99.9%",
+      "description": "Selective GH secretagogue for growth hormone release mechanism studies.",
+      "sizes": ["2mg", "5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "cjc-1295",
+      "name": "CJC-1295 (DAC)",
+      "subtitle": "GHRH Analog",
+      "category": "Hormonal",
+      "purity": "99.9%",
+      "description": "Long-acting growth hormone releasing hormone analog for GH research.",
+      "sizes": ["2mg", "5mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "tesamorelin",
+      "name": "Tesamorelin",
+      "subtitle": "GHRH Analog",
+      "category": "Hormonal",
+      "purity": "99.9%",
+      "description": "Studied for visceral fat reduction and GH axis research.",
+      "sizes": ["2mg", "5mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "kpv",
+      "name": "KPV",
+      "subtitle": "α-MSH Fragment",
+      "category": "Immune",
+      "purity": "99.9%",
+      "description": "Anti-inflammatory and gut barrier research peptide.",
+      "sizes": ["5mg", "10mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "nad",
+      "name": "NAD+",
+      "subtitle": "Nicotinamide Adenine Dinucleotide",
+      "category": "Immune",
+      "purity": "99.9%",
+      "description": "Critical coenzyme for cellular energy and longevity research.",
+      "sizes": ["100mg", "500mg"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "wolverine",
+      "name": "Wolverine",
+      "subtitle": "BPC-157 + TB-500",
+      "category": "Stacks",
+      "purity": "99.9%",
+      "description": "Synergistic recovery stack for comprehensive tissue repair research.",
+      "sizes": ["5mg each", "10mg each"],
+      "forms": ["Lyophilized", "Liquid Vial", "Injectable Pen"]
+    },
+    {
+      "slug": "glow",
+      "name": "GLOW",
+      "subtitle": "BPC-157 + TB-500 + GHK-Cu",
+      "category": "Stacks",
+      "purity": "99.9%",
+      "description": "Skin, recovery, and regeneration multi-peptide stack.",
+      "sizes": ["Combo kit"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    },
+    {
+      "slug": "klow",
+      "name": "KLOW",
+      "subtitle": "KPV + BPC-157 + TB-500 + GHK-Cu",
+      "category": "Stacks",
+      "purity": "99.9%",
+      "description": "Advanced multi-pathway recovery and anti-inflammatory stack.",
+      "sizes": ["Combo kit"],
+      "forms": ["Lyophilized", "Liquid Vial"]
+    }
+  ]
+}

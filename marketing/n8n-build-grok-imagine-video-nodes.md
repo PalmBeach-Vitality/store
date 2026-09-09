@@ -39,7 +39,7 @@ Seedance docs remain available but are **not** required for this path.
 | Authentication | Header Auth → same xAI credential as `GROK_API` |
 | Send Body | ON · JSON |
 
-**Quality (required):** model from Sheet 9 `model_still` — currently **`grok-imagine-image-2.0`** + `resolution: '2k'`. Never the old fast `grok-imagine-image` or `1k` for production.
+**Quality (required):** model from Sheet 9 `model_still` — must be **`grok-imagine-image-2.0`** + `resolution: '2k'`. If the cell is empty or any other slug, fail. Never `grok-imagine-image`, `grok-imagine-image-quality`, or `1k`.
 
 **Body** (fx / Expression):
 
@@ -88,8 +88,7 @@ Full paste: **`n8n-still-edit-before-video.md`** + `n8n-code-prep-still-edit.js`
 
 | Node | Role |
 |---|---|
-| `still_edit_instructions` | You type what to add/remove |
-| `if_still_edit` | Skip edit when prompt is blank |
+| `still_edit_instructions` | You type `still_edit_prompt` as Fixed (not a sheet field) |
 | `prep_still_edit` / `grok_imagine_edit_still` | xAI `/v1/images/edits` |
 | `save_edited_still_url` | Final `still_url` for video |
 
