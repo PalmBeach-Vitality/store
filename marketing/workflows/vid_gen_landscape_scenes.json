@@ -1,0 +1,1800 @@
+{
+  "id": "Kc2HqqjSyiKs87qy",
+  "name": "Vid_gen_landscape_scenes -500-peptide-wellness-scenes",
+  "active": false,
+  "isArchived": false,
+  "versionId": "49a35d0f-a4d2-489d-bc7c-88a4cd323f93",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "nodeCount": 30,
+  "createdAt": "2026-08-05T14:13:27.747Z",
+  "updatedAt": "2026-08-20T14:28:22.969Z",
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "tags": [],
+  "parentFolderId": null,
+  "scopes": [
+    "execution:reveal",
+    "workflow:create",
+    "workflow:delete",
+    "workflow:disableRedaction",
+    "workflow:enableRedaction",
+    "workflow:execute",
+    "workflow:execute-chat",
+    "workflow:export",
+    "workflow:import",
+    "workflow:list",
+    "workflow:move",
+    "workflow:publish",
+    "workflow:read",
+    "workflow:share",
+    "workflow:unpublish",
+    "workflow:unshare",
+    "workflow:update"
+  ],
+  "canExecute": true,
+  "connections": {
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "GROK_API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse_Grok": {
+      "main": [
+        [
+          {
+            "node": "if_complaince",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Prep_day_variant",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prep_day_variant": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GROK_API": {
+      "main": [
+        [
+          {
+            "node": "Parse_Grok",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter_active": {
+      "main": [
+        [
+          {
+            "node": "sort_rotation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_reel_creations": {
+      "main": [
+        [
+          {
+            "node": "filter_creations_active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter_creations_active": {
+      "main": [
+        [
+          {
+            "node": "pick_creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "pick_creation": {
+      "main": [
+        [
+          {
+            "node": "grok_imagine_reel_still",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_imagine_reel_still": {
+      "main": [
+        [
+          {
+            "node": "flag_still_edit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_still_url": {
+      "main": [
+        [
+          {
+            "node": "prep_grok_video_start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_video_start": {
+      "main": [
+        [
+          {
+            "node": "wait_video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "wait_video": {
+      "main": [
+        [
+          {
+            "node": "grok_video_poll",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "grok_video_poll": {
+      "main": [
+        [
+          {
+            "node": "save_video_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save_video_url": {
+      "main": [
+        [
+          {
+            "node": "sheets_update_creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "if_video_ready": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "get_rows_in_sheet": {
+      "main": [
+        [
+          {
+            "node": "filter_active",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prep_grok_video_start": {
+      "main": [
+        [
+          {
+            "node": "grok_video_start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sort_rotation": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "still_edit_instructions": {
+      "main": [
+        []
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "grok_imagine_edit_still": {
+      "main": [
+        [
+          {
+            "node": "save_still_url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "prep_still_edit": {
+      "main": [
+        [
+          {
+            "node": "grok_imagine_edit_still",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flag_still_edit": {
+      "main": [
+        [
+          {
+            "node": "prep_still_edit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "choose_still_path": {
+      "main": [
+        []
+      ]
+    },
+    "switch_still_path": {
+      "main": [
+        [],
+        []
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "get_reel_creations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1696,
+        0
+      ],
+      "id": "9b3559e2-c786-4394-a2b1-dea8c26022d3",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e31ab001-ab2a-4507-bf01-85933f7ed139",
+              "name": "=user_prompt",
+              "value": "={{\n'Write science and research-only captions for this exact scene + product. Chemical names only. No marketing, no human-use language.\\n\\nHARD RULES:\\n- IG, FB, TikTok captions MUST all end with the mandatory disclaimer.\\n- Today: ' + String($now.weekdayLong).trim() + ' / ' + $now.toISODate() + '\\n- Aspect: 9:16 social vertical\\n- Include exact marker in IG + FB: Catalog note \u2014 ' + $now.toISODate() + '\\n- Captions MUST match this product only (do not switch compounds).\\n- creative_brief.visual_notes must match the scene_brief vibe (environment vs vial/pen) and stay full-scene, not extreme macro.\\n\\nHARD CAPTION LOCK:\\n' + String($json.caption_lock || $('Prep_day_variant').item.json.caption_lock || '') + '\\n\\nscene:\\n' + JSON.stringify({\n  creation_id: $json.creation_id || $('Prep_day_variant').item.json.creation_id || $('Limit').item.json.creation_id,\n  rank: $json.rank || $('Prep_day_variant').item.json.rank || $('Limit').item.json.rank,\n  category: $json.category || $('Prep_day_variant').item.json.category || $('Limit').item.json.category,\n  shot_family: $json.shot_family || $('Prep_day_variant').item.json.shot_family || $('Limit').item.json.shot_family,\n  compound_id: $json.compound_id || $('Prep_day_variant').item.json.compound_id || $('Limit').item.json.compound_id,\n  compound_name: $json.compound_name || $('Prep_day_variant').item.json.compound_name || $('Limit').item.json.compound_name,\n  canonical_url: $json.canonical_url || $('Prep_day_variant').item.json.canonical_url || $('Limit').item.json.canonical_url,\n  material_detail: $json.material_detail || $('Prep_day_variant').item.json.material_detail || $('Limit').item.json.material_detail,\n  hero_style: $json.hero_style || $('Prep_day_variant').item.json.hero_style || $('Limit').item.json.hero_style,\n  vibe: $json.vibe || $('Prep_day_variant').item.json.vibe || $('Limit').item.json.vibe,\n  theme: $json.theme || $('Prep_day_variant').item.json.theme || $('Limit').item.json.theme,\n  lighting: $json.lighting || $('Prep_day_variant').item.json.lighting || $('Limit').item.json.lighting,\n  aspect_ratio: '9:16',\n  scene_brief: $json.scene_brief || $('Prep_day_variant').item.json.scene_brief || $('Limit').item.json.scene_brief,\n  catalog_note_date: $now.toISODate()\n}, null, 2)\n}}",
+              "type": "string"
+            },
+            {
+              "id": "1699e01e-cbdc-4dea-9702-c2ec4206107d",
+              "name": "system_prompt",
+              "value": "You write SCIENCE AND RESEARCH-ONLY captions for Palm Beach Vitality laboratory research materials.  Tone: technical, neutral, catalog-style. Like a compound listing note for researchers - not ads, not lifestyle content, not wellness content.  CAPTION MISSION: Produce science/research-only copy. Every sentence must serve compound identification, biochemical class, laboratory format, documentation, or research-use restriction.  SCENE LOCK: - The user message includes HARD CAPTION LOCK, compound fields, and scene_brief. - Captions and creative_brief MUST stay locked to that exact compound_id / compound_name / canonical_url. - Do not switch products. Do not invent alternate SKUs. - creative_brief.visual_notes must reflect the provided scene_brief and category (vial_10ml, pen_3ml, or set_environment), full environmental scene, not extreme macro packshot. - Social aspect is always 9:16 vertical.  STRICT CONTENT ALLOWLIST (use only these): 1. Chemical / peptide name(s) 2. Laboratory research material format (research vial OR pre-filled research format) 3. Biochemical class / molecular descriptor grounded in the input 4. High-level in-vitro / laboratory research context (assay, pathway characterization, analytical reference) - no organism outcomes 5. Catalog link CTA for researchers using canonical_url 6. Hashtags using compound names + research tags only 7. Mandatory research-use disclaimer 8. Catalog note marker from user input (catalog_note_date)  STRICT DENYLIST (never write): - Human use, consumption, patients, clinics, athletes, wellness, anti-aging - Diagnose/treat/cure/prevent/heal/therapy/therapeutic/clinical use - Weight, fat, appetite, glucose, blood sugar, muscle, injury recovery, libido, sexual function - Structure/function claims about bodies - Dosing, injection, reconstitution-for-administration, mcg/IU protocols - Testimonials, before/after, results, guarantees - Marketing hype - Emojis - Nicknames: KLOW, Wolverine, GLOW. Use chemical constituents only.  NAMING: - display_name = chemical names only - Overrides: KLOW -> KPV / BPC-157 / TB-500 / GHK-Cu; Wolverine -> BPC-157 / TB-500; GLOW -> BPC-157 / TB-500 / GHK-Cu - Hashtags: research tags + compound tags only  CAPTION STRUCTURE (IG + FB): Required elements somewhere in the caption: - chemical display_name - laboratory format language based on category/material_detail (research vial or pre-filled research format) - one in-vitro / laboratory research context sentence - CTA + canonical_url - hashtags - exact marker line: Catalog note \u2014 YYYY-MM-DD (use catalog_note_date from user) - mandatory disclaimer as the final lines  Open with identity for this workflow: Line 1 may be: display_name - laboratory research material  CRITICAL DISCLAIMER RULE: - Instagram, Facebook, and TikTok captions MUST end with the mandatory disclaimer - If any platform caption omits the disclaimer, set compliance_check.ok=false and add a flag  MANDATORY DISCLAIMER (exact final lines): For laboratory research use only. Not for human use or consumption. Not a drug, dietary supplement, or cosmetic. Not evaluated by the FDA.  TIKTOK (still science/research only): - hook = compound name + \"research compound\" - on_screen_text = short science labels only (name, class, format, research use only) - spoken_script = 12-20 seconds, catalog narration only  Do not invent studies, purity %, approvals, certifications, prices, or facts not in input. If sheet/theme language contains banned benefit words (recovery, healing, wellness), rewrite into science descriptors only.  Output valid JSON only (no markdown). platform_copy MUST be a nested object, NEVER a single string: {   \"compound_id\": \"string\",   \"display_name\": \"string\",   \"platform_copy\": {     \"instagram\": { \"caption\": \"string\", \"first_comment\": \"Research-use catalog note only. Not for human use.\", \"alt_text\": \"string\" },     \"facebook\": { \"caption\": \"string\" },     \"tiktok\": { \"hook\": \"string\", \"on_screen_text\": [\"string\"], \"spoken_script\": \"string\", \"caption\": \"string\" }   },   \"creative_brief\": {     \"headline\": \"string\",     \"subhead\": \"string\",     \"bullets\": [\"string\", \"string\", \"string\"],     \"cta\": \"View laboratory listing\",     \"figma_template_type\": \"string\",     \"visual_notes\": \"string\"   },   \"compliance_check\": { \"ok\": true, \"flags\": [] } }  creative_brief rules: - headline = chemical display_name + short research-catalog phrase - subhead/bullets stay research-only - visual_notes must match scene_brief / category / 9:16 full-scene framing - no benefit language",
+              "type": "string"
+            },
+            {
+              "id": "4c160d48-afc7-4466-913f-a26334e8472a",
+              "name": "=creation_id",
+              "value": "={{ $json.creation_id }}",
+              "type": "string"
+            },
+            {
+              "id": "9b8ba13b-7119-4867-970d-0d95fa354752",
+              "name": "=scene_brief",
+              "value": "={{ $json.scene_brief }}",
+              "type": "string"
+            },
+            {
+              "id": "1bc894b8-84b4-4246-8c62-b852e40b6261",
+              "name": "=category",
+              "value": "={{ $json.category }}",
+              "type": "string"
+            },
+            {
+              "id": "ed01e25a-c1d8-480b-a52b-3183ed0cad2e",
+              "name": "compound_id",
+              "value": "={{ $json.compound_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        -16
+      ],
+      "id": "f407d164-03bb-4f37-a498-e3398d5d095e",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5835537e-7420-4c5a-af1c-b0c27b6ea4b8",
+              "name": "=ig_caption_draft",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return (typeof o.platform_copy === 'string' ? o.platform_copy : o.platform_copy?.instagram?.caption) || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "f458912c-b584-4504-9eb0-df31e657f06c",
+              "name": "=fb_caption_draft",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return (typeof o.platform_copy === 'string' ? o.platform_copy : o.platform_copy?.facebook?.caption)  || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "b8284a77-d320-4eb8-b291-3f3ac1e83c51",
+              "name": "compliance_ok",
+              "value": "={{ JSON.parse($json.choices[0].message.content).compliance_check.ok }}",
+              "type": "string"
+            },
+            {
+              "id": "e2c81a0f-ebf1-4339-a285-388f31cd5150",
+              "name": "=figma_headline",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.headline || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "f37c871e-e663-4705-8192-e1d5fcadc32a",
+              "name": "=figma_subhead",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.subhead || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "706eb6c5-60d4-4788-ab1b-bb8bae01a8fb",
+              "name": "=figma_bullet_1",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.bullets?.[0] || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "205d5dfa-680f-40cb-b5ae-33a14d5183f1",
+              "name": "=figma_bullet_2",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.bullets?.[1] || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "6541f08a-d137-44be-bb21-308e69340ea7",
+              "name": "=figma_bullet_3",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.bullets?.[2] || ''; })() }}",
+              "type": "string"
+            },
+            {
+              "id": "8d70cf68-ac72-476c-a1e9-ad35038cd76b",
+              "name": "=figma_cta",
+              "value": "={{ (() => { const c = $json.choices[0].message.content; const o = typeof c === 'string' ? JSON.parse(c) : c; return o.creative_brief?.cta || 'View laboratory listing'; })() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        -16
+      ],
+      "id": "bd0f2261-0165-40c9-b3d9-cdcec7a07a2c",
+      "name": "Parse_Grok",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -960,
+        0
+      ],
+      "id": "be7698d0-34cb-4628-b670-1b196d3e74f9",
+      "name": "Limit",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a60aa207-a37f-4051-a984-fbbad74f8737",
+              "name": "=material_detail",
+              "value": "={{ $json.material_detail }}",
+              "type": "string"
+            },
+            {
+              "id": "1026170a-e5c0-4584-b4a5-4e1ce15a03ba",
+              "name": "=compound_id",
+              "value": "={{ $json.compound_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d566cd18-4836-4884-82e3-e80521224750",
+              "name": "=compound_name",
+              "value": "={{ $json.compound_name }}",
+              "type": "string"
+            },
+            {
+              "id": "1c522ed8-aad3-480d-818a-14d256e56b17",
+              "name": "=canonical_url",
+              "value": "={{ $json.canonical_url }}",
+              "type": "string"
+            },
+            {
+              "id": "0030c9d5-60bb-4902-9dbf-1d2c148c9c85",
+              "name": "=caption_lock",
+              "value": "={{ $json.caption_lock }}",
+              "type": "string"
+            },
+            {
+              "id": "e6e535b2-f5fe-4533-beee-51d5eb7ce4f8",
+              "name": "=scene_brief",
+              "value": "={{ $json.scene_brief }}",
+              "type": "string"
+            },
+            {
+              "id": "8f6c7228-58ab-4bdf-867f-c9f0913f4b49",
+              "name": "=shot_family",
+              "value": "={{ $json.shot_family }}",
+              "type": "string"
+            },
+            {
+              "id": "2d51620d-99c9-49d2-a332-1e8251707c77",
+              "name": "=aspect_ratio",
+              "value": "={{ $json.aspect_ratio }}",
+              "type": "string"
+            },
+            {
+              "id": "c8b6ba30-c38e-4be9-b2b7-aa4007b744a3",
+              "name": "=still_resolution",
+              "value": "={{ $json.still_resolution }}",
+              "type": "string"
+            },
+            {
+              "id": "cf56fa2a-afd2-46a4-b230-cd63f5f9944f",
+              "name": "=video_prompt",
+              "value": "={{ $json.video_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "ef1bc69e-3088-493e-b17e-e6276c551c17",
+              "name": "=video_motion_prompt",
+              "value": "={{ $json.video_motion_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "b35b5e9f-4ecc-4126-888a-a485498d558a",
+              "name": "=hero_style",
+              "value": "={{ $json.hero_style }}",
+              "type": "string"
+            },
+            {
+              "id": "05a014e2-80d5-4aa3-ad15-0077d5470e7b",
+              "name": "=lighting",
+              "value": "={{ $json.lighting }}",
+              "type": "string"
+            },
+            {
+              "id": "f8a7fa3e-5e64-4607-8869-c06329729510",
+              "name": "=camera_move",
+              "value": "={{ $json.camera_move }}",
+              "type": "string"
+            },
+            {
+              "id": "102a2905-303f-4835-b597-63932063e852",
+              "name": "=vibe",
+              "value": "={{ $json.vibe }}",
+              "type": "string"
+            },
+            {
+              "id": "df7d110a-adac-42f5-9567-c3b0a5be52aa",
+              "name": "=theme",
+              "value": "={{ $json.theme }}",
+              "type": "string"
+            },
+            {
+              "id": "79f3c008-c035-4cef-8668-94bb65d04d89",
+              "name": "=rank",
+              "value": "={{ $json.rank }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "={{ true }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -784,
+        -16
+      ],
+      "id": "d97d2bf9-8f5a-4104-8cac-fa81585bd8f5",
+      "name": "Prep_day_variant",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "=application/json",
+        "body": "={{ JSON.stringify({ model: 'grok-4.5', temperature: 0.6, max_tokens: 1200, response_format: { type: 'json_object' }, messages: [ { role: 'system', content: $json.system_prompt }, { role: 'user', content: $json.user_prompt } ] }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -288,
+        -16
+      ],
+      "id": "89d030cb-cd29-46d2-a8a9-433ff83418b4",
+      "name": "GROK_API",
+      "disabled": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "987o7riAlMFiLp2q",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a1de8de5-38dd-4f1d-8576-49fd2773b24e",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Active",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1328,
+        0
+      ],
+      "id": "3910cd6d-124d-469d-a726-4d86abfec493",
+      "name": "filter_active",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6db05ad5-a0b7-411c-a32b-f6563cd75801",
+              "leftValue": "={{ $json.compliance_ok }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        -16
+      ],
+      "id": "cc7bfa0c-695c-4e8f-9872-e68d008f523a",
+      "name": "if_complaince",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "=1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 444650679,
+          "mode": "list",
+          "cachedResultName": "500_Peptide_Wellness_Reel_Scenes.csv",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo/edit#gid=444650679"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1904,
+        192
+      ],
+      "id": "8f277e5c-ecb9-4506-bea0-3189f941300a",
+      "name": "get_reel_creations",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OGHfxWtOUeZbDesw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "eeaaaaae-4590-4e2d-9db6-6b9448b3ac1e",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Active",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.3,
+      "position": [
+        -1696,
+        192
+      ],
+      "id": "4683db43-c8ca-472f-9f18-d2401257b5d1",
+      "name": "filter_creations_active"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: pick_creation\n// Workflow: Vid_gen_landscape_scenes -500-peptide-wellness-scenes\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF (must receive all sheet rows)\n// After: get_reel_creations / filter Active on 500_Peptide_Wellness_Reel_Scenes\n// Before: grok_imagine_reel_still\n//\n// SHEETS-ONLY: every Grok parameter is copied from the picked row.\n// This node does not wrap prompts, invent models, or fill missing cells.\n\nfunction val(obj, names) {\n  obj = obj || {};\n  for (var i = 0; i < names.length; i++) {\n    var n = names[i];\n    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {\n      return obj[n];\n    }\n  }\n  var keys = Object.keys(obj);\n  for (var w = 0; w < names.length; w++) {\n    var want = String(names[w]).toLowerCase().replace(/\\s+/g, '_');\n    for (var k = 0; k < keys.length; k++) {\n      if (keys[k].toLowerCase().replace(/\\s+/g, '_') === want && String(obj[keys[k]]).trim() !== '') {\n        return obj[keys[k]];\n      }\n    }\n  }\n  return '';\n}\n\nfunction isActive(status) {\n  var s = String(status || '').trim().toLowerCase();\n  return s === 'active' || s === 'true' || s === '1' || s === 'yes';\n}\n\n/** Disclaimers belong in captions only \u2014 never in Grok prompts. */\nfunction stripVidDisclaimer(text) {\n  var t = String(text || '');\n  var patterns = [\n    /\\s*For laboratory research use only\\.?\\s*/gi,\n    /\\s*Not for human use or consumption\\.?\\s*/gi,\n    /\\s*No treatment, cure, dosage-for-humans, or clinical outcome claims in the image\\.?\\s*/gi,\n    /\\s*with a small ['']For Laboratory Research Use Only[''] line\\s*[\u2014\u2013-]?\\s*/gi,\n    /\\s*,?\\s*optionally with\\s*['']For Laboratory Research Use Only['']\\.?/gi,\n    /\\s*['']For Laboratory Research Use Only['']\\.?\\s*/gi,\n    /\\s*Explicit research[- ]use only[^.]*\\.?\\s*/gi,\n    /\\s*Research use only\\s*[\u2014\u2013-]\\s*not for (?:human|clinical)[^.]*\\.?\\s*/gi,\n    /\\s*Research only\\s*[\u2014\u2013-]\\s*not for human use\\.?\\s*/gi,\n    /\\s*Lab use only\\s*[\u2014\u2013-]\\s*not for clinical use\\.?\\s*/gi,\n    /\\s*[\u2014\u2013-]\\s*lab use only\\.?\\s*/gi,\n    /\\s*Documentation must retain research-only disclaimer\\.?\\s*/gi,\n  ];\n  for (var p = 0; p < patterns.length; p++) t = t.replace(patterns[p], ' ');\n  return t.replace(/\\s+/g, ' ').replace(/\\s+\\./g, '.').trim();\n}\n\nfunction requireField(pick, label) {\n  var s = String(pick[label] == null ? '' : pick[label]).trim();\n  if (!s) {\n    throw new Error(\n      'SHEETS-ONLY: 500_Peptide_Wellness_Reel_Scenes row missing ' +\n        label +\n        ' for creation_id=' +\n        (pick.creation_id || '?')\n    );\n  }\n  return s;\n}\n\nvar creations = $input.all().map(function (i) {\n  return i.json;\n});\n\nif (!creations.length) {\n  throw new Error(\n    'No reel creations returned. Check get_reel_creations Document/Sheet and filter status=Active.'\n  );\n}\n\nvar scored = creations\n  .map(function (c) {\n    return {\n      creation_id: String(val(c, ['creation_id', 'creationId', 'Creation_ID'])).trim(),\n      rank: Number(val(c, ['rank', 'creation_rank'])) || 0,\n      row_number: Number(val(c, ['row_number', 'rowNumber'])) || 0,\n      material_detail: val(c, ['material_detail', 'materialDetail']),\n      compound_id: val(c, ['compound_id', 'compoundId']),\n      compound_name: val(c, ['compound_name', 'compoundName', 'label_compound']),\n      canonical_url: val(c, ['canonical_url', 'canonicalUrl']),\n      caption_lock: val(c, ['caption_lock', 'captionLock']),\n      shot_family: val(c, ['shot_family', 'shotFamily']),\n      camera_angle: val(c, ['camera_angle', 'cameraAngle']),\n      camera_direction: val(c, ['camera_direction', 'cameraDirection']),\n      framing: val(c, ['framing']),\n      category: val(c, ['category', 'scene_category']),\n      scene_brief: stripVidDisclaimer(val(c, ['scene_brief', 'sceneBrief'])),\n      quality_suffix: val(c, ['quality_suffix', 'qualitySuffix']),\n      quality_var_count: val(c, ['quality_var_count', 'qualityVarCount']),\n      aspect_ratio: val(c, ['aspect_ratio', 'aspectRatio']),\n      duration_seconds: val(c, ['duration_seconds', 'durationSeconds', 'duration']),\n      resolution: val(c, ['resolution']),\n      model_still: val(c, ['model_still', 'modelStill']),\n      model_video: val(c, ['model_video', 'modelVideo']),\n      still_resolution: val(c, ['still_resolution', 'stillResolution']),\n      video_prompt: stripVidDisclaimer(val(c, ['video_prompt', 'videoPrompt'])),\n      video_motion_prompt: stripVidDisclaimer(\n        val(c, ['video_motion_prompt', 'videoMotionPrompt', 'motion_prompt'])\n      ),\n      still_edit_prompt: stripVidDisclaimer(val(c, ['still_edit_prompt', 'stillEditPrompt'])),\n      status: val(c, ['status', 'creation_status']),\n      times_used: Number(val(c, ['times_used', 'creation_times_used'])) || 0,\n      last_used_at: String(val(c, ['last_used_at', 'lastUsedAt', 'last_reel_at'])),\n      surface: val(c, ['surface']),\n      lighting: val(c, ['lighting']),\n      camera_move: val(c, ['camera_move', 'cameraMove', 'camera']),\n      color_grade: val(c, ['color_grade', 'colorGrade']),\n      hero_style: val(c, ['hero_style', 'heroStyle']),\n      source_id: val(c, ['source_id', 'sourceId']),\n      vibe: val(c, ['vibe']),\n      theme: val(c, ['theme']),\n      workflow: val(c, ['workflow']),\n      wait_seconds: val(c, ['wait_seconds', 'waitSeconds']),\n      audio: val(c, ['audio']),\n      still_n: val(c, ['still_n', 'n', 'image_n']),\n    };\n  })\n  .filter(function (c) {\n    return c.creation_id && c.video_prompt && c.video_motion_prompt && isActive(c.status);\n  })\n  .sort(function (a, b) {\n    if (a.times_used !== b.times_used) return a.times_used - b.times_used;\n    if (a.last_used_at !== b.last_used_at) {\n      return String(a.last_used_at).localeCompare(String(b.last_used_at));\n    }\n    return Number(a.rank) - Number(b.rank);\n  });\n\nif (!scored.length) {\n  var sampleKeys = Object.keys(creations[0] || {}).join(', ');\n  throw new Error(\n    'No valid creations (need creation_id + video_prompt + video_motion_prompt + status=Active). First row keys: ' +\n      sampleKeys\n  );\n}\n\nvar previouslyUsed = scored\n  .filter(function (c) {\n    return c.times_used > 0 || (c.last_used_at && String(c.last_used_at).trim());\n  })\n  .slice()\n  .sort(function (a, b) {\n    return String(b.last_used_at).localeCompare(String(a.last_used_at));\n  });\n\nvar last = previouslyUsed[0] || null;\nvar lastId = last ? last.creation_id : '';\nvar lastCompound = last ? String(last.compound_name || '').trim() : '';\nvar lastLabScene = last ? String(last.category || last.scene_category || '').trim() : '';\nif (!lastLabScene && last) lastLabScene = String(last.lab_scene || '').trim();\n\nfunction accumulateUsage(getter) {\n  var times = {};\n  for (var i = 0; i < scored.length; i++) {\n    var key = getter(scored[i]) || '(none)';\n    times[key] = (times[key] || 0) + (Number(scored[i].times_used) || 0);\n  }\n  return times;\n}\n\nvar compoundTimes = accumulateUsage(function (c) {\n  return String(c.compound_name || '').trim();\n});\nvar labSceneTimes = accumulateUsage(function (c) {\n  return String(c.category || '').trim();\n});\n\nfunction recentDistinct(getter, n) {\n  var out = [];\n  var seen = {};\n  for (var i = 0; i < previouslyUsed.length; i++) {\n    var key = getter(previouslyUsed[i]);\n    if (!key || seen[key]) continue;\n    seen[key] = true;\n    out.push(key);\n    if (out.length >= n) break;\n  }\n  return out;\n}\n\nvar RECENT_N = 8;\nvar recentCompounds = recentDistinct(function (c) {\n  return String(c.compound_name || '').trim();\n}, RECENT_N);\nvar recentLabScenes = recentDistinct(function (c) {\n  return String(c.category || '').trim();\n}, RECENT_N);\n\nfunction scorePick(c) {\n  var compound = String(c.compound_name || '').trim() || '(none)';\n  var labScene = String(c.category || '').trim() || '(none)';\n  var penalty = 0;\n  if (lastId && c.creation_id === lastId) penalty += 8000;\n  if (lastCompound && compound === lastCompound) penalty += 4000;\n  if (lastLabScene && labScene === lastLabScene) penalty += 4000;\n  var ci = recentCompounds.indexOf(compound);\n  if (compound && ci >= 0) penalty += 300 + (RECENT_N - ci) * 40;\n  var si = recentLabScenes.indexOf(labScene);\n  if (labScene && si >= 0) penalty += 300 + (RECENT_N - si) * 40;\n  penalty += (compoundTimes[compound] || 0) * 25;\n  penalty += (labSceneTimes[labScene] || 0) * 25;\n  return penalty;\n}\n\nvar diversified = scored.slice().sort(function (a, b) {\n  var pa = scorePick(a);\n  var pb = scorePick(b);\n  if (pa !== pb) return pa - pb;\n  var ca = String(a.compound_name || '').trim() || '(none)';\n  var cb = String(b.compound_name || '').trim() || '(none)';\n  var sa = String(a.category || '').trim() || '(none)';\n  var sb = String(b.category || '').trim() || '(none)';\n  if ((compoundTimes[ca] || 0) !== (compoundTimes[cb] || 0)) {\n    return (compoundTimes[ca] || 0) - (compoundTimes[cb] || 0);\n  }\n  if ((labSceneTimes[sa] || 0) !== (labSceneTimes[sb] || 0)) {\n    return (labSceneTimes[sa] || 0) - (labSceneTimes[sb] || 0);\n  }\n  if (a.times_used !== b.times_used) return a.times_used - b.times_used;\n  if (a.last_used_at !== b.last_used_at) {\n    return String(a.last_used_at).localeCompare(String(b.last_used_at));\n  }\n  return Number(a.rank) - Number(b.rank);\n});\n\nfunction differsBoth(c) {\n  var compound = String(c.compound_name || '').trim();\n  var labScene = String(c.category || '').trim();\n  var compoundOk = !lastCompound || compound !== lastCompound;\n  var sceneOk = !lastLabScene || labScene !== lastLabScene;\n  return compoundOk && sceneOk;\n}\nfunction differsEither(c) {\n  var compound = String(c.compound_name || '').trim();\n  var labScene = String(c.category || '').trim();\n  var compoundOk = !lastCompound || compound !== lastCompound;\n  var sceneOk = !lastLabScene || labScene !== lastLabScene;\n  return compoundOk || sceneOk;\n}\n\nvar bothDifferent = diversified.filter(differsBoth);\nvar eitherDifferent = diversified.filter(differsEither);\nvar pick = (bothDifferent.length ? bothDifferent : eitherDifferent.length ? eitherDifferent : diversified)[0];\n\nrequireField(pick, 'creation_id');\nrequireField(pick, 'video_prompt');\nrequireField(pick, 'video_motion_prompt');\nrequireField(pick, 'scene_brief');\nrequireField(pick, 'still_edit_prompt');\nrequireField(pick, 'model_still');\nrequireField(pick, 'model_video');\nrequireField(pick, 'duration_seconds');\nrequireField(pick, 'resolution');\nrequireField(pick, 'still_resolution');\nrequireField(pick, 'aspect_ratio');\nrequireField(pick, 'camera_move');\nrequireField(pick, 'wait_seconds');\nrequireField(pick, 'audio');\nrequireField(pick, 'still_n');\n\nvar duration = Number(pick.duration_seconds);\nif (!isFinite(duration) || duration <= 0) {\n  throw new Error(\n    'SHEETS-ONLY: duration_seconds must be a positive number (creation_id=' +\n      pick.creation_id +\n      ', got ' +\n      pick.duration_seconds +\n      ')'\n  );\n}\nvar waitSeconds = Number(pick.wait_seconds);\nif (!isFinite(waitSeconds) || waitSeconds <= 0) {\n  throw new Error(\n    'SHEETS-ONLY: wait_seconds must be a positive number (creation_id=' +\n      pick.creation_id +\n      ', got ' +\n      pick.wait_seconds +\n      ')'\n  );\n}\nvar stillN = Number(pick.still_n);\nif (!isFinite(stillN) || stillN <= 0) {\n  throw new Error(\n    'SHEETS-ONLY: still_n must be a positive number (creation_id=' +\n      pick.creation_id +\n      ', got ' +\n      pick.still_n +\n      ')'\n  );\n}\nvar audioRaw = String(pick.audio).trim().toLowerCase();\nvar audio;\nif (audioRaw === 'true' || audioRaw === '1' || audioRaw === 'yes') audio = true;\nelse if (audioRaw === 'false' || audioRaw === '0' || audioRaw === 'no') audio = false;\nelse {\n  throw new Error(\n    'SHEETS-ONLY: audio must be TRUE or FALSE (creation_id=' +\n      pick.creation_id +\n      ', got ' +\n      pick.audio +\n      ')'\n  );\n}\n\nreturn [\n  {\n    json: {\n      creation_id: pick.creation_id,\n      creation_rank: pick.rank,\n      row_number: pick.row_number,\n      material_detail: pick.material_detail,\n      compound_id: pick.compound_id,\n      compound_name: pick.compound_name,\n      canonical_url: pick.canonical_url,\n      caption_lock: pick.caption_lock,\n      shot_family: pick.shot_family,\n      camera_angle: pick.camera_angle,\n      camera_direction: pick.camera_direction,\n      framing: pick.framing,\n      scene_id: pick.creation_id,\n      scene_category: pick.category,\n      category: pick.category,\n      lab_scene: pick.category,\n      scene_brief: pick.scene_brief,\n      quality_suffix: pick.quality_suffix,\n      quality_var_count: pick.quality_var_count,\n      aspect_ratio: pick.aspect_ratio,\n      duration_seconds: duration,\n      resolution: pick.resolution,\n      model_still: pick.model_still,\n      model_video: pick.model_video,\n      still_resolution: pick.still_resolution,\n      video_prompt: pick.video_prompt,\n      video_motion_prompt: pick.video_motion_prompt,\n      still_edit_prompt: pick.still_edit_prompt,\n      surface: pick.surface,\n      lighting: pick.lighting,\n      camera_move: pick.camera_move,\n      color_grade: pick.color_grade,\n      hero_style: pick.hero_style,\n      source_id: pick.source_id,\n      vibe: pick.vibe,\n      theme: pick.theme,\n      workflow: pick.workflow,\n      wait_seconds: waitSeconds,\n      audio: audio,\n      still_n: stillN,\n      creation_status: pick.status,\n      creation_times_used: pick.times_used,\n      times_used: pick.times_used,\n      creation_last_used_at: pick.last_used_at,\n    },\n  },\n];\n",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1488,
+        192
+      ],
+      "id": "e7c580ca-37f3-4a1b-ba1c-53ad9e940205",
+      "name": "pick_creation"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "=1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 444650679,
+          "mode": "list",
+          "cachedResultName": "500_Peptide_Wellness_Reel_Scenes.csv",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo/edit#gid=444650679"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "reel_still_url": "={{\n  $('save_video_url').item.json.reel_still_url\n  || $('prep_grok_video_start').item.json.reel_still_url\n  || $('grok_imagine_reel_still').item.json.data[0].url\n  || ''\n}}",
+            "video_url": "={{\n  $('save_video_url').item.json.video_url\n  || $('grok_video_poll').item.json.video.url\n  || ''\n}}",
+            "times_used": "={{ Number($('pick_creation').item.json.creation_times_used || $('pick_creation').item.json.times_used || 0) + 1 }}",
+            "last_used_at": "={{ $now.toISO() }}",
+            "creation_id": "={{ $('save_video_url').item.json.creation_id || $('pick_creation').item.json.creation_id || $('pick_creation').item.json.scene_id }}"
+          },
+          "matchingColumns": [
+            "creation_id"
+          ],
+          "schema": [
+            {
+              "id": "creation_id",
+              "displayName": "creation_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rank",
+              "displayName": "rank",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category",
+              "displayName": "category",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "material_detail",
+              "displayName": "material_detail",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "compound_id",
+              "displayName": "compound_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "compound_name",
+              "displayName": "compound_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "canonical_url",
+              "displayName": "canonical_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "caption_lock",
+              "displayName": "caption_lock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shot_family",
+              "displayName": "shot_family",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "camera_angle",
+              "displayName": "camera_angle",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "camera_direction",
+              "displayName": "camera_direction",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "framing",
+              "displayName": "framing",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scene_brief",
+              "displayName": "scene_brief",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quality_var_count",
+              "displayName": "quality_var_count",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quality_suffix",
+              "displayName": "quality_suffix",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "aspect_ratio",
+              "displayName": "aspect_ratio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "duration_seconds",
+              "displayName": "duration_seconds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "resolution",
+              "displayName": "resolution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "model_still",
+              "displayName": "model_still",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "model_video",
+              "displayName": "model_video",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "still_resolution",
+              "displayName": "still_resolution",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "video_prompt",
+              "displayName": "video_prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "video_motion_prompt",
+              "displayName": "video_motion_prompt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "times_used",
+              "displayName": "times_used",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_used_at",
+              "displayName": "last_used_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reel_still_url",
+              "displayName": "reel_still_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "video_url",
+              "displayName": "video_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "surface",
+              "displayName": "surface",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "lighting",
+              "displayName": "lighting",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "camera_move",
+              "displayName": "camera_move",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "color_grade",
+              "displayName": "color_grade",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "hero_style",
+              "displayName": "hero_style",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source_id",
+              "displayName": "source_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "vibe",
+              "displayName": "vibe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "theme",
+              "displayName": "theme",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "workflow",
+              "displayName": "workflow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        432
+      ],
+      "id": "3ffca882-cf87-42ea-b5c8-387bbf1c7f81",
+      "name": "sheets_update_creation",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OGHfxWtOUeZbDesw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/images/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: $json.model_still, prompt: $json.video_prompt, n: Number($json.still_n), aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}",
+        "options": {},
+        "model": null
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -1280,
+        192
+      ],
+      "id": "3ef2eb8d-e313-4286-b636-a68cff0fa024",
+      "name": "grok_imagine_reel_still",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "z1BIQ5TSRwkwn4UG",
+          "name": "XAI Grok"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: save_still_url\n// Workflow: Vid_gen_landscape_scenes -500-peptide-wellness-scenes\n// Mode: Run Once for All Items\n// After: grok_imagine_edit_still\n// Before: prep_grok_video_start\n//\n// still_url is runtime from Imagine/edit. All other Grok params from pick_creation (sheet).\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction pickUrl(obj) {\n  if (!obj || typeof obj !== 'object') return '';\n  var candidates = [\n    obj.data && obj.data[0] && obj.data[0].url,\n    obj.data && obj.data[0] && obj.data[0].image_url,\n    obj.data && obj.data[0] && obj.data[0].image && obj.data[0].image.url,\n    obj.url,\n    obj.image_url,\n    obj.reel_still_url,\n    obj.still_url,\n  ];\n  for (var i = 0; i < candidates.length; i++) {\n    var c = candidates[i];\n    if (typeof c === 'string' && /^https:\\/\\//i.test(c.trim())) return c.trim();\n  }\n  return '';\n}\n\nvar input = $json && typeof $json === 'object' ? $json : {};\nvar pick = firstJson('pick_creation');\nvar stillUrl =\n  pickUrl(firstJson('grok_imagine_edit_still')) ||\n  pickUrl(firstJson('grok_imagine_reel_still')) ||\n  pickUrl(input);\n\nif (!stillUrl) {\n  throw new Error('save_still_url: no https Imagine URL. Run grok_imagine_edit_still first.');\n}\n\nfunction fromPick(name) {\n  var v = input[name];\n  if (v !== undefined && v !== null && String(v).trim() !== '') return v;\n  if (pick[name] !== undefined && pick[name] !== null && String(pick[name]).trim() !== '') {\n    return pick[name];\n  }\n  return '';\n}\n\nreturn [\n  {\n    json: Object.assign({}, pick, input, {\n      still_url: stillUrl,\n      reel_still_url: stillUrl,\n      save_still_url: stillUrl,\n      creation_id: String(fromPick('creation_id') || ''),\n      video_prompt: String(fromPick('video_prompt') || ''),\n      video_motion_prompt: String(fromPick('video_motion_prompt') || ''),\n      still_edit_prompt: String(fromPick('still_edit_prompt') || ''),\n      scene_brief: String(fromPick('scene_brief') || ''),\n      compound_id: String(fromPick('compound_id') || ''),\n      compound_name: String(fromPick('compound_name') || ''),\n      model_still: String(fromPick('model_still') || ''),\n      model_video: String(fromPick('model_video') || ''),\n      duration_seconds: fromPick('duration_seconds'),\n      resolution: String(fromPick('resolution') || ''),\n      still_resolution: String(fromPick('still_resolution') || ''),\n      aspect_ratio: fromPick('aspect_ratio'),\n      camera_move: String(fromPick('camera_move') || ''),\n      shot_family: String(fromPick('shot_family') || ''),\n      wait_seconds: fromPick('wait_seconds'),\n      audio: fromPick('audio'),\n      still_n: fromPick('still_n'),\n      row_number: Number(pick.row_number || input.row_number || 0) || 0,\n      creation_times_used: Number(pick.creation_times_used || pick.times_used || 0) || 0,\n    }),\n  },\n];\n",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        368
+      ],
+      "id": "0f9530a1-7d94-4693-bf04-d65a2569d455",
+      "name": "save_still_url"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.x.ai/v1/videos/generations",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={{ $json.grok_video_body_json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        32,
+        208
+      ],
+      "id": "f0e454ca-16cc-4392-b93d-f273dd33eece",
+      "name": "grok_video_start",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "z1BIQ5TSRwkwn4UG",
+          "name": "XAI Grok"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ Number($('pick_creation').first().json.wait_seconds) }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        208
+      ],
+      "id": "1b092f65-b2de-4f11-b78c-82e3d7a21c62",
+      "name": "wait_video",
+      "webhookId": "8a7f259b-34ee-4a4e-9ff9-3c558eab0f06"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.x.ai/v1/videos/{{ $('grok_video_start').item.json.request_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        384,
+        208
+      ],
+      "id": "5d6199bb-06a2-4adc-b6a9-372d56d23bb6",
+      "name": "grok_video_poll",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "yQi55LoiZSNWHMXA",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "61422673-c021-42a3-af98-6e8d05bb23d7",
+              "name": "=video_url",
+              "value": "={{ $json.video.url }}",
+              "type": "string"
+            },
+            {
+              "id": "93dfbd8b-ee3c-406f-95e3-aaa95c2cb314",
+              "name": "video_request_id",
+              "value": "={{ $('grok_video_start').item.json.request_id }}",
+              "type": "string"
+            },
+            {
+              "id": "a7537bbe-4354-457e-ba73-3eb16b0e98a8",
+              "name": "=video_model",
+              "value": "={{ $('pick_creation').first().json.model_video }}",
+              "type": "string"
+            },
+            {
+              "id": "8bdd3bc4-51e6-4ff2-bf36-f804c0b08d0d",
+              "name": "=video_seconds",
+              "value": "={{ String($('pick_creation').first().json.duration_seconds) }}",
+              "type": "string"
+            },
+            {
+              "id": "e2f6b327-0f25-4a7d-9116-30870b03fbe8",
+              "name": "reel_still_url",
+              "value": "={{ $('prep_grok_video_start').item.json.reel_still_url }}",
+              "type": "string"
+            },
+            {
+              "id": "88e6541c-eb65-4d2e-bc46-27778a042579",
+              "name": "=scene_id",
+              "value": "={{ $('prep_grok_video_start').item.json.scene_id || $('pick_creation').item.json.scene_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e37b2be8-392a-4444-ba6c-e0c006eef5ae",
+              "name": "=creation_id",
+              "value": "={{ $('pick_creation').item.json.creation_id || $('pick_creation').item.json.scene_id }}",
+              "type": "string"
+            },
+            {
+              "id": "afd753a9-7ee3-4d05-b7d9-da530171f16c",
+              "name": "=compound_id",
+              "value": "={{ $('pick_creation').item.json.compound_id }}",
+              "type": "string"
+            },
+            {
+              "id": "9e3e4cbd-bd36-43a0-a4d0-4f12197a4b73",
+              "name": "=compound_name",
+              "value": "={{ $('pick_creation').item.json.compound_name }}",
+              "type": "string"
+            },
+            {
+              "id": "d66289a2-e81d-4588-b216-6c17e7a83af9",
+              "name": "=ig_caption_draft",
+              "value": "={{ $('Parse_Grok').item.json.ig_caption_draft }}",
+              "type": "string"
+            },
+            {
+              "id": "d59fecea-2fc4-4b06-ad73-a07e21329974",
+              "name": "=fb_caption_draft",
+              "value": "={{ $('Parse_Grok').item.json.fb_caption_draft }}",
+              "type": "string"
+            },
+            {
+              "id": "721c1ea9-fc65-4250-ad57-53c3535f1f59",
+              "name": "=compliance_ok",
+              "value": "={{ $('Parse_Grok').item.json.compliance_ok }}",
+              "type": "string"
+            },
+            {
+              "id": "056c7f2a-2cf2-47df-9798-7c10d0a59d64",
+              "name": "=aspect_ratio",
+              "value": "={{ $('pick_creation').first().json.aspect_ratio }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        32,
+        432
+      ],
+      "id": "22ac8c83-f230-44fb-bbb9-6c6eaadf5c68",
+      "name": "save_video_url"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5d1a8217-ad77-47f2-b8b2-4bf5fda6c62d",
+              "leftValue": "{{ $json.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -720,
+        592
+      ],
+      "id": "8fc22cf2-ee76-4317-9a18-716ad9d00674",
+      "name": "if_video_ready",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "=1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 444650679,
+          "mode": "list",
+          "cachedResultName": "500_Peptide_Wellness_Reel_Scenes.csv",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S6UQmD4ZFW3oL4vx8BKmhWAZrt7KMGwsBS7jW3S9HPo/edit#gid=444650679"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1504,
+        0
+      ],
+      "id": "0e0c1569-7632-4ef6-a3f5-db75c6eda484",
+      "name": "get_rows_in_sheet",
+      "disabled": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "OGHfxWtOUeZbDesw",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: prep_grok_video_start\n// Workflow: Vid_gen_landscape_scenes -500-peptide-wellness-scenes\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: save_still_url\n// Before: grok_video_start\n//\n// SHEETS-ONLY: model / motion / duration / aspect / resolution / audio from pick_creation.\n// still_url is runtime from save_still_url (Imagine / edit).\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction val(obj, names) {\n  obj = obj || {};\n  for (var i = 0; i < names.length; i++) {\n    var n = names[i];\n    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {\n      return obj[n];\n    }\n  }\n  return '';\n}\n\nfunction pickUrl(obj) {\n  if (!obj || typeof obj !== 'object') return '';\n  var candidates = [\n    obj.still_url,\n    obj.reel_still_url,\n    obj.save_still_url,\n    obj.source_still_url,\n    obj.edited_still_url,\n    obj.data && obj.data[0] && obj.data[0].url,\n    obj.url,\n  ];\n  for (var i = 0; i < candidates.length; i++) {\n    var c = candidates[i];\n    if (typeof c === 'string' && /^https:\\/\\//i.test(c.trim())) return c.trim();\n  }\n  return '';\n}\n\nfunction requireFromSheet(label, value, creationId) {\n  var s = String(value == null ? '' : value).trim();\n  if (!s) {\n    throw new Error(\n      'SHEETS-ONLY: ' + label + ' must come from the sheet (creation_id=' + (creationId || '?') + ').'\n    );\n  }\n  return s;\n}\n\nfunction aspectFromSheet(raw, creationId) {\n  var s = requireFromSheet('aspect_ratio', raw, creationId)\n    .replace(/\\u2236/g, ':')\n    .replace(/\\s+/g, '');\n  if (/^\\d+:\\d+$/.test(s)) return s;\n  throw new Error(\n    'SHEETS-ONLY: aspect_ratio on the sheet must be like 9:16 (creation_id=' +\n      creationId +\n      ', got ' +\n      raw +\n      ')'\n  );\n}\n\nfunction audioFromSheet(raw, creationId) {\n  var s = String(raw == null ? '' : raw).trim().toLowerCase();\n  if (s === 'true' || s === '1' || s === 'yes') return true;\n  if (s === 'false' || s === '0' || s === 'no') return false;\n  throw new Error(\n    'SHEETS-ONLY: audio must be TRUE or FALSE on the sheet (creation_id=' +\n      creationId +\n      ', got ' +\n      raw +\n      ')'\n  );\n}\n\nvar input = ($input.first() && $input.first().json) || {};\nvar pick = firstJson('pick_creation');\nvar stillNode = firstJson('save_still_url');\nvar editHttp = firstJson('grok_imagine_edit_still');\n\nvar stillResolved = pickUrl(input) || pickUrl(stillNode) || pickUrl(editHttp);\nif (!stillResolved) {\n  throw new Error('prep_grok_video_start: still_url missing from save_still_url');\n}\n\nvar creationId = String(val(pick, ['creation_id']) || val(input, ['creation_id']) || '');\n\nfunction sheetField(names, label) {\n  var v = val(pick, names);\n  if (!String(v).trim()) v = val(input, names);\n  if (!String(v).trim()) v = val(stillNode, names);\n  return requireFromSheet(label, v, creationId);\n}\n\nvar motion = sheetField(['video_motion_prompt', 'videoMotionPrompt'], 'video_motion_prompt');\nvar modelVideo = sheetField(['model_video', 'modelVideo'], 'model_video');\nvar durationRaw = sheetField(['duration_seconds', 'durationSeconds', 'duration'], 'duration_seconds');\nvar duration = Number(durationRaw);\nif (!isFinite(duration) || duration <= 0) {\n  throw new Error(\n    'SHEETS-ONLY: duration_seconds on the sheet must be a positive number (creation_id=' +\n      creationId +\n      ', got ' +\n      durationRaw +\n      ')'\n  );\n}\nvar resolution = sheetField(['resolution'], 'resolution');\nvar aspect = aspectFromSheet(\n  val(pick, ['aspect_ratio', 'aspectRatio']) ||\n    val(input, ['aspect_ratio', 'aspectRatio']) ||\n    val(stillNode, ['aspect_ratio', 'aspectRatio']),\n  creationId\n);\nvar cameraMove = sheetField(['camera_move', 'cameraMove', 'camera'], 'camera_move');\nvar audio = audioFromSheet(\n  val(pick, ['audio']) || val(input, ['audio']) || val(stillNode, ['audio']),\n  creationId\n);\nvar waitRaw = sheetField(['wait_seconds', 'waitSeconds'], 'wait_seconds');\nvar waitSeconds = Number(waitRaw);\nif (!isFinite(waitSeconds) || waitSeconds <= 0) {\n  throw new Error(\n    'SHEETS-ONLY: wait_seconds on the sheet must be a positive number (creation_id=' +\n      creationId +\n      ', got ' +\n      waitRaw +\n      ')'\n  );\n}\n\nvar body = {\n  model: modelVideo,\n  prompt: motion,\n  image: { url: stillResolved },\n  duration: duration,\n  aspect_ratio: aspect,\n  resolution: resolution,\n  audio: audio,\n};\n\nreturn [\n  {\n    json: Object.assign({}, input, {\n      still_url: stillResolved,\n      reel_still_url: stillResolved,\n      video_motion_prompt: motion,\n      model_video: modelVideo,\n      duration_seconds: duration,\n      resolution: resolution,\n      aspect_ratio: aspect,\n      camera_move: cameraMove,\n      audio: audio,\n      wait_seconds: waitSeconds,\n      grok_video_body_json: JSON.stringify(body),\n      creation_id: creationId,\n    }),\n  },\n];\n",
+        "mode": "runOnceForAllItems"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -176,
+        208
+      ],
+      "id": "5bfee367-3b87-4608-aa8b-b399182ec3c2",
+      "name": "prep_grok_video_start"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nitems.sort((a, b) => {\n  const aLast = a.json.last_used_at || '';\n  const bLast = b.json.last_used_at || '';\n  if (aLast !== bLast) return aLast < bLast ? -1 : 1;\n\n  const aUsed = Number(a.json.times_used || 0);\n  const bUsed = Number(b.json.times_used || 0);\n  if (aUsed !== bUsed) return aUsed - bUsed;\n\n  return Number(a.json.rank || 0) - Number(b.json.rank || 0);\n});\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1136,
+        0
+      ],
+      "id": "d641bfa9-707c-47bc-9aa6-95e6a4ed1652",
+      "name": "sort_rotation",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "be0aa67a-1d93-4f85-b87a-2bd0df7099be",
+              "name": "=still_url",
+              "value": "={{ $json.data[0].url }}",
+              "type": "string"
+            },
+            {
+              "id": "95da7c79-fec7-4200-a0fc-1d3d19c35b7b",
+              "name": "=creation_id",
+              "value": "={{ $('pick_creation').first().json.creation_id }}",
+              "type": "string"
+            },
+            {
+              "id": "e5a33580-97cc-4db3-9b31-7fb8901316c7",
+              "name": "=model_still",
+              "value": "={{ $('pick_creation').first().json.model_still }}",
+              "type": "string"
+            },
+            {
+              "id": "c43fe6cb-0630-4eca-8439-38012a1d1f8d",
+              "name": "=aspect_ratio",
+              "value": "={{ $('pick_creation').first().json.aspect_ratio }}",
+              "type": "string"
+            },
+            {
+              "id": "926cce0d-72b7-45a4-8d87-e3871d166389",
+              "name": "=video_motion_prompt",
+              "value": "={{ $('pick_creation').first().json.video_motion_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "b3d3fe92-15df-4389-b7e4-936c857eeea5",
+              "name": "=model_video",
+              "value": "={{ $('pick_creation').first().json.model_video }}",
+              "type": "string"
+            },
+            {
+              "id": "9309bc4e-1267-49c2-b171-9335a07e563f",
+              "name": "=duration_seconds",
+              "value": "={{ $('pick_creation').first().json.duration_seconds }}",
+              "type": "string"
+            },
+            {
+              "id": "fa8c8185-7315-4b57-9cd6-121ef64ddbca",
+              "name": "=resolution",
+              "value": "={{ $('pick_creation').first().json.resolution }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": "",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -1344,
+        592
+      ],
+      "id": "7c5616eb-c1ba-4d9d-833a-857a27d6e3b1",
+      "name": "still_edit_instructions",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "22997074-2a93-4c1d-b592-5f1cb17bcf1c",
+              "leftValue": "={{ $json.do_still_edit }}",
+              "rightValue": "CRITICAL",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -944,
+        608
+      ],
+      "id": "1540f2ab-c082-47f3-b0a9-ba9686f86e2c",
+      "name": "If",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.x.ai/v1/images/edits",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.still_edit_body_json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        -480,
+        208
+      ],
+      "id": "32d47730-0df9-49fd-82c2-8cf2b1083e11",
+      "name": "grok_imagine_edit_still",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "z1BIQ5TSRwkwn4UG",
+          "name": "XAI Grok"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: prep_still_edit\n// Workflow: Vid_gen_landscape_scenes -500-peptide-wellness-scenes\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: flag_still_edit\n// Before: grok_imagine_edit_still\n//\n// SHEETS-ONLY: model_still, aspect_ratio, still_edit_prompt from pick_creation.\n// still_url is runtime from grok_imagine_reel_still / flag_still_edit.\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction val(obj, names) {\n  obj = obj || {};\n  for (var i = 0; i < names.length; i++) {\n    var n = names[i];\n    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {\n      return obj[n];\n    }\n  }\n  return '';\n}\n\nfunction httpsUrl(s) {\n  s = String(s || '').trim();\n  return /^https:\\/\\//i.test(s) ? s : '';\n}\n\nfunction grokStillUrl(obj) {\n  if (!obj) return '';\n  return (\n    httpsUrl(obj.still_url) ||\n    httpsUrl(obj.source_still_url) ||\n    httpsUrl(obj.data && obj.data[0] && obj.data[0].url) ||\n    ''\n  );\n}\n\nvar input = ($input.first() && $input.first().json) || {};\nvar flag = firstJson('flag_still_edit');\nvar pick = firstJson('pick_creation');\nvar imagine = firstJson('grok_imagine_reel_still');\n\nvar sourceStill =\n  grokStillUrl(input) || grokStillUrl(flag) || grokStillUrl(imagine) || grokStillUrl(pick) || '';\n\nif (!sourceStill) {\n  throw new Error('prep_still_edit: still_url missing from grok_imagine_reel_still / flag_still_edit.');\n}\n\nvar creationId = String(val(pick, ['creation_id']) || val(flag, ['creation_id']) || val(input, ['creation_id']) || '');\n\nfunction requireFromSheet(label, value) {\n  var s = String(value == null ? '' : value).trim();\n  if (!s) {\n    throw new Error('SHEETS-ONLY: ' + label + ' missing on sheet row creation_id=' + (creationId || '?'));\n  }\n  return s;\n}\n\nvar editPrompt = requireFromSheet(\n  'still_edit_prompt',\n  val(pick, ['still_edit_prompt']) || val(flag, ['still_edit_prompt']) || val(input, ['still_edit_prompt'])\n);\nvar modelStill = requireFromSheet(\n  'model_still',\n  val(pick, ['model_still']) || val(flag, ['model_still']) || val(input, ['model_still'])\n);\nvar aspectRatio = requireFromSheet(\n  'aspect_ratio',\n  val(pick, ['aspect_ratio']) || val(flag, ['aspect_ratio']) || val(input, ['aspect_ratio'])\n);\n\nvar body = {\n  model: modelStill,\n  prompt: editPrompt,\n  image: { url: sourceStill },\n  aspect_ratio: aspectRatio,\n};\n\nreturn [\n  {\n    json: Object.assign({}, pick, flag, input, {\n      still_url: sourceStill,\n      source_still_url: sourceStill,\n      still_edit_prompt: editPrompt,\n      model_still: modelStill,\n      aspect_ratio: aspectRatio,\n      still_edit_body: body,\n      still_edit_body_json: JSON.stringify(body),\n      creation_id: creationId,\n    }),\n  },\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        192
+      ],
+      "id": "f5b991f0-336b-413c-9251-5fcefe25b16c",
+      "name": "prep_still_edit"
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: flag_still_edit\n// Workflow: Vid_gen_landscape_scenes -500-peptide-wellness-scenes\n// Mode: Run Once for All Items\n// Settings \u2192 Execute Once = OFF\n// After: grok_imagine_reel_still\n// Before: prep_still_edit\n//\n// SHEETS-ONLY: still_edit_prompt comes from pick_creation (sheet row).\n// still_url is runtime from grok_imagine_reel_still.\n\nfunction firstJson(name) {\n  try {\n    return $(name).first().json || {};\n  } catch (e) {\n    return {};\n  }\n}\n\nfunction grokStillUrl(obj) {\n  if (!obj) return '';\n  if (obj.data && obj.data[0] && obj.data[0].url) return String(obj.data[0].url).trim();\n  if (obj.still_url) return String(obj.still_url).trim();\n  return '';\n}\n\nvar pick = firstJson('pick_creation');\nvar j = Object.assign({}, pick, ($input.first() && $input.first().json) || $json || {});\n\nvar stillUrl =\n  grokStillUrl(firstJson('grok_imagine_reel_still')) ||\n  grokStillUrl(j) ||\n  String(j.still_url || '').trim() ||\n  '';\n\nif (!/^https:\\/\\//i.test(stillUrl)) {\n  throw new Error(\n    'flag_still_edit: no https still from grok_imagine_reel_still \u2014 run the still node first.'\n  );\n}\n\nvar prompt = String(pick.still_edit_prompt || j.still_edit_prompt || '').trim();\nif (!prompt) {\n  throw new Error(\n    'SHEETS-ONLY: still_edit_prompt missing on sheet row creation_id=' +\n      (pick.creation_id || j.creation_id || '?')\n  );\n}\n\nj.still_url = stillUrl;\nj.source_still_url = stillUrl;\nj.still_edit_prompt = prompt;\nj.still_edit_prompt_source = 'sheet';\n\nreturn [{ json: j }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -912,
+        208
+      ],
+      "id": "18378faf-1945-486f-b0d4-abe1280cb657",
+      "name": "flag_still_edit"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2edee51f-158a-413a-8b10-88ac00cfbc35",
+              "name": "still_path",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "a4d86d54-f90f-491e-8537-3067c4a5e7de",
+              "name": "=still_url",
+              "value": "={{ $('grok_imagine_reel_still').first().json.data[0].url }}",
+              "type": "string"
+            },
+            {
+              "id": "e9a15503-cd4d-4d95-af15-102666d56523",
+              "name": "=creation_id",
+              "value": "={{ $('pick_creation').first().json.creation_id }}",
+              "type": "string"
+            },
+            {
+              "id": "25162162-bcda-4c7a-8afd-d499192e2407",
+              "name": "=video_motion_prompt",
+              "value": "={{ $('pick_creation').first().json.video_motion_prompt }}",
+              "type": "string"
+            },
+            {
+              "id": "b0bc4114-2f6d-4fe7-b800-6c9dce228e6a",
+              "name": "=model_video",
+              "value": "={{ $('pick_creation').first().json.model_video }}",
+              "type": "string"
+            },
+            {
+              "id": "f9865848-6bf2-4ba1-9d07-ccba2fa380ae",
+              "name": "=duration_seconds",
+              "value": "={{ $('pick_creation').first().json.duration_seconds }}",
+              "type": "string"
+            },
+            {
+              "id": "f04ed0fa-0fb2-484b-bf20-43768bdb3223",
+              "name": "=resolution",
+              "value": "={{ $('pick_creation').first().json.resolution }}",
+              "type": "string"
+            },
+            {
+              "id": "c38b3506-7267-444f-bd0b-b1adf8e13b52",
+              "name": "=aspect_ratio",
+              "value": "={{ $('pick_creation').first().json.aspect_ratio }}",
+              "type": "string"
+            },
+            {
+              "id": "48a4ff6c-a0e6-4223-b733-2acf0eb523e9",
+              "name": "=model_still",
+              "value": "={{ $('pick_creation').first().json.model_still }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -1584,
+        592
+      ],
+      "id": "a24cb6ca-30d4-40e7-8126-8b5e2828a0f2",
+      "name": "choose_still_path",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('choose_still_path').first().json.still_path }}",
+                    "rightValue": "edit",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "ccc2fc97-e5ea-4e8d-ab25-34c81496667d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "edit"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "21632a4f-4a87-4487-968d-47145906f5c0",
+                    "leftValue": "={{ $('choose_still_path').first().json.still_path }}",
+                    "rightValue": "skip",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "skip"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -1152,
+        608
+      ],
+      "id": "a98e57de-df88-4ce8-add0-199baa455c29",
+      "name": "switch_still_path",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "af594a1d-06dc-420f-b78b-fdc01ae3e958",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1040,
+        384
+      ],
+      "id": "1c5b3199-fff0-4969-a081-17ffbf1867d4",
+      "name": "If1",
+      "disabled": true
+    }
+  ],
+  "nodeGroups": [],
+  "activeVersion": null,
+  "meta": {
+    "aiBuilderAssisted": true,
+    "builderVariant": "mcp"
+  }
+}
