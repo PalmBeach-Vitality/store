@@ -24,6 +24,8 @@ pick_creation (least-used + new shot_family)
 
 **Video model:** ByteDance **Seedance 2.5** is live on fal. Daily I2V notes: `n8n-seedance-vid-gen.md`. Standalone hyperrealistic T2V (sheets-only): `seedance_25_vid_gen` is **palmbeach-rx.com** — see `n8n-seedance-25-vid-gen.md`. A separate vitality.store T2V path is deferred.
 
+Live lab daily (Grok still → edit → Grok video) is **`Vid_gen_lab_scenes -9-lab-items-creations-500`**. Edit the still *before* video: `n8n-vid-gen-lab-scenes.md`.
+
 ### B — `PBVita — Creatomate Package` (separate)
 
 Copy `get_reel_text` → `save_creatomate_url` (+ any `sheets_append_reel`) into a new workflow.  
@@ -84,6 +86,26 @@ enter_compound → get_caption_science → match_compound
 
 See `n8n-peptide-caption-gen.md`. Import JSON: `marketing/workflows/peptide_caption_gen.json`.
 
+### G — MOTS-C film I2V stack (Sheet 18)
+
+Locked film keepers → **per-beat** I2V. Four unpublished linear workflows. No Switch. No Creatomate. CapCut stays manual.
+
+**Finished film: 60–90s** (aim ~75s). Not 45s. Raw stack is 228s (11×8s Veo + 14×10s Seedance/Kling) so the cut has coverage. Daily catalog reels stay 45–60s.
+
+| Workflow | Model | Beats |
+|---|---|---|
+| `film_i2v_seedance` | Seedance 2.5 (fal) | flyover, walk, handoff, vial-into-engine |
+| `film_i2v_kling` | Kling 3.0 Pro (existing fal.ai account) | crash, liftoff + warp |
+| `film_i2v_veo` | Veo 3.1 (fal) | cockpit / face / product close-ups |
+| `film_i2v_runway` | Runway Gen-4.5 | identity-lock backup — key later |
+
+```text
+get_film_stills → pick_film_still → fal_i2v_generate
+  → save_film_video_url → sheets_update_still
+```
+
+See `n8n-motsc-film-i2v-stack.md`. Old Grok 1.5 factory stays unpublished and unused.
+
 ### F — `sheet_format_as_tables` (one-shot)
 
 Converts marketing Google Sheets into Tables (table menu + header dropdowns) via Apps Script `marketing/scripts/sheets_convert_to_tables.gs`. Does not change cell data. See `n8n-sheet-format-as-tables.md`.
@@ -121,6 +143,8 @@ See `n8n-camera-diversity-plan.md`.
 - Grok still: `n8n-build-grok-imagine-video-nodes.md`  
 - Seedance 2.5 T2V (sheets-only): `n8n-seedance-25-vid-gen.md`  
 - Seedance I2V notes: `n8n-seedance-vid-gen.md`  
+- Seedance video: `n8n-seedance-vid-gen.md`  
+- Prompt blocks (Flux/Kling/Grok/Veo): `prompt-moderation-rulebook.md`  
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  

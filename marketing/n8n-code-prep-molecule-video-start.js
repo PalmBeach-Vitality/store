@@ -50,7 +50,11 @@ if (!motion) {
 var modelVideo = String(
   input.model_video || pick.model_video || saveStill.model_video || 'grok-imagine-video-1.5'
 ).trim();
-var duration = Number(input.duration_seconds || pick.duration_seconds || saveStill.duration_seconds || 15) || 15;
+var wanted = Number(firstJson('enter_video_seconds').video_seconds || 15);
+if (wanted !== 30) wanted = 15;
+// First clip is always 15s — Grok generate max. Longer clips add a 10s
+// silent extend on grok-imagine-video (1.5 cannot extend).
+var duration = 15;
 var resolution = String(input.resolution || pick.resolution || saveStill.resolution || '1080p').trim();
 
 var body = {
@@ -69,6 +73,7 @@ return [
       video_motion_prompt: motion,
       model_video: modelVideo,
       duration_seconds: duration,
+      video_seconds: wanted,
       resolution: resolution,
       creation_id: String(input.creation_id || pick.creation_id || ''),
       compound_name: String(input.compound_name || pick.compound_name || ''),
