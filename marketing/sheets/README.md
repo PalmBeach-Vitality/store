@@ -33,7 +33,7 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
 - **Single hero product (CRITICAL):** exactly **one vial OR one pen** per creation image — never both, never multiples. Script: `scripts/enforce_single_vial_or_pen.py`
-- Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
+- Vial look (Sheet 9 / 8 / 12): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar with **catalog mg + mg/ml per compound** / volume footer — see `scripts/overlay_lab_vial_dosages.py` and `compound-vial-labels.json`
 - Import stills: tab **`12-import-still-queue`** (do not paste URLs into Fixed n8n fields)
 - Chemical-breakdown molecule vids: tab **`13-chem-breakdown-54`** (Sheet 9 columns; dark microscopic **cellular chemical reaction** — living cells + amino acids; no logo, no text, no sound; not a vial, not a pen). `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` each have **6** staggered values so consecutive ranks never match.
 - Pens-only catalog vids: tab **`14-pen-creations-150`** (Sheet 9 **columns**; pen **input** from `3-image-scenes-150`; one white insulin-style 3ml pen, blue DNA + orange compound name + orange `3ml pen` badge, no mg/ml, no vial)
