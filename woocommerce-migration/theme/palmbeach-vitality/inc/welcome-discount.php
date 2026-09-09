@@ -1,6 +1,6 @@
 <?php
 /**
- * Store coupons: WELCOME20 (new-client 20%) + AS-1010 (10%, stackable).
+ * Store coupons: WELCOME20 (new-client 20%) + AS-1010 (10% under $250) + AS-1515 (15% over $250).
  *
  * @package PalmBeachVitality
  */
@@ -15,11 +15,17 @@ define('PBV_WELCOME_COUPON_CODE', 'WELCOME20');
 /** Percent off for new clients. */
 define('PBV_WELCOME_COUPON_PERCENT', 20);
 
-/** Stackable promo code. */
+/** Stackable promo code — orders under $250. */
 define('PBV_STACK_COUPON_CODE', 'AS-1010');
 
-/** Percent off for the stackable promo. */
+/** Percent off for AS-1010. */
 define('PBV_STACK_COUPON_PERCENT', 10);
+
+/** Stackable promo code — orders $250 and over. */
+define('PBV_STACK_COUPON_CODE_OVER', 'AS-1515');
+
+/** Percent off for AS-1515. */
+define('PBV_STACK_COUPON_PERCENT_OVER', 15);
 
 /** Production n8n webhook for the branded intro email. */
 define('PBV_N8N_WELCOME_WEBHOOK_DEFAULT', 'https://stockjohnson.app.n8n.cloud/webhook/vitality-store-email-webhook');
@@ -31,8 +37,10 @@ define('PBV_N8N_WELCOME_WEBHOOK_DEFAULT', 'https://stockjohnson.app.n8n.cloud/we
  * @param float  $percent     Discount percent.
  * @param string $description Admin description.
  * @param array  $args {
- *     @type bool $individual_use      Whether coupon is exclusive.
- *     @type int  $usage_limit_per_user Per-customer usage limit (0 = unlimited).
+ *     @type bool   $individual_use        Whether coupon is exclusive.
+ *     @type int    $usage_limit_per_user  Per-customer usage limit (0 = unlimited).
+ *     @type string $minimum_amount        Minimum cart subtotal (empty = none).
+ *     @type string $maximum_amount        Maximum cart subtotal (empty = none).
  * }
  * @return int|false Coupon ID or false.
  */
@@ -49,6 +57,8 @@ function pbv_ensure_percent_coupon($code, $percent, $description, $args = array(
     $defaults = array(
         'individual_use'       => false,
         'usage_limit_per_user' => 0,
+        'minimum_amount'       => '',
+        'maximum_amount'       => '',
     );
     $args = wp_parse_args($args, $defaults);
 
@@ -63,6 +73,8 @@ function pbv_ensure_percent_coupon($code, $percent, $description, $args = array(
     $coupon->set_usage_limit_per_user((int) $args['usage_limit_per_user']);
     $coupon->set_free_shipping(false);
     $coupon->set_exclude_sale_items(false);
+    $coupon->set_minimum_amount((string) $args['minimum_amount']);
+    $coupon->set_maximum_amount((string) $args['maximum_amount']);
     $coupon->save();
 
     return (int) $coupon->get_id();
@@ -94,10 +106,29 @@ function pbv_ensure_stack_coupon() {
     return pbv_ensure_percent_coupon(
         PBV_STACK_COUPON_CODE,
         (float) PBV_STACK_COUPON_PERCENT,
-        __('Promo AS-1010 — 10% off (stacks with WELCOME20).', 'palmbeach-vitality'),
+        __('Promo AS-1010 — 10% off orders under $250 (stacks with WELCOME20).', 'palmbeach-vitality'),
         array(
             'individual_use'       => false,
             'usage_limit_per_user' => 0,
+            'maximum_amount'       => '249.99',
+        )
+    );
+}
+
+/**
+ * Ensure AS-1515 exists (15%, orders $250+, stackable with WELCOME20).
+ *
+ * @return int|false
+ */
+function pbv_ensure_stack_coupon_over() {
+    return pbv_ensure_percent_coupon(
+        PBV_STACK_COUPON_CODE_OVER,
+        (float) PBV_STACK_COUPON_PERCENT_OVER,
+        __('Promo AS-1515 — 15% off orders $250+ (stacks with WELCOME20).', 'palmbeach-vitality'),
+        array(
+            'individual_use'       => false,
+            'usage_limit_per_user' => 0,
+            'minimum_amount'       => '250',
         )
     );
 }
@@ -115,15 +146,17 @@ function pbv_seed_welcome_coupon_once() {
     try {
         update_option('woocommerce_enable_coupons', 'yes');
 
-        $version = '1.1.0'; // 1.1.0: AS-1010 + allow stacking (WELCOME20 individual_use off).
+        $version = '1.2.0'; // 1.2.0: AS-1010 max $249.99 + AS-1515 min $250.
         if (get_option('pbv_welcome_coupon_version') === $version) {
             pbv_ensure_welcome_coupon();
             pbv_ensure_stack_coupon();
+            pbv_ensure_stack_coupon_over();
             return;
         }
 
         pbv_ensure_welcome_coupon();
         pbv_ensure_stack_coupon();
+        pbv_ensure_stack_coupon_over();
         update_option('pbv_welcome_coupon_version', $version);
     } catch (Throwable $e) {
         if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) {

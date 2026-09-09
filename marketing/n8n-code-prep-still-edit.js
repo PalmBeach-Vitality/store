@@ -1,16 +1,17 @@
 // n8n Code node: prep_still_edit
 // Mode: Run Once for All Items
+// After: download_still  Before: grok_imagine_edit_still
 //
-// Wire (true branch):
-//   flag_still_edit → if → **prep_still_edit** → grok_imagine_edit_still → save_still_url
+// Wire:
+//   save_still_url → still_edit_instructions → download_still → **prep_still_edit** → grok_imagine_edit_still
 //
-// still_url: runtime from Grok / flag (save_still_url is AFTER edit on this path).
-// still_edit_prompt: flag → Set → pick → CODE fallback below.
-
-// ── Same fallback as flag_still_edit (edit either; flag runs first) ───────
-var CODE_STILL_EDIT_PROMPT =
-  'CRITICAL COUNT FIX: Keep exactly ONE sealed Palm Beach Vitality hero product (one vial OR one pen). DELETE every extra vial/pen (background, soft-focus, smaller secondary, open/uncapped duplicates). Also DELETE any weighing scale, digital scale, platform scale, or metal tray under the product — place the single hero directly on the table/surface. After the edit the viewer must count exactly 1 product and zero scales. Do not restyle lighting, camera, label text, or environment. Do not add new products.';
-// ─────────────────────────────────────────────────────────────────────────
+// still_edit_prompt comes ONLY from still_edit_instructions (Fixed text you type).
+// Do not read the sheet, pick, or incoming item. Do not invent a fallback.
+//
+// xAI /v1/images/edits cannot fetch imgen.x.ai (404 invalid_image).
+// Send a real base64 data URI from download_still binary.
+// Do NOT use binary.data directly — when n8n uses filesystem mode
+// that field is the literal string "filesystem-v2", which xAI rejects.
 
 function firstJson(name) {
   try {
@@ -20,15 +21,15 @@ function firstJson(name) {
   }
 }
 
-function val(obj, names, fallback) {
-  if (fallback === undefined) fallback = '';
+function val(obj, names) {
+  obj = obj || {};
   for (var i = 0; i < names.length; i++) {
     var n = names[i];
-    if (obj && obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
+    if (obj[n] !== undefined && obj[n] !== null && String(obj[n]).trim() !== '') {
       return obj[n];
     }
   }
-  return fallback;
+  return '';
 }
 
 function httpsUrl(s) {
@@ -36,120 +37,105 @@ function httpsUrl(s) {
   return /^https:\/\//i.test(s) ? s : '';
 }
 
-function grokStillUrl(obj) {
-  if (!obj) return '';
-  return (
-    httpsUrl(obj.still_url) ||
-    httpsUrl(obj.source_still_url) ||
-    httpsUrl(obj.data && obj.data[0] && obj.data[0].url) ||
-    ''
-  );
+function looksLikeRealBase64(s) {
+  s = String(s || '');
+  if (s.length < 200) return false;
+  if (/^filesystem/i.test(s)) return false;
+  return /^[A-Za-z0-9+/=\r\n]+$/.test(s.slice(0, 200));
 }
 
-function resolveEditPrompt(input, flag, instructions, sheet, importStill) {
-  var sources = [input, flag, instructions, sheet, importStill, firstJson('pick_creation')];
-  for (var i = 0; i < sources.length; i++) {
-    var p = String(
-      val(sources[i], ['still_edit_prompt', 'edit_prompt', 'Still Edit Prompt'], '')
-    ).trim();
-    if (p) return p;
+const out = [];
+const items = $input.all();
+
+for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
+  const inputItem = items[itemIndex] || {};
+  const input = inputItem.json || {};
+  const pick = firstJson('pull_sheet_row');
+  const instructions = firstJson('still_edit_instructions');
+  const saveStill = firstJson('save_still_url');
+  let imagine = firstJson('grok_imagine_reel_still');
+  if (!Object.keys(imagine).length) imagine = firstJson('grok_imagine_pen_still');
+
+  const sourceStill = httpsUrl(
+    val(input, ['still_url', 'source_still_url']) ||
+      val(instructions, ['still_url']) ||
+      val(saveStill, ['still_url']) ||
+      (input.data && input.data[0] && input.data[0].url) ||
+      (imagine.data && imagine.data[0] && imagine.data[0].url)
+  );
+
+  const editPrompt = String(val(instructions, ['still_edit_prompt', 'edit_prompt'])).trim();
+
+  const modelStill = String(val(pick, ['model_still']) || val(input, ['model_still'])).trim();
+  const aspectRatio = String(val(pick, ['aspect_ratio']) || val(input, ['aspect_ratio'])).trim();
+  const creationId = String(
+    val(pick, ['creation_id']) || val(input, ['creation_id']) || val(saveStill, ['creation_id'])
+  );
+
+  if (!editPrompt) {
+    throw new Error(
+      'still_edit_prompt missing. Type it as Fixed on still_edit_instructions (creation_id=' +
+        (creationId || '?') +
+        '). This is not a sheet field.'
+    );
   }
-  var alts = ['still_edit_instructions', 'Still Edit Instructions', 'flag_still_edit'];
-  for (var a = 0; a < alts.length; a++) {
-    var o = firstJson(alts[a]);
-    var q = String(o.still_edit_prompt || o.edit_prompt || '').trim();
-    if (q) return q;
+  if (!modelStill) {
+    throw new Error('SHEETS-ONLY: model_still missing on sheet row creation_id=' + (creationId || '?'));
   }
-  return String(CODE_STILL_EDIT_PROMPT || '').trim();
-}
+  if (!aspectRatio) {
+    throw new Error(
+      'SHEETS-ONLY: aspect_ratio missing on sheet row creation_id=' + (creationId || '?')
+    );
+  }
 
-var input = ($input.first() && $input.first().json) || {};
-var flag = firstJson('flag_still_edit');
-var instructions = firstJson('still_edit_instructions');
-if (!Object.keys(instructions).length) {
-  instructions = firstJson('Still Edit Instructions');
-}
-var imagine = firstJson('grok_imagine_reel_still');
-var saveStill = firstJson('save_still_url');
-var sheet = firstJson('map_sheet_fields');
-if (!Object.keys(sheet).length) sheet = firstJson('pick_creation');
-if (!Object.keys(sheet).length) sheet = firstJson('import_still_from_sheet');
-var importStill = firstJson('import_still_url');
+  if (!inputItem.binary || !Object.keys(inputItem.binary).length) {
+    throw new Error(
+      'prep_still_edit: download_still returned no image bytes. ' +
+        'Wire still_edit_instructions → download_still → this node. ' +
+        'Do not send imgen.x.ai URLs to /v1/images/edits (xAI 404s them).'
+    );
+  }
 
-var sourceStill =
-  grokStillUrl(input) ||
-  grokStillUrl(flag) ||
-  grokStillUrl(instructions) ||
-  grokStillUrl(imagine) ||
-  grokStillUrl(saveStill) ||
-  grokStillUrl(importStill) ||
-  '';
+  const binaryKey = Object.keys(inputItem.binary)[0];
+  const bin = inputItem.binary[binaryKey] || {};
+  const mime = String(bin.mimeType || 'image/png').trim() || 'image/png';
 
-if (!sourceStill) {
-  throw new Error(
-    'still_url missing — set still_url on still_edit_instructions to ' +
-      "={{ $('grok_imagine_reel_still').first().json.data[0].url }}"
-  );
-}
+  let b64 = '';
+  if (looksLikeRealBase64(bin.data)) {
+    b64 = String(bin.data).replace(/\s+/g, '');
+  } else {
+    const buf = await this.helpers.getBinaryDataBuffer(itemIndex, binaryKey);
+    b64 = Buffer.from(buf).toString('base64');
+  }
 
-var editPrompt = resolveEditPrompt(input, flag, instructions, sheet, importStill);
+  if (!b64 || b64.length < 200 || /^filesystem/i.test(b64)) {
+    throw new Error(
+      'prep_still_edit: could not decode download_still binary (got ' +
+        String(bin.data || '').slice(0, 40) +
+        '). Re-run download_still so the file is present.'
+    );
+  }
 
-var modelStill = String(
-  val(input, ['model_still']) ||
-    val(flag, ['model_still']) ||
-    val(instructions, ['model_still']) ||
-    val(sheet, ['model_still']) ||
-    val(importStill, ['model_still'], '') ||
-    'grok-imagine-image-2.0'
-).trim();
+  const imageUrl = 'data:' + mime + ';base64,' + b64;
 
-var aspectRatio = String(
-  val(input, ['aspect_ratio']) ||
-    val(flag, ['aspect_ratio']) ||
-    val(instructions, ['aspect_ratio']) ||
-    val(sheet, ['aspect_ratio']) ||
-    val(importStill, ['aspect_ratio'], '') ||
-    '9:16'
-).trim();
+  const body = {
+    model: modelStill,
+    prompt: editPrompt,
+    image: { url: imageUrl, type: 'image_url' },
+    aspect_ratio: aspectRatio,
+  };
 
-if (!editPrompt) {
-  throw new Error(
-    'still_edit_prompt missing everywhere (Set, Sheet, and CODE_STILL_EDIT_PROMPT). ' +
-      'Edit CODE_STILL_EDIT_PROMPT at the top of flag_still_edit or prep_still_edit.'
-  );
-}
-
-var body = {
-  model: modelStill,
-  prompt: editPrompt,
-  image: {
-    url: sourceStill,
-  },
-};
-
-if (aspectRatio) {
-  body.aspect_ratio = aspectRatio;
-}
-
-return [
-  {
+  out.push({
     json: {
       still_url: sourceStill,
       source_still_url: sourceStill,
       still_edit_prompt: editPrompt,
       model_still: modelStill,
       aspect_ratio: aspectRatio,
-      still_edit_body: body,
       still_edit_body_json: JSON.stringify(body),
-      creation_id: String(
-        val(input, ['creation_id']) ||
-          val(flag, ['creation_id']) ||
-          val(instructions, ['creation_id']) ||
-          val(sheet, ['creation_id']) ||
-          val(importStill, ['creation_id']) ||
-          ''
-      ),
-      do_still_edit: true,
+      creation_id: creationId,
     },
-  },
-];
+  });
+}
+
+return out;
