@@ -3,10 +3,11 @@
 // Mode: Run Once for All Items
 // Settings → Execute Once = OFF (must receive all sheet rows)
 // After: get_reel_creations / filter Active on 500_Peptide_Wellness_Reel_Scenes
-// Before: grok_imagine_reel_still
+// Before: save_still_url
+// still_url_input.creation_id (if set) forces that Active row — same as lab edit/skip.
 //
-// SHEETS-ONLY: every Grok parameter is copied from the picked row.
-// This node does not wrap prompts, invent models, or fill missing cells.
+// SHEETS-ONLY for still/video gen fields. still_edit_prompt is typed on
+// still_edit_instructions — do not require it from the sheet.
 
 function val(obj, names) {
   obj = obj || {};
@@ -33,16 +34,15 @@ function isActive(status) {
   return s === 'active' || s === 'true' || s === '1' || s === 'yes';
 }
 
-/** Disclaimers belong in captions only — never in Grok prompts. */
 function stripVidDisclaimer(text) {
   var t = String(text || '');
   var patterns = [
     /\s*For laboratory research use only\.?\s*/gi,
     /\s*Not for human use or consumption\.?\s*/gi,
     /\s*No treatment, cure, dosage-for-humans, or clinical outcome claims in the image\.?\s*/gi,
-    /\s*with a small ['']For Laboratory Research Use Only[''] line\s*[—–-]?\s*/gi,
-    /\s*,?\s*optionally with\s*['']For Laboratory Research Use Only['']\.?/gi,
-    /\s*['']For Laboratory Research Use Only['']\.?\s*/gi,
+    /\s*with a small [''']For Laboratory Research Use Only['''] line\s*[—–-]\s*/gi,
+    /\s*,?\s*optionally with\s*[''']For Laboratory Research Use Only[''']\.?/gi,
+    /\s*[''']For Laboratory Research Use Only[''']\.?\s*/gi,
     /\s*Explicit research[- ]use only[^.]*\.?\s*/gi,
     /\s*Research use only\s*[—–-]\s*not for (?:human|clinical)[^.]*\.?\s*/gi,
     /\s*Research only\s*[—–-]\s*not for human use\.?\s*/gi,
@@ -251,11 +251,28 @@ var bothDifferent = diversified.filter(differsBoth);
 var eitherDifferent = diversified.filter(differsEither);
 var pick = (bothDifferent.length ? bothDifferent : eitherDifferent.length ? eitherDifferent : diversified)[0];
 
+var forcedId = '';
+try {
+  forcedId = String($('still_url_input').first().json.creation_id || '').trim();
+} catch (e) {
+  forcedId = '';
+}
+if (forcedId) {
+  var forced = scored.filter(function (c) {
+    return c.creation_id === forcedId;
+  });
+  if (!forced.length) {
+    throw new Error(
+      'still_url_input.creation_id not in Active sheet rows: ' + forcedId
+    );
+  }
+  pick = forced[0];
+}
+
 requireField(pick, 'creation_id');
 requireField(pick, 'video_prompt');
 requireField(pick, 'video_motion_prompt');
 requireField(pick, 'scene_brief');
-requireField(pick, 'still_edit_prompt');
 requireField(pick, 'model_still');
 requireField(pick, 'model_video');
 requireField(pick, 'duration_seconds');
