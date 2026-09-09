@@ -71,7 +71,7 @@ COMPOUNDS = [
     (
         "P-BPCTB-001",
         "BPC-157/TB-500",
-        "bpc tb,bpctb,bpc157tb500,bpc/tb",
+        "bpc tb,bpctb,bpc157tb500,bpc/tb,wolverine,wolverine blend,wolverine stack,bpc-157/tb-500",
         "a paired research complex combining two widely studied repair-pathway peptides",
         "complementary signaling work around cytoskeletal dynamics and tissue-research models",
         "how two peptide sequences are cataloged together for side-by-side laboratory study",

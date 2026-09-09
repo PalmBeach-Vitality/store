@@ -1,54 +1,51 @@
 # Still edit before Grok Imagine video 1.5
 
-**Goal:** Still → sheet `still_edit_prompt` edit → video → sheets. **No Switch. No IF.**  
-**Sheets-only:** do not hardcode the edit prompt in Code. Put the text on the Sheet 9 `still_edit_prompt` cell.
+**Goal:** Still → type the edit on `still_edit_instructions` → Grok edit → video. **No sheet writeback for the edit prompt.**
 
 **fx legend:** **ON** = Expression · **OFF** = Fixed
 
+`still_edit_prompt` lives on **`still_edit_instructions` only** (Fixed). Type it there and stop. Do not map it from the sheet. Sheets update nodes must not write it back.
+
 ---
 
-## Wire (linear — use this)
+## Wire (vid-gen lab / pen / landscape)
 
 ```text
-pick_creation
-  → grok_imagine_reel_still
-  → flag_still_edit                 ← copies sheet still_edit_prompt (throws if empty)
-  → prep_still_edit
-  → grok_imagine_edit_still
-  → save_still_url
-  → prep_grok_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
-  → save_video_url
-  → sheets_update_creation
+save_still_url → **still_edit_instructions** → download_still → prep_still_edit
+  → grok_imagine_edit_still → save_edited_still_url → prep_grok_video_start → …
 ```
 
-Delete / unwired: `choose_still_path`, `normalize_still_path`, `switch_still_path`, any IF for still edit.
-
-Live lab vid-gen currently skips this still-edit hop (`save_still_url` → `prep_grok_video_start`). The Code paste-sources are sheets-only so the hop can be wired later without inventing a prompt.
+Skip path (leave unwired for an edit run): `save_still_url` → `skip_still_edit` → `prep_grok_video_start`
 
 ---
 
-## Node 1 — `flag_still_edit`
+## Node 1 — `still_edit_instructions`
 
-**Type:** Code · Run Once for All Items  
-**Before → this → After:** `grok_imagine_reel_still` → **flag_still_edit** → `prep_still_edit`
+**Type:** Edit Fields  
+**Before → this → After:** `save_still_url` → **still_edit_instructions** → `download_still`
 
-Paste: `marketing/n8n-code-flag-still-edit.js`
+Include Other Input Fields: **ON** · include **except** `still_edit_prompt` (so the sheet field cannot leak through).
 
-**Check:** `still_edit_prompt` from the sheet row + https `still_url`
+| Name | fx | Value |
+|---|---|---|
+| `still_url` | **ON** | `={{ $json.still_url }}` |
+| `still_edit_prompt` | **OFF** | type the edit here (empty until you do) |
+| `creation_id` | **ON** | `={{ $json.creation_id }}` |
+
+**Check:** the prompt you typed is still there after Execute. It must not revert to the sheet cell.
 
 ---
 
 ## Node 2 — `prep_still_edit`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `flag_still_edit` → **prep_still_edit** → `grok_imagine_edit_still`
+**Before → this → After:** `download_still` → **prep_still_edit** → `grok_imagine_edit_still`
 
 Paste: `marketing/n8n-code-prep-still-edit.js`
 
-**Check:** `still_edit_body_json` uses sheet `still_edit_prompt` + `model_still` + `aspect_ratio` (throws if any are empty) + `source_still_url`
+Reads `still_edit_prompt` only from `$('still_edit_instructions')`. Throws if empty. No sheet / pick / CODE fallback.
+
+**Check:** `still_edit_body_json` + data-URI image (not an `imgen.x.ai` URL)
 
 ---
 
