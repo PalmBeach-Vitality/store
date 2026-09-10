@@ -1,7 +1,7 @@
 # peptide_molecule_vid_gen
 
 **New workflow** — chemical-breakdown molecule videos.  
-**Not** the lab-vial daily path. **Not** Creatomate. **No Switch / IF.**
+**Not** the lab-vial daily path. Creatomate is last-frame + 30s concat only (no text template). Hop 1/2 use Switch for done / wait / quota.
 
 **Sheet:** `13-chem-breakdown-54` (same columns as Sheet 9)  
 **Name the workflow exactly:** `peptide_molecule_vid_gen`  
@@ -23,27 +23,36 @@ manual_trigger
   → get_chem_creations
   → filter_chem_active
   → pick_molecule_creation
+  → sheets_update_chem
   → grok_imagine_molecule_still
   → save_still_url
   → prep_molecule_video_start
   → openrouter_i2v_start
-  → wait_i2v
+  → wait_i2v (45s first poll)
   → openrouter_i2v_poll
-  → prep_last_frame
+  → route_hop1 → switch_hop1
+       done  → download_hop1 → upload_hop1_public → parse_hop1_public → prep_last_frame
+       wait  → wait_i2v_again (45s) → openrouter_i2v_poll
+       quota → wait_i2v_quota (90s) → retry_hop1_body → openrouter_i2v_start
   → creatomate_last_frame
   → wait_last_frame
   → creatomate_last_frame_poll
   → prep_kling_extend
   → openrouter_i2v_extend
-  → wait_i2v_extend
+  → wait_i2v_extend (45s)
   → openrouter_i2v_extend_poll
-  → prep_creatomate_concat
+  → route_hop2 → switch_hop2
+       done  → download_hop2 → upload_hop2_public → parse_hop2_public → prep_creatomate_concat
+       wait  → wait_i2v_extend_again → openrouter_i2v_extend_poll
+       quota → wait_i2v_extend_quota → retry_hop2_body → openrouter_i2v_extend
   → creatomate_concat
   → wait_concat
   → creatomate_poll
   → save_video_url
-  → sheets_update_chem
+  → sheets_update_video
 ```
+
+Kling `parallel task over resource pack limit` (exec 2135) means the **job already failed** (concurrency full). Raising `wait_i2v` does not help. The quota branch waits 90s and resubmits hop 1/2 (max 5). Pending jobs poll every 45s for **600s** (Sheet 13 has no `wait_seconds` column; 180 was too short — exec 2139 still `pending` after 4 polls).
 
 ---
 
@@ -53,6 +62,11 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
+3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth**. Exec 2133/2136/2137 `401 No cookie auth credentials found` is that template sending no Bearer token. If the n8n canvas was open on an old copy, **refresh the tab** and do not Save over the live workflow.
+4. Unpin `openrouter_i2v_start` before a new run. Exec 2136/2137 pinned the already-failed job `xUC5d3S5fcAQylMh55LK` and never POSTed a new video.
+5. Exec 2135: OpenRouter accepted hop 1 (`pending`), then Kling **failed** it with `parallel task over resource pack limit`. That is concurrency, not a short wait. `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` resubmits after 90s. Max 5 retries. Do not Execute while other Kling jobs are in flight if the pack is a 1-slot plan.
+6. Exec 2140: hop 1 **completed**. `creatomate_last_frame` 401 was a bad **Creatomate PbVita** key (`The provided API key is invalid`). Header Auth must be `Authorization: Bearer …`. Creatomate also cannot fetch OpenRouter `unsigned_urls` — hop 1/2 now rehost on litterbox before last-frame / concat.
+7. CHEM-007 / Sermorelin 30s is done (exec 2140 hop 1 + off-canvas hop 2/concat). Sheet 13 `video_url` is written. **Do not** full-Execute to retry CHEM-007 — next Execute picks the next unused rank (CHEM-008+). Unpin `grok_imagine_molecule_still` if you want a new still, not the CHEM-005 keeper.
 
 ---
 
@@ -108,9 +122,9 @@ Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has *
 
 **Settings → Execute Once:** **OFF**. If this is ON, n8n only passes CHEM-001 into the Code node and every run repeats row 1.
 
-Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set.
+Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0`, `last_used_at` is set, or `video_url` is an `https://` URL. `video_prompt`, `video_motion_prompt`, and `still_edit_prompt` pass through from the sheet — do not prepend vibe locks in this node.
 
-**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `model_still` = `grok-imagine-image-2.0`
+**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `video_prompt` starts with `HERO SUBJECT:` plus that row’s material (not a shared `HARD VIBE LOCK` / `HARD OUTPUT LOCK`).
 
 ---
 
@@ -118,6 +132,8 @@ Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row 
 
 **Type:** HTTP Request  
 **Before → this → After:** `sheets_update_chem` → **grok_imagine_molecule_still** → `save_still_url`
+
+Grok `prompt` is the sheet `video_prompt` from `pick_molecule_creation` (Sheet 13 has no `still_prompt` column).
 
 | Setting | fx | Value |
 |---|---|---|
@@ -129,7 +145,7 @@ Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row 
 | JSON | **ON** | see below |
 
 ```text
-={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio || '9:16', resolution: $('pick_molecule_creation').first().json.still_resolution || '2k' }) }}
+={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio, resolution: $('pick_molecule_creation').first().json.still_resolution }) }}
 ```
 
 **Check:** `$json.data[0].url` — one molecule, no vial.
@@ -169,19 +185,114 @@ See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → ho
 
 ---
 
+## Node 8 — `openrouter_i2v_start`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_molecule_video_start` → **openrouter_i2v_start** → `wait_i2v`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | POST |
+| URL | **OFF** | `https://openrouter.ai/api/v1/videos` |
+| Authentication | — | Predefined Credential Type → **OpenRouter API** |
+| Credential | — | **OpenRouter account** |
+| Body | **ON** | `={{ JSON.parse($json.openrouter_body_json) }}` |
+
+Same credential on `openrouter_i2v_poll`, `openrouter_i2v_extend`, and `openrouter_i2v_extend_poll`. Do **not** leave **Simplified Custom Auth** on the poll node — that is exec 2136/2137 `Authorization failed`.
+
+---
+
+## Node — `openrouter_i2v_poll`
+
+**Type:** HTTP Request  
+**Before → this → After:** `wait_i2v` → **openrouter_i2v_poll** → `route_hop1`  
+Loop: `wait_i2v_again` → **openrouter_i2v_poll** → `route_hop1`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | GET |
+| URL | **ON** | `={{ ($json.polling_url && String($json.polling_url).indexOf('http') === 0) ? $json.polling_url : ('https://openrouter.ai/api/v1/videos/' + $json.id) }}` |
+| Authentication | — | Predefined Credential Type → **OpenRouter API** |
+| Credential | — | **OpenRouter account** (`zDmHXnCHbj14yIvl`) |
+
+No second credential. No Header Auth. Same settings on `openrouter_i2v_extend_poll`.
+
+---
+
+## Node — `creatomate_last_frame`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_last_frame` → **creatomate_last_frame** → `wait_last_frame`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | POST |
+| URL | **OFF** | `https://api.creatomate.com/v1/renders` |
+| Authentication | — | Generic Credential Type → **Header Auth** |
+| Credential | — | **Creatomate PbVita** (`UkuSlYOEACCWm5rB`) |
+| Body | **ON** | `={{ JSON.parse($json.creatomate_body_json) }}` |
+
+Header Auth must be `Authorization` = `Bearer <Creatomate API key>`. Exec 2140 hop 1 **completed** (`2pqY7c8xe8THwhtaaRTf`), then Creatomate returned `401 The provided API key is invalid`. That is the key stored in **Creatomate PbVita**, not a missing n8n credential. Same header on `creatomate_last_frame_poll`, `creatomate_concat`, `creatomate_poll`.
+
+Creatomate cannot fetch OpenRouter `unsigned_urls`. Live wire rehosts hop 1/2 on litterbox (`download_hop*` → `upload_hop*_public` → `parse_hop*_public`) before last-frame or concat. CHEM-007 30s: `marketing/runs/chem007-sermorelin-30s.md`.
+
+---
+
+## Node — `route_hop1`
+
+**Type:** Code  
+**Before → this → After:** `openrouter_i2v_poll` → **route_hop1** → `switch_hop1`
+
+Paste: `marketing/n8n-code-route-hop1.js`
+
+Sets `hop1_route` to `done` / `wait` / `quota`. Quota = Kling resource pack full → `wait_i2v_quota` → **retry_hop1_body** → `openrouter_i2v_start`. Same pattern on hop 2 (`route_hop2`).
+
+---
+
+## Node — `download_hop1`
+
+**Type:** HTTP Request  
+**Before → this → After:** `switch_hop1` (done) → **download_hop1** → `upload_hop1_public`
+
+GET `https://openrouter.ai/api/v1/videos/{{ $json.id }}/content?index=0` as a file. Auth = **OpenRouter account**. Same pattern on `download_hop2` after `switch_hop2` (done).
+
+## Node — `upload_hop1_public`
+
+**Type:** HTTP Request  
+**Before → this → After:** `download_hop1` → **upload_hop1_public** → `parse_hop1_public`
+
+POST `https://litterbox.catbox.moe/resources/internals/api.php` multipart: `reqtype=fileupload`, `time=72h`, `fileToUpload` = hop MP4. Same on `upload_hop2_public`.
+
+## Node — `parse_hop1_public`
+
+**Type:** Code  
+**Before → this → After:** `upload_hop1_public` → **parse_hop1_public** → `prep_last_frame`
+
+Paste: `marketing/n8n-code-parse-hop1-public.js`  
+Hop 2: `marketing/n8n-code-parse-hop2-public.js` → `prep_creatomate_concat`.
+
 ## Node 11 — `save_video_url`
 
-**Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → (end)  
-Include Other Input Fields: **ON**
+**Type:** Code  
+**Before → this → After:** `creatomate_poll` → **save_video_url** → `sheets_update_video`
 
-| Name | fx | Value |
+Reads the succeeded Creatomate concat URL into `video_url` + `creation_id`.
+
+## Node — `sheets_update_video`
+
+**Type:** Google Sheets → Update  
+**Before → this → After:** `save_video_url` → **sheets_update_video** → `end`
+
+| Setting | fx | Value |
 |---|---|---|
-| `video_url` | **ON** | `={{ $json.video.url \|\| $json.url }}` |
-| `still_url` | **ON** | `={{ $('save_still_url').first().json.still_url }}` |
-| `creation_id` | **ON** | `={{ $('pick_molecule_creation').first().json.creation_id }}` |
-| `compound_name` | **ON** | `={{ $('pick_molecule_creation').first().json.compound_name }}` |
-| `created_at` | **ON** | `={{ $now.toISO() }}` |
+| Operation | — | Update |
+| Document | — | **By ID** (same workbook) |
+| Sheet | **OFF** | `13-chem-breakdown-54` |
+| Column to Match On | **OFF** | `creation_id` |
+| `creation_id` | **ON** | `={{ $json.creation_id }}` |
+| `video_url` | **ON** | `={{ $json.video_url }}` |
+
+Sheet 13 now has a `video_url` column (added by exec 2143). Do not list `video_url` in a Sheets schema until that header exists — n8n throws `Missing columns: video_url`. Extra fields use `handlingExtraData: insertInNewColumn` with `autoMapInputData` only.
 
 ---
 
@@ -190,7 +301,7 @@ Include Other Input Fields: **ON**
 **Type:** Google Sheets → Update  
 **Before → this → After:** `pick_molecule_creation` → **sheets_update_chem** → `grok_imagine_molecule_still`
 
-Marks the row used **before** the still so a still-only Execute still advances to CHEM-002 next time.
+Marks the row used **before** the still so a still-only Execute (destination = `grok_imagine_molecule_still`) still advances to the next unused rank. Do **not** wait until Creatomate finishes — that left CHEM-004 at `times_used: 0` after exec 2126 and re-picked NAD+.
 
 | Setting | fx | Value |
 |---|---|---|
@@ -210,6 +321,14 @@ Marks the row used **before** the still so a still-only Execute still advances t
 n8n: **Import from File** → name stays `peptide_molecule_vid_gen` → attach credentials → set Sheet document ID.
 
 ---
+
+## Locked keepers
+
+**CHEM-005 / Semaglutide** (exec 2132, destination `grok_imagine_molecule_still`): unique-first `HERO SUBJECT` prompt. Coral lipidated helix, vesicle orbs, amino-acid bond flash, no text/logo. **1584 × 2816** (real 2K 9:16).
+
+- Repo: `marketing/stills/chem005-semaglutide.png`
+- Grok tmp: `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-ec45ad99-2489-92a6-a90a-ea429e8637b6-e47dc059.png`
+- `times_used` on CHEM-005 is **1**. Do **not** re-pick this row for a new still. I2V must use this keeper URL, not a fresh Grok still.
 
 ## Related
 

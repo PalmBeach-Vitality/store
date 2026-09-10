@@ -1,7 +1,7 @@
 // n8n Code node: prep_creatomate_concat
-// After: openrouter_i2v_extend_poll
+// After: parse_hop2_public
 // Before: creatomate_concat
-// Join two 15s OpenRouter Kling clips on the same Creatomate track into one 30s mp4.
+// Join two 15s public clips on the same Creatomate track into one 30s mp4.
 
 function firstJson(name) {
   try {
@@ -31,28 +31,54 @@ function pickVideoUrl(obj) {
   );
 }
 
-var hop2 = ($input.first() && $input.first().json) || {};
+var hop2 = firstJson('route_hop2');
+if (!hop2.status) hop2 = firstJson('openrouter_i2v_extend_poll');
+var rehost2 = ($input.first() && $input.first().json) || firstJson('parse_hop2_public');
+var rehost1 = firstJson('parse_hop1_public');
 var status = String(hop2.status || '').toLowerCase();
 var err = hop2.error;
 if (err && typeof err === 'object') err = err.message || JSON.stringify(err);
+var quota = /resource pack|parallel task|1303/i.test(String(err || '')) || /resource pack|parallel task|1303/i.test(status);
+if (quota) {
+  throw new Error(
+    'Kling hop 2 hit parallel task over resource pack limit. The job already failed — raising wait_i2v_extend will not help. Wait for other Kling jobs to finish, then Execute from prep_kling_extend.'
+  );
+}
 if (status !== 'completed') {
+  var pendingish =
+    status === 'pending' ||
+    status === 'in_progress' ||
+    status === 'processing' ||
+    status === 'queued' ||
+    status === 'running';
   throw new Error(
     'prep_creatomate_concat: OpenRouter hop 2 status is ' +
       JSON.stringify(hop2.status) +
       (err ? ' error=' + err : '') +
-      '. Raise wait_i2v_extend if still pending/in_progress.'
+      (pendingish
+        ? '. Still generating — raise wait_seconds on Sheet 13.'
+        : '. Failed job; do not raise wait_i2v_extend.')
   );
 }
 
-var video2 = pickVideoUrl(hop2);
+var video2 = httpsUrl(rehost2.public_video_url || rehost2.video_url_extend);
+if (!video2) video2 = pickVideoUrl(hop2);
 var ext = firstJson('prep_kling_extend');
-var video1 = httpsUrl(ext.video_url_15);
+var video1 = httpsUrl(rehost1.public_video_url || rehost1.video_url_15 || ext.video_url_15);
 if (!video1) {
-  throw new Error('prep_creatomate_concat missing video_url_15 from prep_kling_extend.');
+  throw new Error(
+    'prep_creatomate_concat missing public hop 1 URL. Rehost via parse_hop1_public before concat. Creatomate cannot fetch OpenRouter unsigned_urls.'
+  );
 }
 if (!video2) {
   throw new Error(
-    'prep_creatomate_concat hop 2 returned no https video URL. Keys: ' + Object.keys(hop2).join(', ')
+    'prep_creatomate_concat missing public hop 2 URL. Wire download_hop2 → upload_hop2_public → parse_hop2_public. Keys: ' +
+      Object.keys(hop2).concat(Object.keys(rehost2)).join(', ')
+  );
+}
+if (/openrouter\.ai|unsigned/i.test(video1) || /openrouter\.ai|unsigned/i.test(video2)) {
+  throw new Error(
+    'prep_creatomate_concat: hop URLs are still OpenRouter. Rehost both clips to litterbox/catbox first.'
   );
 }
 

@@ -1,7 +1,7 @@
 // n8n Code node: prep_last_frame
-// After: openrouter_i2v_poll
+// After: parse_hop1_public
 // Before: creatomate_last_frame
-// Creatomate snapshot of hop 1 last frame. Replaces fal-ai/ffmpeg-api/extract-frame.
+// Creatomate snapshot of hop 1 last frame. Requires a public litterbox/catbox URL.
 
 function firstJson(name) {
   try {
@@ -31,27 +31,51 @@ function pickVideoUrl(obj) {
   );
 }
 
-var hop1 = ($input.first() && $input.first().json) || {};
+var hop1 = firstJson('route_hop1');
+if (!hop1.status) hop1 = firstJson('openrouter_i2v_poll');
 var start = firstJson('prep_molecule_video_start');
 var pick = firstJson('pick_molecule_creation');
+var rehost = ($input.first() && $input.first().json) || firstJson('parse_hop1_public');
 
 var status = String(hop1.status || '').toLowerCase();
 var err = hop1.error;
 if (err && typeof err === 'object') err = err.message || JSON.stringify(err);
+var quota = /resource pack|parallel task|1303/i.test(String(err || '')) || /resource pack|parallel task|1303/i.test(status);
+if (quota) {
+  throw new Error(
+    'Kling hop 1 hit parallel task over resource pack limit. The job already failed — raising wait_i2v will not help. Wait for other Kling jobs to finish, then Execute from prep_molecule_video_start.'
+  );
+}
 if (status !== 'completed') {
+  var pendingish =
+    status === 'pending' ||
+    status === 'in_progress' ||
+    status === 'processing' ||
+    status === 'queued' ||
+    status === 'running';
   throw new Error(
     'prep_last_frame: OpenRouter hop 1 status is ' +
       JSON.stringify(hop1.status) +
       (err ? ' error=' + err : '') +
-      '. Raise wait_i2v if still pending/in_progress.'
+      (pendingish
+        ? '. Still generating — raise wait_seconds on Sheet 13.'
+        : '. Failed job; do not raise wait_i2v.')
   );
 }
 
-var video1 = pickVideoUrl(hop1);
+var video1 = httpsUrl(rehost.public_video_url || rehost.video_url_15);
+if (!video1) {
+  video1 = pickVideoUrl(hop1);
+}
 if (!video1) {
   throw new Error(
-    'prep_last_frame: openrouter_i2v_poll returned no https video URL. Keys: ' +
-      Object.keys(hop1).join(', ')
+    'prep_last_frame: missing public hop 1 URL. Wire download_hop1 → upload_hop1_public → parse_hop1_public first. Creatomate cannot fetch OpenRouter unsigned_urls. Keys: ' +
+      Object.keys(hop1).concat(Object.keys(rehost)).join(', ')
+  );
+}
+if (/openrouter\.ai|unsigned/i.test(video1)) {
+  throw new Error(
+    'prep_last_frame: got an OpenRouter URL. Rehost hop 1 to litterbox/catbox before creatomate_last_frame.'
   );
 }
 

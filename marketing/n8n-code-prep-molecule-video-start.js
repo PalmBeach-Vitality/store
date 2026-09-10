@@ -60,11 +60,10 @@ var motion = String(
   input.video_motion_prompt || pick.video_motion_prompt || saveStill.video_motion_prompt || ''
 ).trim();
 if (!motion) {
-  throw new Error('prep_molecule_video_start video_motion_prompt missing from pick_molecule_creation.');
+  throw new Error(
+    'SHEETS-ONLY: prep_molecule_video_start missing video_motion_prompt from 13-chem-breakdown-54.'
+  );
 }
-motion =
-  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. No text, no captions, no logos appear. Cellular reaction continues. ' +
-  motion;
 if (motion.length > 2500) {
   motion = motion.slice(0, 2497) + '.';
 }
@@ -81,9 +80,10 @@ if (!isFinite(duration) || duration < 3 || duration > 15) {
   );
 }
 var resolution = requireText(input.resolution || pick.resolution || saveStill.resolution, 'resolution');
-var aspect = requireText(input.aspect_ratio || pick.aspect_ratio || '9:16', 'aspect_ratio');
-var waitSeconds = Number(input.wait_seconds || pick.wait_seconds || 180);
-if (!isFinite(waitSeconds) || waitSeconds < 1) waitSeconds = 180;
+var aspect = requireText(input.aspect_ratio || pick.aspect_ratio, 'aspect_ratio');
+var waitSeconds = Number(input.wait_seconds || pick.wait_seconds || 600);
+if (!isFinite(waitSeconds) || waitSeconds < 1) waitSeconds = 600;
+if (waitSeconds < 600) waitSeconds = 600;
 
 var body = {
   model: modelVideo,
