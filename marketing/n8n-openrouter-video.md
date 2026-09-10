@@ -20,7 +20,12 @@ Wait (sheet wait_seconds, read from the prep node — not from the start respons
 
 GET  https://openrouter.ai/api/v1/videos/{id}
   → status completed + unsigned_urls[0]
+  → status pending / in_progress → poll again
+  → status failed + "parallel task over resource pack limit" → wait 90s and POST a new job
+    (Kling concurrency is full. Do not raise wait on that failed id.)
 ```
+
+`peptide_molecule_vid_gen` `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` (done / wait / quota). Same pattern on hop 2.
 
 Image-to-video body (sheets-only fields):
 

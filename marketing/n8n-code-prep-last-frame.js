@@ -1,5 +1,5 @@
 // n8n Code node: prep_last_frame
-// After: openrouter_i2v_poll
+// After: switch_hop1 (done)
 // Before: creatomate_last_frame
 // Creatomate snapshot of hop 1 last frame. Replaces fal-ai/ffmpeg-api/extract-frame.
 
@@ -38,12 +38,26 @@ var pick = firstJson('pick_molecule_creation');
 var status = String(hop1.status || '').toLowerCase();
 var err = hop1.error;
 if (err && typeof err === 'object') err = err.message || JSON.stringify(err);
+var quota = /resource pack|parallel task|1303/i.test(String(err || '')) || /resource pack|parallel task|1303/i.test(status);
+if (quota) {
+  throw new Error(
+    'Kling hop 1 hit parallel task over resource pack limit. The job already failed — raising wait_i2v will not help. Wait for other Kling jobs to finish, then Execute from prep_molecule_video_start.'
+  );
+}
 if (status !== 'completed') {
+  var pendingish =
+    status === 'pending' ||
+    status === 'in_progress' ||
+    status === 'processing' ||
+    status === 'queued' ||
+    status === 'running';
   throw new Error(
     'prep_last_frame: OpenRouter hop 1 status is ' +
       JSON.stringify(hop1.status) +
       (err ? ' error=' + err : '') +
-      '. Raise wait_i2v if still pending/in_progress.'
+      (pendingish
+        ? '. Still generating — raise wait_seconds on Sheet 13.'
+        : '. Failed job; do not raise wait_i2v.')
   );
 }
 

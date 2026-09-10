@@ -28,22 +28,30 @@ manual_trigger
   → save_still_url
   → prep_molecule_video_start
   → openrouter_i2v_start
-  → wait_i2v
+  → wait_i2v (45s)
   → openrouter_i2v_poll
-  → prep_last_frame
+  → route_hop1 → switch_hop1
+       done  → prep_last_frame
+       wait  → wait_i2v_again (45s) → openrouter_i2v_poll
+       quota → wait_i2v_quota (90s) → retry_hop1_body → openrouter_i2v_start
   → creatomate_last_frame
   → wait_last_frame
   → creatomate_last_frame_poll
   → prep_kling_extend
   → openrouter_i2v_extend
-  → wait_i2v_extend
+  → wait_i2v_extend (45s)
   → openrouter_i2v_extend_poll
-  → prep_creatomate_concat
+  → route_hop2 → switch_hop2
+       done  → prep_creatomate_concat
+       wait  → wait_i2v_extend_again → openrouter_i2v_extend_poll
+       quota → wait_i2v_extend_quota → retry_hop2_body → openrouter_i2v_extend
   → creatomate_concat
   → wait_concat
   → creatomate_poll
   → save_video_url
 ```
+
+Kling `parallel task over resource pack limit` (exec 2135) means the **job already failed** (concurrency full). Raising `wait_i2v` does not help. The quota branch waits 90s and resubmits hop 1/2 (max 5). Pending jobs poll every 45s until Sheet `wait_seconds`.
 
 ---
 
@@ -54,6 +62,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
 3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth** on the same node; leftover templated auth on `openrouter_i2v_start` caused exec 2133 `401 No cookie auth credentials found` (no Bearer token). The start node was rebuilt with OpenRouter account only.
+4. Exec 2135: OpenRouter accepted hop 1 (`pending`), then Kling **failed** it with `parallel task over resource pack limit`. That is concurrency, not a short wait. `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` resubmits after 90s. Max 5 retries. Do not Execute while other Kling jobs are in flight if the pack is a 1-slot plan.
 
 ---
 
@@ -186,6 +195,17 @@ See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → ho
 | Body | **ON** | `={{ JSON.parse($json.openrouter_body_json) }}` |
 
 Same credential on `openrouter_i2v_poll`, `openrouter_i2v_extend`, and `openrouter_i2v_extend_poll`.
+
+---
+
+## Node — `route_hop1`
+
+**Type:** Code  
+**Before → this → After:** `openrouter_i2v_poll` → **route_hop1** → `switch_hop1`
+
+Paste: `marketing/n8n-code-route-hop1.js`
+
+Sets `hop1_route` to `done` / `wait` / `quota`. Quota = Kling resource pack full → `wait_i2v_quota` → **retry_hop1_body** → `openrouter_i2v_start`. Same pattern on hop 2 (`route_hop2`).
 
 ---
 

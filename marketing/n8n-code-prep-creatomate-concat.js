@@ -1,5 +1,5 @@
 // n8n Code node: prep_creatomate_concat
-// After: openrouter_i2v_extend_poll
+// After: switch_hop2 (done)
 // Before: creatomate_concat
 // Join two 15s OpenRouter Kling clips on the same Creatomate track into one 30s mp4.
 
@@ -35,12 +35,26 @@ var hop2 = ($input.first() && $input.first().json) || {};
 var status = String(hop2.status || '').toLowerCase();
 var err = hop2.error;
 if (err && typeof err === 'object') err = err.message || JSON.stringify(err);
+var quota = /resource pack|parallel task|1303/i.test(String(err || '')) || /resource pack|parallel task|1303/i.test(status);
+if (quota) {
+  throw new Error(
+    'Kling hop 2 hit parallel task over resource pack limit. The job already failed — raising wait_i2v_extend will not help. Wait for other Kling jobs to finish, then Execute from prep_kling_extend.'
+  );
+}
 if (status !== 'completed') {
+  var pendingish =
+    status === 'pending' ||
+    status === 'in_progress' ||
+    status === 'processing' ||
+    status === 'queued' ||
+    status === 'running';
   throw new Error(
     'prep_creatomate_concat: OpenRouter hop 2 status is ' +
       JSON.stringify(hop2.status) +
       (err ? ' error=' + err : '') +
-      '. Raise wait_i2v_extend if still pending/in_progress.'
+      (pendingish
+        ? '. Still generating — raise wait_seconds on Sheet 13.'
+        : '. Failed job; do not raise wait_i2v_extend.')
   );
 }
 
