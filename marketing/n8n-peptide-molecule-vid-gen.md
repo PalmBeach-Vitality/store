@@ -64,6 +64,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth**. Exec 2133/2136/2137 `401 No cookie auth credentials found` is that template sending no Bearer token. If the n8n canvas was open on an old copy, **refresh the tab** and do not Save over the live workflow.
 4. Unpin `openrouter_i2v_start` before a new run. Exec 2136/2137 pinned the already-failed job `xUC5d3S5fcAQylMh55LK` and never POSTed a new video.
 5. Exec 2135: OpenRouter accepted hop 1 (`pending`), then Kling **failed** it with `parallel task over resource pack limit`. That is concurrency, not a short wait. `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` resubmits after 90s. Max 5 retries. Do not Execute while other Kling jobs are in flight if the pack is a 1-slot plan.
+6. Exec 2140: hop 1 **completed**. `creatomate_last_frame` 401 = **Creatomate PbVita** key rejected (`The provided API key is invalid`). Fix Header Auth `Authorization: Bearer …` from [Creatomate API keys](https://creatomate.com/docs/api/reference/where-can-i-find-my-api-key). Resume from `prep_last_frame`, do not POST hop 1 again.
 
 ---
 
@@ -213,6 +214,23 @@ Loop: `wait_i2v_again` → **openrouter_i2v_poll** → `route_hop1`
 | Credential | — | **OpenRouter account** (`zDmHXnCHbj14yIvl`) |
 
 No second credential. No Header Auth. Same settings on `openrouter_i2v_extend_poll`.
+
+---
+
+## Node — `creatomate_last_frame`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_last_frame` → **creatomate_last_frame** → `wait_last_frame`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | POST |
+| URL | **OFF** | `https://api.creatomate.com/v1/renders` |
+| Authentication | — | Generic Credential Type → **Header Auth** |
+| Credential | — | **Creatomate PbVita** (`UkuSlYOEACCWm5rB`) |
+| Body | **ON** | `={{ JSON.parse($json.creatomate_body_json) }}` |
+
+Header Auth must be `Authorization` = `Bearer <Creatomate API key>`. Exec 2140 hop 1 **completed** (`2pqY7c8xe8THwhtaaRTf`), then Creatomate returned `401 The provided API key is invalid`. That is the key stored in **Creatomate PbVita**, not a missing n8n credential. Same header on `creatomate_last_frame_poll`, `creatomate_concat`, `creatomate_poll`. Do **not** full-Execute to retry — hop 1 is done. Execute from `prep_last_frame` after the key is valid.
 
 ---
 
