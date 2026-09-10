@@ -5,8 +5,9 @@
 // After: get_chem_creations / filter Active on 13-chem-breakdown-54
 // Before: sheets_update_chem → grok_imagine_molecule_still
 //
-// Next unused row by rank (CHEM-001 then CHEM-002 …). Sheet prompts
-// already include reaction locks — do NOT wrap vial rules.
+// Next unused row by rank (CHEM-001 then CHEM-002 …). Pass sheet
+// video_prompt / video_motion_prompt / still_edit_prompt as-is.
+// Do NOT prepend vibe locks or silent prefixes — those already live on the sheet.
 
 function val(obj, names, fallback) {
   if (fallback === undefined) fallback = '';
@@ -39,18 +40,17 @@ function capPrompt(text) {
   return t;
 }
 
-function moleculeVibeLock(name) {
-  var n = String(name || '').trim();
-  return (
-    "HARD VIBE LOCK (READ FIRST): DARK cinematic 3D MEDICAL ANIMATION of a LIVE CELLULAR CHEMICAL REACTION. " +
-    "NOT a product photography studio. NOT a white cyclorama. NOT a frosted glass pedestal. NOT spa/lifestyle. NOT a catalog still of one floating molecule. " +
-    "Setting: inside/around a living cell — lipid-bilayer membrane, cytoplasm, wet receptors. " +
-    "Action: amino-acid monomers (glossy ball-and-stick) collide, dock, and form peptide bonds with energy flashes. A forming peptide chain of '" +
-    n +
-    "' is the unseen reaction subject. " +
-    "NO TEXT anywhere — no letters, numbers, captions, titles, compound-name overlay, labels. " +
-    "NO LOGO, NO palm tree, NO URL, NO watermark. No vial. No pen. Silent later — do not imply captions."
-  );
+function requireText(value, label, creationId) {
+  var v = String(value == null ? '' : value).trim();
+  if (!v) {
+    throw new Error(
+      'SHEETS-ONLY: 13-chem-breakdown-54 missing ' +
+        label +
+        (creationId ? ' on ' + creationId : '') +
+        '.'
+    );
+  }
+  return v;
 }
 
 var creations = $input.all().map(function (i) {
@@ -95,15 +95,15 @@ var scored = creations
       scene_brief: val(c, ['scene_brief']),
       quality_suffix: val(c, ['quality_suffix']),
       quality_var_count: val(c, ['quality_var_count'], ''),
-      aspect_ratio: val(c, ['aspect_ratio']) || '9:16',
-      duration_seconds: Number(val(c, ['duration_seconds', 'duration'], 15)) || 15,
-      resolution: val(c, ['resolution']) || '1080p',
-      model_still: val(c, ['model_still']) || 'grok-imagine-image-2.0',
-      model_video: val(c, ['model_video']) || 'grok-imagine-video-1.5',
-      still_resolution: val(c, ['still_resolution']) || '2k',
+      aspect_ratio: String(val(c, ['aspect_ratio'], '')).trim(),
+      duration_seconds: Number(val(c, ['duration_seconds', 'duration'], '')),
+      resolution: String(val(c, ['resolution'], '')).trim(),
+      model_still: String(val(c, ['model_still'], '')).trim(),
+      model_video: String(val(c, ['model_video'], '')).trim(),
+      still_resolution: String(val(c, ['still_resolution'], '')).trim(),
       video_prompt: capPrompt(val(c, ['video_prompt'])),
       video_motion_prompt: capPrompt(val(c, ['video_motion_prompt'])),
-      still_edit_prompt: String(val(c, ['still_edit_prompt'], '')).trim(),
+      still_edit_prompt: capPrompt(val(c, ['still_edit_prompt'])),
       surface: val(c, ['surface']),
       lighting: val(c, ['lighting']),
       camera_move: val(c, ['camera_move']),
@@ -141,17 +141,31 @@ scored.sort(function (a, b) {
 });
 
 var pick = scored[0];
-if (String(pick.model_still || '').trim() !== 'grok-imagine-image-2.0') {
+requireText(pick.compound_name, 'compound_name', pick.creation_id);
+requireText(pick.video_prompt, 'video_prompt', pick.creation_id);
+requireText(pick.video_motion_prompt, 'video_motion_prompt', pick.creation_id);
+requireText(pick.model_still, 'model_still', pick.creation_id);
+requireText(pick.model_video, 'model_video', pick.creation_id);
+requireText(pick.resolution, 'resolution', pick.creation_id);
+requireText(pick.aspect_ratio, 'aspect_ratio', pick.creation_id);
+requireText(pick.still_resolution, 'still_resolution', pick.creation_id);
+if (!isFinite(pick.duration_seconds) || pick.duration_seconds < 3 || pick.duration_seconds > 15) {
   throw new Error(
-    'STILL LOCK: model_still must be grok-imagine-image-2.0 (creation_id=' +
+    'SHEETS-ONLY: duration_seconds must be 3–15 on ' +
       pick.creation_id +
-      ', got ' +
-      pick.model_still +
+      ' (got ' +
+      JSON.stringify(pick.duration_seconds) +
       ').'
   );
 }
-var vibe = moleculeVibeLock(pick.compound_name);
-var videoPrompt = capPrompt(vibe + ' ' + pick.video_prompt);
+if (String(pick.model_video).indexOf('fal-ai/') === 0 || String(pick.model_video).indexOf('grok-imagine-video') === 0) {
+  throw new Error(
+    'Sheet 13 model_video must be an OpenRouter slug (kwaivgi/kling-v3.0-pro). Got: ' + pick.model_video
+  );
+}
+
+var videoPrompt = pick.video_prompt;
+var motionPrompt = pick.video_motion_prompt;
 
 return [
   {
@@ -179,13 +193,8 @@ return [
       still_resolution: pick.still_resolution,
       video_prompt: videoPrompt,
       video_prompt_len: videoPrompt.length,
-      video_motion_prompt: capPrompt(
-        "Silent video. No text, no logos, no captions. Cellular chemical reaction continues: living cells and amino acids forming peptide bonds. Same '" +
-          pick.compound_name +
-          "' reaction subject — never printed. No studio cut. " +
-          pick.video_motion_prompt
-      ),
-      still_edit_prompt: capPrompt(vibe + ' ' + pick.still_edit_prompt),
+      video_motion_prompt: motionPrompt,
+      still_edit_prompt: pick.still_edit_prompt,
       surface: pick.surface,
       lighting: pick.lighting,
       camera_move: pick.camera_move,

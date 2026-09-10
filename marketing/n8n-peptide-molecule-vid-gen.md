@@ -23,6 +23,7 @@ manual_trigger
   → get_chem_creations
   → filter_chem_active
   → pick_molecule_creation
+  → sheets_update_chem
   → grok_imagine_molecule_still
   → save_still_url
   → prep_molecule_video_start
@@ -42,7 +43,6 @@ manual_trigger
   → wait_concat
   → creatomate_poll
   → save_video_url
-  → sheets_update_chem
 ```
 
 ---
@@ -108,9 +108,9 @@ Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has *
 
 **Settings → Execute Once:** **OFF**. If this is ON, n8n only passes CHEM-001 into the Code node and every run repeats row 1.
 
-Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set.
+Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set. `video_prompt`, `video_motion_prompt`, and `still_edit_prompt` pass through from the sheet — do not prepend vibe locks in this node.
 
-**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `model_still` = `grok-imagine-image-2.0`
+**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `video_prompt` starts with the sheet `HARD OUTPUT LOCK` (not a Code-node `HARD VIBE LOCK`).
 
 ---
 
@@ -118,6 +118,8 @@ Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row 
 
 **Type:** HTTP Request  
 **Before → this → After:** `sheets_update_chem` → **grok_imagine_molecule_still** → `save_still_url`
+
+Grok `prompt` is the sheet `video_prompt` from `pick_molecule_creation` (Sheet 13 has no `still_prompt` column).
 
 | Setting | fx | Value |
 |---|---|---|
@@ -129,7 +131,7 @@ Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row 
 | JSON | **ON** | see below |
 
 ```text
-={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio || '9:16', resolution: $('pick_molecule_creation').first().json.still_resolution || '2k' }) }}
+={{ JSON.stringify({ model: $('pick_molecule_creation').first().json.model_still, prompt: $('pick_molecule_creation').first().json.video_prompt, n: 1, aspect_ratio: $('pick_molecule_creation').first().json.aspect_ratio, resolution: $('pick_molecule_creation').first().json.still_resolution }) }}
 ```
 
 **Check:** `$json.data[0].url` — one molecule, no vial.
@@ -172,7 +174,7 @@ See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → ho
 ## Node 11 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → (end)  
+**Before → this → After:** `creatomate_poll` → **save_video_url** → `end`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -190,7 +192,7 @@ Include Other Input Fields: **ON**
 **Type:** Google Sheets → Update  
 **Before → this → After:** `pick_molecule_creation` → **sheets_update_chem** → `grok_imagine_molecule_still`
 
-Marks the row used **before** the still so a still-only Execute still advances to CHEM-002 next time.
+Marks the row used **before** the still so a still-only Execute (destination = `grok_imagine_molecule_still`) still advances to the next unused rank. Do **not** wait until Creatomate finishes — that left CHEM-004 at `times_used: 0` after exec 2126 and re-picked NAD+.
 
 | Setting | fx | Value |
 |---|---|---|
