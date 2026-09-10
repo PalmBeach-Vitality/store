@@ -16,7 +16,7 @@ Get a key: [openrouter.ai/settings/keys](https://openrouter.ai/settings/keys)
 POST https://openrouter.ai/api/v1/videos
   → { id, polling_url, status: pending }
 
-Wait (sheet wait_seconds, read from the prep node — not from the start response)
+Wait 45s, then GET. Keep polling every 45s for **600s** (Sheet 13 has no `wait_seconds`; 180 threw exec 2139 while Kling was still `pending`).
 
 GET  https://openrouter.ai/api/v1/videos/{id}
   → status completed + unsigned_urls[0]

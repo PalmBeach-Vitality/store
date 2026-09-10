@@ -81,8 +81,9 @@ if (!isFinite(duration) || duration < 3 || duration > 15) {
 }
 var resolution = requireText(input.resolution || pick.resolution || saveStill.resolution, 'resolution');
 var aspect = requireText(input.aspect_ratio || pick.aspect_ratio, 'aspect_ratio');
-var waitSeconds = Number(input.wait_seconds || pick.wait_seconds || 180);
-if (!isFinite(waitSeconds) || waitSeconds < 1) waitSeconds = 180;
+var waitSeconds = Number(input.wait_seconds || pick.wait_seconds || 600);
+if (!isFinite(waitSeconds) || waitSeconds < 1) waitSeconds = 600;
+if (waitSeconds < 600) waitSeconds = 600;
 
 var body = {
   model: modelVideo,

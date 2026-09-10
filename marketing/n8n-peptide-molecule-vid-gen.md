@@ -28,7 +28,7 @@ manual_trigger
   → save_still_url
   → prep_molecule_video_start
   → openrouter_i2v_start
-  → wait_i2v (45s)
+  → wait_i2v (45s first poll)
   → openrouter_i2v_poll
   → route_hop1 → switch_hop1
        done  → prep_last_frame
@@ -51,7 +51,7 @@ manual_trigger
   → save_video_url
 ```
 
-Kling `parallel task over resource pack limit` (exec 2135) means the **job already failed** (concurrency full). Raising `wait_i2v` does not help. The quota branch waits 90s and resubmits hop 1/2 (max 5). Pending jobs poll every 45s until Sheet `wait_seconds`.
+Kling `parallel task over resource pack limit` (exec 2135) means the **job already failed** (concurrency full). Raising `wait_i2v` does not help. The quota branch waits 90s and resubmits hop 1/2 (max 5). Pending jobs poll every 45s for **600s** (Sheet 13 has no `wait_seconds` column; 180 was too short — exec 2139 still `pending` after 4 polls).
 
 ---
 

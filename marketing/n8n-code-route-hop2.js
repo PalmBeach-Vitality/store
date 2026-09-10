@@ -2,6 +2,7 @@
 // After: openrouter_i2v_extend_poll
 // Before: switch_hop2
 // Same routing as hop 1: done / wait / quota.
+// Pending budget is max(sheet wait_seconds, 600). First wait_i2v_extend is 45s.
 
 function firstJson(name) {
   try {
@@ -31,8 +32,11 @@ function errText(raw) {
 var hop2 = ($input.first() && $input.first().json) || {};
 var status = String(hop2.status || '').toLowerCase();
 var err = errText(hop2.error);
-var waitMax = Number(firstJson('prep_kling_extend').wait_seconds || firstJson('prep_molecule_video_start').wait_seconds || 180);
-if (!isFinite(waitMax) || waitMax < 1) waitMax = 180;
+var waitMax = Number(
+  firstJson('prep_kling_extend').wait_seconds || firstJson('prep_molecule_video_start').wait_seconds || 600
+);
+if (!isFinite(waitMax) || waitMax < 1) waitMax = 600;
+if (waitMax < 600) waitMax = 600;
 var pollCount = runCount('openrouter_i2v_extend_poll');
 var quotaTries = runCount('retry_hop2_body');
 var pendingish =
@@ -46,6 +50,7 @@ var quota = /resource pack|parallel task|1303/i.test(err) || /resource pack|para
 var out = Object.assign({}, hop2, {
   hop2_poll_count: pollCount,
   hop2_quota_retries: quotaTries,
+  hop2_wait_budget: waitMax,
 });
 
 if (status === 'completed') {
@@ -60,7 +65,9 @@ if (pendingish) {
         status +
         ' after ' +
         pollCount +
-        ' polls. Raise wait_seconds on Sheet 13 if Kling is still generating. This is not a resource-pack failure.'
+        ' polls (~' +
+        pollCount * 45 +
+        's). Job is still generating — Execute from openrouter_i2v_extend_poll with the same id. This is not a resource-pack failure.'
     );
   }
   out.hop2_route = 'wait';

@@ -3,6 +3,10 @@
 // Before: switch_hop1
 // Routes hop 1: completed → last-frame, pending → poll again,
 // resource-pack fail → wait and resubmit. Do not treat quota as a wait issue.
+//
+// First wait_i2v is 45s. Then poll every 45s. Sheet/prep wait_seconds is the
+// TOTAL pending budget (default 600). Exec 2139 threw at poll 4 because
+// wait_seconds defaulted to 180 (4 × 45) while Kling was still pending.
 
 function firstJson(name) {
   try {
@@ -32,8 +36,9 @@ function errText(raw) {
 var hop1 = ($input.first() && $input.first().json) || {};
 var status = String(hop1.status || '').toLowerCase();
 var err = errText(hop1.error);
-var waitMax = Number(firstJson('prep_molecule_video_start').wait_seconds || 180);
-if (!isFinite(waitMax) || waitMax < 1) waitMax = 180;
+var waitMax = Number(firstJson('prep_molecule_video_start').wait_seconds || 600);
+if (!isFinite(waitMax) || waitMax < 1) waitMax = 600;
+if (waitMax < 600) waitMax = 600;
 var pollCount = runCount('openrouter_i2v_poll');
 var quotaTries = runCount('retry_hop1_body');
 var pendingish =
@@ -47,6 +52,7 @@ var quota = /resource pack|parallel task|1303/i.test(err) || /resource pack|para
 var out = Object.assign({}, hop1, {
   hop1_poll_count: pollCount,
   hop1_quota_retries: quotaTries,
+  hop1_wait_budget: waitMax,
 });
 
 if (status === 'completed') {
@@ -61,7 +67,9 @@ if (pendingish) {
         status +
         ' after ' +
         pollCount +
-        ' polls. Raise wait_seconds on Sheet 13 if Kling is still generating. This is not a resource-pack failure.'
+        ' polls (~' +
+        pollCount * 45 +
+        's). Job is still generating — Execute from openrouter_i2v_poll with the same id. This is not a resource-pack failure.'
     );
   }
   out.hop1_route = 'wait';
