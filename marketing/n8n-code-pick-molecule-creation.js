@@ -112,6 +112,7 @@ var scored = creations
       status: val(c, ['status'], 'Active'),
       times_used: Number(val(c, ['times_used'], 0)) || 0,
       last_used_at: String(val(c, ['last_used_at'], '')),
+      video_url: String(val(c, ['video_url'], '')).trim(),
     };
   })
   .filter(function (c) {
@@ -130,6 +131,8 @@ function usedCount(c) {
   if (!isFinite(n) || n < 0) n = 0;
   var last = String(c.last_used_at || '').trim();
   if (last && last !== '0') n = Math.max(n, 1);
+  var video = String(c.video_url || '').trim();
+  if (video.indexOf('https://') === 0 || video.indexOf('HTTPS://') === 0) n = Math.max(n, 1);
   return n;
 }
 
