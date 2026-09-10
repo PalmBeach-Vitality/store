@@ -213,6 +213,14 @@ n8n: **Import from File** → name stays `peptide_molecule_vid_gen` → attach c
 
 ---
 
+## Locked keepers
+
+**CHEM-005 / Semaglutide** (exec 2132, destination `grok_imagine_molecule_still`): unique-first `HERO SUBJECT` prompt. Coral lipidated helix, vesicle orbs, amino-acid bond flash, no text/logo. **1584 × 2816** (real 2K 9:16).
+
+- Repo: `marketing/stills/chem005-semaglutide.png`
+- Grok tmp: `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-ec45ad99-2489-92a6-a90a-ea429e8637b6-e47dc059.png`
+- `times_used` on CHEM-005 is **1**. Do **not** re-pick this row for a new still. I2V must use this keeper URL, not a fresh Grok still.
+
 ## Related
 
 - Sheet: `marketing/sheets/13-chem-breakdown-54.csv`
