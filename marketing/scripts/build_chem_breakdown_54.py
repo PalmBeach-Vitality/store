@@ -54,14 +54,10 @@ QUALITY = (
     "no vials, no pens, no people, no product studio, no readable text, no logos"
 )
 
-STILL_EDIT = (
-    "CRITICAL VIBE FIX: This must be an IN-PROGRESS cellular chemical reaction, not a catalog product still. "
-    "Replace any sunlit studio, white cyclorama, glass pedestal, spa, or floating lone molecule on a stand "
-    "with a DARK microscopic living-cell scene: lipid-bilayer cell membrane, cytoplasm, amino-acid "
-    "ball-and-stick monomers colliding and forming peptide bonds with energy flashes. "
-    "DELETE every logo, palm tree, watermark, URL, caption, letter, number, and label. "
-    "BLANK frame — no typography anywhere. No vials, no pens, no people. Do not restyle into a cartoon. "
-    "Keep the row's SURFACE, LIGHTING, COLOR GRADE, and CAMERA MOVE."
+# Shared still-edit tail only. The row-specific set/light/hero comes first in still_edit_prompt().
+STILL_EDIT_TAIL = (
+    "Delete every logo, palm tree, watermark, URL, caption, letter, number, and label. "
+    "No vials, no pens, no people, no sunlit studio, no glass pedestal."
 )
 
 COMPOUNDS = [
@@ -148,10 +144,9 @@ SURFACES = [
         "lab_item": "Chemical breakdown — amino-acid reaction at the cell membrane",
         "hero_style": "membrane docking — amino acids assembling a peptide at a living cell",
         "env": (
-            "DARK cinematic 3D medical animation at the OUTER membrane of a living cell. "
-            "Lipid-bilayer, wet receptors, extracellular fluid. Amino-acid monomers swarm, dock, "
-            "and form peptide bonds with energy flashes. A forming chain grows at a receptor. "
-            "NOT a photography studio. NOT a white cyclorama. NOT a glass pedestal."
+            "SET: the OUTER membrane of a living cell — a wet lipid-bilayer sea, receptors like kelp, "
+            "extracellular fluid in the foreground. Amino-acid monomers swarm, dock, and form peptide "
+            "bonds with energy flashes. A forming chain grows at one receptor."
         ),
     },
     {
@@ -160,10 +155,9 @@ SURFACES = [
         "lab_item": "Chemical breakdown — intracellular amino-acid condensation",
         "hero_style": "cytosol condensation — amino acids locking into a peptide chain",
         "env": (
-            "DARK cinematic 3D medical animation INSIDE a living cell. Cytoplasm, organelle silhouettes, "
-            "wet protein mesh. Amino-acid monomers stream toward a growing peptide and condense — "
-            "each new bond a sharp chemical flash. Nucleus or mitochondrion in bokeh. "
-            "NOT a sunlit showroom. NOT a product catalog set. NOT a glass pedestal."
+            "SET: INSIDE a living cell — crowded cytoplasm, organelle silhouettes, wet protein mesh. "
+            "Amino-acid monomers stream toward a growing peptide and condense; each new bond a sharp "
+            "chemical flash. A nucleus or mitochondrion sits in bokeh."
         ),
     },
     {
@@ -172,10 +166,8 @@ SURFACES = [
         "lab_item": "Chemical breakdown — mitochondrial-membrane peptide assembly",
         "hero_style": "cristae reaction — amino acids assembling along inner membrane folds",
         "env": (
-            "DARK cinematic 3D medical animation at a mitochondrion. Cristae folds, dense matrix, "
-            "inner membrane. Amino acids collide along the membrane and form peptide bonds with "
-            "brief energy flashes. Living-cell chemistry, not a catalog still. "
-            "NOT a photography studio. NOT a glass pedestal."
+            "SET: inside a mitochondrion — cristae as stacked canyons, dense matrix, inner membrane. "
+            "Amino acids collide along the folds and form peptide bonds with brief energy flashes."
         ),
     },
     {
@@ -184,9 +176,8 @@ SURFACES = [
         "lab_item": "Chemical breakdown — nuclear-envelope peptide reaction",
         "hero_style": "nuclear-pore reaction — amino acids assembling at the envelope edge",
         "env": (
-            "DARK cinematic 3D medical animation at the nuclear envelope. A nuclear pore, chromatin "
-            "bokeh, nucleoplasm edge. Amino-acid monomers gather at the pore and form peptide bonds "
-            "with wispy electron-cloud filaments. NOT a spa. NOT a white cyclorama. NOT a glass pedestal."
+            "SET: the nuclear envelope — a pore tunnel, chromatin bokeh, nucleoplasm edge. "
+            "Amino-acid monomers gather at the pore and form peptide bonds with wispy electron-cloud filaments."
         ),
     },
     {
@@ -195,10 +186,8 @@ SURFACES = [
         "lab_item": "Chemical breakdown — ER-membrane peptide condensation",
         "hero_style": "ER cisternae reaction — amino acids condensing on a ribosome-studded membrane",
         "env": (
-            "DARK cinematic 3D medical animation on endoplasmic reticulum. Stacked cisternae, "
-            "ribosome-studded membrane. Amino acids condense into a growing peptide along the ER "
-            "surface with bond flashes. Active reaction, not a floating molecule. "
-            "NOT a sunlit studio. NOT a glass pedestal."
+            "SET: endoplasmic reticulum factory floor — stacked cisternae, ribosome-studded membrane. "
+            "Amino acids condense into a growing peptide along the ER surface with bond flashes."
         ),
     },
     {
@@ -207,10 +196,8 @@ SURFACES = [
         "lab_item": "Chemical breakdown — vesicle-docking peptide reaction",
         "hero_style": "vesicle-field reaction — amino acids assembling at docking sites",
         "env": (
-            "DARK cinematic 3D medical animation in a vesicle docking field. Cytosolic haze, "
-            "membrane fusion sites. Amino-acid monomers cluster at a docking patch and form peptide "
-            "bonds with energy flashes. Living-cell chemistry. "
-            "NOT a product stand. NOT a white cyclorama. NOT a glass pedestal."
+            "SET: a vesicle docking field in cytosolic haze — membrane orbs fuse at flashing patches. "
+            "Amino-acid monomers cluster at one docking site and form peptide bonds with energy flashes."
         ),
     },
 ]
@@ -249,55 +236,35 @@ def look_for_rank(rank: int) -> dict:
     }
 
 
-def molecule_lock(name: str) -> str:
-    return (
-        f"HARD OUTPUT LOCK: a cellular-level CHEMICAL REACTION featuring the peptide '{name}'. "
-        "Show living cells AND amino acids actually reacting (bonds forming, docking, condensation). "
-        "Cinematic photoreal 3D medical animation — not cartoon, not sketch, not product photography. "
-        "NO TEXT anywhere: no letters, numbers, captions, titles, compound-name overlay, labels. "
-        "NO LOGO, NO palm tree, NO watermark, NO URL, NO brand mark. "
-        "No vial, no pen, no syringe, no people, no packaging. "
-        f"Use '{name}' only as the unseen scientific subject — never render it as readable type."
-    )
-
-
-def closing_lock() -> str:
-    return (
-        " FINAL CHECK: this is a living-cell chemical reaction with amino acids, not a studio product shot. "
-        "Zero typography. Zero logos. No vials. No pens."
-    )
-
-
 def video_prompt(name: str, look: dict, mol: str) -> str:
-    lock = molecule_lock(name)
-    body = (
-        f"Vertical 9:16 chemical-reaction still — DARK microscopic cellular animation. "
+    # Unique look FIRST. Shared locks last — Grok clones when every row starts
+    # with the same HARD OUTPUT LOCK / dark-medical-animation paragraph.
+    return (
+        f"HERO SUBJECT: {mol}. "
+        f"This still is a cellular chemical reaction of that structure — '{name}' is never printed as text. "
         f"{look['env']} "
         f"SURFACE: {look['surface']}. "
         f"LIGHTING: {look['lighting']}. "
         f"COLOR GRADE: {look['color_grade']}. "
-        f"SHOT FAMILY: {look['shot_family']}. CAMERA MOVE: {look['camera_move']}. "
-        f"REACTION SUBJECT (visual only, never as text): {mol}. "
-        "Amino acids are glossy translucent colored glass spheres with metallic bonds; "
-        "the forming peptide matches that look as monomers lock together. "
-        "Shallow depth of field, cinematic macro lens, tack-sharp reaction plane, dark cellular bokeh. "
-        "FORBIDDEN scenery: white cyclorama, sunlit photography studio, frosted optical-glass pedestal, "
-        "spa, lifestyle interior, windows, palm-frond wall shadows, product stands. "
-        "FORBIDDEN overlays: any readable text, any logo, any URL, any palm watermark, any caption. "
-        "No product packaging. No research-use disclaimer. No medical claims in frame."
+        f"CAMERA: {look['shot_family']} — {look['camera_move']}. {look['framing']}. "
+        "Photoreal 3D medical still, 9:16, shallow depth of field, tack-sharp reaction plane. "
+        "No text, no logos, no palm tree, no URL, no vials, no pens, no people."
     )
-    return f"{lock} {body}{closing_lock()}"
 
 
 def motion(name: str, look: dict) -> str:
     return (
-        "Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. "
-        f"Camera: {look['camera_move']}. "
-        "Keep the same living-cell environment and lighting. "
-        "Continue the chemical reaction: amino acids drift in, collide, peptide bonds form with "
-        "energy flashes, the cell membrane / cytoplasm undulates. "
-        "Do not cut to a studio or pedestal. No vials, people, needles. "
-        "NO text appears. NO logos appear. NO captions. Completely blank of typography."
+        f"Silent. Camera: {look['camera_move']}. "
+        f"Stay on {look['surface']} with {look['lighting']}. "
+        "Amino acids keep colliding and forming peptide bonds. "
+        "No text, no logos, no vials, no pens."
+    )
+
+
+def still_edit_prompt(look: dict, mol: str) -> str:
+    return (
+        f"Keep this as {look['hero_style']} on {look['surface']} with {look['lighting']} "
+        f"and {look['color_grade']}. Hero structure: {mol}. {STILL_EDIT_TAIL}"
     )
 
 
@@ -395,13 +362,13 @@ def make_row(rank: int, cid: str, name: str, mol: str, look: dict) -> dict:
         "quality_suffix": QUALITY,
         "aspect_ratio": "9:16",
         "duration_seconds": 15,
-        "resolution": "1080p",
+        "resolution": "720p",
         "model_still": "grok-imagine-image-2.0",
-        "model_video": "grok-imagine-video-1.5",
+        "model_video": "kwaivgi/kling-v3.0-pro",
         "still_resolution": "2k",
         "video_prompt": video_prompt(name, look, mol),
         "video_motion_prompt": motion(name, look),
-        "still_edit_prompt": STILL_EDIT,
+        "still_edit_prompt": still_edit_prompt(look, mol),
         "status": "Active",
         "times_used": 0,
         "last_used_at": "",
@@ -453,7 +420,15 @@ def main() -> None:
         mp = r["video_motion_prompt"].lower()
         if "chemical reaction" not in vp and "amino acid" not in vp:
             raise SystemExit(f"missing cellular reaction vibe {r['creation_id']}")
-        if "living cell" not in vp and "cytoplasm" not in vp and "lipid" not in vp:
+        if (
+            "living cell" not in vp
+            and "cytoplasm" not in vp
+            and "lipid" not in vp
+            and "mitochondr" not in vp
+            and "nuclear" not in vp
+            and "endoplasmic" not in vp
+            and "vesicle" not in vp
+        ):
             raise SystemExit(f"missing living-cell scenery {r['creation_id']}")
         if "no text" not in vp:
             raise SystemExit(f"missing no-text lock {r['creation_id']}")
@@ -465,6 +440,13 @@ def main() -> None:
             raise SystemExit(f"overlay text still requested {r['creation_id']}")
         if len(r["video_prompt"]) > 7900:
             raise SystemExit(f"prompt too long {r['creation_id']} {len(r['video_prompt'])}")
+    for i in range(1, len(rows)):
+        a = rows[i - 1]["video_prompt"][:72]
+        b = rows[i]["video_prompt"][:72]
+        if a == b:
+            raise SystemExit(
+                f"adjacent ranks share the same prompt lead: {rows[i]['creation_id']}"
+            )
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", newline="", encoding="utf-8") as f:
@@ -485,7 +467,7 @@ def main() -> None:
     print("unique color_grade:", len({r['color_grade'] for r in rows}))
     print("round B offset compounds:", ", ".join(round_b[:5]), "...")
 
-    patch_path = Path("/tmp/n8n-code-rebuild-chem-looks.js")
+    patch_path = ROOT / "n8n-code-rebuild-chem-looks.js"
     keys = [
         "creation_id",
         "category",

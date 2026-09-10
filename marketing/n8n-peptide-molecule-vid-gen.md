@@ -110,7 +110,7 @@ Each of `shot_family`, `camera_move`, `surface`, `lighting`, `color_grade` has *
 
 Picks the next **unused** row by `rank` (`CHEM-001` then `CHEM-002` …). A row is used if `times_used > 0` or `last_used_at` is set. `video_prompt`, `video_motion_prompt`, and `still_edit_prompt` pass through from the sheet — do not prepend vibe locks in this node.
 
-**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `video_prompt` starts with the sheet `HARD OUTPUT LOCK` (not a Code-node `HARD VIBE LOCK`).
+**Check:** `lab_item_id` (should advance), `input_row_count` = 54, `video_prompt` starts with `HERO SUBJECT:` plus that row’s material (not a shared `HARD VIBE LOCK` / `HARD OUTPUT LOCK`).
 
 ---
 
