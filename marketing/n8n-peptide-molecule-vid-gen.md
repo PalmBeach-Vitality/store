@@ -53,7 +53,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
-3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** use `Simplified Custom Auth account`; exec 2133 returned `401 No cookie auth credentials found` because that template sent no Bearer token.
+3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth** on the same node; leftover templated auth on `openrouter_i2v_start` caused exec 2133 `401 No cookie auth credentials found` (no Bearer token). The start node was rebuilt with OpenRouter account only.
 
 ---
 
