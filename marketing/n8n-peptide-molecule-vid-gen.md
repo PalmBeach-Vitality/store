@@ -61,8 +61,9 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
-3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth** on the same node; leftover templated auth on `openrouter_i2v_start` caused exec 2133 `401 No cookie auth credentials found` (no Bearer token). The start node was rebuilt with OpenRouter account only.
-4. Exec 2135: OpenRouter accepted hop 1 (`pending`), then Kling **failed** it with `parallel task over resource pack limit`. That is concurrency, not a short wait. `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` resubmits after 90s. Max 5 retries. Do not Execute while other Kling jobs are in flight if the pack is a 1-slot plan.
+3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** attach **Simplified Custom Auth**. Exec 2133/2136/2137 `401 No cookie auth credentials found` is that template sending no Bearer token. If the n8n canvas was open on an old copy, **refresh the tab** and do not Save over the live workflow.
+4. Unpin `openrouter_i2v_start` before a new run. Exec 2136/2137 pinned the already-failed job `xUC5d3S5fcAQylMh55LK` and never POSTed a new video.
+5. Exec 2135: OpenRouter accepted hop 1 (`pending`), then Kling **failed** it with `parallel task over resource pack limit`. That is concurrency, not a short wait. `openrouter_i2v_poll` → **route_hop1** → `switch_hop1` resubmits after 90s. Max 5 retries. Do not Execute while other Kling jobs are in flight if the pack is a 1-slot plan.
 
 ---
 
@@ -194,7 +195,24 @@ See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → ho
 | Credential | — | **OpenRouter account** |
 | Body | **ON** | `={{ JSON.parse($json.openrouter_body_json) }}` |
 
-Same credential on `openrouter_i2v_poll`, `openrouter_i2v_extend`, and `openrouter_i2v_extend_poll`.
+Same credential on `openrouter_i2v_poll`, `openrouter_i2v_extend`, and `openrouter_i2v_extend_poll`. Do **not** leave **Simplified Custom Auth** on the poll node — that is exec 2136/2137 `Authorization failed`.
+
+---
+
+## Node — `openrouter_i2v_poll`
+
+**Type:** HTTP Request  
+**Before → this → After:** `wait_i2v` → **openrouter_i2v_poll** → `route_hop1`  
+Loop: `wait_i2v_again` → **openrouter_i2v_poll** → `route_hop1`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | GET |
+| URL | **ON** | `={{ ($json.polling_url && String($json.polling_url).indexOf('http') === 0) ? $json.polling_url : ('https://openrouter.ai/api/v1/videos/' + $json.id) }}` |
+| Authentication | — | Predefined Credential Type → **OpenRouter API** |
+| Credential | — | **OpenRouter account** (`zDmHXnCHbj14yIvl`) |
+
+No second credential. No Header Auth. Same settings on `openrouter_i2v_extend_poll`.
 
 ---
 
