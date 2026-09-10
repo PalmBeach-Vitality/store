@@ -53,6 +53,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 1. Tab is `13-chem-breakdown-54`. Do not point this workflow at `9-lab-item-creations-500`.
 2. Test with **Execute workflow** (manual). Do not Publish until one row looks right.
+3. All four `openrouter_*` HTTP nodes use predefined **OpenRouter account** (`openRouterApi` / `zDmHXnCHbj14yIvl`) — same as `film_i2v_kling`. Do **not** use `Simplified Custom Auth account`; exec 2133 returned `401 No cookie auth credentials found` because that template sent no Bearer token.
 
 ---
 
@@ -168,6 +169,23 @@ Paste: `marketing/n8n-code-prep-molecule-video-start.js`
 OpenRouter Kling v3 Pro is **720p only**. Sheet 13 `resolution` must be `720p`.
 
 See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → hop 2 → Creatomate concat.
+
+---
+
+## Node 8 — `openrouter_i2v_start`
+
+**Type:** HTTP Request  
+**Before → this → After:** `prep_molecule_video_start` → **openrouter_i2v_start** → `wait_i2v`
+
+| Setting | fx | Value |
+|---|---|---|
+| Method | — | POST |
+| URL | **OFF** | `https://openrouter.ai/api/v1/videos` |
+| Authentication | — | Predefined Credential Type → **OpenRouter API** |
+| Credential | — | **OpenRouter account** |
+| Body | **ON** | `={{ JSON.parse($json.openrouter_body_json) }}` |
+
+Same credential on `openrouter_i2v_poll`, `openrouter_i2v_extend`, and `openrouter_i2v_extend_poll`.
 
 ---
 
