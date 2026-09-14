@@ -44,7 +44,16 @@ Writeback after Buffer: **`last_used_date` only** (match on `scene_id`). Caption
 - Grok still/video library: tab **`9-lab-item-creations-500`** (sheets-only inputs — see `n8n-sheets-only-vid-gen.md`). Daily wire + edit-before-video: `n8n-vid-gen-lab-scenes.md`.
 - Optional still edit text: column **`still_edit_prompt`** (blank = skip edit)
 - **`compound_name` is a selector, not label text.** `grok_imagine_reel_still` sends only `video_prompt`, so the name printed on the vial is whatever that prompt says; `compound_name` just picks the row. `pull_sheet_row` matches it with a two-way substring test on the normalized string, so a name that sits inside another active name is unreachable — `Ipamorelin` can never be addressed while `CJC/Ipamorelin` is Active. Where that happens, put a collision-free handle in `compound_name` and keep the real name in `video_prompt`. Check with `scripts/simulate_choose_compound.py` before adding a compound.
-- **A new row's `video_prompt` must name its compound.** It is the only field the still node sends; a prompt that says "compound name in large bold dark maroon" and nothing else returns an unlabeled vial. 70 of the 500 live rows have this defect.
+- **A new row's `video_prompt` must name its compound.** It is the only field the still node sends; a prompt that says "compound name in large bold dark maroon" and nothing else returns an unlabeled vial. 70 of the 500 live rows predate the lock blocks and carry none of `LABEL REQUIREMENT` / `VIAL STATE RULE` / `SINGLE HERO PRODUCT RULE` / `PRODUCT COUNT MUST EQUAL 1` / `NO DOUBLES ANYWHERE` — repair with `scripts/fix_unlabeled_video_prompts.py`, which appends the tail 48 live rows already share and leaves the other 430 byte-identical.
+
+Paste artifacts for the live tab (no cell-write tool exists outside n8n — the Drive integration is file-level only):
+
+| file | paste target |
+| --- | --- |
+| `9-lab-item-creations-501-535-append.tsv` | `A502` — appends the 35 new vial rows, fills `A502:AE536` |
+| `9-lab-item-creations-video-prompt-column.tsv` | `U2` — rewrites the `video_prompt` column, fills `U2:U501` |
+
+Both are headerless and free of tabs and newlines, so Sheets splits them without an import step. After either lands, re-run the matching builder with `--write` so the repo mirror stops drifting from the live tab.
 - **Vial state (CRITICAL):** upright only; exactly one vial; pre-filled before still (never filling in video); clear liquid except **GLOW** = bright blue. Script: `scripts/enforce_vial_state_rules.py`
 - **Single hero product (CRITICAL):** exactly **one vial OR one pen** per creation image — never both, never multiples. Script: `scripts/enforce_single_vial_or_pen.py`
 - Vial look (Sheet 9 / 8 / 12 / `500_Peptide_Wellness_Reel_Scenes`): clear glass + **blue flip-cap** + silver crimp + white label with maroon DNA logo / compound name / maroon dosage bar / `10ml Sterile Multi-Use Vial` — see `scripts/enforce_pbvita_vial_packaging.py`
