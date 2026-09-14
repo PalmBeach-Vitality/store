@@ -18,9 +18,11 @@ recipes; these rows draw from the 223 that live has never used, which makes
 camera_move and framing collision-free by construction.
 
 Usage:
-    python3 marketing/scripts/build_lab_rows_501_535.py [--write]
+    python3 marketing/scripts/build_lab_rows_501_535.py [--handles] [--write]
 
-Without --write it prints the QA report and touches nothing.
+Without --write it prints the QA report and touches nothing. With --handles the
+compound_name column carries a collision-free selector handle so choose_compound
+can address every row; see the PRODUCTS comment.
 """
 
 from __future__ import annotations
@@ -59,6 +61,16 @@ TEXT_FIELDS = (
 # `conc` is None where the store itself marks fill volume unconfirmed — in that
 # case the label keeps the vial lock's generic concentration line and prints no
 # invented mg/ml.
+#
+# `compound_name` is a SELECTOR, not label text. pull_sheet_row matches a typed
+# name with a two-way normalized substring test, and grok_imagine_reel_still
+# sends only video_prompt, so the name printed on the vial comes from the prompt
+# body. Where a chemical name is a substring of another live compound the row
+# would be unreachable, so `handle` overrides the column while `compound_name`
+# stays the text in every prompt. Run with --handles to use them.
+#   CJC                    is inside live CJC/Ipamorelin
+#   Ipamorelin             is inside live CJC/Ipamorelin and Tesamorelin/Ipamorelin
+#   Tesamorelin/Ipamorelin contains live Tesamorelin
 PRODUCTS = [
     {
         "compound_name": "Semax",
@@ -92,6 +104,7 @@ PRODUCTS = [
     },
     {
         "compound_name": "CJC",
+        "handle": "CJC-1295",
         "mg": "10mg",
         "conc": "1 mg/ml",
         "vol": "10ml",
@@ -101,6 +114,7 @@ PRODUCTS = [
     },
     {
         "compound_name": "Ipamorelin",
+        "handle": "Ipamorelin-Solo",
         "mg": "10mg",
         "conc": "1 mg/ml",
         "vol": "10ml",
@@ -109,6 +123,7 @@ PRODUCTS = [
     },
     {
         "compound_name": "Tesamorelin/Ipamorelin",
+        "handle": "Tesa-Ipa",
         "mg": "12mg/3mg",
         "conc": None,
         "vol": "10ml",
@@ -201,7 +216,8 @@ def own_keys(compound: str) -> set[str]:
 
 
 def foreign_names(row: dict, names: list[str], aliases: dict) -> set[str]:
-    own = own_keys(row["compound_name"])
+    # Prompts carry the label name; compound_name may be a selector handle.
+    own = own_keys(row.get("label_name") or row["compound_name"])
     blob = " ".join(row[f] or "" for f in TEXT_FIELDS)
     hits = set()
     for n in names:
@@ -223,10 +239,13 @@ def scene_brief_prefix(rows: list[dict]) -> str:
     return prefix
 
 
-def build_row(donor: dict, spec: dict, recipe: dict, idx: int, sb_prefix: str) -> dict:
+def build_row(
+    donor: dict, spec: dict, recipe: dict, idx: int, sb_prefix: str, handles: bool
+) -> dict:
     row = dict(donor)
     old = donor["compound_name"]
     new = spec["compound_name"]
+    handle = spec.get("handle", new) if handles else new
 
     for field in TEXT_FIELDS:
         text = row.get(field) or ""
@@ -277,7 +296,8 @@ def build_row(donor: dict, spec: dict, recipe: dict, idx: int, sb_prefix: str) -
     row["creation_id"] = f"PBVita-Lab-{idx:03d}"
     row["lab_item_id"] = f"LAB-{idx:03d}"
     row["rank"] = str(idx)
-    row["compound_name"] = new
+    row["compound_name"] = handle
+    row["label_name"] = new
     row["shot_family"] = recipe["shot_family"]
     row["camera_angle"] = recipe["camera_angle"]
     row["camera_direction"] = recipe["camera_direction"]
@@ -298,7 +318,9 @@ def build_row(donor: dict, spec: dict, recipe: dict, idx: int, sb_prefix: str) -
 
 
 def main() -> None:
-    write = "--write" in sys.argv[1:]
+    args = sys.argv[1:]
+    write = "--write" in args
+    handles = "--handles" in args
     with CSV9.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         columns = list(reader.fieldnames or [])
@@ -311,7 +333,16 @@ def main() -> None:
     names = load_catalog_names()
     sb_prefix = scene_brief_prefix(live)
 
-    clean = [r for r in live if not foreign_names(r, names, aliases)]
+    # A donor must name its own compound inside video_prompt. The rename is a
+    # substitution, so a donor that only says "compound name in large bold dark
+    # maroon" gives the new row no name to print — and video_prompt is the only
+    # field grok_imagine_reel_still sends, so the vial would come back unlabeled.
+    clean = [
+        r
+        for r in live
+        if not foreign_names(r, names, aliases)
+        and word_re(r["compound_name"]).search(r["video_prompt"] or "")
+    ]
     if len(clean) < ROWS_PER_PRODUCT * len(PRODUCTS):
         raise SystemExit(f"only {len(clean)} clean donors, need 35")
 
@@ -354,10 +385,14 @@ def main() -> None:
             donor = donor_buckets[cat].pop(0)
             donor_buckets[cat].append(donor)
             recipe = recipe_buckets[fam].pop(0)
-            new_rows.append(build_row(donor, spec, recipe, idx, sb_prefix))
+            new_rows.append(build_row(donor, spec, recipe, idx, sb_prefix, handles))
             idx += 1
 
     qa(live, new_rows, names, aliases, columns)
+
+    # label_name is builder scratch, not a sheet column.
+    for r in new_rows:
+        r.pop("label_name", None)
 
     with OUT_NEW.open("w", newline="\n", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
@@ -397,7 +432,10 @@ def qa(live: list[dict], new: list[dict], names, aliases, columns) -> None:
 
     print(f"QA on {len(new)} new rows:")
     check("row count is 35", len(new) == 35)
-    check("all 31 columns present", all(set(r) == set(columns) for r in new))
+    check(
+        "all 31 columns present",
+        all(set(r) - {"label_name"} == set(columns) for r in new),
+    )
 
     live_ids = {r["creation_id"] for r in live}
     live_lab = {r["lab_item_id"] for r in live}
@@ -433,7 +471,8 @@ def qa(live: list[dict], new: list[dict], names, aliases, columns) -> None:
 
     counts = {p["compound_name"]: 0 for p in PRODUCTS}
     for r in new:
-        counts[r["compound_name"]] = counts.get(r["compound_name"], 0) + 1
+        key = r.get("label_name") or r["compound_name"]
+        counts[key] = counts.get(key, 0) + 1
     check("5 rows per compound", all(v == 5 for v in counts.values()), str(counts))
 
     bad = {r["creation_id"]: sorted(foreign_names(r, names, aliases)) for r in new}
@@ -443,9 +482,20 @@ def qa(live: list[dict], new: list[dict], names, aliases, columns) -> None:
     missing = [
         r["creation_id"]
         for r in new
-        if not word_re(r["compound_name"]).search(" ".join(r[f] or "" for f in TEXT_FIELDS))
+        if not word_re(r.get("label_name") or r["compound_name"]).search(
+            " ".join(r[f] or "" for f in TEXT_FIELDS)
+        )
     ]
     check("own compound name appears in prompts", not missing, str(missing))
+
+    # video_prompt is the only field grok_imagine_reel_still sends, so the name
+    # must be in it or the still comes back with a blank label.
+    unnamed = [
+        r["creation_id"]
+        for r in new
+        if not word_re(r.get("label_name") or r["compound_name"]).search(r["video_prompt"])
+    ]
+    check("video_prompt names the compound (still node sends only this)", not unnamed, str(unnamed))
 
     empty = [
         (r["creation_id"], f)
