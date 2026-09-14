@@ -67,10 +67,12 @@ See `n8n-creatomate-package-workflow.md` + `n8n-buffer-from-creatomate.md`.
 Chemical-breakdown **3D molecule** reels. Sheet **`13-chem-breakdown-54`**. Not vials. Linear — no Switch/IF.
 
 ```text
-get_chem_creations → pick_molecule_creation
+get_chem_creations → filter_chem_active → pick_molecule_creation
+  → sheets_update_chem
   → grok_imagine_molecule_still → save_still_url
-  → prep_molecule_video_start → grok_video_start
-  → wait → poll → save_video_url → sheets_update_chem
+  → prep_molecule_video_start → openrouter_i2v_start
+  → wait → poll → Creatomate last-frame → openrouter hop 2 → concat
+  → save_video_url
 ```
 
 See `n8n-peptide-molecule-vid-gen.md`. Import JSON: `marketing/workflows/peptide_molecule_vid_gen.json`.

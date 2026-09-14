@@ -43,10 +43,13 @@ var hop1 = firstJson('openrouter_i2v_poll');
 var start = firstJson('prep_molecule_video_start');
 var pick = firstJson('pick_molecule_creation');
 
-var video1 = pickVideoUrl(hop1);
+var video1 =
+  httpsUrl(firstJson('parse_hop1_public').public_video_url) ||
+  httpsUrl(firstJson('prep_last_frame').video_url_15) ||
+  pickVideoUrl(hop1);
 if (!video1) {
   throw new Error(
-    'prep_kling_extend openrouter_i2v_poll returned no https video URL. Keys: ' +
+    'prep_kling_extend missing hop 1 URL from parse_hop1_public / openrouter_i2v_poll. Keys: ' +
       Object.keys(hop1).join(', ')
   );
 }
