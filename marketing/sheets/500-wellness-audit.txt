@@ -1,0 +1,44 @@
+750 rows, 41 columns
+
+== CONTRACT
+   clean
+   duplicate creation_id: 0
+
+== REACHABILITY (can choose_compound address the row?)
+   'CJC' (21 rows) also pulls ['CJC ', 'CJC /Ipamorelin', 'CJC/Ipamorelin']
+   'CJC ' (3 rows) also pulls ['CJC', 'CJC /Ipamorelin', 'CJC/Ipamorelin']
+   'CJC /Ipamorelin' (2 rows) also pulls ['CJC', 'CJC ', 'CJC/Ipamorelin']
+   'CJC/Ipamorelin' (32 rows) also pulls ['CJC', 'CJC ', 'CJC /Ipamorelin']
+   'Tesamorelin' (34 rows) also pulls ['Tesamorelin/Ipamorelin']
+   'Tesamorelin/Ipamorelin' (10 rows) also pulls ['Tesamorelin']
+   WHITESPACE in compound_name: ['CJC ']
+
+   winner when typed (times_used, then last_used_at, then rank):
+      type 'CJC' -> LI-046 ('CJC/Ipamorelin')  <-- WRONG COMPOUND
+      type 'CJC ' -> LI-046 ('CJC/Ipamorelin')  <-- WRONG COMPOUND
+      type 'CJC /Ipamorelin' -> LI-046 ('CJC/Ipamorelin')  <-- WRONG COMPOUND
+      type 'Tesamorelin/Ipamorelin' -> LI-014 ('Tesamorelin')  <-- WRONG COMPOUND
+
+== CONTENT
+   category: {'vial_10ml': 329, 'set_environment': 374, 'pen_3ml': 47}
+   'VIAL DOSE LOCK' in video_prompt:      0
+   'VIAL DOSE LOCK' in still_edit_prompt: 208   (no node reads still_edit_prompt)
+   video_prompt gives an exact dose bar:  205
+   video_prompt gives an exact conc line: 205
+   video_prompt gives an exact footer:    205
+   video_prompt states a hero scale:      0
+   rows whose printed label is NOT their own compound: 545
+      ['LI-004', 'LI-027', 'LI-044', 'LI-166', 'LI-112', 'LI-142', 'LI-146', 'LI-160']
+   'MUST copy the X catalog still' donor: {'GHK-Cu': 205}
+      rows pointed at another compound's still: 195
+   footer volume disagrees with the catalog: 24
+      LI-018 Cagrilinitide: prints 10ml, catalog says 5ml
+      LI-043 Cagrilinitide: prints 10ml, catalog says 5ml
+      LI-053 Cagrilinitide: prints 10ml, catalog says 5ml
+      LI-242 Cagrilinitide: prints 10ml, catalog says 5ml
+      LI-086 Cagrilinitide: prints 10ml, catalog says 5ml
+      LI-406 Cagrilinitide: prints 10ml, catalog says 5ml
+   label ink words in video_prompt: {'dark red': 750, 'dark maroon': 2987, 'maroon': 955, 'crimson': 498}
+   pen_3ml rows carrying a VIAL VISUAL LOCK: 47
+   set_environment rows carrying a VIAL VISUAL LOCK: 374
+   video_prompt length: 805-5162 chars
