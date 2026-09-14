@@ -112,7 +112,9 @@ Use this when you want to see the raw still before you commit the edit / video.
 
 `grok_imagine_reel_still` sends nothing but `video_prompt`, uncapped and unwrapped. So the size of the vial, the words on the label, and the ban on extra lettering all have to be in that one sheet cell, and on 2026-09-14 none of them were: a Cagrilintide still came back with an illegible label because no row said how big the hero should be and the label spec ordered a dose bar it never filled in. All 535 rows now carry a `HERO SCALE (MANDATORY)` clause at 40-45% of frame width plus exact dose / concentration / volume strings. Salvatore asked to start at that figure and adjust from there; the target is roughly half the frame. Details and the repair script: `sheets/README.md` and `scripts/fix_vial_label_legibility.py`.
 
-**Watch `still_edit_instructions` before a run.** Its `still_edit_prompt` is currently a Fixed leftover from an earlier one-off — *"make the vial centered in the image. just move it over on the table but make sure its not at the edge of the table. change 50 mg/ml to: 50mg, change 20mg/ml to: 5mg/ml"*. On the default wire that edit is applied to **every** still, so it asks a Cagrilintide frame to change two values it does not have, and "move it over on the table" pulls against the new centred hero-scale lock. Clear it or retype it per run. Not edited here, because node edits need Salvatore's OK.
+**The still-edit branch is off the live path.** Salvatore runs the skip side, so the Fixed text sitting in `still_edit_instructions` — an old one-off that says *"change 50 mg/ml to: 50mg, change 20mg/ml to: 5mg/ml"* — never reaches a still and does not fight the hero-scale lock. Leave it alone. It only matters if someone wires the edit branch back in, and then it needs retyping first.
+
+On the live canvas `save_still_url` currently has **no** outgoing connection, so neither branch is attached to it. A top-to-bottom Execute halts there with a still and no clip; reaching `fal_kling_generate` means attaching `skip_still_edit` or running the tail nodes with Execute step.
 
 ---
 
