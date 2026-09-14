@@ -44,6 +44,10 @@ OUT_NEW = SHEETS / "9-lab-item-creations-501-535-new.csv"
 # the CSV, so n8n parses it natively and no hand-rolled CSV parser can mangle a
 # quoted prompt field.
 OUT_NEW_JSON = SHEETS / "9-lab-item-creations-501-535-new.json"
+# Headerless TSV for a direct clipboard paste into the live tab. No field in
+# these rows contains a tab or a newline, so Sheets splits it correctly without
+# an import step. Verified by build; see the tsv guard in qa().
+OUT_NEW_TSV = SHEETS / "9-lab-item-creations-501-535-append.tsv"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from camera_recipes import generate_all_recipes  # noqa: E402
@@ -405,6 +409,19 @@ def main() -> None:
     )
     print(f"wrote {OUT_NEW_JSON.relative_to(ROOT.parent)}")
 
+    OUT_NEW_TSV.write_text(
+        "".join("\t".join(r[c] for c in columns) + "\n" for r in new_rows),
+        encoding="utf-8",
+    )
+    first = len(live) + 2  # header row + existing rows
+    last_col = chr(ord("A") + (len(columns) - 1) // 26 - 1) + chr(
+        ord("A") + (len(columns) - 1) % 26
+    )
+    print(
+        f"wrote {OUT_NEW_TSV.relative_to(ROOT.parent)} "
+        f"-> paste into A{first}, fills A{first}:{last_col}{first + len(new_rows) - 1}"
+    )
+
     if not write:
         print("dry run — Sheet 9 mirror untouched. Re-run with --write to append.")
         return
@@ -553,6 +570,16 @@ def qa(live: list[dict], new: list[dict], names, aliases, columns) -> None:
         if m
     }
     check("footer volume is 10ml only", footers <= {"10ml"}, str(footers))
+
+    # A tab or newline in any cell would shift the paste and silently corrupt
+    # every column to its right.
+    dirty = [
+        (r["creation_id"], c)
+        for r in new
+        for c in columns
+        if re.search(r"[\t\r\n]", r[c] or "")
+    ]
+    check("no tab or newline in any cell (paste-safe)", not dirty, str(dirty[:5]))
 
     if fail:
         raise SystemExit(f"\n{len(fail)} QA check(s) failed: {fail}")
