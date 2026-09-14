@@ -20,11 +20,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
-CSV_TARGETS = ("9-lab-item-creations-500.csv", "9-lab-item-creations-250.csv")
-JSON_TARGETS = (
-    "pbvita-500-lab-item-creations.json",
-    "pbvita-250-lab-item-creations.json",
-)
+# Only the -500 pair mirrors this tab. The -250 pair is an older, separate
+# generation of the same creation_ids (different lab_item / video_prompt /
+# scene_brief / hero_style on ~440 rows) and is not this tab's mirror, so
+# writing it here would silently destroy it. Left alone pending Salvatore's
+# call on whether to keep or delete it.
+CSV_TARGETS = ("9-lab-item-creations-500.csv",)
+JSON_TARGETS = ("pbvita-500-lab-item-creations.json",)
 
 EXPECTED_COLUMNS = [
     "creation_id",
