@@ -38,6 +38,9 @@ JSON9 = ROOT / "pbvita-500-lab-item-creations.json"
 JSON9_250 = ROOT / "pbvita-250-lab-item-creations.json"
 OUT_TSV = SHEETS / "9-lab-item-creations-video-prompt-column.tsv"
 OUT_DIFF = SHEETS / "9-lab-item-creations-unlabeled-70-fix.csv"
+# creation_id + video_prompt for the repaired rows only, so a Google Sheets
+# update node can match on creation_id and leave the other 430 alone.
+OUT_JSON = SHEETS / "9-lab-item-creations-unlabeled-70-fix.json"
 
 MARKERS = (
     "LABEL REQUIREMENT",
@@ -138,6 +141,22 @@ def main() -> None:
                 [r["creation_id"], r["compound_name"], before[r["creation_id"]], r["video_prompt"]]
             )
     print(f"wrote {OUT_DIFF.relative_to(ROOT.parent)} ({len(fixed)} before/after pairs)")
+
+    OUT_JSON.write_text(
+        json.dumps(
+            {
+                "count": len(fixed),
+                "rows": [
+                    {"creation_id": r["creation_id"], "video_prompt": r["video_prompt"]}
+                    for r in fixed
+                ],
+            },
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    print(f"wrote {OUT_JSON.relative_to(ROOT.parent)} ({len(fixed)} rows)")
 
     if not write:
         print("dry run — Sheet 9 mirror untouched. Re-run with --write to apply.")
