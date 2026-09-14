@@ -219,6 +219,11 @@ def main() -> int:
         before = r["video_prompt"]
         m = PRINTED_NAME_RE.search(before)
         if not m:
+            if "HERO SCALE (MANDATORY)" in before:
+                raise SystemExit(
+                    "the sheet already carries the fix — this script runs once against "
+                    "the pre-fix mirror, so restore it from git before re-running"
+                )
             raise SystemExit(f"{r['creation_id']}: cannot read the printed label name")
         name = m.group(1)
         mg, conc, vol, warn = resolve(name, before, catalog, aliases)
@@ -287,7 +292,14 @@ def main() -> int:
             w.writerows(rows)
         OUT_JSON.write_text(
             json.dumps(
-                [{"creation_id": r["creation_id"], "video_prompt": r["video_prompt"]} for r in rows],
+                [
+                    {
+                        "creation_id": r["creation_id"],
+                        "video_prompt": r["video_prompt"],
+                        "scene_brief": r["scene_brief"],
+                    }
+                    for r in rows
+                ],
                 indent=1,
             )
             + "\n"
