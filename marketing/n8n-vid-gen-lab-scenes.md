@@ -22,9 +22,7 @@ When clicking ‘Execute workflow’
   → grok_imagine_edit_still          apply the edit
   → save_edited_still_url            edited still URL
   → prep_grok_video_start
-  → grok_video_start
-  → wait_video                       200s
-  → grok_video_poll
+  → fal_kling_generate               fal Kling 3.0 Standard I2V, 15s, no audio
   → save_video_url
   → sheets_update_creation           times_used + last_used_at
 ```
@@ -33,7 +31,9 @@ When clicking ‘Execute workflow’
 **Skip:** disconnect that wire, connect `save_still_url` → `skip_still_edit`.  
 Do not leave **both** wires on. That sends two videos.
 
-**Mute:** clips are silent. `prep_grok_video_start` sends `audio: false` and prefixes the sheet `video_motion_prompt` with a silent lock (same as pen / molecule). Camera and vial motion stay on the sheet. Do not rewrite `pick_creation`.
+**Vid gen API (quality/cost check):** fal.ai `fal-ai/kling-video/v3/standard/image-to-video`. 15s. `generate_audio: false`. Grok still + still-edit hops are unchanged. Old `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas **disabled**.
+
+**Mute:** clips are silent. `prep_grok_video_start` sends `generate_audio: false` and prefixes the sheet `video_motion_prompt` with a silent lock (same as pen / molecule). Camera and vial motion stay on the sheet. Do not rewrite `pull_sheet_row`.
 
 ---
 
@@ -64,7 +64,7 @@ To edit again: disconnect `skip_still_edit`, wire `save_still_url` back to `stil
 3. Edit these columns, then wait for Sheets to save:
    - **`video_prompt`** — what the first still should look like
    - **`still_edit_prompt`** — what to change on that still (one hero, no extras, no scale, etc.)
-   - **`video_motion_prompt`** — camera move for the video (this is what Grok video uses)
+   - **`video_motion_prompt`** — camera move for the video (this is what fal Kling uses)
 4. Confirm `status` is **`Active`**.
 5. In n8n open **Vid_gen_lab_scenes -9-lab-items-creations-500**.
 6. Click **Execute workflow**. Do **not** Publish.
@@ -90,7 +90,7 @@ Use this when you want to see the raw still before you commit the edit / video.
 ### Do not edit
 
 - `model_still` / `model_video` / `duration_seconds` / `resolution` / `aspect_ratio` — those stay on the sheet. Empty cells throw.
-- Do not type a prompt into `grok_imagine_reel_still` or `grok_video_start`. Those nodes only read `$json`.
+- Do not type a prompt into `grok_imagine_reel_still` or `fal_kling_generate`. Those nodes only read `$json`.
 - Do not re-enable the leftover import / Buffer / Creatomate / IF nodes.
 
 ---
@@ -102,7 +102,8 @@ Use this when you want to see the raw still before you commit the edit / video.
 | `still_edit_instructions` | **This is the edit desk.** `still_url` fx **ON** from the raw still. `still_edit_prompt` fx **ON** from the sheet unless you turn it **OFF** for a one-run paste. |
 | `prep_still_edit` | Builds the xAI edit body. Paste: `n8n-code-prep-still-edit.js`. |
 | `save_edited_still_url` | Writes the edited `https` URL. Include Other Fields **ON**. |
-| `prep_grok_video_start` | Builds the xAI video body. Paste: `n8n-code-prep-grok-video-start.js`. Mutes the clip (`audio: false` + silent lock). |
+| `prep_grok_video_start` | Maps sheet motion + still URL for fal. Paste: `n8n-code-prep-grok-video-start.js`. Mutes the clip (`generate_audio: false` + silent lock). |
+| `fal_kling_generate` | fal.ai Kling 3.0 Standard I2V. 15s. No audio. Credential: `fal.ai account`. |
 | `sheets_update_creation` | Match `creation_id`. Writes `times_used` + `last_used_at` only. |
 
 ---

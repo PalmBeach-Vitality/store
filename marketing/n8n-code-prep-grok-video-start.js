@@ -1,17 +1,17 @@
 // n8n Code node name: prep_grok_video_start
 // Workflow: Vid_gen_lab_scenes -9-lab-items-creations-500
 // Mode: Run Once for All Items
-// After: save_edited_still_url  (edit)  or  skip_still_edit  (skip)
-// Before: grok_video_start
+// After: grok_imagine_edit_still  (edit)  or  skip_still_edit  (skip)
+// Before: fal_kling_generate
 //
-// HARD RULE: every video generation parameter comes from the sheet via pick_creation.
-// This node must not invent camera, motion, model, duration, aspect_ratio, or resolution.
+// HARD RULE: every video generation parameter comes from the sheet via pull_sheet_row.
+// This node must not invent camera, motion, duration, aspect_ratio, or resolution.
 // Do not append vial lock. Do not truncate. Do not default to push-in.
 // still_url may come from Imagine / save_still_url (not a sheet camera param).
 //
-// MUTE (Salvatore asked): Grok Imagine Video 1.5 muxes audio by default.
-// Keep audio: false and prefix the sheet motion with a silent lock.
-// Do not rewrite pick_creation or Sheet 9 video_motion_prompt.
+// VID GEN API (Salvatore quality/cost check): fal Kling 3.0 Standard I2V.
+// Node fal_kling_generate is the API. Mute with generate_audio: false.
+// Keep the silent lock on the sheet motion. Do not rewrite pull_sheet_row.
 
 function firstJson(name) {
   try {
@@ -85,7 +85,7 @@ function aspectFromSheet(raw, creationId) {
 }
 
 var input = $json && typeof $json === 'object' ? $json : {};
-var pick = firstJson('pick_creation');
+var pick = firstJson('pull_sheet_row');
 var stillUrl =
   pickUrl(firstJson('grok_imagine_edit_still')) ||
   pickUrl(firstJson('save_edited_still_url')) ||
@@ -99,14 +99,13 @@ if (!stillUrl) {
 var creationId = String(val(pick, ['creation_id']) || val(input, ['creation_id']) || '');
 
 function sheetField(names, label) {
-  // pick_creation first, then current item. NEVER get_reel_creations (that is sheet row 1).
+  // pull_sheet_row first, then current item. NEVER get_reel_creations (that is sheet row 1).
   var v = val(pick, names);
   if (!String(v).trim()) v = val(input, names);
   return requireFromSheet(label, v, creationId);
 }
 
 var motion = sheetField(['video_motion_prompt', 'videoMotionPrompt'], 'video_motion_prompt');
-var modelVideo = sheetField(['model_video', 'modelVideo'], 'model_video');
 var durationRaw = sheetField(
   ['duration_seconds', 'durationSeconds', 'duration'],
   'duration_seconds'
@@ -121,6 +120,15 @@ if (!Number.isFinite(duration) || duration <= 0) {
       ')'
   );
 }
+if (duration !== 15) {
+  throw new Error(
+    'fal Kling 3.0 I2V is locked to 15s for this quality check (creation_id=' +
+      creationId +
+      ', sheet duration_seconds=' +
+      durationRaw +
+      ')'
+  );
+}
 var resolution = sheetField(['resolution'], 'resolution');
 var aspect = aspectFromSheet(
   val(pick, ['aspect_ratio', 'aspectRatio']) || val(input, ['aspect_ratio', 'aspectRatio']),
@@ -130,31 +138,22 @@ var cameraMove = sheetField(['camera_move', 'cameraMove', 'camera'], 'camera_mov
 
 var SILENT_LOCK =
   'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ';
-var motionForGrok = SILENT_LOCK + motion;
-
-var body = {
-  model: modelVideo,
-  prompt: motionForGrok,
-  image: { url: stillUrl },
-  duration: duration,
-  aspect_ratio: aspect,
-  resolution: resolution,
-  audio: false,
-};
+var motionForVideo = SILENT_LOCK + motion;
 
 return [
   {
     json: Object.assign({}, input, {
       still_url: stillUrl,
       reel_still_url: stillUrl,
-      video_motion_prompt: motionForGrok,
-      model_video: modelVideo,
+      video_motion_prompt: motionForVideo,
+      model_video: 'fal-ai/kling-video/v3/standard/image-to-video',
       duration_seconds: duration,
+      duration_label: String(duration),
       resolution: resolution,
       aspect_ratio: aspect,
       camera_move: cameraMove,
       audio: false,
-      grok_video_body_json: JSON.stringify(body),
+      generate_audio: false,
     }),
   },
 ];
