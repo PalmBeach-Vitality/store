@@ -136,9 +136,16 @@ def main() -> int:
     print(f"   'VIAL DOSE LOCK' in still_edit_prompt: {edit_lock}   "
           "(no node reads still_edit_prompt)")
 
-    bar = sum(1 for r in rows if re.search(r"bar white '[^']+'", r["video_prompt"]))
-    conc = sum(1 for r in rows if re.search(r"black '[^']*mg/ml'", r["video_prompt"]))
-    foot = sum(1 for r in rows if re.search(r"footer '[^']+'", r["video_prompt"]))
+    # Two shapes: the old HARD OUTPUT LOCK phrasing and the Sheet 9 phrasing
+    # the rebuild uses. Accept either so this stays a real check if the tab
+    # ever regresses to the old text.
+    bar = sum(1 for r in rows if re.search(
+        r"bar white '[^']+'|dose bar with white text reading exactly '[^']+'", r["video_prompt"]))
+    conc = sum(1 for r in rows if re.search(
+        r"black '[^']*mg/ml'|concentration line under the bar reading exactly '[^']+'"
+        r"|NO mg/ml concentration line anywhere", r["video_prompt"]))
+    foot = sum(1 for r in rows if re.search(
+        r"footer '[^']+'|footer reading exactly '[^']+'", r["video_prompt"]))
     print(f"   video_prompt gives an exact dose bar:  {bar}")
     print(f"   video_prompt gives an exact conc line: {conc}")
     print(f"   video_prompt gives an exact footer:    {foot}")
@@ -148,10 +155,18 @@ def main() -> int:
         r"|\d+\s*(?:%|percent) of (?:the )?frame", r["video_prompt"], re.I))
     print(f"   video_prompt states a hero scale:      {scale}")
 
-    # Does the label text name this row's own compound?
-    named = [r["creation_id"] for r in rows
-             if not re.search(rf"maroon '{re.escape(r['compound_name'].strip())}'",
-                              r["video_prompt"])]
+    # Does the label text name this row's own compound? compound_name is a
+    # selector handle on four compounds (CJC-1295 prints 'CJC', Tesa-Ipa prints
+    # 'Tesamorelin/Ipamorelin'), so compare against the printed name.
+    handles = {"CJC-1295": "CJC", "Tesa-Ipa": "Tesamorelin/Ipamorelin",
+               "Ipamorelin-Solo": "Ipamorelin", "TA-1": "TA-1"}
+    named = []
+    for r in rows:
+        own = r["compound_name"].strip()
+        printed = handles.get(own, own)
+        if not re.search(rf"(?:maroon|reading exactly) '{re.escape(printed)}'",
+                         r["video_prompt"]):
+            named.append(r["creation_id"])
     print(f"   rows whose printed label is NOT their own compound: {len(named)}")
     if named:
         print(f"      {named[:8]}")
