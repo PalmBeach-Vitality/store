@@ -32,7 +32,7 @@ Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
 `LN-003` (Sept 11 issue — FDA warning letters + NCT07803250) was sent on Sep 8, 2026. The row is `sent`. Do not re-send it.
 
-`LN-004` is the Sept 14 issue from the [Aug 21 weekly Figma mockup](https://www.figma.com/design/p9xRXPzisANMpE7FZp7Bit/Palm-Beach-Vitality---Weekly-Newsletter-Mockup--Aug-21-2026-?node-id=0-1) (quiet week + GHK-Cu research pen). Status is `test`. Do not send until the updated subscriber list is in. Do not Publish the send workflow until you ask.
+`LN-004` is the Sept 14 issue from the [Aug 21 weekly Figma mockup](https://www.figma.com/design/p9xRXPzisANMpE7FZp7Bit/Palm-Beach-Vitality---Weekly-Newsletter-Mockup--Aug-21-2026-?node-id=0-1) (quiet week + GHK-Cu research pen). Test went to `salvatorejohnson1984@gmail.com` on Sep 14. The row is `tested`. Do not list-send until you confirm. Do not Publish the send workflow until you ask.
 
 ## Where you write the newsletter
 
@@ -40,7 +40,7 @@ You do **not** paste a finished HTML email into n8n or Gmail. You fill **one row
 
 Format in the cells: **plain text**. New paragraph = **Alt+Enter** inside the cell. Do not paste `<html>`. Links belong in the `link_*_url` columns, not inside the body.
 
-`LN-004` is the Sept 14 issue (status `test`, not sent). Duplicate that row for later weeks; do not invent copy if you have a new Figma.
+`LN-004` is the Sept 14 issue (status `tested`). Duplicate that row for later weeks; do not invent copy if you have a new Figma.
 
 ## Campaign sheet fields
 
@@ -85,7 +85,7 @@ Empty cells fail. Placeholder draft copy (`write the …`) also fails. Sheet `fr
 - Skips `unsubscribed` and anyone already `sent` for that `campaign_id`.
 - Unsubscribe link in every footer.
 - Physical address + research disclaimer in the footer.
-- Start with a 1-person test, then the current 5-person list. Do not import a cold list.
+- Start with a 1-person test, then the subscribed list. Do not import a cold list.
 - Workspace daily cap is typically ~2,000. Stay far under that while the domain is warming.
 
 ## n8n node map — send
