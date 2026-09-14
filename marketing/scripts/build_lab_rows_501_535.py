@@ -58,10 +58,12 @@ TEXT_FIELDS = (
 PRODUCTS = [
     {
         "compound_name": "Semax",
-        "mg": "20mg",
-        "conc": "2 mg/ml",
+        "mg": "10mg",
+        "conc": "1 mg/ml",
         "vol": "10ml",
-        "source": "store PDP: Semax 10 mL Vial (20 mg), 2 mg/mL",
+        # Salvatore 2026-09-13: vial is 10mg / 1 mg/ml on every vial sheet. The
+        # store PDP showing 20 mg / 2 mg/mL is the pen strength and is stale.
+        "source": "Salvatore confirmed; matches wholesale sheet 'Semax 10mg Vial'",
     },
     {
         "compound_name": "PT-141",
