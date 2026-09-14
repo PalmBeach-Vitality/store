@@ -38,6 +38,10 @@ CSV9_250 = SHEETS / "9-lab-item-creations-250.csv"
 JSON9 = ROOT / "pbvita-500-lab-item-creations.json"
 JSON9_250 = ROOT / "pbvita-250-lab-item-creations.json"
 OUT_NEW = SHEETS / "9-lab-item-creations-501-535-new.csv"
+# JSON twin of OUT_NEW. The append workflow fetches this over HTTPS rather than
+# the CSV, so n8n parses it natively and no hand-rolled CSV parser can mangle a
+# quoted prompt field.
+OUT_NEW_JSON = SHEETS / "9-lab-item-creations-501-535-new.json"
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from camera_recipes import generate_all_recipes  # noqa: E402
@@ -88,17 +92,20 @@ PRODUCTS = [
     },
     {
         "compound_name": "CJC",
-        "mg": "100mg",
-        "conc": "10 mg/ml",
+        "mg": "10mg",
+        "conc": "1 mg/ml",
         "vol": "10ml",
-        "source": "store PDP: CJC (no DAC) 10 mL Vial (100 mg), 10 mg/mL",
+        # Salvatore 2026-09-13: wholesale 'CJC-1295 10mg Vial' is correct. The
+        # PDP's 100 mg / 10 mg/mL is stale, same failure mode as Semax.
+        "source": "Salvatore confirmed; matches wholesale sheet 'CJC-1295 10mg Vial'",
     },
     {
         "compound_name": "Ipamorelin",
         "mg": "10mg",
-        "conc": None,
+        "conc": "1 mg/ml",
         "vol": "10ml",
-        "source": "store PDP: Ipamorelin 10mg Vial; fill volume flagged 'verify before publish'",
+        # Salvatore 2026-09-13: 10mg in a 10 mL fill, so 1 mg/ml.
+        "source": "Salvatore confirmed 10mg / 1 mg/ml, 10 mL fill",
     },
     {
         "compound_name": "Tesamorelin/Ipamorelin",
@@ -357,6 +364,11 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(new_rows)
     print(f"\nwrote {OUT_NEW.relative_to(ROOT.parent)} ({len(new_rows)} rows)")
+    OUT_NEW_JSON.write_text(
+        json.dumps({"count": len(new_rows), "rows": new_rows}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"wrote {OUT_NEW_JSON.relative_to(ROOT.parent)}")
 
     if not write:
         print("dry run — Sheet 9 mirror untouched. Re-run with --write to append.")
