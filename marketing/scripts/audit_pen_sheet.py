@@ -59,14 +59,34 @@ VIAL_LANG = re.compile(
 # The wholesale sheet codes the GLP agonists; the pen tab uses drug names.
 PRICE_ALIASES = {"glp1s": "semaglutide", "glp2t": "tirzepatide", "glp3r": "retatrutide"}
 
+# compound_name is a selector, not label text. Where a product's real name is
+# a substring of another Active name, the column holds a collision-free handle
+# and the pen still prints the real name. Audit the product, not the handle.
+HANDLES = {
+    "ipamorelinsolo": "Ipamorelin",
+    "tesaipa": "Tesamorelin/Ipamorelin",
+    "cjc1295": "CJC",
+    "cjcipamorelin": "CJC-1295/Ipamorelin",
+}
+
+# Salvatore confirmed these ship as pens; the wholesale sheet just has no pen
+# line for them.
+PRICE_SHEET_GAPS = {"aod9604", "kpv"}
+
+# Salvatore took the GLP agonists off this sheet on 2026-09-14: every pen here
+# is a peptide pen. Their absence is the intent, not a coverage gap.
+OFF_SHEET = {"semaglutide", "tirzepatide", "retatrutide"}
+
 
 def norm(text: str) -> str:
     return re.sub(r"[^a-z0-9]", "", str(text).lower())
 
 
 def canon(text: str) -> str:
-    """One key per product, whichever of the two vocabularies named it."""
-    return PRICE_ALIASES.get(norm(text), norm(text))
+    """One key per product, whichever of the three vocabularies named it."""
+    key = norm(text)
+    key = norm(HANDLES.get(key, key))
+    return PRICE_ALIASES.get(key, key)
 
 
 def main() -> int:
@@ -148,8 +168,14 @@ def main() -> int:
     sheet_canon = {canon(n) for n in names}
     pen_products = {r["compound_name"] for r in prices if r["form"].strip().lower() == "pen"}
     pen_canon = {canon(p) for p in pen_products}
-    missing = sorted(p for p in pen_products if canon(p) not in sheet_canon)
-    extra = sorted(n for n in names if canon(n) not in pen_canon)
+    missing = sorted(
+        p
+        for p in pen_products
+        if canon(p) not in sheet_canon and canon(p) not in OFF_SHEET
+    )
+    extra = sorted(
+        n for n in names if canon(n) not in pen_canon and canon(n) not in PRICE_SHEET_GAPS
+    )
     print(f"        price-sheet pens with no rows ({len(missing)}): {missing}")
     print(f"        rows with no price-sheet pen ({len(extra)}): {extra}")
 
