@@ -5,8 +5,9 @@
 // After: save_edited_still_url
 // Before: grok_video_start
 //
-// SHEETS-ONLY: model / motion / duration / aspect / resolution / audio from pick_creation.
+// SHEETS-ONLY: model / motion / duration / aspect / resolution from pull_sheet_row.
 // still_url is runtime from save_edited_still_url (edit) then save_still_url.
+// Audio is the one exception: hard off, never read from the sheet.
 
 function firstJson(name) {
   try {
@@ -69,21 +70,8 @@ function aspectFromSheet(raw, creationId) {
   );
 }
 
-function audioFromSheet(raw, creationId) {
-  var s = String(raw == null ? '' : raw).trim().toLowerCase();
-  if (s === 'true' || s === '1' || s === 'yes') return true;
-  if (s === 'false' || s === '0' || s === 'no') return false;
-  throw new Error(
-    'SHEETS-ONLY: audio must be TRUE or FALSE on the sheet (creation_id=' +
-      creationId +
-      ', got ' +
-      raw +
-      ')'
-  );
-}
-
 var input = ($input.first() && $input.first().json) || {};
-var pick = firstJson('pick_creation');
+var pick = firstJson('pull_sheet_row');
 var editedStill = firstJson('save_edited_still_url');
 var stillNode = firstJson('save_still_url');
 var editHttp = firstJson('grok_imagine_edit_still');
@@ -124,10 +112,6 @@ var aspect = aspectFromSheet(
   creationId
 );
 var cameraMove = sheetField(['camera_move', 'cameraMove', 'camera'], 'camera_move');
-var audio = audioFromSheet(
-  val(pick, ['audio']) || val(input, ['audio']) || val(stillNode, ['audio']),
-  creationId
-);
 var waitRaw = sheetField(['wait_seconds', 'waitSeconds'], 'wait_seconds');
 var waitSeconds = Number(waitRaw);
 if (!isFinite(waitSeconds) || waitSeconds <= 0) {
@@ -140,9 +124,16 @@ if (!isFinite(waitSeconds) || waitSeconds <= 0) {
   );
 }
 
+// Salvatore: audio is off on all three vid-gen workflows, always. The sheet audio
+// column is not read here. The API flag alone has let Grok score a clip, so the
+// motion prompt carries the same silent lock as lab and pen.
+var SILENT_LOCK =
+  'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ';
+var motionForVideo = motion.indexOf('Silent video') === -1 ? SILENT_LOCK + motion : motion;
+
 var body = {
   model: modelVideo,
-  prompt: motion,
+  prompt: motionForVideo,
   image: { url: stillResolved },
   duration: duration,
   aspect_ratio: aspect,
@@ -155,13 +146,14 @@ return [
     json: Object.assign({}, input, {
       still_url: stillResolved,
       reel_still_url: stillResolved,
-      video_motion_prompt: motion,
+      video_motion_prompt: motionForVideo,
       model_video: modelVideo,
       duration_seconds: duration,
       resolution: resolution,
       aspect_ratio: aspect,
       camera_move: cameraMove,
-      audio: audio,
+      audio: false,
+      generate_audio: false,
       wait_seconds: waitSeconds,
       grok_video_body_json: JSON.stringify(body),
       creation_id: creationId,
