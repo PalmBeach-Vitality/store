@@ -73,8 +73,20 @@ The API flag on its own has let Grok score a clip, which is why the lock is in t
 ### `pull_sheet_row`
 
 **Before → this → After:** `filter_creations_active` → **pull_sheet_row** → `grok_imagine_reel_still`  
-Reads `choose_compound.compound_name` and picks the least-used Active row for that compound. Matching is two-way substring, so blend names need selector handles (`Ipamorelin-Solo`, `Tesa-Ipa`) — see `marketing/sheets/README.md`.  
-Execute Once **OFF**.
+Reads `choose_compound.compound_name` and picks the least-used Active row for that compound. Execute Once **OFF**.
+
+Matching is a **two-way substring** test, so a short name silently swallows a longer one. Three compounds are only reachable by their handle, and one of them is a trap:
+
+| Type this | You get | Note |
+|---|---|---|
+| `Tesa-Ipa` | Tesamorelin/Ipamorelin blend | **Typing `Tesamorelin/Ipamorelin` gets you solo Tesamorelin**, because the typed string contains `Tesamorelin` |
+| `Ipamorelin-Solo` | Ipamorelin on its own | Typing `Ipamorelin` is ambiguous with `CJC/Ipamorelin` |
+| `CJC-1295` | CJC on its own | Typing `CJC` is ambiguous with `CJC/Ipamorelin` |
+| `TA-1` | Thymosin Alpha-1 | Typing `Thymosin Alpha-1` matches nothing and throws |
+
+The other 19 compounds match on their own name: `AOD-9604`, `BPC-157`, `CJC/Ipamorelin`, `Cagrilintide`, `GHK-Cu`, `GLOW`, `KLOW`, `KPV`, `MOTS-C`, `Melanotan II`, `NAD+`, `PT-141`, `SS-31`, `Selank`, `Semax`, `Sermorelin`, `TB-500`, `Tesamorelin`, `Wolverine`.
+
+When several rows share a compound the least-used one wins (`times_used`, then `last_used_at`, then `rank`).
 
 ### `grok_imagine_reel_still`
 
@@ -88,7 +100,7 @@ Execute Once **OFF**.
 
 ### `still_edit_instructions` / `download_still` / `prep_still_edit`
 
-Off the live path. `still_edit_prompt` is typed Fixed on `still_edit_instructions` — it is not a sheet field and nothing writes it back. It is deliberately **blank**: a stale one-off (`remove the small blue tap from the blue cap`) used to live there and ran on every execution, so it was cleared. Leave it blank so an accidental rewire throws instead of applying somebody's old edit.  
+Off the live path, and **fluid** — `still_edit_instructions` is a scratch pad Salvatore types over per run. `still_edit_prompt` is not a sheet field and nothing writes it back. Whatever is in it is not a lock: do not audit it, do not report it as a defect, do not carry it forward. It is currently blank; type an edit there only when you actually want one.  
 `download_still` fetches the still as a file because xAI `/v1/images/edits` 404s on `imgen.x.ai` URLs.  
 Execute Once **OFF**.
 
@@ -119,6 +131,21 @@ Amount **ON** `={{ Number($('pull_sheet_row').first().json.wait_seconds) }}`
 `video_model` / `video_seconds` / `aspect_ratio` from `pull_sheet_row` / `prep_grok_video_start` — not Fixed literals.
 
 Several assignment names in this Set node are written `=video_url`, `=creation_id` and so on. Cosmetic: n8n strips the leading `=` when resolving the field name. Left as-is.
+
+---
+
+## Pre-flight before a run
+
+Checked 2026-09-15 against the live `pull_sheet_row` contract — all clean:
+
+- 601 rows, all `Active`, no duplicate `creation_id`.
+- Every field `pull_sheet_row` throws on is populated on every row: `video_prompt`, `video_motion_prompt`, `camera_move`, `model_still`, `model_video`, `still_resolution`, `duration_seconds`, `resolution`, `aspect_ratio`, `wait_seconds`, `still_n`, `audio`.
+- `wait_seconds` 200, `still_n` 1, `duration_seconds` 15 — all positive numerics, so none of the three numeric guards trip.
+- `aspect_ratio` is `9:16` on all 601, which is what `prep_grok_video_start` requires. `resolution` `1080p` means 1080 × 1920.
+- `audio` is `FALSE` on all 601. Nothing reads it — see **Audio** above — but the column has to be non-blank or `pull_sheet_row` refuses to run.
+- 23 compounds, no collisions between the sheet's own names.
+
+Re-run with `python3 marketing/scripts/audit_wellness_sheet.py`.
 
 ---
 

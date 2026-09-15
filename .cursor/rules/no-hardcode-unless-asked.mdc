@@ -16,6 +16,7 @@ This includes (not exhaustive): prompts, prompt wrappers/locks, still-edit text,
 - Which Google Sheet document/tab a Get/Update node reads (the sheet identity)
 - Filter values that match a sheet column’s own vocabulary (e.g. `status` equals `Active`)
 - API endpoint URLs (`https://api.x.ai/v1/...`) and HTTP method/auth wiring
+- **Whatever text is sitting in a `still_edit_instructions` node.** That node is a fluid scratch pad, off the live path, typed over per run. It is not a hardcode, not a lock, and not a workflow defect. Do not audit it, do not report it, do not carry it forward, do not "fix" it (Salvatore, 2026-09-15). The wire into it is a different question — if `save_still_url` feeds it instead of `skip_still_edit`, the edit desk is live and costing an API call per run, and that is worth raising.
 
 **Already asked for — keep hardcoded**
 
