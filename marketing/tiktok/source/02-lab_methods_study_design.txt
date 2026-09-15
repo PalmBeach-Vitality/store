@@ -1,0 +1,100 @@
+curious :: Was there a control arm in the study they are citing?
+technical :: Sample size is doing a lot of quiet work in that graph.
+curious :: Curious what study design they are citing here.
+technical :: Preregistration would settle most of the debate in this thread.
+light :: Finally someone talking about methodology instead of headlines.
+curious :: Do we know if the work was blinded?
+curious :: Was that effect size or just statistical significance?
+technical :: A probability value without an effect size is half a finding.
+light :: Methodology content always underperforms and it should not.
+curious :: How many replicates went into that measurement?
+curious :: Is this a single study or a body of work?
+technical :: One study is a hypothesis. A replicated one is evidence.
+light :: The part about confounders was worth the whole video.
+curious :: Were the groups randomized or self-selected?
+curious :: Any chance the original paper was preregistered?
+technical :: Publication bias explains a startling amount of this literature.
+light :: Love that you mentioned the limitations section.
+curious :: What was the confidence interval on that number?
+curious :: Is the comparison against placebo or against nothing?
+technical :: Comparing against nothing is not a comparison, worth repeating.
+light :: Good to see someone read past the abstract.
+curious :: Did the authors report their dropout rate?
+curious :: Are these in-vitro models or broader research reviews?
+technical :: In-vitro concentrations rarely map onto anything physiological.
+light :: The methods walkthrough was unexpectedly gripping.
+curious :: Was the analysis prespecified or run after the fact?
+curious :: How was the primary endpoint defined?
+technical :: Shifting endpoints mid-study is the oldest trick in the book.
+light :: Underrated channel for actual study design talk.
+curious :: Did anyone attempt a direct replication?
+curious :: Was the work peer reviewed or a preprint?
+technical :: Preprints are fine, just label them clearly.
+light :: Respect for saying the evidence is preliminary.
+curious :: How large was the observed effect in practical terms?
+curious :: Any conflict of interest declared in the paper?
+technical :: Funding disclosure changes how I read every table.
+light :: The graph critique was genuinely funny and correct.
+curious :: Is the vertical axis truncated in that figure?
+curious :: Was there a washout period between conditions?
+technical :: Crossover designs need a proper washout or the data blur.
+light :: More of the boring methodological stuff please.
+curious :: How many comparisons were run on that dataset?
+curious :: Did they correct for multiple comparisons?
+technical :: Twenty comparisons and one significant finding is just noise.
+light :: Refreshing to see error bars taken seriously.
+curious :: Are those standard error or standard deviation bars?
+curious :: Was the sample drawn from a general population?
+technical :: Selection effects can manufacture a finding out of thin air.
+light :: The scepticism here feels earned, not performative.
+curious :: What statistical test was applied to that comparison?
+curious :: Is the dataset publicly available?
+technical :: Open data would let someone actually check the analysis.
+light :: Bookmarking this as a methodology primer.
+curious :: Did the study measure the outcome directly or by proxy?
+curious :: How long was the observation window?
+technical :: Short observation windows hide almost everything interesting.
+light :: The distinction between correlation and mechanism landed well.
+curious :: Is there a systematic review covering this question?
+curious :: Were the reviewers blinded to the authors?
+technical :: Meta-analysis quality depends entirely on what you let in.
+light :: Good nuance, no absolutes. Following.
+curious :: How heterogeneous were the studies in that pooled analysis?
+curious :: Any sensitivity analysis reported in the paper?
+technical :: A finding that vanishes under sensitivity analysis was never there.
+light :: This is what science communication should sound like.
+curious :: Were the cell lines authenticated?
+curious :: What passage number were those cells at?
+technical :: Late-passage cell lines drift, and nobody reports it.
+light :: Small detail, big implication. Nicely spotted.
+curious :: Was the assay validated independently?
+curious :: Did they run a positive control alongside?
+technical :: No positive control means you cannot tell a null from a failure.
+light :: The bit on negative findings was the best minute.
+curious :: Are null findings from this area published anywhere?
+curious :: Is the model system relevant to the question being asked?
+technical :: Model choice quietly determines the answer more often than method.
+light :: Appreciate the honesty about what is not known.
+curious :: How reproducible has this measurement been across labs?
+curious :: Was the protocol published alongside the paper?
+technical :: Published protocols are the difference between science and anecdote.
+light :: Solid breakdown, and the caveats were not buried.
+curious :: Did the authors share their analysis code?
+curious :: How was missing data handled?
+technical :: Imputation choices can move a borderline finding either way.
+light :: This thread is better than the paper it is about.
+curious :: Was the comparison group matched on anything?
+curious :: Is this observational or experimental work?
+technical :: Observational data can flag a pattern, never confirm a cause.
+light :: Clear, careful, and it cited its sources. Rare.
+curious :: How wide is the uncertainty on that central estimate?
+curious :: Any pilot data before the main study?
+technical :: Pilot studies are for feasibility, not for headline numbers.
+light :: Genuinely learned something about experimental controls today.
+curious :: Were the measurements taken by the same operator throughout?
+curious :: Is there a standard protocol in this field yet?
+technical :: Lack of a standard protocol is why the literature disagrees.
+light :: The measured tone here is the whole appeal.
+curious :: What would a stronger version of this study look like?
+curious :: Which methodological gap is the field still working on?
+technical :: Method sections deserve more attention than abstracts ever get.
