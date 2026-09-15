@@ -1,5 +1,7 @@
 # Sheets reference (PB Vitality)
 
+**Every printed product string in one place:** [`../compound-identification-prompts.txt`](../compound-identification-prompts.txt) — the exact name, dose bar, concentration, footer and vial body for all 23 vial compounds, plus name and badge for all 30 pens, quoted verbatim from the mirrors below with the full label clause ready to copy. Regenerate with `python3 scripts/build_compound_identification_txt.py` after any label change; it is a report, never a source of truth.
+
 | File | Tab name |
 |---|---|
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB Buffer image scenes — `aspect_ratio` **3:4** feed posts, not 9:16; writeback = `last_used_date` only) |

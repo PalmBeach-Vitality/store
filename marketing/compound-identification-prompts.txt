@@ -1,0 +1,948 @@
+PALM BEACH VITALITY - COMPOUND IDENTIFICATION STRINGS
+================================================================================================
+
+Every string the image model is told to print on a product, vials and pens, in one place.
+Quoted verbatim from the live sheet mirrors. Nothing here was composed for this file: if a
+string looks wrong, fix the sheet, not this file, then regenerate:
+
+    python3 marketing/scripts/build_compound_identification_txt.py
+
+Sources
+  vials  marketing/sheets/9-lab-item-creations-500.csv          (535 rows)
+  vials  marketing/sheets/500_Peptide_Wellness_Reel_Scenes.csv  (601 rows)
+  pens   marketing/sheets/14-pen-creations-150.csv              (168 rows)
+
+A vial carries FOUR printed strings, a pen carries TWO. That is deliberate - the pen prompt
+forbids a dose or concentration anywhere in frame, so a pen never shows mg or mg/mL.
+
+SELECTOR vs PRINTED NAME. The left-hand heading is the compound_name you type into
+choose_compound. It is not always what gets printed: the blends need a unique selector
+because the node matches on a two-way substring. Print name is the quoted string.
+
+
+================================================================================================
+VIALS
+================================================================================================
+
+------------------------------------------------------------------------------------------------
+AOD-9604
+------------------------------------------------------------------------------------------------
+  rows: 30
+  print name     'AOD-9604'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'AOD-9604', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+BPC-157     [2 SKUs on the sheet]
+------------------------------------------------------------------------------------------------
+  rows: 55
+  print name     'BPC-157'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'BPC-157', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+  rows: 5
+  print name     'BPC-157'
+  dose bar       '20MG'
+  concentration  '2mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'BPC-157', brick red #A63334 dose
+    bar with white text reading exactly '20MG', black concentration line under the bar reading
+    exactly '2mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Cagrilintide
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'Cagrilintide'
+  dose bar       '25MG'
+  concentration  '5mg/mL'
+  footer         '5mL Sterile Multi-Dose Vial'
+  vial body      '5ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Cagrilintide', brick red #A63334
+    dose bar with white text reading exactly '25MG', black concentration line under the bar reading
+    exactly '5mg/mL', small black footer reading exactly '5mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+CJC-1295
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'CJC'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'CJC', brick red #A63334 dose bar
+    with white text reading exactly '10MG', black concentration line under the bar reading exactly
+    '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four strings
+    are printed once, spelled exactly as written, in crisp sharp type that is fully legible at full
+    resolution.
+
+------------------------------------------------------------------------------------------------
+CJC/Ipamorelin
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'CJC/Ipamorelin'
+  dose bar       '10MG/10MG'
+  concentration  '1mg/1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'CJC/Ipamorelin', brick red
+    #A63334 dose bar with white text reading exactly '10MG/10MG', black concentration line under the
+    bar reading exactly '1mg/1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose
+    Vial'. All four strings are printed once, spelled exactly as written, in crisp sharp type that
+    is fully legible at full resolution.
+
+------------------------------------------------------------------------------------------------
+GHK-Cu
+------------------------------------------------------------------------------------------------
+  rows: 30
+  print name     'GHK-Cu'
+  dose bar       '50MG'
+  concentration  '5mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'GHK-Cu', brick red #A63334 dose
+    bar with white text reading exactly '50MG', black concentration line under the bar reading
+    exactly '5mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+GLOW
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'GLOW'
+  dose bar       '10/10/50MG'
+  concentration  '1mg/1mg/5mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'GLOW', brick red #A63334 dose bar
+    with white text reading exactly '10/10/50MG', black concentration line under the bar reading
+    exactly '1mg/1mg/5mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All
+    four strings are printed once, spelled exactly as written, in crisp sharp type that is fully
+    legible at full resolution.
+
+------------------------------------------------------------------------------------------------
+Ipamorelin-Solo
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Ipamorelin'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Ipamorelin', brick red #A63334
+    dose bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+KLOW
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'KLOW'
+  dose bar       '10/10/10/50MG'
+  concentration  '1mg/1mg/1mg/10mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'KLOW', brick red #A63334 dose bar
+    with white text reading exactly '10/10/10/50MG', black concentration line under the bar reading
+    exactly '1mg/1mg/1mg/10mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose
+    Vial'. All four strings are printed once, spelled exactly as written, in crisp sharp type that
+    is fully legible at full resolution.
+
+------------------------------------------------------------------------------------------------
+KPV
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'KPV'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'KPV', brick red #A63334 dose bar
+    with white text reading exactly '10MG', black concentration line under the bar reading exactly
+    '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four strings
+    are printed once, spelled exactly as written, in crisp sharp type that is fully legible at full
+    resolution.
+
+------------------------------------------------------------------------------------------------
+Melanotan II
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Melanotan II'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Melanotan II', brick red #A63334
+    dose bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+MOTS-C
+------------------------------------------------------------------------------------------------
+  rows: 30
+  print name     'MOTS-C'
+  dose bar       '20MG'
+  concentration  '2mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'MOTS-C', brick red #A63334 dose
+    bar with white text reading exactly '20MG', black concentration line under the bar reading
+    exactly '2mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+NAD+
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'NAD+'
+  dose bar       '1000MG'
+  concentration  '100mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'NAD+', brick red #A63334 dose bar
+    with white text reading exactly '1000MG', black concentration line under the bar reading exactly
+    '100mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four strings
+    are printed once, spelled exactly as written, in crisp sharp type that is fully legible at full
+    resolution.
+
+------------------------------------------------------------------------------------------------
+PT-141
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'PT-141'
+  dose bar       '20MG'
+  concentration  '2mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'PT-141', brick red #A63334 dose
+    bar with white text reading exactly '20MG', black concentration line under the bar reading
+    exactly '2mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Selank
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'Selank'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Selank', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Semax
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Semax'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Semax', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Sermorelin
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'Sermorelin'
+  dose bar       '20MG'
+  concentration  '2mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Sermorelin', brick red #A63334
+    dose bar with white text reading exactly '20MG', black concentration line under the bar reading
+    exactly '2mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+SS-31
+------------------------------------------------------------------------------------------------
+  rows: 30
+  print name     'SS-31'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'SS-31', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+TA-1
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'TA-1'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'TA-1', brick red #A63334 dose bar
+    with white text reading exactly '10MG', black concentration line under the bar reading exactly
+    '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four strings
+    are printed once, spelled exactly as written, in crisp sharp type that is fully legible at full
+    resolution.
+
+------------------------------------------------------------------------------------------------
+TB-500
+------------------------------------------------------------------------------------------------
+  rows: 30
+  print name     'TB-500'
+  dose bar       '10MG'
+  concentration  '1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'TB-500', brick red #A63334 dose
+    bar with white text reading exactly '10MG', black concentration line under the bar reading
+    exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Tesa-Ipa
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Tesamorelin/Ipamorelin'
+  dose bar       '12MG/3MG'
+  concentration  '(none - sheet says do not invent one)'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Tesamorelin/Ipamorelin', brick
+    red #A63334 dose bar with white text reading exactly '12MG/3MG', NO mg/ml concentration line
+    anywhere (do not invent one), small black footer reading exactly '10mL Sterile Multi-Dose Vial'.
+    All three strings are printed once, spelled exactly as written, in crisp sharp type that is
+    fully legible at full resolution.
+
+------------------------------------------------------------------------------------------------
+Tesamorelin
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'Tesamorelin'
+  dose bar       '30MG'
+  concentration  '3mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Tesamorelin', brick red #A63334
+    dose bar with white text reading exactly '30MG', black concentration line under the bar reading
+    exactly '3mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
+    strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
+    at full resolution.
+
+------------------------------------------------------------------------------------------------
+Wolverine
+------------------------------------------------------------------------------------------------
+  rows: 29
+  print name     'Wolverine'
+  dose bar       '10MG/10MG'
+  concentration  '1mg/1mg/mL'
+  footer         '10mL Sterile Multi-Dose Vial'
+  vial body      '10ml'
+  copy:
+    Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
+    compound name in large bold brick red #A63334 reading exactly 'Wolverine', brick red #A63334
+    dose bar with white text reading exactly '10MG/10MG', black concentration line under the bar
+    reading exactly '1mg/1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'.
+    All four strings are printed once, spelled exactly as written, in crisp sharp type that is fully
+    legible at full resolution.
+
+
+================================================================================================
+PENS
+================================================================================================
+
+------------------------------------------------------------------------------------------------
+5-Amino-1MQ
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     '5-Amino-1MQ'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "5-Amino-1MQ" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only '5-Amino-1MQ' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+AOD-9604
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'AOD-9604'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "AOD-9604" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'AOD-9604' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+BPC-157
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'BPC-157'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "BPC-157" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'BPC-157' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Cagrilintide
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Cagrilintide'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Cagrilintide" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Cagrilintide' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+CJC-1295
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'CJC'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "CJC" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'CJC' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+CJC/Ipamorelin
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'CJC/Ipamorelin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "CJC/Ipamorelin" and the
+    badge "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research
+    Purposes Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No
+    milligram dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions
+    only, never burned into the still or the video.
+  copy (tail):
+    LABEL: only 'CJC/Ipamorelin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Dihexa
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Dihexa'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Dihexa" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'Dihexa' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+DSIP
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'DSIP'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "DSIP" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'DSIP' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Epithalon
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Epithalon'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Epithalon" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Epithalon' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+GHK-Cu
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'GHK-Cu'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "GHK-Cu" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'GHK-Cu' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+GLOW
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'GLOW'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "GLOW" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'GLOW' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Glutathione
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Glutathione'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Glutathione" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Glutathione' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+IGF-LR3
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'IGF-LR3'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "IGF-LR3" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'IGF-LR3' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Ipamorelin-Solo
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Ipamorelin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Ipamorelin" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Ipamorelin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Kisspeptin
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Kisspeptin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Kisspeptin" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Kisspeptin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+KLOW
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'KLOW'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "KLOW" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'KLOW' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+KPV
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'KPV'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "KPV" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'KPV' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Melanotan 2
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Melanotan 2'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Melanotan 2" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Melanotan 2' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+MOTS-C
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'MOTS-C'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "MOTS-C" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'MOTS-C' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+NAD+
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'NAD+'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "NAD+" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'NAD+' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+PT-141
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'PT-141'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "PT-141" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'PT-141' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Selank
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Selank'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Selank" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'Selank' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+SEMAX
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'SEMAX'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "SEMAX" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'SEMAX' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Sermorelin
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Sermorelin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Sermorelin" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Sermorelin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+SS-31
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'SS-31'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "SS-31" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'SS-31' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+TA-1
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'TA-1'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "TA-1" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'TA-1' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+TB-500
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'TB-500'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "TB-500" and the badge "3ml
+    Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes Only". No
+    "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram dose. No
+    10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never burned
+    into the still or the video.
+  copy (tail):
+    LABEL: only 'TB-500' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Tesa-Ipa
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Tesamorelin/Ipamorelin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Tesamorelin/Ipamorelin" and
+    the badge "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research
+    Purposes Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No
+    milligram dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions
+    only, never burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Tesamorelin/Ipamorelin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Tesamorelin
+------------------------------------------------------------------------------------------------
+  rows: 6
+  print name     'Tesamorelin'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Tesamorelin" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Tesamorelin' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+------------------------------------------------------------------------------------------------
+Wolverine
+------------------------------------------------------------------------------------------------
+  rows: 5
+  print name     'Wolverine'
+  badge          '3ml Pen'
+  dose / conc    none - a pen never prints mg or mg/mL
+  copy:
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Wolverine" and the badge
+    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
+    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
+    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
+    burned into the still or the video.
+  copy (tail):
+    LABEL: only 'Wolverine' and badge '3ml Pen'. No other text on the pen or in-frame.
+
+
+================================================================================================
+CROSS-CHECKS
+================================================================================================
+
+Same product, different printed name by form factor:
+  vial prints 'Melanotan II' (selector 'Melanotan II')  but pen prints 'Melanotan 2' (selector 'Melanotan 2')
+  vial prints 'Semax' (selector 'Semax')  but pen prints 'SEMAX' (selector 'SEMAX')
+
+  These are the same product wearing two different names. Pick one spelling per product
+  and fix the losing sheet; a reel that cuts a vial next to a pen shows both.
+
+Vial label agreement between the two vial tabs:
+  BPC-157: Sheet 9 also prints [('BPC-157', '20MG', '2mg/mL', '10mL Sterile Multi-Dose Vial', '10ml')]
+
+Products with a pen but no vial:
+  5-Amino-1MQ
+  DSIP
+  Dihexa
+  Epithalon
+  Glutathione
+  IGF-LR3
+  Kisspeptin
+
+Products with a vial but no pen:
+  none
+
+Products in both forms: 23
+
+Rows missing an identification string:
+  none - every row names its own product
+
