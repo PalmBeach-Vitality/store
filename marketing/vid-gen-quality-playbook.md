@@ -90,6 +90,35 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 
 ---
 
+## 1080p price board — audio off, 9:16
+
+**Priced 2026-09-15.** 720p is forbidden, so every row below is a **1080p** rate with **audio off**. Re-price before a big run; providers move.
+
+| Endpoint | 1080p rate, no audio | 10s | 15s | Max duration |
+|---|---|---|---|---|
+| **fal Kling v3 Pro I2V** `fal-ai/kling-video/v3/pro/image-to-video` | $0.112/s | **$1.12** | **$1.68** | 15s |
+| OpenRouter `kwaivgi/kling-v3.0-pro` | $0.112/s + 5.5% credit fee | $1.18 | $1.77 | 15s |
+| **fal Hailuo 02 Pro I2V** `fal-ai/minimax/hailuo-02/pro/image-to-video` | $0.08/s | **$0.80** | — (6s or 10s only) | 10s |
+| fal Veo 3.1 I2V `fal-ai/veo3.1/image-to-video` | $0.20/s | — (needs 2 gens) | — (needs 2 gens) | 8s → $1.60 |
+| fal Wan 3.0 I2V `alibaba/wan-3.0/image-to-video` | $0.20/s | $2.00 | $3.00 | 30s |
+| fal Wan 3.0 Prime I2V | $0.28/s | $2.80 | $4.20 | 30s |
+| Replicate `kwaivgi/kling-v3-video` (mode `pro`) | $0.168/s | $1.68 | $2.52 | 15s |
+| fal Seedance 2.0 Standard I2V | $0.682/s | $6.82 | $10.23 | 15s |
+
+**Cheapest legal clip:** Hailuo 02 Pro at 10s ($0.80). **Cheapest 15s:** Kling v3 Pro on fal ($1.68).
+
+### Rules that come with the board
+
+- **No 720p row belongs here.** Kling v3 **Standard**, Seedance 2.0 **Fast**, Seedance 2.5 (schema enum is `480p` / `720p`), and Grok Imagine Video 1.5 (720p ceiling) are all out on resolution alone, whatever they cost.
+- **MiniMax H3 is out too.** Native modes are 480P / 768P; its `2K` and `4K` are **upscales of a 768p base**. That is rule 5 — do not upscale and call it 1080p.
+- **fal Kling v3 Pro has no `resolution` field.** Pro *is* the 1080p tier and `aspect_ratio` on I2V follows the start image. So the only proof of 1080 × 1920 is `ffprobe` on the output.
+- **Muting does not always save money.** Kling and Veo bill audio separately (Kling $0.112 → $0.168, Veo $0.20 → $0.40). Seedance and Wan bill the **same rate either way** — `generate_audio: false` there is a quality/brief decision, not a discount.
+- **Vertical is not a surcharge.** Wan and Seedance bill by token, and tokens are frame **area** × duration, so 1080 × 1920 costs exactly what 1920 × 1080 costs. Kling, Hailuo, and Veo are flat per-second.
+- **OpenRouter is never cheaper than fal for the same model.** It passes provider pricing through with no inference markup, then adds **5.5% on credit top-ups** ($0.80 minimum per purchase). Same Kling Pro seconds, plus a fee. Use it for the unified API shape, not for price.
+- **Veo cannot do 10s or 15s in one pass** (`4s` / `6s` / `8s`). A 15s Veo beat is two generations and a seam. Face-forward human rows never go to Veo at all — see `AGENTS.md`.
+
+---
+
 ## Social pixel lock (9:16)
 
 | Label | Width × height | Ships? |
