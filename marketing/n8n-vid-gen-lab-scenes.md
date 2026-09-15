@@ -33,15 +33,25 @@ Do not leave **both** wires on. That sends two videos.
 
 **Vid gen API (quality/cost check):** fal.ai `fal-ai/kling-video/v3/standard/image-to-video`. 15s. `generate_audio: false`. Grok still + still-edit hops are unchanged. Old `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas **disabled**.
 
-**Mute:** clips are silent. `prep_grok_video_start` sends `generate_audio: false` and prefixes the sheet `video_motion_prompt` with a silent lock (same as pen / molecule). Camera and vial motion stay on the sheet. Do not rewrite `pull_sheet_row`.
+**Mute — audio is off. Always. All three vid-gen workflows** (this one, `Vid_gen_landscape_scenes`, `peptide_pen_vid_gen`). Salvatore's standing rule, and the one value these nodes are allowed to hardcode.
+
+`prep_grok_video_start` sets `audio: false` / `generate_audio: false` and prefixes the sheet `video_motion_prompt` with the silent lock:
+
+```text
+Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio.
+```
+
+`fal_kling_generate` pins its own `generate_audio` to `={{ false }}` rather than reading the upstream field, so the mute does not break if prep stops emitting it. Note the expression form: the literal string `false` would be read as truthy. Do not wire audio to a sheet column. Camera and vial motion stay on the sheet — do not rewrite `pull_sheet_row`.
 
 ---
 
 ## Edit the still — `still_edit_instructions`
 
-This is the only node you type in. Leave the default wire: `save_still_url` → `still_edit_instructions`.
+This is the only node you type in. It currently sits **off the live path** — `save_still_url` goes to `skip_still_edit` — so it does not run.
 
 Put the edit on Sheet 9 `still_edit_prompt`, **or** open `still_edit_instructions` → `still_edit_prompt` → **fx OFF** → paste. Then Execute.
+
+**This node is fluid — whatever is in it is scratch.** Salvatore types over it per run. Do not read the leftover text as a lock, do not audit it, and do not report it as a workflow defect. It is not a true path for the workflow. Retype it when you actually want an edit.
 
 ---
 
@@ -112,9 +122,7 @@ Use this when you want to see the raw still before you commit the edit / video.
 
 `grok_imagine_reel_still` sends nothing but `video_prompt`, uncapped and unwrapped. So the size of the vial, the words on the label, and the ban on extra lettering all have to be in that one sheet cell, and on 2026-09-14 none of them were: a Cagrilintide still came back with an illegible label because no row said how big the hero should be and the label spec ordered a dose bar it never filled in. All 535 rows now carry a `HERO SCALE (MANDATORY)` clause at 40-45% of frame width plus exact dose / concentration / volume strings. Salvatore asked to start at that figure and adjust from there; the target is roughly half the frame. Details and the repair script: `sheets/README.md` and `scripts/fix_vial_label_legibility.py`.
 
-**The still-edit branch is off the live path.** Salvatore runs the skip side, so the Fixed text sitting in `still_edit_instructions` — an old one-off that says *"change 50 mg/ml to: 50mg, change 20mg/ml to: 5mg/ml"* — never reaches a still and does not fight the hero-scale lock. Leave it alone. It only matters if someone wires the edit branch back in, and then it needs retyping first.
-
-On the live canvas `save_still_url` currently has **no** outgoing connection, so neither branch is attached to it. A top-to-bottom Execute halts there with a still and no clip; reaching `fal_kling_generate` means attaching `skip_still_edit` or running the tail nodes with Execute step.
+**The still-edit branch is off the live path.** `save_still_url` goes to `skip_still_edit`, so the hero-scale lock reaches the still exactly as the sheet wrote it. Whatever text is sitting in `still_edit_instructions` is scratch and never runs — ignore it.
 
 ---
 

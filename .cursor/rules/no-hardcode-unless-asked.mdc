@@ -7,7 +7,7 @@ alwaysApply: true
 
 Do **not** hardcode generation or creative values in n8n nodes, Code, HTTP bodies, Set fields, or docs-as-defaults.
 
-This includes (not exhaustive): prompts, prompt wrappers/locks, still-edit text, models (`grok-imagine-*`, chat models), `duration`, `aspect_ratio`, `resolution`, `still_resolution`, `n` / `still_n`, `audio`, wait seconds, camera/motion, compound names, captions, CTA copy, temperature, max_tokens, and `|| '9:16'` / `|| 15` / `|| '1080p'` / `|| 'grok-imagine-video-1.5'` style fallbacks.
+This includes (not exhaustive): prompts, prompt wrappers/locks, still-edit text, models (`grok-imagine-*`, chat models), `duration`, `aspect_ratio`, `resolution`, `still_resolution`, `n` / `still_n`, wait seconds, camera/motion, compound names, captions, CTA copy, temperature, max_tokens, and `|| '9:16'` / `|| 15` / `|| '1080p'` / `|| 'grok-imagine-video-1.5'` style fallbacks.
 
 **Allowed without asking**
 
@@ -16,6 +16,11 @@ This includes (not exhaustive): prompts, prompt wrappers/locks, still-edit text,
 - Which Google Sheet document/tab a Get/Update node reads (the sheet identity)
 - Filter values that match a sheet column’s own vocabulary (e.g. `status` equals `Active`)
 - API endpoint URLs (`https://api.x.ai/v1/...`) and HTTP method/auth wiring
+- **Whatever text is sitting in a `still_edit_instructions` node.** That node is a fluid scratch pad, off the live path, typed over per run. It is not a hardcode, not a lock, and not a workflow defect. Do not audit it, do not report it, do not carry it forward, do not "fix" it (Salvatore, 2026-09-15). The wire into it is a different question — if `save_still_url` feeds it instead of `skip_still_edit`, the edit desk is live and costing an API call per run, and that is worth raising.
+
+**Already asked for — keep hardcoded**
+
+- **`audio` / `generate_audio` is hardcoded off on every vid-gen workflow.** Salvatore, 2026-09-15: "audio should always be off - for all 3 of those workflows" (`Vid_gen_lab_scenes`, `Vid_gen_landscape_scenes`, `peptide_pen_vid_gen`). Do **not** "fix" this back to a sheet column. The sheets still carry an `audio` column and `pull_sheet_row` still requires it to be non-blank, but nothing downstream reads it. The prep nodes also prefix the sheet motion prompt with the silent lock, because the API flag alone has let a clip come back scored.
 
 **If a sheet cell is empty:** throw a clear error. Do **not** invent a fallback.
 

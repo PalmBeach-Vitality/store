@@ -1,0 +1,27 @@
+601 rows, 41 columns
+
+== CONTRACT
+   clean
+   duplicate creation_id: 0
+
+== REACHABILITY (can choose_compound address the row?)
+   clean
+
+   winner when typed (times_used, then last_used_at, then rank):
+
+== CONTENT
+   category: {'vial_10ml': 290, 'set_environment': 311}
+   'VIAL DOSE LOCK' in video_prompt:      0
+   'VIAL DOSE LOCK' in still_edit_prompt: 0   (no node reads still_edit_prompt)
+   video_prompt gives an exact dose bar:  601
+   video_prompt gives an exact conc line: 601
+   video_prompt gives an exact footer:    601
+   video_prompt states a hero scale:      601
+   rows whose printed label is NOT their own compound: 0
+   'MUST copy the X catalog still' donor: {}
+      rows pointed at another compound's still: 0
+   footer volume disagrees with the catalog: 0
+   label ink words in video_prompt: {'brick red': 3606, 'dark red': 601}
+   pen_3ml rows carrying a VIAL VISUAL LOCK: 0
+   set_environment rows carrying a VIAL VISUAL LOCK: 311
+   video_prompt length: 6770-6950 chars
