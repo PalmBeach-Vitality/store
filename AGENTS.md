@@ -1,5 +1,9 @@
 # Palm Beach Vitality (Store)
 
+**New to this work? Read [`HANDOVER.md`](HANDOVER.md) first.** Current state of the vid-gen
+workflows and sheets, the PR stack, how to write to a live Google Sheet, the compound selector
+footgun, open decisions waiting on Salvatore, and the mistakes already made.
+
 A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanilla JS) for the `www.palmbeach-vitality.store` domain, plus a **Shopify → WooCommerce migration kit** under `woocommerce-migration/`.
 
 ## Marketing / n8n (Reel Studio)
