@@ -1,0 +1,100 @@
+curious :: Which layer of the dermis is this research looking at?
+technical :: Fibroblast behaviour in culture rarely matches intact skin.
+curious :: Is the collagen work on synthesis or on degradation?
+light :: Good explainer on skin biology without the marketing gloss.
+technical :: Elastin turnover is slow enough to complicate short studies.
+curious :: Are they studying barrier function or deeper structure?
+curious :: What does the photobiology literature say here?
+technical :: Ultraviolet damage research is the best established part of this field.
+light :: Refreshing to see sun exposure science taken seriously.
+curious :: Is the research on keratinocytes or fibroblasts?
+curious :: Which model is used, reconstructed skin or monolayer?
+technical :: Reconstructed skin models are better but still simplified.
+light :: The skin model comparison was genuinely interesting.
+curious :: Does the study measure barrier integrity directly?
+curious :: Any work on transepidermal water loss in that paper?
+technical :: Transepidermal water loss is a decent proxy, not a mechanism.
+light :: Good distinction between proxy measures and mechanism.
+curious :: Is the hair follicle work on cycling or on density?
+curious :: Which phase of the follicle cycle is being studied?
+technical :: Follicle cycling makes timing the single hardest variable here.
+light :: Follicle cycle explained clearly. That is rare.
+curious :: Are the follicle studies in culture or in animal models?
+curious :: What does the dermal papilla research show?
+technical :: Dermal papilla cells lose their signature quickly in culture.
+light :: That culture drift detail was a good catch.
+curious :: Is the keratin research structural or genetic?
+curious :: How is hair shaft integrity measured in these studies?
+technical :: Tensile testing on hair shafts is more standardized than expected.
+light :: Did not expect tensile testing content today. Excellent.
+curious :: Does the literature separate scalp biology from skin generally?
+curious :: Is the microbiome part of this research area?
+technical :: Skin microbiome research is expanding faster than it is replicating.
+light :: Fair point about replication lagging expansion.
+curious :: Which markers indicate dermal remodeling in that work?
+curious :: Are matrix metalloproteinases measured here?
+technical :: Matrix metalloproteinase activity explains a lot of structural change.
+light :: Matrix enzyme content is always the interesting bit.
+curious :: Is the research on photoaging or intrinsic change?
+curious :: How do they separate sun exposure from time?
+technical :: Separating photoaging from intrinsic change needs protected-site comparisons.
+light :: The protected-site method was clever. Nice explanation.
+curious :: Which peptide sequences show up in dermal literature?
+curious :: Is there penetration data behind the topical research?
+technical :: Skin penetration is the bottleneck nobody wants to discuss.
+light :: Glad the penetration problem got airtime.
+curious :: How is penetration actually measured in those studies?
+curious :: Are the studies using diffusion cell setups?
+technical :: Diffusion cell data is standard and still frequently misreported.
+light :: Learned what a diffusion cell is today. Thanks.
+curious :: Does the research look at wound models or intact skin?
+curious :: Which inflammatory pathways are involved in the skin work?
+technical :: Cutaneous inflammation pathways overlap heavily with systemic ones.
+light :: The overlap point tied the topic together well.
+curious :: Is there histology supporting the structural conclusions?
+curious :: How thick were the tissue sections analysed?
+technical :: Section thickness and staining choice shape what you can see.
+light :: Methodological detail in a skin video. Unheard of.
+curious :: Are the studies in pigmented or non-pigmented models?
+curious :: Does melanin biology factor into this research?
+technical :: Melanin biology is far more complex than pigment alone.
+light :: Melanin explainer was better than most textbooks.
+curious :: Which growth factors appear in follicle research?
+curious :: Is signaling between dermis and epidermis measured?
+technical :: Dermal and epidermal crosstalk is central and hard to study.
+light :: Crosstalk framing made that section click.
+curious :: Does the literature address ageing skin specifically?
+curious :: Are older tissue samples included in that work?
+technical :: Donor age is a variable that skin studies often underreport.
+light :: Donor age mattering is a good practical point.
+curious :: How consistent are these findings across skin types?
+curious :: Is the research diverse in sample population?
+technical :: Dermatology research skews toward lighter skin types historically.
+light :: Important point about representation in the data.
+curious :: Which measurement tools are standard in this field?
+curious :: Is imaging used alongside biochemical measures?
+technical :: Confocal imaging plus biochemistry is the stronger combination.
+light :: Confocal skin imaging looks incredible honestly.
+curious :: Does the study measure hydration objectively?
+curious :: How is skin elasticity quantified?
+technical :: Elasticity probe measurements vary with operator technique noticeably.
+light :: Operator variability is such an underrated problem.
+curious :: Are the hair studies measuring count or thickness?
+curious :: Which is more informative, density or diameter?
+technical :: Shaft diameter often shifts before count does, worth knowing.
+light :: That diameter insight was actually new to me.
+curious :: Is there long-term follow-up in the follicle literature?
+curious :: How long do these skin studies typically run?
+technical :: Skin turnover cycles mean short studies show very little.
+light :: Turnover timing explains a lot of disappointing studies.
+curious :: Which part of the skin literature is strongest?
+curious :: Where does dermal research still fall short?
+technical :: The weak point is durability of change over long periods.
+light :: Honest about durability. Appreciate that.
+curious :: Are there good systematic reviews on dermal peptide science?
+curious :: What would you read first in this area?
+technical :: A structured review would help enormously in this space.
+light :: Clear, sourced, no overclaiming. Following.
+curious :: Which question is the field closest to answering?
+curious :: What experiment would settle the current debate?
+technical :: Protected-site comparisons would settle most of these arguments.
