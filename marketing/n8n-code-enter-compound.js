@@ -7,7 +7,7 @@
 //
 // TYPE THE CATALOG NAME HERE, then Execute workflow.
 
-var COMPOUND = 'BPC-157';
+var COMPOUND = 'TB-500';
 
 return [
   {

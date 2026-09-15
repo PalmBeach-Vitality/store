@@ -1,0 +1,83 @@
+form,category,product,compound_name,total_mg,fill_volume,conc_mg_per_ml,availability,price_usd,source_sheet
+vial,weight_management,GLP-1S 25mg,GLP-1S,25mg,,,Regular,50.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-1S 50mg Vial,GLP-1S,50mg,,,Regular,100.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 20MG/2ML VIAL,GLP-3R,20mg,2ml,10 mg/ml,Regular,84.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 30MG/3ML VIAL,GLP-3R,30mg,3ml,10 mg/ml,Regular,110.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 50MG/5ML VIAL,GLP-3R,50mg,5ml,10 mg/ml,Regular,116.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 60mg Vial,GLP-3R,60mg,,,Regular,126.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 100mg Vial,GLP-3R,100mg,,,Regular,240.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-3R 200mg Vial,GLP-3R,200mg,,,Regular,450.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-2T 50mg/5ml Vial,GLP-2T,50mg,5ml,10 mg/ml,Regular,100.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-2T 100mg Vial,GLP-2T,100mg,,,Regular,200.00,Finished Price Sheet 2026-09-11
+vial,weight_management,GLP-2T 200mg Vial,GLP-2T,200mg,,,Regular,200.00,Finished Price Sheet 2026-09-11
+vial,weight_management,Cagrilintide 25mg Vial,Cagrilintide,25mg,,,Regular,150.00,Finished Price Sheet 2026-09-11
+vial,recovery_healing,BPC-157 10mg Vial,BPC-157,10mg,,,Regular,30.00,Finished Price Sheet 2026-09-11
+vial,recovery_healing,BPC-157 20mg Vial,BPC-157,20mg,,,Regular,51.00,Finished Price Sheet 2026-09-11
+vial,recovery_healing,TB-500 10mg Vial,TB-500,10mg,,,Regular,54.00,Finished Price Sheet 2026-09-11
+vial,recovery_healing,Wolverine (BPC-157 / TB-500) 10 + 10mg Vial,Wolverine,10mg/10mg,,,Regular,75.00,Finished Price Sheet 2026-09-11
+vial,immune_stack,KPV 10mg Vial,KPV,10mg,,,Regular,84.00,Finished Price Sheet 2026-09-11
+vial,immune_stack,Thymosin-Alpha 1 10mg Vial,TA-1,10mg,,,Regular,81.00,Finished Price Sheet 2026-09-11
+vial,longevity_cellular,NAD+ 1000mg Vial,NAD+,1000mg,,,Regular,51.00,Finished Price Sheet 2026-09-11
+vial,longevity_cellular,MOTS-C 25mg/5ml vial,MOTS-C,25mg,5ml,5 mg/ml,Regular,144.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,CJC-1295 10mg Vial,CJC-1295,10mg,,,Regular,39.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,Ipamorelin 10mg Vial,Ipamorelin,10mg,,,Regular,39.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,CJC-1295 / Ipamorelin 10/10mg vial,CJC-1295/Ipamorelin,10mg/10mg,,,Regular,114.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,Tesamorelin 30mg Vial,Tesamorelin,30mg,,,Regular,105.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,Tesa/IPA 12/3mg,Tesamorelin/Ipamorelin,12mg/3mg,,,Regular,114.00,Finished Price Sheet 2026-09-11
+vial,growth_hormone,Sermorelin 10mg Vial,Sermorelin,10mg,,,Regular,60.00,Finished Price Sheet 2026-09-11
+vial,skin_aesthetics,GHK-CU 50mg Vial,GHK-Cu,50mg,,,Regular,27.00,Finished Price Sheet 2026-09-11
+vial,skin_aesthetics,GLOW 70mg Vial,GLOW,70mg,,,Regular,93.00,Finished Price Sheet 2026-09-11
+vial,skin_aesthetics,KLOW 80mg Vial,KLOW,80mg,,,Regular,111.00,Finished Price Sheet 2026-09-11
+vial,skin_aesthetics,Melanotan-2 10mg Vial,Melanotan-2,10mg,,,Regular,24.00,Finished Price Sheet 2026-09-11
+vial,cognitive_neurological,Selank 10mg Vial,Selank,10mg,,,Regular,45.00,Finished Price Sheet 2026-09-11
+vial,cognitive_neurological,Semax 10mg Vial,Semax,10mg,,,Regular,45.00,Finished Price Sheet 2026-09-11
+vial,sexual_health,PT-141 20mg Vial,PT-141,20mg,,,Regular,60.00,Finished Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 8mg Pen,GLP-3R,8mg,,,Regular,50.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 16mg Pen,GLP-3R,16mg,,,Regular,96.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 24mg Pen,GLP-3R,24mg,,,Regular,140.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 32mg Pen,GLP-3R,32mg,,,Regular,190.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 40mg Pen,GLP-3R,40mg,,,Regular,230.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-3R 48mg Pen,GLP-3R,48mg,,,Regular,280.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-1S 1.5mg Pen,GLP-1S,1.5mg,,,Regular,30.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-1S 3.5mg Pen,GLP-1S,3.5mg,,,Regular,44.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-1S 5.5mg Pen,GLP-1S,5.5mg,,,Regular,62.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-1S 7.5mg Pen,GLP-1S,7.5mg,,,Regular,76.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-1S 10mg Pen,GLP-1S,10mg,,,Regular,100.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 10mg Pen,GLP-2T,10mg,,,Regular,40.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 20mg Pen,GLP-2T,20mg,,,Regular,70.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 30mg Pen,GLP-2T,30mg,,,Regular,100.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 40mg Pen,GLP-2T,40mg,,,Regular,130.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 50mg Pen,GLP-2T,50mg,,,Regular,160.00,Pens Price Sheet 2026-09-11
+pen,weight_management,GLP-2T 60mg Pen,GLP-2T,60mg,,,Regular,190.00,Pens Price Sheet 2026-09-11
+pen,weight_management,Cagrilintide 10mg Pen,Cagrilintide,10mg,,,Regular,56.00,Pens Price Sheet 2026-09-11
+pen,recovery_healing,BPC-157 10mg Pen,BPC-157,10mg,,,Regular,32.00,Pens Price Sheet 2026-09-11
+pen,recovery_healing,BPC-157 20mg Pen,BPC-157,20mg,,,Regular,52.00,Pens Price Sheet 2026-09-11
+pen,recovery_healing,TB-500 10mg Pen,TB-500,10mg,,,Regular,52.00,Pens Price Sheet 2026-09-11
+pen,recovery_healing,Wolverine (BPC-157 / TB-500) 10 + 10mg Pen,Wolverine,10mg/10mg,,,Regular,58.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,NAD+ 500mg Pen,NAD+,500mg,,,Regular,60.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,NAD+ 1000mg Pen,NAD+,1000mg,,,Regular,64.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,NAD+ 1600mg Pen,NAD+,1600mg,,,Regular,100.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,MOTS-C 20mg Pen,MOTS-C,20mg,,,Regular,70.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,MOTS-C 40mg Pen,MOTS-C,40mg,,,Regular,116.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,5-Amino-1MQ 50mg Pen,5-Amino-1MQ,50mg,,,Regular,36.00,Pens Price Sheet 2026-09-11
+pen,longevity_cellular,Epithalon 50mg Pen,Epithalon,50mg,,,Regular,160.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,CJC-1295 10mg Pen,CJC-1295,10mg,,,Regular,56.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,CJC-1295/Ipamorelin 10/10mg Pen,CJC-1295/Ipamorelin,10mg/10mg,,,Regular,64.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,Tesamorelin 30mg Pen,Tesamorelin,30mg,,,Regular,70.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,Tesamorelin/Ipamorelin 12/3mg,Tesamorelin/Ipamorelin,12mg/3mg,,,Regular,64.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,Sermorelin 10mg Pen,Sermorelin,10mg,,,Regular,70.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,Ipamorelin 30mg Pen,Ipamorelin,30mg,,,Regular,80.00,Pens Price Sheet 2026-09-11
+pen,growth_hormone,IGF-LR3 1mg 3mL Pen,IGF-LR3,1mg,3ml,,Regular,80.00,Pens Price Sheet 2026-09-11
+pen,skin_aesthetics,GHK-CU 50mg Pen,GHK-Cu,50mg,,,Regular,34.00,Pens Price Sheet 2026-09-11
+pen,skin_aesthetics,GLOW 70mg Pen,GLOW,70mg,,,Regular,100.00,Pens Price Sheet 2026-09-11
+pen,skin_aesthetics,KLOW 80mg Pen,KLOW,80mg,,,Regular,116.00,Pens Price Sheet 2026-09-11
+pen,cognitive_neurological,Selank 20mg Pen,Selank,20mg,,,Regular,60.00,Pens Price Sheet 2026-09-11
+pen,cognitive_neurological,Semax 20mg Pen,Semax,20mg,,,Regular,60.00,Pens Price Sheet 2026-09-11
+pen,sexual_health,PT-141 10mg Pen,PT-141,10mg,,,Regular,36.00,Pens Price Sheet 2026-09-11
+pen,sexual_health,KISSPeptin 10mg Pen,Kisspeptin,10mg,,,Regular,74.00,Pens Price Sheet 2026-09-11
+pen,sleep,DSIP 5mg Pen,DSIP,5mg,,,Regular,50.00,Pens Price Sheet 2026-09-11
+pen,specialty,Dihexia 10mg Pen,Dihexa,10mg,,,Special Order,50.00,Pens Price Sheet 2026-09-11
+pen,specialty,MT-II 10mg 3mL Pen,Melanotan-2,10mg,3ml,,Special Order,70.00,Pens Price Sheet 2026-09-11
+pen,specialty,SS-31 50mg Pen,SS-31,50mg,,,Special Order,300.00,Pens Price Sheet 2026-09-11
+pen,specialty,Glutathione 600 mg Pen,Glutathione,600mg,,,Special Order,56.00,Pens Price Sheet 2026-09-11
+pen,specialty,TA-1 10mg Pen,TA-1,10mg,,,Special Order,80.00,Pens Price Sheet 2026-09-11
