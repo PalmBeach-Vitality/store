@@ -1,0 +1,100 @@
+curious :: Is the sleep work using polysomnography or wearables?
+technical :: Actigraphy and polysomnography disagree more than people realize.
+curious :: Which sleep stage is the research focused on?
+light :: Good explainer on sleep staging without the gadget marketing.
+technical :: Slow wave activity is the measure that usually matters here.
+curious :: Are they measuring sleep quality or just duration?
+curious :: What does the memory consolidation literature show?
+technical :: Consolidation studies depend heavily on task choice.
+light :: Task choice mattering that much is a great point.
+curious :: Is the circadian work in constant routine conditions?
+curious :: How was light exposure controlled in that study?
+technical :: Uncontrolled light exposure wrecks circadian study interpretation.
+light :: Light control being that critical was news to me.
+curious :: Does the research use objective cognitive testing?
+curious :: Which attention paradigm was applied?
+technical :: Psychomotor vigilance tasks are the workhorse and quite sensitive.
+light :: Learned about vigilance testing today. Genuinely interesting.
+curious :: Are the cognitive measures validated instruments?
+curious :: How large was the practice effect in those tasks?
+technical :: Practice effects can masquerade as improvement across sessions.
+light :: Practice effects explain so many wobbly findings.
+curious :: Is melatonin measured in saliva or plasma here?
+curious :: What does the melatonin timing literature actually say?
+technical :: Melatonin onset timing is informative, concentration much less so.
+light :: The timing versus concentration point was sharp.
+curious :: Does the study control for caffeine intake?
+curious :: How was habitual caffeine handled in the design?
+technical :: Caffeine history is a confounder in nearly every alertness study.
+light :: Good catch on the caffeine confound.
+curious :: Is the work in shift workers or standard schedules?
+curious :: Any research on circadian misalignment specifically?
+technical :: Shift work research is observational and therefore very tangled.
+light :: The misalignment explainer was the clearest part.
+curious :: Which brain regions show up in the imaging work?
+curious :: Is there electroencephalography data behind those conclusions?
+technical :: Scalp recordings give you timing, not location, worth remembering.
+light :: Timing versus location in brain imaging. Nicely put.
+curious :: How many nights were recorded in that study?
+curious :: Was there an adaptation night in the lab?
+technical :: First-night effects in sleep labs are large and well documented.
+light :: First-night effect is such a neat methodological detail.
+curious :: Are the sleep findings from self-report or measurement?
+curious :: How well does self-reported sleep track objective measures?
+technical :: Self-reported and measured sleep correlate surprisingly weakly.
+light :: That weak correlation is genuinely unsettling.
+curious :: Does the research address sleep continuity separately?
+curious :: Is fragmentation measured in that dataset?
+technical :: Fragmentation may matter more than total time in bed.
+light :: Fragmentation over duration. Good reframe.
+curious :: Which markers track daytime alertness objectively?
+curious :: Is pupillometry used in any of this work?
+technical :: Pupillometry is an elegant alertness measure and underused.
+light :: Pupillometry sounds fascinating. Any reading on it?
+curious :: Does the literature separate attention from working memory?
+curious :: Which cognitive domain is most sleep sensitive?
+technical :: Sustained attention degrades earliest and most measurably.
+light :: Sustained attention being first to go tracks honestly.
+curious :: Are the studies acute deprivation or chronic restriction?
+curious :: How do those two conditions differ in the data?
+technical :: Chronic restriction and acute deprivation produce different profiles.
+light :: The restriction versus deprivation distinction was useful.
+curious :: Is recovery sleep studied after restriction?
+curious :: How many nights does the literature say recovery takes?
+technical :: Full recovery from restriction takes longer than most assume.
+light :: Longer recovery than expected. Good to know.
+curious :: Does the research include age-stratified analysis?
+curious :: How does sleep architecture shift with age?
+technical :: Slow wave sleep declines with age, which confounds comparisons.
+light :: Age-related architecture change explained well.
+curious :: Which chronotype measures were used?
+curious :: Is chronotype controlled for in the analysis?
+technical :: Chronotype mismatch can swamp an intervention effect entirely.
+light :: Chronotype as a confounder. Had not considered that.
+curious :: Are the participants screened for sleep disorders?
+curious :: How was disordered breathing ruled out in that sample?
+technical :: Undiagnosed breathing disruption in a sample distorts everything downstream.
+light :: Screening detail that clearly matters. Nice.
+curious :: Does the study report objective sleep onset latency?
+curious :: Which measures are considered gold standard here?
+technical :: Polysomnography remains the reference standard, with real limitations.
+light :: Good to hear the gold standard has limits too.
+curious :: Is there any home-based measurement validation?
+curious :: How accurate are consumer devices in the literature?
+technical :: Consumer device accuracy varies wildly by sleep stage.
+light :: Device accuracy varying by stage explains my data. Thanks.
+curious :: Does the research look at temperature regulation?
+curious :: Is core body temperature tracked in these studies?
+technical :: Core temperature rhythm is one of the cleaner circadian markers.
+light :: Temperature as a circadian marker. Neat.
+curious :: Which environmental variables were held constant?
+curious :: Was ambient noise controlled in the protocol?
+technical :: Ambient conditions in sleep studies deserve far more reporting.
+light :: Reporting standards point, well made.
+curious :: Is there long-term follow-up in this sleep literature?
+curious :: How durable are the observed changes?
+technical :: Durability is the weakest link across sleep intervention studies.
+light :: Honest about durability again. Consistent channel.
+curious :: Which sleep question is closest to settled?
+curious :: What would a stronger circadian study look like?
+technical :: Constant routine designs would strengthen most circadian claims.

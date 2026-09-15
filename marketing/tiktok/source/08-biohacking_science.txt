@@ -1,0 +1,100 @@
+curious :: Is anyone running proper single-subject designs in this space?
+technical :: Single-subject designs can be rigorous if you randomize the blocks.
+curious :: What does the heart rate variability literature actually support?
+light :: Good, someone explaining self-tracking without selling anything.
+technical :: Day-to-day variability in most wearable metrics is enormous.
+curious :: Are the continuous glucose studies in non-diabetic populations?
+curious :: How reliable are consumer sensors in the published work?
+technical :: Sensor accuracy papers rarely make it into the discourse.
+light :: Refreshing to see sensor limitations acknowledged.
+curious :: Is the cold exposure research controlled or observational?
+curious :: What temperature and duration do those studies use?
+technical :: Cold exposure methods vary so much that pooling is meaningless.
+light :: Pooling incomparable studies. Classic problem.
+curious :: Does the heat exposure literature use sauna or immersion?
+curious :: Are the sauna studies mostly from one cohort?
+technical :: A large share of sauna research traces to a single Finnish cohort.
+light :: Did not know the sauna data came from one cohort. Wild.
+curious :: Is breathwork research blinded in any meaningful way?
+curious :: How do you even blind a breathing intervention?
+technical :: Blinding a behavioural intervention is the core methodological problem.
+light :: The blinding problem framing was excellent.
+curious :: Does the study include a sham condition?
+curious :: What was the control activity in that trial?
+technical :: Sham controls in behavioural research are hard and rarely convincing.
+light :: Sham control discussion, in a biohacking video. Impressive.
+curious :: Is placebo response measured separately here?
+curious :: How large is the expectancy effect in this literature?
+technical :: Expectancy effects in self-tracking are large and often unmeasured.
+light :: Expectancy effects deserve their own video honestly.
+curious :: Are people tracking the metric that actually matters?
+curious :: Which measure has the best evidence behind it?
+technical :: Resting heart rate is simple and holds up better than most.
+light :: Simple measures holding up best. Sounds right.
+curious :: Does the research support any particular light exposure timing?
+curious :: How much of this is extrapolated from lab conditions?
+technical :: Laboratory light intensities are far above real-world exposure.
+light :: Lab versus real-world intensity. Good caveat.
+curious :: Is there any research on tracking making things worse?
+curious :: Does self-monitoring change the behaviour being measured?
+technical :: Measurement reactivity is real and complicates every tracking study.
+light :: Measurement changing behaviour. Very meta, very true.
+curious :: Which wearable metrics have published validation studies?
+curious :: Are the validation papers independent of the manufacturers?
+technical :: Manufacturer-funded validation studies need reading carefully.
+light :: Funding source on validation papers. Sharp catch.
+curious :: Does the literature support any of the common tracking claims?
+curious :: How much evidence sits behind the popular metrics?
+technical :: Popularity and evidence quality are almost unrelated here.
+light :: That gap between popular and proven is the whole story.
+curious :: Is the research on trained or untrained populations?
+curious :: How transferable are athlete findings to everyone else?
+technical :: Athlete data transfers poorly to sedentary populations.
+light :: Transferability point was worth the watch.
+curious :: Which variables confound the self-experiment data most?
+curious :: Is seasonality accounted for in long tracking series?
+technical :: Seasonal drift can mimic an intervention effect entirely.
+light :: Seasonality mimicking an effect. Never thought of that.
+curious :: Does the analysis handle autocorrelation in time series?
+curious :: How are trends separated from noise in that data?
+technical :: Autocorrelated data breaks standard statistical tests quietly.
+light :: Time series statistics in a wellness video. Excellent.
+curious :: Is there a washout between self-experiment conditions?
+curious :: How long should a washout period be here?
+technical :: Washout length should exceed the metric's own variability window.
+light :: Practical and rigorous at once. Nice balance.
+curious :: Does anyone publish their null self-experiments?
+curious :: Where do negative findings go in this community?
+technical :: Nobody posts the experiments that showed nothing, which skews everything.
+light :: Nobody posting nulls. Painfully accurate.
+curious :: Is the literature on eating windows any good?
+curious :: How well controlled are the meal timing studies?
+technical :: Meal timing research struggles enormously with adherence measurement.
+light :: Adherence measurement being the hard part. Makes sense.
+curious :: Are the metabolic studies using indirect calorimetry?
+curious :: Which metabolic measures are actually reliable?
+technical :: Indirect calorimetry is reliable and rarely available outside labs.
+light :: Learned what indirect calorimetry is. Good video.
+curious :: Does the research distinguish adaptation from improvement?
+curious :: How do you tell adaptation from a real change?
+technical :: Adaptation and improvement look identical over short windows.
+light :: Adaptation versus improvement. Genuinely useful frame.
+curious :: Which self-tracking practice has the strongest evidence base?
+curious :: Is sleep tracking better supported than the rest?
+technical :: Sleep and activity tracking are the best validated of the lot.
+light :: Good ranking of what is actually validated.
+curious :: Does the literature address tracking fatigue?
+curious :: How long do people sustain these measurements?
+technical :: Adherence decay over weeks limits most tracking datasets.
+light :: Adherence decay. The quiet killer of long studies.
+curious :: Are there registries collecting self-experiment data?
+curious :: Would pooled self-experiments be worth anything scientifically?
+technical :: Pooled single-subject trials are a real and underused design.
+light :: Pooled single-subject trials sound genuinely promising.
+curious :: Which question would you most want tested properly?
+curious :: What would a rigorous version of this experiment need?
+technical :: Randomized block order and a sham would fix most designs.
+light :: Clear, sceptical, and still curious. Great mix.
+curious :: Is the scepticism in this area proportionate?
+curious :: Where is the evidence base strongest right now?
+technical :: The strongest evidence sits with sleep and activity measurement.

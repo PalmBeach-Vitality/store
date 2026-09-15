@@ -1,0 +1,100 @@
+curious :: Which pathway is this lab work focusing on first?
+technical :: Upstream signaling or downstream transcription, because those are different papers.
+curious :: Is the proposed mechanism receptor-mediated or something indirect?
+light :: The cascade diagram made a confusing topic legible.
+technical :: Pathway crosstalk makes single-target explanations almost always incomplete.
+curious :: Are they measuring gene expression or protein levels?
+curious :: What is the proposed signaling route here?
+technical :: Transcript and protein levels do not move together as often as assumed.
+light :: Nice, an explainer that admits the pathway is partly mapped.
+curious :: Does the literature place this upstream or downstream of inflammation?
+curious :: Is there a feedback loop that complicates the picture?
+technical :: Negative feedback tends to flatten everything over a longer window.
+light :: The signaling analogy actually worked, which is rare.
+curious :: Which kinase is doing the phosphorylation in that step?
+curious :: Are the pathway papers in cell models or tissue?
+technical :: Kinase specificity is the part most summaries skip entirely.
+light :: Following for the pathway breakdowns specifically.
+curious :: How direct is the link between the receptor and the readout?
+curious :: Is the mechanism conserved across the models studied?
+technical :: A conserved pathway does not mean a conserved outcome.
+light :: This made mitochondrial signaling almost intuitive.
+curious :: Which transcription factors show up in that dataset?
+curious :: Are they proposing one mechanism or several in parallel?
+technical :: Parallel mechanisms are the honest answer and the harder video.
+light :: The part on redundancy in signaling was excellent.
+curious :: Does blocking the receptor abolish the observed change?
+curious :: Any knockout or knockdown work supporting the mechanism?
+technical :: Knockdown data is what separates mechanism from correlation here.
+light :: Clear, layered, no overclaiming. Good video.
+curious :: Is the pathway activity measured directly or inferred?
+curious :: What happens to the signal over longer timeframes?
+technical :: Time course data would clear up most of this ambiguity.
+light :: Appreciated the note that the mechanism is still proposed.
+curious :: Which second messengers are involved downstream?
+curious :: Is calcium signaling part of this at all?
+technical :: Calcium gets invoked for everything, which makes it uninformative.
+light :: The receptor explainer was the clearest I have seen.
+curious :: Are the receptor subtypes distinguished in the literature?
+curious :: How selective is the interaction at the receptor level?
+technical :: Off-target binding is where most clean mechanisms fall apart.
+light :: Good to see selectivity discussed honestly.
+curious :: Does the pathway converge with anything already well characterized?
+curious :: Is this acting on transcription or on translation?
+technical :: Transcriptional and post-translational effects need separate experiments.
+light :: The layered explanation respected the audience. Nice.
+curious :: What is the evidence that the pathway is actually engaged?
+curious :: Any phosphoproteomics work in this area?
+technical :: Phosphoproteomics would map this far better than single-target assays.
+light :: The bit on signaling noise was genuinely interesting.
+curious :: How much of the mechanism is inferred from homology?
+curious :: Are there competing mechanistic models in the literature?
+technical :: Two competing models usually means neither has clean evidence yet.
+light :: Honest uncertainty is why this channel works.
+curious :: Which cellular compartment is the activity localized to?
+curious :: Is there imaging work showing where this happens?
+technical :: Localization data changes the mechanistic story completely.
+light :: Subcellular detail is my favourite part of these.
+curious :: Does the pathway behave differently in stressed cells?
+curious :: Are the mitochondrial and nuclear signals separable here?
+technical :: Mitochondrial signaling and nuclear response are often conflated.
+light :: Solid pathway walkthrough, properly caveated.
+curious :: What concentration range was the pathway active at?
+curious :: Is the response linear or does it plateau?
+technical :: Nonlinear response curves break a lot of simple interpretations.
+light :: The curve explanation was the highlight.
+curious :: Does the literature describe any threshold effect?
+curious :: Which receptor family does this sit in?
+technical :: Receptor family placement predicts more than people expect.
+light :: Genuinely clarifying. Saving this one for later.
+curious :: Are the pathway findings consistent across cell types?
+curious :: What happens in primary cells rather than immortalized lines?
+technical :: Primary cells and cell lines often disagree on mechanism.
+light :: That distinction is rarely made. Well done.
+curious :: Is the mechanism proposed or demonstrated at this point?
+curious :: Any structural work on the binding interaction?
+technical :: Structural data would move this from proposed to plausible.
+light :: The mechanism-versus-association framing was sharp.
+curious :: How does this interact with existing metabolic signaling?
+curious :: Is nutrient sensing part of the proposed route?
+technical :: Nutrient sensing pathways are notoriously context dependent.
+light :: Context dependence deserved the emphasis it got.
+curious :: Which enzymes are rate limiting in that sequence?
+curious :: Are the rate constants known or estimated?
+technical :: Estimated kinetics carry more uncertainty than the graphs suggest.
+light :: Appreciate the uncertainty being drawn on the chart.
+curious :: Does the pathway show tissue specificity in the literature?
+curious :: Is the signaling acute or sustained in these models?
+technical :: Acute and sustained signaling can produce opposite outcomes.
+light :: That opposite-outcome point reframed the whole topic.
+curious :: What upstream signal initiates the cascade?
+curious :: Are there any endogenous regulators of this pathway?
+technical :: Endogenous regulation is the missing half of most pathway videos.
+light :: Nuanced and sourced. More of this.
+curious :: How well conserved is this route across the model organisms?
+curious :: Is the pathway work mostly rodent or cell based?
+technical :: Rodent pathway data translates unevenly and everyone knows it.
+light :: Honest about translation gaps, which I respect.
+curious :: Which step in the cascade is least understood?
+curious :: Where does the mechanistic evidence get thinnest?
+technical :: The thinnest link in the cascade is worth studying next.

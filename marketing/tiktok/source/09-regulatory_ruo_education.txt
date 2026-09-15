@@ -1,0 +1,100 @@
+curious :: How does research-grade labeling differ from pharmaceutical grade legally?
+technical :: Certificate of analysis documentation is where the real differences show.
+curious :: What does a certificate of analysis actually certify?
+light :: Good explainer on labeling standards. Genuinely educational.
+technical :: Identity testing and purity testing answer completely different questions.
+curious :: Is third-party identity verification standard in this sector?
+curious :: Which testing methods appear on a typical analysis certificate?
+technical :: Mass spectrometry confirms identity, chromatography estimates purity.
+light :: That identity versus purity distinction should be common knowledge.
+curious :: How is research-grade material regulated differently?
+curious :: What does investigational status mean in the regulatory sense?
+technical :: Investigational status is a regulatory category, not a quality claim.
+light :: Useful clarification. Those terms get blurred constantly.
+curious :: Does the labeling framework differ across jurisdictions?
+curious :: How do import rules handle laboratory reagents?
+technical :: Import classification depends on declared intended purpose, largely.
+light :: Regulatory content that is actually clear. Rare thing.
+curious :: Which agency oversees laboratory reagent labeling?
+curious :: Is there an international standard for research reagents?
+technical :: Standards exist but adoption across suppliers is inconsistent.
+light :: Inconsistent adoption explains a lot of confusion.
+curious :: What does good manufacturing practice actually require?
+curious :: How does research grade differ from that standard?
+technical :: Manufacturing standards cover process control, not just the molecule.
+light :: Process control framing made that click.
+curious :: Are suppliers required to publish their testing methods?
+curious :: Which documentation should a lab expect with a reagent?
+technical :: Batch records and method details matter as much as the certificate.
+light :: Documentation content, surprisingly interesting. Nicely done.
+curious :: How does peer review differ from regulatory review?
+curious :: Which one is the stronger signal for a researcher?
+technical :: Peer review assesses a claim, regulatory review assesses a product.
+light :: That comparison was the clearest minute of the video.
+curious :: What is the legal definition of a research reagent?
+curious :: Does terminology differ between regions?
+technical :: Terminology drift between regions causes genuine compliance confusion.
+light :: Terminology drift is a great phrase for it.
+curious :: How are laboratory supply chains audited?
+curious :: Is supplier auditing common in this sector?
+technical :: Supplier auditing is standard in pharma and patchy elsewhere.
+light :: The audit comparison was informative.
+curious :: What record keeping does a research laboratory owe?
+curious :: Are chain of custody records expected here?
+technical :: Chain of custody documentation is basic and frequently missing.
+light :: Basic yet missing. Story of a lot of sectors.
+curious :: How should a laboratory verify an incoming reagent?
+curious :: Is independent verification common practice?
+technical :: Independent verification is the only real check on supplier claims.
+light :: Independent verification point deserves repeating.
+curious :: Which analytical methods count as confirmatory?
+curious :: Is nuclear magnetic resonance used for confirmation here?
+technical :: Magnetic resonance confirms structure better than anything routine.
+light :: Structural confirmation methods explained well.
+curious :: How do storage and handling standards get specified?
+curious :: Are cold chain requirements documented for reagents?
+technical :: Cold chain documentation is where a lot of quality quietly fails.
+light :: Cold chain being the weak link. Very plausible.
+curious :: What does a supplier quality agreement typically include?
+curious :: Are those agreements common outside pharmaceutical supply?
+technical :: Quality agreements are common in pharma, rare in reagent supply.
+light :: Clear contrast between the two sectors. Helpful.
+curious :: How is advertising of laboratory reagents regulated?
+curious :: Which claims are permitted on research labeling?
+technical :: Permitted labeling claims are narrower than most suppliers behave.
+light :: Narrower than behaviour suggests. Diplomatically put.
+curious :: Does the regulatory framework address research intent explicitly?
+curious :: How is intended purpose established legally?
+technical :: Intended purpose is inferred from labeling and marketing together.
+light :: Intent being inferred from marketing. Important nuance.
+curious :: What happens when labeling and marketing disagree?
+curious :: Is enforcement in this area primarily documentation based?
+technical :: Enforcement tends to follow labeling language more than chemistry.
+light :: Enforcement following language. Very useful to know.
+curious :: Which regulatory concepts do researchers most often misunderstand?
+curious :: Is there a good primer on this framework anywhere?
+technical :: A plain-language regulatory primer for this sector is badly needed.
+light :: Someone should write that primer. Maybe you.
+curious :: How do research exemptions work in practice?
+curious :: Are institutional approvals part of that framework?
+technical :: Institutional review sits alongside, not inside, product regulation.
+light :: Good separation of institutional and product oversight.
+curious :: What role do ethics committees play in reagent sourcing?
+curious :: Is sourcing documentation reviewed at that stage?
+technical :: Sourcing documentation increasingly forms part of ethics submissions.
+light :: Did not know sourcing reached ethics review. Interesting.
+curious :: How transparent are suppliers about manufacturing origin?
+curious :: Is country of origin routinely disclosed?
+technical :: Origin disclosure is voluntary and therefore wildly variable.
+light :: Voluntary disclosure being variable. Unsurprising but useful.
+curious :: Which questions should a laboratory ask a new supplier?
+curious :: What documentation would you consider non-negotiable?
+technical :: Identity confirmation and batch traceability are the non-negotiables.
+light :: Two clear non-negotiables. Practical and memorable.
+curious :: How often does independent testing disagree with a certificate?
+curious :: Are there published surveys on reagent quality variability?
+technical :: Published surveys of reagent quality exist and make sobering reading.
+light :: Would genuinely read that survey. Which journal is it in?
+curious :: Which part of this framework is most misunderstood publicly?
+curious :: What regulatory change would improve transparency most?
+technical :: Mandatory method disclosure would improve transparency immediately.
