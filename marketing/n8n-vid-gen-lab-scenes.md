@@ -33,15 +33,31 @@ Do not leave **both** wires on. That sends two videos.
 
 **Vid gen API (quality/cost check):** fal.ai `fal-ai/kling-video/v3/standard/image-to-video`. 15s. `generate_audio: false`. Grok still + still-edit hops are unchanged. Old `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas **disabled**.
 
-**Mute:** clips are silent. `prep_grok_video_start` sends `generate_audio: false` and prefixes the sheet `video_motion_prompt` with a silent lock (same as pen / molecule). Camera and vial motion stay on the sheet. Do not rewrite `pull_sheet_row`.
+**Mute — audio is off. Always. All three vid-gen workflows** (this one, `Vid_gen_landscape_scenes`, `peptide_pen_vid_gen`). Salvatore's standing rule, and the one value these nodes are allowed to hardcode.
+
+`prep_grok_video_start` sets `audio: false` / `generate_audio: false` and prefixes the sheet `video_motion_prompt` with the silent lock:
+
+```text
+Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio.
+```
+
+`fal_kling_generate` pins its own `generate_audio` to `={{ false }}` rather than reading the upstream field, so the mute does not break if prep stops emitting it. Note the expression form: the literal string `false` would be read as truthy. Do not wire audio to a sheet column. Camera and vial motion stay on the sheet — do not rewrite `pull_sheet_row`.
 
 ---
 
 ## Edit the still — `still_edit_instructions`
 
-This is the only node you type in. Leave the default wire: `save_still_url` → `still_edit_instructions`.
+This is the only node you type in. It currently sits **off the live path** — `save_still_url` goes to `skip_still_edit` — so it does not run.
 
 Put the edit on Sheet 9 `still_edit_prompt`, **or** open `still_edit_instructions` → `still_edit_prompt` → **fx OFF** → paste. Then Execute.
+
+**Read the field before you rewire it.** It still holds a stale one-off from the pre-artwork passes:
+
+```text
+make the vial centered in the image. just move it over on the table but make sure its not at the edge of the table. change 50 mg/ml to: 50mg, change 20mg/ml to: 5mg/ml
+```
+
+Harmless while the node has no input, but the vial spec now handles centring, scale, and the exact dose / concentration strings in `video_prompt`, so re-running that text would fight the sheet and cost an extra paid edit call. Clear it or replace it before wiring the edit path back on. The landscape workflow's copy has already been blanked for this reason.
 
 ---
 

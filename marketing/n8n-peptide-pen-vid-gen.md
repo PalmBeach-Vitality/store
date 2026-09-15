@@ -169,7 +169,9 @@ Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws
 | Content Type | **OFF** | `application/json` |
 | Body | **ON** | `={{ $json.grok_video_body_json }}` |
 
-**Check:** `request_id`. Clip is **muted** (`audio: false` + silent motion). Add sound later.
+**Check:** `request_id`. Clip is **muted**: `prep_pen_video_start` sends `audio: false` and prefixes the sheet `video_motion_prompt` with the silent lock (`Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio.`).
+
+**Audio is off. Always. All three vid-gen workflows** (this one, `Vid_gen_lab_scenes`, `Vid_gen_landscape_scenes`). Salvatore's standing rule, and the one value these nodes are allowed to hardcode. Add sound in post if a reel ever needs it — never here.
 
 ---
 
