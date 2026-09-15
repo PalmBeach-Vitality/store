@@ -24,24 +24,34 @@ inputs. He is precise about product detail and will catch a wrong dose or a wron
 He said "we will run a smoketest tomorrow." Nothing is queued to run automatically. Do not generate
 anything before he asks.
 
-### The PR stack — this matters
+### The PR stack
 
-Branches are stacked, not parallel. Getting this wrong will look like work disappearing.
+Already on `main`, squash-merged by Salvatore on 2026-09-14:
+
+- [#72](https://github.com/PalmBeach-Vitality/store/pull/72) — dropped 140 MB of unreferenced media, kept the I2V source stills.
+- [#73](https://github.com/PalmBeach-Vitality/store/pull/73) — the Sheet 9 vial spec: hero scale, exact label strings, DNA emblem, correct volumes.
+
+Still open:
 
 | PR | Branch | Base | State |
 |---|---|---|---|
-| [#73](https://github.com/PalmBeach-Vitality/store/pull/73) | `cursor/vial-label-legibility-4c4b` | `main` | **draft** |
-| [#75](https://github.com/PalmBeach-Vitality/store/pull/75) | `cursor/wellness-scenes-products-4c4b` | **#73's branch** | ready, mergeable |
+| [#75](https://github.com/PalmBeach-Vitality/store/pull/75) | `cursor/wellness-scenes-products-4c4b` | `main` | ready, mergeable |
+| [#66](https://github.com/PalmBeach-Vitality/store/pull/66) | `cursor/film004-alien-reach-4c4b` | `main` | draft, **on hold** |
+| [#74](https://github.com/PalmBeach-Vitality/store/pull/74) | `cursor/lab-notes-ln004-3232` | `main` | draft, **different agent** |
 
-`#75` contains all of `#73`. **`#75` cannot reach `main` until `#73` merges.** Merge #73 first, then
-#75 retargets cleanly. Ask Salvatore before merging either — he merges on his own schedule and has
-merged PRs himself mid-session before.
+`#75` used to be stacked on `#73`'s branch. The squash-merge of `#73` broke the auto-retarget — the
+branch still carried the pre-squash commits, so `#75` went `dirty`. It was rebased with
+`git rebase --onto origin/main 66132c5`, replaying only the eight wellness commits and dropping the
+nine that `#73` already landed. The delta is unchanged.
 
-Also open, from earlier sessions, and not mine to resolve:
+`#66` is on hold pending Salvatore's call on whether FILM-004 is still live. Two things block it: it
+adds a 12.8 MB clip, against the no-media-in-repo rule that `#72` just enforced, and it conflicts with
+`#75` on `AGENTS.md`. It is **not** superseded — it holds the only committed copy of the hardened
+prompt-review gate (workflow name + ID, API + model, still URL, duration/resolution/aspect, exact
+motion prompt, then approve or deny). `main` still has the weaker "also name the API and model and
+wait." Do not close `#66` without salvaging that first.
 
-- [#72](https://github.com/PalmBeach-Vitality/store/pull/72) `cursor/purge-vial-pen-media-4c4b` → `main`, ready. Drops ~140 MB of unreferenced media, keeps the I2V source stills.
-- [#66](https://github.com/PalmBeach-Vitality/store/pull/66) `cursor/film004-alien-reach-4c4b` → `main`, draft. FILM-004 Veo work, unrelated to the vial/pen sheets.
-- [#74](https://github.com/PalmBeach-Vitality/store/pull/74) `cursor/lab-notes-ln004-3232` → `main`, draft. **Different agent** (`-3232` suffix, not `-4c4b`). Leave it alone.
+`#74` is another agent's (`-3232` suffix, not `-4c4b`). Leave it alone.
 
 Current branch is `cursor/wellness-scenes-products-4c4b`. Stay on it unless Salvatore says otherwise.
 New branches must match `cursor/<descriptive-name>-4c4b`, all lowercase.
