@@ -5,7 +5,7 @@
   "display": {
     "mg": "maroon dosage bar, white text",
     "conc": "black concentration line under the bar",
-    "footer": "10ml Sterile Multi-Use Vial"
+    "footer": "<vol> Sterile Multi-Use Vial - use the compound's own vol, never a flat 10ml"
   },
   "labels": {
     "AOD-9604": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
@@ -36,7 +36,8 @@
     "Thymosin Alpha-1": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
     "TB-500": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
     "Tesamorelin": { "mg": "30mg", "conc": "3 mg/ml", "vol": "10ml" },
-    "Tesamorelin/Ipamorelin": { "mg": "12mg/3mg", "conc": "4mg/1mg/ml", "vol": "3ml" },
+    "Tesamorelin/Ipamorelin": { "mg": "12mg/3mg", "conc": null, "vol": "10ml" },
+    "KPV": { "mg": "10mg", "conc": "1 mg/ml", "vol": "10ml" },
     "Tirzepatide": { "mg": "100mg", "conc": "10 mg/ml", "vol": "10ml" }
   },
   "aliases": {
@@ -59,7 +60,7 @@
     "Tirzepatide": [{ "mg": "200mg", "conc": "20 mg/ml", "vol": "10ml" }],
     "Semaglutide": [{ "mg": "50mg", "conc": "5 mg/ml", "vol": "10ml" }]
   },
-  "no_vial_sku": ["5-Amino-1MQ", "DSIP", "KPV"],
+  "no_vial_sku": ["5-Amino-1MQ", "DSIP"],
   "notes": {
     "Sermorelin": "Price list + Salvatore 2026-09-06: 20mg / 2 mg/ml. Never 5mg.",
     "NAD+": "Salvatore 2026-09-03: 1000mg / 100 mg/ml / 10ml. Not 500mg / 50 mg/ml.",
@@ -70,6 +71,9 @@
     "MOTS-C": "Store hero vial is 20mg / 2 mg/ml. Price list also has 5mL 25mg (5mg/mL).",
     "GHK-Cu": "50mg in 10ml = 5 mg/ml. Price list text saying 10mg/mL is internally inconsistent.",
     "BPC-157": "Both 10mg / 1 mg/ml and 20mg / 2 mg/ml are catalog SKUs. Keep whichever the row already locked.",
-    "no_vial_sku": "Pen-only. Do not invent a milligram vial label."
+    "Tesamorelin/Ipamorelin": "Salvatore 2026-09-14: the vial is 10ml, not 3ml. 3ml is the pen. conc is null on purpose - the label prints 12mg/3mg and no mg/ml line. Do not derive one.",
+    "KPV": "Price list has 'KPV 10mg Vial'. 10mg in 10ml = 1 mg/ml. It is not pen-only; the old no_vial_sku entry was wrong.",
+    "no_vial_sku": "Pen-only. Do not invent a milligram vial label.",
+    "conc_null": "conc null means the label prints no mg/ml line at all. Print the mg bar and stop."
   }
 }
