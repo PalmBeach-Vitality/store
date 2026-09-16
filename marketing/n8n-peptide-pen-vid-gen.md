@@ -11,7 +11,7 @@
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
 Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`).
 
-**Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
+**Pen hardware (mandatory):** measured off the live catalog photos — see `marketing/peptide-pen-visual-spec.md`. White gloss body at **one constant diameter**, length **8.3×** the barrel diameter, white cap + pocket clip ON, two **flush** brushed-steel collars (the upper one carries two small rounded-square dose windows), **white** ridged dose dial, and an **orange** knurled push button at the very bottom at **0.92×** the barrel diameter — it steps **in**, it is never as wide as the barrel. Label: light steel-**blue** `#839CB5` DNA helix above the compound name in deep brick **red** `#9B2423`, plus one graphite `#19191A` line with the dose and `3ml`. No badge. Not a glass vial. Not an all-metal body. Not maroon vial branding.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 
