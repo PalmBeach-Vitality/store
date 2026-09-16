@@ -235,6 +235,14 @@ PHRASES = [
         'The pen label shows ONLY "{COMPOUND}" and the badge "3ml Pen".',
         'The pen label shows ONLY "{COMPOUND}", its dose, and "3ml".',
     ),
+    # Six CJC/Ipamorelin rows carry a mangled duplicate of this clause, left by an
+    # earlier script that substituted a name containing a slash. Match the whole
+    # corrupt run first so the clean clause below never rewrites only its head.
+    (
+        "the catalog label ('{COMPOUND}', '3ml Pen', DNA helix icon with no hands)"
+        "/Ipamorelin', '3ml Pen', DNA helix icon with no hands, vertical )",
+        "the catalog label ('{COMPOUND}', the dose line with '3ml', DNA helix icon with no hands)",
+    ),
     (
         "the catalog label ('{COMPOUND}', '3ml Pen', DNA helix icon with no hands)",
         "the catalog label ('{COMPOUND}', the dose line with '3ml', DNA helix icon with no hands)",
@@ -247,18 +255,21 @@ PHRASES = [
         "LABEL: only '{COMPOUND}' and badge '3ml Pen'.",
         "LABEL: only '{COMPOUND}' with its dose line and '3ml'.",
     ),
-    # the liquid window the product does not have
+    # The liquid window the product does not have. Leave the terminator off both
+    # sides: the same clause ends '.' on lab_item and video_prompt, ';' on
+    # material_detail, and nothing at all on scene_brief, and pinning the period
+    # matched only two of the four fields.
     (
         "barrel window shows settled crystal-clear colorless liquid already inside at a stable "
-        "level; never filling.",
+        "level; never filling",
         "no liquid window anywhere on the pen; the only windows are the two dose windows in the "
-        "upper steel collar.",
+        "upper steel collar",
     ),
     (
         "barrel window shows settled clear bright blue liquid already inside at a stable level "
-        "(GLOW only — blue liquid); never filling.",
+        "(GLOW only — blue liquid); never filling",
         "no liquid window anywhere on the pen; the only windows are the two dose windows in the "
-        "upper steel collar.",
+        "upper steel collar",
     ),
     (
         "lined up so barrel windows stay readable",
@@ -286,10 +297,41 @@ PHRASES = [
         "DELETE orange, burgundy vial branding",
         "DELETE orange anywhere except the bottom push button, burgundy vial branding",
     ),
+    (
+        "accent-color circular plunger tip in frame",
+        f"{BUTTON_ORANGE} push button in frame, narrower than the barrel",
+    ),
+    # A shot name carried over from 3-image-scenes-150 product_hero. The part it
+    # frames is a push button, so the shot has to be renamed with it.
+    ("research pen plunger-tip macro", "research pen push-button macro"),
     ("White dial. Accent plunger tip.", "White dial. Orange push button, narrower than the barrel."),
     ("white ridged dose dial, accent plunger tip", "white ridged dose dial, orange push button"),
     ("each white body and accent plunger tip", f"each white body and {BUTTON_ORANGE} push button"),
     ("matte white", "white gloss"),
+]
+
+# Wording the rewrite has to leave nothing of. emit_pen_spec_code_node.py hands
+# this same list to the n8n node, so the live sheet is held to the mirror's bar.
+#
+# Two entries are deliberately blunter than the block they came from: "plunger"
+# is scanned bare because the old tip was worded four different ways, and
+# "barrel window shows" is scanned instead of "barrel window" because the new
+# FORM block legitimately says "NOT a barrel window".
+STALE = [
+    "crimson red",
+    "#DC143C",
+    "matte white",
+    "plunger",
+    "FORBIDDEN: orange anywhere",
+    "No blue accents",
+    "NOT brushed-silver metal",
+    "small rectangular transparent barrel window",
+    "barrel window shows",
+    "rectangle badge",
+    "3ml Pen",
+    "vertical )",
+    "stretch 10-20 percent longer",
+    "No milligram dose",
 ]
 
 # Stacks label differently; one sentence covers all three without naming a dose.
@@ -418,19 +460,7 @@ def main() -> int:
             if needle in str(r[f])
         ]
 
-    for gone in (
-        "crimson red",
-        "#DC143C",
-        "matte white",
-        "plunger tip at the bottom of the dial",
-        "FORBIDDEN: orange anywhere",
-        "No blue accents",
-        "NOT brushed-silver metal",
-        "small rectangular transparent barrel window",
-        "rectangle badge",
-        "stretch 10-20 percent longer",
-        "No milligram dose",
-    ):
+    for gone in STALE:
         hit = scan(gone)
         check(f"no {gone!r} left", not hit, f"{len(hit)} fields")
 

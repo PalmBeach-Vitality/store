@@ -47,6 +47,9 @@ const BLOCKS = {json.dumps(blocks, ensure_ascii=False)};
 const PHRASES = {json.dumps(phrases, ensure_ascii=False)};
 const STACK_NOTE = {json.dumps(m.STACK_NOTE, ensure_ascii=False)};
 const DONE_MARKER = 'ONE CONSTANT DIAMETER';
+// Same list apply_measured_pen_spec.py asserts on. 'barrel window shows' is the
+// verb only the old clause uses; the new FORM block says 'NOT a barrel window'.
+const STALE = {json.dumps(m.STALE, ensure_ascii=False)};
 
 function escapeRe(text) {{
   return text.replace(/[.*+?^${{}}()|[\\]\\\\]/g, '\\\\$&');
@@ -110,8 +113,10 @@ for (const item of $input.all()) {{
       }});
     }}
 
-    if (value.includes('crimson red') || value.includes('matte white')) {{
-      throw new Error(`${{id}}/${{field}}: old pen wording survived the rewrite`);
+    for (const stale of STALE) {{
+      if (value.includes(stale)) {{
+        throw new Error(`${{id}}/${{field}}: old pen wording survived the rewrite: ${{stale}}`);
+      }}
     }}
 
     updated[field] = value;

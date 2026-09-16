@@ -9,6 +9,22 @@ This is the **peptide** pen only. The weight-loss pens
 (`/product-category/weight-loss-pens/`) are a different accent colour and are
 out of scope here.
 
+### Scope, verified
+
+Salvatore asked for the peptide pens and not the weight-loss pens, so this is
+checked rather than assumed:
+
+- The measured sample is thirteen pens off `/product-category/peptide-pens/`.
+  The blue metabolic pen photos that sit in `woocommerce-migration/data/` were
+  **not** sampled.
+- The weight-loss pen category is Semaglutide, Tirzepatide and Retatrutride
+  only (17 SKUs, `woocommerce-migration/data/products-4-categories.csv`).
+- None of those three, and no `GLP-1` or weight-loss wording, appears anywhere
+  in the 168 × 8 values this spec rewrites on the pen tab.
+
+Re-runnable as `marketing/scripts/apply_measured_pen_spec.py`; the standing
+result is in `/opt/cursor/artifacts/peptide-pen-scope-and-lock-audit.log`.
+
 ## Why this file exists
 
 Salvatore, 2026-09-16, on the first fal Kling Pro pen clip: *"the red bottom part
@@ -104,11 +120,14 @@ All counts are fields on `marketing/sheets/14-pen-creations-150.csv` (168 rows).
 `White ridged gear-like dose dial (NOT colored, NOT orange)` is correct as
 written and stays.
 
-## Proposed replacement text
+## The replacement text
 
-Five find-and-replace pairs. `{COMPOUND}` is the row's own compound name; the
-script substitutes it per row, nothing is hardcoded. Nothing below is applied
-until Salvatore approves it.
+Six find-and-replace blocks, all approved by Salvatore on 2026-09-16.
+`{COMPOUND}` is the name the row actually prints on the label, captured from the
+text rather than read from `compound_name` — row 26 is keyed `Tesa-Ipa` but
+prints `Tesamorelin/Ipamorelin`. Nothing is hardcoded.
+
+Applied to the repo mirror by `marketing/scripts/apply_measured_pen_spec.py`.
 
 ### 1. PEN VISUAL LOCK — the constant prefix
 
@@ -188,16 +207,55 @@ Appears on `still_edit_prompt`, 168 rows.
 
 > CRITICAL PRODUCT FIX: Keep this exact catalog pen, then remove every extra pen until only ONE remains. White gloss barrel at one constant diameter, white clip-cap ON, white ridged dose dial (NOT orange), two flush brushed-steel collars. NARROW THE BOTTOM: the bottom push button must be orange #BE4718 and 0.92x the barrel diameter — if it is as wide as the barrel or wider, or reads as a flared base, skirt, or foot, shrink it until it steps in. Logo ABOVE the name: steel-blue #8FA7C1 DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. Name '{COMPOUND}' large bold condensed brick red #B13A3B sans-serif along the barrel axis. No badge, no red rectangle.
 
-## Open conflict — the dose on the label
+## The dose on the label — settled
 
-`video_prompt` and `still_edit_prompt` carry `No milligram dose. No 10mg.` on all
-168 rows, and `still_edit_prompt` actively strips milligram text. The real
-catalog label **does** print the dose: `500mg 3ml`, `50mg 3ml`, `10mg 3ml`.
+`video_prompt` and `still_edit_prompt` used to carry `No milligram dose. No
+10mg.` on all 168 rows, and `still_edit_prompt` actively stripped milligram
+text. The real catalog label **does** print the dose: `500mg 3ml`, `50mg 3ml`,
+`10mg 3ml`.
 
-Two ways to go, Salvatore's call:
+Salvatore chose **match the catalog**, so the dose line stays and is specced as
+a graphite `#19191A` line reading the dose and `3ml`, set along the barrel axis
+with the name. The `No milligram dose` wording is gone from the tab.
 
-- **Match the catalog** — allow the dose line, spec it as graphite `<dose> 3ml`.
-- **Keep video clean** — keep the dose off the rendered label, and accept that
-  the still will not match the product photo on that one line.
+## Four variants the six blocks did not reach
 
-Nothing in the sheet changes on this point until he picks one.
+The six blocks are worded as one canonical sentence each, but the tab was built
+by several earlier scripts and carries per-row variants. These four survived the
+first pass and are now covered:
+
+| Leftover | Where | Why the block missed it | Now |
+|---|---|---|---|
+| `barrel window shows settled crystal-clear colorless liquid already inside at a stable level; never filling` | `material_detail`, `scene_brief`, 162 rows | The block pinned a trailing `.`, but this clause ends `.` on `lab_item` and `video_prompt`, `;` on `material_detail`, and nothing at all on `scene_brief` | Terminator dropped from both sides of the pair, so all four fields match and each keeps its own punctuation |
+| same clause, GLOW's `clear bright blue liquid ... (GLOW only — blue liquid)` | `material_detail`, `scene_brief`, 6 rows | Same pinned `.` | Same fix |
+| `accent-color circular plunger tip in frame` | 5 rows × 4 fields | A fifth wording of the old tip, outside the FORM block | Replaced with `orange #BE4718 push button in frame, narrower than the barrel` |
+| `research pen plunger-tip macro` | 25 fields | A shot name from `3-image-scenes-150 product_hero`, not product copy | Renamed `research pen push-button macro` — the part it frames is a push button |
+
+The liquid clause was the one that mattered. It told the model there is a barrel
+window with liquid in it, on the same row where the new FORM block says
+`NOT a barrel window`. The real pen has no barrel window at all; its only
+windows are the two dose windows in the upper steel collar. **GLOW's blue
+liquid goes with it** — with no window there is nothing to see it through.
+
+Also cleaned while in there: six `CJC/Ipamorelin` rows carried a mangled
+duplicate label clause, left by an earlier script that substituted a name
+containing a slash. It read
+`('CJC/Ipamorelin', '3ml Pen', ... no hands)/Ipamorelin', '3ml Pen', ... vertical )`.
+Pre-existing, not from this change, but it printed the `3ml Pen` badge string
+this spec removes, so it is gone.
+
+## How the rewrite is held in place
+
+`apply_measured_pen_spec.py` asserts a `STALE` list — fourteen phrases that must
+not survive anywhere on the tab. Two entries are deliberately blunter than the
+block they came from, because the first pass proved one sentence per block is
+not enough:
+
+- `plunger` is scanned as a bare word. The old tip was worded five ways.
+- `barrel window shows` is scanned instead of `barrel window`, because the new
+  FORM block legitimately says `NOT a barrel window`.
+
+`emit_pen_spec_code_node.py` generates the n8n Code node from the same tables
+and hands it the same `STALE` list, so the live sheet is held to the mirror's
+bar. Verified in node: byte-identical to the Python mirror on 168 rows × 8
+fields, and a re-run rewrites 0 rows.
