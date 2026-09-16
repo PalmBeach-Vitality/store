@@ -2,9 +2,12 @@
 // Workflow: peptide_pen_vid_gen
 // Mode: Run Once for All Items
 // After: skip_still_edit (skip) or save_edited_still_url (edit)
-// Before: grok_video_start
+// Before: fal_kling_generate
 //
 // SHEETS-ONLY. Motion / model / duration / resolution from pull_sheet_row.
+// fal_kling_generate reads model_video off this node's output, so the sheet owns the
+// tier. Never pin a slug on the node. grok_video_body_json is only for the disabled
+// Grok path.
 // Do not truncate. Do not invent a fallback prompt.
 // Fail if Sheet 14 motion contains vial / flip-off language (I2V morphs the pen).
 

@@ -1,0 +1,100 @@
+curious :: Which repair pathway is the research pointing at here?
+technical :: Collagen synthesis timelines in the literature are slower than people think.
+curious :: Is the tissue repair work in tendon models or muscle?
+light :: Good breakdown of what repair research can and cannot say.
+technical :: Inflammation markers alone tell you very little about tissue remodeling.
+curious :: Are they measuring soreness or actual tissue change?
+curious :: What does the literature say about connective tissue turnover?
+technical :: Soreness and damage correlate poorly, which the papers keep showing.
+light :: Refreshing to hear that repair research is still early.
+curious :: Is there any imaging data behind the repair conclusions?
+curious :: Which markers are used to track remodeling in these studies?
+technical :: Biomarker panels in recovery research are wildly inconsistent.
+light :: The bit on training load was unexpectedly useful.
+curious :: Does the research separate acute from chronic adaptation?
+curious :: Any rodent work on tendon remodeling worth reading?
+technical :: Tendon turnover is slow enough that short studies miss it entirely.
+light :: Appreciate the emphasis on timeframes here.
+curious :: How long were the observation windows in those papers?
+curious :: Is muscle protein synthesis measured directly in that work?
+technical :: Tracer studies are the only honest way to measure synthesis.
+light :: The tracer explanation was clearer than my textbook.
+curious :: What models do they use to study connective tissue repair?
+curious :: Are the inflammation findings from blood or tissue samples?
+technical :: Serum markers and local tissue state can diverge sharply.
+light :: Nice to see local versus systemic actually distinguished.
+curious :: Does the literature support a window for tissue remodeling?
+curious :: Is sleep architecture part of the recovery research here?
+technical :: Sleep staging data would strengthen most recovery papers.
+light :: Good, someone finally mentioned sleep in a recovery video.
+curious :: How is training load quantified in those studies?
+curious :: Any work on the connective tissue side rather than muscle?
+technical :: Connective tissue research lags badly behind muscle research.
+light :: That lag explains a lot about the discourse.
+curious :: Which growth factors show up in the repair literature?
+curious :: Is the signaling work here local or endocrine?
+technical :: Local signaling in repair is measured far less than systemic.
+light :: Solid, careful framing on an overhyped topic.
+curious :: What does the published record say about tissue loading?
+curious :: Is mechanical loading part of the research design?
+technical :: Mechanical loading drives remodeling more than most inputs studied.
+light :: The loading point deserves its own video honestly.
+curious :: Are the studies in trained or untrained models?
+curious :: How does baseline conditioning affect the measurements?
+technical :: Baseline conditioning shifts every recovery metric measurably.
+light :: Good nuance on baselines, that gets skipped constantly.
+curious :: Which inflammatory mediators are tracked in this research?
+curious :: Does the literature distinguish inflammation from damage?
+technical :: Inflammation is part of remodeling, not the opposite of it.
+light :: That reframe on inflammation was genuinely helpful.
+curious :: Any studies on remodeling timelines across age groups?
+curious :: Is the research on soft tissue or bone?
+technical :: Bone remodeling operates on a completely different clock.
+light :: The timeline comparison made the difference obvious.
+curious :: What is the strongest recovery paper in this area?
+curious :: Are there systematic reviews on tissue remodeling research?
+technical :: A good review here would save everyone a lot of arguing.
+light :: Measured, sourced, no overpromising. Following.
+curious :: Does the data come from injury models or normal training?
+curious :: How are the injury models induced in those studies?
+technical :: Injury model choice changes the remodeling story entirely.
+light :: Model selection mattering that much is fascinating.
+curious :: Is there research on remodeling in tendon versus ligament?
+curious :: Which tissue type is best studied in this literature?
+technical :: Tendon is studied more than ligament, and it shows.
+light :: Learned the tendon and ligament distinction properly today.
+curious :: How much of this research is in-vitro versus in-vivo?
+curious :: Are cell culture findings holding up in animal models?
+technical :: Culture conditions rarely reproduce mechanical tissue environments.
+light :: The culture limitation point was well made.
+curious :: Which biomarker is most reliable across these papers?
+curious :: Is creatine kinase still used as a marker here?
+technical :: Creatine kinase varies enormously between individuals, limiting its use.
+light :: Good to hear the marker limitations spelled out.
+curious :: Does the literature look at fascia at all?
+curious :: Any research on the extracellular matrix specifically?
+technical :: Matrix composition research is quietly the interesting frontier here.
+light :: Extracellular matrix content is always the best part.
+curious :: How do these findings hold up across sexes in the models?
+curious :: Are the studies mostly male animal models?
+technical :: Male-only animal models still dominate this literature unfortunately.
+light :: Glad someone raised the model bias issue.
+curious :: Which repair stage is best characterized in the research?
+curious :: Is the proliferative phase well studied?
+technical :: Early and late remodeling phases need separate study designs.
+light :: The phase breakdown was the clearest part.
+curious :: What is still unknown about tissue remodeling timelines?
+curious :: Where does the recovery literature get weakest?
+technical :: The weakest part is long-term follow-up, consistently.
+light :: Honest about the gaps, which builds trust.
+curious :: Any research comparing rest against active loading?
+curious :: Is immobilization studied alongside movement here?
+technical :: Immobilization data is old but surprisingly consistent.
+light :: Old data being consistent is its own kind of finding.
+curious :: How is tissue quality assessed in these papers?
+curious :: Is there histology behind the remodeling conclusions?
+technical :: Histology is what turns a claim into a measurement here.
+light :: Appreciate the push for actual tissue data.
+curious :: Which question would you want studied next here?
+curious :: What would a properly designed remodeling study include?
+technical :: A long follow-up window would improve this whole field.

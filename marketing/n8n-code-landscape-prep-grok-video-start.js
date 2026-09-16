@@ -3,11 +3,17 @@
 // Mode: Run Once for All Items
 // Settings → Execute Once = OFF
 // After: save_edited_still_url
-// Before: grok_video_start
+// Before: fal_kling_generate
 //
 // SHEETS-ONLY: model / motion / duration / aspect / resolution from pull_sheet_row.
 // still_url is runtime from save_edited_still_url (edit) then save_still_url.
 // Audio is the one exception: hard off, never read from the sheet.
+//
+// VID GEN API: fal.ai. fal_kling_generate reads model_video off this node's output,
+// so the sheet owns the tier. Never pin a slug on the node.
+// wait_seconds is still required here, but fal_kling_generate polls to completion
+// itself, so it no longer drives the video wait. grok_video_body_json is only for
+// the disabled Grok path.
 
 function firstJson(name) {
   try {

@@ -1,0 +1,1001 @@
+id,category,comment,tone,asks_question
+1,peptide_science,Which peptide family does this sequence actually belong to?,curious,true
+2,peptide_science,Curious whether they characterized the sequence by mass spec or just purity.,technical,false
+3,peptide_science,Is the literature here on receptor binding or downstream signaling?,curious,true
+4,peptide_science,"Peptide chemistry explained without the buzzwords, finally.",light,false
+5,peptide_science,Any word on peptide stability across freeze-thaw cycles in these papers?,technical,true
+6,peptide_science,What made this analog interesting compared to the parent sequence?,curious,true
+7,peptide_science,Are they citing structure-activity work or something newer?,curious,true
+8,peptide_science,"Short sequences like this usually have rough bioavailability, right?",technical,true
+9,peptide_science,The amino-acid sidebar was the best part of this.,light,false
+10,peptide_science,Which residue is doing the heavy lifting in that binding pocket?,curious,true
+11,peptide_science,Solid-phase synthesis or recombinant expression for a peptide this length?,technical,true
+12,peptide_science,"Does the folding matter here, or is it mostly linear activity?",curious,true
+13,peptide_science,Rare to see peptide science broken down this calmly.,light,false
+14,peptide_science,"Purity by chromatography tells you almost nothing about identity, worth flagging.",technical,false
+15,peptide_science,How much of this is primary literature versus review summaries?,curious,true
+16,peptide_science,Any papers comparing the cyclized version against the linear one?,curious,true
+17,peptide_science,Half-life in plasma is the part nobody ever cites properly.,technical,false
+18,peptide_science,"Saving this one, the sequence breakdown was genuinely clear.",light,false
+19,peptide_science,Is the peptide acting at a single receptor or several?,curious,true
+20,peptide_science,Lyophilized versus solution stability is a real variable in this space.,technical,false
+21,peptide_science,What assay did they use to confirm binding affinity?,curious,true
+22,peptide_science,Good to hear someone say the literature is still thin.,light,false
+23,peptide_science,Peptide bond hydrolysis is underrated as a confounder in older papers.,technical,false
+24,peptide_science,Which part of the sequence is conserved across the analogs?,curious,true
+25,peptide_science,Are the peer-reviewed sources open access or paywalled here?,curious,true
+26,peptide_science,Molecular weight alone will not tell you if the batch is clean.,technical,false
+27,peptide_science,This is the first peptide explainer I have not scrolled past.,light,false
+28,peptide_science,"Is there any structural data, or only sequence homology?",curious,true
+29,peptide_science,Curious if the lab ran circular dichroism on the folded form.,technical,false
+30,peptide_science,What does the current literature say about enzymatic breakdown here?,curious,true
+31,peptide_science,The bit about naming conventions cleared up a lot.,light,false
+32,peptide_science,Sequence length that short usually means fast systemic clearance.,technical,false
+33,peptide_science,Did anyone replicate the binding numbers in a second lab?,curious,true
+34,peptide_science,Which journal is the core paper on this published in?,curious,true
+35,peptide_science,"Acetate versus trifluoroacetate salt forms change the analysis, worth noting.",technical,false
+36,peptide_science,"Calm delivery, no hype, more of this please.",light,false
+37,peptide_science,Is the receptor work in cell lines or tissue preparations?,curious,true
+38,peptide_science,"Peptide science lives and dies on characterization, glad you said it.",technical,false
+39,peptide_science,Which decade does the primary research here come from?,curious,true
+40,peptide_science,Are there any head-to-head comparisons in the published record?,curious,true
+41,peptide_science,Chain length and charge distribution explain most of the stability story.,technical,false
+42,peptide_science,Learned two terms I have been mispronouncing for years.,light,false
+43,peptide_science,What is the mechanism of action the papers actually propose?,curious,true
+44,peptide_science,Does the literature separate binding from functional activity here?,curious,true
+45,peptide_science,Amide versus free acid at the terminus matters more than people think.,technical,false
+46,peptide_science,"The tone here is refreshing, just data and caveats.",light,false
+47,peptide_science,Any independent characterization of these sequences in the literature?,curious,true
+48,peptide_science,Third-party identity testing is the part worth pushing on.,technical,false
+49,peptide_science,Is this classed as a peptide or a small protein at that length?,curious,true
+50,peptide_science,Which model system produced the original observation?,curious,true
+51,peptide_science,Storage temperature is the silent variable in most of these papers.,technical,false
+52,peptide_science,"Genuinely useful. No hype, no nonsense.",light,false
+53,peptide_science,Are they referencing in-vitro affinity or something functional?,curious,true
+54,peptide_science,"Sequence homology across species complicates translation, always has.",technical,false
+55,peptide_science,What does the peer-reviewed record look like on the analog specifically?,curious,true
+56,peptide_science,Is the interest in the peptide itself or its fragments?,curious,true
+57,peptide_science,"Fragment activity is a whole separate literature, worth a video.",technical,false
+58,peptide_science,"Following for the chemistry, staying for the caveats.",light,false
+59,peptide_science,How reproducible are the binding assays across published papers?,curious,true
+60,peptide_science,"Any structural biology work on this, or just modeling?",curious,true
+61,peptide_science,"Computational docking is a hypothesis, not evidence, glad that got said.",technical,false
+62,peptide_science,The sequence diagram made this click instantly.,light,false
+63,peptide_science,Which laboratory first characterized this molecule?,curious,true
+64,peptide_science,Is the research base here academic or industry-funded?,curious,true
+65,peptide_science,"Funding source belongs in every literature summary, honestly.",technical,false
+66,peptide_science,Quietly one of the better science accounts on here.,light,false
+67,peptide_science,What is the earliest paper on this sequence?,curious,true
+68,peptide_science,"Are the cited studies in-vitro, preclinical, or both?",curious,true
+69,peptide_science,Solubility profile changes the entire experimental design downstream.,technical,false
+70,peptide_science,Appreciate that you flagged what is still unknown.,light,false
+71,peptide_science,Does the literature agree on the receptor target yet?,curious,true
+72,peptide_science,Any conflicting papers worth knowing about here?,curious,true
+73,peptide_science,Conflicting findings usually trace back to assay conditions.,technical,false
+74,peptide_science,This deserves way more views than it has.,light,false
+75,peptide_science,How does the analog differ structurally from the original?,curious,true
+76,peptide_science,Is there a consensus sequence in the published work?,curious,true
+77,peptide_science,Batch-to-batch variation would explain a lot of the inconsistency.,technical,false
+78,peptide_science,"Good explainer. Clear, sourced, no overreach.",light,false
+79,peptide_science,What laboratory methods confirm the sequence identity?,curious,true
+80,peptide_science,Are the studies cited here recent or from the nineties?,curious,true
+81,peptide_science,A lot of this literature is genuinely older than people assume.,technical,false
+82,peptide_science,The historical context was the most interesting part.,light,false
+83,peptide_science,Which species were the original models drawn from?,curious,true
+84,peptide_science,Is anyone working on the stability problem in current research?,curious,true
+85,peptide_science,Formulation science is where this field is actually moving.,technical,false
+86,peptide_science,Straightforward and properly sourced. Subscribed immediately.,light,false
+87,peptide_science,What does the isoelectric point tell you about handling?,curious,true
+88,peptide_science,Any published work on the degradation products?,curious,true
+89,peptide_science,Degradation pathways deserve as much attention as the parent molecule.,technical,false
+90,peptide_science,The caveats section is why I trust this channel.,light,false
+91,peptide_science,Is the research focused on the receptor or the ligand side?,curious,true
+92,peptide_science,How large were the sample sizes in the studies cited?,curious,true
+93,peptide_science,Sample size in early peptide literature is often painfully small.,technical,false
+94,peptide_science,"Short, accurate, no hype. Rare combination.",light,false
+95,peptide_science,Which paper is considered the benchmark on this sequence?,curious,true
+96,peptide_science,Are there review articles worth starting with here?,curious,true
+97,peptide_science,A good systematic review would settle half these arguments.,technical,false
+98,peptide_science,Bookmarking for the citation list alone.,light,false
+99,peptide_science,Which peptide characteristics actually drive the research interest?,curious,true
+100,peptide_science,Is the published evidence base growing or fairly static?,curious,true
+101,lab_methods_study_design,Was there a control arm in the study they are citing?,curious,true
+102,lab_methods_study_design,Sample size is doing a lot of quiet work in that graph.,technical,false
+103,lab_methods_study_design,Curious what study design they are citing here.,curious,false
+104,lab_methods_study_design,Preregistration would settle most of the debate in this thread.,technical,false
+105,lab_methods_study_design,Finally someone talking about methodology instead of headlines.,light,false
+106,lab_methods_study_design,Do we know if the work was blinded?,curious,true
+107,lab_methods_study_design,Was that effect size or just statistical significance?,curious,true
+108,lab_methods_study_design,A probability value without an effect size is half a finding.,technical,false
+109,lab_methods_study_design,Methodology content always underperforms and it should not.,light,false
+110,lab_methods_study_design,How many replicates went into that measurement?,curious,true
+111,lab_methods_study_design,Is this a single study or a body of work?,curious,true
+112,lab_methods_study_design,One study is a hypothesis. A replicated one is evidence.,technical,false
+113,lab_methods_study_design,The part about confounders was worth the whole video.,light,false
+114,lab_methods_study_design,Were the groups randomized or self-selected?,curious,true
+115,lab_methods_study_design,Any chance the original paper was preregistered?,curious,true
+116,lab_methods_study_design,Publication bias explains a startling amount of this literature.,technical,false
+117,lab_methods_study_design,Love that you mentioned the limitations section.,light,false
+118,lab_methods_study_design,What was the confidence interval on that number?,curious,true
+119,lab_methods_study_design,Is the comparison against placebo or against nothing?,curious,true
+120,lab_methods_study_design,"Comparing against nothing is not a comparison, worth repeating.",technical,false
+121,lab_methods_study_design,Good to see someone read past the abstract.,light,false
+122,lab_methods_study_design,Did the authors report their dropout rate?,curious,true
+123,lab_methods_study_design,Are these in-vitro models or broader research reviews?,curious,true
+124,lab_methods_study_design,In-vitro concentrations rarely map onto anything physiological.,technical,false
+125,lab_methods_study_design,The methods walkthrough was unexpectedly gripping.,light,false
+126,lab_methods_study_design,Was the analysis prespecified or run after the fact?,curious,true
+127,lab_methods_study_design,How was the primary endpoint defined?,curious,true
+128,lab_methods_study_design,Shifting endpoints mid-study is the oldest trick in the book.,technical,false
+129,lab_methods_study_design,Underrated channel for actual study design talk.,light,false
+130,lab_methods_study_design,Did anyone attempt a direct replication?,curious,true
+131,lab_methods_study_design,Was the work peer reviewed or a preprint?,curious,true
+132,lab_methods_study_design,"Preprints are fine, just label them clearly.",technical,false
+133,lab_methods_study_design,Respect for saying the evidence is preliminary.,light,false
+134,lab_methods_study_design,How large was the observed effect in practical terms?,curious,true
+135,lab_methods_study_design,Any conflict of interest declared in the paper?,curious,true
+136,lab_methods_study_design,Funding disclosure changes how I read every table.,technical,false
+137,lab_methods_study_design,The graph critique was genuinely funny and correct.,light,false
+138,lab_methods_study_design,Is the vertical axis truncated in that figure?,curious,true
+139,lab_methods_study_design,Was there a washout period between conditions?,curious,true
+140,lab_methods_study_design,Crossover designs need a proper washout or the data blur.,technical,false
+141,lab_methods_study_design,More of the boring methodological stuff please.,light,false
+142,lab_methods_study_design,How many comparisons were run on that dataset?,curious,true
+143,lab_methods_study_design,Did they correct for multiple comparisons?,curious,true
+144,lab_methods_study_design,Twenty comparisons and one significant finding is just noise.,technical,false
+145,lab_methods_study_design,Refreshing to see error bars taken seriously.,light,false
+146,lab_methods_study_design,Are those standard error or standard deviation bars?,curious,true
+147,lab_methods_study_design,Was the sample drawn from a general population?,curious,true
+148,lab_methods_study_design,Selection effects can manufacture a finding out of thin air.,technical,false
+149,lab_methods_study_design,"The scepticism here feels earned, not performative.",light,false
+150,lab_methods_study_design,What statistical test was applied to that comparison?,curious,true
+151,lab_methods_study_design,Is the dataset publicly available?,curious,true
+152,lab_methods_study_design,Open data would let someone actually check the analysis.,technical,false
+153,lab_methods_study_design,Bookmarking this as a methodology primer.,light,false
+154,lab_methods_study_design,Did the study measure the outcome directly or by proxy?,curious,true
+155,lab_methods_study_design,How long was the observation window?,curious,true
+156,lab_methods_study_design,Short observation windows hide almost everything interesting.,technical,false
+157,lab_methods_study_design,The distinction between correlation and mechanism landed well.,light,false
+158,lab_methods_study_design,Is there a systematic review covering this question?,curious,true
+159,lab_methods_study_design,Were the reviewers blinded to the authors?,curious,true
+160,lab_methods_study_design,Meta-analysis quality depends entirely on what you let in.,technical,false
+161,lab_methods_study_design,"Good nuance, no absolutes. Following.",light,false
+162,lab_methods_study_design,How heterogeneous were the studies in that pooled analysis?,curious,true
+163,lab_methods_study_design,Any sensitivity analysis reported in the paper?,curious,true
+164,lab_methods_study_design,A finding that vanishes under sensitivity analysis was never there.,technical,false
+165,lab_methods_study_design,This is what science communication should sound like.,light,false
+166,lab_methods_study_design,Were the cell lines authenticated?,curious,true
+167,lab_methods_study_design,What passage number were those cells at?,curious,true
+168,lab_methods_study_design,"Late-passage cell lines drift, and nobody reports it.",technical,false
+169,lab_methods_study_design,"Small detail, big implication. Nicely spotted.",light,false
+170,lab_methods_study_design,Was the assay validated independently?,curious,true
+171,lab_methods_study_design,Did they run a positive control alongside?,curious,true
+172,lab_methods_study_design,No positive control means you cannot tell a null from a failure.,technical,false
+173,lab_methods_study_design,The bit on negative findings was the best minute.,light,false
+174,lab_methods_study_design,Are null findings from this area published anywhere?,curious,true
+175,lab_methods_study_design,Is the model system relevant to the question being asked?,curious,true
+176,lab_methods_study_design,Model choice quietly determines the answer more often than method.,technical,false
+177,lab_methods_study_design,Appreciate the honesty about what is not known.,light,false
+178,lab_methods_study_design,How reproducible has this measurement been across labs?,curious,true
+179,lab_methods_study_design,Was the protocol published alongside the paper?,curious,true
+180,lab_methods_study_design,Published protocols are the difference between science and anecdote.,technical,false
+181,lab_methods_study_design,"Solid breakdown, and the caveats were not buried.",light,false
+182,lab_methods_study_design,Did the authors share their analysis code?,curious,true
+183,lab_methods_study_design,How was missing data handled?,curious,true
+184,lab_methods_study_design,Imputation choices can move a borderline finding either way.,technical,false
+185,lab_methods_study_design,This thread is better than the paper it is about.,light,false
+186,lab_methods_study_design,Was the comparison group matched on anything?,curious,true
+187,lab_methods_study_design,Is this observational or experimental work?,curious,true
+188,lab_methods_study_design,"Observational data can flag a pattern, never confirm a cause.",technical,false
+189,lab_methods_study_design,"Clear, careful, and it cited its sources. Rare.",light,false
+190,lab_methods_study_design,How wide is the uncertainty on that central estimate?,curious,true
+191,lab_methods_study_design,Any pilot data before the main study?,curious,true
+192,lab_methods_study_design,"Pilot studies are for feasibility, not for headline numbers.",technical,false
+193,lab_methods_study_design,Genuinely learned something about experimental controls today.,light,false
+194,lab_methods_study_design,Were the measurements taken by the same operator throughout?,curious,true
+195,lab_methods_study_design,Is there a standard protocol in this field yet?,curious,true
+196,lab_methods_study_design,Lack of a standard protocol is why the literature disagrees.,technical,false
+197,lab_methods_study_design,The measured tone here is the whole appeal.,light,false
+198,lab_methods_study_design,What would a stronger version of this study look like?,curious,true
+199,lab_methods_study_design,Which methodological gap is the field still working on?,curious,true
+200,lab_methods_study_design,Method sections deserve more attention than abstracts ever get.,technical,false
+201,pathways_mechanisms,Which pathway is this lab work focusing on first?,curious,true
+202,pathways_mechanisms,"Upstream signaling or downstream transcription, because those are different papers.",technical,false
+203,pathways_mechanisms,Is the proposed mechanism receptor-mediated or something indirect?,curious,true
+204,pathways_mechanisms,The cascade diagram made a confusing topic legible.,light,false
+205,pathways_mechanisms,Pathway crosstalk makes single-target explanations almost always incomplete.,technical,false
+206,pathways_mechanisms,Are they measuring gene expression or protein levels?,curious,true
+207,pathways_mechanisms,What is the proposed signaling route here?,curious,true
+208,pathways_mechanisms,Transcript and protein levels do not move together as often as assumed.,technical,false
+209,pathways_mechanisms,"Nice, an explainer that admits the pathway is partly mapped.",light,false
+210,pathways_mechanisms,Does the literature place this upstream or downstream of inflammation?,curious,true
+211,pathways_mechanisms,Is there a feedback loop that complicates the picture?,curious,true
+212,pathways_mechanisms,Negative feedback tends to flatten everything over a longer window.,technical,false
+213,pathways_mechanisms,"The signaling analogy actually worked, which is rare.",light,false
+214,pathways_mechanisms,Which kinase is doing the phosphorylation in that step?,curious,true
+215,pathways_mechanisms,Are the pathway papers in cell models or tissue?,curious,true
+216,pathways_mechanisms,Kinase specificity is the part most summaries skip entirely.,technical,false
+217,pathways_mechanisms,Following for the pathway breakdowns specifically.,light,false
+218,pathways_mechanisms,How direct is the link between the receptor and the readout?,curious,true
+219,pathways_mechanisms,Is the mechanism conserved across the models studied?,curious,true
+220,pathways_mechanisms,A conserved pathway does not mean a conserved outcome.,technical,false
+221,pathways_mechanisms,This made mitochondrial signaling almost intuitive.,light,false
+222,pathways_mechanisms,Which transcription factors show up in that dataset?,curious,true
+223,pathways_mechanisms,Are they proposing one mechanism or several in parallel?,curious,true
+224,pathways_mechanisms,Parallel mechanisms are the honest answer and the harder video.,technical,false
+225,pathways_mechanisms,The part on redundancy in signaling was excellent.,light,false
+226,pathways_mechanisms,Does blocking the receptor abolish the observed change?,curious,true
+227,pathways_mechanisms,Any knockout or knockdown work supporting the mechanism?,curious,true
+228,pathways_mechanisms,Knockdown data is what separates mechanism from correlation here.,technical,false
+229,pathways_mechanisms,"Clear, layered, no overclaiming. Good video.",light,false
+230,pathways_mechanisms,Is the pathway activity measured directly or inferred?,curious,true
+231,pathways_mechanisms,What happens to the signal over longer timeframes?,curious,true
+232,pathways_mechanisms,Time course data would clear up most of this ambiguity.,technical,false
+233,pathways_mechanisms,Appreciated the note that the mechanism is still proposed.,light,false
+234,pathways_mechanisms,Which second messengers are involved downstream?,curious,true
+235,pathways_mechanisms,Is calcium signaling part of this at all?,curious,true
+236,pathways_mechanisms,"Calcium gets invoked for everything, which makes it uninformative.",technical,false
+237,pathways_mechanisms,The receptor explainer was the clearest I have seen.,light,false
+238,pathways_mechanisms,Are the receptor subtypes distinguished in the literature?,curious,true
+239,pathways_mechanisms,How selective is the interaction at the receptor level?,curious,true
+240,pathways_mechanisms,Off-target binding is where most clean mechanisms fall apart.,technical,false
+241,pathways_mechanisms,Good to see selectivity discussed honestly.,light,false
+242,pathways_mechanisms,Does the pathway converge with anything already well characterized?,curious,true
+243,pathways_mechanisms,Is this acting on transcription or on translation?,curious,true
+244,pathways_mechanisms,Transcriptional and post-translational effects need separate experiments.,technical,false
+245,pathways_mechanisms,The layered explanation respected the audience. Nice.,light,false
+246,pathways_mechanisms,What is the evidence that the pathway is actually engaged?,curious,true
+247,pathways_mechanisms,Any phosphoproteomics work in this area?,curious,true
+248,pathways_mechanisms,Phosphoproteomics would map this far better than single-target assays.,technical,false
+249,pathways_mechanisms,The bit on signaling noise was genuinely interesting.,light,false
+250,pathways_mechanisms,How much of the mechanism is inferred from homology?,curious,true
+251,pathways_mechanisms,Are there competing mechanistic models in the literature?,curious,true
+252,pathways_mechanisms,Two competing models usually means neither has clean evidence yet.,technical,false
+253,pathways_mechanisms,Honest uncertainty is why this channel works.,light,false
+254,pathways_mechanisms,Which cellular compartment is the activity localized to?,curious,true
+255,pathways_mechanisms,Is there imaging work showing where this happens?,curious,true
+256,pathways_mechanisms,Localization data changes the mechanistic story completely.,technical,false
+257,pathways_mechanisms,Subcellular detail is my favourite part of these.,light,false
+258,pathways_mechanisms,Does the pathway behave differently in stressed cells?,curious,true
+259,pathways_mechanisms,Are the mitochondrial and nuclear signals separable here?,curious,true
+260,pathways_mechanisms,Mitochondrial signaling and nuclear response are often conflated.,technical,false
+261,pathways_mechanisms,"Solid pathway walkthrough, properly caveated.",light,false
+262,pathways_mechanisms,What concentration range was the pathway active at?,curious,true
+263,pathways_mechanisms,Is the response linear or does it plateau?,curious,true
+264,pathways_mechanisms,Nonlinear response curves break a lot of simple interpretations.,technical,false
+265,pathways_mechanisms,The curve explanation was the highlight.,light,false
+266,pathways_mechanisms,Does the literature describe any threshold effect?,curious,true
+267,pathways_mechanisms,Which receptor family does this sit in?,curious,true
+268,pathways_mechanisms,Receptor family placement predicts more than people expect.,technical,false
+269,pathways_mechanisms,Genuinely clarifying. Saving this one for later.,light,false
+270,pathways_mechanisms,Are the pathway findings consistent across cell types?,curious,true
+271,pathways_mechanisms,What happens in primary cells rather than immortalized lines?,curious,true
+272,pathways_mechanisms,Primary cells and cell lines often disagree on mechanism.,technical,false
+273,pathways_mechanisms,That distinction is rarely made. Well done.,light,false
+274,pathways_mechanisms,Is the mechanism proposed or demonstrated at this point?,curious,true
+275,pathways_mechanisms,Any structural work on the binding interaction?,curious,true
+276,pathways_mechanisms,Structural data would move this from proposed to plausible.,technical,false
+277,pathways_mechanisms,The mechanism-versus-association framing was sharp.,light,false
+278,pathways_mechanisms,How does this interact with existing metabolic signaling?,curious,true
+279,pathways_mechanisms,Is nutrient sensing part of the proposed route?,curious,true
+280,pathways_mechanisms,Nutrient sensing pathways are notoriously context dependent.,technical,false
+281,pathways_mechanisms,Context dependence deserved the emphasis it got.,light,false
+282,pathways_mechanisms,Which enzymes are rate limiting in that sequence?,curious,true
+283,pathways_mechanisms,Are the rate constants known or estimated?,curious,true
+284,pathways_mechanisms,Estimated kinetics carry more uncertainty than the graphs suggest.,technical,false
+285,pathways_mechanisms,Appreciate the uncertainty being drawn on the chart.,light,false
+286,pathways_mechanisms,Does the pathway show tissue specificity in the literature?,curious,true
+287,pathways_mechanisms,Is the signaling acute or sustained in these models?,curious,true
+288,pathways_mechanisms,Acute and sustained signaling can produce opposite outcomes.,technical,false
+289,pathways_mechanisms,That opposite-outcome point reframed the whole topic.,light,false
+290,pathways_mechanisms,What upstream signal initiates the cascade?,curious,true
+291,pathways_mechanisms,Are there any endogenous regulators of this pathway?,curious,true
+292,pathways_mechanisms,Endogenous regulation is the missing half of most pathway videos.,technical,false
+293,pathways_mechanisms,Nuanced and sourced. More of this.,light,false
+294,pathways_mechanisms,How well conserved is this route across the model organisms?,curious,true
+295,pathways_mechanisms,Is the pathway work mostly rodent or cell based?,curious,true
+296,pathways_mechanisms,Rodent pathway data translates unevenly and everyone knows it.,technical,false
+297,pathways_mechanisms,"Honest about translation gaps, which I respect.",light,false
+298,pathways_mechanisms,Which step in the cascade is least understood?,curious,true
+299,pathways_mechanisms,Where does the mechanistic evidence get thinnest?,curious,true
+300,pathways_mechanisms,The thinnest link in the cascade is worth studying next.,technical,false
+301,recovery_research,Which repair pathway is the research pointing at here?,curious,true
+302,recovery_research,Collagen synthesis timelines in the literature are slower than people think.,technical,false
+303,recovery_research,Is the tissue repair work in tendon models or muscle?,curious,true
+304,recovery_research,Good breakdown of what repair research can and cannot say.,light,false
+305,recovery_research,Inflammation markers alone tell you very little about tissue remodeling.,technical,false
+306,recovery_research,Are they measuring soreness or actual tissue change?,curious,true
+307,recovery_research,What does the literature say about connective tissue turnover?,curious,true
+308,recovery_research,"Soreness and damage correlate poorly, which the papers keep showing.",technical,false
+309,recovery_research,Refreshing to hear that repair research is still early.,light,false
+310,recovery_research,Is there any imaging data behind the repair conclusions?,curious,true
+311,recovery_research,Which markers are used to track remodeling in these studies?,curious,true
+312,recovery_research,Biomarker panels in recovery research are wildly inconsistent.,technical,false
+313,recovery_research,The bit on training load was unexpectedly useful.,light,false
+314,recovery_research,Does the research separate acute from chronic adaptation?,curious,true
+315,recovery_research,Any rodent work on tendon remodeling worth reading?,curious,true
+316,recovery_research,Tendon turnover is slow enough that short studies miss it entirely.,technical,false
+317,recovery_research,Appreciate the emphasis on timeframes here.,light,false
+318,recovery_research,How long were the observation windows in those papers?,curious,true
+319,recovery_research,Is muscle protein synthesis measured directly in that work?,curious,true
+320,recovery_research,Tracer studies are the only honest way to measure synthesis.,technical,false
+321,recovery_research,The tracer explanation was clearer than my textbook.,light,false
+322,recovery_research,What models do they use to study connective tissue repair?,curious,true
+323,recovery_research,Are the inflammation findings from blood or tissue samples?,curious,true
+324,recovery_research,Serum markers and local tissue state can diverge sharply.,technical,false
+325,recovery_research,Nice to see local versus systemic actually distinguished.,light,false
+326,recovery_research,Does the literature support a window for tissue remodeling?,curious,true
+327,recovery_research,Is sleep architecture part of the recovery research here?,curious,true
+328,recovery_research,Sleep staging data would strengthen most recovery papers.,technical,false
+329,recovery_research,"Good, someone finally mentioned sleep in a recovery video.",light,false
+330,recovery_research,How is training load quantified in those studies?,curious,true
+331,recovery_research,Any work on the connective tissue side rather than muscle?,curious,true
+332,recovery_research,Connective tissue research lags badly behind muscle research.,technical,false
+333,recovery_research,That lag explains a lot about the discourse.,light,false
+334,recovery_research,Which growth factors show up in the repair literature?,curious,true
+335,recovery_research,Is the signaling work here local or endocrine?,curious,true
+336,recovery_research,Local signaling in repair is measured far less than systemic.,technical,false
+337,recovery_research,"Solid, careful framing on an overhyped topic.",light,false
+338,recovery_research,What does the published record say about tissue loading?,curious,true
+339,recovery_research,Is mechanical loading part of the research design?,curious,true
+340,recovery_research,Mechanical loading drives remodeling more than most inputs studied.,technical,false
+341,recovery_research,The loading point deserves its own video honestly.,light,false
+342,recovery_research,Are the studies in trained or untrained models?,curious,true
+343,recovery_research,How does baseline conditioning affect the measurements?,curious,true
+344,recovery_research,Baseline conditioning shifts every recovery metric measurably.,technical,false
+345,recovery_research,"Good nuance on baselines, that gets skipped constantly.",light,false
+346,recovery_research,Which inflammatory mediators are tracked in this research?,curious,true
+347,recovery_research,Does the literature distinguish inflammation from damage?,curious,true
+348,recovery_research,"Inflammation is part of remodeling, not the opposite of it.",technical,false
+349,recovery_research,That reframe on inflammation was genuinely helpful.,light,false
+350,recovery_research,Any studies on remodeling timelines across age groups?,curious,true
+351,recovery_research,Is the research on soft tissue or bone?,curious,true
+352,recovery_research,Bone remodeling operates on a completely different clock.,technical,false
+353,recovery_research,The timeline comparison made the difference obvious.,light,false
+354,recovery_research,What is the strongest recovery paper in this area?,curious,true
+355,recovery_research,Are there systematic reviews on tissue remodeling research?,curious,true
+356,recovery_research,A good review here would save everyone a lot of arguing.,technical,false
+357,recovery_research,"Measured, sourced, no overpromising. Following.",light,false
+358,recovery_research,Does the data come from injury models or normal training?,curious,true
+359,recovery_research,How are the injury models induced in those studies?,curious,true
+360,recovery_research,Injury model choice changes the remodeling story entirely.,technical,false
+361,recovery_research,Model selection mattering that much is fascinating.,light,false
+362,recovery_research,Is there research on remodeling in tendon versus ligament?,curious,true
+363,recovery_research,Which tissue type is best studied in this literature?,curious,true
+364,recovery_research,"Tendon is studied more than ligament, and it shows.",technical,false
+365,recovery_research,Learned the tendon and ligament distinction properly today.,light,false
+366,recovery_research,How much of this research is in-vitro versus in-vivo?,curious,true
+367,recovery_research,Are cell culture findings holding up in animal models?,curious,true
+368,recovery_research,Culture conditions rarely reproduce mechanical tissue environments.,technical,false
+369,recovery_research,The culture limitation point was well made.,light,false
+370,recovery_research,Which biomarker is most reliable across these papers?,curious,true
+371,recovery_research,Is creatine kinase still used as a marker here?,curious,true
+372,recovery_research,"Creatine kinase varies enormously between individuals, limiting its use.",technical,false
+373,recovery_research,Good to hear the marker limitations spelled out.,light,false
+374,recovery_research,Does the literature look at fascia at all?,curious,true
+375,recovery_research,Any research on the extracellular matrix specifically?,curious,true
+376,recovery_research,Matrix composition research is quietly the interesting frontier here.,technical,false
+377,recovery_research,Extracellular matrix content is always the best part.,light,false
+378,recovery_research,How do these findings hold up across sexes in the models?,curious,true
+379,recovery_research,Are the studies mostly male animal models?,curious,true
+380,recovery_research,Male-only animal models still dominate this literature unfortunately.,technical,false
+381,recovery_research,Glad someone raised the model bias issue.,light,false
+382,recovery_research,Which repair stage is best characterized in the research?,curious,true
+383,recovery_research,Is the proliferative phase well studied?,curious,true
+384,recovery_research,Early and late remodeling phases need separate study designs.,technical,false
+385,recovery_research,The phase breakdown was the clearest part.,light,false
+386,recovery_research,What is still unknown about tissue remodeling timelines?,curious,true
+387,recovery_research,Where does the recovery literature get weakest?,curious,true
+388,recovery_research,"The weakest part is long-term follow-up, consistently.",technical,false
+389,recovery_research,"Honest about the gaps, which builds trust.",light,false
+390,recovery_research,Any research comparing rest against active loading?,curious,true
+391,recovery_research,Is immobilization studied alongside movement here?,curious,true
+392,recovery_research,Immobilization data is old but surprisingly consistent.,technical,false
+393,recovery_research,Old data being consistent is its own kind of finding.,light,false
+394,recovery_research,How is tissue quality assessed in these papers?,curious,true
+395,recovery_research,Is there histology behind the remodeling conclusions?,curious,true
+396,recovery_research,Histology is what turns a claim into a measurement here.,technical,false
+397,recovery_research,Appreciate the push for actual tissue data.,light,false
+398,recovery_research,Which question would you want studied next here?,curious,true
+399,recovery_research,What would a properly designed remodeling study include?,curious,true
+400,recovery_research,A long follow-up window would improve this whole field.,technical,false
+401,longevity_cellular,Which aging pathway is the lab prioritizing in this work?,curious,true
+402,longevity_cellular,Senescence markers are messier than the summaries make them sound.,technical,false
+403,longevity_cellular,"Is the longevity work in worms, flies, or mice?",curious,true
+404,longevity_cellular,Good explainer on why model organism choice matters.,light,false
+405,longevity_cellular,"Lifespan extension in nematodes translates poorly, as always.",technical,false
+406,longevity_cellular,Are they measuring lifespan or healthspan in these studies?,curious,true
+407,longevity_cellular,What does the autophagy literature actually show here?,curious,true
+408,longevity_cellular,Autophagy flux and autophagy markers are not the same measurement.,technical,false
+409,longevity_cellular,That flux distinction cleared up a real confusion.,light,false
+410,longevity_cellular,Is mitochondrial biogenesis measured directly in that research?,curious,true
+411,longevity_cellular,Which epigenetic clock are they referencing?,curious,true
+412,longevity_cellular,"Epigenetic clocks predict chronology better than biology, still.",technical,false
+413,longevity_cellular,The clock caveats were the most useful minute here.,light,false
+414,longevity_cellular,Does the research separate cellular from organismal aging?,curious,true
+415,longevity_cellular,Any work on senescent cell clearance in these models?,curious,true
+416,longevity_cellular,"Senolytic research is promising and very early, both true.",technical,false
+417,longevity_cellular,Appreciate the restraint in describing early findings.,light,false
+418,longevity_cellular,How is cellular senescence defined in that paper?,curious,true
+419,longevity_cellular,Is telomere length being used as a primary measure?,curious,true
+420,longevity_cellular,Telomere length is a noisy proxy for almost everything.,technical,false
+421,longevity_cellular,Glad someone said telomeres are not the whole story.,light,false
+422,longevity_cellular,What is the current thinking on mitochondrial decline?,curious,true
+423,longevity_cellular,Are the nicotinamide papers converging on anything yet?,curious,true
+424,longevity_cellular,Nicotinamide metabolism has more open questions than settled ones.,technical,false
+425,longevity_cellular,Honest accounting of open questions. Following.,light,false
+426,longevity_cellular,Does caloric restriction research replicate across species?,curious,true
+427,longevity_cellular,Which hallmark of aging is this work targeting?,curious,true
+428,longevity_cellular,The hallmarks framework is useful and increasingly contested.,technical,false
+429,longevity_cellular,Did not know the hallmarks were debated. Interesting.,light,false
+430,longevity_cellular,Is there any primate data in this area yet?,curious,true
+431,longevity_cellular,How long were the longevity studies run for?,curious,true
+432,longevity_cellular,"Lifespan studies take years, which limits how many exist.",technical,false
+433,longevity_cellular,The timescale problem explains so much of this field.,light,false
+434,longevity_cellular,Are the findings from genetic or pharmacological interventions?,curious,true
+435,longevity_cellular,What happens to the effect in older animals?,curious,true
+436,longevity_cellular,Late-life intervention data is scarce and the most informative.,technical,false
+437,longevity_cellular,Late-life data being scarce is a good point.,light,false
+438,longevity_cellular,Which cellular stress response is involved here?,curious,true
+439,longevity_cellular,Is proteostasis part of the proposed mechanism?,curious,true
+440,longevity_cellular,Proteostasis decline shows up in nearly every aging model.,technical,false
+441,longevity_cellular,Proteostasis is such an underrated topic. Thanks.,light,false
+442,longevity_cellular,Does the research look at stem cell function?,curious,true
+443,longevity_cellular,Any work on the aging immune system in this literature?,curious,true
+444,longevity_cellular,Immune aging may drive more than the cell-intrinsic story.,technical,false
+445,longevity_cellular,The immune angle reframed this for me.,light,false
+446,longevity_cellular,Are inflammatory markers rising with age in that dataset?,curious,true
+447,longevity_cellular,Is chronic low-grade inflammation part of the model?,curious,true
+448,longevity_cellular,Low-grade inflammation is consistently observed and poorly explained.,technical,false
+449,longevity_cellular,Consistently observed but unexplained. Such a science phrase.,light,false
+450,longevity_cellular,Which biomarkers of aging are considered reliable now?,curious,true
+451,longevity_cellular,How well validated are the composite aging measures?,curious,true
+452,longevity_cellular,Composite aging scores need external validation they mostly lack.,technical,false
+453,longevity_cellular,Validation talk is the boring part that actually matters.,light,false
+454,longevity_cellular,Is the mitochondrial work on function or on number?,curious,true
+455,longevity_cellular,Are they measuring respiration directly?,curious,true
+456,longevity_cellular,Respirometry data beats mitochondrial counting every time.,technical,false
+457,longevity_cellular,Respirometry explained simply. Nicely done.,light,false
+458,longevity_cellular,Does the literature agree on where decline starts?,curious,true
+459,longevity_cellular,Which tissue ages fastest in these models?,curious,true
+460,longevity_cellular,"Tissues age at different rates, complicating whole-organism measures.",technical,false
+461,longevity_cellular,Different rates across tissues is a great detail.,light,false
+462,longevity_cellular,Is there work on cellular reprogramming in this area?,curious,true
+463,longevity_cellular,How stable are the reprogramming findings so far?,curious,true
+464,longevity_cellular,Partial reprogramming is fascinating and a long way from settled.,technical,false
+465,longevity_cellular,"Balanced take on reprogramming, which is rare online.",light,false
+466,longevity_cellular,What does the genetics of longevity actually predict?,curious,true
+467,longevity_cellular,Are the long-lived cohorts genetically unusual?,curious,true
+468,longevity_cellular,Centenarian genetics explains less variance than expected.,technical,false
+469,longevity_cellular,That variance point was genuinely surprising.,light,false
+470,longevity_cellular,Which species shows the most interesting aging biology?,curious,true
+471,longevity_cellular,Any research on naturally long-lived animals here?,curious,true
+472,longevity_cellular,Comparative biology of long-lived species is underexplored.,technical,false
+473,longevity_cellular,Naked mole rat content is always welcome.,light,false
+474,longevity_cellular,Is oxidative stress still considered central?,curious,true
+475,longevity_cellular,Has the free radical model held up?,curious,true
+476,longevity_cellular,The free radical theory aged worse than the organisms it described.,technical,false
+477,longevity_cellular,That line about the theory aging was excellent.,light,false
+478,longevity_cellular,What replaced oxidative damage as the leading explanation?,curious,true
+479,longevity_cellular,Are there competing frameworks in aging biology?,curious,true
+480,longevity_cellular,Multiple frameworks coexisting is normal for a young field.,technical,false
+481,longevity_cellular,Good context on how young this field really is.,light,false
+482,longevity_cellular,How is biological age estimated in that study?,curious,true
+483,longevity_cellular,Is the estimate validated against anything external?,curious,true
+484,longevity_cellular,Biological age estimates need hard endpoints to mean much.,technical,false
+485,longevity_cellular,Appreciate the push for real endpoints.,light,false
+486,longevity_cellular,Does the cellular work connect to whole-organism measures?,curious,true
+487,longevity_cellular,Which level of analysis is strongest here?,curious,true
+488,longevity_cellular,Bridging cellular and organismal scales is the central difficulty.,technical,false
+489,longevity_cellular,The scale-bridging problem was well explained.,light,false
+490,longevity_cellular,Are the interventions studied preventive or corrective?,curious,true
+491,longevity_cellular,What happens when the intervention stops?,curious,true
+492,longevity_cellular,Reversibility after withdrawal is rarely tested and always interesting.,technical,false
+493,longevity_cellular,Nobody ever asks the withdrawal question. Good one.,light,false
+494,longevity_cellular,How much of this literature is preclinical only?,curious,true
+495,longevity_cellular,Where is the translational gap widest?,curious,true
+496,longevity_cellular,The translational gap in aging biology is enormous and honest.,technical,false
+497,longevity_cellular,Honest about the gap. That is why I watch.,light,false
+498,longevity_cellular,Which aging question feels closest to an answer?,curious,true
+499,longevity_cellular,What would move this field forward fastest?,curious,true
+500,longevity_cellular,Better biomarkers would unlock most of this field quickly.,technical,false
+501,skin_hair_science,Which layer of the dermis is this research looking at?,curious,true
+502,skin_hair_science,Fibroblast behaviour in culture rarely matches intact skin.,technical,false
+503,skin_hair_science,Is the collagen work on synthesis or on degradation?,curious,true
+504,skin_hair_science,Good explainer on skin biology without the marketing gloss.,light,false
+505,skin_hair_science,Elastin turnover is slow enough to complicate short studies.,technical,false
+506,skin_hair_science,Are they studying barrier function or deeper structure?,curious,true
+507,skin_hair_science,What does the photobiology literature say here?,curious,true
+508,skin_hair_science,Ultraviolet damage research is the best established part of this field.,technical,false
+509,skin_hair_science,Refreshing to see sun exposure science taken seriously.,light,false
+510,skin_hair_science,Is the research on keratinocytes or fibroblasts?,curious,true
+511,skin_hair_science,"Which model is used, reconstructed skin or monolayer?",curious,true
+512,skin_hair_science,Reconstructed skin models are better but still simplified.,technical,false
+513,skin_hair_science,The skin model comparison was genuinely interesting.,light,false
+514,skin_hair_science,Does the study measure barrier integrity directly?,curious,true
+515,skin_hair_science,Any work on transepidermal water loss in that paper?,curious,true
+516,skin_hair_science,"Transepidermal water loss is a decent proxy, not a mechanism.",technical,false
+517,skin_hair_science,Good distinction between proxy measures and mechanism.,light,false
+518,skin_hair_science,Is the hair follicle work on cycling or on density?,curious,true
+519,skin_hair_science,Which phase of the follicle cycle is being studied?,curious,true
+520,skin_hair_science,Follicle cycling makes timing the single hardest variable here.,technical,false
+521,skin_hair_science,Follicle cycle explained clearly. That is rare.,light,false
+522,skin_hair_science,Are the follicle studies in culture or in animal models?,curious,true
+523,skin_hair_science,What does the dermal papilla research show?,curious,true
+524,skin_hair_science,Dermal papilla cells lose their signature quickly in culture.,technical,false
+525,skin_hair_science,That culture drift detail was a good catch.,light,false
+526,skin_hair_science,Is the keratin research structural or genetic?,curious,true
+527,skin_hair_science,How is hair shaft integrity measured in these studies?,curious,true
+528,skin_hair_science,Tensile testing on hair shafts is more standardized than expected.,technical,false
+529,skin_hair_science,Did not expect tensile testing content today. Excellent.,light,false
+530,skin_hair_science,Does the literature separate scalp biology from skin generally?,curious,true
+531,skin_hair_science,Is the microbiome part of this research area?,curious,true
+532,skin_hair_science,Skin microbiome research is expanding faster than it is replicating.,technical,false
+533,skin_hair_science,Fair point about replication lagging expansion.,light,false
+534,skin_hair_science,Which markers indicate dermal remodeling in that work?,curious,true
+535,skin_hair_science,Are matrix metalloproteinases measured here?,curious,true
+536,skin_hair_science,Matrix metalloproteinase activity explains a lot of structural change.,technical,false
+537,skin_hair_science,Matrix enzyme content is always the interesting bit.,light,false
+538,skin_hair_science,Is the research on photoaging or intrinsic change?,curious,true
+539,skin_hair_science,How do they separate sun exposure from time?,curious,true
+540,skin_hair_science,Separating photoaging from intrinsic change needs protected-site comparisons.,technical,false
+541,skin_hair_science,The protected-site method was clever. Nice explanation.,light,false
+542,skin_hair_science,Which peptide sequences show up in dermal literature?,curious,true
+543,skin_hair_science,Is there penetration data behind the topical research?,curious,true
+544,skin_hair_science,Skin penetration is the bottleneck nobody wants to discuss.,technical,false
+545,skin_hair_science,Glad the penetration problem got airtime.,light,false
+546,skin_hair_science,How is penetration actually measured in those studies?,curious,true
+547,skin_hair_science,Are the studies using diffusion cell setups?,curious,true
+548,skin_hair_science,Diffusion cell data is standard and still frequently misreported.,technical,false
+549,skin_hair_science,Learned what a diffusion cell is today. Thanks.,light,false
+550,skin_hair_science,Does the research look at wound models or intact skin?,curious,true
+551,skin_hair_science,Which inflammatory pathways are involved in the skin work?,curious,true
+552,skin_hair_science,Cutaneous inflammation pathways overlap heavily with systemic ones.,technical,false
+553,skin_hair_science,The overlap point tied the topic together well.,light,false
+554,skin_hair_science,Is there histology supporting the structural conclusions?,curious,true
+555,skin_hair_science,How thick were the tissue sections analysed?,curious,true
+556,skin_hair_science,Section thickness and staining choice shape what you can see.,technical,false
+557,skin_hair_science,Methodological detail in a skin video. Unheard of.,light,false
+558,skin_hair_science,Are the studies in pigmented or non-pigmented models?,curious,true
+559,skin_hair_science,Does melanin biology factor into this research?,curious,true
+560,skin_hair_science,Melanin biology is far more complex than pigment alone.,technical,false
+561,skin_hair_science,Melanin explainer was better than most textbooks.,light,false
+562,skin_hair_science,Which growth factors appear in follicle research?,curious,true
+563,skin_hair_science,Is signaling between dermis and epidermis measured?,curious,true
+564,skin_hair_science,Dermal and epidermal crosstalk is central and hard to study.,technical,false
+565,skin_hair_science,Crosstalk framing made that section click.,light,false
+566,skin_hair_science,Does the literature address ageing skin specifically?,curious,true
+567,skin_hair_science,Are older tissue samples included in that work?,curious,true
+568,skin_hair_science,Donor age is a variable that skin studies often underreport.,technical,false
+569,skin_hair_science,Donor age mattering is a good practical point.,light,false
+570,skin_hair_science,How consistent are these findings across skin types?,curious,true
+571,skin_hair_science,Is the research diverse in sample population?,curious,true
+572,skin_hair_science,Dermatology research skews toward lighter skin types historically.,technical,false
+573,skin_hair_science,Important point about representation in the data.,light,false
+574,skin_hair_science,Which measurement tools are standard in this field?,curious,true
+575,skin_hair_science,Is imaging used alongside biochemical measures?,curious,true
+576,skin_hair_science,Confocal imaging plus biochemistry is the stronger combination.,technical,false
+577,skin_hair_science,Confocal skin imaging looks incredible honestly.,light,false
+578,skin_hair_science,Does the study measure hydration objectively?,curious,true
+579,skin_hair_science,How is skin elasticity quantified?,curious,true
+580,skin_hair_science,Elasticity probe measurements vary with operator technique noticeably.,technical,false
+581,skin_hair_science,Operator variability is such an underrated problem.,light,false
+582,skin_hair_science,Are the hair studies measuring count or thickness?,curious,true
+583,skin_hair_science,"Which is more informative, density or diameter?",curious,true
+584,skin_hair_science,"Shaft diameter often shifts before count does, worth knowing.",technical,false
+585,skin_hair_science,That diameter insight was actually new to me.,light,false
+586,skin_hair_science,Is there long-term follow-up in the follicle literature?,curious,true
+587,skin_hair_science,How long do these skin studies typically run?,curious,true
+588,skin_hair_science,Skin turnover cycles mean short studies show very little.,technical,false
+589,skin_hair_science,Turnover timing explains a lot of disappointing studies.,light,false
+590,skin_hair_science,Which part of the skin literature is strongest?,curious,true
+591,skin_hair_science,Where does dermal research still fall short?,curious,true
+592,skin_hair_science,The weak point is durability of change over long periods.,technical,false
+593,skin_hair_science,Honest about durability. Appreciate that.,light,false
+594,skin_hair_science,Are there good systematic reviews on dermal peptide science?,curious,true
+595,skin_hair_science,What would you read first in this area?,curious,true
+596,skin_hair_science,A structured review would help enormously in this space.,technical,false
+597,skin_hair_science,"Clear, sourced, no overclaiming. Following.",light,false
+598,skin_hair_science,Which question is the field closest to answering?,curious,true
+599,skin_hair_science,What experiment would settle the current debate?,curious,true
+600,skin_hair_science,Protected-site comparisons would settle most of these arguments.,technical,false
+601,sleep_focus_research,Is the sleep work using polysomnography or wearables?,curious,true
+602,sleep_focus_research,Actigraphy and polysomnography disagree more than people realize.,technical,false
+603,sleep_focus_research,Which sleep stage is the research focused on?,curious,true
+604,sleep_focus_research,Good explainer on sleep staging without the gadget marketing.,light,false
+605,sleep_focus_research,Slow wave activity is the measure that usually matters here.,technical,false
+606,sleep_focus_research,Are they measuring sleep quality or just duration?,curious,true
+607,sleep_focus_research,What does the memory consolidation literature show?,curious,true
+608,sleep_focus_research,Consolidation studies depend heavily on task choice.,technical,false
+609,sleep_focus_research,Task choice mattering that much is a great point.,light,false
+610,sleep_focus_research,Is the circadian work in constant routine conditions?,curious,true
+611,sleep_focus_research,How was light exposure controlled in that study?,curious,true
+612,sleep_focus_research,Uncontrolled light exposure wrecks circadian study interpretation.,technical,false
+613,sleep_focus_research,Light control being that critical was news to me.,light,false
+614,sleep_focus_research,Does the research use objective cognitive testing?,curious,true
+615,sleep_focus_research,Which attention paradigm was applied?,curious,true
+616,sleep_focus_research,Psychomotor vigilance tasks are the workhorse and quite sensitive.,technical,false
+617,sleep_focus_research,Learned about vigilance testing today. Genuinely interesting.,light,false
+618,sleep_focus_research,Are the cognitive measures validated instruments?,curious,true
+619,sleep_focus_research,How large was the practice effect in those tasks?,curious,true
+620,sleep_focus_research,Practice effects can masquerade as improvement across sessions.,technical,false
+621,sleep_focus_research,Practice effects explain so many wobbly findings.,light,false
+622,sleep_focus_research,Is melatonin measured in saliva or plasma here?,curious,true
+623,sleep_focus_research,What does the melatonin timing literature actually say?,curious,true
+624,sleep_focus_research,"Melatonin onset timing is informative, concentration much less so.",technical,false
+625,sleep_focus_research,The timing versus concentration point was sharp.,light,false
+626,sleep_focus_research,Does the study control for caffeine intake?,curious,true
+627,sleep_focus_research,How was habitual caffeine handled in the design?,curious,true
+628,sleep_focus_research,Caffeine history is a confounder in nearly every alertness study.,technical,false
+629,sleep_focus_research,Good catch on the caffeine confound.,light,false
+630,sleep_focus_research,Is the work in shift workers or standard schedules?,curious,true
+631,sleep_focus_research,Any research on circadian misalignment specifically?,curious,true
+632,sleep_focus_research,Shift work research is observational and therefore very tangled.,technical,false
+633,sleep_focus_research,The misalignment explainer was the clearest part.,light,false
+634,sleep_focus_research,Which brain regions show up in the imaging work?,curious,true
+635,sleep_focus_research,Is there electroencephalography data behind those conclusions?,curious,true
+636,sleep_focus_research,"Scalp recordings give you timing, not location, worth remembering.",technical,false
+637,sleep_focus_research,Timing versus location in brain imaging. Nicely put.,light,false
+638,sleep_focus_research,How many nights were recorded in that study?,curious,true
+639,sleep_focus_research,Was there an adaptation night in the lab?,curious,true
+640,sleep_focus_research,First-night effects in sleep labs are large and well documented.,technical,false
+641,sleep_focus_research,First-night effect is such a neat methodological detail.,light,false
+642,sleep_focus_research,Are the sleep findings from self-report or measurement?,curious,true
+643,sleep_focus_research,How well does self-reported sleep track objective measures?,curious,true
+644,sleep_focus_research,Self-reported and measured sleep correlate surprisingly weakly.,technical,false
+645,sleep_focus_research,That weak correlation is genuinely unsettling.,light,false
+646,sleep_focus_research,Does the research address sleep continuity separately?,curious,true
+647,sleep_focus_research,Is fragmentation measured in that dataset?,curious,true
+648,sleep_focus_research,Fragmentation may matter more than total time in bed.,technical,false
+649,sleep_focus_research,Fragmentation over duration. Good reframe.,light,false
+650,sleep_focus_research,Which markers track daytime alertness objectively?,curious,true
+651,sleep_focus_research,Is pupillometry used in any of this work?,curious,true
+652,sleep_focus_research,Pupillometry is an elegant alertness measure and underused.,technical,false
+653,sleep_focus_research,Pupillometry sounds fascinating. Any reading on it?,light,true
+654,sleep_focus_research,Does the literature separate attention from working memory?,curious,true
+655,sleep_focus_research,Which cognitive domain is most sleep sensitive?,curious,true
+656,sleep_focus_research,Sustained attention degrades earliest and most measurably.,technical,false
+657,sleep_focus_research,Sustained attention being first to go tracks honestly.,light,false
+658,sleep_focus_research,Are the studies acute deprivation or chronic restriction?,curious,true
+659,sleep_focus_research,How do those two conditions differ in the data?,curious,true
+660,sleep_focus_research,Chronic restriction and acute deprivation produce different profiles.,technical,false
+661,sleep_focus_research,The restriction versus deprivation distinction was useful.,light,false
+662,sleep_focus_research,Is recovery sleep studied after restriction?,curious,true
+663,sleep_focus_research,How many nights does the literature say recovery takes?,curious,true
+664,sleep_focus_research,Full recovery from restriction takes longer than most assume.,technical,false
+665,sleep_focus_research,Longer recovery than expected. Good to know.,light,false
+666,sleep_focus_research,Does the research include age-stratified analysis?,curious,true
+667,sleep_focus_research,How does sleep architecture shift with age?,curious,true
+668,sleep_focus_research,"Slow wave sleep declines with age, which confounds comparisons.",technical,false
+669,sleep_focus_research,Age-related architecture change explained well.,light,false
+670,sleep_focus_research,Which chronotype measures were used?,curious,true
+671,sleep_focus_research,Is chronotype controlled for in the analysis?,curious,true
+672,sleep_focus_research,Chronotype mismatch can swamp an intervention effect entirely.,technical,false
+673,sleep_focus_research,Chronotype as a confounder. Had not considered that.,light,false
+674,sleep_focus_research,Are the participants screened for sleep disorders?,curious,true
+675,sleep_focus_research,How was disordered breathing ruled out in that sample?,curious,true
+676,sleep_focus_research,Undiagnosed breathing disruption in a sample distorts everything downstream.,technical,false
+677,sleep_focus_research,Screening detail that clearly matters. Nice.,light,false
+678,sleep_focus_research,Does the study report objective sleep onset latency?,curious,true
+679,sleep_focus_research,Which measures are considered gold standard here?,curious,true
+680,sleep_focus_research,"Polysomnography remains the reference standard, with real limitations.",technical,false
+681,sleep_focus_research,Good to hear the gold standard has limits too.,light,false
+682,sleep_focus_research,Is there any home-based measurement validation?,curious,true
+683,sleep_focus_research,How accurate are consumer devices in the literature?,curious,true
+684,sleep_focus_research,Consumer device accuracy varies wildly by sleep stage.,technical,false
+685,sleep_focus_research,Device accuracy varying by stage explains my data. Thanks.,light,false
+686,sleep_focus_research,Does the research look at temperature regulation?,curious,true
+687,sleep_focus_research,Is core body temperature tracked in these studies?,curious,true
+688,sleep_focus_research,Core temperature rhythm is one of the cleaner circadian markers.,technical,false
+689,sleep_focus_research,Temperature as a circadian marker. Neat.,light,false
+690,sleep_focus_research,Which environmental variables were held constant?,curious,true
+691,sleep_focus_research,Was ambient noise controlled in the protocol?,curious,true
+692,sleep_focus_research,Ambient conditions in sleep studies deserve far more reporting.,technical,false
+693,sleep_focus_research,"Reporting standards point, well made.",light,false
+694,sleep_focus_research,Is there long-term follow-up in this sleep literature?,curious,true
+695,sleep_focus_research,How durable are the observed changes?,curious,true
+696,sleep_focus_research,Durability is the weakest link across sleep intervention studies.,technical,false
+697,sleep_focus_research,Honest about durability again. Consistent channel.,light,false
+698,sleep_focus_research,Which sleep question is closest to settled?,curious,true
+699,sleep_focus_research,What would a stronger circadian study look like?,curious,true
+700,sleep_focus_research,Constant routine designs would strengthen most circadian claims.,technical,false
+701,biohacking_science,Is anyone running proper single-subject designs in this space?,curious,true
+702,biohacking_science,Single-subject designs can be rigorous if you randomize the blocks.,technical,false
+703,biohacking_science,What does the heart rate variability literature actually support?,curious,true
+704,biohacking_science,"Good, someone explaining self-tracking without selling anything.",light,false
+705,biohacking_science,Day-to-day variability in most wearable metrics is enormous.,technical,false
+706,biohacking_science,Are the continuous glucose studies in non-diabetic populations?,curious,true
+707,biohacking_science,How reliable are consumer sensors in the published work?,curious,true
+708,biohacking_science,Sensor accuracy papers rarely make it into the discourse.,technical,false
+709,biohacking_science,Refreshing to see sensor limitations acknowledged.,light,false
+710,biohacking_science,Is the cold exposure research controlled or observational?,curious,true
+711,biohacking_science,What temperature and duration do those studies use?,curious,true
+712,biohacking_science,Cold exposure methods vary so much that pooling is meaningless.,technical,false
+713,biohacking_science,Pooling incomparable studies. Classic problem.,light,false
+714,biohacking_science,Does the heat exposure literature use sauna or immersion?,curious,true
+715,biohacking_science,Are the sauna studies mostly from one cohort?,curious,true
+716,biohacking_science,A large share of sauna research traces to a single Finnish cohort.,technical,false
+717,biohacking_science,Did not know the sauna data came from one cohort. Wild.,light,false
+718,biohacking_science,Is breathwork research blinded in any meaningful way?,curious,true
+719,biohacking_science,How do you even blind a breathing intervention?,curious,true
+720,biohacking_science,Blinding a behavioural intervention is the core methodological problem.,technical,false
+721,biohacking_science,The blinding problem framing was excellent.,light,false
+722,biohacking_science,Does the study include a sham condition?,curious,true
+723,biohacking_science,What was the control activity in that trial?,curious,true
+724,biohacking_science,Sham controls in behavioural research are hard and rarely convincing.,technical,false
+725,biohacking_science,"Sham control discussion, in a biohacking video. Impressive.",light,false
+726,biohacking_science,Is placebo response measured separately here?,curious,true
+727,biohacking_science,How large is the expectancy effect in this literature?,curious,true
+728,biohacking_science,Expectancy effects in self-tracking are large and often unmeasured.,technical,false
+729,biohacking_science,Expectancy effects deserve their own video honestly.,light,false
+730,biohacking_science,Are people tracking the metric that actually matters?,curious,true
+731,biohacking_science,Which measure has the best evidence behind it?,curious,true
+732,biohacking_science,Resting heart rate is simple and holds up better than most.,technical,false
+733,biohacking_science,Simple measures holding up best. Sounds right.,light,false
+734,biohacking_science,Does the research support any particular light exposure timing?,curious,true
+735,biohacking_science,How much of this is extrapolated from lab conditions?,curious,true
+736,biohacking_science,Laboratory light intensities are far above real-world exposure.,technical,false
+737,biohacking_science,Lab versus real-world intensity. Good caveat.,light,false
+738,biohacking_science,Is there any research on tracking making things worse?,curious,true
+739,biohacking_science,Does self-monitoring change the behaviour being measured?,curious,true
+740,biohacking_science,Measurement reactivity is real and complicates every tracking study.,technical,false
+741,biohacking_science,"Measurement changing behaviour. Very meta, very true.",light,false
+742,biohacking_science,Which wearable metrics have published validation studies?,curious,true
+743,biohacking_science,Are the validation papers independent of the manufacturers?,curious,true
+744,biohacking_science,Manufacturer-funded validation studies need reading carefully.,technical,false
+745,biohacking_science,Funding source on validation papers. Sharp catch.,light,false
+746,biohacking_science,Does the literature support any of the common tracking claims?,curious,true
+747,biohacking_science,How much evidence sits behind the popular metrics?,curious,true
+748,biohacking_science,Popularity and evidence quality are almost unrelated here.,technical,false
+749,biohacking_science,That gap between popular and proven is the whole story.,light,false
+750,biohacking_science,Is the research on trained or untrained populations?,curious,true
+751,biohacking_science,How transferable are athlete findings to everyone else?,curious,true
+752,biohacking_science,Athlete data transfers poorly to sedentary populations.,technical,false
+753,biohacking_science,Transferability point was worth the watch.,light,false
+754,biohacking_science,Which variables confound the self-experiment data most?,curious,true
+755,biohacking_science,Is seasonality accounted for in long tracking series?,curious,true
+756,biohacking_science,Seasonal drift can mimic an intervention effect entirely.,technical,false
+757,biohacking_science,Seasonality mimicking an effect. Never thought of that.,light,false
+758,biohacking_science,Does the analysis handle autocorrelation in time series?,curious,true
+759,biohacking_science,How are trends separated from noise in that data?,curious,true
+760,biohacking_science,Autocorrelated data breaks standard statistical tests quietly.,technical,false
+761,biohacking_science,Time series statistics in a wellness video. Excellent.,light,false
+762,biohacking_science,Is there a washout between self-experiment conditions?,curious,true
+763,biohacking_science,How long should a washout period be here?,curious,true
+764,biohacking_science,Washout length should exceed the metric's own variability window.,technical,false
+765,biohacking_science,Practical and rigorous at once. Nice balance.,light,false
+766,biohacking_science,Does anyone publish their null self-experiments?,curious,true
+767,biohacking_science,Where do negative findings go in this community?,curious,true
+768,biohacking_science,"Nobody posts the experiments that showed nothing, which skews everything.",technical,false
+769,biohacking_science,Nobody posting nulls. Painfully accurate.,light,false
+770,biohacking_science,Is the literature on eating windows any good?,curious,true
+771,biohacking_science,How well controlled are the meal timing studies?,curious,true
+772,biohacking_science,Meal timing research struggles enormously with adherence measurement.,technical,false
+773,biohacking_science,Adherence measurement being the hard part. Makes sense.,light,false
+774,biohacking_science,Are the metabolic studies using indirect calorimetry?,curious,true
+775,biohacking_science,Which metabolic measures are actually reliable?,curious,true
+776,biohacking_science,Indirect calorimetry is reliable and rarely available outside labs.,technical,false
+777,biohacking_science,Learned what indirect calorimetry is. Good video.,light,false
+778,biohacking_science,Does the research distinguish adaptation from improvement?,curious,true
+779,biohacking_science,How do you tell adaptation from a real change?,curious,true
+780,biohacking_science,Adaptation and improvement look identical over short windows.,technical,false
+781,biohacking_science,Adaptation versus improvement. Genuinely useful frame.,light,false
+782,biohacking_science,Which self-tracking practice has the strongest evidence base?,curious,true
+783,biohacking_science,Is sleep tracking better supported than the rest?,curious,true
+784,biohacking_science,Sleep and activity tracking are the best validated of the lot.,technical,false
+785,biohacking_science,Good ranking of what is actually validated.,light,false
+786,biohacking_science,Does the literature address tracking fatigue?,curious,true
+787,biohacking_science,How long do people sustain these measurements?,curious,true
+788,biohacking_science,Adherence decay over weeks limits most tracking datasets.,technical,false
+789,biohacking_science,Adherence decay. The quiet killer of long studies.,light,false
+790,biohacking_science,Are there registries collecting self-experiment data?,curious,true
+791,biohacking_science,Would pooled self-experiments be worth anything scientifically?,curious,true
+792,biohacking_science,Pooled single-subject trials are a real and underused design.,technical,false
+793,biohacking_science,Pooled single-subject trials sound genuinely promising.,light,false
+794,biohacking_science,Which question would you most want tested properly?,curious,true
+795,biohacking_science,What would a rigorous version of this experiment need?,curious,true
+796,biohacking_science,Randomized block order and a sham would fix most designs.,technical,false
+797,biohacking_science,"Clear, sceptical, and still curious. Great mix.",light,false
+798,biohacking_science,Is the scepticism in this area proportionate?,curious,true
+799,biohacking_science,Where is the evidence base strongest right now?,curious,true
+800,biohacking_science,The strongest evidence sits with sleep and activity measurement.,technical,false
+801,regulatory_ruo_education,How does research-grade labeling differ from pharmaceutical grade legally?,curious,true
+802,regulatory_ruo_education,Certificate of analysis documentation is where the real differences show.,technical,false
+803,regulatory_ruo_education,What does a certificate of analysis actually certify?,curious,true
+804,regulatory_ruo_education,Good explainer on labeling standards. Genuinely educational.,light,false
+805,regulatory_ruo_education,Identity testing and purity testing answer completely different questions.,technical,false
+806,regulatory_ruo_education,Is third-party identity verification standard in this sector?,curious,true
+807,regulatory_ruo_education,Which testing methods appear on a typical analysis certificate?,curious,true
+808,regulatory_ruo_education,"Mass spectrometry confirms identity, chromatography estimates purity.",technical,false
+809,regulatory_ruo_education,That identity versus purity distinction should be common knowledge.,light,false
+810,regulatory_ruo_education,How is research-grade material regulated differently?,curious,true
+811,regulatory_ruo_education,What does investigational status mean in the regulatory sense?,curious,true
+812,regulatory_ruo_education,"Investigational status is a regulatory category, not a quality claim.",technical,false
+813,regulatory_ruo_education,Useful clarification. Those terms get blurred constantly.,light,false
+814,regulatory_ruo_education,Does the labeling framework differ across jurisdictions?,curious,true
+815,regulatory_ruo_education,How do import rules handle laboratory reagents?,curious,true
+816,regulatory_ruo_education,"Import classification depends on declared intended purpose, largely.",technical,false
+817,regulatory_ruo_education,Regulatory content that is actually clear. Rare thing.,light,false
+818,regulatory_ruo_education,Which agency oversees laboratory reagent labeling?,curious,true
+819,regulatory_ruo_education,Is there an international standard for research reagents?,curious,true
+820,regulatory_ruo_education,Standards exist but adoption across suppliers is inconsistent.,technical,false
+821,regulatory_ruo_education,Inconsistent adoption explains a lot of confusion.,light,false
+822,regulatory_ruo_education,What does good manufacturing practice actually require?,curious,true
+823,regulatory_ruo_education,How does research grade differ from that standard?,curious,true
+824,regulatory_ruo_education,"Manufacturing standards cover process control, not just the molecule.",technical,false
+825,regulatory_ruo_education,Process control framing made that click.,light,false
+826,regulatory_ruo_education,Are suppliers required to publish their testing methods?,curious,true
+827,regulatory_ruo_education,Which documentation should a lab expect with a reagent?,curious,true
+828,regulatory_ruo_education,Batch records and method details matter as much as the certificate.,technical,false
+829,regulatory_ruo_education,"Documentation content, surprisingly interesting. Nicely done.",light,false
+830,regulatory_ruo_education,How does peer review differ from regulatory review?,curious,true
+831,regulatory_ruo_education,Which one is the stronger signal for a researcher?,curious,true
+832,regulatory_ruo_education,"Peer review assesses a claim, regulatory review assesses a product.",technical,false
+833,regulatory_ruo_education,That comparison was the clearest minute of the video.,light,false
+834,regulatory_ruo_education,What is the legal definition of a research reagent?,curious,true
+835,regulatory_ruo_education,Does terminology differ between regions?,curious,true
+836,regulatory_ruo_education,Terminology drift between regions causes genuine compliance confusion.,technical,false
+837,regulatory_ruo_education,Terminology drift is a great phrase for it.,light,false
+838,regulatory_ruo_education,How are laboratory supply chains audited?,curious,true
+839,regulatory_ruo_education,Is supplier auditing common in this sector?,curious,true
+840,regulatory_ruo_education,Supplier auditing is standard in pharma and patchy elsewhere.,technical,false
+841,regulatory_ruo_education,The audit comparison was informative.,light,false
+842,regulatory_ruo_education,What record keeping does a research laboratory owe?,curious,true
+843,regulatory_ruo_education,Are chain of custody records expected here?,curious,true
+844,regulatory_ruo_education,Chain of custody documentation is basic and frequently missing.,technical,false
+845,regulatory_ruo_education,Basic yet missing. Story of a lot of sectors.,light,false
+846,regulatory_ruo_education,How should a laboratory verify an incoming reagent?,curious,true
+847,regulatory_ruo_education,Is independent verification common practice?,curious,true
+848,regulatory_ruo_education,Independent verification is the only real check on supplier claims.,technical,false
+849,regulatory_ruo_education,Independent verification point deserves repeating.,light,false
+850,regulatory_ruo_education,Which analytical methods count as confirmatory?,curious,true
+851,regulatory_ruo_education,Is nuclear magnetic resonance used for confirmation here?,curious,true
+852,regulatory_ruo_education,Magnetic resonance confirms structure better than anything routine.,technical,false
+853,regulatory_ruo_education,Structural confirmation methods explained well.,light,false
+854,regulatory_ruo_education,How do storage and handling standards get specified?,curious,true
+855,regulatory_ruo_education,Are cold chain requirements documented for reagents?,curious,true
+856,regulatory_ruo_education,Cold chain documentation is where a lot of quality quietly fails.,technical,false
+857,regulatory_ruo_education,Cold chain being the weak link. Very plausible.,light,false
+858,regulatory_ruo_education,What does a supplier quality agreement typically include?,curious,true
+859,regulatory_ruo_education,Are those agreements common outside pharmaceutical supply?,curious,true
+860,regulatory_ruo_education,"Quality agreements are common in pharma, rare in reagent supply.",technical,false
+861,regulatory_ruo_education,Clear contrast between the two sectors. Helpful.,light,false
+862,regulatory_ruo_education,How is advertising of laboratory reagents regulated?,curious,true
+863,regulatory_ruo_education,Which claims are permitted on research labeling?,curious,true
+864,regulatory_ruo_education,Permitted labeling claims are narrower than most suppliers behave.,technical,false
+865,regulatory_ruo_education,Narrower than behaviour suggests. Diplomatically put.,light,false
+866,regulatory_ruo_education,Does the regulatory framework address research intent explicitly?,curious,true
+867,regulatory_ruo_education,How is intended purpose established legally?,curious,true
+868,regulatory_ruo_education,Intended purpose is inferred from labeling and marketing together.,technical,false
+869,regulatory_ruo_education,Intent being inferred from marketing. Important nuance.,light,false
+870,regulatory_ruo_education,What happens when labeling and marketing disagree?,curious,true
+871,regulatory_ruo_education,Is enforcement in this area primarily documentation based?,curious,true
+872,regulatory_ruo_education,Enforcement tends to follow labeling language more than chemistry.,technical,false
+873,regulatory_ruo_education,Enforcement following language. Very useful to know.,light,false
+874,regulatory_ruo_education,Which regulatory concepts do researchers most often misunderstand?,curious,true
+875,regulatory_ruo_education,Is there a good primer on this framework anywhere?,curious,true
+876,regulatory_ruo_education,A plain-language regulatory primer for this sector is badly needed.,technical,false
+877,regulatory_ruo_education,Someone should write that primer. Maybe you.,light,false
+878,regulatory_ruo_education,How do research exemptions work in practice?,curious,true
+879,regulatory_ruo_education,Are institutional approvals part of that framework?,curious,true
+880,regulatory_ruo_education,"Institutional review sits alongside, not inside, product regulation.",technical,false
+881,regulatory_ruo_education,Good separation of institutional and product oversight.,light,false
+882,regulatory_ruo_education,What role do ethics committees play in reagent sourcing?,curious,true
+883,regulatory_ruo_education,Is sourcing documentation reviewed at that stage?,curious,true
+884,regulatory_ruo_education,Sourcing documentation increasingly forms part of ethics submissions.,technical,false
+885,regulatory_ruo_education,Did not know sourcing reached ethics review. Interesting.,light,false
+886,regulatory_ruo_education,How transparent are suppliers about manufacturing origin?,curious,true
+887,regulatory_ruo_education,Is country of origin routinely disclosed?,curious,true
+888,regulatory_ruo_education,Origin disclosure is voluntary and therefore wildly variable.,technical,false
+889,regulatory_ruo_education,Voluntary disclosure being variable. Unsurprising but useful.,light,false
+890,regulatory_ruo_education,Which questions should a laboratory ask a new supplier?,curious,true
+891,regulatory_ruo_education,What documentation would you consider non-negotiable?,curious,true
+892,regulatory_ruo_education,Identity confirmation and batch traceability are the non-negotiables.,technical,false
+893,regulatory_ruo_education,Two clear non-negotiables. Practical and memorable.,light,false
+894,regulatory_ruo_education,How often does independent testing disagree with a certificate?,curious,true
+895,regulatory_ruo_education,Are there published surveys on reagent quality variability?,curious,true
+896,regulatory_ruo_education,Published surveys of reagent quality exist and make sobering reading.,technical,false
+897,regulatory_ruo_education,Would genuinely read that survey. Which journal is it in?,light,true
+898,regulatory_ruo_education,Which part of this framework is most misunderstood publicly?,curious,true
+899,regulatory_ruo_education,What regulatory change would improve transparency most?,curious,true
+900,regulatory_ruo_education,Mandatory method disclosure would improve transparency immediately.,technical,false
+901,general_science_curiosity,Which paper would you start with on this topic?,curious,true
+902,general_science_curiosity,Citing the review and the primary source is the right habit.,technical,false
+903,general_science_curiosity,Is there a primary source for that figure?,curious,true
+904,general_science_curiosity,Good science communication is harder than it looks. Nicely done.,light,false
+905,general_science_curiosity,The distinction between evidence and plausibility carried this video.,technical,false
+906,general_science_curiosity,Where did the underlying dataset come from?,curious,true
+907,general_science_curiosity,Any chance you could drop the citation?,curious,true
+908,general_science_curiosity,Appreciate a creator who says when the data is thin.,light,false
+909,general_science_curiosity,Plausible mechanism and demonstrated effect are separate claims.,technical,false
+910,general_science_curiosity,How confident is the field on this at the moment?,curious,true
+911,general_science_curiosity,Is this settled science or an active debate?,curious,true
+912,general_science_curiosity,Active debates make the best videos and the worst headlines.,technical,false
+913,general_science_curiosity,This showed up at exactly the right time. Thanks.,light,false
+914,general_science_curiosity,What is the strongest counterargument to this?,curious,true
+915,general_science_curiosity,Are there researchers who disagree with this reading?,curious,true
+916,general_science_curiosity,Steelmanning the opposing view would strengthen this further.,technical,false
+917,general_science_curiosity,"Calm, sourced, no hype. Instant follow.",light,false
+918,general_science_curiosity,How old is the research being described here?,curious,true
+919,general_science_curiosity,Has anything changed in the literature since then?,curious,true
+920,general_science_curiosity,Field consensus shifts faster than popular summaries update.,technical,false
+921,general_science_curiosity,The update on outdated claims was worth the watch.,light,false
+922,general_science_curiosity,Which part of this is still hypothesis?,curious,true
+923,general_science_curiosity,Where does the evidence stop and interpretation start?,curious,true
+924,general_science_curiosity,Drawing that line explicitly is what makes a good explainer.,technical,false
+925,general_science_curiosity,Clearly explained without being condescending. Rare skill.,light,false
+926,general_science_curiosity,Is the effect size meaningful or just detectable?,curious,true
+927,general_science_curiosity,How much does this actually matter in practice?,curious,true
+928,general_science_curiosity,Detectable and meaningful are wildly different thresholds.,technical,false
+929,general_science_curiosity,That threshold distinction is going to stick with me.,light,false
+930,general_science_curiosity,Which discipline does this research sit in?,curious,true
+931,general_science_curiosity,Are chemists and biologists reading this differently?,curious,true
+932,general_science_curiosity,Cross-disciplinary reading of the same data is genuinely instructive.,technical,false
+933,general_science_curiosity,Interdisciplinary framing made this much richer.,light,false
+934,general_science_curiosity,What would change your mind on this?,curious,true
+935,general_science_curiosity,Is there an experiment that would settle it?,curious,true
+936,general_science_curiosity,Naming the falsifying experiment is the mark of real understanding.,technical,false
+937,general_science_curiosity,Asking what would falsify it. Proper science energy.,light,false
+938,general_science_curiosity,How reproducible is this area generally?,curious,true
+939,general_science_curiosity,Has the replication problem touched this field?,curious,true
+940,general_science_curiosity,Replication rates vary enormously between subfields.,technical,false
+941,general_science_curiosity,The replication context was a good addition.,light,false
+942,general_science_curiosity,Which journals publish the serious work here?,curious,true
+943,general_science_curiosity,Is most of this in specialist or general journals?,curious,true
+944,general_science_curiosity,"Specialist journals carry the detail, general ones carry the hype.",technical,false
+945,general_science_curiosity,Journal landscape explained. Unexpectedly useful.,light,false
+946,general_science_curiosity,How do you find good papers in an unfamiliar area?,curious,true
+947,general_science_curiosity,Any advice for reading outside your field?,curious,true
+948,general_science_curiosity,"Start with a recent review, then chase its references backwards.",technical,false
+949,general_science_curiosity,Chasing references backwards. Adopting that immediately.,light,false
+950,general_science_curiosity,What does the word preliminary actually mean here?,curious,true
+951,general_science_curiosity,How much weight should a preprint carry?,curious,true
+952,general_science_curiosity,"A preprint is a claim awaiting scrutiny, nothing more.",technical,false
+953,general_science_curiosity,Clean definition of a preprint. Saving that.,light,false
+954,general_science_curiosity,Is there a conflict of interest worth noting?,curious,true
+955,general_science_curiosity,Who funded the research being described?,curious,true
+956,general_science_curiosity,"Funding never invalidates a finding, it changes the scrutiny.",technical,false
+957,general_science_curiosity,Balanced take on funding. Appreciated.,light,false
+958,general_science_curiosity,How large was the study behind that claim?,curious,true
+959,general_science_curiosity,Does sample size undercut the conclusion here?,curious,true
+960,general_science_curiosity,Small samples produce big effects that shrink on replication.,technical,false
+961,general_science_curiosity,Effects shrinking on replication. Learned that the hard way.,light,false
+962,general_science_curiosity,What is the base rate we should compare against?,curious,true
+963,general_science_curiosity,Is there a baseline in that comparison?,curious,true
+964,general_science_curiosity,"Without a base rate, a percentage change means very little.",technical,false
+965,general_science_curiosity,Base rate reminder. Always needed.,light,false
+966,general_science_curiosity,How was that graph scaled?,curious,true
+967,general_science_curiosity,Is the axis starting at zero?,curious,true
+968,general_science_curiosity,Axis choices can manufacture a trend out of nothing.,technical,false
+969,general_science_curiosity,Graph literacy content. Keep making it.,light,false
+970,general_science_curiosity,Which assumption is the analysis most sensitive to?,curious,true
+971,general_science_curiosity,What breaks if that assumption fails?,curious,true
+972,general_science_curiosity,Stating the load-bearing assumption is half the analysis.,technical,false
+973,general_science_curiosity,Load-bearing assumption. That is a great phrase.,light,false
+974,general_science_curiosity,Is the terminology here standardized across papers?,curious,true
+975,general_science_curiosity,Do different labs define that term the same way?,curious,true
+976,general_science_curiosity,Inconsistent definitions across labs quietly wreck meta-analyses.,technical,false
+977,general_science_curiosity,Definition drift ruining meta-analyses. Depressing and true.,light,false
+978,general_science_curiosity,How would a sceptic read the same data?,curious,true
+979,general_science_curiosity,What is the most charitable alternative explanation?,curious,true
+980,general_science_curiosity,Alternative explanations deserve airtime before the preferred one wins.,technical,false
+981,general_science_curiosity,Giving alternatives airtime. That is the whole method.,light,false
+982,general_science_curiosity,Which measurement is hardest to get right here?,curious,true
+983,general_science_curiosity,Where does the uncertainty concentrate?,curious,true
+984,general_science_curiosity,Naming where uncertainty concentrates beats quoting a single number.,technical,false
+985,general_science_curiosity,Uncertainty mapping. Excellent way to put it.,light,false
+986,general_science_curiosity,Is the field moving toward or away from this view?,curious,true
+987,general_science_curiosity,What has changed in the last five years?,curious,true
+988,general_science_curiosity,Tracking how a consensus moved teaches more than the consensus.,technical,false
+989,general_science_curiosity,Watching consensus move is the interesting part. Agreed.,light,false
+990,general_science_curiosity,Which open question here excites you most?,curious,true
+991,general_science_curiosity,What would you study if funding were not an issue?,curious,true
+992,general_science_curiosity,Funding constraints shape which questions ever get asked.,technical,false
+993,general_science_curiosity,Funding shaping the questions. Sobering point.,light,false
+994,general_science_curiosity,Are there good textbooks for this area?,curious,true
+995,general_science_curiosity,Where should a curious non-specialist start?,curious,true
+996,general_science_curiosity,A solid undergraduate textbook beats most online summaries.,technical,false
+997,general_science_curiosity,Seconding the request for a textbook recommendation.,light,false
+998,general_science_curiosity,Which common misconception would you retire first?,curious,true
+999,general_science_curiosity,What does the public get most wrong here?,curious,true
+1000,general_science_curiosity,The biggest misconception is reading early data as settled.,technical,false

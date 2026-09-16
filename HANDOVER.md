@@ -66,9 +66,15 @@ prep → video → write the URL and bump `times_used`.
 
 | Workflow | ID | Sheet | Video API |
 |---|---|---|---|
-| `Vid_gen_lab_scenes -9-lab-items-creations-500` | `C4BkmmISpTMmgnAg` | Sheet 9 (vials) | fal Kling 3.0 Standard I2V, 15s |
-| `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` | `Kc2HqqjSyiKs87qy` | wellness (vials) | Grok Imagine Video 1.5 |
-| `peptide_pen_vid_gen` | `eLM4xCpHflgqJGfB` | Sheet 14 (pens) | Grok Imagine Video |
+| `Vid_gen_lab_scenes -9-lab-items-creations-500` | `C4BkmmISpTMmgnAg` | Sheet 9 (vials) | fal Kling 3.0 Pro I2V, 1080p, 15s |
+| `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` | `Kc2HqqjSyiKs87qy` | wellness (vials) | fal Kling 3.0 Pro I2V, 1080p, 15s |
+| `peptide_pen_vid_gen` | `eLM4xCpHflgqJGfB` | Sheet 14 (pens) | fal Kling 3.0 Pro I2V, 1080p, 15s |
+
+All three end at a node called `fal_kling_generate` whose `model` is `={{ $json.model_video }}`, so the
+tier lives on the sheet (`fal-ai/kling-video/v3/pro/image-to-video`) and not in the node. Do not pin a
+slug there — that is exactly the bug that shipped lab clips at 720p. Wellness and pen still carry their
+old `grok_video_start` / `wait_video` / `grok_video_poll` nodes on the canvas, **disabled**, so the Grok
+path can be read but not run.
 
 Stills are Grok Imagine Image 2.0 on all three, via `https://api.x.ai/v1/images/generations`.
 
@@ -91,6 +97,18 @@ read the field from the prep node. **The expression form matters** — fal treat
 `"false"` as truthy, so it has to be `={{ false }}`, not `false`.
 
 Pen (`eLM4xCpHflgqJGfB`): no changes. It was already correct on every point above.
+
+### 2026-09-16 — all three moved to fal Kling 3.0 Pro (1080p), on Salvatore's instruction
+
+1. `model_video` rewritten to `fal-ai/kling-video/v3/pro/image-to-video` on all three live tabs (1,304 rows) and their repo mirrors (1,380 rows, `marketing/scripts/set_model_video_kling_pro.py`). One-shot n8n workflow `migrate_model_video_to_kling_pro` (`Ljf3bGYSVBwTlw21`) did the live write; it is idempotent and safe to archive.
+2. Lab `prep_grok_video_start` stopped pinning the Standard slug and now reads `model_video` off the sheet. Its `duration !== 15` throw was replaced with Kling's real limit, 3–15 whole seconds.
+3. Lab `fal_kling_generate.model` moved from the pinned Standard slug to `={{ $json.model_video }}`.
+4. Wellness and pen each gained a `fal_kling_generate` node wired `prep → fal_kling_generate → assert_video_ok`, with `grok_video_start` / `wait_video` / `grok_video_poll` disabled in place.
+5. Wellness `save_video_url.video_request_id` repointed from `grok_video_start` to `fal_kling_generate`.
+6. Both `assert_video_ok` nodes reworded for fal. On wellness, sheet `wait_seconds` no longer drives the video wait — `fal_kling_generate` polls itself (`maxWaitTime` 600s), so a timeout is a node setting now, not a sheet cell. `prep_grok_video_start` still requires `wait_seconds` to be present, so do not blank the column.
+7. `audit_vidgen_model_video` (`HM8UbBGArTzC9S6T`) is a read-only checker: run it to get per-tab counts of `model_video` / `resolution` / `duration_seconds` and confirm the sheets still agree with the nodes.
+
+**Not done:** the per-workflow smoke test. Three clips need to run and be `ffprobe`d for 1080 × 1920. That needs Salvatore's prompt + API/model approval first (prompt review gate).
 
 ---
 
