@@ -77,6 +77,8 @@ Same credential on poll / extend / extend_poll. No second credential on the node
 
 Kling Pro and Seedance 2.5 will **400** if the sheet still says `1080p`. Overlay writes `720p` for those rows.
 
+**Unresolved as of 2026-09-15 — do not trust the Kling row above until it is re-checked.** OpenRouter's own model page for `kwaivgi/kling-v3.0-pro` now advertises 1080p, and its video docs list `1080p` as a valid `resolution`. The `720p only` note above came from a real 400 on this account, so one of the two is stale. Settle it with `GET https://openrouter.ai/api/v1/videos/models` and read `supported_resolutions` for the slug before any row is set to `1080p`. Until then 720p rows here are **not shippable** — 720p is forbidden. Prices for every legal 1080p path: `vid-gen-quality-playbook.md` → *1080p price board*.
+
 ---
 
 ## Workflows

@@ -36,7 +36,7 @@ The same advice shows up across production blogs, vendor prompt guides, and API 
 | Native res over upscale | Upscale interpolates. It does not invent hull panel lines. |
 | 4–8s production clips, extend from a clean last frame | Long single gens wander. Prefer a sharp 6–8s over a mushy 15s. |
 | Draft cheap, finish native-high | Iterate stills (and optional low-res motion tests). Re-roll the keeper at 1080p/4K. |
-| Arena Elo ≠ delivery res | Seedance 2.0 often leads I2V **as 720p**. Grok Video 1.5 ranks well and **caps at 720p**. Preference score is not a pixel count. |
+| Arena Elo ≠ delivery res | Seedance 2.0 often leads I2V **as 720p**. Preference score is not a pixel count — always ask which resolution the row was scored at. |
 | Sora 2 is dead | Product gone April 2026; API shutdown window in 2026. Do not build new pipelines on it. |
 
 ---
@@ -50,7 +50,7 @@ Use the model whose **job** matches the beat. Confirm the gateway’s `supported
 | **Cinematic motion / camera / speed** (reentry, flyby, tracking) | **Kling 3.0 Pro** `kwaivgi/kling-v3.0-pro` @ **1080p** 9:16 | Repeated “best camera / action / human+vehicle motion.” Pro mode is native **1080 × 1920**. Some gateways also expose Kling **4K**. | `film_i2v_kling` | The first frame is 720p; the gateway only offers 720p |
 | **Identity / product / ship lock** | **Seedance 2.0 / 2.5** | Arena I2V leader (often 720p *preference*). Best reference-heavy commercial lock. 2.5 = longer + more refs when the API is live. | `film_i2v_seedance` | You need proven **1080p pixels** and the row is still 720p |
 | **Photoreal physics / atmosphere / fire** | **Veo 3.1** | Wins lighting, plasma-adjacent physics, photoreal. Clips shorter (~4–8s). Pricey. | `film_i2v_veo` | You need 10–15s of one continuous dive |
-| **Silent I2V preference / cheap draft** | Grok Imagine Video 1.5 | Strong arena *without audio*. **720p ceiling.** Fine for lab-item drafts, not film heroes. | lab Grok path | Film, crash, beach, any “must look 1080p” shot |
+| **Silent I2V preference** | Grok Imagine Video 1.5 | Strong arena *without audio*. Does **native 1080p** on T2V and I2V, 1–15s. But it is the **priciest 1080p second we have** — $0.25/s, 2.2× Kling Pro. | wellness / pen / lab rows | Cost matters, or the row needs the cheapest legal 1080p |
 | **Current arena I2V (with audio)** | MiniMax H3 Max / H3, Gemini Omni Flash, Wan 3.0 | Sep 2026 AA I2V-with-audio leaders. H3 Max is new; test before locking a film beat. | not wired yet | We have not measured a 9:16 1080p clip from these in this studio |
 | **Filmmaker control / VFX** | Runway Gen-4.5 | Control + polish. Often 720p native + upscale. Key not attached on `film_i2v_runway`. | hold | Key missing; upscale-from-720p |
 | **HDR / grade pipeline** | Luma Ray3 | Native 16-bit HDR. Overkill for IG 9:16. | not wired | Reels delivery is 1080p SDR |
@@ -64,7 +64,7 @@ Use the model whose **job** matches the beat. Confirm the gateway’s `supported
 
 **Runner-up if the ship morphs:** Seedance 2.5 I2V with the keeper + crash-ship reference — only if the sheet row is truly 1080p (or higher), not 720p.
 
-**Do not use Grok Video for FILM-020.** 720p ceiling. The last crash still already looked soft for this reason.
+**Do not use Grok Video for FILM-020.** Not a resolution problem — 1.5 can do 1080p — but Kling Pro wins this camera move and costs less than half per second. The last crash still looked soft because the **still** was 720 × 1280, which is a still problem, not a video-model problem.
 
 Do not run I2V until Salvatore says run.
 
@@ -87,6 +87,43 @@ Locked side profile. The exact same dart ship dives extremely fast through atmos
 ```
 
 n8n may only map sheet fields, call APIs, and write URLs back.
+
+---
+
+## 1080p price board — audio off, 9:16
+
+**Priced 2026-09-15.** 720p is forbidden, so every row below is a **1080p** rate with **audio off**. Re-price before a big run; providers move.
+
+| Endpoint | 1080p rate, no audio | 10s | 15s | Max duration |
+|---|---|---|---|---|
+| **fal Kling v3 Pro I2V** `fal-ai/kling-video/v3/pro/image-to-video` | $0.112/s | **$1.12** | **$1.68** | 15s |
+| OpenRouter `kwaivgi/kling-v3.0-pro` | $0.112/s + 5.5% credit fee | $1.18 | $1.77 | 15s |
+| **fal Hailuo 02 Pro I2V** `fal-ai/minimax/hailuo-02/pro/image-to-video` | $0.08/s | **$0.80** | — (6s or 10s only) | 10s |
+| fal Veo 3.1 I2V `fal-ai/veo3.1/image-to-video` | $0.20/s | — (needs 2 gens) | — (needs 2 gens) | 8s → $1.60 |
+| fal Wan 3.0 I2V `alibaba/wan-3.0/image-to-video` | $0.20/s | $2.00 | $3.00 | 30s |
+| fal Wan 3.0 Prime I2V | $0.28/s | $2.80 | $4.20 | 30s |
+| Replicate `kwaivgi/kling-v3-video` (mode `pro`) | $0.168/s | $1.68 | $2.52 | 15s |
+| **xAI `grok-imagine-video-1.5`** (what wellness / pen run today) | **$0.25/s** + $0.01/input image | **$2.51** | **$3.76** | 15s |
+| fal Seedance 2.0 Standard I2V | $0.682/s | $6.82 | $10.23 | 15s |
+
+**Cheapest legal clip:** Hailuo 02 Pro at 10s ($0.80). **Cheapest 15s:** Kling v3 Pro on fal ($1.68).
+
+**What we are paying now.** Sheets `500_Peptide_Wellness_Reel_Scenes` (601 rows), `14-pen-creations-150` (168 rows), and `9-lab-item-creations-500` (535 rows) all carry `model_video=grok-imagine-video-1.5`, `resolution=1080p`, `duration_seconds=15`. At the 1080p tier that is **$3.76 a clip**. The same 15s on fal Kling v3 Pro is **$1.68** — a saving of **$2.08 per clip, 55%**, before any still costs.
+
+**Grok is billed by resolution, so the summary rate lies.** xAI's pricing page lists `grok-imagine-video-1.5` as a flat `$0.080 / sec`. That is the **480p** tier. The real card is $0.08 at 480p, **$0.14 at 720p, $0.25 at 1080p**, plus $0.01 per input image. Never budget a 1080p Grok run off the $0.08 figure.
+
+**Still costs, for a full per-reel number.** `grok-imagine-image-2.0` is $0.04 per image, and an **image edit bills both the input and the output image**, so the still-edit hop is about $0.08 on top of the $0.04 first still.
+
+### Rules that come with the board
+
+- **No 720p row belongs here.** Kling v3 **Standard**, Seedance 2.0 **Fast**, and Seedance 2.5 (schema enum is `480p` / `720p`) are out on resolution alone, whatever they cost. Grok Imagine Video 1.5 is **not** in that group — it does native 1080p, it is just expensive.
+- **`9-lab-item-creations-500` is currently mismatched.** All 535 rows say `resolution=1080p` and `model_video=grok-imagine-video-1.5`, but the live node is `fal_kling_generate` on `fal-ai/kling-video/v3/standard/image-to-video` — the **720p** tier. The sheet cell is not reaching the API, so lab clips are shipping at 720 × 1280 while the row claims 1080p. This is rule 1 in the wild. Fix the endpoint to `/v3/pro/`, then `ffprobe` to confirm.
+- **MiniMax H3 is out too.** Native modes are 480P / 768P; its `2K` and `4K` are **upscales of a 768p base**. That is rule 5 — do not upscale and call it 1080p.
+- **fal Kling v3 Pro has no `resolution` field.** Pro *is* the 1080p tier and `aspect_ratio` on I2V follows the start image. So the only proof of 1080 × 1920 is `ffprobe` on the output.
+- **Muting does not always save money.** Kling and Veo bill audio separately (Kling $0.112 → $0.168, Veo $0.20 → $0.40). Seedance and Wan bill the **same rate either way** — `generate_audio: false` there is a quality/brief decision, not a discount.
+- **Vertical is not a surcharge.** Wan and Seedance bill by token, and tokens are frame **area** × duration, so 1080 × 1920 costs exactly what 1920 × 1080 costs. Kling, Hailuo, and Veo are flat per-second.
+- **OpenRouter is never cheaper than fal for the same model.** It passes provider pricing through with no inference markup, then adds **5.5% on credit top-ups** ($0.80 minimum per purchase). Same Kling Pro seconds, plus a fee. Use it for the unified API shape, not for price.
+- **Veo cannot do 10s or 15s in one pass** (`4s` / `6s` / `8s`). A 15s Veo beat is two generations and a seam. Face-forward human rows never go to Veo at all — see `AGENTS.md`.
 
 ---
 
@@ -120,7 +157,7 @@ Read that as **preference**, not delivery pixels. Seedance 2.0’s high Elo is o
 
 **Pixo / Lotix / 3DAI / Pollo / Oakgen / Studiolist:** no universal winner. Seedance = commercial + references. Kling = motion, length, multi-shot. Veo = photoreal + native audio. Use more than one model in a campaign.
 
-**Grok Video 1.5 reviews:** fast, cheap, strong short I2V preference; **720p hard cap**; “floaty” full-body motion vs Kling’s weight. Draft on Grok, finish elsewhere when the brief is 1080p+.
+**Grok Video 1.5 reviews:** fast, strong short I2V preference; “floaty” full-body motion vs Kling’s weight. Earlier notes here claimed a **720p hard cap — that was wrong.** xAI's own docs list `480p` / `720p` / `1080p` and state 1080p is supported on `grok-imagine-video-1.5` for text-to-video and image-to-video. Only *reference*-to-video is capped at 720p, and 1.5 does not support that mode at all. Video **editing** is still capped at 720p and will downsize a 1080p input.
 
 **I2V craft (Sensei, Runway, Lovart, HappyHorse, invideo, Seedance docs):** still first · still bigger than video · motion-only prompt · first/last frame for landings · 4–8s then extend · reduce motion if the product/ship warps.
 
