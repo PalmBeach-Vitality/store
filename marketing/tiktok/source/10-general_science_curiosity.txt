@@ -1,0 +1,100 @@
+curious :: Which paper would you start with on this topic?
+technical :: Citing the review and the primary source is the right habit.
+curious :: Is there a primary source for that figure?
+light :: Good science communication is harder than it looks. Nicely done.
+technical :: The distinction between evidence and plausibility carried this video.
+curious :: Where did the underlying dataset come from?
+curious :: Any chance you could drop the citation?
+light :: Appreciate a creator who says when the data is thin.
+technical :: Plausible mechanism and demonstrated effect are separate claims.
+curious :: How confident is the field on this at the moment?
+curious :: Is this settled science or an active debate?
+technical :: Active debates make the best videos and the worst headlines.
+light :: This showed up at exactly the right time. Thanks.
+curious :: What is the strongest counterargument to this?
+curious :: Are there researchers who disagree with this reading?
+technical :: Steelmanning the opposing view would strengthen this further.
+light :: Calm, sourced, no hype. Instant follow.
+curious :: How old is the research being described here?
+curious :: Has anything changed in the literature since then?
+technical :: Field consensus shifts faster than popular summaries update.
+light :: The update on outdated claims was worth the watch.
+curious :: Which part of this is still hypothesis?
+curious :: Where does the evidence stop and interpretation start?
+technical :: Drawing that line explicitly is what makes a good explainer.
+light :: Clearly explained without being condescending. Rare skill.
+curious :: Is the effect size meaningful or just detectable?
+curious :: How much does this actually matter in practice?
+technical :: Detectable and meaningful are wildly different thresholds.
+light :: That threshold distinction is going to stick with me.
+curious :: Which discipline does this research sit in?
+curious :: Are chemists and biologists reading this differently?
+technical :: Cross-disciplinary reading of the same data is genuinely instructive.
+light :: Interdisciplinary framing made this much richer.
+curious :: What would change your mind on this?
+curious :: Is there an experiment that would settle it?
+technical :: Naming the falsifying experiment is the mark of real understanding.
+light :: Asking what would falsify it. Proper science energy.
+curious :: How reproducible is this area generally?
+curious :: Has the replication problem touched this field?
+technical :: Replication rates vary enormously between subfields.
+light :: The replication context was a good addition.
+curious :: Which journals publish the serious work here?
+curious :: Is most of this in specialist or general journals?
+technical :: Specialist journals carry the detail, general ones carry the hype.
+light :: Journal landscape explained. Unexpectedly useful.
+curious :: How do you find good papers in an unfamiliar area?
+curious :: Any advice for reading outside your field?
+technical :: Start with a recent review, then chase its references backwards.
+light :: Chasing references backwards. Adopting that immediately.
+curious :: What does the word preliminary actually mean here?
+curious :: How much weight should a preprint carry?
+technical :: A preprint is a claim awaiting scrutiny, nothing more.
+light :: Clean definition of a preprint. Saving that.
+curious :: Is there a conflict of interest worth noting?
+curious :: Who funded the research being described?
+technical :: Funding never invalidates a finding, it changes the scrutiny.
+light :: Balanced take on funding. Appreciated.
+curious :: How large was the study behind that claim?
+curious :: Does sample size undercut the conclusion here?
+technical :: Small samples produce big effects that shrink on replication.
+light :: Effects shrinking on replication. Learned that the hard way.
+curious :: What is the base rate we should compare against?
+curious :: Is there a baseline in that comparison?
+technical :: Without a base rate, a percentage change means very little.
+light :: Base rate reminder. Always needed.
+curious :: How was that graph scaled?
+curious :: Is the axis starting at zero?
+technical :: Axis choices can manufacture a trend out of nothing.
+light :: Graph literacy content. Keep making it.
+curious :: Which assumption is the analysis most sensitive to?
+curious :: What breaks if that assumption fails?
+technical :: Stating the load-bearing assumption is half the analysis.
+light :: Load-bearing assumption. That is a great phrase.
+curious :: Is the terminology here standardized across papers?
+curious :: Do different labs define that term the same way?
+technical :: Inconsistent definitions across labs quietly wreck meta-analyses.
+light :: Definition drift ruining meta-analyses. Depressing and true.
+curious :: How would a sceptic read the same data?
+curious :: What is the most charitable alternative explanation?
+technical :: Alternative explanations deserve airtime before the preferred one wins.
+light :: Giving alternatives airtime. That is the whole method.
+curious :: Which measurement is hardest to get right here?
+curious :: Where does the uncertainty concentrate?
+technical :: Naming where uncertainty concentrates beats quoting a single number.
+light :: Uncertainty mapping. Excellent way to put it.
+curious :: Is the field moving toward or away from this view?
+curious :: What has changed in the last five years?
+technical :: Tracking how a consensus moved teaches more than the consensus.
+light :: Watching consensus move is the interesting part. Agreed.
+curious :: Which open question here excites you most?
+curious :: What would you study if funding were not an issue?
+technical :: Funding constraints shape which questions ever get asked.
+light :: Funding shaping the questions. Sobering point.
+curious :: Are there good textbooks for this area?
+curious :: Where should a curious non-specialist start?
+technical :: A solid undergraduate textbook beats most online summaries.
+light :: Seconding the request for a textbook recommendation.
+curious :: Which common misconception would you retire first?
+curious :: What does the public get most wrong here?
+technical :: The biggest misconception is reading early data as settled.

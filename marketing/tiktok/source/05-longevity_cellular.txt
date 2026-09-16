@@ -1,0 +1,100 @@
+curious :: Which aging pathway is the lab prioritizing in this work?
+technical :: Senescence markers are messier than the summaries make them sound.
+curious :: Is the longevity work in worms, flies, or mice?
+light :: Good explainer on why model organism choice matters.
+technical :: Lifespan extension in nematodes translates poorly, as always.
+curious :: Are they measuring lifespan or healthspan in these studies?
+curious :: What does the autophagy literature actually show here?
+technical :: Autophagy flux and autophagy markers are not the same measurement.
+light :: That flux distinction cleared up a real confusion.
+curious :: Is mitochondrial biogenesis measured directly in that research?
+curious :: Which epigenetic clock are they referencing?
+technical :: Epigenetic clocks predict chronology better than biology, still.
+light :: The clock caveats were the most useful minute here.
+curious :: Does the research separate cellular from organismal aging?
+curious :: Any work on senescent cell clearance in these models?
+technical :: Senolytic research is promising and very early, both true.
+light :: Appreciate the restraint in describing early findings.
+curious :: How is cellular senescence defined in that paper?
+curious :: Is telomere length being used as a primary measure?
+technical :: Telomere length is a noisy proxy for almost everything.
+light :: Glad someone said telomeres are not the whole story.
+curious :: What is the current thinking on mitochondrial decline?
+curious :: Are the nicotinamide papers converging on anything yet?
+technical :: Nicotinamide metabolism has more open questions than settled ones.
+light :: Honest accounting of open questions. Following.
+curious :: Does caloric restriction research replicate across species?
+curious :: Which hallmark of aging is this work targeting?
+technical :: The hallmarks framework is useful and increasingly contested.
+light :: Did not know the hallmarks were debated. Interesting.
+curious :: Is there any primate data in this area yet?
+curious :: How long were the longevity studies run for?
+technical :: Lifespan studies take years, which limits how many exist.
+light :: The timescale problem explains so much of this field.
+curious :: Are the findings from genetic or pharmacological interventions?
+curious :: What happens to the effect in older animals?
+technical :: Late-life intervention data is scarce and the most informative.
+light :: Late-life data being scarce is a good point.
+curious :: Which cellular stress response is involved here?
+curious :: Is proteostasis part of the proposed mechanism?
+technical :: Proteostasis decline shows up in nearly every aging model.
+light :: Proteostasis is such an underrated topic. Thanks.
+curious :: Does the research look at stem cell function?
+curious :: Any work on the aging immune system in this literature?
+technical :: Immune aging may drive more than the cell-intrinsic story.
+light :: The immune angle reframed this for me.
+curious :: Are inflammatory markers rising with age in that dataset?
+curious :: Is chronic low-grade inflammation part of the model?
+technical :: Low-grade inflammation is consistently observed and poorly explained.
+light :: Consistently observed but unexplained. Such a science phrase.
+curious :: Which biomarkers of aging are considered reliable now?
+curious :: How well validated are the composite aging measures?
+technical :: Composite aging scores need external validation they mostly lack.
+light :: Validation talk is the boring part that actually matters.
+curious :: Is the mitochondrial work on function or on number?
+curious :: Are they measuring respiration directly?
+technical :: Respirometry data beats mitochondrial counting every time.
+light :: Respirometry explained simply. Nicely done.
+curious :: Does the literature agree on where decline starts?
+curious :: Which tissue ages fastest in these models?
+technical :: Tissues age at different rates, complicating whole-organism measures.
+light :: Different rates across tissues is a great detail.
+curious :: Is there work on cellular reprogramming in this area?
+curious :: How stable are the reprogramming findings so far?
+technical :: Partial reprogramming is fascinating and a long way from settled.
+light :: Balanced take on reprogramming, which is rare online.
+curious :: What does the genetics of longevity actually predict?
+curious :: Are the long-lived cohorts genetically unusual?
+technical :: Centenarian genetics explains less variance than expected.
+light :: That variance point was genuinely surprising.
+curious :: Which species shows the most interesting aging biology?
+curious :: Any research on naturally long-lived animals here?
+technical :: Comparative biology of long-lived species is underexplored.
+light :: Naked mole rat content is always welcome.
+curious :: Is oxidative stress still considered central?
+curious :: Has the free radical model held up?
+technical :: The free radical theory aged worse than the organisms it described.
+light :: That line about the theory aging was excellent.
+curious :: What replaced oxidative damage as the leading explanation?
+curious :: Are there competing frameworks in aging biology?
+technical :: Multiple frameworks coexisting is normal for a young field.
+light :: Good context on how young this field really is.
+curious :: How is biological age estimated in that study?
+curious :: Is the estimate validated against anything external?
+technical :: Biological age estimates need hard endpoints to mean much.
+light :: Appreciate the push for real endpoints.
+curious :: Does the cellular work connect to whole-organism measures?
+curious :: Which level of analysis is strongest here?
+technical :: Bridging cellular and organismal scales is the central difficulty.
+light :: The scale-bridging problem was well explained.
+curious :: Are the interventions studied preventive or corrective?
+curious :: What happens when the intervention stops?
+technical :: Reversibility after withdrawal is rarely tested and always interesting.
+light :: Nobody ever asks the withdrawal question. Good one.
+curious :: How much of this literature is preclinical only?
+curious :: Where is the translational gap widest?
+technical :: The translational gap in aging biology is enormous and honest.
+light :: Honest about the gap. That is why I watch.
+curious :: Which aging question feels closest to an answer?
+curious :: What would move this field forward fastest?
+technical :: Better biomarkers would unlock most of this field quickly.
