@@ -29,12 +29,18 @@ manual_trigger
   → grok_imagine_pen_still
   → save_still_url
   → prep_pen_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
+  → fal_kling_generate               fal Kling 3.0 Pro I2V, 1080p, no audio
+  → assert_video_ok
   → save_video_url
   → sheets_update_pen
 ```
+
+**Vid gen API:** fal.ai Kling 3.0 **Pro** I2V at **1080p**, `generate_audio: false`. The slug lives on
+Sheet 14 `model_video` (`fal-ai/kling-video/v3/pro/image-to-video`) and `fal_kling_generate` reads it
+with `={{ $json.model_video }}` — **nothing is pinned on the node**. Pro has no `resolution` field and
+I2V takes `aspect_ratio` from the start image, so `ffprobe` the clip for 1080 × 1920 rather than
+trusting the sheet cell. `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas
+**disabled** — Nodes 8–10 below document that dead path.
 
 ---
 
@@ -135,16 +141,20 @@ Include Other Input Fields: **ON**
 | `creation_id` | **ON** | `={{ $('pick_pen_creation').first().json.creation_id }}` |
 | `compound_name` | **ON** | `={{ $('pick_pen_creation').first().json.compound_name }}` |
 | `video_motion_prompt` | **ON** | `={{ $('pick_pen_creation').first().json.video_motion_prompt }}` |
-| `model_video` | **ON** | `={{ $('pick_pen_creation').first().json.model_video \|\| 'grok-imagine-video-1.5' }}` |
-| `duration_seconds` | **ON** | `={{ $('pick_pen_creation').first().json.duration_seconds \|\| 15 }}` |
-| `resolution` | **ON** | `={{ $('pick_pen_creation').first().json.resolution \|\| '1080p' }}` |
+| `model_video` | **ON** | `={{ $('pull_sheet_row').first().json.model_video }}` |
+| `duration_seconds` | **ON** | `={{ $('pull_sheet_row').first().json.duration_seconds }}` |
+| `resolution` | **ON** | `={{ $('pull_sheet_row').first().json.resolution }}` |
+
+No `||` fallbacks on these three. An empty sheet cell has to throw — a `|| 'grok-imagine-video-1.5'` or
+`|| '1080p'` default is exactly the hardcode `.cursor/rules/no-hardcode-unless-asked.mdc` forbids, and it
+is how a row can claim one model while another one renders.
 
 ---
 
 ## Node 7 — `prep_pen_video_start`
 
 **Type:** Code · Run Once for All Items  
-**Before → this → After:** `skip_still_edit` → **prep_pen_video_start** → `grok_video_start`
+**Before → this → After:** `skip_still_edit` → **prep_pen_video_start** → `fal_kling_generate`
 
 Paste: `marketing/n8n-code-prep-pen-video-start.js`
 
@@ -154,10 +164,49 @@ Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws
 
 ---
 
-## Node 8 — `grok_video_start`
+## Node 8 — `fal_kling_generate`
 
-**Type:** HTTP Request  
-**Before → this → After:** `prep_pen_video_start` → **grok_video_start** → `wait_video`
+**Type:** fal.ai (`@fal-ai/n8n-nodes-fal.falAi`)
+**Before → this → After:** `prep_pen_video_start` → **fal_kling_generate** → `assert_video_ok`
+
+| Setting | fx | Value |
+|---|---|---|
+| Resource / Operation | — | Model / Generate |
+| Model | **ON** | `={{ $json.model_video }}` (mode: By ID) |
+| Parameter `prompt` | **ON** | `={{ $json.video_motion_prompt }}` |
+| Parameter `start_image_url` | **ON** | `={{ $json.still_url }}` |
+| Parameter `duration` | **ON** | `={{ String($json.duration_seconds) }}` |
+| Parameter `generate_audio` | **ON** | `={{ false }}` |
+| Wait For Completion | — | **ON** (poll 5s, max 600s) |
+| Credential | — | `fal.ai account` |
+
+`generate_audio` must be the expression `={{ false }}`, not the text `false` — fal reads the literal
+string `"false"` as truthy and you get a clip with sound.
+
+Because the node waits for the render itself, Sheet 14 `wait_seconds` no longer drives the video wait.
+A timeout is `maxWaitTime` on this node.
+
+---
+
+## Node 9 — `assert_video_ok`
+
+**Type:** Code · Run Once for All Items
+**Before → this → After:** `fal_kling_generate` → **assert_video_ok** → `save_video_url`
+
+Throws if the fal result has no `video.url`, or reports `failed` / `error`. Without it `save_video_url`
+writes an empty `video_url` and `sheets_update_pen` still bumps `times_used`, so the row rotates out
+with nothing to show for it.
+
+---
+
+## Disabled — the old Grok video path
+
+Kept on the canvas for reference. Do not re-enable without asking.
+
+### `grok_video_start`
+
+**Type:** HTTP Request
+**Before → this → After:** `unwired` → **grok_video_start** → `wait_video`
 
 | Setting | fx | Value |
 |---|---|---|
@@ -175,7 +224,7 @@ Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws
 
 ---
 
-## Node 9 — `wait_video`
+### `wait_video`
 
 **Type:** Wait  
 **Before → this → After:** `grok_video_start` → **wait_video** → `grok_video_poll`
@@ -190,7 +239,7 @@ Must be **enabled**.
 
 ---
 
-## Node 10 — `grok_video_poll`
+### `grok_video_poll`
 
 **Type:** HTTP Request  
 **Before → this → After:** `wait_video` → **grok_video_poll** → `save_video_url`
@@ -206,10 +255,10 @@ Must be **enabled**.
 
 ---
 
-## Node 11 — `save_video_url`
+## Node 10 — `save_video_url`
 
 **Type:** Edit Fields  
-**Before → this → After:** `grok_video_poll` → **save_video_url** → `sheets_update_pen`  
+**Before → this → After:** `assert_video_ok` → **save_video_url** → `sheets_update_pen`  
 Include Other Input Fields: **ON**
 
 | Name | fx | Value |
@@ -222,7 +271,7 @@ Include Other Input Fields: **ON**
 
 ---
 
-## Node 12 — `sheets_update_pen`
+## Node 11 — `sheets_update_pen`
 
 **Type:** Google Sheets → Update  
 **Before → this → After:** `save_video_url` → **sheets_update_pen** → (end)

@@ -20,9 +20,7 @@ Schedule Trigger
   → save_still_url
   → skip_still_edit
   → prep_grok_video_start
-  → grok_video_start
-  → wait_video
-  → grok_video_poll
+  → fal_kling_generate               fal Kling 3.0 Pro I2V, 1080p, no audio
   → assert_video_ok
   → save_video_url
   → sheets_update_creation
@@ -42,14 +40,14 @@ Caption / IF / Switch leftovers stay on the canvas **disabled**. Do not Publish.
 | `still_edit_prompt` | image edit `prompt` |
 | `video_motion_prompt` | video `prompt` |
 | `model_still` | still + edit `model` |
-| `model_video` | video `model` |
+| `model_video` | video `model` — read by `fal_kling_generate` as `={{ $json.model_video }}`. Currently `fal-ai/kling-video/v3/pro/image-to-video` on all 601 rows. **Never pin a slug on the node.** |
 | `aspect_ratio` | still / edit / video |
 | `still_resolution` | still `resolution` |
-| `resolution` | video `resolution` |
+| `resolution` | nothing at the API — fal Kling Pro **is** the 1080p tier and has no `resolution` field. `prep_grok_video_start` still requires the cell; `ffprobe` is the only proof. |
 | `duration_seconds` | video `duration` |
 | `still_n` | still `n` |
 | `audio` | nothing — see **Audio** below |
-| `wait_seconds` | `wait_video` amount |
+| `wait_seconds` | nothing — `fal_kling_generate` polls to completion itself (`maxWaitTime` 600s). `prep_grok_video_start` still requires the cell, so do not blank the column. |
 | `camera_move` | required on the row (must be present) |
 
 Missing cell → Code throws. No `||` fallbacks in HTTP/Set.
@@ -111,20 +109,41 @@ JSON **ON** `={{ $json.still_edit_body_json }}`
 
 ### `prep_grok_video_start`
 
-**Before → this → After:** `skip_still_edit` → **prep_grok_video_start** → `grok_video_start`  
-Paste: `marketing/n8n-code-landscape-prep-grok-video-start.js`  
+**Before → this → After:** `skip_still_edit` → **prep_grok_video_start** → `fal_kling_generate`
+Paste: `marketing/n8n-code-landscape-prep-grok-video-start.js`
 Forces `audio: false` and the silent lock. Everything else is sheet-owned.
 
-### `wait_video`
+### `fal_kling_generate`
 
-**Before → this → After:** `grok_video_start` → **wait_video** → `grok_video_poll`  
-Amount **ON** `={{ Number($('pull_sheet_row').first().json.wait_seconds) }}`
+**Before → this → After:** `prep_grok_video_start` → **fal_kling_generate** → `assert_video_ok`
+
+fal.ai node, Model / Generate. Same config as lab and pen:
+
+| Setting | fx | Value |
+|---|---|---|
+| Model | **ON** | `={{ $json.model_video }}` (mode: By ID) |
+| Parameter `prompt` | **ON** | `={{ $json.video_motion_prompt }}` |
+| Parameter `start_image_url` | **ON** | `={{ $json.still_url }}` |
+| Parameter `duration` | **ON** | `={{ String($json.duration_seconds) }}` |
+| Parameter `generate_audio` | **ON** | `={{ false }}` |
+| Wait For Completion | — | **ON** (poll 5s, max 600s) |
+| Credential | — | `fal.ai account` |
+
+`generate_audio` has to be `={{ false }}`, not the text `false` — fal reads the literal string
+`"false"` as truthy. Pro has no `resolution` field and I2V takes `aspect_ratio` from the start image,
+so `ffprobe` for 1080 × 1920 rather than trusting the row.
+
+The old `grok_video_start` / `wait_video` / `grok_video_poll` chain stays on the canvas **disabled**.
 
 ### `assert_video_ok`
 
-**Before → this → After:** `grok_video_poll` → **assert_video_ok** → `save_video_url`
+**Before → this → After:** `fal_kling_generate` → **assert_video_ok** → `save_video_url`
 
-`grok_video_poll` fires once after `wait_video`. If the render failed, or is still queued, the poll comes back with no video URL — and without this guard `save_video_url` wrote an empty `video_url` while `sheets_update_creation` still incremented `times_used`, so the row rotated out with nothing to show. Now it throws. If the message says queued or processing, raise `wait_seconds` on the row. Same node as pen's `assert_video_ok`.
+A failed or empty render still arrives here as an item with no video URL — and without this guard
+`save_video_url` wrote an empty `video_url` while `sheets_update_creation` still incremented
+`times_used`, so the row rotated out with nothing to show. Now it throws. Same node as pen's
+`assert_video_ok`. If it reports a timeout, raise `maxWaitTime` on `fal_kling_generate` (sheet
+`wait_seconds` no longer drives the video wait).
 
 ### `save_video_url`
 
@@ -141,7 +160,7 @@ Checked 2026-09-15 against the live `pull_sheet_row` contract — all clean:
 - 601 rows, all `Active`, no duplicate `creation_id`.
 - Every field `pull_sheet_row` throws on is populated on every row: `video_prompt`, `video_motion_prompt`, `camera_move`, `model_still`, `model_video`, `still_resolution`, `duration_seconds`, `resolution`, `aspect_ratio`, `wait_seconds`, `still_n`, `audio`.
 - `wait_seconds` 200, `still_n` 1, `duration_seconds` 15 — all positive numerics, so none of the three numeric guards trip.
-- `aspect_ratio` is `9:16` on all 601, which is what `prep_grok_video_start` requires. `resolution` `1080p` means 1080 × 1920.
+- `aspect_ratio` is `9:16` on all 601, which is what `prep_grok_video_start` requires. `resolution` `1080p` means 1080 × 1920 — but it is a label, not a guarantee. `ffprobe` the clip.
 - `audio` is `FALSE` on all 601. Nothing reads it — see **Audio** above — but the column has to be non-blank or `pull_sheet_row` refuses to run.
 - 23 compounds, no collisions between the sheet's own names.
 

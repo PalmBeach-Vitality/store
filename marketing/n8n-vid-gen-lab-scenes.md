@@ -22,7 +22,7 @@ When clicking ‘Execute workflow’
   → grok_imagine_edit_still          apply the edit
   → save_edited_still_url            edited still URL
   → prep_grok_video_start
-  → fal_kling_generate               fal Kling 3.0 Standard I2V, 15s, no audio
+  → fal_kling_generate               fal Kling 3.0 Pro I2V, 1080p, 15s, no audio
   → save_video_url
   → sheets_update_creation           times_used + last_used_at
 ```
@@ -31,7 +31,9 @@ When clicking ‘Execute workflow’
 **Skip:** disconnect that wire, connect `save_still_url` → `skip_still_edit`.  
 Do not leave **both** wires on. That sends two videos.
 
-**Vid gen API (quality/cost check):** fal.ai `fal-ai/kling-video/v3/standard/image-to-video`. 15s. `generate_audio: false`. Grok still + still-edit hops are unchanged. Old `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas **disabled**.
+**Vid gen API:** fal.ai Kling 3.0 **Pro** I2V at **1080p**, 15s, `generate_audio: false`. The slug lives on Sheet 9 `model_video` (`fal-ai/kling-video/v3/pro/image-to-video`) and `fal_kling_generate` reads it with `={{ $json.model_video }}` — **nothing is pinned on the node**. Pinning the tier is what shipped lab clips at 720p while every row read `1080p`; see `vid-gen-quality-playbook.md`. Grok still + still-edit hops are unchanged. Old `grok_video_start` / `wait_video` / `grok_video_poll` stay on the canvas **disabled**.
+
+**Pro has no `resolution` field,** and I2V takes `aspect_ratio` from the start image. So the sheet saying `1080p` is not proof — `ffprobe` the clip and look for 1080 × 1920.
 
 **Mute — audio is off. Always. All three vid-gen workflows** (this one, `Vid_gen_landscape_scenes`, `peptide_pen_vid_gen`). Salvatore's standing rule, and the one value these nodes are allowed to hardcode.
 
@@ -112,8 +114,8 @@ Use this when you want to see the raw still before you commit the edit / video.
 | `still_edit_instructions` | **This is the edit desk.** `still_url` fx **ON** from the raw still. `still_edit_prompt` fx **ON** from the sheet unless you turn it **OFF** for a one-run paste. |
 | `prep_still_edit` | Builds the xAI edit body. Paste: `n8n-code-prep-still-edit.js`. |
 | `save_edited_still_url` | Writes the edited `https` URL. Include Other Fields **ON**. |
-| `prep_grok_video_start` | Maps sheet motion + still URL for fal. Paste: `n8n-code-prep-grok-video-start.js`. Mutes the clip (`generate_audio: false` + silent lock). |
-| `fal_kling_generate` | fal.ai Kling 3.0 Standard I2V. 15s. No audio. Credential: `fal.ai account`. |
+| `prep_grok_video_start` | Maps sheet motion, model slug, and still URL for fal. Paste: `n8n-code-prep-grok-video-start.js`. Mutes the clip (`generate_audio: false` + silent lock). Throws if `duration_seconds` is outside Kling's 3–15 whole seconds. |
+| `fal_kling_generate` | fal.ai Kling 3.0 Pro I2V, 1080p. `model` = `={{ $json.model_video }}` (sheet-owned). No audio. Credential: `fal.ai account`. |
 | `sheets_update_creation` | Match `creation_id`. Writes `times_used` + `last_used_at` only. |
 
 ---
