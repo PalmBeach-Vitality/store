@@ -103,12 +103,12 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 | fal Wan 3.0 I2V `alibaba/wan-3.0/image-to-video` | $0.20/s | $2.00 | $3.00 | 30s |
 | fal Wan 3.0 Prime I2V | $0.28/s | $2.80 | $4.20 | 30s |
 | Replicate `kwaivgi/kling-v3-video` (mode `pro`) | $0.168/s | $1.68 | $2.52 | 15s |
-| **xAI `grok-imagine-video-1.5`** (what wellness / pen run today) | **$0.25/s** + $0.01/input image | **$2.51** | **$3.76** | 15s |
+| **xAI `grok-imagine-video-1.5`** (what wellness / pen ran before 2026-09-16) | **$0.25/s** + $0.01/input image | **$2.51** | **$3.76** | 15s |
 | fal Seedance 2.0 Standard I2V | $0.682/s | $6.82 | $10.23 | 15s |
 
 **Cheapest legal clip:** Hailuo 02 Pro at 10s ($0.80). **Cheapest 15s:** Kling v3 Pro on fal ($1.68).
 
-**What we are paying now.** Sheets `500_Peptide_Wellness_Reel_Scenes` (601 rows), `14-pen-creations-150` (168 rows), and `9-lab-item-creations-500` (535 rows) all carry `model_video=grok-imagine-video-1.5`, `resolution=1080p`, `duration_seconds=15`. At the 1080p tier that is **$3.76 a clip**. The same 15s on fal Kling v3 Pro is **$1.68** — a saving of **$2.08 per clip, 55%**, before any still costs.
+**What we pay now — all three vid-gen workflows are on fal Kling v3 Pro (2026-09-16).** Sheets `500_Peptide_Wellness_Reel_Scenes` (601 rows), `14-pen-creations-150` (168 rows), and `9-lab-item-creations-500` (535 rows) all carry `model_video=fal-ai/kling-video/v3/pro/image-to-video`, `resolution=1080p`, `duration_seconds=15`, and the `fal_kling_generate` node in each workflow reads that slug off the sheet. A 15s clip is **$1.68**. Before the switch, wellness and pen ran `grok-imagine-video-1.5` at the 1080p tier — **$3.76 a clip** — so this is **$2.08 per clip, 55%** cheaper, before still costs. Lab was worse than mismatched: its node was pinned to the Standard slug, so it billed cheap and shipped 720p.
 
 **Grok is billed by resolution, so the summary rate lies.** xAI's pricing page lists `grok-imagine-video-1.5` as a flat `$0.080 / sec`. That is the **480p** tier. The real card is $0.08 at 480p, **$0.14 at 720p, $0.25 at 1080p**, plus $0.01 per input image. Never budget a 1080p Grok run off the $0.08 figure.
 
@@ -117,7 +117,7 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 ### Rules that come with the board
 
 - **No 720p row belongs here.** Kling v3 **Standard**, Seedance 2.0 **Fast**, and Seedance 2.5 (schema enum is `480p` / `720p`) are out on resolution alone, whatever they cost. Grok Imagine Video 1.5 is **not** in that group — it does native 1080p, it is just expensive.
-- **`9-lab-item-creations-500` is currently mismatched.** All 535 rows say `resolution=1080p` and `model_video=grok-imagine-video-1.5`, but the live node is `fal_kling_generate` on `fal-ai/kling-video/v3/standard/image-to-video` — the **720p** tier. The sheet cell is not reaching the API, so lab clips are shipping at 720 × 1280 while the row claims 1080p. This is rule 1 in the wild. Fix the endpoint to `/v3/pro/`, then `ffprobe` to confirm.
+- **Never pin the model slug on the node — read `model_video` off the sheet.** `9-lab-item-creations-500` shipped 720p for weeks with all 535 rows reading `resolution=1080p`: `prep_grok_video_start` overwrote the sheet value with `fal-ai/kling-video/v3/standard/image-to-video` and `fal_kling_generate` had the same Standard slug pinned in its model field. The sheet said 1080p, the API was asked for 720p, and nothing in between complained. Fixed 2026-09-16 — every `fal_kling_generate` now takes `model` from `={{ $json.model_video }}`. If you ever see a tier pinned on a node again, that is the bug.
 - **MiniMax H3 is out too.** Native modes are 480P / 768P; its `2K` and `4K` are **upscales of a 768p base**. That is rule 5 — do not upscale and call it 1080p.
 - **fal Kling v3 Pro has no `resolution` field.** Pro *is* the 1080p tier and `aspect_ratio` on I2V follows the start image. So the only proof of 1080 × 1920 is `ffprobe` on the output.
 - **Muting does not always save money.** Kling and Veo bill audio separately (Kling $0.112 → $0.168, Veo $0.20 → $0.40). Seedance and Wan bill the **same rate either way** — `generate_audio: false` there is a quality/brief decision, not a discount.

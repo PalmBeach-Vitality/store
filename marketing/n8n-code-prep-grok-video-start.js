@@ -9,9 +9,12 @@
 // Do not append vial lock. Do not truncate. Do not default to push-in.
 // still_url may come from Imagine / save_still_url (not a sheet camera param).
 //
-// VID GEN API (Salvatore quality/cost check): fal Kling 3.0 Standard I2V.
-// Node fal_kling_generate is the API. Mute with generate_audio: false.
+// VID GEN API: fal.ai. Node fal_kling_generate is the API and reads model_video
+// off this node's output, so the sheet owns the tier. Mute with generate_audio: false.
 // Keep the silent lock on the sheet motion. Do not rewrite pull_sheet_row.
+//
+// This node used to pin model_video to the Standard (720p) slug, which silently
+// overrode a sheet that said 1080p. Never reintroduce that — read the slug.
 
 function firstJson(name) {
   try {
@@ -120,15 +123,18 @@ if (!Number.isFinite(duration) || duration <= 0) {
       ')'
   );
 }
-if (duration !== 15) {
+// Kling v3 accepts whole seconds from 3 to 15. Anything else 400s at fal, so fail
+// here with the row id instead of burning a request.
+if (!Number.isInteger(duration) || duration < 3 || duration > 15) {
   throw new Error(
-    'fal Kling 3.0 I2V is locked to 15s for this quality check (creation_id=' +
+    'Kling v3 I2V accepts 3-15 whole seconds (creation_id=' +
       creationId +
       ', sheet duration_seconds=' +
       durationRaw +
       ')'
   );
 }
+var modelVideo = sheetField(['model_video', 'modelVideo'], 'model_video');
 var resolution = sheetField(['resolution'], 'resolution');
 var aspect = aspectFromSheet(
   val(pick, ['aspect_ratio', 'aspectRatio']) || val(input, ['aspect_ratio', 'aspectRatio']),
@@ -146,7 +152,7 @@ return [
       still_url: stillUrl,
       reel_still_url: stillUrl,
       video_motion_prompt: motionForVideo,
-      model_video: 'fal-ai/kling-video/v3/standard/image-to-video',
+      model_video: modelVideo,
       duration_seconds: duration,
       duration_label: String(duration),
       resolution: resolution,
