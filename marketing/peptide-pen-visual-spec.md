@@ -43,7 +43,7 @@ never 1.0, never above it.
    cap wall. Same diameter as the barrel. Always on; the needle is never shown.
 2. **Upper collar** — brushed steel ring, flush, carrying **two small
    rounded-square dose windows** side by side.
-3. **Label barrel** — white gloss. Artwork order: light steel-blue DNA
+3. **Label barrel** — white gloss. Artwork order: steel-blue DNA
    double-helix icon on top, then the compound name in bold condensed deep brick
    red set **along the barrel axis** (rotated, reads bottom-to-top), with one
    graphite line beside it reading the dose and `3ml` (e.g. `500mg 3ml`).
@@ -54,17 +54,35 @@ never 1.0, never above it.
 
 ## Colours
 
-| Part | Measured | Sheet currently says |
-|---|---|---|
-| Compound name | **#9B2423** deep brick red | `crimson red #DC143C` |
-| DNA helix | **#839CB5** light steel blue | `crimson red #DC143C`, plus "No blue accents" |
-| Bottom button | **#BE4718** orange | `crimson red`, plus "FORBIDDEN: orange anywhere" |
-| Dose line text | **#19191A** graphite | not specified |
-| Barrel, cap, dial | white gloss | `matte white` |
-| Two collars | brushed steel | `NOT brushed-silver metal` |
+| Part | Measured (median) | Range across pens | Sheet currently says |
+|---|---|---|---|
+| Compound name | **#B13A3B** brick red | #9E292B – #E43130 | `crimson red #DC143C` |
+| DNA helix | **#8FA7C1** steel blue | #528CB8 – #AAB8CB | `crimson red #DC143C`, plus "No blue accents" |
+| Bottom button | **#BE4718** orange | #BA4210 – #C74E1E | `crimson red`, plus "FORBIDDEN: orange anywhere" |
+| Dose line text | **#19191A** graphite | — | not specified |
+| Barrel, cap, dial | white gloss | — | `matte white` |
+| Two collars | brushed steel | — | `NOT brushed-silver metal` |
+
+Sampled as the eroded median of the glyph fill, so these are the values as the
+catalog photo renders them, which is what an image model has to reproduce.
 
 Orange lives on the bottom button and nowhere else. Blue lives on the helix and
 nowhere else.
+
+## Stack SKUs behave differently
+
+Three rows on the sheet are stacks, and their labels are not built like the
+single-compound pens:
+
+- **Wolverine** prints its **contents**, not its name: `BPC-157/TB-500`, dose
+  line `10/10mg 3ml`.
+- **KLOW** prints the stack name in a brighter red (#C21613) over a stronger
+  blue helix (#528CB8), dose line `10/10/10/50mg 3ml Pen`.
+- **GLOW** prints its name in **white letters with a red glow halo**, not solid
+  red, dose line `10/10/50mg 3ml Pen`.
+
+The dose line ends `3ml` on the single-compound pens and `3ml Pen` on GLOW and
+KLOW, so the lock says "the dose and '3ml'" rather than pinning an exact string.
 
 ## What the sheet lock gets wrong
 
@@ -75,7 +93,7 @@ All counts are fields on `marketing/sheets/14-pen-creations-150.csv` (168 rows).
 | `Small flat circular plunger tip at the bottom of the dial in crimson red` | knurled **orange** cylinder at 0.92 × barrel, steps in | `lab_item`, `material_detail`, `scene_brief`, `video_prompt` |
 | `FORBIDDEN: orange anywhere` | orange **is** the button | `lab_item`, `video_prompt` |
 | `No blue accents` | helix **is** steel blue | 5 fields + 19 `scene_brief` |
-| `crimson red #DC143C` helix and name | helix is `#839CB5`, name is `#9B2423` | 5 fields + 19 `scene_brief` |
+| `crimson red #DC143C` helix and name | helix is `#8FA7C1`, name is `#B13A3B` | 5 fields + 19 `scene_brief` |
 | `matte white` barrel | white **gloss** | 7 fields |
 | `NOT brushed-silver metal` | barrel is not metal, but **two collars are brushed steel** | `lab_item`, `video_prompt` |
 | `small rectangular transparent barrel window beside the label` | no barrel window; **two rounded-square dose windows in the upper steel collar** | `lab_item`, `material_detail`, `scene_brief`, `video_prompt` |
@@ -103,7 +121,7 @@ Appears on `lab_item`, `material_detail`, `hero_style`, `video_prompt`,
 
 **Proposed:**
 
-> PEN VISUAL LOCK (identical every frame, ZERO EXCEPTIONS): Exactly ONE Palm Beach Vitality 3ml injection pen, built to the catalog photo. ONE CONSTANT DIAMETER from cap to dial — the cap, both steel collars and the white ridged dose dial are all flush with the barrel at the same width. Nothing on this pen is ever wider than the barrel: no flare, no skirt, no foot, no cone, no pedestal, no widening base. PROPORTION: total length is 8.3x the barrel diameter. TOP TO BOTTOM: white gloss cap with a flat top and an integrated white pocket clip, cap = top 36 percent of the pen, clip running down the top 27 percent; a brushed-steel collar (6 percent of length, flush) carrying TWO small rounded-square dose windows side by side; the white gloss label barrel (44 percent); a second brushed-steel collar (4 percent, flush); the WHITE ridged dose dial with vertical flutes (6 percent, flush); and last, a short knurled ORANGE #BE4718 push button with gear-tooth ridges around its rim at 0.92x the barrel diameter — it STEPS IN, narrower than the barrel, never as wide, never wider. LABEL: light steel-blue #839CB5 double-helix DNA icon on top — no hands near the helix; below it the compound name '{COMPOUND}' in bold condensed deep brick red #9B2423, set along the barrel axis so it reads bottom-to-top; beside the name one graphite #19191A line reading the dose and '3ml'. No badge, no red rectangle. Orange appears ONLY on the bottom push button — never on the dial, the name, the helix, or the cap. Blue appears ONLY on the helix. No vial. No second pen.
+> PEN VISUAL LOCK (identical every frame, ZERO EXCEPTIONS): Exactly ONE Palm Beach Vitality 3ml injection pen, built to the catalog photo. ONE CONSTANT DIAMETER from cap to dial — the cap, both steel collars and the white ridged dose dial are all flush with the barrel at the same width. Nothing on this pen is ever wider than the barrel: no flare, no skirt, no foot, no cone, no pedestal, no widening base. PROPORTION: total length is 8.3x the barrel diameter. TOP TO BOTTOM: white gloss cap with a flat top and an integrated white pocket clip, cap = top 36 percent of the pen, clip running down the top 27 percent; a brushed-steel collar (6 percent of length, flush) carrying TWO small rounded-square dose windows side by side; the white gloss label barrel (44 percent); a second brushed-steel collar (4 percent, flush); the WHITE ridged dose dial with vertical flutes (6 percent, flush); and last, a short knurled ORANGE #BE4718 push button with gear-tooth ridges around its rim at 0.92x the barrel diameter — it STEPS IN, narrower than the barrel, never as wide, never wider. LABEL: steel-blue #8FA7C1 double-helix DNA icon on top — no hands near the helix; below it the compound name '{COMPOUND}' in bold condensed brick red #B13A3B, set along the barrel axis so it reads bottom-to-top; beside the name one graphite #19191A line reading the dose and '3ml'. No badge, no red rectangle. Orange appears ONLY on the bottom push button — never on the dial, the name, the helix, or the cap. Blue appears ONLY on the helix. No vial. No second pen.
 
 ### 2. HARD OUTPUT LOCK (READ FIRST)
 
@@ -117,7 +135,7 @@ lineup, cluster, second pen.` is untouched.
 
 **Proposed:**
 
-> HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render exactly ONE smooth white gloss cylindrical insulin-style Palm Beach Vitality research pen labeled '{COMPOUND}', as a single catalog hero. Camera closer on the one pen. Product count = 1. PROPORTION: total length is 8.3x the barrel diameter, full-length adult injector, not compact, not short. ONE CONSTANT DIAMETER cap to dial — both steel collars and the white dial are flush; nothing steps out or flares. The pen body is a medical injection pen, NOT a glass vial, NOT an all-metal body, NOT a perfume cartridge, NOT a chrome claw stand — the only metal is the two flush brushed-steel collars, one below the cap with two small rounded-square dose windows and one above the dial. White gloss cap ON with integrated white pocket clip covering the tip — never removed, never sitting beside the pen, never showing a needle. White ridged gear-like dose dial (NOT colored, NOT orange). Bottom push button: short knurled orange #BE4718 cylinder at 0.92x the barrel diameter, stepped IN — never as wide as the barrel, never wider, never a flared base. No mixed compounds. No vial. No syringe. No people. COLOR LOCK: Every pen on this sheet is a peptide pen = deep brick red #9B2423 compound name, light steel-blue #839CB5 helix, orange #BE4718 bottom button. No other accent colour exists on this sheet. FORBIDDEN: orange on the dial, cap, name, or helix. FORBIDDEN: hands near the DNA helix.
+> HARD OUTPUT LOCK (READ FIRST): Copy the catalog injector still. Render exactly ONE smooth white gloss cylindrical insulin-style Palm Beach Vitality research pen labeled '{COMPOUND}', as a single catalog hero. Camera closer on the one pen. Product count = 1. PROPORTION: total length is 8.3x the barrel diameter, full-length adult injector, not compact, not short. ONE CONSTANT DIAMETER cap to dial — both steel collars and the white dial are flush; nothing steps out or flares. The pen body is a medical injection pen, NOT a glass vial, NOT an all-metal body, NOT a perfume cartridge, NOT a chrome claw stand — the only metal is the two flush brushed-steel collars, one below the cap with two small rounded-square dose windows and one above the dial. White gloss cap ON with integrated white pocket clip covering the tip — never removed, never sitting beside the pen, never showing a needle. White ridged gear-like dose dial (NOT colored, NOT orange). Bottom push button: short knurled orange #BE4718 cylinder at 0.92x the barrel diameter, stepped IN — never as wide as the barrel, never wider, never a flared base. No mixed compounds. No vial. No syringe. No people. COLOR LOCK: Every pen on this sheet is a peptide pen = brick red #B13A3B compound name, steel-blue #8FA7C1 helix, orange #BE4718 bottom button. No other accent colour exists on this sheet. FORBIDDEN: orange on the dial, cap, name, or helix. FORBIDDEN: hands near the DNA helix.
 
 ### 3. FORM
 
@@ -143,7 +161,7 @@ each.
 
 **Proposed:**
 
-> LABEL (MANDATORY): clean white gloss wrap-around barrel label. Logo ABOVE the name: light steel-blue #839CB5 DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. Exact compound name '{COMPOUND}' in large bold condensed deep brick red #9B2423 sans-serif (Helvetica/Arial), set along the barrel axis so it reads bottom-to-top. One graphite #19191A line beside the name reading the dose and '3ml'. No badge, no red rectangle, no white-on-red text. FORBIDDEN: orange DNA, orange name, orange dial, orange cap, red helix, blue name, burgundy vial branding, palm tree, extra class names, poster overlays.
+> LABEL (MANDATORY): clean white gloss wrap-around barrel label. Logo ABOVE the name: steel-blue #8FA7C1 DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. Exact compound name '{COMPOUND}' in large bold condensed brick red #B13A3B sans-serif (Helvetica/Arial), set along the barrel axis so it reads bottom-to-top. One graphite #19191A line beside the name reading the dose and '3ml'. No badge, no red rectangle, no white-on-red text. FORBIDDEN: orange DNA, orange name, orange dial, orange cap, red helix, blue name, burgundy vial branding, palm tree, extra class names, poster overlays.
 
 ### 5. HARD OUTPUT LOCK (FINAL CHECK)
 
@@ -156,7 +174,7 @@ each.
 
 **Proposed:**
 
-> HARD OUTPUT LOCK (FINAL CHECK): This is exactly ONE freshly made pen, camera closer on the one hero. Product count = 1. No extra pens. No vials. No mixed SKUs. Cap on. Length 8.3x the barrel diameter. One constant diameter cap to dial, every section flush. White ridged dial. Bottom push button orange and narrower than the barrel — if the bottom is as wide as the barrel or wider, the frame is wrong. DNA helix in steel blue with no hands. Compound name in deep brick red.
+> HARD OUTPUT LOCK (FINAL CHECK): This is exactly ONE freshly made pen, camera closer on the one hero. Product count = 1. No extra pens. No vials. No mixed SKUs. Cap on. Length 8.3x the barrel diameter. One constant diameter cap to dial, every section flush. White ridged dial. Bottom push button orange and narrower than the barrel — if the bottom is as wide as the barrel or wider, the frame is wrong. DNA helix in steel blue with no hands. Compound name in brick red.
 
 ### 6. CRITICAL PRODUCT FIX — `still_edit_prompt` only
 
@@ -168,7 +186,7 @@ Appears on `still_edit_prompt`, 168 rows.
 
 **Proposed:**
 
-> CRITICAL PRODUCT FIX: Keep this exact catalog pen, then remove every extra pen until only ONE remains. White gloss barrel at one constant diameter, white clip-cap ON, white ridged dose dial (NOT orange), two flush brushed-steel collars. NARROW THE BOTTOM: the bottom push button must be orange #BE4718 and 0.92x the barrel diameter — if it is as wide as the barrel or wider, or reads as a flared base, skirt, or foot, shrink it until it steps in. Logo ABOVE the name: light steel-blue #839CB5 DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. Name '{COMPOUND}' large bold condensed deep brick red #9B2423 sans-serif along the barrel axis. No badge, no red rectangle.
+> CRITICAL PRODUCT FIX: Keep this exact catalog pen, then remove every extra pen until only ONE remains. White gloss barrel at one constant diameter, white clip-cap ON, white ridged dose dial (NOT orange), two flush brushed-steel collars. NARROW THE BOTTOM: the bottom push button must be orange #BE4718 and 0.92x the barrel diameter — if it is as wide as the barrel or wider, or reads as a flared base, skirt, or foot, shrink it until it steps in. Logo ABOVE the name: steel-blue #8FA7C1 DNA double-helix icon only — no hands, no palms, no figurative hands cradling the helix. Name '{COMPOUND}' large bold condensed brick red #B13A3B sans-serif along the barrel axis. No badge, no red rectangle.
 
 ## Open conflict — the dose on the label
 
