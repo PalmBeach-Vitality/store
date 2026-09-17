@@ -64,6 +64,8 @@ Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient
 
 The API flag on its own has let Grok score a clip, which is why the lock is in the prompt too. The sheet's `audio` column is **not read** — `pull_sheet_row` still requires it to be non-blank, so leave `FALSE` in it, but nothing downstream consumes it. Do not re-wire audio to the sheet.
 
+Sheet `video_motion_prompt` starts with CAMERA LOCK (vial planted, camera travels, cap seated, no turntable). Unique camera recipes follow, including orbits as **camera** paths. Do not append that lock in `prep_grok_video_start`. Pens are a different workflow and stay out of this lock.
+
 ---
 
 ## Nodes
