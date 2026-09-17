@@ -69,7 +69,7 @@ ALIASES = {
     "CJC/Ipamorelin": {"CJC", "Ipamorelin", "CJC/Ipamorelin"},
     "GLOW": {"BPC-157", "TB-500", "GHK-Cu", "GLOW"},
     "KLOW": {"KPV", "BPC-157", "TB-500", "GHK-Cu", "KLOW"},
-    "Wolverine": {"BPC-157", "TB-500", "Wolverine"},
+    "Wolverine": {"BPC-157", "TB-500", "BPC-157/TB-500"},
 }
 
 LABEL_RE = re.compile(

@@ -8,8 +8,10 @@
 // KLOW = KPV / BPC-157 / TB-500 / GHK-Cu
 // GLOW = BPC-157 / TB-500 / GHK-Cu
 // Wolverine = BPC-157 / TB-500
-// Does not invent prompts. Rewrites in-memory compound_name + label text
-// so choose_compound can match and the still prints the catalog nickname.
+// Does not invent prompts. Rewrites in-memory compound_name so choose_compound
+// can match. Printed label text for the BPC-157/TB-500 blend stays BPC-157/TB-500
+// — Grok Imagine word-blocks Marvel "Wolverine" (exec 2251). The selector handle
+// remains Wolverine.
 
 function norm(s) {
   return String(s || '')
@@ -60,8 +62,6 @@ function rewriteText(s) {
   s = s.split('KPV/BPC-157/TB-500/GHK-Cu').join('KLOW');
   s = s.split('BPC-157 / TB-500 / GHK-Cu').join('GLOW');
   s = s.split('BPC-157/TB-500/GHK-Cu').join('GLOW');
-  s = s.split('BPC-157 / TB-500').join('Wolverine');
-  s = s.split('BPC-157/TB-500').join('Wolverine');
   return s;
 }
 

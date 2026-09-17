@@ -128,6 +128,22 @@ Use this when you want to see the raw still before you commit the edit / video.
 
 ---
 
+## 10ml vial shape — lock to the catalog photo
+
+Salvatore, 2026-09-17: the lab stills were too tall and too narrow, and the helix was too big. The lock is his BPC-157 10mg catalog photo. **506 10ml rows only.** The 29 Cagrilintide rows that still say `This is the 5ml multi-dose vial` are untouched.
+
+Numbers live on Sheet 9 (`lab_item`, `material_detail`, `hero_style`, `still_edit_prompt`, `video_prompt`):
+
+- H = **2.36 ×** body width
+- straight body = **1.56 ×** body width
+- helix = **small**, one fifth of the label, 1.7× as tall as it is wide
+
+FORBIDDEN: tall / slim / test-tube / ampoule, height over 2.4× body width, oversized helix.
+
+Spec + apply script: `lab-vial-10ml-visual-spec.md`, `scripts/apply_measured_10ml_vial_spec.py`.
+
+---
+
 ## Related
 
 - Older still-edit wire: `n8n-still-edit-before-video.md`  

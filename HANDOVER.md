@@ -287,7 +287,7 @@ there is no blue metabolic SKU left and no colour exception.
 
 Do not resolve these yourself.
 
-1. **Two products print different names depending on form factor.** A vial prints `Melanotan II`, a pen prints `Melanotan 2`. A vial prints `Semax`, a pen prints `SEMAX`. A reel that cuts a vial next to a pen shows both spellings. He needs to pick one per product.
+1. **Semax still prints two spellings by form factor.** Salvatore picked **Melanotan 2** for both vial and pen (folded from #76 onto #84). A vial still prints `Semax`, a pen prints `SEMAX`. A reel that cuts a vial next to a pen shows both spellings. He needs to pick one for Semax.
 2. **BPC-157 has two real SKUs but only one reached the wellness tab.** Sheet 9 prints `10MG`/`1mg/mL` on 55 rows and `20MG`/`2mg/mL` on 5; the price sheet confirms both ($30 and $51). The wellness tab only has the 10mg. Coverage gap, not an error.
 3. **Seven products are pen-only** — 5-Amino-1MQ, DSIP, Dihexa, Epithalon, Glutathione, IGF-LR3, Kisspeptin. He chose to keep them off the vial sheets. Revisit only if he asks.
 

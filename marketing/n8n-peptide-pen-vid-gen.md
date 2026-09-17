@@ -94,7 +94,7 @@ Imported into n8n Cloud (unpublished). Google Sheets account + XAI Grok header a
 
 Paste: `marketing/n8n-code-alias-stack-names.js`
 
-Maps catalog nicknames **GLOW**, **KLOW**, **Wolverine** onto chemical blend strings (and the reverse). Does not invent prompts.
+Maps catalog nicknames **GLOW**, **KLOW**, **Wolverine** onto chemical blend strings so `choose_compound` matches. Does not invent prompts. Printed blend text for the Wolverine handle stays **BPC-157/TB-500** (Grok Imagine blocks Marvel "Wolverine"); the selector handle is unchanged.
 
 ---
 
