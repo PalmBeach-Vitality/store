@@ -29,7 +29,7 @@ python3 marketing/scripts/shrink_10ml_helix.py --write
 
 Live write, 2026-09-17: unpublished n8n `apply_10ml_vial_spec` (`GqVY0SvZ1iSAFqdC`) wrote 506 lab rows and 577 wellness rows. 5ml Cagrilintide untouched. Archive after. Do not publish. Do not run vid-gen from this workflow.
 
-Live write, 2026-09-17 (helix still too big on LI-016 smoke): unpublished n8n `shrink_10ml_helix` wrote 506 lab + 577 wellness rows. SMALL / one-fifth / quarter-of-name → TINY / one-tenth / forbid wider than one eighth. 5ml Cagrilintide untouched. Archive after. Do not publish. Do not run vid-gen from this workflow.
+Live write, 2026-09-17 (helix still too big on LI-016 smoke): unpublished n8n `shrink_10ml_helix` (`Ay6VWEJJQfDNdhCP`) exec **2258** wrote 506 lab + 577 wellness 10ml rows. SMALL / one-fifth / quarter-of-name → TINY / one-tenth / forbid wider than one eighth. 5ml Cagrilintide untouched. Read-back `verify_shrink_10ml_helix` (`ZKqmaffVUEeUJEZR`) exec **2259**: PBVita-Lab-207 and LI-016 have TINY / one tenth, leftover SMALL and one-fifth = false. Archive after. Do not publish. Do not run vid-gen from these workflows.
 
 Live write, 2026-09-17 (Wolverine print name): unpublished n8n `apply_wolverine_print_name` (`74OyZ0RWA6d9KdIr`) exec **2252** printed `BPC-157/TB-500` on 29 lab + 32 wellness + 5 pen rows. `compound_name` / `choose_compound` stay **Wolverine**. Read-back `verify_wolverine_print_name` (`LnKj6WPzoVFrknxg`) exec **2253**: PBVita-Lab-207 still handle Wolverine, `reading exactly 'BPC-157/TB-500'`. Do not publish. Do not run vid-gen from these workflows.
 
