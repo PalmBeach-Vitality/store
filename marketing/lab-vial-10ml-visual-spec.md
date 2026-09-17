@@ -26,3 +26,5 @@ Apply:
 python3 marketing/scripts/apply_measured_10ml_vial_spec.py           # dry run
 python3 marketing/scripts/apply_measured_10ml_vial_spec.py --write
 ```
+
+Live write, 2026-09-17: unpublished n8n `apply_10ml_vial_spec` (`GqVY0SvZ1iSAFqdC`) wrote 506 lab rows and 577 wellness rows. 5ml Cagrilintide untouched. Archive after. Do not publish. Do not run vid-gen from this workflow.
