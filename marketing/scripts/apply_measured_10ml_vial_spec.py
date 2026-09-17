@@ -17,11 +17,11 @@ Measured from that photo (cap top to base / glass body width):
     helix width                   1/4 of the label, 1/4 of the compound name
     helix height                  1.7 x helix width
 
-The 29 Cagrilintide rows that still say ``This is the 5ml multi-dose vial``
-are left untouched.
+Cagrilintide 5ml rows are left untouched (29 on lab, 24 on wellness).
 
-    python3 marketing/scripts/apply_measured_10ml_vial_spec.py           # dry run
-    python3 marketing/scripts/apply_measured_10ml_vial_spec.py --write
+    python3 marketing/scripts/apply_measured_10ml_vial_spec.py --sheet lab        # dry run
+    python3 marketing/scripts/apply_measured_10ml_vial_spec.py --sheet wellness --write
+    python3 marketing/scripts/apply_measured_10ml_vial_spec.py --sheet all --write
 """
 
 from __future__ import annotations
@@ -36,8 +36,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
-MIRROR = SHEETS / "9-lab-item-creations-500.csv"
-PAYLOAD = SHEETS / "9-lab-item-creations-10ml-vial-spec.json"
+LAB_MIRROR = SHEETS / "9-lab-item-creations-500.csv"
+LAB_PAYLOAD = SHEETS / "9-lab-item-creations-10ml-vial-spec.json"
+WELLNESS_MIRROR = SHEETS / "500_Peptide_Wellness_Reel_Scenes.csv"
+WELLNESS_PAYLOAD = SHEETS / "500_Peptide_Wellness_10ml-vial-spec.json"
+
+WELLNESS_SHAPE_FIELDS = ["material_detail", "hero_style", "video_prompt"]
+WELLNESS_HELIX_FIELDS = ["video_prompt"]
 
 STILL_FIELDS = [
     "lab_item",
@@ -122,6 +127,9 @@ VIDEO_PHRASES: list[tuple[str, str]] = [
     ),
 ]
 
+SHAPE_PHRASES = VIDEO_PHRASES[:5]
+HELIX_PHRASES = VIDEO_PHRASES[5:]
+
 STALE_10ML = [
     "standard ~10ml multi-use vial proportions",
     "2.3 times the width of the glass body",
@@ -144,6 +152,28 @@ def is_10ml(row: dict[str, str]) -> bool:
     return TEN_ML in vp
 
 
+def apply_phrases(
+    text: str, phrases: list[tuple[str, str]], creation_id: str, field: str, hits: Counter[str]
+) -> str:
+    out = text
+    for old, new in phrases:
+        if old not in out:
+            raise SystemExit(f"{creation_id}: {field} missing {old[:60]!r}")
+        out = out.replace(old, new, 1)
+        hits[f"{field}:{old[:40]}"] += 1
+    return out
+
+
+def apply_wellness_row(row: dict[str, str], hits: Counter[str]) -> dict[str, str]:
+    out = dict(row)
+    cid = str(row.get("creation_id") or "")
+    for field in WELLNESS_SHAPE_FIELDS:
+        out[field] = apply_phrases(out.get(field) or "", SHAPE_PHRASES, cid, field, hits)
+    for field in WELLNESS_HELIX_FIELDS:
+        out[field] = apply_phrases(out.get(field) or "", HELIX_PHRASES, cid, f"{field}-helix", hits)
+    return out
+
+
 def apply_row(row: dict[str, str], hits: Counter[str]) -> dict[str, str]:
     out = dict(row)
     for field in STILL_FIELDS:
@@ -160,6 +190,44 @@ def apply_row(row: dict[str, str], hits: Counter[str]) -> dict[str, str]:
         hits[f"video:{old[:40]}"] += 1
     out[VIDEO_FIELD] = vp
     return out
+
+
+def qa_wellness(rows: list[dict[str, str]], original: list[dict[str, str]]) -> None:
+    ten = [r for r in rows if is_10ml(r)]
+    five = [r for r in rows if FIVE_ML in (r.get(VIDEO_FIELD) or "")]
+    if len(ten) != 577:
+        raise SystemExit(f"expected 577 wellness 10ml rows, got {len(ten)}")
+    if len(five) != 24:
+        raise SystemExit(f"expected 24 wellness 5ml rows, got {len(five)}")
+    orig_by_id = {r["creation_id"]: r for r in original}
+    fields = WELLNESS_SHAPE_FIELDS
+    for r in five:
+        old = orig_by_id[r["creation_id"]]
+        for f in fields:
+            if r.get(f) != old.get(f):
+                raise SystemExit(f"5ml row {r['creation_id']} {f} was modified")
+    for r in ten:
+        blob = " ".join(r.get(f) or "" for f in fields)
+        for stale in (
+            "2.3 times the width of the glass body",
+            "only about 1.2 times as tall as it is wide",
+            "top 40% of the vial's height",
+            "the straight body the lower 55%",
+            "about 88% of the body width",
+            "about 95% of the body width",
+            "a tall straight-sided brushed-silver",
+            "two broad flat tapering ribbons",
+            "height-to-width ratio of about 7:4",
+        ):
+            if stale in blob:
+                raise SystemExit(f"{r['creation_id']}: stale {stale!r} still present")
+        for f in ("material_detail", "hero_style", "video_prompt"):
+            if "2.36 times the width of the glass body" not in (r.get(f) or ""):
+                raise SystemExit(f"{r['creation_id']}: {f} missing 2.36 lock")
+            if "only 1.56 times as tall as it is wide" not in (r.get(f) or ""):
+                raise SystemExit(f"{r['creation_id']}: {f} missing 1.56 lock")
+        if "SMALL red DNA double-helix" not in (r.get(VIDEO_FIELD) or ""):
+            raise SystemExit(f"{r['creation_id']}: video_prompt missing small helix")
 
 
 def qa(rows: list[dict[str, str]], original: list[dict[str, str]]) -> None:
@@ -207,12 +275,27 @@ def qa(rows: list[dict[str, str]], original: list[dict[str, str]]) -> None:
                 raise SystemExit(f"{r['creation_id']}: video_prompt missing {needle!r}")
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--write", action="store_true")
-    args = ap.parse_args()
+def run_sheet(name: str, write: bool) -> None:
+    if name == "lab":
+        path, payload_path, apply, check, payload_fields = (
+            LAB_MIRROR,
+            LAB_PAYLOAD,
+            apply_row,
+            qa,
+            STILL_FIELDS + [VIDEO_FIELD],
+        )
+    elif name == "wellness":
+        path, payload_path, apply, check, payload_fields = (
+            WELLNESS_MIRROR,
+            WELLNESS_PAYLOAD,
+            apply_wellness_row,
+            qa_wellness,
+            WELLNESS_SHAPE_FIELDS,
+        )
+    else:
+        raise SystemExit(f"unknown sheet {name}")
 
-    with MIRROR.open(newline="") as fh:
+    with path.open(newline="") as fh:
         reader = csv.DictReader(fh)
         fieldnames = list(reader.fieldnames or [])
         original = list(reader)
@@ -226,21 +309,20 @@ def main() -> int:
             out_rows.append(row)
             skipped += 1
             continue
-        out_rows.append(apply_row(row, hits))
+        out_rows.append(apply(row, hits))
         changed += 1
 
-    qa(out_rows, original)
-
-    print(f"10ml rows rewritten: {changed}")
-    print(f"rows left untouched (5ml + any other): {skipped}")
+    check(out_rows, original)
+    print(f"{name}: 10ml rows rewritten: {changed}")
+    print(f"{name}: rows left untouched: {skipped}")
     for k, n in sorted(hits.items()):
         print(f"  {n:4d}  {k}")
 
-    if not args.write:
-        print("dry run only — pass --write to save")
-        return 0
+    if not write:
+        print(f"{name}: dry run only — pass --write to save")
+        return
 
-    with MIRROR.open("w", newline="") as fh:
+    with path.open("w", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(out_rows)
@@ -249,13 +331,23 @@ def main() -> int:
     for row in out_rows:
         if not is_10ml(row):
             continue
-        item = {"creation_id": row["creation_id"], VIDEO_FIELD: row[VIDEO_FIELD]}
-        for f in STILL_FIELDS:
+        item = {"creation_id": row["creation_id"]}
+        for f in payload_fields:
             item[f] = row[f]
         payload.append(item)
-    PAYLOAD.write_text(json.dumps(payload, indent=1) + "\n")
-    print(f"wrote {MIRROR}")
-    print(f"wrote {PAYLOAD} ({len(payload)} 10ml rows)")
+    payload_path.write_text(json.dumps(payload, indent=1) + "\n")
+    print(f"wrote {path}")
+    print(f"wrote {payload_path} ({len(payload)} 10ml rows)")
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--write", action="store_true")
+    ap.add_argument("--sheet", choices=["lab", "wellness", "all"], default="all")
+    args = ap.parse_args()
+    targets = ["lab", "wellness"] if args.sheet == "all" else [args.sheet]
+    for name in targets:
+        run_sheet(name, args.write)
     return 0
 
 

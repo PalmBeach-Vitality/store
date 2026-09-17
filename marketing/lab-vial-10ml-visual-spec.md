@@ -1,7 +1,7 @@
 # 10ml lab vial — visual lock
 
 Source: Salvatore's BPC-157 10mg catalog photo, 2026-09-17.
-Scope: **every 10ml row** on Sheet `9-lab-item-creations-500`. The 29 Cagrilintide rows that still say `This is the 5ml multi-dose vial` are not in this lock.
+Scope: **every 10ml row** on Sheet `9-lab-item-creations-500` (506 rows) and `500_Peptide_Wellness_Reel_Scenes` (577 rows). The Cagrilintide rows that still say `This is the 5ml multi-dose vial` are not in this lock (29 lab, 24 wellness).
 
 W = width of the straight glass body.
 H = top of the blue cap down to the glass base.

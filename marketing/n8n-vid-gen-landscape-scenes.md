@@ -168,6 +168,22 @@ Re-run with `python3 marketing/scripts/audit_wellness_sheet.py`.
 
 ---
 
+## 10ml vial shape — same lock as Sheet 9
+
+Salvatore, 2026-09-17: apply the BPC-157 10mg catalog vial to this tab the same way as `Vid_gen_lab_scenes`. **577 10ml rows.** The 24 Cagrilintide rows that still say `This is the 5ml multi-dose vial` are untouched.
+
+Numbers live on `material_detail`, `hero_style`, and `video_prompt` (helix size is on `video_prompt` only; `still_edit_prompt` on this tab is the short label lock and is not part of this pass):
+
+- H = **2.36 ×** body width
+- straight body = **1.56 ×** body width
+- helix = **small**, one fifth of the label, 1.7× as tall as it is wide
+
+FORBIDDEN: tall / slim / test-tube / ampoule, height over 2.4× body width, oversized helix.
+
+Spec + apply script: `lab-vial-10ml-visual-spec.md`, `scripts/apply_measured_10ml_vial_spec.py --sheet wellness`.
+
+---
+
 ## One-shot sheet overlay
 
 `overlay_landscape_sheet_params` writes `still_edit_prompt`, `wait_seconds`, `audio`, `still_n` onto existing rows (does not touch `times_used`). Archive after one successful Execute.
