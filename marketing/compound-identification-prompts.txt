@@ -416,18 +416,18 @@ Tesamorelin
 Wolverine
 ------------------------------------------------------------------------------------------------
   rows: 29
-  print name     'Wolverine'
+  print name     'BPC-157/TB-500'
   dose bar       '10MG/10MG'
   concentration  '1mg/1mg/mL'
   footer         '10mL Sterile Multi-Dose Vial'
   vial body      '10ml'
   copy:
     Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
-    compound name in large bold brick red #A63334 reading exactly 'Wolverine', brick red #A63334
-    dose bar with white text reading exactly '10MG/10MG', black concentration line under the bar
-    reading exactly '1mg/1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'.
-    All four strings are printed once, spelled exactly as written, in crisp sharp type that is fully
-    legible at full resolution.
+    compound name in large bold brick red #A63334 reading exactly 'BPC-157/TB-500', brick red
+    #A63334 dose bar with white text reading exactly '10MG/10MG', black concentration line under the
+    bar reading exactly '1mg/1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose
+    Vial'. All four strings are printed once, spelled exactly as written, in crisp sharp type that
+    is fully legible at full resolution.
 
 
 ================================================================================================
@@ -902,17 +902,17 @@ Tesamorelin
 Wolverine
 ------------------------------------------------------------------------------------------------
   rows: 5
-  print name     'Wolverine'
+  print name     'BPC-157/TB-500'
   badge          '3ml Pen'
   dose / conc    none - a pen never prints mg or mg/mL
   copy:
-    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "Wolverine" and the badge
-    "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research Purposes
-    Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No milligram
-    dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions only, never
-    burned into the still or the video.
+    HARD RULE (stills and video, READ FIRST): The pen label shows ONLY "BPC-157/TB-500" and the
+    badge "3ml Pen". Zero other text anywhere in the frame. No disclaimers. No "For Research
+    Purposes Only". No "Not for Human Use". No "Research Peptide". No lyophilized. No purity. No
+    milligram dose. No 10mg. No fine print. No vertical side text. Disclaimers belong in captions
+    only, never burned into the still or the video.
   copy (tail):
-    LABEL: only 'Wolverine' and badge '3ml Pen'. No other text on the pen or in-frame.
+    LABEL: only 'BPC-157/TB-500' and badge '3ml Pen'. No other text on the pen or in-frame.
 
 
 ================================================================================================

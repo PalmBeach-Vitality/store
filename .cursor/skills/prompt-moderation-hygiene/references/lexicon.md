@@ -43,6 +43,7 @@ Keep I2V short: camera path, speed, what must not change. The still already has 
 | child, kid, baby, teen | no people at all |
 | celebrity / politician names | omit |
 | shoot the product | capture the product; catalog still |
+| Wolverine (Marvel IP — Grok Imagine word-block, exec 2251) | BPC-157/TB-500 on the printed label / prompt. Keep `compound_name` / `choose_compound` as Wolverine. |
 
 ## Human subjects (FILM identity / astronaut rows)
 

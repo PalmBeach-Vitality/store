@@ -59,6 +59,7 @@ HANDLE_LABELS = {
     "CJC-1295": "CJC",
     "Ipamorelin-Solo": "Ipamorelin",
     "Tesa-Ipa": "Tesamorelin/Ipamorelin",
+    "Wolverine": "BPC-157/TB-500",
 }
 
 ASPECT_RE = re.compile(r"^\d+:\d+$")
