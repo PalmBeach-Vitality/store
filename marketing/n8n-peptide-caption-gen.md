@@ -198,6 +198,8 @@ manual_trigger → read_caption_science → map_new_caption_rows → append_capt
 
 Do not Publish. Do not run `peptide_caption_gen` from this overlay.
 
+Live write: n8n exec **2266** (2026-09-17T19:17:09Z) appended the six rows. Exec **2267** re-read the tab and stopped because the six names were already present (33 data rows).
+
 ---
 
 ## Importable JSON
