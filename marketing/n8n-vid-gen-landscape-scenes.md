@@ -82,7 +82,7 @@ Matching is a **two-way substring** test, so a short name silently swallows a lo
 | `CJC-1295` | CJC on its own | Typing `CJC` is ambiguous with `CJC/Ipamorelin` |
 | `TA-1` | Thymosin Alpha-1 | Typing `Thymosin Alpha-1` matches nothing and throws |
 
-The other 19 compounds match on their own name: `AOD-9604`, `BPC-157`, `CJC/Ipamorelin`, `Cagrilintide`, `GHK-Cu`, `GLOW`, `KLOW`, `KPV`, `MOTS-C`, `Melanotan II`, `NAD+`, `PT-141`, `SS-31`, `Selank`, `Semax`, `Sermorelin`, `TB-500`, `Tesamorelin`, `Wolverine`.
+The other 19 compounds match on their own name: `AOD-9604`, `BPC-157`, `CJC/Ipamorelin`, `Cagrilintide`, `GHK-Cu`, `GLOW`, `KLOW`, `KPV`, `MOTS-C`, `Melanotan 2`, `NAD+`, `PT-141`, `SS-31`, `Selank`, `Semax`, `Sermorelin`, `TB-500`, `Tesamorelin`, `Wolverine`. Typing `Wolverine` still selects those rows; the vial **print** on `video_prompt` is `BPC-157/TB-500` (Grok Imagine word-blocks Marvel "Wolverine"). Typing `Melanotan 2` selects the Melanotan 2 rows.
 
 When several rows share a compound the least-used one wins (`times_used`, then `last_used_at`, then `rank`).
 
@@ -165,6 +165,22 @@ Checked 2026-09-15 against the live `pull_sheet_row` contract — all clean:
 - 23 compounds, no collisions between the sheet's own names.
 
 Re-run with `python3 marketing/scripts/audit_wellness_sheet.py`.
+
+---
+
+## 10ml vial shape — same lock as Sheet 9
+
+Salvatore, 2026-09-17: apply the BPC-157 10mg catalog vial to this tab the same way as `Vid_gen_lab_scenes`. **577 10ml rows.** The 24 Cagrilintide rows that still say `This is the 5ml multi-dose vial` are untouched.
+
+Numbers live on `material_detail`, `hero_style`, and `video_prompt` (helix size is on `video_prompt` only; `still_edit_prompt` on this tab is the short label lock and is not part of this pass):
+
+- H = **2.36 ×** body width
+- straight body = **1.56 ×** body width
+- helix = **small**, one fifth of the label, 1.7× as tall as it is wide
+
+FORBIDDEN: tall / slim / test-tube / ampoule, height over 2.4× body width, oversized helix.
+
+Spec + apply script: `lab-vial-10ml-visual-spec.md`, `scripts/apply_measured_10ml_vial_spec.py --sheet wellness`.
 
 ---
 

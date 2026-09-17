@@ -81,7 +81,6 @@ DROP_COMPOUNDS = {
 # Align compound_name to the Sheet 9 roster so one type-in addresses both tabs.
 RENAME = {
     "Cagrilinitide": "Cagrilintide",
-    "Melanotan 2": "Melanotan II",
     "Thymosin Alpha-1": "TA-1",
     "CJC": "CJC-1295",
     "CJC /Ipamorelin": "CJC/Ipamorelin",
