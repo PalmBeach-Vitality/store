@@ -82,7 +82,7 @@ Matching is a **two-way substring** test, so a short name silently swallows a lo
 | `CJC-1295` | CJC on its own | Typing `CJC` is ambiguous with `CJC/Ipamorelin` |
 | `TA-1` | Thymosin Alpha-1 | Typing `Thymosin Alpha-1` matches nothing and throws |
 
-The other 19 compounds match on their own name: `AOD-9604`, `BPC-157`, `CJC/Ipamorelin`, `Cagrilintide`, `GHK-Cu`, `GLOW`, `KLOW`, `KPV`, `MOTS-C`, `Melanotan II`, `NAD+`, `PT-141`, `SS-31`, `Selank`, `Semax`, `Sermorelin`, `TB-500`, `Tesamorelin`, `Wolverine`. Typing `Wolverine` still selects those rows; the vial **print** on `video_prompt` is `BPC-157/TB-500` (Grok Imagine word-blocks Marvel "Wolverine").
+The other 19 compounds match on their own name: `AOD-9604`, `BPC-157`, `CJC/Ipamorelin`, `Cagrilintide`, `GHK-Cu`, `GLOW`, `KLOW`, `KPV`, `MOTS-C`, `Melanotan 2`, `NAD+`, `PT-141`, `SS-31`, `Selank`, `Semax`, `Sermorelin`, `TB-500`, `Tesamorelin`, `Wolverine`. Typing `Wolverine` still selects those rows; the vial **print** on `video_prompt` is `BPC-157/TB-500` (Grok Imagine word-blocks Marvel "Wolverine"). Typing `Melanotan 2` selects the Melanotan 2 rows.
 
 When several rows share a compound the least-used one wins (`times_used`, then `last_used_at`, then `rank`).
 

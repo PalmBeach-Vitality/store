@@ -209,17 +209,17 @@ KPV
     resolution.
 
 ------------------------------------------------------------------------------------------------
-Melanotan II
+Melanotan 2
 ------------------------------------------------------------------------------------------------
   rows: 5
-  print name     'Melanotan II'
+  print name     'Melanotan 2'
   dose bar       '10MG'
   concentration  '1mg/mL'
   footer         '10mL Sterile Multi-Dose Vial'
   vial body      '10ml'
   copy:
     Label: white face with a single brick red #A63334 double-helix DNA emblem centred at the top,
-    compound name in large bold brick red #A63334 reading exactly 'Melanotan II', brick red #A63334
+    compound name in large bold brick red #A63334 reading exactly 'Melanotan 2', brick red #A63334
     dose bar with white text reading exactly '10MG', black concentration line under the bar reading
     exactly '1mg/mL', small black footer reading exactly '10mL Sterile Multi-Dose Vial'. All four
     strings are printed once, spelled exactly as written, in crisp sharp type that is fully legible
@@ -920,7 +920,6 @@ CROSS-CHECKS
 ================================================================================================
 
 Same product, different printed name by form factor:
-  vial prints 'Melanotan II' (selector 'Melanotan II')  but pen prints 'Melanotan 2' (selector 'Melanotan 2')
   vial prints 'Semax' (selector 'Semax')  but pen prints 'SEMAX' (selector 'SEMAX')
 
   These are the same product wearing two different names. Pick one spelling per product
