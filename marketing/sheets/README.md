@@ -16,7 +16,7 @@
 | `8-lab-items-500.csv` | `8-lab-items-500` (legacy subject list — not auto-synced from wellness rebuild) |
 | `9-lab-item-creations-500.csv` | `9-lab-item-creations-500` (**production** Grok still/video — 500 rows; includes `still_edit_prompt`, models, motion; no Creatomate `mod_*`) |
 | `13-chem-breakdown-54.csv` | `13-chem-breakdown-54` (**new** chemical-breakdown molecule vids — same columns as Sheet 9; 27 compounds × 2 ranks = 54 rows; `shot_family` / `camera_move` / `surface` / `lighting` / `color_grade` each have **6** staggered values; do not mix with vial Sheet 9) |
-| `15-caption-science-27.csv` | `15-caption-science-27` (**new** IG caption science briefs — 27 compounds; input for `peptide_caption_gen`) |
+| `15-caption-science-27.csv` | `15-caption-science-27` (IG caption science briefs — **33** compounds; tab name kept; input for `peptide_caption_gen`) |
 | `16-ig-captions.csv` | `16-ig-captions` (**new** caption archive — header + appended vial/pen captions after verify) |
 | `14-pen-creations-150.csv` | `14-pen-creations-150` (**pens-only** catalog vids — Sheet 9 columns; **168 rows / 30 compounds**; **exactly 1 pen / 1 compound**; white clip-cap ON, white ridged dial, **crimson red on every row**, `3ml Pen` badge, no dose on the label; do not mix with Sheet 9 mixed lab rows or Sheet 13 molecules) |
 | `17-seedance-25-t2v.csv` | `17-seedance-25-t2v` (**palmbeach-rx.com** Seedance 2.5 hyperrealistic T2V — 27 compounds; prompt / model / duration / resolution / aspect / audio / bitrate / wait on the sheet; native max 30s. Separate vitality.store T2V sheet is deferred.) |

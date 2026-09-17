@@ -92,7 +92,7 @@ See `n8n-peptide-pen-vid-gen.md`. Import JSON: `marketing/workflows/peptide_pen_
 
 ### E — `peptide_caption_gen` (separate)
 
-IG captions for **vial** and **pen** (2 each). Manual compound name → Sheet 15 science brief → FDA verify → email. Not Creatomate. Not vid gen. Linear — no Switch/IF.
+IG captions for **vial** and **pen** (2 each). Manual compound name → Sheet 15 science brief (**33** compounds) → FDA verify → email. Not Creatomate. Not vid gen. Linear — no Switch/IF.
 
 ```text
 enter_compound → get_caption_science → match_compound
