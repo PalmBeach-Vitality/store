@@ -336,8 +336,8 @@ STALE = [
 
 # Stacks label differently; one sentence covers all three without naming a dose.
 STACK_NOTE = (
-    " STACK SKUs: a stack pen prints its own catalog wording — Wolverine prints its contents "
-    "'BPC-157/TB-500', KLOW and GLOW print the stack name, and the dose line carries every part "
+    " STACK SKUs: a stack pen prints its own catalog wording — the BPC-157/TB-500 stack prints "
+    "that contents name, KLOW and GLOW print the stack name, and the dose line carries every part "
     "of the dose. GLOW alone sets its name in white with a red glow instead of solid red."
 )
 

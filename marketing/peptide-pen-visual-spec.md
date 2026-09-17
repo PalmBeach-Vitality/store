@@ -90,8 +90,10 @@ nowhere else.
 Three rows on the sheet are stacks, and their labels are not built like the
 single-compound pens:
 
-- **Wolverine** prints its **contents**, not its name: `BPC-157/TB-500`, dose
-  line `10/10mg 3ml`.
+- **Wolverine** (`choose_compound` / `compound_name` stay **Wolverine**) prints
+  its **contents**, not its name: `BPC-157/TB-500`, dose line `10/10mg 3ml`.
+  Grok-facing prompt fields must not say Wolverine (Grok Imagine word-blocks
+  Marvel IP; lab exec 2251).
 - **KLOW** prints the stack name in a brighter red (#C21613) over a stronger
   blue helix (#528CB8), dose line `10/10/10/50mg 3ml Pen`.
 - **GLOW** prints its name in **white letters with a red glow halo**, not solid
