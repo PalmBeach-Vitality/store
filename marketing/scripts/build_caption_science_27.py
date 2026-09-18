@@ -3,6 +3,10 @@
 
 Does NOT modify Sheet 9 / 10 / 13 / 14.
 Output: marketing/sheets/15-caption-science-27.csv
+
+Tab name stays 15-caption-science-27. Row count is EXPECTED (33): the original
+27 plus the six Sep 14 catalog SKUs (Dihexa, Epithalon, Glutathione, IGF-LR3,
+Ipamorelin, Kisspeptin).
 """
 
 from __future__ import annotations
@@ -117,6 +121,18 @@ COMPOUNDS = [
         "ResearchPeptides",
     ),
     (
+        "P-DIHEXA-001",
+        "Dihexa",
+        "dihexa,dihexia,dihexa pen",
+        "a synthetic angiotensin-IV analogue used in synaptic-pathway laboratory research",
+        "hippocampal-receptor signaling and cognitive-circuit mapping in controlled lab models",
+        "how a compact peptide analogue is cataloged for receptor-level study, not outcome claims",
+        "PeptideResearch",
+        "ReceptorScience",
+        "CellularScience",
+        "ResearchPeptides",
+    ),
+    (
         "P-DSIP-001",
         "DSIP",
         "delta sleep,dsip peptide",
@@ -126,6 +142,18 @@ COMPOUNDS = [
         "NeuropeptideScience",
         "PeptideResearch",
         "CellularScience",
+        "ResearchPeptides",
+    ),
+    (
+        "P-EPITH-001",
+        "Epithalon",
+        "epithalon,epitalon,epithalamin",
+        "a synthetic pineal tetrapeptide used in telomere-pathway laboratory catalogs",
+        "pineal-peptide signaling and cellular-aging models in controlled research systems",
+        "how a four-residue sequence is documented for longevity-pathway mapping without outcome claims",
+        "PeptideResearch",
+        "CellularScience",
+        "PeptideScience",
         "ResearchPeptides",
     ),
     (
@@ -153,6 +181,18 @@ COMPOUNDS = [
         "ResearchPeptides",
     ),
     (
+        "P-GSH-001",
+        "Glutathione",
+        "glutathione,gsh,glutathione pen",
+        "a tripeptide thiol used in redox-buffer and cellular-defense laboratory studies",
+        "glutathione cycling and oxidative-stress pathway mapping in research models",
+        "how a gamma-glutamyl tripeptide is cataloged for molecular redox work, not results",
+        "CellularScience",
+        "MetabolicResearch",
+        "PeptideResearch",
+        "ResearchPeptides",
+    ),
+    (
         "P-KLOW-001",
         "KLOW",
         "klow blend,klow peptide",
@@ -162,6 +202,42 @@ COMPOUNDS = [
         "PeptideResearch",
         "CellularScience",
         "CopperPeptide",
+        "ResearchPeptides",
+    ),
+    (
+        "P-IGFLR3-001",
+        "IGF-LR3",
+        "igf-lr3,igflr3,igf lr3,long r3 igf",
+        "a long-acting IGF-1 analogue used in growth-factor signaling laboratory work",
+        "IGF-receptor engagement and mitogenic-pathway mapping in controlled models",
+        "how an extended analogue is cataloged for receptor-duration research",
+        "PeptideResearch",
+        "ReceptorScience",
+        "CellularScience",
+        "ResearchPeptides",
+    ),
+    (
+        "P-IPA-001",
+        "Ipamorelin",
+        "ipamorelin-solo,ipa-solo,ipamorelin vial,ipamorelin pen",
+        "a selective ghrelin-mimetic pentapeptide used in growth-axis laboratory studies",
+        "GHS-R1a signaling mapped as a solo secretagogue, apart from CJC blend catalogs",
+        "how a compact growth-axis peptide is documented at the receptor level without stack claims",
+        "EndocrineLab",
+        "PeptideResearch",
+        "CellularScience",
+        "ResearchPeptides",
+    ),
+    (
+        "P-KISS-001",
+        "Kisspeptin",
+        "kisspeptin,kisspeptin-10,metastin",
+        "a KISS1-derived research peptide used in reproductive-axis laboratory models",
+        "GPR54/KISS1R signaling and hypothalamic-pathway mapping in controlled systems",
+        "how a ligand peptide is cataloged for endocrine-axis research, not outcome claims",
+        "EndocrineLab",
+        "PeptideResearch",
+        "CellularScience",
         "ResearchPeptides",
     ),
     (
@@ -335,7 +411,7 @@ COMPOUNDS = [
     (
         "P-TESAIPA-001",
         "Tesamorelin/Ipamorelin",
-        "tesa ipa,tesamorelin ipamorelin",
+        "tesa ipa,tesamorelin ipamorelin,tesa-ipa",
         "a stacked GHRH analogue plus ghrelin-mimetic pair for endocrine research catalogs",
         "combined growth-axis signaling studied as one laboratory complex",
         "how two complementary peptides are listed together for pathway comparison",
@@ -360,10 +436,10 @@ COMPOUNDS = [
 
 
 def main() -> None:
-    if len(COMPOUNDS) != 27:
-        raise SystemExit(f"expected 27 compounds, got {len(COMPOUNDS)}")
+    if len(COMPOUNDS) != 33:
+        raise SystemExit(f"expected 33 compounds, got {len(COMPOUNDS)}")
     names = [c[1] for c in COMPOUNDS]
-    if len(set(names)) != 27:
+    if len(set(names)) != 33:
         raise SystemExit("duplicate compound names")
 
     rows = []
