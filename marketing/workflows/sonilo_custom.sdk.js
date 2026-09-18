@@ -77,28 +77,63 @@ const prepStart = node({
   },
 });
 
+const downloadSource = node({
+  type: 'n8n-nodes-base.httpRequest',
+  version: 4.5,
+  config: {
+    name: 'download_source_mp4',
+    position: [820, 304],
+    parameters: {
+      method: 'GET',
+      url: expr('{{ $json.video_url }}'),
+      authentication: 'none',
+      options: {
+        timeout: 180000,
+        redirect: { redirect: { followRedirects: true, maxRedirects: 5 } },
+        response: { response: { responseFormat: 'file', outputPropertyName: 'data' } },
+      },
+    },
+    output: [{ mimeType: 'video/mp4' }],
+  },
+});
+
+const forceMp4 = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'force_mp4_binary',
+    position: [940, 304],
+    parameters: {
+      mode: 'runOnceForAllItems',
+      language: 'javaScript',
+      jsCode: "var item = $input.first();\nif (!item || !item.binary || !item.binary.data) {\n  throw new Error('force_mp4_binary: download_source_mp4 returned no file. Check video_url on the sheet.');\n}\nvar bin = item.binary.data;\nvar sz = Number(bin.fileSize || 0);\nif (sz && sz < 100000) {\n  throw new Error('force_mp4_binary: downloaded file is ' + sz + ' bytes — not an MP4. Host probably returned HTML.');\n}\nbin.fileName = 'source.mp4';\nbin.mimeType = 'video/mp4';\nbin.fileExtension = 'mp4';\nreturn [item];\n",
+    },
+    output: [{ mimeType: 'video/mp4' }],
+  },
+});
+
 const soniloStart = node({
   type: 'n8n-nodes-base.httpRequest',
   version: 4.5,
   config: {
     name: 'sonilo_start',
-    position: [940, 304],
+    position: [1060, 304],
     credentials: { httpTemplatedCustomAuth: newCredential('Simplified Custom Auth account') },
     parameters: {
       method: 'POST',
-      url: expr("{{ $json.audio_endpoint }}"),
+      url: expr("{{ $('prep_sonilo_start').item.json.audio_endpoint }}"),
       authentication: 'genericCredentialType',
       genericAuthType: 'httpTemplatedCustomAuth',
       sendBody: true,
       contentType: 'multipart-form-data',
       bodyParameters: {
         parameters: [
-          { name: 'video_url', value: expr("{{ $json.video_url }}") },
-          { name: 'music_prompt', value: expr("{{ $json.music_prompt }}") },
-          { name: 'sfx_prompt', value: expr("{{ $json.sfx_prompt }}") },
+          { parameterType: 'formBinaryData', name: 'video', inputDataFieldName: 'data' },
+          { name: 'music_prompt', value: expr("{{ $('prep_sonilo_start').item.json.music_prompt }}") },
+          { name: 'sfx_prompt', value: expr("{{ $('prep_sonilo_start').item.json.sfx_prompt }}") },
         ],
       },
-      options: { timeout: 120000 },
+      options: { timeout: 180000 },
     },
     output: [{ task_id: 'task_123', status: 'processing' }],
   },
@@ -252,6 +287,8 @@ export default workflow('sonilo_custom', 'sonilo_custom')
   .to(getJobs)
   .to(pickJob)
   .to(prepStart)
+  .to(downloadSource)
+  .to(forceMp4)
   .to(soniloStart)
   .to(waitSonilo)
   .to(soniloPoll)

@@ -144,7 +144,8 @@ Reusable Sonilo hop for custom clips. One Google Sheet: paste `video_url`, `musi
 
 ```text
 get_sonilo_jobs → pick_sonilo_job → prep_sonilo_start
-  → sonilo_start → wait_sonilo → sonilo_poll → parse_sonilo
+  → download_source_mp4 → force_mp4_binary → sonilo_start
+  → wait_sonilo → sonilo_poll → parse_sonilo
   → save_sonilo_url → sheets_update_sonilo
 ```
 

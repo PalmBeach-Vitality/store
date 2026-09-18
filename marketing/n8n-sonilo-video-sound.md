@@ -145,6 +145,8 @@ manual_trigger
   → get_sonilo_jobs
   → pick_sonilo_job
   → prep_sonilo_start
+  → download_source_mp4
+  → force_mp4_binary
   → sonilo_start
   → wait_sonilo
   → sonilo_poll
@@ -158,9 +160,13 @@ manual_trigger
 
 **Before → this → After:** `get_sonilo_jobs` → **pick_sonilo_job** → `prep_sonilo_start`
 
-**Before → this → After:** `pick_sonilo_job` → **prep_sonilo_start** → `sonilo_start`
+**Before → this → After:** `pick_sonilo_job` → **prep_sonilo_start** → `download_source_mp4`
 
-**Before → this → After:** `prep_sonilo_start` → **sonilo_start** → `wait_sonilo`
+**Before → this → After:** `prep_sonilo_start` → **download_source_mp4** → `force_mp4_binary`
+
+**Before → this → After:** `download_source_mp4` → **force_mp4_binary** → `sonilo_start`
+
+**Before → this → After:** `force_mp4_binary` → **sonilo_start** → `wait_sonilo`
 
 **Before → this → After:** `sonilo_start` → **wait_sonilo** → `sonilo_poll`
 
@@ -237,7 +243,7 @@ Maps sheet fields only.
 | Method | POST |
 | URL | `={{ $json.audio_endpoint }}` |
 | Auth | generic → templated `Sonilo` |
-| Body | multipart `video_url` / `music_prompt` / `sfx_prompt` from the sheet |
+| Body | multipart `video` (n8n downloads sheet `video_url`) + `music_prompt` / `sfx_prompt` from the sheet |
 
 ### sound — `wait_sonilo`
 
