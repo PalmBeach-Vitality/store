@@ -3,7 +3,7 @@
 **New workflow** — IG captions for **vial** and **pen** (same compound, different copy).  
 **Not** vid gen. **Not** Creatomate overlays. **No Switch / IF.**
 
-**Sheet in:** `15-caption-science-27` (science briefs, 27 compounds)  
+**Sheet in:** `15-caption-science-27` (science briefs, **33** compounds — tab name unchanged)  
 **Sheet out:** `16-ig-captions` (archive after email)  
 **Name the workflow exactly:** `peptide_caption_gen`  
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/4To3g8t7No4XegMj
@@ -41,7 +41,11 @@ manual_trigger
 
 ## After import
 
-Tabs `15-caption-science-27` (27 rows) and `16-ig-captions` are already on the chem workbook. Gmail + Sheets creds are attached.
+Tabs `15-caption-science-27` (33 rows) and `16-ig-captions` are already on the chem workbook. Gmail + Sheets creds are attached.
+
+Sep 14 catalog add: **Dihexa, Epithalon, Glutathione, IGF-LR3, Ipamorelin, Kisspeptin**. Typing `Ipamorelin` matches the **solo** SKU (`ipamorelin-10mg-vial` / `ipamorelin-30mg-pen`). Use `CJC (no DAC)/Ipamorelin` for the blend. `Ipamorelin-Solo` is an alias for the solo row.
+
+`match_compound` PRODUCT_LINKS slugs come from the live shop. Pen-only SKUs still emit vial copy; vial CTA falls back to the pen URL when no vial listing exists.
 
 1. Open `enter_compound` → set `COMPOUND = 'BPC-157'` → Execute.
 2. Check your inbox for 2 vial + 2 pen captions.
@@ -98,7 +102,7 @@ Paste: `marketing/n8n-code-match-compound.js`
 Typo-tolerant match against `compound_name` + `aliases`. Unknown name → throw with closest matches.
 
 **Settings → Execute Once:** **OFF**  
-**Check:** `compound_name`, `input_row_count` = 27, `match_distance` 0 or 1
+**Check:** `compound_name`, `input_row_count` = 33, `match_distance` 0 or 1
 
 ---
 
@@ -177,6 +181,24 @@ Paste: `marketing/n8n-code-prep-caption-email.js`
 | Mapping | — | defineBelow from `prep_caption_email` |
 
 Email already went out if this node fails (missing tab).
+
+---
+
+## Overlay — `overlay_caption_science_new_products` (unpublished)
+
+One-shot Sheet 15 append for the six Sep 14 SKUs. **Not** caption gen. Does not email.
+
+```text
+manual_trigger → read_caption_science → map_new_caption_rows → append_caption_science
+```
+
+**Before → this → After:** `manual_trigger` → **read_caption_science** → `map_new_caption_rows`  
+**Before → this → After:** `read_caption_science` → **map_new_caption_rows** → `append_caption_science`  
+**Before → this → After:** `map_new_caption_rows` → **append_caption_science** → (end)
+
+Do not Publish. Do not run `peptide_caption_gen` from this overlay.
+
+Live write: n8n exec **2266** (2026-09-17T19:17:09Z) appended the six rows. Exec **2267** re-read the tab and stopped because the six names were already present (33 data rows).
 
 ---
 
