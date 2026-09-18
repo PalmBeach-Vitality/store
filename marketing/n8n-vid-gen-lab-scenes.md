@@ -45,6 +45,8 @@ Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient
 
 `fal_kling_generate` pins its own `generate_audio` to `={{ false }}` rather than reading the upstream field, so the mute does not break if prep stops emitting it. Note the expression form: the literal string `false` would be read as truthy. Do not wire audio to a sheet column. Camera and vial motion stay on the sheet — do not rewrite `pull_sheet_row`.
 
+Sheet `video_motion_prompt` starts with CAMERA LOCK (vial planted, camera travels, cap seated, no turntable). Unique camera recipes follow. Do not append that lock in `prep_grok_video_start`.
+
 ---
 
 ## Edit the still — `still_edit_instructions`
