@@ -14,7 +14,7 @@ Measured from that photo (cap top to base / glass body width):
     glass neck : body width       0.66
     cap+collar+neck+shoulder      34% of height
     straight body                 66% of height
-    helix width                   1/4 of the label, 1/4 of the compound name
+    helix width                   1/10 of the label (never more than 1/8)
     helix height                  1.7 x helix width
 
 Cagrilintide 5ml rows are left untouched (29 on lab, 24 on wellness).
@@ -72,10 +72,11 @@ STILL_NEW = (
     "brushed-silver aluminum crimp 92 percent of body width, plain bright blue "
     "plastic flip-off cap ONLY 94 percent of body width (smooth round flip-off — "
     "FORBIDDEN: tabs, wings, pull-tabs, tear-tabs, side flaps, hanging pieces). "
-    "Label: white face with a SMALL dark red double-helix DNA emblem centred at "
-    "the top (one fifth of the label width, 1.7 times as tall as it is wide, a "
-    "compact mark above the compound name; FORBIDDEN: oversized helix, helix as "
-    "wide as the compound name, helix filling the top of the label),"
+    "Label: white face with a TINY dark red double-helix DNA emblem centred at "
+    "the top (only one tenth of the label width, 1.7 times as tall as it is wide, "
+    "a stamp-size mark above the compound name; FORBIDDEN: oversized helix, helix "
+    "wider than one eighth of the label, helix as wide as the compound name, "
+    "helix filling the top of the label),"
 )
 
 VIDEO_PHRASES: list[tuple[str, str]] = [
@@ -114,12 +115,12 @@ VIDEO_PHRASES: list[tuple[str, str]] = [
         "taller than it is wide at a height-to-width ratio of about 7:4, and "
         "about one fifth of the label's width — roughly a quarter as wide as "
         "the compound name beneath it.",
-        "a single SMALL red DNA double-helix mark centred above the compound "
-        "name, only 1.7 times as tall as it is wide, and only one fifth of the "
-        "label's width — a compact mark roughly a quarter as wide as the "
-        "compound name beneath it, never larger. FORBIDDEN: oversized helix, "
-        "helix wider than one quarter of the label, helix as tall as the "
-        "compound name.",
+        "a single TINY red DNA double-helix mark centred above the compound "
+        "name, only 1.7 times as tall as it is wide, and only one tenth of the "
+        "label's width — a stamp-size mark no wider than two letters of the "
+        "compound name, never larger. FORBIDDEN: oversized helix, helix wider "
+        "than one eighth of the label, helix as wide as the compound name, "
+        "helix as tall as the compound name, helix filling the top of the label.",
     ),
     (
         "It is drawn as two broad flat tapering ribbons",
@@ -226,8 +227,8 @@ def qa_wellness(rows: list[dict[str, str]], original: list[dict[str, str]]) -> N
                 raise SystemExit(f"{r['creation_id']}: {f} missing 2.36 lock")
             if "only 1.56 times as tall as it is wide" not in (r.get(f) or ""):
                 raise SystemExit(f"{r['creation_id']}: {f} missing 1.56 lock")
-        if "SMALL red DNA double-helix" not in (r.get(VIDEO_FIELD) or ""):
-            raise SystemExit(f"{r['creation_id']}: video_prompt missing small helix")
+        if "TINY red DNA double-helix" not in (r.get(VIDEO_FIELD) or ""):
+            raise SystemExit(f"{r['creation_id']}: video_prompt missing tiny helix")
 
 
 def qa(rows: list[dict[str, str]], original: list[dict[str, str]]) -> None:
@@ -254,19 +255,19 @@ def qa(rows: list[dict[str, str]], original: list[dict[str, str]]) -> None:
         for needle in (
             "2.36 times the width",
             "1.56 times as tall",
-            "SMALL dark red double-helix",
-            "one fifth of the label width",
+            "TINY dark red double-helix",
+            "one tenth of the label width",
         ):
             still = " ".join(r.get(f) or "" for f in STILL_FIELDS)
             if needle == "2.36 times the width" and needle not in still:
                 raise SystemExit(f"{r['creation_id']}: still fields missing {needle!r}")
-            if needle == "SMALL dark red double-helix" and needle not in still:
-                raise SystemExit(f"{r['creation_id']}: still fields missing small helix")
+            if needle == "TINY dark red double-helix" and needle not in still:
+                raise SystemExit(f"{r['creation_id']}: still fields missing tiny helix")
         vp = r.get(VIDEO_FIELD) or ""
         for needle in (
             "2.36 times the width of the glass body",
             "only 1.56 times as tall as it is wide",
-            "SMALL red DNA double-helix",
+            "TINY red DNA double-helix",
             "top 34% of the vial's height",
             "about 92% of the body width",
             "about 94% of the body width",
