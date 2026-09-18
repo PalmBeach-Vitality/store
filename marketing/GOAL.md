@@ -137,6 +137,19 @@ get_film_stills → pick_sonilo_reel → prep_sonilo_start
 ```
 
 Prompts, host, and endpoint come from Sheet 18. See `n8n-sonilo-video-sound.md`.
+
+### I — `sonilo_custom` (any public MP4)
+
+Reusable Sonilo hop for custom clips. One Google Sheet: paste `video_url`, `music_prompt`, `sfx_prompt`, set `status=Active`. Each Execute scores the least-used Active row and writes `audio_video_url` + `times_used`. Not a new workflow per clip. MOTS-C film stays on `film_sonilo_sound` / Sheet 18.
+
+```text
+get_sonilo_jobs → pick_sonilo_job → prep_sonilo_start
+  → sonilo_start → wait_sonilo → sonilo_poll → parse_sonilo
+  → save_sonilo_url → sheets_update_sonilo
+```
+
+Live sheet: `22-sonilo-custom` (`10J0KA0P7nitt5NLanXEXoPZQ7iRyxVZPoNZXCFD5Hb0`). Keeper `CNrbbAqpQhhYnGb5`. See `n8n-sonilo-video-sound.md`.
+
 ### G — `overlay_film_beach_entry` (one-shot)
 
 Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they were still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `gen_film_beach_stills` generates new keepers from the sheet `still_prompt`. See `n8n-film-001-004-beach-entry.md`.
@@ -192,7 +205,7 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
-- Sonilo music + SFX: `n8n-sonilo-video-sound.md`  
+- Sonilo music + SFX (film + custom sheet): `n8n-sonilo-video-sound.md`  
 
 - FILM-001/004 beach + FILM-020 burn-up: `n8n-film-001-004-beach-entry.md`  
 - 25-clip VACE join + FLF2V bridges: `n8n-vace-clip-join.md`  
