@@ -1,14 +1,21 @@
 # Sonilo video-to-sound (music + SFX)
 
-One call scores the joined ~80s MOTS-C reel: synced sound effects plus a dynamic music bed. No ElevenLabs. No Mirelo-only SFX. No Kling 20s cap. No Creatomate mux.
+One call scores a public MP4: synced sound effects plus a dynamic music bed, muxed into the picture. No ElevenLabs. No Mirelo-only SFX. No Kling 20s cap. No Creatomate mux.
+
+Two keepers, one API:
+
+| Workflow | Sheet | When |
+|---|---|---|
+| **`sonilo_custom`** | `22-sonilo-custom` | Any custom clip. Paste `video_url` + prompts. **Use this.** |
+| `film_sonilo_sound` | Sheet 18 MOTS-C | Joined film reel only |
 
 ```text
-joined MP4 (Sheet 18 join_url or audio_source_url)
+public MP4 (sheet video_url)
   → Sonilo video-to-video-sound
   → muxed MP4 with music + SFX (audio_video_url)
 ```
 
-Subjects stay the film catalog. Every creative field comes from the sheet.
+Every creative field comes from the sheet. Empty cell → throw. Do not invent a prompt.
 
 ---
 
@@ -94,7 +101,86 @@ If a required cell is empty, the hop fails. It does not invent a prompt.
 
 ---
 
+## Custom jobs (`22-sonilo-custom`)
+
+Live sheet: https://docs.google.com/spreadsheets/d/10J0KA0P7nitt5NLanXEXoPZQ7iRyxVZPoNZXCFD5Hb0/edit
+
+Canonical CSV: `marketing/sheets/22-sonilo-custom.csv`.
+
+| Column | Who writes it | Notes |
+|---|---|---|
+| `job_id` | you | `SONILO-001`, `SONILO-002`, … |
+| `title` | you | human label |
+| `video_url` | you | public https MP4 (catbox / litterbox / raw). Drive view links fail. |
+| `music_prompt` | you | exact bed text |
+| `sfx_prompt` | you | exact FX text |
+| `status` | you | `Active` to pick, `Hold` to skip |
+| `times_used` | `sonilo_custom` | increments after a scored take |
+| `last_used_at` | `sonilo_custom` | ISO time of last score |
+| `audio_host` | you | `sonilo` |
+| `sound_type` | you | `music_and_sfx` |
+| `output_mode` | you | `muxed_video` |
+| `audio_endpoint` | you | `https://api.sonilo.com/v1/video-to-video-sound` |
+| `audio_poll_base` | you | `https://api.sonilo.com/v1/tasks` |
+| `sonilo_wait_seconds` | you | seconds between polls |
+| `sonilo_max_polls` | you | stop after this many polls |
+| `ducking` / `preserve_speech` / `keep_original_sound` | you | `false` |
+| `audio_video_url` | `sonilo_custom` | muxed mp4 |
+| `sonilo_task_id` | `sonilo_custom` | async task id |
+
+Add a row (or duplicate SONILO-001), paste the three creative cells, set `status=Active`. Duplicate the operational columns from SONILO-001. One Execute = one least-used Active row.
+
+---
+
 ## Workflows
+
+### `sonilo_custom` (unpublished keeper)
+
+https://stockjohnson.app.n8n.cloud/workflow/CNrbbAqpQhhYnGb5
+
+Reusable. Do not build a new workflow per clip.
+
+```text
+manual_trigger
+  → get_sonilo_jobs
+  → pick_sonilo_job
+  → prep_sonilo_start
+  → download_source_mp4
+  → force_mp4_binary
+  → sonilo_start
+  → wait_sonilo
+  → sonilo_poll
+  → parse_sonilo
+  → if_sonilo_ready
+       true  → save_sonilo_url → sheets_update_sonilo
+       false → wait_sonilo   (loop)
+```
+
+**Before → this → After:** `manual_trigger` → **get_sonilo_jobs** → `pick_sonilo_job`
+
+**Before → this → After:** `get_sonilo_jobs` → **pick_sonilo_job** → `prep_sonilo_start`
+
+**Before → this → After:** `pick_sonilo_job` → **prep_sonilo_start** → `download_source_mp4`
+
+**Before → this → After:** `prep_sonilo_start` → **download_source_mp4** → `force_mp4_binary`
+
+**Before → this → After:** `download_source_mp4` → **force_mp4_binary** → `sonilo_start`
+
+**Before → this → After:** `force_mp4_binary` → **sonilo_start** → `wait_sonilo`
+
+**Before → this → After:** `sonilo_start` → **wait_sonilo** → `sonilo_poll`
+
+**Before → this → After:** `wait_sonilo` → **sonilo_poll** → `parse_sonilo`
+
+**Before → this → After:** `sonilo_poll` → **parse_sonilo** → `if_sonilo_ready`
+
+**Before → this → After:** `parse_sonilo` → **if_sonilo_ready** → `save_sonilo_url` (true) / `wait_sonilo` (false)
+
+**Before → this → After:** `if_sonilo_ready` (true) → **save_sonilo_url** → `sheets_update_sonilo`
+
+**Before → this → After:** `save_sonilo_url` → **sheets_update_sonilo** → (end)
+
+Match `job_id`. Writes `audio_video_url`, `times_used`, `last_used_at`.
 
 ### `overlay_film_sonilo` (unpublished)
 
@@ -157,7 +243,7 @@ Maps sheet fields only.
 | Method | POST |
 | URL | `={{ $json.audio_endpoint }}` |
 | Auth | generic → templated `Sonilo` |
-| Body | multipart `video_url` / `music_prompt` / `sfx_prompt` from the sheet |
+| Body | multipart `video` (n8n downloads sheet `video_url`) + `music_prompt` / `sfx_prompt` from the sheet |
 
 ### sound — `wait_sonilo`
 
