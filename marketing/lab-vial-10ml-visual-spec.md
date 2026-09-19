@@ -11,20 +11,27 @@ H = top of the blue cap down to the glass base.
 | Total height | **2.36 × W** |
 | Straight body height | **1.56 × W** (66% of H) |
 | Cap + collar + neck + shoulder | 34% of H |
-| Blue flip-off cap width | 0.94 × W |
+| Blue cap width | 0.94 × W — **simple uniform** one-piece disc, **no tabs** |
 | Brushed-silver crimp collar width | 0.92 × W |
 | Glass neck width | 0.66 × W |
 | DNA helix width | **one tenth of the label** (never more than one eighth) |
 | DNA helix height | 1.7 × helix width |
 | Helix | tiny stamp-size mark above the name — not a large logo, not scaled to the compound name |
 
-FORBIDDEN on 10ml rows: tall vial, slim vial, test-tube, ampoule, height greater than 2.4 × body width, oversized helix, helix wider than one eighth of the label, helix as wide as the compound name, helix filling the top of the label.
+FORBIDDEN on 10ml rows: tall vial, slim vial, test-tube, ampoule, height greater than 2.4 × body width, oversized helix, helix wider than one eighth of the label, helix as wide as the compound name, helix filling the top of the label, **cap tabs**, wings, pull-tabs, tear-tabs, side flaps.
 
 Apply helix shrink (after the 10ml geometry lock):
 
 ```bash
 python3 marketing/scripts/shrink_10ml_helix.py           # dry run
 python3 marketing/scripts/shrink_10ml_helix.py --write
+```
+
+Apply simple uniform cap (no tabs; after helix):
+
+```bash
+python3 marketing/scripts/lock_simple_blue_cap.py           # dry run
+python3 marketing/scripts/lock_simple_blue_cap.py --write
 ```
 
 Live write, 2026-09-17: unpublished n8n `apply_10ml_vial_spec` (`GqVY0SvZ1iSAFqdC`) wrote 506 lab rows and 577 wellness rows. 5ml Cagrilintide untouched. Archive after. Do not publish. Do not run vid-gen from this workflow.
@@ -49,6 +56,8 @@ python3 marketing/scripts/lock_camera_not_vial.py --write
 ```
 
 Live write, 2026-09-17 (camera moved the vial on exec 2261): unpublished n8n `lock_camera_not_vial` (`IuPO3E9eOz5ebFAY`) exec **2262** wrote `video_motion_prompt` only on 535 lab + 601 wellness rows, including 5ml. CAP LOCK → CAMERA LOCK. Unique camera recipes kept. Pens untouched. TINY helix on `video_prompt` not written. Read-back `verify_lock_camera_not_vial` (`DBoj9PvFC6YDaHPa`) exec **2263**: lab 535/535 CAMERA LOCK leftover 0 unique 535; wellness 601/601 leftover 0 unique 601; LI-016 and PBVita-Lab-207 start with planted-vial CAMERA LOCK. Archive after. Do not publish. Do not run vid-gen from these workflows. Do not re-run I2V until Salvatore sends an authorizing sentence. The accepted still remains `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-1e6c9ce0-b34f-9b25-b514-d5894eb02da3-c1c3d8db.png`.
+
+Live write, 2026-09-18 (landscape still still showed cap tabs): unpublished n8n `lock_simple_blue_cap` (`XT7rcU0iyCU9vWPn`) exec **2270** replaced flip-off cap wording with a simple uniform one-piece blue disc on 535 lab + 601 wellness still/video prompt fields, including 5ml. Tabs forbidden. CAMERA LOCK and TINY helix not written. Read-back `verify_lock_simple_blue_cap` (`cqUy5f8AWqeePD4v`) exec **2271**: lab 535/535 simple uniform leftover flip-off 0; wellness 601/601 leftover 0. Archive after. Do not publish. Do not run vid-gen from these workflows.
 
 Live write, 2026-09-17 (Wolverine print name): unpublished n8n `apply_wolverine_print_name` (`74OyZ0RWA6d9KdIr`) exec **2252** printed `BPC-157/TB-500` on 29 lab + 32 wellness + 5 pen rows. `compound_name` / `choose_compound` stay **Wolverine**. Read-back `verify_wolverine_print_name` (`LnKj6WPzoVFrknxg`) exec **2253**: PBVita-Lab-207 still handle Wolverine, `reading exactly 'BPC-157/TB-500'`. Do not publish. Do not run vid-gen from these workflows.
 
