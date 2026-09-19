@@ -4,7 +4,7 @@
 Grok video already has the still. Motion must stay short and affirmative.
 Do NOT mention flip-off / uncap / pop — I2V treats those as action.
 
-CAP LOCK: solid bright blue cap, seated and frozen. Camera may move; the cap does not.
+CAMERA LOCK: vial planted. Camera travels. Cap stays seated. No turntable.
 """
 
 from __future__ import annotations
@@ -16,11 +16,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CSV = ROOT / "sheets" / "500_Peptide_Wellness_Reel_Scenes.csv"
 
-MAX_MOTION = 700
+MAX_MOTION = 800
 
-CAP_LOCK = (
-    "CAP LOCK: One solid bright blue cap, seated and frozen. "
-    "The cap stays closed. Camera may move; the cap does not."
+CAMERA_LOCK = (
+    "CAMERA LOCK: the vial never moves. It stays planted on its base, "
+    "upright and still. If anything travels, it is the camera, not the bottle. "
+    "Cap stays seated and closed. FORBIDDEN: vial sliding, spinning, rolling, "
+    "floating, or turning like a turntable."
 )
 
 BAD_MOTION = re.compile(
@@ -59,7 +61,7 @@ def build_motion_prompt(row: dict) -> str:
     compound = require(row, "compound_name")
     move = require(row, "camera_move")[:160]
     prompt = (
-        f"{CAP_LOCK} "
+        f"{CAMERA_LOCK} "
         f"Slow cinematic camera: {move}. "
         f"Shot {require(row, 'shot_family')}, "
         f"angle {require(row, 'camera_angle')}, "

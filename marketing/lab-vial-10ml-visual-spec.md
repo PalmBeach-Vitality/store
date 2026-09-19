@@ -14,20 +14,41 @@ H = top of the blue cap down to the glass base.
 | Blue flip-off cap width | 0.94 × W |
 | Brushed-silver crimp collar width | 0.92 × W |
 | Glass neck width | 0.66 × W |
-| DNA helix width | one fifth of the label (~1/4 of the compound name) |
+| DNA helix width | **one tenth of the label** (never more than one eighth) |
 | DNA helix height | 1.7 × helix width |
-| Helix | small compact mark above the name — not a large logo |
+| Helix | tiny stamp-size mark above the name — not a large logo, not scaled to the compound name |
 
-FORBIDDEN on 10ml rows: tall vial, slim vial, test-tube, ampoule, height greater than 2.4 × body width, oversized helix, helix as wide as the compound name, helix filling the top of the label.
+FORBIDDEN on 10ml rows: tall vial, slim vial, test-tube, ampoule, height greater than 2.4 × body width, oversized helix, helix wider than one eighth of the label, helix as wide as the compound name, helix filling the top of the label.
 
-Apply:
+Apply helix shrink (after the 10ml geometry lock):
 
 ```bash
-python3 marketing/scripts/apply_measured_10ml_vial_spec.py           # dry run
-python3 marketing/scripts/apply_measured_10ml_vial_spec.py --write
+python3 marketing/scripts/shrink_10ml_helix.py           # dry run
+python3 marketing/scripts/shrink_10ml_helix.py --write
 ```
 
 Live write, 2026-09-17: unpublished n8n `apply_10ml_vial_spec` (`GqVY0SvZ1iSAFqdC`) wrote 506 lab rows and 577 wellness rows. 5ml Cagrilintide untouched. **Archived 2026-09-17.** Do not publish. Do not run vid-gen from this workflow.
+
+Live write, 2026-09-17 (helix still too big on first LI-016 smoke): unpublished n8n `shrink_10ml_helix` (`Ay6VWEJJQfDNdhCP`) exec **2258** wrote 506 lab + 577 wellness 10ml rows. SMALL / one-fifth / quarter-of-name → TINY / one-tenth / forbid wider than one eighth. 5ml Cagrilintide untouched. Read-back `verify_shrink_10ml_helix` (`ZKqmaffVUEeUJEZR`) exec **2259**: PBVita-Lab-207 and LI-016 have TINY / one tenth, leftover SMALL and one-fifth = false. **Archived 2026-09-17.** Do not publish. Do not run vid-gen from these workflows.
+
+Live smoke, 2026-09-17: landscape `Vid_gen_landscape_scenes -500-peptide-wellness-scenes` (`Kc2HqqjSyiKs87qy`) exec **2260** stopped at `grok_imagine_reel_still`. `choose_compound` `wolverine-vial` → LI-016, print `BPC-157/TB-500`, TINY / one-tenth helix on `video_prompt`. Salvatore accepted still `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-1e6c9ce0-b34f-9b25-b514-d5894eb02da3-c1c3d8db.png`. Helix lock stays. `save_still_url` was not in that run.
+
+I2V of that still (exec **2261**, clip `https://v3b.fal.media/files/b/0aaacccc/utS7Qisl3hW--2a2h1H8O_output.mp4`) moved the vial. CAP LOCK only froze the cap. Camera lock below replaces it. Do not re-run I2V until he sends an authorizing sentence.
+
+## Camera lock — vial planted, camera travels
+
+Salvatore, 2026-09-17: the camera is supposed to move, not the vial. Apply to **both** lab (`C4BkmmISpTMmgnAg`) and landscape (`Kc2HqqjSyiKs87qy`). All 535 lab + 601 wellness `video_motion_prompt` rows, including 5ml. Pens out of scope. Unique `Slow cinematic camera:` recipes stay (wellness orbits stay camera orbits; turntable is forbidden). Do not hardcode this in `prep_grok_video_start`.
+
+```text
+CAMERA LOCK: the vial never moves. It stays planted on its base, upright and still. If anything travels, it is the camera, not the bottle. Cap stays seated and closed. FORBIDDEN: vial sliding, spinning, rolling, floating, or turning like a turntable.
+```
+
+```bash
+python3 marketing/scripts/lock_camera_not_vial.py           # dry run
+python3 marketing/scripts/lock_camera_not_vial.py --write
+```
+
+Live write, 2026-09-17 (camera moved the vial on exec 2261): unpublished n8n `lock_camera_not_vial` (`IuPO3E9eOz5ebFAY`) exec **2262** wrote `video_motion_prompt` only on 535 lab + 601 wellness rows, including 5ml. CAP LOCK → CAMERA LOCK. Unique camera recipes kept. Pens untouched. TINY helix on `video_prompt` not written. Read-back `verify_lock_camera_not_vial` (`DBoj9PvFC6YDaHPa`) exec **2263**: lab 535/535 CAMERA LOCK leftover 0 unique 535; wellness 601/601 leftover 0 unique 601; LI-016 and PBVita-Lab-207 start with planted-vial CAMERA LOCK. **Archived 2026-09-17.** Do not publish. Do not run vid-gen from these workflows. Do not re-run I2V until Salvatore sends an authorizing sentence. The accepted still remains `https://imgen.x.ai/xai-imgen/xai-tmp-imgen-1e6c9ce0-b34f-9b25-b514-d5894eb02da3-c1c3d8db.png`.
 
 Live write, 2026-09-17 (Wolverine print name): unpublished n8n `apply_wolverine_print_name` (`74OyZ0RWA6d9KdIr`) exec **2252** printed `BPC-157/TB-500` on 29 lab + 32 wellness + 5 pen rows. `compound_name` / `choose_compound` stay **Wolverine**. Read-back `verify_wolverine_print_name` (`LnKj6WPzoVFrknxg`) exec **2253**: PBVita-Lab-207 still handle Wolverine, `reading exactly 'BPC-157/TB-500'`. **Archived 2026-09-17.** Do not publish. Do not run vid-gen from these workflows.
 
