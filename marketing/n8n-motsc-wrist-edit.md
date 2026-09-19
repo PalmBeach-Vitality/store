@@ -6,7 +6,7 @@ Do **not** Publish. Test with Execute. Sheets-only: edit prompt comes from Sheet
 
 Live sheet: [18-motsc-film-stills](https://docs.google.com/spreadsheets/d/1ChDI33MVdCwGXcPDBvETRoc5xY8DEgZS3KU5VC09dnU/edit#gid=1628285227)
 
-Factory (unchanged, unpublished): `custom_vid_gen 1.5 -18-motsc-film-stills` `qZ7qU8LVwVXAXyaL`
+Factory (archived 2026-09-17, unused): `custom_vid_gen 1.5 -18-motsc-film-stills` `qZ7qU8LVwVXAXyaL`
 
 ---
 

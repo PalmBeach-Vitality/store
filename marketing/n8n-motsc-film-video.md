@@ -2,7 +2,7 @@
 
 Unpublished. Do **not** Publish. Do **not** mix Creatomate. Do **not** regenerate locked keepers.
 
-**Superseded by the per-beat stack.** Use `n8n-motsc-film-i2v-stack.md` (`film_i2v_seedance` / `film_i2v_kling` / `film_i2v_veo` / `film_i2v_runway`). This Grok 1.5 factory stays in n8n but is unused.
+**Superseded by the per-beat stack.** Use `n8n-motsc-film-i2v-stack.md` (`film_i2v_seedance` / `film_i2v_kling` / `film_i2v_veo` / `film_i2v_runway`). This Grok 1.5 factory is **archived** (2026-09-17). Do not unarchive.
 
 n8n: [`custom_vid_gen 1.5 -18-motsc-film-stills`](https://stockjohnson.app.n8n.cloud/workflow/qZ7qU8LVwVXAXyaL) `qZ7qU8LVwVXAXyaL`
 
