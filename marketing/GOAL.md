@@ -120,7 +120,7 @@ get_film_stills → pick_film_still → fal_i2v_generate
   → save_film_video_url → sheets_update_still
 ```
 
-See `n8n-motsc-film-i2v-stack.md`. Old Grok 1.5 factory stays unpublished and unused.
+See `n8n-motsc-film-i2v-stack.md`. Old Grok 1.5 factory (`custom_vid_gen 1.5 -18-motsc-film-stills` `qZ7qU8LVwVXAXyaL`) is **archived** (unused).
 
 ### F — `sheet_format_as_tables` (one-shot)
 
@@ -176,6 +176,14 @@ get_seedance_scenes → filter Active → pick_seedance_scene
 
 See `n8n-seedance-25-vid-gen.md`. Native fal max is 30s (not 60).  
 Live unpublished: https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH
+
+### J — n8n menu (2026-09-17, keepers 21 after #90)
+
+Archived spent one-shots (not deleted). Live menu is **21** keepers (`search_workflows` count 21), including keeper `sonilo_custom`.
+
+**Archived:** `overlay_caption_science_new_products`, `lock_camera_not_vial` + verify, `shrink_10ml_helix` + verify, `lock_simple_blue_cap` + verify, `apply_melanotan2_rename` + verify, `apply_wolverine_print_name` + verify, `apply_10ml_vial_spec` + verify, `apply_measured_pen_spec` (never executed — recreate from PR #81 if a live Sheet 14 write is authorized), `audit_vidgen_model_video`, `migrate_model_video_to_kling_pro`, `chem_sheet_looks_rebuild`, `overlay_film001_new_still`, unused Grok 1.5 factory `custom_vid_gen 1.5 -18-motsc-film-stills`.
+
+**Kept:** lab / landscape / pen / molecule vid-gen, `peptide_caption_gen`, `fda_compliance_gate`, `sonilo_custom`, active `Vitality.store_lab_notes_list` + `Vitality.store_email_webhook`, unpublished `Vitality.store_newsletter_send`, film I2V stack (`film_i2v_*`, `film_vace_join`, `film_sonilo_sound`, `edit_one_still`, `seedance_25_vid_gen`), `film_creatomate_stitch`, `image_generation_buffer`, `PB_pep_voiceovers`.
 
 ## Shot diversity
 
