@@ -29,3 +29,10 @@ Columns: date · workflow / execution · provider + model · row · start frame 
 | 2026-09-09 | — | — | FILM-001 | — | rewritten still prompt (waist-up, 3/4, eyes on wrist) + 5 s Kling motion prompt, see `human-subjects.md` | — | — | provider → `kling`, framing → waist-up / eyes down, duration → 5 | **pending** — log the result here |
 
 | 2026-09-09 | `film_i2v_veo` 2123 | fal `fal-ai/veo3.1/image-to-video` 1080p 6s | FILM-001 take 2 ship-behind | eyes down, waist-up, ship in bg | `6-second clip, camera locked waist-up... locks eyes... Silent.` | — | — | overlay take 2 + 6s hold | **passed** https://v3b.fal.media/files/b/0aa9c102/BTdrbOasUrxOCxjMUSMK7_46b293be0a6344d4be47b460d3b82c18.mp4 |
+
+## Audio / Sonilo
+
+| Date | Exec | Provider | Row | Frame | Prompt sent (abridged) | Error | Kind | What changed | Result |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-09-19 | `sonilo_custom` 2296 | Sonilo `video-to-video-sound` | SONILO-002 MOTS-C part 2 take 1 | Drive `1EY9din38fsGSXpmSjm0QvqswNh4kpI0x` 60.6 MB, atmospheric descent, no people in V1 prompts | music: High-velocity cinematic sci-fi action score… no vocals. sfx: arrowhead spacecraft cutting through upper atmosphere… warm orange glow… quiet vacuum around the twin moons. | — | — | lexicon: no crash/war/fight/laser; camera/audio only | **passed** task `64b84622-91bc-46e5-b35e-8620605a0ef7` muxed mp4 |
+| 2026-09-19 | `sonilo_custom` 2298 | Sonilo `video-to-video-sound` | SONILO-003 MOTS-C part 2 take 2 | same source; later beats include astronaut exit, alien look, vial handoff (Sal beat sheet) | music: Sci-fi action score for a high-speed planetary descent… wondrous lift as the pilot meets the alien… vial handoff… calm beach close, no vocals. sfx: high-speed atmospheric descent… lands on the beach… hatch and footsteps… alien hand to human hand… empty beach. | — | — | human gate: audio scoring not Veo/I2V so face rule N/A; lexicon clean; one take | **passed** task `2ed79005-ad66-4f0d-941f-808457df093d` muxed mp4 |
