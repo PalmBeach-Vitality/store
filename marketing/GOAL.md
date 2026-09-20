@@ -137,6 +137,20 @@ get_film_stills → pick_sonilo_reel → prep_sonilo_start
 ```
 
 Prompts, host, and endpoint come from Sheet 18. See `n8n-sonilo-video-sound.md`.
+
+### I — `sonilo_custom` (any public MP4)
+
+Reusable Sonilo hop for custom clips. One Google Sheet: paste `video_url`, `music_prompt`, `sfx_prompt`, set `status=Active`. Each Execute scores the least-used Active row and writes `audio_video_url` + `times_used`. Not a new workflow per clip. MOTS-C film stays on `film_sonilo_sound` / Sheet 18.
+
+```text
+get_sonilo_jobs → pick_sonilo_job → prep_sonilo_start
+  → download_source_mp4 → force_mp4_binary → sonilo_start
+  → wait_sonilo → sonilo_poll → parse_sonilo
+  → save_sonilo_url → sheets_update_sonilo
+```
+
+Live sheet: `22-sonilo-custom` (`10J0KA0P7nitt5NLanXEXoPZQ7iRyxVZPoNZXCFD5Hb0`). Keeper `CNrbbAqpQhhYnGb5`. See `n8n-sonilo-video-sound.md`.
+
 ### G — `overlay_film_beach_entry` (one-shot)
 
 Puts **FILM-001** / **FILM-004** on the FILM-014 alien-galaxy beach (they were still gray studio) and rewrites **FILM-020** as space → high-speed atmospheric burn-up. Then `gen_film_beach_stills` generates new keepers from the sheet `still_prompt`. See `n8n-film-001-004-beach-entry.md`.
@@ -163,13 +177,13 @@ get_seedance_scenes → filter Active → pick_seedance_scene
 See `n8n-seedance-25-vid-gen.md`. Native fal max is 30s (not 60).  
 Live unpublished: https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH
 
-### I — n8n menu (2026-09-17)
+### J — n8n menu (2026-09-17, keepers 21 after #90)
 
-Archived spent one-shots (not deleted). Menu is 20 keepers.
+Archived spent one-shots (not deleted). Live menu is **21** keepers (`search_workflows` count 21), including keeper `sonilo_custom`.
 
-**Archived:** `overlay_caption_science_new_products`, `lock_camera_not_vial` + verify, `shrink_10ml_helix` + verify, `apply_melanotan2_rename` + verify, `apply_wolverine_print_name` + verify, `apply_10ml_vial_spec` + verify, `apply_measured_pen_spec` (never executed — recreate from PR #81 if a live Sheet 14 write is authorized), `audit_vidgen_model_video`, `migrate_model_video_to_kling_pro`, `chem_sheet_looks_rebuild`, `overlay_film001_new_still`, unused Grok 1.5 factory `custom_vid_gen 1.5 -18-motsc-film-stills`.
+**Archived:** `overlay_caption_science_new_products`, `lock_camera_not_vial` + verify, `shrink_10ml_helix` + verify, `lock_simple_blue_cap` + verify, `apply_melanotan2_rename` + verify, `apply_wolverine_print_name` + verify, `apply_10ml_vial_spec` + verify, `apply_measured_pen_spec` (never executed — recreate from PR #81 if a live Sheet 14 write is authorized), `audit_vidgen_model_video`, `migrate_model_video_to_kling_pro`, `chem_sheet_looks_rebuild`, `overlay_film001_new_still`, unused Grok 1.5 factory `custom_vid_gen 1.5 -18-motsc-film-stills`.
 
-**Kept:** lab / landscape / pen / molecule vid-gen, `peptide_caption_gen`, `fda_compliance_gate`, active `Vitality.store_lab_notes_list` + `Vitality.store_email_webhook`, unpublished `Vitality.store_newsletter_send`, film I2V stack (`film_i2v_*`, `film_vace_join`, `film_sonilo_sound`, `edit_one_still`, `seedance_25_vid_gen`), `film_creatomate_stitch`, `image_generation_buffer`, `PB_pep_voiceovers`.
+**Kept:** lab / landscape / pen / molecule vid-gen, `peptide_caption_gen`, `fda_compliance_gate`, `sonilo_custom`, active `Vitality.store_lab_notes_list` + `Vitality.store_email_webhook`, unpublished `Vitality.store_newsletter_send`, film I2V stack (`film_i2v_*`, `film_vace_join`, `film_sonilo_sound`, `edit_one_still`, `seedance_25_vid_gen`), `film_creatomate_stitch`, `image_generation_buffer`, `PB_pep_voiceovers`.
 
 ## Shot diversity
 
@@ -200,7 +214,7 @@ See `n8n-camera-diversity-plan.md`.
 - Lab items: `n8n-lab-items-500.md`  
 - Creatomate package (WF B): `n8n-creatomate-package-workflow.md`  
 - Sheets writeback: `n8n-sheets-update-creation.md`  
-- Sonilo music + SFX: `n8n-sonilo-video-sound.md`  
+- Sonilo music + SFX (film + custom sheet): `n8n-sonilo-video-sound.md`  
 
 - FILM-001/004 beach + FILM-020 burn-up: `n8n-film-001-004-beach-entry.md`  
 - 25-clip VACE join + FLF2V bridges: `n8n-vace-clip-join.md`  
