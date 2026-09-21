@@ -32,7 +32,9 @@ Do **not** keep trying to make From `info@`. Do **not** Publish until you ask.
 
 `LN-003` (Sept 11 issue — FDA warning letters + NCT07803250) was sent on Sep 8, 2026. The row is `sent`. Do not re-send it.
 
-`LN-004` (Sept 14 issue — quiet week + GHK-Cu research pen) was sent on Sep 14, 2026. The row is `sent`. Do not re-send it. Do not Publish the send workflow until you ask.
+`LN-004` (Sept 14 issue — quiet week + GHK-Cu research pen) was sent on Sep 14, 2026. The row is `sent`. Do not re-send it.
+
+`LN-005` (Sept 21 issue — Ohio inspections, BPC-157 demand notes, compounded GLP-1 crisis) is the current Figma. Copy is from [Weekly Research Update · September 21, 2026](https://www.figma.com/design/p9xRXPzisANMpE7FZp7Bit/Weekly-Newsletter?node-id=51-2). Do not invent extra copy. Do not Publish the send workflow until you ask.
 
 ## Where you write the newsletter
 
@@ -40,7 +42,7 @@ You do **not** paste a finished HTML email into n8n or Gmail. You fill **one row
 
 Format in the cells: **plain text**. New paragraph = **Alt+Enter** inside the cell. Do not paste `<html>`. Links belong in the `link_*_url` columns, not inside the body.
 
-`LN-004` is the Sept 14 issue (sent Sep 14). Duplicate that row for later weeks; do not invent copy if you have a new Figma.
+`LN-005` is the Sept 21 issue (Figma frame 51:2). Duplicate that row for later weeks; do not invent copy if you have a new Figma.
 
 ## Campaign sheet fields
 
