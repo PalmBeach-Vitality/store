@@ -90,6 +90,8 @@ get_pen_creations → pick_pen_creation
 
 See `n8n-peptide-pen-vid-gen.md`. Import JSON: `marketing/workflows/peptide_pen_vid_gen.json`.
 
+**Grok still prompt is frozen.** `grok_imagine_pen_still` sends Sheet 14 `video_prompt` only (live `peptide_pen_vid_gen` exec **2305**: Kisspeptin / `PBVita-Pen-181`, model `grok-imagine-image-2.0`). That is the crimson-red `#DC143C` / matte white / `FORBIDDEN: orange anywhere` lock already on the tab. Do not rewrite those cells. Do not overlay a second pen lock. The measured-catalog rewrite on PR #81 is invalid.
+
 ### E — `peptide_caption_gen` (separate)
 
 IG captions for **vial** and **pen** (2 each). Manual compound name → Sheet 15 science brief (**33** compounds) → FDA verify → email. Not Creatomate. Not vid gen. Linear — no Switch/IF.
@@ -181,7 +183,7 @@ Live unpublished: https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH
 
 Archived spent one-shots (not deleted). Live menu is **21** keepers (`search_workflows` count 21), including keeper `sonilo_custom`.
 
-**Archived:** `overlay_caption_science_new_products`, `lock_camera_not_vial` + verify, `shrink_10ml_helix` + verify, `lock_simple_blue_cap` + verify, `apply_melanotan2_rename` + verify, `apply_wolverine_print_name` + verify, `apply_10ml_vial_spec` + verify, `apply_measured_pen_spec` (never executed — recreate from PR #81 if a live Sheet 14 write is authorized), `audit_vidgen_model_video`, `migrate_model_video_to_kling_pro`, `chem_sheet_looks_rebuild`, `overlay_film001_new_still`, unused Grok 1.5 factory `custom_vid_gen 1.5 -18-motsc-film-stills`.
+**Archived:** `overlay_caption_science_new_products`, `lock_camera_not_vial` + verify, `shrink_10ml_helix` + verify, `lock_simple_blue_cap` + verify, `apply_melanotan2_rename` + verify, `apply_wolverine_print_name` + verify, `apply_10ml_vial_spec` + verify, `apply_measured_pen_spec` (never executed — **do not recreate**; live Sheet 14 `video_prompt` is the Grok Imagine 2.0 still prompt), `audit_vidgen_model_video`, `migrate_model_video_to_kling_pro`, `chem_sheet_looks_rebuild`, `overlay_film001_new_still`, unused Grok 1.5 factory `custom_vid_gen 1.5 -18-motsc-film-stills`.
 
 **Kept:** lab / landscape / pen / molecule vid-gen, `peptide_caption_gen`, `fda_compliance_gate`, `sonilo_custom`, active `Vitality.store_lab_notes_list` + `Vitality.store_email_webhook`, unpublished `Vitality.store_newsletter_send`, film I2V stack (`film_i2v_*`, `film_vace_join`, `film_sonilo_sound`, `edit_one_still`, `seedance_25_vid_gen`), `film_creatomate_stitch`, `image_generation_buffer`, `PB_pep_voiceovers`.
 
