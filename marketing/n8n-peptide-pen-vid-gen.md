@@ -8,10 +8,10 @@
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB  
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
-**Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
-Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`).
+**Canonical Grok still prompt (frozen).** `grok_imagine_pen_still` POSTs `prompt: $json.video_prompt` to `https://api.x.ai/v1/images/generations` with `model: $json.model_still` (`grok-imagine-image-2.0`). Last live hit: exec **2305** (`PBVita-Pen-181` / Kisspeptin). Keep those Sheet 14 `video_prompt` cells byte-for-byte. Do not overlay a second lock (the measured-catalog rewrite on PR #81 is invalid). `lab_item` / `material_detail` / `hero_style` / `still_edit_prompt` are not sent on the live skip-edit path. I2V still uses `video_motion_prompt` → fal Kling; that column is unchanged too.
 
-**Pen hardware (mandatory):** white plastic body, white cap + pocket clip ON, small rectangular barrel window, bright orange ridged dial. Label: bright **blue** DNA helix, **orange** compound name, **orange** badge `3ml pen`. Not a glass vial. Not brushed silver. Not maroon vial branding.
+**Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
+Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml Pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`). Hardware, ink, and FORBIDDEN clauses live on Sheet 14 `video_prompt` — copy that cell, do not invent a second spec here.
 
 **fx:** **ON** = Expression · **OFF** = Fixed
 
