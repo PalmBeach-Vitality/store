@@ -20,7 +20,7 @@ define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
  * @return string
  */
 function pbv_default_announcement() {
-    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on orders over $200!';
+    return 'New products are live, and we’ve lowered prices across the catalog. Heads up - high demand means a 2–3 day shipping backlog. Free shipping on orders over $200!';
 }
 
 require_once get_template_directory() . '/inc/product-research.php';
