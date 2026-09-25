@@ -247,8 +247,8 @@ VIALS = {
     302: ("Tesamorelin", "30mg", "3mg/ml", "10ml Sterile Multi-Dose Vial", 10),
     303: ("BPC-157/TB-500", "10mg/10mg", "1mg/ml / 1mg/ml", "10mL Sterile Multi-Dose Vial", 10),
     821: ("Retatrutide", "20mg", "10 mg/mL", "2ml Sterile Multi-Use Vial", 2),
-    822: ("Retatrutide", "30mg", "15 mg/mL", "2ml Sterile Multi-Use Vial", 2),
-    823: ("Retatrutide", "50mg", "16.67 mg/mL", "3ml Sterile Multi-Use Vial", 3),
+    822: ("Retatrutide", "30mg", "10 mg/mL", "3ml Sterile Multi-Use Vial", 3),
+    823: ("Retatrutide", "50mg", "10 mg/mL", "5ml Sterile Multi-Use Vial", 5),
     824: ("Tirzepatide", "50mg", "10 mg/mL", "5ml Sterile Multi-Use Vial", 5),
     825: ("KPV", "10mg", "1mg/ml", "10mL Sterile Multi-Dose Vial", 10),
     826: ("Ipamorelin", "10mg", "1mg/ml", "10mL Sterile Multi-Dose Vial", 10),
@@ -381,7 +381,7 @@ INK = {"name": (87, 1, 1), "dose": (253, 253, 253), "conc": (4, 4, 4), "foot": (
 
 # ---------------- physical volume classes -----------------------------------------
 # (body diameter mm, total height mm, crimp-cap diameter mm) - typical crimp-top serum vials
-VOL = {10: (24.0, 50.0, 20.0), 5: (22.0, 40.0, 20.0), 3: (17.0, 38.0, 13.0), 2: (16.0, 35.0, 13.0)}
+VOL = {10: (24.0, 50.0, 20.0), 5: (18.37, 44.0, 14.0), 3: (17.0, 38.0, 13.0), 2: (16.0, 35.0, 13.0)}
 CANVAS = (1152, 1728); BOTTOM = 1472; TOP10 = 168; CX = 576
 PX_PER_MM = (BOTTOM - TOP10) / VOL[10][1]           # 26.08 px/mm on the output canvas
 SS = 2                                               # supersampling factor
