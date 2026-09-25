@@ -9,10 +9,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.71');
+define('PBV_THEME_VERSION', '2.10.72');
 define('PBV_SEED_VERSION', '2.5.3');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
-define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
+define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
 
 /**
  * Default top announcement bar copy (no discount promo).
@@ -20,7 +20,7 @@ define('PBV_ANNOUNCE_FIX_VERSION', '2.10.32');
  * @return string
  */
 function pbv_default_announcement() {
-    return 'Notice: During the ongoing FDA compounding review, certain peptides may experience temporary supply delays. We appreciate your patience as we continue providing research-grade compounds with full documentation. Free shipping on research orders over $250!';
+    return 'New products are live, and we’ve lowered prices across the catalog. Heads up - high demand means a 2–3 day shipping backlog. Free shipping on orders over $200!';
 }
 
 require_once get_template_directory() . '/inc/product-research.php';
@@ -1377,7 +1377,7 @@ function pbv_policy_shipping_html() {
 <p>At Palm Beach Vitality, we want your experience to be as smooth and stress-free as possible. All orders are carefully packaged and fully insured for transit.</p>
 
 <h3>Cold Pack Shipping</h3>
-<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout. <strong>Free shipping on research orders over $250!</strong></p>
+<p>To protect product integrity, every order ships via <strong>Next-Day Air Cold Pack Shipping</strong> in a temperature-controlled package that includes an insulated cooler and dry ice. A flat rate of <strong>$35.00</strong> applies at checkout. <strong>Free shipping on orders over $200!</strong></p>
 
 <h3>Shipping &amp; Delivery</h3>
 <p>Most orders ship within 1–2 business days via next-day air cold pack service. You will receive a tracking number via email once your order has shipped.</p>
@@ -1521,7 +1521,7 @@ add_action('init', 'pbv_fix_primary_menu_once', 40);
 add_action('woocommerce_init', 'pbv_fix_primary_menu_once');
 
 /**
- * One-time: refresh announcement bar with free-shipping notice after "documentation".
+ * One-time: refresh announcement bar with free-shipping notice ($200 threshold).
  */
 function pbv_fix_announcement_once() {
     if (get_option('pbv_announce_fix_version') === PBV_ANNOUNCE_FIX_VERSION) {
@@ -1841,7 +1841,7 @@ function pbv_save_checkout_policy_acceptance($order) {
 add_action('woocommerce_checkout_create_order', 'pbv_save_checkout_policy_acceptance', 20);
 
 function pbv_free_shipping_threshold() {
-    return 250.0;
+    return 200.0;
 }
 
 /**
@@ -1871,7 +1871,7 @@ function pbv_qualifies_for_free_shipping($package = null) {
 }
 
 /**
- * Cold-pack shipping cost: $35, or $0 when subtotal is $250+.
+ * Cold-pack shipping cost: $35, or $0 when subtotal is $200+.
  *
  * @param array|null $package Optional WooCommerce shipping package.
  * @return float
@@ -1894,7 +1894,7 @@ function pbv_cold_pack_shipping_label($package = null) {
 }
 
 /**
- * Replace available shipping rates with cold-pack rate ($35, or free over $250!).
+ * Replace available shipping rates with cold-pack rate ($35, or free over $200!).
  *
  * @param array $rates   Package rates.
  * @param array $package Package data.
@@ -2000,12 +2000,12 @@ function pbv_checkout_shipping_note() {
     echo '<p class="pbv-checkout-shipping-note">';
     if (pbv_qualifies_for_free_shipping()) {
         echo esc_html__(
-            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice. Your research order qualifies for FREE shipping (orders over $250!).',
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice. Your research order qualifies for FREE shipping (orders over $200!).',
             'palmbeach-vitality'
         );
     } else {
         echo esc_html__(
-            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00. Free shipping on research orders over $250!',
+            'All orders ship via Next-Day Air Cold Pack Shipping in a temperature-controlled package with an insulated cooler and dry ice to preserve product integrity. Flat rate: $35.00. Free shipping on orders over $200!',
             'palmbeach-vitality'
         );
     }
