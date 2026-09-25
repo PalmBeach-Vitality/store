@@ -9,8 +9,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.72');
-define('PBV_SEED_VERSION', '2.5.3');
+define('PBV_THEME_VERSION', '2.10.73');
+define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
 
@@ -1334,7 +1334,7 @@ function pbv_policy_privacy_html() {
 <p>We may update this Privacy Policy from time to time, including to reflect changes to our practices or for other operational, legal, or regulatory reasons. We will post the revised Privacy Policy on this website, update the "Last updated" date and provide notice as required by applicable law.</p>
 
 <h3>Contact</h3>
-<p>Should you have any questions about our privacy practices or this Privacy Policy, or if you would like to exercise any of the rights available to you, please call <a href="tel:+15612916304">+1 561-291-6304</a> or email us at <a href="mailto:palmbeachpeptides@gmail.com">palmbeachpeptides@gmail.com</a>.</p>
+<p>Should you have any questions about our privacy practices or this Privacy Policy, or if you would like to exercise any of the rights available to you, email us at <a href="mailto:info@palmbeach-vitality.com">info@palmbeach-vitality.com</a>.</p>
 HTML;
 }
 
@@ -1367,8 +1367,7 @@ function pbv_policy_tos_html() {
 <h3>8. Changes to Terms</h3>
 <p>We reserve the right to update or modify these Terms of Service at any time. Any changes will be effective immediately upon posting on this page. Your continued use of the website after changes are posted constitutes your acceptance of the updated terms.</p>
 <p>By using this website and making a purchase, you acknowledge that you have read, understood, and agree to these Terms of Service.</p>
-<p>Questions about the Terms of Service should be sent to us at <a href="mailto:Sales@palmbeach-vitality.com">Sales@palmbeach-vitality.com</a>.</p>
-<p>Sal Johnson<br><a href="mailto:Sales@palmbeach-vitality.com">Sales@palmbeach-vitality.com</a><br><a href="tel:+15612919304">(561) 291-9304</a></p>
+<p>Questions about the Terms of Service should be sent to us at <a href="mailto:info@palmbeach-vitality.com">info@palmbeach-vitality.com</a>.</p>
 HTML;
 }
 
