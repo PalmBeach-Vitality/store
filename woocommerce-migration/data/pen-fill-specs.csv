@@ -1,0 +1,53 @@
+store_id,product_name_live,total_mg,fill_ml,conc_mg_per_ml,label_text,source
+123,KLOW Pen,10/10/10/50 (blend),3,3.333/3.333/3.333/16.667,10/10/10/50mg 3ml Pen,protocol app
+125,MOTS-C 20mg Pen,20,3,6.667,20mg 3ml,protocol app
+129,PT-141 Pen,10,3,3.333,10mg 3ml,protocol app
+131,Semax Pen,20,3,6.667,20mg 3ml,protocol app
+133,Selank Pen,20,3,6.667,20mg 3ml,protocol app
+135,Sermorelin Pen,10,3,3.333,10mg 3ml,protocol app
+137,TA-1 Pen,10,3,3.333,10mg 3ml,protocol app
+139,Tesamorelin 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+141,Tesamorelin 30mg Pen,30,3,10,30mg 3ml,protocol app
+143,Tesamorelin/Ipamorelin Pen,12/3 Tesamorelin/Ipamorelin (15 total),3,4/1,12/3mg 3ml Pen,protocol app
+145,Wolverine Pen,10/10 BPC-157/TB-500 (20 total),3,3.333/3.333,10/10mg 3ml,protocol app
+147,CJC/Ipamorelin Pen,10/10 CJC/Ipamorelin (20 total),3,3.333/3.333,10/10mg 3ml,protocol app
+149,DSIP Pen,5,3,1.667,5mg 3ml,protocol app
+151,GHK-Cu Pen,50,3,16.667,50mg 3ml,protocol app
+153,5-Amino-1MQ Pen,50,3,16.667,50mg 3ml,protocol app
+155,GLOW Pen,10/10/50 (blend),3,3.333/3.333/16.667,10/10/50mg 3ml Pen,protocol app
+157,SS-31 Pen,50,3,16.667,50mg 3ml,protocol app
+159,KPV Pen,10,3,3.333,10mg 3ml,protocol app
+169,Semaglutide 1.5mg Pen,1.5,0.6,2.5,1.5mg 0.6ml pen,protocol app
+171,Semaglutide 3.5mg Pen,3.5,0.7,5,3.5mg 0.7ml pen,protocol app
+173,Semaglutide 5.5mg Pen,5.5,1.1,5,5.5mg 1.1ml pen,protocol app
+175,Semaglutide 7.5mg Pen,7.5,1.5,5,7.5mg 1.5ml pen,protocol app
+177,Semaglutide 10mg Pen,10,2,5,10mg 2ml pen,protocol app
+179,Semaglutide 15mg Pen,15,3,5,15mg 3ml pen,protocol app
+181,Tirzepatide 10mg Pen,10,0.5,20,10mg 0.5ml pen,protocol app
+183,Tirzepatide 20mg Pen,20,1,20,20mg 1ml pen,protocol app
+185,Tirzepatide 30mg Pen,30,1.5,20,30mg 1.5ml pen,protocol app
+187,Tirzepatide 40mg Pen,40,2,20,40mg 2ml pen,protocol app
+191,Tirzepatide 60mg Pen,60,3,20,60mg 3ml pen,protocol app
+195,Tirzepatide 50mg Pen,50,2.5,20,50mg 2.5ml pen,protocol app
+197,Retatrutide 8mg Pen,8,0.4,20,8mg 0.4ml pen,protocol app
+199,Retatrutide 16mg Pen,16,0.8,20,16mg 0.8ml pen,protocol app
+201,Retatrutide 24mg Pen,24,1.2,20,24mg 1.2ml pen,protocol app
+203,Retatrutide 32mg Pen,32,1.6,20,32mg 1.6ml pen,protocol app
+204,Retatrutide 40mg Pen,40,2,20,40mg 2ml pen,protocol app
+208,NAD+ Pen 500mg,500,3,166.667,500mg 3ml,label
+614,BPC-157 20mg Pen,20,3,6.667,20mg 3ml,protocol app
+828,Retatrutide 48mg Pen,48,2.4,20,48mg 2.4ml pen,protocol app
+829,Cagrilintide 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+830,BPC-157 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+831,TB-500 10mg Pen,10,3,3.333,10mg 3ml,label
+832,NAD+ 1000mg Pen,1000,3,333.333,1000mg 3ml,protocol app
+833,NAD+ 1600mg Pen,1600,3,533.333,1600mg 3ml,protocol app
+834,Epithalon 60mg Pen,60,3,20,60mg 3ml,protocol app
+835,CJC-1295 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+836,Ipamorelin 30mg Pen,30,3,10,30mg 3ml,protocol app
+837,IGF-LR3 1mg Pen,1,3,0.333,1mg 3ml,protocol app
+838,Kisspeptin 5mg Pen,5,3,1.667,5mg 3ml,protocol app
+839,Dihexa 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+840,Melanotan II 10mg Pen,10,3,3.333,10mg 3ml,protocol app
+841,Glutathione 600mg Pen,600,3,200,600mg 3ml,protocol app
+842,MOTS-C 40mg Pen,40,3,13.333,40mg 3ml,protocol app
