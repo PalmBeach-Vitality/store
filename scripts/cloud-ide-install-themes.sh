@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Idempotent: install popular Cloud IDE themes from Open VSX into cursor-server.
+# Idempotent: install popular Cloud IDE themes from Open VSX into cursor-server
+# and apply GitHub Dark Default user settings.
 set -euo pipefail
 EXT_DIR="${HOME}/.cursor-server/extensions"
 mkdir -p "$EXT_DIR" /tmp/cloud-ide-themes
@@ -53,4 +54,39 @@ PY
 
 install_one GitHub github-vscode-theme 6.3.5
 install_one zhuangtongfa material-theme 3.20.2
+
+mkdir -p "${HOME}/.cursor-server/data/User" "${HOME}/.config/Cursor/User"
+python3 - <<'PY'
+import json, os
+settings = {
+  "workbench.colorTheme": "GitHub Dark Default",
+  "workbench.iconTheme": "vs-seti",
+  "editor.fontSize": 14,
+  "editor.lineHeight": 22,
+  "editor.fontFamily": "JetBrains Mono, Cascadia Code, Fira Code, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontLigatures": True,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.smoothScrolling": True,
+  "editor.minimap.enabled": False,
+  "editor.bracketPairColorization.enabled": True,
+  "editor.guides.bracketPairs": True,
+  "workbench.list.smoothScrolling": True,
+  "workbench.tree.indent": 16,
+  "terminal.integrated.fontSize": 13,
+  "terminal.integrated.smoothScrolling": True,
+  "window.autoDetectColorScheme": False,
+  "workbench.startupEditor": "none",
+}
+for p in [
+  os.path.expanduser("~/.cursor-server/data/User/settings.json"),
+  os.path.expanduser("~/.config/Cursor/User/settings.json"),
+]:
+  os.makedirs(os.path.dirname(p), exist_ok=True)
+  with open(p, "w") as f:
+    json.dump(settings, f, indent=2)
+    f.write("\n")
+print("settings applied")
+PY
+
 echo "cloud-ide themes ready"
