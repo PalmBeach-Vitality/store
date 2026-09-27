@@ -1,5 +1,5 @@
 {
-  "brand": "Palm Beach Peptides",
+  "brand": "Palm Beach Vitality",
   "domain": "www.palmbeach-vitality.store",
   "disclaimer": "All products intended for research purposes only. Not for human consumption. Not evaluated by the FDA.",
   "note": "Prices intentionally blank — replace with live Shopify export values before WooCommerce import. SKUs are provisional.",
@@ -135,7 +135,7 @@
     {
       "slug": "kpv",
       "name": "KPV",
-      "subtitle": "α-MSH Fragment",
+      "subtitle": "\u03b1-MSH Fragment",
       "category": "Immune",
       "purity": "99.9%",
       "description": "Anti-inflammatory and gut barrier research peptide.",

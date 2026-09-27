@@ -36,7 +36,7 @@ Premium American-made peptides for researchers, clinics, and B2B brands.
 - Clean white cards
 
 ## Purpose
-1. **Static brand / content reference** for Palm Beach Peptides (HTML pages in this repo).
+1. **Static brand / content reference** for Palm Beach Vitality (HTML pages in this repo).
 2. **Shopify → WooCommerce migration kit** in [`woocommerce-migration/`](woocommerce-migration/PLAN.md) — plan, checklist, product CSV, redirects, and a WordPress theme.
 3. **Emergency failover** — GitHub Pages standby if the commerce host is down (domain normally should point at WooCommerce after cutover, not this repo).
 
@@ -76,4 +76,4 @@ All pages are fully linked and mobile-responsive. No build step required (uses T
 - Update contact email / phone when ready
 - Expand research library articles as content is written
 
-Built for Salvatore / Palm Beach Peptides project.
+Built for Salvatore / Palm Beach Vitality project.
