@@ -13,7 +13,7 @@
             <span class="site-brand__mark" aria-hidden="true">PB</span>
             <span>
               <div class="site-brand__name" style="color:#fff">Palm Beach</div>
-              <div class="site-brand__tag">Peptides</div>
+              <div class="site-brand__tag">Vitality</div>
             </span>
           </a>
           <p style="margin-top:1rem">Precision. Purity. Palm Beach Made. Premium American-made peptides for researchers, clinics, and B2B brands.</p>
@@ -54,7 +54,7 @@
       </div>
 
       <div class="site-footer__legal">
-        <p>&copy; <?php echo esc_html(gmdate('Y')); ?> Palm Beach Peptides. All rights reserved.</p>
+        <p>&copy; <?php echo esc_html(gmdate('Y')); ?> Palm Beach Vitality. All rights reserved.</p>
         <p>All products are intended for research purposes only. Not for human consumption. Not evaluated by the FDA.</p>
       </div>
     </div>

@@ -11,7 +11,7 @@ get_header();
 <section class="pb-hero">
   <div class="pb-container pb-hero__inner">
     <p class="pb-hero__tagline">Precision. Purity. Palm Beach Made.</p>
-    <h1 class="pb-hero__brand">Palm Beach Peptides</h1>
+    <h1 class="pb-hero__brand">Palm Beach Vitality</h1>
     <p class="pb-hero__text">Pharmacy-grade research peptides synthesized domestically, independently verified, and shipped with full documentation.</p>
     <div class="pb-hero__actions">
       <a class="btn btn-primary" href="<?php echo esc_url(home_url('/shop/')); ?>">Browse Catalog</a>
