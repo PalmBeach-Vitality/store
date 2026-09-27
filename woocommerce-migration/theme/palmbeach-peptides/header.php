@@ -28,7 +28,7 @@
           <span class="site-brand__mark" aria-hidden="true">PB</span>
           <span>
             <div class="site-brand__name">Palm Beach</div>
-            <div class="site-brand__tag">Peptides</div>
+            <div class="site-brand__tag">Vitality</div>
           </span>
         <?php endif; ?>
       </a>

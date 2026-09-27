@@ -1,6 +1,6 @@
 <?php
 /**
- * Palm Beach Peptides theme functions.
+ * Palm Beach Vitality theme functions.
  *
  * @package PalmBeachPeptides
  */
