@@ -1,5 +1,5 @@
 # Shopify → WooCommerce Migration Plan
-**Palm Beach Peptides / palmbeach-vitality.store**
+**Palm Beach Vitality / palmbeach-vitality.store**
 
 This folder is the migration kit for moving the live Shopify store onto WordPress + WooCommerce while preserving the Palm Beach brand built in this repo.
 
