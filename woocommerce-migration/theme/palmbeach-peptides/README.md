@@ -1,6 +1,6 @@
-# Palm Beach Peptides — WordPress Theme
+# Palm Beach Vitality — WordPress Theme
 
-WooCommerce-ready theme matching the Palm Beach Peptides brand (navy / teal / sand).
+WooCommerce-ready theme matching the Palm Beach Vitality brand (navy / teal / sand).
 
 ## Install
 
