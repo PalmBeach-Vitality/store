@@ -1,5 +1,7 @@
 # Palm Beach Vitality (Store)
 
+**HARD RULE — his name is Sal.** Address him as Sal in every reply. Never call him "user", "the user", or "User". No exceptions. Sal, 2026-09-28.
+
 **New to this work? Read [`HANDOVER.md`](HANDOVER.md) first.** Current state of the vid-gen
 workflows and sheets, the PR stack, how to write to a live Google Sheet, the compound selector
 footgun, open decisions waiting on Salvatore, and the mistakes already made.
@@ -28,7 +30,7 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 ### Scope (do not cross)
 - **This agent / this repo is ONLY for `www.palmbeach-vitality.store`** (`PalmBeach-Vitality/store`), including the WooCommerce theme under `woocommerce-migration/`.
 - **Do NOT edit, push to, or deploy `www.palmbeach-vitality.com`.** That site lives in a separate repo (`PalmBeach-Vitality/pep`) and is handled by a different agent.
-- If a request is clearly for vitality.com / the `pep` repo, refuse and tell the user to use the .com agent instead. Do not apply .com product-landing or marketing-page work here by mistake.
+- If a request is clearly for vitality.com / the `pep` repo, refuse and tell Sal to use the .com agent instead. Do not apply .com product-landing or marketing-page work here by mistake.
 
 ### Repo map
 `store` and `pep` stay **separate**. They look similar. They are two sites, two domains, two agents.
