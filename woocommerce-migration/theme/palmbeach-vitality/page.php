@@ -15,7 +15,12 @@ while (have_posts()) :
   </header>
   <main id="primary" class="site-main pbv-section">
     <div class="pbv-container entry-content">
-      <?php the_content(); ?>
+      <?php
+      if (is_page(array('about', 'faq'))) {
+          echo pbv_official_sites_html();
+      }
+      the_content();
+      ?>
     </div>
   </main>
     <?php

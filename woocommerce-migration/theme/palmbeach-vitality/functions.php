@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.73');
+define('PBV_THEME_VERSION', '2.10.74');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -1421,6 +1421,35 @@ function pbv_policy_legal_notice_html() {
 <p>You must be 18 years of age or older to purchase. By placing an order you confirm you meet this requirement and are purchasing solely for research purposes.</p>
 <p>If you do not agree to these terms in full, do not purchase or use any products from this website.</p>
 HTML;
+}
+
+/**
+ * Official-sites copy. Names the two Vitality properties and the unaffiliated Peptides sites.
+ *
+ * @return string
+ */
+function pbv_official_sites_copy_html() {
+    $com = 'https://www.palmbeach-vitality.com/';
+    $store = 'https://palmbeach-vitality.store/';
+
+    return '<p>Palm Beach Vitality operates only these properties:</p>'
+        . '<ul>'
+        . '<li><a href="' . esc_url($com) . '">palmbeach-vitality.com</a> — company, wholesale, research library</li>'
+        . '<li><a href="' . esc_url($store) . '">palmbeach-vitality.store</a> — catalog and checkout</li>'
+        . '</ul>'
+        . '<p>We are not Palm Beach Peptides. We are not affiliated with palmbeachpeptides.com, palmbeachpeptides.store, or any site that uses that name. Orders, COAs, and support exist only on the two Vitality domains above. If a site asks you to pay somewhere else, it is not us.</p>';
+}
+
+/**
+ * Official-sites block for the About and FAQ pages.
+ *
+ * @return string
+ */
+function pbv_official_sites_html() {
+    return '<section class="pbv-official-sites" id="official-sites">'
+        . '<h2>Official sites</h2>'
+        . pbv_official_sites_copy_html()
+        . '</section>';
 }
 
 /**

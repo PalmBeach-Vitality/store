@@ -145,6 +145,13 @@ if (function_exists('pbv_render_homepage_products')) {
     <h2 class="pbv-faq__title">Frequently asked questions</h2>
 
     <div class="pbv-faq__list">
+      <details class="pbv-faq__item" id="official-sites">
+        <summary>Official sites<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="pbv-faq__answer">
+          <?php echo pbv_official_sites_copy_html(); ?>
+        </div>
+      </details>
+
       <details class="pbv-faq__item">
         <summary>Are your peptides intended for human consumption or medical use?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
         <div class="pbv-faq__answer">No. All products are intended strictly for research purposes only. They are not for human or veterinary use, not evaluated by the FDA, and not sold as drugs, supplements, or cosmetics for consumption.</div>
