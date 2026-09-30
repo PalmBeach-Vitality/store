@@ -151,7 +151,7 @@ TILES = [
         "theme_filename": "home-weight-loss.jpg",
         "overlay_eyebrow": "VIALS",
         "overlay_title": "Metabolic",
-        "input_reference_urls": DRIVE.format(file_id="1eYc8L15WhxmRmQM9gzWp-vs0e9sdpcQg"),
+        "input_reference_urls": DRIVE.format(file_id="1ves9nnxz-5WSWvd_ek6Wf1Rm7sFzzNI2"),
         "still_prompt": " ".join(
             [
                 PAVILION_LAB,
