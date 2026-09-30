@@ -503,39 +503,183 @@ function pbv_wp_sitemaps_exclude_pages($args) {
 add_filter('wp_sitemaps_posts_query_args', 'pbv_wp_sitemaps_exclude_pages', 10, 1);
 
 /**
- * Build OfferShippingDetails from the live shipping policy (flat $35 cold-pack, US).
+ * Flat cold-pack rate Google accepts on offers.shippingDetails.shippingRate.
+ *
+ * @return array<string,string>
+ */
+function pbv_schema_shipping_rate_amount() {
+    return array(
+        '@type'    => 'MonetaryAmount',
+        'value'    => '35.00',
+        'currency' => 'USD',
+    );
+}
+
+/**
+ * US destination used on the product shipping block.
+ *
+ * @return array<string,string>
+ */
+function pbv_schema_shipping_destination() {
+    return array(
+        '@type'          => 'DefinedRegion',
+        'addressCountry' => 'US',
+    );
+}
+
+/**
+ * Cold-pack handling and transit already published on the product schema.
  *
  * @return array<string,mixed>
  */
-function pbv_schema_shipping_details() {
+function pbv_schema_shipping_delivery_time() {
     return array(
-        '@type'               => 'OfferShippingDetails',
-        'shippingRate'        => array(
-            '@type'    => 'MonetaryAmount',
-            'value'    => '35.00',
-            'currency' => 'USD',
+        '@type'        => 'ShippingDeliveryTime',
+        'handlingTime' => array(
+            '@type'    => 'QuantitativeValue',
+            'minValue' => 1,
+            'maxValue' => 2,
+            'unitCode' => 'DAY',
         ),
-        'shippingDestination' => array(
-            '@type'          => 'DefinedRegion',
-            'addressCountry' => 'US',
+        'transitTime'  => array(
+            '@type'    => 'QuantitativeValue',
+            'minValue' => 1,
+            'maxValue' => 1,
+            'unitCode' => 'DAY',
         ),
-        'deliveryTime'        => array(
-            '@type'        => 'ShippingDeliveryTime',
-            'handlingTime' => array(
-                '@type'    => 'QuantitativeValue',
-                'minValue' => 1,
-                'maxValue' => 2,
-                'unitCode' => 'DAY',
+    );
+}
+
+/**
+ * Free cold-pack shipping at $250, in the ShippingConditions shape Google documents.
+ * Does not change checkout, zones, or the $250 threshold.
+ *
+ * @param array<string,mixed> $destination DefinedRegion.
+ * @return array<string,mixed>
+ */
+function pbv_schema_cold_pack_shipping_service($destination) {
+    return array(
+        '@type'              => 'ShippingService',
+        'name'               => 'Cold-pack Next-Day Air',
+        'description'        => 'Cold-pack Next-Day Air; free shipping on orders over $250',
+        'fulfillmentType'    => 'FulfillmentTypeDelivery',
+        'shippingConditions' => array(
+            array(
+                '@type'               => 'ShippingConditions',
+                'shippingDestination' => $destination,
+                'orderValue'          => array(
+                    '@type'    => 'MonetaryAmount',
+                    'minValue' => 0,
+                    'maxValue' => 249.99,
+                    'currency' => 'USD',
+                ),
+                'shippingRate'        => pbv_schema_shipping_rate_amount(),
             ),
-            'transitTime'  => array(
-                '@type'    => 'QuantitativeValue',
-                'minValue' => 1,
-                'maxValue' => 1,
-                'unitCode' => 'DAY',
+            array(
+                '@type'               => 'ShippingConditions',
+                'shippingDestination' => $destination,
+                'orderValue'          => array(
+                    '@type'    => 'MonetaryAmount',
+                    'minValue' => 250,
+                    'currency' => 'USD',
+                ),
+                'shippingRate'        => array(
+                    '@type'    => 'MonetaryAmount',
+                    'value'    => '0',
+                    'currency' => 'USD',
+                ),
             ),
         ),
     );
 }
+
+/**
+ * One OfferShippingDetails block: plain MonetaryAmount rate, plus the $250 threshold.
+ *
+ * @param array<string,mixed> $existing Existing OfferShippingDetails, if any.
+ * @return array<string,mixed>
+ */
+function pbv_schema_shipping_details($existing = array()) {
+    $destination = pbv_schema_shipping_destination();
+    if (!empty($existing['shippingDestination']) && is_array($existing['shippingDestination'])) {
+        $destination = $existing['shippingDestination'];
+    }
+
+    $delivery = pbv_schema_shipping_delivery_time();
+    if (!empty($existing['deliveryTime']) && is_array($existing['deliveryTime'])) {
+        $delivery = $existing['deliveryTime'];
+    }
+
+    return array(
+        '@type'               => 'OfferShippingDetails',
+        'shippingRate'        => pbv_schema_shipping_rate_amount(),
+        'shippingDestination' => $destination,
+        'deliveryTime'        => $delivery,
+        'hasShippingService'  => pbv_schema_cold_pack_shipping_service($destination),
+    );
+}
+
+/**
+ * Collapse shippingDetails to one block. A list keeps the first block's destination and delivery time.
+ *
+ * @param mixed $value Existing shippingDetails value.
+ * @return array<string,mixed>
+ */
+function pbv_schema_single_shipping_details($value) {
+    $existing = $value;
+    if (is_array($value) && isset($value[0]) && is_array($value[0]) && array_key_exists(0, $value)) {
+        $existing = $value[0];
+    }
+    if (!is_array($existing)) {
+        $existing = array();
+    }
+    return pbv_schema_shipping_details($existing);
+}
+
+/**
+ * Replace every shippingDetails value in a schema tree with the single valid block.
+ *
+ * @param mixed $data Schema fragment.
+ * @return mixed
+ */
+function pbv_schema_fix_shipping_tree($data) {
+    if (!is_array($data)) {
+        return $data;
+    }
+
+    foreach ($data as $key => $value) {
+        if ($key === 'shippingDetails') {
+            $data[$key] = pbv_schema_single_shipping_details($value);
+            continue;
+        }
+        if (is_array($value)) {
+            $data[$key] = pbv_schema_fix_shipping_tree($value);
+        }
+    }
+
+    return $data;
+}
+
+/**
+ * Rank Math prints offers.shippingDetails.shippingRate as ShippingRateSettings.
+ * Google merchant listings require that field to be a MonetaryAmount.
+ *
+ * @param mixed $data   Rank Math JSON-LD pieces.
+ * @param mixed $jsonld Unused Rank Math JsonLD instance.
+ * @return mixed
+ */
+function pbv_rank_math_fix_shipping_rate($data, $jsonld = null) {
+    unset($jsonld);
+    if (!is_array($data)) {
+        return $data;
+    }
+    if (!function_exists('is_product') || !is_product()) {
+        return $data;
+    }
+    return pbv_schema_fix_shipping_tree($data);
+}
+add_filter('rank_math/json_ld', 'pbv_rank_math_fix_shipping_rate', PHP_INT_MAX, 2);
+add_filter('rank_math/snippet/rich_snippet_product_entity', 'pbv_schema_fix_shipping_tree', PHP_INT_MAX);
 
 /**
  * Build MerchantReturnPolicy — all sales final (matches /terms/#refund).
@@ -677,6 +821,7 @@ add_filter('woocommerce_structured_data_product_offer', 'pbv_enhance_product_off
 
 /**
  * Fallback: if another plugin printed Product JSON-LD without our fields, patch in footer.
+ * Shipping is owned by pbv_rank_math_fix_shipping_rate(), not this script.
  * Only runs on single products; does not alter visible HTML.
  */
 function pbv_patch_product_jsonld_footer() {
@@ -690,10 +835,9 @@ function pbv_patch_product_jsonld_footer() {
 
     $desc = pbv_schema_product_description($product);
     $payload = array(
-        'validFrom'                 => gmdate('Y-m-d'),
-        'shippingDetails'           => pbv_schema_shipping_details(),
-        'hasMerchantReturnPolicy'   => pbv_schema_return_policy(),
-        'description'               => $desc,
+        'validFrom'               => gmdate('Y-m-d'),
+        'hasMerchantReturnPolicy' => pbv_schema_return_policy(),
+        'description'             => $desc,
     );
     ?>
 <script id="pbv-product-schema-patch">
@@ -715,7 +859,6 @@ function pbv_patch_product_jsonld_footer() {
         arr.forEach(function(offer){
           if (!offer || typeof offer !== 'object') return;
           if (!offer.validFrom) offer.validFrom = patch.validFrom;
-          offer.shippingDetails = patch.shippingDetails;
           offer.hasMerchantReturnPolicy = patch.hasMerchantReturnPolicy;
           if (Array.isArray(offer.priceSpecification)) {
             offer.priceSpecification.forEach(function(spec){
