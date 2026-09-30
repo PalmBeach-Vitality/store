@@ -34,6 +34,16 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 - **Do NOT edit, push to, or deploy `www.palmbeach-vitality.com`.** That site lives in a separate repo (`PalmBeach-Vitality/pep`) and is handled by a different agent.
 - If a request is clearly for vitality.com / the `pep` repo, refuse and tell Sal to use the .com agent instead. Do not apply .com product-landing or marketing-page work here by mistake.
 
+### Front end — vitality.store owns the live Woo theme (2026-09-30)
+
+SEO desk, Webby, and Supreme Leader: the live storefront is the WooCommerce theme at `woocommerce-migration/theme/palmbeach-vitality/`. The static HTML in the repo root is not the live homepage. Do not open or merge another PR that edits that theme folder while the front-end PR below is open. Rebase onto it after it lands, or leave the theme alone.
+
+- **PR:** [#107](https://github.com/PalmBeach-Vitality/store/pull/107) — branch `cursor/front-page-lab-video-3232` — theme **2.10.81**
+- **Desktop:** a 2.35:1 cinema frame. The short copy sits on the left of the film. The longer paragraphs sit on the right. No logo on that film yet.
+- **Mobile:** the portrait hero stays. The white oval button is gone. The words “Shop collections” are the link.
+- **Not live yet.** The installed theme is still **2.10.70**. Grok installs 2.10.81. Keep 2.10.70 installed so Sal can switch back. Do not choose “Replace current” unless the current theme folder is duplicated first. Do not use the WordPress theme editor.
+- **Shipping JSON-LD** is already on `main` as #105. Do not redo it on a second theme branch.
+
 ### Repo map
 `store` and `pep` stay **separate**. They look similar. They are two sites, two domains, two agents.
 

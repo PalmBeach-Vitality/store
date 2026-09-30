@@ -62,9 +62,10 @@ $hero_mobile = pbv_hero_mobile_image_url();
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 .pbv-hero-photo__cta{margin:.85rem 0 .45rem;}
 .pbv-hero-photo__shop{
-  display:inline-flex!important;align-items:center;justify-content:center;
-  padding:.55rem 1.15rem;border-radius:999px;background:#fff;color:#0b1220!important;
-  font-size:.82rem;font-weight:700;text-decoration:none!important;text-shadow:none;
+  display:inline!important;padding:0;border-radius:0;background:transparent;
+  color:#7ec8ff!important;font-size:inherit;font-weight:600;
+  text-decoration:underline!important;text-underline-offset:.12em;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);
 }
 @media (min-width:750px){
   .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 0 .75rem!important;}
@@ -132,6 +133,57 @@ $hero_mobile = pbv_hero_mobile_image_url();
 </section>
 
 <?php
+$pbv_lab_video  = pbv_asset_path('assets/video/beachside-lab.mp4');
+$pbv_lab_poster = pbv_asset_path('assets/video/beachside-lab-poster.jpg');
+if (file_exists($pbv_lab_video)) :
+    $pbv_lab_video_uri  = pbv_asset_uri('assets/video/beachside-lab.mp4');
+    $pbv_lab_poster_uri = file_exists($pbv_lab_poster) ? pbv_asset_uri('assets/video/beachside-lab-poster.jpg') : '';
+    ?>
+<section class="pbv-desk" aria-label="<?php esc_attr_e('Homepage', 'palmbeach-vitality'); ?>">
+  <div class="pbv-desk__stage"<?php echo $pbv_lab_poster_uri ? ' style="background-image:url(' . esc_url($pbv_lab_poster_uri) . ')"' : ''; ?>>
+    <video
+      class="pbv-desk__video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      <?php echo $pbv_lab_poster_uri ? ' poster="' . esc_url($pbv_lab_poster_uri) . '"' : ''; ?>
+      data-src="<?php echo esc_url($pbv_lab_video_uri); ?>"
+    ></video>
+    <div class="pbv-desk__wash" aria-hidden="true"></div>
+    <div class="pbv-desk__overlay">
+      <div class="pbv-desk__copy">
+        <p class="pbv-desk__kicker"><?php esc_html_e('Laboratory research', 'palmbeach-vitality'); ?></p>
+        <h1 class="pbv-desk__title">Palm Beach Vitality</h1>
+        <p class="pbv-desk__subtitle">Premium Peptides. Precision Crafted.</p>
+        <p class="pbv-desk__lead">U.S.-made research peptides, documented with HPLC and mass spectrometry, shipped cold-pack across all 50 states.</p>
+        <p class="pbv-desk__cta">
+          <a class="pbv-desk__shop" href="#shop-collections"><?php esc_html_e('Shop collections', 'palmbeach-vitality'); ?></a>
+        </p>
+        <p class="pbv-desk__wholesale">Wholesale buyers: <a href="https://www.palmbeach-vitality.com">palmbeach-vitality.com</a></p>
+      </div>
+      <div class="pbv-desk__story">
+        <p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>
+        <p>No shortcuts. No compromises. Just the finest peptides available — made right here in America with cutting-edge science and uncompromising quality standards.</p>
+        <p class="pbv-desk__welcome">Welcome to Palm Beach Vitality. Where premium meets performance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var video = document.querySelector('.pbv-desk__video');
+  if (!video) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var src = video.getAttribute('data-src');
+  if (!src) return;
+  video.src = src;
+  video.play().catch(function () {});
+})();
+</script>
+    <?php
+endif;
+
 if (function_exists('pbv_render_homepage_collections')) {
     pbv_render_homepage_collections();
 }

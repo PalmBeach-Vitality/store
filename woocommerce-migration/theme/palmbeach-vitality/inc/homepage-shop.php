@@ -18,28 +18,36 @@ if (!defined('ABSPATH')) {
 function pbv_homepage_collections() {
     return array(
         array(
-            'slug'  => 'peptides',
-            'title' => 'Peptides',
-            'alt'   => 'Vials — Peptides',
-            'image' => 'home-peptides.jpg',
+            'slug'   => 'peptides',
+            'title'  => 'Peptides',
+            'alt'    => 'Vials — Peptides',
+            'image'  => 'home-peptides.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
-            'slug'  => 'peptide-pens',
-            'title' => 'Peptide Pens',
-            'alt'   => 'Pens — Peptides',
-            'image' => 'home-peptide-pens.jpg',
+            'slug'   => 'peptide-pens',
+            'title'  => 'Peptide Pens',
+            'alt'    => 'Pens — Peptides',
+            'image'  => 'home-peptide-pens.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
-            'slug'  => 'weight-loss',
-            'title' => 'Weight Loss',
-            'alt'   => 'Vials — Metabolic',
-            'image' => 'home-weight-loss.jpg',
+            'slug'   => 'weight-loss',
+            'title'  => 'Weight Loss',
+            'alt'    => 'Vials — Metabolic',
+            'image'  => 'home-weight-loss.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
-            'slug'  => 'weight-loss-pens',
-            'title' => 'Weight Loss Pens',
-            'alt'   => 'Pens — Metabolic',
-            'image' => 'home-weight-loss-pens.jpg',
+            'slug'   => 'weight-loss-pens',
+            'title'  => 'Weight Loss Pens',
+            'alt'    => 'Pens — Metabolic',
+            'image'  => 'home-weight-loss-pens.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
     );
 }
@@ -88,8 +96,17 @@ function pbv_render_homepage_collections() {
         <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds — intended for laboratory research use only.</p>
         <div class="pbv-home-collections">
           <?php foreach ($cards as $card) :
-              $url   = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
-              $image = pbv_asset_uri('assets/images/' . $card['image']);
+              $url      = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
+              $relative = 'assets/images/' . $card['image'];
+              $image    = pbv_asset_uri($relative);
+              $ver      = defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '';
+              $path     = function_exists('pbv_asset_path') ? pbv_asset_path($relative) : '';
+              if ($path && file_exists($path)) {
+                  $ver = $ver . '-' . (string) filemtime($path);
+              }
+              if ($ver !== '') {
+                  $image .= '?ver=' . rawurlencode($ver);
+              }
               ?>
             <a
               class="pbv-home-collection"
@@ -100,8 +117,8 @@ function pbv_render_homepage_collections() {
                 class="pbv-home-collection__img"
                 src="<?php echo esc_url($image); ?>"
                 alt="<?php echo esc_attr($card['alt']); ?>"
-                width="1792"
-                height="1008"
+                width="<?php echo (int) $card['width']; ?>"
+                height="<?php echo (int) $card['height']; ?>"
                 loading="lazy"
                 decoding="async"
               />
