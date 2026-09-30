@@ -5,7 +5,7 @@
 | File | Tab name |
 |---|---|
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB Buffer image scenes — `aspect_ratio` **3:4** feed posts, not 9:16; writeback = `last_used_date` only) |
-| `latest-models.csv` | Still lock — Grok Imagine Image 2.0 everywhere except `18-motsc-film-stills` (Flux.2 Max trial) |
+| `latest-models.csv` | Still lock — Grok Imagine Image 2.0 everywhere except `18-motsc-film-stills` (Flux.2 Max trial) and `24-site-tiles-4` (Flux.2 Max, website tiles) |
 | `3-image-scenes-150.csv` | `3-image-scenes-150` (IG/FB image scenes — writeback = `last_used_date` only) |
 | `3-figma-content-queue.csv` | `3-figma-content-queue` (Figma Content Studio queue) |
 | `4-reel-queue.csv` | `4-reel-queue` (finished Creatomate packages — WF B `sheets_append_reel`) |
@@ -22,6 +22,7 @@
 | `17-seedance-25-t2v.csv` | `17-seedance-25-t2v` (**palmbeach-rx.com** Seedance 2.5 hyperrealistic T2V — 27 compounds; prompt / model / duration / resolution / aspect / audio / bitrate / wait on the sheet; native max 30s. Separate vitality.store T2V sheet is deferred.) |
 | `21-sonilo-audio.csv` | Sonilo music+SFX columns for the joined MOTS-C reel (`sound_type=music_and_sfx`). Live write is `overlay_film_sonilo` onto Sheet 18. |
 | `22-sonilo-custom.csv` | Reusable Sonilo jobs (`22-sonilo-custom`) — paste `video_url` + `music_prompt` + `sfx_prompt`, set `status=Active`, Execute `sonilo_custom`. Live doc `10J0KA0P7nitt5NLanXEXoPZQ7iRyxVZPoNZXCFD5Hb0`. |
+| `24-site-tiles-4.csv` | `24-site-tiles-4` (**website** homepage collection tiles, not social — 4 rows, one per tile in `woocommerce-migration/theme/palmbeach-vitality/inc/homepage-shop.php`; OpenRouter Flux.2 Max at 16:9 with product-photo `input_reference_urls` (pipe-separated); `still_takes` Flux calls per run; takes land in Google Drive and are appended to `take_urls` / `take_sizes`). Live doc `1AxTan_epEpQEPukFztP6MhiIpgxzAYISj1kWz-Gqw4k`, tab gid `0`. Built by `scripts/build_site_tiles_4.py`. See `n8n-site-tiles-flux.md`. |
 | `23-molecule-smoke-2.csv` | `23-molecule-smoke-2` (**2-row smoke test** for `peptide_molecule_vid_gen` before Sheet 13 is rebuilt — hyperreal sci-fi molecule looks; row 1 GHK-Cu on GPT Image 2.5 Sunburst, row 2 BPC-157 on Grok Imagine 2.0; fal Kling v3 Pro 15s + 15s at 1080p, joined in Creatomate; `times_used` counts finished videos only). Live doc `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`, tab gid `105980795`. Built by `scripts/build_molecule_smoke_2.py`. See `n8n-peptide-molecule-vid-gen.md`. |
 | `20-film-001-004-020-beach-entry.csv` | Snapshot of Sheet 18 overlay for FILM-001 / 004 (FILM-014 beach) + FILM-020 (space → atmospheric burn-up). Live write is `overlay_film_beach_entry`. |
 | `19-film-join-25.csv` | Join-queue columns for the 25 MOTS-C film clips (also overlaid onto `18-motsc-film-stills`). VACE stitch + optional FLF2V seams — see `n8n-vace-clip-join.md` |
