@@ -6,7 +6,7 @@
 **Sheet:** `13-chem-breakdown-54` (same columns as Sheet 9)  
 **Name the workflow exactly:** `peptide_molecule_vid_gen`  
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq  
-**Smoke test (unpublished, not run):** `peptide_molecule_vid_gen_v2`, https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn. See *Smoke test* below.  
+**Smoke test (unpublished):** `peptide_molecule_vid_gen_v2`, https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn. Row 1 has a finished 30s video. `grok_imagine_molecule_still` is deactivated. See *Smoke test* below.  
 **Workbook:** https://docs.google.com/spreadsheets/d/1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0 — tab `13-chem-breakdown-54`.
 
 **Vibe (mandatory):** dark cinematic 3D **medical animation of a cellular chemical reaction** — living cells + amino acids forming peptide bonds at microscopic scale. Not a sunlit studio. Not a glass pedestal. Not the pen workflow. **No logo. No text. No sound** (add those after vid gen). Clip is muted (`audio: false`).
@@ -69,9 +69,9 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 
 ---
 
-## Smoke test — `23-molecule-smoke-2` (built 2026-09-30 as `peptide_molecule_vid_gen_v2` · not run)
+## Smoke test — `23-molecule-smoke-2` (built 2026-09-30 as `peptide_molecule_vid_gen_v2`)
 
-**Built as a new workflow. Nothing has run.** Sal chose a new workflow over editing the old one, so `peptide_molecule_vid_gen` keeps all 42 nodes at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea`, untouched.
+**Built as a new workflow.** Sal chose a new workflow over editing the old one, so `peptide_molecule_vid_gen` keeps all 42 nodes at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea`, untouched. Row 1's 30s video is saved (exec 2585).
 - **Workflow:** `peptide_molecule_vid_gen_v2`, ID `Hc1US0JgKRvM2opn`, unpublished, in the root of Sal's personal project. [Open it](https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn).
 - **Source:** `python3 marketing/scripts/build_molecule_vid_gen_v2.py --notes-sha <commit>` writes `marketing/workflows/peptide_molecule_vid_gen_v2.sdk.js`, the Workflow SDK code the workflow was created from.
 - **Checked after creation:** 33 nodes (29 working + 4 notes), every credential attached, no pinned data, and every Code node byte-for-byte equal to its file in `marketing/n8n-molecule-smoke/`.
@@ -101,7 +101,7 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 **Both rows:**
 - Video: `fal-ai/kling-video/v3/pro/image-to-video`, `resolution` 1080p, 15s + 15s, `cfg_scale` 0.5.
 - Render: 1080 × 1920 at 24 fps, mp4 out, with a png hand-off frame.
-- **A/B:** both engines' columns are filled on both rows, so the A/B is one cell — set row 1's `model_still` to `grok-imagine-image-2.0`.
+- **A/B:** both engines' columns are filled on both rows. That comparison is parked while `grok_imagine_molecule_still` is deactivated. Row 2's `model_still` is still `grok-imagine-image-2.0`.
 
 **Prompt shape:**
 - **Still:** one shared hyperreal sci-fi header, then HERO, WORLD, LIGHT, CAMERA and COLOR, then a lock line (no text, no people, no vials or pens).
@@ -147,7 +147,7 @@ Characters sent (video prompts include the silent lock); Kling's cap is 2,500:
 ```text
 manual_trigger → get_chem_creations → filter_chem_active → pick_molecule_creation → route_still_model
   true  (openai/gpt-image-*)   → gpt_image_molecule_still → check_gpt_still → gpt_still_to_file → upload_gpt_still → save_still_url
-  false (grok-imagine-image-*) → grok_imagine_molecule_still → save_still_url
+  false (grok-imagine-image-*) → grok_imagine_molecule_still (deactivated) → save_still_url
 → prep_molecule_video_start → fal_kling_hop1 → prep_last_frame
 → creatomate_last_frame → wait_last_frame → creatomate_last_frame_poll → route_last_frame → switch_last_frame
      true → prep_kling_extend        false → wait_last_frame
@@ -244,9 +244,11 @@ HTTP Request 4.5.
 - Response Format **Text**; the URL lands in `$json.data`.
 - Same as the old workflow's `upload_hop1_public`, except Options → Timeout comes from the sheet: `={{ $('pick_molecule_creation').first().json.still_timeout_seconds * 1000 }}`.
 
-#### `grok_imagine_molecule_still` (edit)
+#### `grok_imagine_molecule_still` (edit, deactivated)
 
 **Before → this → After:** `route_still_model` (false) → **grok_imagine_molecule_still** → `save_still_url`
+
+Deactivated 2026-09-30. The node stays on the canvas with its **XAI Grok** credential and both wires. n8n skips a deactivated node and passes the incoming item straight through, so a row whose `model_still` starts with `grok-imagine-image-` must not be run until this node is turned back on. `save_still_url` would otherwise store a bad `still_url`.
 
 Same URL and **XAI Grok** header auth. The body now reads `still_prompt` (was `video_prompt`) and `still_n` (was a fixed `1`):
 
@@ -367,10 +369,10 @@ Google Sheets 4.7, Update Row.
 
 #### Sticky notes (new)
 
-Four notes in a 2 × 2 grid: overview and how to run (top left), the still (top right), hop 1 (bottom left), hop 2 (bottom right).
-- **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 72 px and titles are 88 px, twice the H1 size and half the first pass. The notes sit above one row of nodes and are only as wide as their text.
+Four notes sit above the one row of nodes, left to right: overview and how to run, the still, hop 1, hop 2.
+- **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 72 px and titles are 88 px, twice the H1 size and half the first pass. The notes are only as wide as their text.
 - **Source:** `python3 marketing/scripts/render_n8n_note_images.py` writes the PNGs and `notes.json` to `marketing/n8n-notes/peptide_molecule_vid_gen_v2/`.
-- **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `162c6f0`, which stays reachable after the PR merges. The image's alt text carries the full wording.
+- **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `9286103d786213a43499839e21e24928324aaba0`, which stays reachable after the PR merges. The image's alt text carries the full wording.
 - **Editing:** the text can't be edited inside n8n. Change the lines in the script, render, commit, then point the note's image link at the new commit.
 
 ### Checks already done (no spend)
@@ -390,7 +392,7 @@ Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The 
 3. **Video.** In the same editor session, open `sheets_update_video` → **Execute step**. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. A page reload can drop that data, so if the page was reloaded, start again from step 1.
 4. **Unpin `save_still_url`** after the video run. A pin left in place makes the next run animate the old still with the next row's prompts.
 5. **Next row.** The pick takes the least-used Active row, then the lower `rank`, so row 2 comes up once row 1's video is saved. To run row 2 first, set row 1's `status` to `Hold`.
-6. **A/B (optional).** For the same look on both still engines, set row 1's `model_still` to `grok-imagine-image-2.0` and repeat from step 1. Row 1 is picked again once both rows have run once, because it has the lower `rank`. Stopping at step 1 compares the stills for $0.04.
+6. **A/B is parked.** `grok_imagine_molecule_still` is deactivated, so do not set a row's `model_still` to `grok-imagine-image-2.0` until that node is turned back on. Row 2 is still set to that model. Change it to `openai/gpt-image-2.5-sunburst`, or set its `status` to `Hold`, before another run. Row 2 already has `still_size` 1440x2560 and `still_quality` high.
 
 **Per full run:** GPT still about $0.2–0.5 (Grok $0.04), plus Kling $3.36, plus about 16 Creatomate credits.
 

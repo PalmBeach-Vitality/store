@@ -77,18 +77,18 @@ const renderSample = { id: "render-1", status: "succeeded", url: "https://exampl
 
 const doneSample = { done: true, url: "https://example.com/render.png", render_id: "render-1" };
 
-const noteOverview = sticky("![Molecule video v2 · Smoke test · 23-molecule-smoke-2 · 30s · 1080 × 1920 · 9:16 · no sound · Every prompt comes from the sheet · How to run · 1. save_still_url → Execute step (makes the still only) · 2. Like it? Pin save_still_url · 3. sheets_update_video → Execute step (the 30s video) · 4. Unpin save_still_url](https://raw.githubusercontent.com/PalmBeach-Vitality/store/162c6f093d3c1f35118a12cf6b63c4937467e9d3/marketing/n8n-notes/peptide_molecule_vid_gen_v2/0-overview.png#full-width)", [], { name: "note_overview", color: 1, position: [0, 0], width: 2860, height: 2360 });
+const noteOverview = sticky("![Molecule video v2 · Smoke test · 23-molecule-smoke-2 · 30s · 1080 × 1920 · 9:16 · no sound · Every prompt comes from the sheet · How to run · 1. gpt_image_molecule_still → Execute step (the still only) · 2. Like it? Pin save_still_url · 3. sheets_update_video → Execute step (the 30s video) · 4. Unpin save_still_url](https://raw.githubusercontent.com/PalmBeach-Vitality/store/9286103d786213a43499839e21e24928324aaba0/marketing/n8n-notes/peptide_molecule_vid_gen_v2/0-overview.png#full-width)", [], { name: "note_overview", color: 1, position: [0, -1060], width: 1364, height: 1140 });
 
-const noteStill = sticky("![1 · The still · Least-used Active row goes first · Top: GPT Image 2.5 (OpenRouter) · Bottom: Grok Imagine 2.0 (xAI) · The row’s model_still picks one](https://raw.githubusercontent.com/PalmBeach-Vitality/store/162c6f093d3c1f35118a12cf6b63c4937467e9d3/marketing/n8n-notes/peptide_molecule_vid_gen_v2/1-still.png#full-width)", [], { name: "note_1_still", color: 5, position: [3060, 0], width: 2860, height: 2360 });
+const noteStill = sticky("![1 · The still · Least-used Active row goes first · GPT Image 2.5 (OpenRouter) · Grok Imagine 2.0 is off](https://raw.githubusercontent.com/PalmBeach-Vitality/store/9286103d786213a43499839e21e24928324aaba0/marketing/n8n-notes/peptide_molecule_vid_gen_v2/1-still.png#full-width)", [], { name: "note_1_still", color: 5, position: [1444, -400], width: 1244, height: 480 });
 
-const noteHop1 = sticky("![2 · Hop 1 (0:00–0:15) · fal Kling v3 Pro · 1080p · 15s · Creatomate grabs frame 359, the first frame of hop 2](https://raw.githubusercontent.com/PalmBeach-Vitality/store/162c6f093d3c1f35118a12cf6b63c4937467e9d3/marketing/n8n-notes/peptide_molecule_vid_gen_v2/2-hop1.png#full-width)", [], { name: "note_2_hop1", color: 4, position: [0, 2520], width: 2860, height: 1440 });
+const noteHop1 = sticky("![2 · Hop 1 (0:00–0:15) · fal Kling v3 Pro · 1080p · 15s · Creatomate grabs frame 359, the first frame of hop 2](https://raw.githubusercontent.com/PalmBeach-Vitality/store/9286103d786213a43499839e21e24928324aaba0/marketing/n8n-notes/peptide_molecule_vid_gen_v2/2-hop1.png#full-width)", [], { name: "note_2_hop1", color: 4, position: [2768, -400], width: 1144, height: 480 });
 
-const noteHop2 = sticky("![3 · Hop 2 (0:15–0:30) · fal Kling v3 Pro · 1080p · 15s · Creatomate joins the 30s video · Saves the URLs to the sheet](https://raw.githubusercontent.com/PalmBeach-Vitality/store/162c6f093d3c1f35118a12cf6b63c4937467e9d3/marketing/n8n-notes/peptide_molecule_vid_gen_v2/3-hop2.png#full-width)", [], { name: "note_3_hop2", color: 6, position: [3060, 2520], width: 2860, height: 1440 });
+const noteHop2 = sticky("![3 · Hop 2 (0:15–0:30) · fal Kling v3 Pro · 1080p · 15s · Creatomate joins the 30s video · Saves the URLs to the sheet](https://raw.githubusercontent.com/PalmBeach-Vitality/store/9286103d786213a43499839e21e24928324aaba0/marketing/n8n-notes/peptide_molecule_vid_gen_v2/3-hop2.png#full-width)", [], { name: "note_3_hop2", color: 6, position: [3992, -400], width: 1204, height: 480 });
 
 const manualTrigger = trigger({
   type: "n8n-nodes-base.manualTrigger",
   version: 1,
-  config: { name: "manual_trigger", position: [3180, 1680] },
+  config: { name: "manual_trigger", position: [220, 240] },
   output: [{}],
 });
 
@@ -97,7 +97,7 @@ const getChemCreations = node({
   version: 4.7,
   config: {
     name: "get_chem_creations",
-    position: [3460, 1680],
+    position: [440, 240],
     executeOnce: true,
     credentials: credSheets,
     parameters: { resource: "sheet", operation: "read", documentId: smokeDocument, sheetName: smokeTab, options: {} },
@@ -110,7 +110,7 @@ const filterChemActive = node({
   version: 2.3,
   config: {
     name: "filter_chem_active",
-    position: [3740, 1680],
+    position: [680, 240],
     parameters: {
       conditions: {
         options: strictOptions,
@@ -135,7 +135,7 @@ const pickMoleculeCreation = node({
   version: 2,
   config: {
     name: "pick_molecule_creation",
-    position: [4020, 1680],
+    position: [900, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -149,7 +149,7 @@ const routeStillModel = ifElse({
   version: 2.3,
   config: {
     name: "route_still_model",
-    position: [4300, 1680],
+    position: [1120, 240],
     parameters: {
       conditions: {
         options: strictOptions,
@@ -174,7 +174,7 @@ const gptImageStill = node({
   version: 4.5,
   config: {
     name: "gpt_image_molecule_still",
-    position: [4580, 1520],
+    position: [1340, 16],
     credentials: credOpenRouter,
     parameters: {
       method: "POST",
@@ -195,7 +195,7 @@ const checkGptStill = node({
   version: 2,
   config: {
     name: "check_gpt_still",
-    position: [4860, 1520],
+    position: [1560, 16],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -218,7 +218,7 @@ const gptStillToFile = node({
   version: 1.1,
   config: {
     name: "gpt_still_to_file",
-    position: [5140, 1520],
+    position: [1800, 16],
     parameters: {
       operation: "toBinary",
       sourceProperty: "still_b64",
@@ -237,7 +237,7 @@ const uploadGptStill = node({
   version: 4.5,
   config: {
     name: "upload_gpt_still",
-    position: [5420, 1520],
+    position: [2020, 16],
     parameters: {
       method: "POST",
       url: "https://litterbox.catbox.moe/resources/internals/api.php",
@@ -264,7 +264,8 @@ const grokImageStill = node({
   version: 4.5,
   config: {
     name: "grok_imagine_molecule_still",
-    position: [5000, 1840],
+    position: [1680, 464],
+    disabled: true,
     credentials: credXai,
     parameters: {
       method: "POST",
@@ -285,7 +286,7 @@ const saveStillUrl = node({
   version: 3.5,
   config: {
     name: "save_still_url",
-    position: [5700, 1680],
+    position: [2240, 240],
     parameters: {
       mode: "manual",
       includeOtherFields: false,
@@ -310,7 +311,7 @@ const prepVideoStart = node({
   version: 2,
   config: {
     name: "prep_molecule_video_start",
-    position: [120, 3600],
+    position: [2460, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -325,7 +326,7 @@ const falKlingHop1 = node({
   version: 1,
   config: {
     name: "fal_kling_hop1",
-    position: [480, 3600],
+    position: [2680, 240],
     credentials: credFal,
     parameters: {
       resource: "model",
@@ -343,7 +344,7 @@ const prepLastFrame = node({
   version: 2,
   config: {
     name: "prep_last_frame",
-    position: [840, 3600],
+    position: [2920, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -364,7 +365,7 @@ const creatomateLastFrame = node({
   version: 4.5,
   config: {
     name: "creatomate_last_frame",
-    position: [1200, 3600],
+    position: [3140, 240],
     credentials: credCreatomate,
     parameters: {
       method: "POST",
@@ -385,7 +386,7 @@ const waitLastFrame = node({
   version: 1.1,
   config: {
     name: "wait_last_frame",
-    position: [1560, 3600],
+    position: [3360, 240],
     parameters: {
       resume: "timeInterval",
       amount: expr("{{ $('pick_molecule_creation').first().json.creatomate_poll_seconds }}"),
@@ -400,7 +401,7 @@ const creatomateLastFramePoll = node({
   version: 4.5,
   config: {
     name: "creatomate_last_frame_poll",
-    position: [1920, 3600],
+    position: [3580, 240],
     credentials: credCreatomate,
     parameters: {
       method: "GET",
@@ -418,7 +419,7 @@ const routeLastFrame = node({
   version: 2,
   config: {
     name: "route_last_frame",
-    position: [2280, 3600],
+    position: [3800, 240],
     parameters: { mode: "runOnceForAllItems", language: "javaScript", jsCode: routeRenderCode },
   },
   output: [doneSample],
@@ -428,7 +429,7 @@ const switchLastFrame = ifElse({
   version: 2.3,
   config: {
     name: "switch_last_frame",
-    position: [2640, 3600],
+    position: [4040, 240],
     parameters: {
       conditions: {
         options: strictOptions,
@@ -453,7 +454,7 @@ const prepKlingExtend = node({
   version: 2,
   config: {
     name: "prep_kling_extend",
-    position: [3180, 3600],
+    position: [4260, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -468,7 +469,7 @@ const falKlingHop2 = node({
   version: 1,
   config: {
     name: "fal_kling_hop2",
-    position: [3460, 3600],
+    position: [4480, 240],
     credentials: credFal,
     parameters: {
       resource: "model",
@@ -486,7 +487,7 @@ const prepCreatomateConcat = node({
   version: 2,
   config: {
     name: "prep_creatomate_concat",
-    position: [3740, 3600],
+    position: [4700, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -506,7 +507,7 @@ const creatomateConcat = node({
   version: 4.5,
   config: {
     name: "creatomate_concat",
-    position: [4020, 3600],
+    position: [4920, 240],
     credentials: credCreatomate,
     parameters: {
       method: "POST",
@@ -527,7 +528,7 @@ const waitConcat = node({
   version: 1.1,
   config: {
     name: "wait_concat",
-    position: [4300, 3600],
+    position: [5160, 240],
     parameters: {
       resume: "timeInterval",
       amount: expr("{{ $('pick_molecule_creation').first().json.creatomate_poll_seconds }}"),
@@ -542,7 +543,7 @@ const creatomatePoll = node({
   version: 4.5,
   config: {
     name: "creatomate_poll",
-    position: [4580, 3600],
+    position: [5380, 240],
     credentials: credCreatomate,
     parameters: {
       method: "GET",
@@ -560,7 +561,7 @@ const routeConcat = node({
   version: 2,
   config: {
     name: "route_concat",
-    position: [4860, 3600],
+    position: [5600, 240],
     parameters: { mode: "runOnceForAllItems", language: "javaScript", jsCode: routeRenderCode },
   },
   output: [doneSample],
@@ -570,7 +571,7 @@ const switchConcat = ifElse({
   version: 2.3,
   config: {
     name: "switch_concat",
-    position: [5140, 3600],
+    position: [5820, 240],
     parameters: {
       conditions: {
         options: strictOptions,
@@ -595,7 +596,7 @@ const saveVideoUrl = node({
   version: 2,
   config: {
     name: "save_video_url",
-    position: [5420, 3600],
+    position: [6040, 240],
     parameters: {
       mode: "runOnceForAllItems",
       language: "javaScript",
@@ -610,7 +611,7 @@ const sheetsUpdateVideo = node({
   version: 4.7,
   config: {
     name: "sheets_update_video",
-    position: [5700, 3600],
+    position: [6280, 240],
     credentials: credSheets,
     parameters: {
       resource: "sheet",
