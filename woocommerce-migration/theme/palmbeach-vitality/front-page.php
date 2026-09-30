@@ -62,9 +62,10 @@ $hero_mobile = pbv_hero_mobile_image_url();
 .pbv-hero-photo__wholesale a{color:#7ec8ff;text-decoration:underline;text-underline-offset:.12em;}
 .pbv-hero-photo__cta{margin:.85rem 0 .45rem;}
 .pbv-hero-photo__shop{
-  display:inline-flex!important;align-items:center;justify-content:center;
-  padding:.55rem 1.15rem;border-radius:999px;background:#fff;color:#0b1220!important;
-  font-size:.82rem;font-weight:700;text-decoration:none!important;text-shadow:none;
+  display:inline!important;padding:0;border-radius:0;background:transparent;
+  color:#7ec8ff!important;font-size:inherit;font-weight:600;
+  text-decoration:underline!important;text-underline-offset:.12em;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);
 }
 @media (min-width:750px){
   .pbv-hero{display:flex!important;justify-content:center!important;align-items:center!important;padding:1.25rem 0 .75rem!important;}
