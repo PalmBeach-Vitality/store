@@ -75,6 +75,7 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 - **Workflow:** `peptide_molecule_vid_gen_v2`, ID `Hc1US0JgKRvM2opn`, unpublished, in the root of Sal's personal project. [Open it](https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn).
 - **Source:** `python3 marketing/scripts/build_molecule_vid_gen_v2.py --notes-sha <commit>` writes `marketing/workflows/peptide_molecule_vid_gen_v2.sdk.js`, the Workflow SDK code the workflow was created from.
 - **Checked after creation:** 33 nodes (29 working + 4 notes), every credential attached, no pinned data, and every Code node byte-for-byte equal to its file in `marketing/n8n-molecule-smoke/`.
+- **2026-09-30, after the first smoke run:** `grok_imagine_molecule_still` is deactivated (still on the canvas, not deleted). The nodes sit on one row, the same spacing as the other vid-gen workflows, and the note text is half the first size.
 
 **Sal's calls (2026-09-30):**
 1. Kling v3 Pro, 15s + 15s, stitched in Creatomate.
@@ -367,7 +368,7 @@ Google Sheets 4.7, Update Row.
 #### Sticky notes (new)
 
 Four notes in a 2 × 2 grid: overview and how to run (top left), the still (top right), hop 1 (bottom left), hop 2 (bottom right).
-- **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 144 px and titles are 176 px, 4× the H1 size, rendered at 2× so they stay sharp when zoomed in.
+- **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 72 px and titles are 88 px, twice the H1 size and half the first pass. The notes sit above one row of nodes and are only as wide as their text.
 - **Source:** `python3 marketing/scripts/render_n8n_note_images.py` writes the PNGs and `notes.json` to `marketing/n8n-notes/peptide_molecule_vid_gen_v2/`.
 - **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `162c6f0`, which stays reachable after the PR merges. The image's alt text carries the full wording.
 - **Editing:** the text can't be edited inside n8n. Change the lines in the script, render, commit, then point the note's image link at the new commit.
@@ -384,7 +385,7 @@ Four notes in a 2 × 2 grid: overview and how to run (top left), the still (top 
 
 Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The n8n MCP `execute_workflow` has no stop-at-node option: an agent can only start the whole chain, which would spend on video before Sal has seen the still. An agent starts nothing without "you may run the workflow" or "you can start the workflow".
 
-1. **Still only.** Open `save_still_url` → **Execute step**. Only the sheet read and one still run, and nothing is written to the sheet. Row 1 (GPT Image 2.5) goes first: both rows are at `times_used` 0 and row 1 has the lower `rank`.
+1. **Still only.** Open `gpt_image_molecule_still` → **Execute step**. Only the sheet read and one still run, and nothing is written to the sheet. `save_still_url` → Execute step repeats whichever branch the editor took last time, so a second run can look like row 1 even after the sheet has moved on. `grok_imagine_molecule_still` is deactivated.
 2. **Pin the still** if Sal likes it: pin `save_still_url`. On both engines its output is one small `still_url` field (the GPT base64 nodes are too big to pin).
 3. **Video.** In the same editor session, open `sheets_update_video` → **Execute step**. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. A page reload can drop that data, so if the page was reloaded, start again from step 1.
 4. **Unpin `save_still_url`** after the video run. A pin left in place makes the next run animate the old still with the next row's prompts.

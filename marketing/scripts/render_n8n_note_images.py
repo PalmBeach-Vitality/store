@@ -2,9 +2,9 @@
 """Render big-type sticky-note images for peptide_molecule_vid_gen_v2.
 
 n8n sticky text tops out at the Markdown H1 size (36 px on the canvas), and the
-editor accepts no HTML, so text can't be set any bigger. An image with `#full-width`
-fills the sticky, so these PNGs carry the note text at 4x that size (144 px body,
-176 px titles on the canvas). They render at 2x for sharp text when zoomed in.
+editor accepts no HTML. An image with `#full-width` fills the sticky. These PNGs
+carry the note text at 2x that size (72 px body, 88 px titles on the canvas),
+half the first pass. They render at 2x for sharp text when zoomed in.
 
 The images are served from raw.githubusercontent.com at a pinned commit, so the
 workflow's notes keep loading after the branch is merged or deleted.
@@ -29,26 +29,24 @@ FONT_TITLE = FONT_DIR / "Inter-Bold.ttf"
 FONT_BODY = FONT_DIR / "Inter-SemiBold.ttf"
 
 SCALE = 2
-# Canvas px. The old sticky's H1 lines were 36 px; 4x that is the floor for every line.
-TITLE_PX = 176
-BODY_PX = 144
-TITLE_LEADING = 1.18
-BODY_LEADING = 1.28
-GAP_AFTER_TITLE = 20
-GAP_BLOCK = 64
-INDENT = 96
+# Canvas px. Half of the first pass (144 / 176), which is 2x n8n's H1.
+TITLE_PX = 88
+BODY_PX = 72
+TITLE_LEADING = 1.15
+BODY_LEADING = 1.22
+GAP_AFTER_TITLE = 10
+GAP_BLOCK = 32
+INDENT = 48
 
-# The sticky's width minus its inner padding, so the image lands at 1:1 on the canvas.
-STICKY_WIDTH = 2860
+# Each note is only as wide as its text. The sticky adds this much padding around the image.
 STICKY_PADDING = 24
-IMAGE_WIDTH = STICKY_WIDTH - STICKY_PADDING
 
-PAD_TOP = 56
-PAD_BOTTOM = 64
-PAD_RIGHT = 64
-BAR = 28
-PAD_LEFT = BAR + 64
-RADIUS = 36
+PAD_TOP = 28
+PAD_BOTTOM = 32
+PAD_RIGHT = 36
+BAR = 14
+PAD_LEFT = BAR + 32
+RADIUS = 18
 
 INK_TITLE = (15, 23, 42)
 INK_BODY = (30, 41, 59)
@@ -70,8 +68,8 @@ NOTES = [
             ("body", "Every prompt comes from the sheet"),
             ("gap", ""),
             ("heading", "How to run"),
-            ("body", "1. save_still_url → Execute step"),
-            ("indent", "(makes the still only)"),
+            ("body", "1. gpt_image_molecule_still →"),
+            ("indent", "Execute step (the still only)"),
             ("body", "2. Like it? Pin save_still_url"),
             ("body", "3. sheets_update_video →"),
             ("indent", "Execute step (the 30s video)"),
@@ -86,9 +84,8 @@ NOTES = [
         "lines": [
             ("title", "1 · The still"),
             ("body", "Least-used Active row goes first"),
-            ("body", "Top: GPT Image 2.5 (OpenRouter)"),
-            ("body", "Bottom: Grok Imagine 2.0 (xAI)"),
-            ("body", "The row’s model_still picks one"),
+            ("body", "GPT Image 2.5 (OpenRouter)"),
+            ("body", "Grok Imagine 2.0 is off"),
         ],
     },
     {
@@ -132,15 +129,25 @@ def advance(kind: str) -> float:
     return BODY_PX * BODY_LEADING
 
 
+def text_px(kind: str, text: str) -> float:
+    return ImageDraw.Draw(Image.new("RGB", (1, 1))).textlength(text, font=font(kind)) / SCALE
+
+
 def render(note: dict) -> dict:
+    widest = 0.0
+    for kind, text in note["lines"]:
+        if kind == "gap":
+            continue
+        widest = max(widest, text_px(kind, text) + (INDENT if kind == "indent" else 0))
+    image_width = int((PAD_LEFT + widest + PAD_RIGHT + 19) // 20) * 20
     height = round(PAD_TOP + sum(advance(k) for k, _ in note["lines"]) + PAD_BOTTOM)
-    w, h = IMAGE_WIDTH * SCALE, height * SCALE
+    w, h = image_width * SCALE, height * SCALE
 
     card = Image.new("RGBA", (w, h), CARD + (255,))
     draw = ImageDraw.Draw(card)
     draw.rectangle([0, 0, BAR * SCALE, h], fill=note["accent"] + (255,))
 
-    max_text = (IMAGE_WIDTH - PAD_LEFT - PAD_RIGHT) * SCALE
+    max_text = (image_width - PAD_LEFT - PAD_RIGHT) * SCALE
     y = PAD_TOP * SCALE
     for kind, text in note["lines"]:
         if kind != "gap":
@@ -176,8 +183,8 @@ def render(note: dict) -> dict:
         "name": note["name"],
         "file": note["file"],
         "sticky_color": note["sticky_color"],
-        "sticky_width": STICKY_WIDTH,
-        "image_width": IMAGE_WIDTH,
+        "sticky_width": image_width + STICKY_PADDING,
+        "image_width": image_width,
         "image_height": height,
         "alt": alt,
         "bytes": path.stat().st_size,

@@ -31,15 +31,14 @@ SHEET_GID = "105980795"
 SHEET_TAB = "23-molecule-smoke-2"
 PICK = "$('pick_molecule_creation').first().json"
 
-# Canvas layout, in n8n canvas px. Notes sit in a 2 x 2 grid (overview, still / hop 1, hop 2).
-STICKY_W = 2860
-GRID_GAP_X = 200
-GRID_GAP_Y = 160
-HEADER_SLACK = 60
-EDGE = 120
-COL = 280
-NODE = 100
-BRANCH = 160
+# Same canvas rhythm as the other vid-gen workflows: one row of nodes at y=240,
+# 224 px apart, starting at x=224. The GPT branch sits one row above. Grok sits
+# one row below and is deactivated. Notes sit above the row, only as big as their text.
+STEP = 224
+MAIN_Y = 240
+BRANCH = 224
+NOTE_GAP = 80
+NOTE_PAD = 40
 LINE = 110
 
 
@@ -100,32 +99,20 @@ def snap(v: float) -> int:
 
 def build(notes_sha: str) -> str:
     notes = {n["name"]: n for n in json.loads((NOTES_DIR / "notes.json").read_text(encoding="utf-8"))}
-    header = {k: n["image_height"] + HEADER_SLACK for k, n in notes.items()}
 
-    col_a, col_b = 0, STICKY_W + GRID_GAP_X
-
-    # Row A: overview beside the still stage; both stickies share the taller height, and the
-    # still nodes sit centred under the still note's text.
-    still_block = BRANCH * 2 + NODE + 50
-    row_a_h = max(header["note_overview"], header["note_1_still"] + 240 + still_block + 110)
-    still_top = header["note_1_still"] + (row_a_h - header["note_1_still"] - still_block) / 2
-    y1 = snap(still_top + BRANCH)
-
-    row_b_y = snap(row_a_h + GRID_GAP_Y)
-    hop_h = max(header["note_2_hop1"], header["note_3_hop2"])
-    y2 = snap(row_b_y + hop_h + 120)
-    row_b_h = (y2 + NODE + 50 + 200) - row_b_y
-
-    hop1_col = (STICKY_W - 2 * EDGE - NODE) / 7
-
+    # Still stage uses slots 0-9 (the GPT branch occupies 5-8 above the row).
+    # Hop 1 uses 10-17 and hop 2 uses 18-27, so the chain stays one row.
     def x1(i: float) -> int:
-        return snap(col_b + EDGE + i * COL)
+        return snap(STEP + i * STEP)
 
     def x2(i: int) -> int:
-        return snap(col_a + EDGE + i * hop1_col)
+        return snap(STEP + (10 + i) * STEP)
 
     def x3(i: int) -> int:
-        return snap(col_b + EDGE + i * COL)
+        return snap(STEP + (18 + i) * STEP)
+
+    y1 = MAIN_Y
+    y2 = MAIN_Y
 
     out: list[str] = []
 
@@ -198,16 +185,26 @@ def build(notes_sha: str) -> str:
     const("renderSample", {"id": "render-1", "status": "succeeded", "url": "https://example.com/render.png", "width": 1080, "height": 1920})
     const("doneSample", {"done": True, "url": "https://example.com/render.png", "render_id": "render-1"})
 
-    for name, note_key, pos, h in [
-        ("noteOverview", "note_overview", [col_a, 0], row_a_h),
-        ("noteStill", "note_1_still", [col_b, 0], row_a_h),
-        ("noteHop1", "note_2_hop1", [col_a, row_b_y], row_b_h),
-        ("noteHop2", "note_3_hop2", [col_b, row_b_y], row_b_h),
+    note_x = 0
+    for name, note_key in [
+        ("noteOverview", "note_overview"),
+        ("noteStill", "note_1_still"),
+        ("noteHop1", "note_2_hop1"),
+        ("noteHop2", "note_3_hop2"),
     ]:
         n = notes[note_key]
+        height = snap(n["image_height"] + NOTE_PAD)
+        pos = [note_x, snap(MAIN_Y - 160 - height)]
         content = "![" + n["alt"] + "](" + RAW_BASE.format(sha=notes_sha, file=n["file"]) + ")"
-        cfg = {"name": note_key, "color": n["sticky_color"], "position": pos, "width": STICKY_W, "height": snap(h)}
+        cfg = {
+            "name": note_key,
+            "color": n["sticky_color"],
+            "position": pos,
+            "width": n["sticky_width"],
+            "height": height,
+        }
         out.append(f"const {name} = sticky({js(content)}, [], {js(cfg)});")
+        note_x += n["sticky_width"] + NOTE_GAP
 
     def code_node(name: str, node_name: str, source, pos: list, sample) -> None:
         call(name, "node", {
@@ -221,8 +218,10 @@ def build(notes_sha: str) -> str:
             "output": [sample],
         })
 
-    def http(name: str, node_name: str, pos: list, params: dict, sample, cred=None) -> None:
+    def http(name: str, node_name: str, pos: list, params: dict, sample, cred=None, disabled=False) -> None:
         cfg = {"name": node_name, "position": pos}
+        if disabled:
+            cfg["disabled"] = True
         if cred:
             cfg["credentials"] = Raw(cred)
         cfg["parameters"] = params
@@ -437,7 +436,7 @@ def build(notes_sha: str) -> str:
             "aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}"
         ),
         "options": {"timeout": Expr("{{ $json.still_timeout_seconds * 1000 }}")},
-    }, {"data": [{"url": "https://example.com/still.jpeg"}]}, "credXai")
+    }, {"data": [{"url": "https://example.com/still.jpeg"}]}, "credXai", disabled=True)
     call("saveStillUrl", "node", {
         "type": "n8n-nodes-base.set",
         "version": 3.5,
