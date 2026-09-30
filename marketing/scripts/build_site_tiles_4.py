@@ -12,7 +12,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "marketing" / "sheets" / "24-site-tiles-4.csv"
-REF = "https://raw.githubusercontent.com/PalmBeach-Vitality/store/main/woocommerce-migration/data"
 
 COLUMNS = [
     "tile_id",
@@ -79,19 +78,14 @@ WINDOW_WALL_VIEW = (
     "on a white bench sits a white glossy tray with a thin softly glowing blue edge."
 )
 
-VIALS = (
-    "On the tray, a straight row of five identical 10 mL clear glass pharmaceutical vials that match the "
-    "reference product photos exactly: bright blue flip-off cap, polished silver aluminum crimp collar, "
-    "white wrap-around label with a small crimson DNA double-helix logo, compound name in bold dark-crimson "
-    "sans-serif ({names}), and a crimson band below with the dose in white. Vials are crisp and in focus, "
-    "realistic glass refraction, soft window light on the glass."
-)
+# One photo per tile, shared as Anyone with the link so Flux can fetch it.
+DRIVE = "https://drive.usercontent.google.com/download?id={file_id}&export=download"
 
-PENS = (
-    "On the tray, five slim 3 mL research pens that match the reference product photos exactly lie side by "
-    "side at a slight diagonal: glossy white body, polished chrome bands near both ends, clear cartridge "
-    "window, {dial} dose dial at the end. {label} Pens are crisp and in focus, realistic plastic and chrome "
-    "reflections, soft window light."
+PRODUCT = (
+    "On the tray, a straight row of five identical copies of the single product in the reference photo, "
+    "laid so the label faces the camera. {detail} Copy that reference photo exactly: same shape, cap, "
+    "colors, logo and every printed word. Do not invent a different compound, dose, or spelling. "
+    "The products are crisp and in focus, with soft window light on the glass and plastic."
 )
 
 FINISH = (
@@ -104,10 +98,6 @@ FINISH = (
 )
 
 
-def refs(*paths):
-    return " | ".join(f"{REF}/{p}" for p in paths)
-
-
 TILES = [
     {
         "tile_id": "TILE-01",
@@ -116,15 +106,17 @@ TILES = [
         "theme_filename": "home-peptides.jpg",
         "overlay_eyebrow": "VIALS",
         "overlay_title": "Peptides",
-        "input_reference_urls": refs(
-            "all-product-white-backgrounds/GHK-cu_vial_whitebg-1.jpg",
-            "all-product-white-backgrounds/TB-500_vial_whitebg-1.jpg",
-        ),
+        "input_reference_urls": DRIVE.format(file_id="1W9wBLcjNMJG54HLpB7iErcJRPtGr0M_v"),
         "still_prompt": " ".join(
             [
                 PAVILION_LAB,
                 CORNER_VIEW,
-                VIALS.format(names="BPC-157, GHK-Cu, TB-500, BPC-157, GHK-Cu"),
+                PRODUCT.format(
+                    detail=(
+                        "It is a clear glass pharmaceutical vial with a bright blue flip-off cap, a polished "
+                        "silver crimp collar, a white label, a crimson DNA helix, and a crimson dose band."
+                    )
+                ),
                 FINISH.format(eyebrow="VIALS", title="Peptides"),
             ]
         ),
@@ -136,22 +128,17 @@ TILES = [
         "theme_filename": "home-peptide-pens.jpg",
         "overlay_eyebrow": "PENS",
         "overlay_title": "Peptides",
-        "input_reference_urls": refs(
-            "all-product-white-backgrounds/bpc-157-10mg-pen.jpg",
-            "all-product-white-backgrounds/tb-500-10mg-pen.jpg",
-            "all-product-white-backgrounds/Tesamorelin_10mg_pen_whitebg.jpg",
-        ),
+        "input_reference_urls": DRIVE.format(file_id="1clxbJQlcH8y4p2nnfunjvCK1CG07X8R3"),
         "still_prompt": " ".join(
             [
                 PAVILION_LAB,
                 CORNER_VIEW,
-                PENS.format(
-                    dial="orange-red",
-                    label=(
-                        "White label with a pale-blue DNA double-helix logo and the compound name printed "
-                        "lengthwise in bold crimson sans-serif (BPC-157, TB-500, Tesamorelin, BPC-157, KLOW), "
-                        "dose in small dark text."
-                    ),
+                PRODUCT.format(
+                    detail=(
+                        "It is a slim white research pen with a white cap and side clip, polished chrome bands, "
+                        "a pale-blue infinity DNA logo, the compound name in crimson printed lengthwise, and "
+                        "an orange ridged dial at the end."
+                    )
                 ),
                 FINISH.format(eyebrow="PENS", title="Peptides"),
             ]
@@ -164,16 +151,17 @@ TILES = [
         "theme_filename": "home-weight-loss.jpg",
         "overlay_eyebrow": "VIALS",
         "overlay_title": "Metabolic",
-        "input_reference_urls": refs(
-            "metabolic-vial-images/tirzepatide-50mg-vial.jpg",
-            "metabolic-vial-images/retatrutide-30mg-vial.jpg",
-            "all-product-white-backgrounds/Semaglutide_25mg_vial_whitebg.jpg",
-        ),
+        "input_reference_urls": DRIVE.format(file_id="1eYc8L15WhxmRmQM9gzWp-vs0e9sdpcQg"),
         "still_prompt": " ".join(
             [
                 PAVILION_LAB,
                 WINDOW_WALL_VIEW,
-                VIALS.format(names="Tirzepatide, Retatrutide, Semaglutide, Tirzepatide, Retatrutide"),
+                PRODUCT.format(
+                    detail=(
+                        "It is a clear glass pharmaceutical vial with a bright blue flip-off cap, a polished "
+                        "silver crimp collar, a white label, a crimson DNA helix, and a crimson dose band."
+                    )
+                ),
                 FINISH.format(eyebrow="VIALS", title="Metabolic"),
             ]
         ),
@@ -185,21 +173,17 @@ TILES = [
         "theme_filename": "home-weight-loss-pens.jpg",
         "overlay_eyebrow": "PENS",
         "overlay_title": "Metabolic",
-        "input_reference_urls": refs(
-            "all-product-white-backgrounds/sema_15mg_pen_whitebg.jpg",
-            "all-product-white-backgrounds/Tirz_40mg_pen_whitebg.jpg",
-            "all-product-white-backgrounds/reta_24mg_pen_whitebg.jpg",
-        ),
+        "input_reference_urls": DRIVE.format(file_id="1vDx2xDgTaCQlmTlhiFPAlhqSin8mbWiM"),
         "still_prompt": " ".join(
             [
                 PAVILION_LAB,
                 WINDOW_WALL_VIEW,
-                PENS.format(
-                    dial="cobalt-blue",
-                    label=(
-                        "White label with the compound name printed lengthwise in bold slate-blue sans-serif "
-                        "(Semaglutide, Tirzepatide, Retatrutide, Semaglutide, Tirzepatide), dose in small dark text."
-                    ),
+                PRODUCT.format(
+                    detail=(
+                        "It is a slim white research pen with a white cap and side clip, polished chrome bands, "
+                        "a pale-blue infinity DNA logo, the compound name in slate-blue printed lengthwise, and "
+                        "a cobalt-blue dial at the end."
+                    )
                 ),
                 FINISH.format(eyebrow="PENS", title="Metabolic"),
             ]
