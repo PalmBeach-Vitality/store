@@ -83,10 +83,12 @@ DRIVE = "https://drive.usercontent.google.com/download?id={file_id}&export=downl
 
 PRODUCT = (
     "On the tray, a straight row of five identical copies of the single product in the reference photo, "
-    "laid so the label faces the camera. {detail} Copy that reference photo exactly: same shape, cap, "
+    "{pose} {detail} Copy that reference photo exactly: same shape, cap, "
     "colors, logo and every printed word. Do not invent a different compound, dose, or spelling. "
     "The products are crisp and in focus, with soft window light on the glass and plastic."
 )
+
+LAID = "laid so the label faces the camera."
 
 FINISH = (
     "Shallow depth of field, background gently soft, cinematic commercial product photography, high "
@@ -112,6 +114,7 @@ TILES = [
                 PAVILION_LAB,
                 CORNER_VIEW,
                 PRODUCT.format(
+                    pose=LAID,
                     detail=(
                         "It is a clear glass pharmaceutical vial with a bright blue flip-off cap, a polished "
                         "silver crimp collar, a white label, a crimson DNA helix, and a crimson dose band."
@@ -134,10 +137,13 @@ TILES = [
                 PAVILION_LAB,
                 CORNER_VIEW,
                 PRODUCT.format(
+                    pose="standing upright on top of the tray so the label faces the camera.",
                     detail=(
                         "It is a slim white research pen with a white cap and side clip, polished chrome bands, "
-                        "a pale-blue infinity DNA logo, the compound name in crimson printed lengthwise, and "
-                        "an orange ridged dial at the end."
+                        "a pale-blue infinity DNA logo, the compound name in crimson printed lengthwise, a white "
+                        "ridged collar, and a bright red-orange ridged dial at the very bottom. Each whole pen is "
+                        "in frame. The red-orange ridged dial at the bottom of every pen is fully visible, the same "
+                        "dial as the reference photo. Do not sink the pens into holes or slots, and do not crop or cover the dial."
                     )
                 ),
                 FINISH.format(eyebrow="PENS", title="Peptides"),
@@ -157,6 +163,7 @@ TILES = [
                 PAVILION_LAB,
                 WINDOW_WALL_VIEW,
                 PRODUCT.format(
+                    pose=LAID,
                     detail=(
                         "It is a clear glass pharmaceutical vial with a bright blue flip-off cap, a polished "
                         "silver crimp collar, a white label, a crimson DNA helix, and a crimson dose band."
@@ -179,6 +186,7 @@ TILES = [
                 PAVILION_LAB,
                 WINDOW_WALL_VIEW,
                 PRODUCT.format(
+                    pose=LAID,
                     detail=(
                         "It is a slim white research pen with a white cap and side clip, polished chrome bands, "
                         "a pale-blue infinity DNA logo, the compound name in slate-blue printed lengthwise, and "
