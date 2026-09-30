@@ -46,13 +46,13 @@ It adds no text, logo, or music. Creatomate cannot fetch OpenRouter's auth-gated
 
 **Uniqueness.** 54 rows, **6 looks**. `look_for_rank` in `build_chem_breakdown_54.py` moves shot, surface, lighting, and grade off one counter (`i % 6`, `(i+1) % 6`, …), so ranks 1, 7, 13, … share one look. There are 6 distinct `video_motion_prompt`s, and 5 of them tell the camera to “then hold”. Hop 2 reuses hop 1's motion prompt. All 54 still prompts quote a compound name (`'Tirzepatide' is never printed as text`). This doc says `pick_molecule_creation` never repeats the last 5 compounds; the code only sorts by use count, then rank.
 
-**Row burn.** `sheets_update_chem` bumps `times_used` before the still. CHEM-001 … 009 read `times_used=1`; only CHEM-007 has a `video_url`. Exec 2579 (2026-09-29) claimed CHEM-009 Tirzepatide and made a still (1584 × 2816, no text), then stopped by design. Proposed: one sheet write after the video is saved, so a still-only partial run or a failed run does not burn the row and a pinned still stays matched to its row.
+**Row burn.** `sheets_update_chem` bumps `times_used` before the still. CHEM-001 … 009 read `times_used=1`; only CHEM-007 has a `video_url`. Exec 2579 (2026-09-29) claimed CHEM-009 Tirzepatide and made a still (1584 × 2816, no text), then stopped by design. Proposed: one sheet write after the video is saved, so a still-only partial run or a failed run does not burn the row and a pinned still stays matched to its row. **Sal: YES (2026-09-30)** — count a use only after the video is saved, and reset CHEM-001 … 009 to unused.
 
 **Mirrors.** `marketing/workflows/peptide_molecule_vid_gen.json` is an old 18-node Grok-video export, not the live 42-node workflow. The Sheet 13 CSV trails live on use counts, and CHEM-027 / -041 read `CJC/Ipamorelin` live but `CJC (no DAC)/Ipamorelin` inside their prompt text.
 
-**Model pick.** Video: **Wan 3.0** (`alibaba/wan-3.0`) is the only native-1080p model on OpenRouter's full video list that renders 30s in one pass (Wan 3.0 Prime is the same model, faster, at $0.28/s). fal hosts it too (`alibaba/wan-3.0/image-to-video`, same price). It is #2 on Artificial Analysis image-to-video (2026-09-18) and holds the first frame well; the known risk is an uncommanded cut or dissolve inside long clips. Alibaba's Wan 3.0 guide lists single-shot and multi-shot modes (multi-shot = 4–6s shots marked with timestamps) and opens its single-take example with `[One continuous take, … no cuts, …-second long shot, …]`. Rebuilt motion prompts should open the same way and carry no timestamps. `1080P` is Wan 3.0's default tier in Alibaba's own API reference. $0.20/s at 1080p = **$6.00 per 30s**. Seedance 2.5 also does 30s in one pass, but it renders natively at 720p (fal's `1080p` option counts as an upscale). Still: keep Grok Imagine Image 2.0 (real 2K 9:16, top 5 on both image boards); A/B GPT Image 2.5 on one row before switching.
+**Model pick — superseded 2026-09-30.** Sal chose Kling v3 Pro, 15s + 15s, joined in Creatomate, with Grok Imagine 2.0 kept and GPT Image 2.5 added for a smoke test. See *Smoke test — `23-molecule-smoke-2`* below. The Wan 3.0 notes stay for reference. Video: **Wan 3.0** (`alibaba/wan-3.0`) is the only native-1080p model on OpenRouter's full video list that renders 30s in one pass (Wan 3.0 Prime is the same model, faster, at $0.28/s). fal hosts it too (`alibaba/wan-3.0/image-to-video`, same price). It is #2 on Artificial Analysis image-to-video (2026-09-18) and holds the first frame well; the known risk is an uncommanded cut or dissolve inside long clips. Alibaba's Wan 3.0 guide lists single-shot and multi-shot modes (multi-shot = 4–6s shots marked with timestamps) and opens its single-take example with `[One continuous take, … no cuts, …-second long shot, …]`. Rebuilt motion prompts should open the same way and carry no timestamps. `1080P` is Wan 3.0's default tier in Alibaba's own API reference. $0.20/s at 1080p = **$6.00 per 30s**. Seedance 2.5 also does 30s in one pass, but it renders natively at 720p (fal's `1080p` option counts as an upscale). Still: keep Grok Imagine Image 2.0 (real 2K 9:16, top 5 on both image boards); A/B GPT Image 2.5 on one row before switching.
 
-**Proposed rebuild (waiting on Sal — nothing built):**
+**Proposed rebuild (Wan 3.0) — superseded 2026-09-30 by the smoke-test plan below. Nothing was built.**
 
 ```text
 manual_trigger → get_chem_creations (filter status = Active) → pick_molecule_creation
@@ -65,6 +65,333 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 ```
 
 12 nodes on fal (public `video.url`), 13 on OpenRouter (the content URL needs a rehost). Sheet 13 needs the new `model_video`, `resolution=1080p`, `duration_seconds=30`, poll seconds + budget columns, and 54 rebuilt rows with unique looks and 30s motion scripts.
+
+---
+
+## Smoke test — `23-molecule-smoke-2` (proposed 2026-09-30 · waiting on Sal)
+
+**No n8n node has been changed and nothing has run.** This is the proposal Sal approves or edits before one atomic update. The live workflow stays at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea` until then, and that version stays restorable from history afterwards.
+
+**Sal's calls (2026-09-30):**
+1. Kling v3 Pro, 15s + 15s, stitched in Creatomate.
+2. Keep the Grok Imagine 2.0 still node and add GPT Image 2.5 for a smoke test.
+3. Hyperreal but sci-fi — it has to look cool, not like microscope footage. Start with a new sheet of 2 rows; rebuild Sheet 13 only if he likes the result.
+4. Count a use only after the video is saved, and reset CHEM-001 … 009 to unused.
+
+### Sheet
+
+`23-molecule-smoke-2`:
+- Doc `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`, tab gid `105980795`. [Open the sheet](https://docs.google.com/spreadsheets/d/1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs/edit).
+- Mirror: `marketing/sheets/23-molecule-smoke-2.csv`, built by `python3 marketing/scripts/build_molecule_smoke_2.py` (`--xlsx` also writes the upload copy).
+- 37 columns. Every generation value is a cell.
+- The output columns (`still_url`, `hop1_video_url`, `last_frame_url`, `hop2_video_url`, `video_url`, `last_used_at`) start blank.
+
+| Row | Compound | Look | Still engine |
+|---|---|---|---|
+| `PBVita-MolSmoke-01` | GHK-Cu | Copper star (teal + copper) | `openai/gpt-image-2.5-sunburst` on OpenRouter, `still_size` 1440x2560, `still_quality` high |
+| `PBVita-MolSmoke-02` | BPC-157 | Rising chain (cyan + violet + white-gold) | `grok-imagine-image-2.0` on xAI, `still_resolution` 2k (measured 1584 × 2816 on this workflow) |
+
+**Both rows:**
+- Video: `fal-ai/kling-video/v3/pro/image-to-video`, `resolution` 1080p, 15s + 15s, `cfg_scale` 0.5.
+- Render: 1080 × 1920 at 24 fps, mp4 out, with a png hand-off frame.
+- **A/B:** both engines' columns are filled on both rows, so the A/B is one cell — set row 1's `model_still` to `grok-imagine-image-2.0`.
+
+**Prompt shape:**
+- **Still:** one shared hyperreal sci-fi header, then HERO, WORLD, LIGHT, CAMERA and COLOR, then a lock line (no text, no people, no vials or pens).
+- **Motion:** each motion prompt is one continuous take that is still moving on its last frame, and hop 2 continues hop 1's move.
+- **Negative:** one `negative_prompt` shared by both rows.
+
+Characters sent (video prompts include the silent lock); Kling's cap is 2,500:
+
+| Row | Still | Hop 1 | Hop 2 |
+|---|---|---|---|
+| Row 1 | 1,851 | 784 | 671 |
+| Row 2 | 1,776 | 677 | 652 |
+
+### Why these hosts
+
+**Kling on fal, not OpenRouter.**
+- OpenRouter lists Kling v3 Pro at 720p only, which is banned.
+- fal returns 1080 × 1920 (measured: 24 fps, 15.04s), with public `video.url`s Creatomate can fetch directly, so no rehost.
+- The lab, landscape and pen workflows already run it.
+- $0.112/s with audio off: $1.68 per hop, **$3.36 per 30s**.
+- Concurrency is 1, so don't run two Kling jobs at once.
+
+**GPT Image 2.5 on OpenRouter** (`POST https://openrouter.ai/api/v1/images`, credential **OpenRouter account**).
+- **`size` is required.** The model's endpoint record doesn't list `size`, but the API reference does: explicit pixels are authoritative, and a mismatched `aspect_ratio` alongside returns a 400. 1440x2560 is exactly 9:16. OpenRouter's own gpt-image-2 example asked for 16:9 with no size and got 1536 × 864, so a 9:16 still without `size` would come back about 864 × 1536, narrower than the video.
+- **Size check:** `check_gpt_still` measures the returned image and stops the run before any video spend unless it is exactly `still_size`.
+- **Format:** no `output_format` is sent, so the provider default comes back (PNG for OpenAI). JPEG and WebP are read too.
+- **Cost:** failed generations (400/502) aren't billed. Estimate $0.2–0.5 per still at `high`.
+
+**Creatomate v2 with Bearer Auth account 2** (`02s8mB0EmuoResHc`, httpBearerAuth).
+- **Why this credential:** that key made Creatomate v2 calls for Hook 15s and Study 30s (2026-09-24/26). **Creatomate PbVita** (`UkuSlYOEACCWm5rB`) was last seen returning `401 The provided API key is invalid` (exec 2140).
+- **Resolution cap:** free plans clamp renders to ≤ 480 px, and this account's past output is above that. The CHEM-007 join is 720 × 1280 only because its OpenRouter hops were 720p; the Study snapshots from 2026-09-25 are 1080 × 1920. `route_render` also stops the run if a render comes back smaller than the sheet's size.
+- **Credits:** about 16 per run (1 for the frame, about 15 for the 30s join).
+
+### Seam
+
+- **Cut point:** `hop1_duration_seconds − 1 / render_frame_rate` = 15 − 1/24 = 14.958333 s, which is exactly frame 359 of hop 1.
+- **Hand-off:** `creatomate_last_frame` snapshots that frame as hop 2's start image. `creatomate_concat` trims hop 1 at the same point and plays hop 2 right after it on one track, so no frame is repeated or skipped.
+- **Check by eye at 0:15:** hop 2's first frame is Kling's re-render of the hand-off frame, not a pixel copy.
+- **Dry run:** both Creatomate bodies passed `dry_run` (valid, no warnings, no credits).
+
+### Wire
+
+```text
+manual_trigger → get_chem_creations → filter_chem_active → pick_molecule_creation → route_still_model
+  true  (openai/gpt-image-*)   → gpt_image_molecule_still → check_gpt_still → gpt_still_to_file → upload_gpt_still → save_still_url
+  false (grok-imagine-image-*) → grok_imagine_molecule_still → save_still_url
+→ prep_molecule_video_start → fal_kling_hop1 → prep_last_frame
+→ creatomate_last_frame → wait_last_frame → creatomate_last_frame_poll → route_last_frame → switch_last_frame
+     true → prep_kling_extend        false → wait_last_frame
+→ fal_kling_hop2 → prep_creatomate_concat
+→ creatomate_concat → wait_concat → creatomate_poll → route_concat → switch_concat
+     true → save_video_url           false → wait_concat
+→ sheets_update_video → end
+```
+
+The canvas goes from 42 to 30 nodes (29 working + sticky).
+
+- **Remove (23):**
+  - `sheets_update_chem`
+  - OpenRouter video: `openrouter_i2v_start`, `openrouter_i2v_poll`, `openrouter_i2v_extend`, `openrouter_i2v_extend_poll`
+  - OpenRouter waits: `wait_i2v`, `wait_i2v_again`, `wait_i2v_quota`, `wait_i2v_extend`, `wait_i2v_extend_again`, `wait_i2v_extend_quota`
+  - Quota retry and routing: `retry_hop1_body`, `retry_hop2_body`, `route_hop1`, `route_hop2`, `switch_hop1`, `switch_hop2`
+  - Rehost: `download_hop1`, `upload_hop1_public`, `parse_hop1_public`, `download_hop2`, `upload_hop2_public`, `parse_hop2_public`
+- **Add (11):**
+  - Still branch: `route_still_model`, `gpt_image_molecule_still`, `check_gpt_still`, `gpt_still_to_file`, `upload_gpt_still`
+  - Video: `fal_kling_hop1`, `fal_kling_hop2`
+  - Creatomate loops: `route_last_frame`, `switch_last_frame`, `route_concat`, `switch_concat`
+- **Unchanged:** `manual_trigger`, `filter_chem_active`. Every other kept node is edited as below.
+
+Code for every Code node is in `marketing/n8n-molecule-smoke/` (proposed, not live). `route_last_frame` and `route_concat` share `route_render.js`. All Code nodes run Once for All Items with Execute Once **OFF**.
+
+#### `get_chem_creations` (edit)
+
+**Before → this → After:** `manual_trigger` → **get_chem_creations** → `filter_chem_active`
+
+Google Sheets 4.7, Get Row(s).
+- Document **By ID** `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`.
+- Sheet **From list** `23-molecule-smoke-2` (gid `105980795`).
+- Options empty. Execute Once stays ON.
+
+#### `pick_molecule_creation` (edit)
+
+**Before → this → After:** `filter_chem_active` → **pick_molecule_creation** → `route_still_model`
+
+Paste `pick_molecule_creation.js`. It picks the least-used Active row (by `times_used`, then `rank`) and throws on any of these:
+- an empty or malformed cell
+- a 720p value
+- a Kling slug other than fal's v3 Pro
+- a hop outside 3–15s
+- a frame that isn't 9:16
+- a GPT `still_size` narrower than the video
+
+#### `route_still_model` (new)
+
+**Before → this → After:** `pick_molecule_creation` → **route_still_model** → true `gpt_image_molecule_still` / false `grok_imagine_molecule_still`
+
+IF 2.3. `={{ $json.model_still }}`, String **starts with** `openai/gpt-image-` (case sensitive, strict type validation).
+
+#### `gpt_image_molecule_still` (new)
+
+**Before → this → After:** `route_still_model` (true) → **gpt_image_molecule_still** → `check_gpt_still`
+
+HTTP Request 4.5.
+- POST `https://openrouter.ai/api/v1/images`.
+- Predefined Credential Type **OpenRouter API**, credential **OpenRouter account** (`zDmHXnCHbj14yIvl`).
+- Body JSON:
+
+```text
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.still_prompt, n: $json.still_n, size: $json.still_size, aspect_ratio: $json.aspect_ratio, quality: $json.still_quality }) }}
+```
+
+Options → Timeout `={{ $json.still_timeout_seconds * 1000 }}`.
+
+#### `check_gpt_still` (new)
+
+**Before → this → After:** `gpt_image_molecule_still` → **check_gpt_still** → `gpt_still_to_file`
+
+Paste `check_gpt_still.js`. Outputs `still_b64`, `still_mime`, `still_ext`, `still_width`, `still_height`, `still_cost_usd`.
+
+#### `gpt_still_to_file` (new)
+
+**Before → this → After:** `check_gpt_still` → **gpt_still_to_file** → `upload_gpt_still`
+
+Convert to File 1.1, Move Base64 String to File.
+
+| Setting | fx | Value |
+|---|---|---|
+| Base64 Input Field | OFF | `still_b64` |
+| Put Output File in Field | OFF | `data` |
+| File Name | ON | `={{ $('pick_molecule_creation').first().json.creation_id }}.{{ $json.still_ext }}` |
+| MIME Type | ON | `={{ $json.still_mime }}` |
+
+#### `upload_gpt_still` (new)
+
+**Before → this → After:** `gpt_still_to_file` → **upload_gpt_still** → `save_still_url`
+
+HTTP Request 4.5.
+- POST `https://litterbox.catbox.moe/resources/internals/api.php`.
+- Form-Data: `reqtype` = `fileupload`, `time` = `72h`, and `fileToUpload` = n8n Binary File from `data`.
+- Response Format **Text**; the URL lands in `$json.data`.
+- Same as the live `upload_hop1_public`, minus its fixed timeout.
+
+#### `grok_imagine_molecule_still` (edit)
+
+**Before → this → After:** `route_still_model` (false) → **grok_imagine_molecule_still** → `save_still_url`
+
+Same URL and **XAI Grok** header auth. The body now reads `still_prompt` (was `video_prompt`) and `still_n` (was a fixed `1`):
+
+```text
+={{ JSON.stringify({ model: $json.model_still, prompt: $json.still_prompt, n: $json.still_n, aspect_ratio: $json.aspect_ratio, resolution: $json.still_resolution }) }}
+```
+
+Options → Timeout `={{ $json.still_timeout_seconds * 1000 }}` (was a fixed 120000).
+
+#### `save_still_url` (edit)
+
+**Before → this → After:** `upload_gpt_still` or `grok_imagine_molecule_still` → **save_still_url** → `prep_molecule_video_start`
+
+Edit Fields 3.5.
+- Include Other Input Fields **OFF**.
+- One field: `still_url` (String) `={{ Array.isArray($json.data) ? $json.data[0].url : String($json.data).trim() }}`.
+- The other six fields go; downstream nodes read `pick_molecule_creation` directly.
+
+#### `prep_molecule_video_start` (edit)
+
+**Before → this → After:** `save_still_url` → **prep_molecule_video_start** → `fal_kling_hop1`
+
+Paste `prep_molecule_video_start.js`. It adds the silent lock, checks the 2,500-character cap, and passes `model_video`, `duration`, `negative_prompt`, `cfg_scale`, poll and max wait through from the sheet.
+
+#### `fal_kling_hop1` / `fal_kling_hop2` (new)
+
+**Before → this → After:** `prep_molecule_video_start` → **fal_kling_hop1** → `prep_last_frame`  
+**Before → this → After:** `prep_kling_extend` → **fal_kling_hop2** → `prep_creatomate_concat`
+
+fal.ai node 1, credential **fal.ai account** (`qfVt9MnUeOJxRexp`). Model **By ID** `={{ $json.model_video }}`.
+
+| Parameter | Value |
+|---|---|
+| `prompt` | `={{ $json.prompt }}` |
+| `start_image_url` | `={{ $json.start_image_url }}` |
+| `duration` | `={{ $json.duration }}` (the string `"15"`) |
+| `negative_prompt` | `={{ $json.negative_prompt }}` |
+| `cfg_scale` | `={{ $json.cfg_scale }}` |
+| `generate_audio` | `={{ false }}` (the plain text `false` counts as true) |
+
+Options: Wait For Completion ON, Poll Interval `={{ $json.poll_seconds }}`, Max Wait Time `={{ $json.max_wait_seconds }}`.
+
+#### `prep_last_frame` (edit)
+
+**Before → this → After:** `fal_kling_hop1` → **prep_last_frame** → `creatomate_last_frame`
+
+Paste `prep_last_frame.js`. It builds the snapshot body at the seam cut.
+
+#### `creatomate_last_frame` / `creatomate_concat` (edit)
+
+**Before → this → After:** `prep_last_frame` → **creatomate_last_frame** → `wait_last_frame`  
+**Before → this → After:** `prep_creatomate_concat` → **creatomate_concat** → `wait_concat`
+
+HTTP Request 4.5.
+- POST `https://api.creatomate.com/v2/renders` (was v1).
+- Generic Credential Type **Bearer Auth**, credential **Bearer Auth account 2** (`02s8mB0EmuoResHc`).
+- Body JSON `={{ JSON.stringify($json.creatomate_body) }}`. No fixed timeout.
+
+#### `wait_last_frame` / `wait_concat` (edit)
+
+**Before → this → After:** `creatomate_last_frame` or `switch_last_frame` (false) → **wait_last_frame** → `creatomate_last_frame_poll`  
+**Before → this → After:** `creatomate_concat` or `switch_concat` (false) → **wait_concat** → `creatomate_poll`
+
+Wait 1.1, After Time Interval. Amount `={{ $('pick_molecule_creation').first().json.creatomate_poll_seconds }}`, Unit Seconds.
+
+#### `creatomate_last_frame_poll` / `creatomate_poll` (edit)
+
+**Before → this → After:** `wait_last_frame` → **creatomate_last_frame_poll** → `route_last_frame`  
+**Before → this → After:** `wait_concat` → **creatomate_poll** → `route_concat`
+
+HTTP Request 4.5, GET, same Bearer credential.
+- `=https://api.creatomate.com/v2/renders/{{ $('creatomate_last_frame').first().json.id }}`
+- `=https://api.creatomate.com/v2/renders/{{ $('creatomate_concat').first().json.id }}`
+
+#### `route_last_frame` / `route_concat` (new)
+
+**Before → this → After:** `creatomate_last_frame_poll` → **route_last_frame** → `switch_last_frame`  
+**Before → this → After:** `creatomate_poll` → **route_concat** → `switch_concat`
+
+Paste `route_render.js` into both.
+- Returns `done: true` on a succeeded render at the sheet's size, and `done: false` while it is still rendering.
+- Throws on a failed or cancelled render, on a size mismatch, or after `creatomate_max_polls`.
+
+#### `switch_last_frame` / `switch_concat` (new)
+
+**Before → this → After:** `route_last_frame` → **switch_last_frame** → true `prep_kling_extend` / false `wait_last_frame`  
+**Before → this → After:** `route_concat` → **switch_concat** → true `save_video_url` / false `wait_concat`
+
+IF 2.3. `={{ $json.done }}`, Boolean **is true**.
+
+#### `prep_kling_extend` (edit)
+
+**Before → this → After:** `switch_last_frame` (true) → **prep_kling_extend** → `fal_kling_hop2`
+
+Paste `prep_kling_extend.js`. Hop 2 starts from the hand-off frame with the sheet's `extend_motion_prompt`. The live node's hardcoded continuation block goes.
+
+#### `prep_creatomate_concat` (edit)
+
+**Before → this → After:** `fal_kling_hop2` → **prep_creatomate_concat** → `creatomate_concat`
+
+Paste `prep_creatomate_concat.js`.
+
+#### `save_video_url` (edit)
+
+**Before → this → After:** `switch_concat` (true) → **save_video_url** → `sheets_update_video`
+
+Paste `save_video_url.js`. The run's only sheet write comes after it, so a still-only or failed run never bumps `times_used`.
+
+#### `sheets_update_video` (edit)
+
+**Before → this → After:** `save_video_url` → **sheets_update_video** → `end`
+
+Google Sheets 4.7, Update Row.
+- Document **By ID** `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`, Sheet `23-molecule-smoke-2` (gid `105980795`).
+- Map Each Column Below, matching on `creation_id`.
+- Columns, each `={{ $json.<column> }}`: `creation_id`, `still_url`, `hop1_video_url`, `last_frame_url`, `hop2_video_url`, `video_url`, `times_used` (number), `last_used_at`.
+- Options → Cell Format **RAW**, so values are stored exactly as sent.
+
+#### Sticky note (edit)
+
+Replace its text with the new flow: Grok or GPT still → fal Kling v3 Pro 15s → Creatomate hand-off frame → fal Kling v3 Pro 15s → Creatomate 30s join. Sheet `23-molecule-smoke-2`. No logo, no text, no sound.
+
+### Checks already done (no spend)
+
+- **Local simulation:** every Code node ran against the smoke CSV with fake API responses — typed and all-string cells, both engines, and the Hold and A/B cases. 115 checks pass, including every fail-closed path.
+- **Image measurement:** `check_gpt_still` measured real 1440 × 2560 PNG, JPEG and WebP files (lossy, lossless, alpha) and rejected an 864 × 1536 PNG.
+- **n8n schema:** every new or changed node config passed `validate_node_config`.
+- **Creatomate:** both bodies passed `dry_run`.
+
+### Run plan
+
+Each step needs "you may run the workflow" or "you can start the workflow".
+
+1. **Still only.** Partial run with destination `save_still_url`. No sheet write. Row 1 (GPT Image 2.5) goes first.
+2. **Pin the still** if Sal likes it: `save_still_url` on a GPT row (small JSON; the base64 nodes are too big), or `grok_imagine_molecule_still` on a Grok row.
+3. **Video.** Partial run with destination `sheets_update_video`. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. After a page reload that data may be gone, so re-run step 1 rather than risk a new still.
+4. **A/B.** Set row 1's `model_still` to `grok-imagine-image-2.0`. To run row 2 while row 1 is unused, set row 1's `status` to `Hold`.
+
+**Per full run:** GPT still about $0.2–0.5 (Grok $0.04), plus Kling $3.36, plus about 16 Creatomate credits.
+
+### Open risks
+
+- **`size` rejected:** OpenRouter may still reject `size` with a 400 (not billed). The fix would be a direct OpenAI key.
+- **Short-lived links:** litterbox links last 72h, Grok's `imgen.x.ai` links are temporary, and Creatomate files last 30 days. Production needs a Drive copy of the final MP4.
+- **Slow editor:** the editor may be slow to show the base64 still (several MB of JSON on two nodes).
+- **Measure before it counts:** every output is checked with ffprobe first — 1080 × 1920, about 30.0s, no sound.
+
+### Sheet 13 reset (Sal: YES)
+
+- **Change:** CHEM-001 … 009 → `times_used` 0, `last_used_at` blank.
+- **Blocker:** it's a sheet write, so it needs either a throwaway n8n write workflow (node creation plus "you may run the workflow"), or folding into the 54-row rebuild after the smoke test.
+- **Not urgent:** it doesn't block the smoke test, and Sheet 13 is blocked by the 720p ban anyway.
 
 ---
 
