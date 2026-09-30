@@ -16,6 +16,58 @@ Sister workflow (pens, separate import): `peptide_pen_vid_gen` → Sheet `14-pen
 
 ---
 
+## Audit — 2026-09-29 (read-only; no node, sheet row, or run was changed)
+
+**Status: blocked by the 720p ban.** All 54 Sheet 13 rows read `resolution=720p` and `model_video=kwaivgi/kling-v3.0-pro`, and OpenRouter serves that model at **720p only** (`supported_resolutions: ["720p"]`). The one finished 30s clip, CHEM-007 Sermorelin, measures **720 × 1280** (header of the Creatomate concat MP4). Nothing this workflow makes today can ship.
+
+**Why Creatomate is here — two jobs, both only because Kling caps at 15s:**
+
+1. `creatomate_last_frame` renders a JPG of hop 1 at `duration − 0.1s`. That JPG is hop 2's first frame.
+2. `creatomate_concat` joins hop 1 + hop 2 into the 30s MP4 that is written to `video_url`.
+
+It adds no text, logo, or music. Creatomate cannot fetch OpenRouter's auth-gated `unsigned_urls`, so each hop is downloaded and re-uploaded to litterbox (72h) first.
+
+**Node count.** 42 on canvas = 41 working nodes + 1 sticky. 23 exist only to turn two 15s clips into one 30s clip (hop 1 rehost 3, last frame 4, hop 2 9, hop 2 rehost 3, concat 4). 2 more are the Kling quota resubmit on hop 1.
+
+**Hardcodes (AGENTS.md no-hardcode rule):**
+
+| Node | Hardcoded |
+|---|---|
+| `prep_kling_extend` | Creative prompt block prefixed to hop 2 (“Continue from the last frame … NO pens.”) plus `Same '<compound>' reaction subject, never printed.`; `\|\| '9:16'`, `\|\| 15`, `\|\| 180` |
+| `prep_last_frame`, `prep_creatomate_concat` | `\|\| '720p'`, `\|\| '9:16'`, `\|\| 15`; 720 × 1280 frame default |
+| `creatomate_concat` | `\|\| 1080` / `\|\| 1920` in its own inline body (`prep_creatomate_concat`'s `creatomate_body_json` is never read) |
+| `prep_molecule_video_start` | `wait_seconds \|\| 180` (Sheet 13 has no `wait_seconds` column) |
+| `route_hop1` / `route_hop2` | 600s budget, 45s poll math, 5 quota retries |
+| Wait nodes | 45s / 90s / 20s |
+| `grok_imagine_molecule_still` | `n: 1` |
+| `save_video_url` | `duration_seconds: 30` |
+| `pick_molecule_creation` | Invents `PBVita-Chem-###` when `creation_id` is blank; blank `status` counts as Active; silent cut at 7,900 chars; Kling's 3–15s limit |
+| `prep_molecule_video_start` / `prep_kling_extend` | Silent cut at 2,500 chars; Kling's 3–15s limit (blocks a 30s row) |
+
+**Uniqueness.** 54 rows, **6 looks**. `look_for_rank` in `build_chem_breakdown_54.py` moves shot, surface, lighting, and grade off one counter (`i % 6`, `(i+1) % 6`, …), so ranks 1, 7, 13, … share one look. There are 6 distinct `video_motion_prompt`s, each ending “then hold”. Hop 2 reuses hop 1's motion prompt. 52 of 54 still prompts quote the compound name (`'Tirzepatide' is never printed as text`). This doc says `pick_molecule_creation` never repeats the last 5 compounds; the code only sorts by use count, then rank.
+
+**Row burn.** `sheets_update_chem` bumps `times_used` before the still. CHEM-001 … 009 read `times_used=1`; only CHEM-007 has a `video_url`. Exec 2579 (2026-09-29) claimed CHEM-009 Tirzepatide and made a still (1584 × 2816, no text), then stopped by design. Proposed: one sheet write after the video is saved, so a still-only partial run or a failed run does not burn the row and a pinned still stays matched to its row.
+
+**Mirrors.** `marketing/workflows/peptide_molecule_vid_gen.json` is an old 18-node Grok-video export, not the live 42-node workflow. The Sheet 13 CSV trails live on use counts, and CHEM-027 / -041 read `CJC/Ipamorelin` live but `CJC (no DAC)/Ipamorelin` inside their prompt text.
+
+**Model pick.** Video: **Wan 3.0** (`alibaba/wan-3.0`) is the only native-1080p model on OpenRouter's full video list that renders 30s in one pass (Wan 3.0 Prime is the same model, faster, at $0.28/s). fal hosts it too (`alibaba/wan-3.0/image-to-video`, same price). It is #2 on Artificial Analysis image-to-video (2026-09-18) and holds the first frame well; the known risk is an uncommanded cut or dissolve inside long clips. $0.20/s at 1080p = **$6.00 per 30s**. Still: keep Grok Imagine Image 2.0 (real 2K 9:16, top 5 on both image boards); A/B GPT Image 2.5 on one row before switching.
+
+**Proposed rebuild (waiting on Sal — nothing built):**
+
+```text
+manual_trigger → get_chem_creations (filter status = Active) → pick_molecule_creation
+  → grok_imagine_molecule_still → save_still_url
+  → video_start (Wan 3.0; model, prompt, 30s, 1080p, 9:16 from the sheet; audio off) → wait_video → video_poll → route_video
+       done    → fal: video_result  |  OpenRouter: download_video → drive_upload_video
+               → sheets_update_chem (times_used + 1, last_used_at, video_url, seed) → end
+       running → wait_video
+       failed or over the sheet's poll budget → stop_video_failed → end
+```
+
+12 nodes on fal (public `video.url`), 13 on OpenRouter (the content URL needs a rehost). Sheet 13 needs the new `model_video`, `resolution=1080p`, `duration_seconds=30`, poll seconds + budget columns, and 54 rebuilt rows with unique looks and 30s motion scripts.
+
+---
+
 ## Wire (linear)
 
 ```text
@@ -177,9 +229,9 @@ Include Other Input Fields: **ON**
 
 Paste: `marketing/n8n-code-prep-molecule-video-start.js`
 
-**Check:** `still_url` https + `openrouter_body_json`. `model_video` must be `kwaivgi/kling-v3.0-pro`.
+**Check:** `still_url` https + `openrouter_body_json`. The live code still requires `model_video` = `kwaivgi/kling-v3.0-pro`.
 
-OpenRouter Kling v3 Pro is **720p only**. Sheet 13 `resolution` must be `720p`.
+**Blocked — 720p is banned (AGENTS.md).** OpenRouter serves Kling v3 Pro at 720p only, so this node cannot make a legal clip. Do not write `720p` to Sheet 13; see *Audit — 2026-09-29* above.
 
 See `marketing/n8n-openrouter-video.md` for hop 1 → last-frame snapshot → hop 2 → Creatomate concat.
 
