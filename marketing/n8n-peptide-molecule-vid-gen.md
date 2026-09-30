@@ -96,12 +96,12 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 | Row | Compound | Look | Still engine |
 |---|---|---|---|
 | `PBVita-MolSmoke-01` | GHK-Cu | Copper star (teal + copper) | `openai/gpt-image-2.5-sunburst` on OpenRouter, `still_size` 1440x2560, `still_quality` high |
-| `PBVita-MolSmoke-02` | BPC-157 | Rising chain (cyan + violet + white-gold) | `grok-imagine-image-2.0` on xAI, `still_resolution` 2k (measured 1584 × 2816 on this workflow) |
+| `PBVita-MolSmoke-02` | BPC-157 | Rising chain (cyan + violet + white-gold) | `openai/gpt-image-2.5-sunburst` on OpenRouter, `still_size` 1440x2560, `still_quality` high |
 
 **Both rows:**
 - Video: `fal-ai/kling-video/v3/pro/image-to-video`, `resolution` 1080p, 15s + 15s, `cfg_scale` 0.5.
 - Render: 1080 × 1920 at 24 fps, mp4 out, with a png hand-off frame.
-- **A/B:** both engines' columns are filled on both rows. That comparison is parked while `grok_imagine_molecule_still` is deactivated. Row 2's `model_still` is still `grok-imagine-image-2.0`.
+- **A/B:** both engines' columns are filled on both rows. That comparison is parked while `grok_imagine_molecule_still` is deactivated. On 2026-09-30 row 2's `model_still` was set to `openai/gpt-image-2.5-sunburst`, so the next pick takes the true branch.
 
 **Prompt shape:**
 - **Still:** one shared hyperreal sci-fi header, then HERO, WORLD, LIGHT, CAMERA and COLOR, then a lock line (no text, no people, no vials or pens).
@@ -392,7 +392,7 @@ Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The 
 3. **Video.** In the same editor session, open `sheets_update_video` → **Execute step**. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. A page reload can drop that data, so if the page was reloaded, start again from step 1.
 4. **Unpin `save_still_url`** after the video run. A pin left in place makes the next run animate the old still with the next row's prompts.
 5. **Next row.** The pick takes the least-used Active row, then the lower `rank`, so row 2 comes up once row 1's video is saved. To run row 2 first, set row 1's `status` to `Hold`.
-6. **A/B is parked.** `grok_imagine_molecule_still` is deactivated, so do not set a row's `model_still` to `grok-imagine-image-2.0` until that node is turned back on. Row 2 is still set to that model. Change it to `openai/gpt-image-2.5-sunburst`, or set its `status` to `Hold`, before another run. Row 2 already has `still_size` 1440x2560 and `still_quality` high.
+6. **A/B is parked.** `grok_imagine_molecule_still` is deactivated, so do not set a row's `model_still` to `grok-imagine-image-2.0` until that node is turned back on. Row 2's `model_still` is `openai/gpt-image-2.5-sunburst`.
 
 **Per full run:** GPT still about $0.2–0.5 (Grok $0.04), plus Kling $3.36, plus about 16 Creatomate credits.
 

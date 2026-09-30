@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build the 2-row molecule smoke-test sheet `23-molecule-smoke-2`.
 
-Row 1 stills on GPT Image 2.5 Sunburst (OpenRouter), row 2 on Grok Imagine Image 2.0.
-Both rows fill every still column, so switching engines is one `model_still` edit.
+Both rows use GPT Image 2.5 Sunburst (OpenRouter). Grok Imagine stays in the spare
+columns and off the live `model_still` cell. Switching engines is one cell.
 Video is fal Kling v3 Pro, 15s + 15s, joined by Creatomate. Audio stays off: the
 prep nodes add SILENT_PREFIX and send generate_audio=false, so the sheet omits both.
 
@@ -197,7 +197,7 @@ ROWS = [
         "rank": 2,
         "compound_name": "BPC-157",
         "look_name": "Rising chain (cyan + violet + white-gold)",
-        "model_still": "grok-imagine-image-2.0",
+        "model_still": "openai/gpt-image-2.5-sunburst",
         "still_prompt": (
             STILL_HEADER
             + "HERO: a long chain of amino acids being built link by link. It rises out of a "
