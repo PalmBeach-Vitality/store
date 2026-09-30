@@ -18,28 +18,36 @@ if (!defined('ABSPATH')) {
 function pbv_homepage_collections() {
     return array(
         array(
-            'slug'  => 'peptides',
-            'title' => 'Peptides',
-            'alt'   => 'Vials — Peptides',
-            'image' => 'home-peptides.jpg',
+            'slug'   => 'peptides',
+            'title'  => 'Peptides',
+            'alt'    => 'Vials — Peptides',
+            'image'  => 'home-peptides.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
-            'slug'  => 'peptide-pens',
-            'title' => 'Peptide Pens',
-            'alt'   => 'Pens — Peptides',
-            'image' => 'home-peptide-pens.jpg',
+            'slug'   => 'peptide-pens',
+            'title'  => 'Peptide Pens',
+            'alt'    => 'Pens — Peptides',
+            'image'  => 'home-peptide-pens.jpg',
+            'width'  => 1792,
+            'height' => 1008,
         ),
         array(
-            'slug'  => 'weight-loss',
-            'title' => 'Weight Loss',
-            'alt'   => 'Vials — Metabolic',
-            'image' => 'home-weight-loss.jpg',
+            'slug'   => 'weight-loss',
+            'title'  => 'Weight Loss',
+            'alt'    => 'Vials — Metabolic',
+            'image'  => 'home-weight-loss.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
-            'slug'  => 'weight-loss-pens',
-            'title' => 'Weight Loss Pens',
-            'alt'   => 'Pens — Metabolic',
-            'image' => 'home-weight-loss-pens.jpg',
+            'slug'   => 'weight-loss-pens',
+            'title'  => 'Weight Loss Pens',
+            'alt'    => 'Pens — Metabolic',
+            'image'  => 'home-weight-loss-pens.jpg',
+            'width'  => 1824,
+            'height' => 1024,
         ),
     );
 }
@@ -100,8 +108,8 @@ function pbv_render_homepage_collections() {
                 class="pbv-home-collection__img"
                 src="<?php echo esc_url($image); ?>"
                 alt="<?php echo esc_attr($card['alt']); ?>"
-                width="1792"
-                height="1008"
+                width="<?php echo (int) $card['width']; ?>"
+                height="<?php echo (int) $card['height']; ?>"
                 loading="lazy"
                 decoding="async"
               />
