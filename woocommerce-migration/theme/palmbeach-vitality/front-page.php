@@ -175,25 +175,27 @@ if (file_exists($pbv_lab_video)) :
 (function () {
   var video = document.querySelector('.pbv-desk__video');
   if (!video) return;
+  var stage = video.parentNode;
   video.muted = true;
   video.defaultMuted = true;
   video.loop = true;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    video.removeAttribute('autoplay');
-    video.pause();
-    return;
-  }
   function start() {
     var pending = video.play();
     if (pending && pending.catch) pending.catch(function () {});
   }
+  video.addEventListener('playing', function () {
+    video.removeAttribute('poster');
+    if (stage && stage.style) stage.style.backgroundImage = 'none';
+  });
   video.addEventListener('ended', function () {
     video.currentTime = 0;
     start();
   });
-  if (video.readyState >= 2) start();
-  else video.addEventListener('canplay', start);
   start();
+  video.addEventListener('canplay', start);
+  ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (name) {
+    window.addEventListener(name, start, { once: true, passive: true });
+  });
 })();
 </script>
     <?php
