@@ -150,24 +150,24 @@ if (file_exists($pbv_lab_video)) :
       <?php echo $pbv_lab_poster_uri ? ' poster="' . esc_url($pbv_lab_poster_uri) . '"' : ''; ?>
       data-src="<?php echo esc_url($pbv_lab_video_uri); ?>"
     ></video>
-  </div>
-  <div class="pbv-desk__wash" aria-hidden="true"></div>
-  <div class="pbv-desk__hero">
-    <div class="pbv-desk__copy">
-      <p class="pbv-desk__kicker"><?php esc_html_e('Laboratory research', 'palmbeach-vitality'); ?></p>
-      <h1 class="pbv-desk__title">Palm Beach Vitality</h1>
-      <p class="pbv-desk__subtitle">Premium Peptides. Precision Crafted.</p>
-      <p class="pbv-desk__lead">U.S.-made research peptides, documented with HPLC and mass spectrometry, shipped cold-pack across all 50 states.</p>
-      <p class="pbv-desk__cta">
-        <a class="pbv-desk__shop" href="#shop-collections"><?php esc_html_e('Shop collections', 'palmbeach-vitality'); ?></a>
-      </p>
-      <p class="pbv-desk__wholesale">Wholesale buyers: <a href="https://www.palmbeach-vitality.com">palmbeach-vitality.com</a></p>
+    <div class="pbv-desk__wash" aria-hidden="true"></div>
+    <div class="pbv-desk__overlay">
+      <div class="pbv-desk__copy">
+        <p class="pbv-desk__kicker"><?php esc_html_e('Laboratory research', 'palmbeach-vitality'); ?></p>
+        <h1 class="pbv-desk__title">Palm Beach Vitality</h1>
+        <p class="pbv-desk__subtitle">Premium Peptides. Precision Crafted.</p>
+        <p class="pbv-desk__lead">U.S.-made research peptides, documented with HPLC and mass spectrometry, shipped cold-pack across all 50 states.</p>
+        <p class="pbv-desk__cta">
+          <a class="pbv-desk__shop" href="#shop-collections"><?php esc_html_e('Shop collections', 'palmbeach-vitality'); ?></a>
+        </p>
+        <p class="pbv-desk__wholesale">Wholesale buyers: <a href="https://www.palmbeach-vitality.com">palmbeach-vitality.com</a></p>
+      </div>
+      <div class="pbv-desk__story">
+        <p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>
+        <p>No shortcuts. No compromises. Just the finest peptides available — made right here in America with cutting-edge science and uncompromising quality standards.</p>
+        <p class="pbv-desk__welcome">Welcome to Palm Beach Vitality. Where premium meets performance.</p>
+      </div>
     </div>
-  </div>
-  <div class="pbv-desk__story">
-    <p>Every product is manufactured in state-of-the-art U.S. facilities using advanced automated peptide synthesis technology. Our process combines precision solid-phase synthesis with rigorous multi-stage purification and comprehensive quality control, including HPLC and mass spectrometry testing. Produced under strict cGMP standards with full traceability and third-party verification, each vial delivers exceptional purity, potency, and consistency you can trust.</p>
-    <p>No shortcuts. No compromises. Just the finest peptides available — made right here in America with cutting-edge science and uncompromising quality standards.</p>
-    <p class="pbv-desk__welcome">Welcome to Palm Beach Vitality. Where premium meets performance.</p>
   </div>
 </section>
 <script>
