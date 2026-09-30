@@ -371,12 +371,14 @@ Replace its text with the new flow: Grok or GPT still → fal Kling v3 Pro 15s �
 
 ### Run plan
 
-Each step needs "you may run the workflow" or "you can start the workflow".
+Sal runs both halves from the n8n editor. The n8n MCP `execute_workflow` has no stop-at-node option: an agent can only start the whole chain, which would spend on video before Sal has seen the still. An agent starts nothing without "you may run the workflow" or "you can start the workflow".
 
-1. **Still only.** Partial run with destination `save_still_url`. No sheet write. Row 1 (GPT Image 2.5) goes first.
-2. **Pin the still** if Sal likes it: `save_still_url` on a GPT row (small JSON; the base64 nodes are too big), or `grok_imagine_molecule_still` on a Grok row.
-3. **Video.** Partial run with destination `sheets_update_video`. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. After a page reload that data may be gone, so re-run step 1 rather than risk a new still.
-4. **A/B.** Set row 1's `model_still` to `grok-imagine-image-2.0`. To run row 2 while row 1 is unused, set row 1's `status` to `Hold`.
+1. **Still only.** Open `save_still_url` → **Execute step**. Only the sheet read and one still run, and nothing is written to the sheet. Row 1 (GPT Image 2.5) goes first: both rows are at `times_used` 0 and row 1 has the lower `rank`.
+2. **Pin the still** if Sal likes it: pin `save_still_url`. On both engines its output is one small `still_url` field (the GPT base64 nodes are too big to pin).
+3. **Video.** In the same editor session, open `sheets_update_video` → **Execute step**. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. A page reload can drop that data, so if the page was reloaded, start again from step 1.
+4. **Unpin `save_still_url`** after the video run. A pin left in place makes the next run animate the old still with the next row's prompts.
+5. **Next row.** The pick takes the least-used Active row, then the lower `rank`, so row 2 comes up once row 1's video is saved. To run row 2 first, set row 1's `status` to `Hold`.
+6. **A/B (optional).** For the same look on both still engines, set row 1's `model_still` to `grok-imagine-image-2.0` and repeat from step 1. Row 1 is picked again once both rows have run once, because it has the lower `rank`. Stopping at step 1 compares the stills for $0.04.
 
 **Per full run:** GPT still about $0.2–0.5 (Grok $0.04), plus Kling $3.36, plus about 16 Creatomate credits.
 
