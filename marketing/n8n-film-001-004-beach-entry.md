@@ -130,7 +130,7 @@ Google Sheets **Update**, match `still_id`, write `take_urls` only.
 1. Open the new `take_urls` for 001 / 004 / 020.
 2. Write the keeper into `picked_url` (`overlay_film_beach_keepers` writes the GitHub raw keepers on this branch).
 3. Run `film_i2v_veo` for 001 and 004 (Veo 3.1, 8s, 1080p).
-4. Run `film_i2v_kling` for 020 (Kling 3.0 Pro, 10s, 720p).
+4. ~~Run `film_i2v_kling` for 020 (Kling 3.0 Pro, 10s, 720p).~~ **Blocked — 720p is banned (AGENTS.md, Sal 2026-09-29), and OpenRouter serves Kling 3.0 Pro at 720p only.** Re-plan 020 on a native-1080p path before any run.
 
 Keepers on this branch:
 

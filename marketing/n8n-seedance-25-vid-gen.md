@@ -6,6 +6,8 @@
 
 DeepSeek has no official video API. This is ByteDance **Seedance 2.5** on fal (`bytedance/seedance-2.5/text-to-video`), already planned in `GOAL.md`.
 
+**Blocked — 720p is banned on every workflow (AGENTS.md, Sal 2026-09-29).** Seedance 2.5's resolution enum is `480p` / `720p`, and Sheet 17 rows read `720p`. Do not run this workflow until Sheet 17 moves to a native-1080p model.
+
 **Sheet:** `17-seedance-25-t2v`  
 **Name the workflow exactly:** `seedance_25_vid_gen`  
 **Live unpublished:** https://stockjohnson.app.n8n.cloud/workflow/ItjZGciut9XK3jHH  
