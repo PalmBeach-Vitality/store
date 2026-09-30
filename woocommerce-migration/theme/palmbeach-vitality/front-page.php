@@ -145,7 +145,6 @@ if (file_exists($pbv_lab_video)) :
       class="pbv-desk__video"
       src="<?php echo esc_url($pbv_lab_video_uri); ?>"
       muted
-      loop
       playsinline
       autoplay
       preload="auto"
@@ -176,10 +175,12 @@ if (file_exists($pbv_lab_video)) :
   var video = document.querySelector('.pbv-desk__video');
   if (!video) return;
   var stage = video.parentNode;
+  var finished = false;
   video.muted = true;
   video.defaultMuted = true;
-  video.loop = true;
+  video.loop = false;
   function start() {
+    if (finished) return;
     var pending = video.play();
     if (pending && pending.catch) pending.catch(function () {});
   }
@@ -188,12 +189,16 @@ if (file_exists($pbv_lab_video)) :
     if (stage && stage.style) stage.style.backgroundImage = 'none';
   });
   video.addEventListener('ended', function () {
-    video.currentTime = 0;
-    start();
+    finished = true;
+    var hold = Math.max(0, (video.duration || 0) - 0.04);
+    try { video.currentTime = hold; } catch (err) {}
+    video.pause();
   });
   start();
-  video.addEventListener('canplay', start);
-  ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach(function (name) {
+  video.addEventListener('canplay', function () {
+    if (!finished && video.paused) start();
+  });
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (name) {
     window.addEventListener(name, start, { once: true, passive: true });
   });
 })();
