@@ -39,7 +39,7 @@ SEO desk, Webby, and Supreme Leader: the live storefront is the WooCommerce them
 - **PR:** [#107](https://github.com/PalmBeach-Vitality/store/pull/107) — branch `cursor/front-page-lab-video-3232` — theme **2.10.80**
 - **Desktop:** a 2.35:1 cinema frame. The short copy sits on the left of the film. The longer paragraphs sit on the right. No logo on that film yet.
 - **Mobile:** the portrait hero stays. The white oval button is gone. The words “Shop collections” are the link.
-- **Not live yet.** The installed theme is still **2.10.70**. Grok installs 2.10.79. Keep 2.10.70 installed so Sal can switch back. Do not choose “Replace current” unless the current theme folder is duplicated first. Do not use the WordPress theme editor.
+- **Not live yet.** The installed theme is still **2.10.70**. Grok installs 2.10.80. Keep 2.10.70 installed so Sal can switch back. Do not choose “Replace current” unless the current theme folder is duplicated first. Do not use the WordPress theme editor.
 - **Shipping JSON-LD** is already on `main` as #105. Do not redo it on a second theme branch.
 
 ### Repo map
