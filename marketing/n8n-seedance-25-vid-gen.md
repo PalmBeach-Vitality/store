@@ -6,7 +6,7 @@
 
 DeepSeek has no official video API. This is ByteDance **Seedance 2.5** on fal (`bytedance/seedance-2.5/text-to-video`), already planned in `GOAL.md`.
 
-**Blocked — 720p is banned on every workflow (AGENTS.md, Sal 2026-09-29).** Seedance 2.5's resolution enum is `480p` / `720p`, and Sheet 17 rows read `720p`. Do not run this workflow until Sheet 17 moves to a native-1080p model.
+**Blocked — 720p is banned on every workflow (AGENTS.md, Sal 2026-09-29).** All 27 Sheet 17 rows read `resolution=720p`. Switching the rows to `1080p` does not fix it. fal's `bytedance/seedance-2.5` endpoints accept `1080p` (checked 2026-09-29), but fal's own model page says Seedance 2.5 renders natively "at up to 720p", and ByteDance's ModelArk API lists 480p / 720p only. So fal's 1080p is not a documented native tier and counts as an upscale under the ban. It is also about $1.16/s at 1080p (≈ $35 per 30s 9:16 clip) against $0.47/s at 720p. Do not run this workflow until Sheet 17 moves to a native-1080p model (Sal's call).
 
 **Sheet:** `17-seedance-25-t2v`  
 **Name the workflow exactly:** `seedance_25_vid_gen`  
@@ -44,7 +44,7 @@ Unpublished. Google Sheets account + fal.ai account are attached.
 1. Do **not** point this at Sheet 9 / 13 / 14.
 2. Edit prompts on the sheet. Re-Execute to pick the least-used Active row.
 3. Do **not** Publish until one row looks right.
-4. One 30s 720p clip is expensive — do not batch-fire.
+4. One 30s 1080p clip is expensive — do not batch-fire.
 
 Pick-only smoke (fal disabled) exec `1525`: sheet read + filter + pick `SD25-001` succeeded (`model_video` / `30` / `720p` / `9:16` / `audio=false` all from the sheet). Fal was re-enabled after. Overlay exec `1523` wrote the 27 rows, then archived.
 
