@@ -56,43 +56,48 @@ SHARED = {
     "last_used_at": "",
 }
 
-CORRIDOR_LAB = (
-    "Photorealistic wide 16:9 interior of a futuristic beachside research laboratory at golden hour. "
-    "Floor-to-ceiling curved glass walls on both sides open onto a calm turquoise ocean, white sand and "
-    "tall palm trees, soft warm sunlight streaming in from the right. The lab is sleek and minimal: white "
-    "and deep-navy surfaces, rounded arch doorways receding down a central corridor, thin cool-blue LED "
-    "light strips tracing the ceiling and arch edges, polished reflective floor. On the right, a white lab "
-    "bench with a rack of four silver pipettes and a small glass apparatus. In the left foreground on a "
-    "dark bench sits a black glass tray with a softly glowing blue edge."
+PAVILION_LAB = (
+    "Photorealistic wide 16:9 interior of a clean, futuristic beachside research laboratory inside a "
+    "sleek white-and-brushed-silver glass pavilion raised on slim stilts right at the water's edge. "
+    "Seamless floor-to-ceiling windows run top to bottom, frameless except for thin silver mullions, and "
+    "wrap around a softly rounded glass corner. Through the glass: pale sand, leaning palm trees and gentle "
+    "turquoise surf fading into soft white morning sea mist. Bright, airy, high-key light, soft diffuse "
+    "daylight, no harsh shadows, a pale palette of white, silver, soft sand and sea-glass blue. Minimal, "
+    "uncluttered interior: glossy white lab benches with rounded edges, brushed-aluminum trim, a thin "
+    "recessed linear light strip in the white ceiling, a pale polished floor reflecting the windows."
 )
 
-ROBOT_LAB = (
-    "Photorealistic wide 16:9 interior of a futuristic beachside automated research laboratory in bright "
-    "late-afternoon light. A wide panoramic glass wall at the back looks out over a turquoise ocean, white "
-    "sand beach and swaying palm trees. Inside, two sleek white-and-silver robotic arms work over "
-    "glass-and-steel lab equipment; wall-mounted screens display glowing blue 3D molecular network diagrams; "
-    "a small tablet display on the bench. Deep-navy and white surfaces with thin cool-blue LED trim along "
-    "the ceiling. In the center foreground on a dark polished bench sits a black glass tray with a softly "
-    "glowing blue edge."
+CORNER_VIEW = (
+    "Camera faces the curved glass corner with the ocean beyond; in the soft background a few neat glass "
+    "beakers and a slim white monitor showing a faint blue molecule diagram. In the left foreground on a "
+    "white bench sits a white glossy tray with a thin softly glowing blue edge."
+)
+
+WINDOW_WALL_VIEW = (
+    "Camera looks down the long window wall toward the sea; in the soft background a slim white robotic "
+    "arm works at a bench and a glass display shows a faint blue molecular network. In the left foreground "
+    "on a white bench sits a white glossy tray with a thin softly glowing blue edge."
 )
 
 VIALS = (
-    "On the tray, a straight row of five identical 10 mL clear glass pharmaceutical vials, each with a "
-    "bright blue flip-off cap and polished silver aluminum crimp collar, white wrap-around label with a "
-    "small crimson DNA double-helix logo, compound name in bold dark-crimson sans-serif ({names}), and a "
-    "crimson band below with the dose in white. Vials are crisp and in focus, realistic glass refraction, "
-    "ocean light reflecting on the glass."
+    "On the tray, a straight row of five identical 10 mL clear glass pharmaceutical vials that match the "
+    "reference product photos exactly: bright blue flip-off cap, polished silver aluminum crimp collar, "
+    "white wrap-around label with a small crimson DNA double-helix logo, compound name in bold dark-crimson "
+    "sans-serif ({names}), and a crimson band below with the dose in white. Vials are crisp and in focus, "
+    "realistic glass refraction, soft window light on the glass."
 )
 
 PENS = (
-    "On the tray, five slim 3 mL research pens lie side by side at a slight diagonal: glossy white body, "
-    "polished chrome bands near both ends, clear cartridge window, {dial} dose dial at the end. "
-    "{label} Pens are crisp and in focus, realistic plastic and chrome reflections, warm ocean light."
+    "On the tray, five slim 3 mL research pens that match the reference product photos exactly lie side by "
+    "side at a slight diagonal: glossy white body, polished chrome bands near both ends, clear cartridge "
+    "window, {dial} dose dial at the end. {label} Pens are crisp and in focus, realistic plastic and chrome "
+    "reflections, soft window light."
 )
 
 FINISH = (
     "Shallow depth of field, background gently soft, cinematic commercial product photography, high "
-    "detail, clean clinical feel, lower-left corner slightly darker for text. Text overlay in the "
+    "detail, clean clinical feel. The lower-left corner fades into a soft deep-navy shadow gradient so "
+    "white text reads clearly. Text overlay in the "
     "bottom-left corner: small letter-spaced uppercase \"{eyebrow}\" in light sky-blue, and directly "
     "below it large bold white \"{title}\" in a modern geometric sans-serif. Rounded corners on the whole "
     "image. No people, no other text, no watermarks."
@@ -117,7 +122,8 @@ TILES = [
         ),
         "still_prompt": " ".join(
             [
-                CORRIDOR_LAB,
+                PAVILION_LAB,
+                CORNER_VIEW,
                 VIALS.format(names="BPC-157, GHK-Cu, TB-500, BPC-157, GHK-Cu"),
                 FINISH.format(eyebrow="VIALS", title="Peptides"),
             ]
@@ -137,7 +143,8 @@ TILES = [
         ),
         "still_prompt": " ".join(
             [
-                CORRIDOR_LAB,
+                PAVILION_LAB,
+                CORNER_VIEW,
                 PENS.format(
                     dial="orange-red",
                     label=(
@@ -164,7 +171,8 @@ TILES = [
         ),
         "still_prompt": " ".join(
             [
-                ROBOT_LAB,
+                PAVILION_LAB,
+                WINDOW_WALL_VIEW,
                 VIALS.format(names="Tirzepatide, Retatrutide, Semaglutide, Tirzepatide, Retatrutide"),
                 FINISH.format(eyebrow="VIALS", title="Metabolic"),
             ]
@@ -184,7 +192,8 @@ TILES = [
         ),
         "still_prompt": " ".join(
             [
-                ROBOT_LAB,
+                PAVILION_LAB,
+                WINDOW_WALL_VIEW,
                 PENS.format(
                     dial="cobalt-blue",
                     label=(
@@ -202,7 +211,7 @@ TILES = [
 def main():
     OUT.parent.mkdir(parents=True, exist_ok=True)
     with OUT.open("w", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=COLUMNS)
+        w = csv.DictWriter(f, fieldnames=COLUMNS, lineterminator="\n")
         w.writeheader()
         for tile in TILES:
             w.writerow({**SHARED, **tile})
