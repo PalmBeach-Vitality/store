@@ -34,7 +34,7 @@ Image-to-video body (sheets-only fields):
   "model": "<sheet model_video>",
   "prompt": "<sheet motion / prompt>",
   "duration": 15,
-  "resolution": "720p",
+  "resolution": "1080p",
   "aspect_ratio": "9:16",
   "generate_audio": false,
   "frame_images": [
@@ -71,13 +71,14 @@ Same credential on poll / extend / extend_poll. No second credential on the node
 
 | Provider | OpenRouter slug | Duration | Resolution on OpenRouter |
 |---|---|---|---|
-| Kling v3 Pro | `kwaivgi/kling-v3.0-pro` | 3–15 | **720p only** |
-| Seedance 2.5 | `bytedance/seedance-2.5` | 4–30 | **480p / 720p** |
-| Veo 3.1 | `google/veo-3.1` | 4 / 6 / 8 | 720p / 1080p |
+| Kling v3 Pro | `kwaivgi/kling-v3.0-pro` | 3–15 | **720p only — banned** |
+| Seedance 2.5 | `bytedance/seedance-2.5` | 4–30 | **480p / 720p — banned** |
+| Veo 3.1 | `google/veo-3.1` | 4 / 6 / 8 | 720p / 1080p / 4K |
+| Wan 3.0 | `alibaba/wan-3.0` | 2–30 | 480p / 720p / **1080p** |
 
-Kling Pro and Seedance 2.5 will **400** if the sheet still says `1080p`. Overlay writes `720p` for those rows.
+Kling Pro and Seedance 2.5 will **400** if the sheet says `1080p`, and **720p is banned on every workflow** (AGENTS.md, Sal 2026-09-29). Neither can be used through OpenRouter. Do not write `720p` to any row.
 
-**Unresolved as of 2026-09-15 — do not trust the Kling row above until it is re-checked.** OpenRouter's own model page for `kwaivgi/kling-v3.0-pro` now advertises 1080p, and its video docs list `1080p` as a valid `resolution`. The `720p only` note above came from a real 400 on this account, so one of the two is stale. Settle it with `GET https://openrouter.ai/api/v1/videos/models` and read `supported_resolutions` for the slug before any row is set to `1080p`. Until then 720p rows here are **not shippable** — 720p is forbidden. Prices for every legal 1080p path: `vid-gen-quality-playbook.md` → *1080p price board*.
+**Settled 2026-09-29.** `GET https://openrouter.ai/api/v1/videos/models` lists `supported_resolutions: ["720p"]` for both `kwaivgi/kling-v3.0-pro` and `kwaivgi/kling-v3.0-std`. Their `*_1080p` price SKUs exist, but the resolution is not offered. 9:16 I2V models that list `1080p` on OpenRouter: `alibaba/wan-3.0` (2–30s), `bytedance/seedance-2.0` (4–15s, also 4K), `x-ai/grok-imagine-video-1.5` (1–15s), `alibaba/happyhorse-1.1` (3–15s), `google/veo-3.1` (4 / 6 / 8s). Wan 3.0's own API reference (Alibaba Model Studio) makes `1080P` its default tier. Seedance 2.0's technical report names 480p / 720p as native, and its 1080p is a BytePlus API tier the paper does not describe, so treat Seedance 2.0 at 1080p as unverified and inspect the frames before shipping one. `black-forest-labs/flux-3-video` lists `1080p`, but BFL renders HD and upscales to Full HD — out under playbook rule 5, like MiniMax H3. Seedance 2.5 renders natively at 720p on every host; fal's `1080p` option counts as an upscale. Prices: `vid-gen-quality-playbook.md` → *1080p price board*.
 
 ---
 
@@ -97,8 +98,8 @@ Last-frame extract uses Creatomate (`output_format: jpg`, `snapshot_time: durati
 
 ## Sheets
 
-- **13-chem-breakdown-54:** `model_video=kwaivgi/kling-v3.0-pro`, `resolution=720p`
+- **13-chem-breakdown-54:** `model_video=kwaivgi/kling-v3.0-pro`, `resolution=720p` — **blocked (720p ban)**; see the audit in `n8n-peptide-molecule-vid-gen.md`
 - **18-motsc-film-stills:** run `overlay_film_i2v_stack` (OpenRouter slugs + `https://openrouter.ai/api/v1/videos`)
-- **17-seedance-25-t2v:** `model_video=bytedance/seedance-2.5`, `resolution=720p`
+- **17-seedance-25-t2v:** `model_video=bytedance/seedance-2.5`, `resolution=720p` — **blocked (720p ban)**; Seedance 2.5 tops out at 720p
 
 Do not leave `fal-ai/...` in `model_video`. Prep nodes throw if they see a fal slug.

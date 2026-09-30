@@ -62,7 +62,7 @@ Use the model whose **job** matches the beat. Confirm the gateway’s `supported
 
 **Video (after Salvatore picks a keeper):** **Kling 3.0 Pro, 1080p, 9:16, 6–8s, audio off.** That is the best match for “side shot, traveling extremely fast through atmosphere” in the surveyed writing, and it is the path that already produced a real **1080 × 1920** FILM-015 clip.
 
-**Runner-up if the ship morphs:** Seedance 2.5 I2V with the keeper + crash-ship reference — only if the sheet row is truly 1080p (or higher), not 720p.
+**Runner-up if the ship morphs:** Seedance 2.5 I2V with the keeper + crash-ship reference — only if the sheet row is truly 1080p (or higher), not 720p. As of 2026-09-29 it cannot be: Seedance 2.5 is native 720p, and fal's `1080p` option counts as an upscale (see *Rules that come with the board*).
 
 **Do not use Grok Video for FILM-020.** Not a resolution problem — 1.5 can do 1080p — but Kling Pro wins this camera move and costs less than half per second. The last crash still looked soft because the **still** was 720 × 1280, which is a still problem, not a video-model problem.
 
@@ -97,7 +97,8 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 | Endpoint | 1080p rate, no audio | 10s | 15s | Max duration |
 |---|---|---|---|---|
 | **fal Kling v3 Pro I2V** `fal-ai/kling-video/v3/pro/image-to-video` | $0.112/s | **$1.12** | **$1.68** | 15s |
-| OpenRouter `kwaivgi/kling-v3.0-pro` | $0.112/s + 5.5% credit fee | $1.18 | $1.77 | 15s |
+| ~~OpenRouter `kwaivgi/kling-v3.0-pro`~~ | **Not offered at 1080p** — `supported_resolutions: ["720p"]` (checked 2026-09-29) | — | — | 15s |
+| OpenRouter `alibaba/wan-3.0` | $0.20/s + 5.5% credit fee | $2.11 | $3.17 | 30s → $6.33 |
 | **fal Hailuo 02 Pro I2V** `fal-ai/minimax/hailuo-02/pro/image-to-video` | $0.08/s | **$0.80** | — (6s or 10s only) | 10s |
 | fal Veo 3.1 I2V `fal-ai/veo3.1/image-to-video` | $0.20/s | — (needs 2 gens) | — (needs 2 gens) | 8s → $1.60 |
 | fal Wan 3.0 I2V `alibaba/wan-3.0/image-to-video` | $0.20/s | $2.00 | $3.00 | 30s |
@@ -116,9 +117,11 @@ n8n may only map sheet fields, call APIs, and write URLs back.
 
 ### Rules that come with the board
 
-- **No 720p row belongs here.** Kling v3 **Standard**, Seedance 2.0 **Fast**, and Seedance 2.5 (schema enum is `480p` / `720p`) are out on resolution alone, whatever they cost. Grok Imagine Video 1.5 is **not** in that group — it does native 1080p, it is just expensive.
+- **No 720p row belongs here.** Kling v3 **Standard**, Seedance 2.0 **Fast**, and Seedance 2.5 are out on resolution alone, whatever they cost. Seedance 2.5 renders natively at 480p / 720p (ByteDance ModelArk, and fal's own model page). fal's schema added a `1080p` option at $1.16/s, but it is not a documented native tier, so treat it as an upscale (rule 5). Checked 2026-09-29. Grok Imagine Video 1.5 is **not** in that group — it does native 1080p, it is just expensive.
 - **Never pin the model slug on the node — read `model_video` off the sheet.** `9-lab-item-creations-500` shipped 720p for weeks with all 535 rows reading `resolution=1080p`: `prep_grok_video_start` overwrote the sheet value with `fal-ai/kling-video/v3/standard/image-to-video` and `fal_kling_generate` had the same Standard slug pinned in its model field. The sheet said 1080p, the API was asked for 720p, and nothing in between complained. Fixed 2026-09-16 — every `fal_kling_generate` now takes `model` from `={{ $json.model_video }}`. If you ever see a tier pinned on a node again, that is the bug.
 - **MiniMax H3 is out too.** Native modes are 480P / 768P; its `2K` and `4K` are **upscales of a 768p base**. That is rule 5 — do not upscale and call it 1080p.
+- **FLUX.3 Video is out for the same reason.** OpenRouter lists `1080p`, but BFL's launch post says it renders HD and reaches Full HD through upscaling.
+- **30s in one pass:** on this board only Wan 3.0 / Wan 3.0 Prime do it at native 1080p. Seedance 2.5 also does 30s, but natively at 720p. Everything else tops out at 15s or less, so a 30s clip means two generations, a last-frame hand-off, and a stitch.
 - **fal Kling v3 Pro has no `resolution` field.** Pro *is* the 1080p tier and `aspect_ratio` on I2V follows the start image. So the only proof of 1080 × 1920 is `ffprobe` on the output.
 - **Muting does not always save money.** Kling and Veo bill audio separately (Kling $0.112 → $0.168, Veo $0.20 → $0.40). Seedance and Wan bill the **same rate either way** — `generate_audio: false` there is a quality/brief decision, not a discount.
 - **Vertical is not a surcharge.** Wan and Seedance bill by token, and tokens are frame **area** × duration, so 1080 × 1920 costs exactly what 1920 × 1080 costs. Kling, Hailuo, and Veo are flat per-second.

@@ -74,7 +74,7 @@ Same video API as I2V. Last frame of clip A = first_frame of the bridge. First f
   "model": "<sheet bridge_model>",
   "prompt": "<sheet bridge_prompt>",
   "duration": 5,
-  "resolution": "720p",
+  "resolution": "<sheet bridge_resolution — 1080p or higher>",
   "aspect_ratio": "9:16",
   "generate_audio": false,
   "frame_images": [
@@ -86,7 +86,7 @@ Same video API as I2V. Last frame of clip A = first_frame of the bridge. First f
 
 Frame stills: Creatomate snapshot (already used on molecule hop extend) — outgoing at `duration - 0.1`, incoming at `0.1`. Helper: `n8n-code-prep-flf2v-bridge.js`.
 
-Default `bridge_model` on the overlay is `kwaivgi/kling-v3.0-pro` (720p). Use `google/veo-3.1` if you want 1080p bridges (4 / 6 / 8s only).
+Default `bridge_model` on the overlay is `kwaivgi/kling-v3.0-pro`, which OpenRouter serves at 720p only. **720p is banned (AGENTS.md, Sal 2026-09-29)**, so that default cannot run. Put a native-1080p bridge model on the sheet first — for example `google/veo-3.1` (4 / 6 / 8s, first + last frame).
 
 ---
 
@@ -117,7 +117,7 @@ Canonical CSV: `marketing/sheets/19-film-join-25.csv` (same columns; import if y
 | `bridge_prompt` | you | Required when `seam_mode=flf2v` |
 | `bridge_model` | overlay | OpenRouter slug |
 | `bridge_duration` | overlay | seconds |
-| `bridge_resolution` | overlay | `720p` for Kling |
+| `bridge_resolution` | overlay | `1080p` or higher — 720p is banned |
 | `join_wait_seconds` | overlay | poll wait per VACE batch |
 | `music_prompt` | you | later ElevenLabs |
 | `sfx_prompt` | you | later ElevenLabs |

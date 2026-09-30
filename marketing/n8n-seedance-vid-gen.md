@@ -18,6 +18,8 @@ Seedance (and Kling / Veo) now run through **OpenRouter** `POST /api/v1/videos`.
 | **Seedance 2.5** | `bytedance/seedance-2.5` | 480p / **720p** |
 | **Kling v3 Pro** | `kwaivgi/kling-v3.0-pro` | **720p only** |
 
+Both rows top out at 720p, and **720p is banned on every workflow** (AGENTS.md, Sal 2026-09-29). Neither can ship from this path.
+
 ---
 
 ## Wire
