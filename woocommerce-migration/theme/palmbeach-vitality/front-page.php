@@ -138,24 +138,21 @@ $pbv_lab_poster = pbv_asset_path('assets/video/beachside-lab-poster.jpg');
 if (file_exists($pbv_lab_video)) :
     $pbv_lab_video_uri  = pbv_asset_uri('assets/video/beachside-lab.mp4');
     $pbv_lab_poster_uri = file_exists($pbv_lab_poster) ? pbv_asset_uri('assets/video/beachside-lab-poster.jpg') : '';
-    $pbv_logo_mark      = function_exists('pbv_default_logo_uri') ? pbv_default_logo_uri() : '';
     ?>
 <section class="pbv-desk" aria-label="<?php esc_attr_e('Homepage', 'palmbeach-vitality'); ?>">
+  <div class="pbv-desk__stage"<?php echo $pbv_lab_poster_uri ? ' style="background-image:url(' . esc_url($pbv_lab_poster_uri) . ')"' : ''; ?>>
+    <video
+      class="pbv-desk__video"
+      muted
+      loop
+      playsinline
+      preload="none"
+      <?php echo $pbv_lab_poster_uri ? ' poster="' . esc_url($pbv_lab_poster_uri) . '"' : ''; ?>
+      data-src="<?php echo esc_url($pbv_lab_video_uri); ?>"
+    ></video>
+  </div>
+  <div class="pbv-desk__wash" aria-hidden="true"></div>
   <div class="pbv-desk__hero">
-    <div class="pbv-desk__stage"<?php echo $pbv_lab_poster_uri ? ' style="background-image:url(' . esc_url($pbv_lab_poster_uri) . ')"' : ''; ?>>
-      <video
-        class="pbv-desk__video"
-        muted
-        loop
-        playsinline
-        preload="none"
-        <?php echo $pbv_lab_poster_uri ? ' poster="' . esc_url($pbv_lab_poster_uri) . '"' : ''; ?>
-        data-src="<?php echo esc_url($pbv_lab_video_uri); ?>"
-      ></video>
-      <?php if ($pbv_logo_mark) : ?>
-        <img class="pbv-desk__mark" src="<?php echo esc_url($pbv_logo_mark); ?>" alt="<?php echo esc_attr(get_bloginfo('name')); ?>" width="320" height="320" decoding="async" />
-      <?php endif; ?>
-    </div>
     <div class="pbv-desk__copy">
       <p class="pbv-desk__kicker"><?php esc_html_e('Laboratory research', 'palmbeach-vitality'); ?></p>
       <h1 class="pbv-desk__title">Palm Beach Vitality</h1>

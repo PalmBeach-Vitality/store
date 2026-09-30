@@ -36,10 +36,10 @@ A fully static, multi-page website (HTML + Tailwind CSS via CDN + a little vanil
 
 SEO desk, Webby, and Supreme Leader: the live storefront is the WooCommerce theme at `woocommerce-migration/theme/palmbeach-vitality/`. The static HTML in the repo root is not the live homepage. Do not open or merge another PR that edits that theme folder while the front-end PR below is open. Rebase onto it after it lands, or leave the theme alone.
 
-- **PR:** [#107](https://github.com/PalmBeach-Vitality/store/pull/107) — branch `cursor/front-page-lab-video-3232` — theme **2.10.76**
-- **Desktop:** the stacked logo card and dark text panel are one film row. Beachside lab clip, logo on the sky, copy beside it. Collection cards sit in one row.
+- **PR:** [#107](https://github.com/PalmBeach-Vitality/store/pull/107) — branch `cursor/front-page-lab-video-3232` — theme **2.10.77**
+- **Desktop:** the beachside lab clip sits behind the homepage text. No logo on that film yet. Collection cards sit in one row.
 - **Mobile:** the portrait hero stays. The white oval button is gone. The words “Shop collections” are the link.
-- **Not live yet.** The installed theme is still **2.10.70**. Grok installs 2.10.76. Keep 2.10.70 installed so Sal can switch back. Do not choose “Replace current” unless the current theme folder is duplicated first. Do not use the WordPress theme editor.
+- **Not live yet.** The installed theme is still **2.10.70**. Grok installs 2.10.77. Keep 2.10.70 installed so Sal can switch back. Do not choose “Replace current” unless the current theme folder is duplicated first. Do not use the WordPress theme editor.
 - **Shipping JSON-LD** is already on `main` as #105. Do not redo it on a second theme branch.
 
 ### Repo map

@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.76
+Version: 2.10.77
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -611,39 +611,48 @@ a:hover { opacity: 0.7; }
   }
 }
 
-/* Desktop homepage — one film row, not a stack of full-width blocks.
+/* Desktop homepage — beach film behind the text. No logo.
    Mobile keeps the logo banner and the portrait hero. */
 .pbv-desk { display: none; }
 
 @media (min-width: 900px) {
+  body.home {
+    background: transparent;
+  }
+
   body.home .pbv-logo-banner { display: none; }
 
   body.home .pbv-hero { display: none !important; }
 
-  .pbv-desk {
-    display: block;
-    width: min(100% - 4.5rem, 78rem);
-    margin: 1.75rem auto 0.25rem;
+  body.home .pbv-announce,
+  body.home .site-header {
+    position: relative;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(8px);
   }
 
-  .pbv-desk__hero {
-    display: grid;
-    grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.7fr);
-    gap: clamp(1.75rem, 3vw, 3.25rem);
-    align-items: center;
+  .pbv-desk {
+    display: block;
+    width: min(100% - 4.5rem, 52rem);
+    margin: 2.5rem auto 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pbv-desk__stage,
+  .pbv-desk__wash {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
   }
 
   .pbv-desk__stage {
-    position: relative;
-    aspect-ratio: 16 / 10;
-    border-radius: 1.15rem;
-    overflow: hidden;
     background: #efeae3 center / cover no-repeat;
   }
 
   .pbv-desk__video {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -651,14 +660,16 @@ a:hover { opacity: 0.7; }
     display: block;
   }
 
-  .pbv-desk__mark {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 8.25rem;
-    height: auto;
-    border-radius: 0.7rem;
-    box-shadow: 0 12px 28px rgba(30, 24, 16, 0.16);
+  .pbv-desk__wash {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.42) 38%, rgba(255, 255, 255, 0.55) 100%);
+  }
+
+  .pbv-desk__hero,
+  .pbv-desk__copy,
+  .pbv-desk__story {
+    position: relative;
+    z-index: 1;
+    text-align: center;
   }
 
   .pbv-desk__kicker {
@@ -667,13 +678,13 @@ a:hover { opacity: 0.7; }
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #6b6b6b;
+    color: #3d3d3d;
   }
 
   .pbv-desk__title {
     margin: 0 0 0.45rem;
     font-family: var(--pbv-font-display);
-    font-size: clamp(2.35rem, 3.4vw, 3.35rem);
+    font-size: clamp(2.6rem, 4vw, 3.6rem);
     font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.02em;
@@ -681,79 +692,69 @@ a:hover { opacity: 0.7; }
   }
 
   .pbv-desk__subtitle {
-    margin: 0 0 0.9rem;
-    font-size: 1.05rem;
+    margin: 0 0 1rem;
+    font-size: 1.12rem;
     font-weight: 600;
     line-height: 1.35;
-    color: #1a6b7a;
+    color: #145e6b;
   }
 
-  .pbv-desk__lead {
-    margin: 0 0 1.25rem;
-    max-width: 26rem;
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #333;
+  .pbv-desk__lead,
+  .pbv-desk__story p {
+    margin: 0 auto 0.9rem;
+    max-width: 40rem;
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: #1c1c1c;
   }
 
-  .pbv-desk__cta { margin: 0 0 0.85rem; }
+  .pbv-desk__cta { margin: 1.1rem 0 0.75rem; }
 
   .pbv-desk__shop {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.6rem;
-    padding: 0.55rem 1.3rem;
-    border-radius: 999px;
-    background: #111;
-    color: #fff;
-    font-size: 0.84rem;
+    color: #111;
+    font-size: 1.02rem;
     font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.14em;
   }
 
   .pbv-desk__shop:hover {
-    background: #333;
     opacity: 1;
-    color: #fff;
+    color: #145e6b;
   }
 
   .pbv-desk__wholesale {
     margin: 0;
-    font-size: 0.88rem;
+    font-size: 0.92rem;
     line-height: 1.45;
-    color: #555;
+    color: #333;
   }
 
   .pbv-desk__wholesale a {
-    color: #1a6b7a;
+    color: #145e6b;
     text-decoration: underline;
     text-underline-offset: 0.14em;
   }
 
   .pbv-desk__story {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem 2.5rem;
-    margin-top: 2.25rem;
-    padding-top: 1.75rem;
-    border-top: 1px solid #ececec;
-  }
-
-  .pbv-desk__story p {
-    margin: 0;
-    font-size: 0.95rem;
-    line-height: 1.65;
-    color: #444;
+    margin-top: 1.25rem;
   }
 
   .pbv-desk__welcome {
-    grid-column: 1 / -1;
-    margin-top: 0.35rem !important;
+    margin-top: 0.4rem !important;
     font-family: var(--pbv-font-display);
     font-style: italic;
-    font-size: 1.15rem !important;
-    line-height: 1.45 !important;
+    font-size: 1.2rem !important;
     color: #111 !important;
+  }
+
+  body.home .pbv-home-shop,
+  body.home .pbv-home-products,
+  body.home .pbv-faq,
+  body.home .site-footer {
+    position: relative;
+    z-index: 1;
+    background: transparent;
   }
 
   .pbv-home-collections {
