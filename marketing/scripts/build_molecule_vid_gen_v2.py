@@ -4,7 +4,7 @@
 v2 is a new workflow, so the old peptide_molecule_vid_gen (EcGTbpZ9VG3C69pq) keeps all
 42 of its nodes untouched. Every Code node embeds its file from
 marketing/n8n-molecule-smoke/ byte for byte. Every generation value is read from Sheet
-23-molecule-smoke-2 through pick_molecule_creation; the nodes only map fields.
+14-chem-breakdown-54 through pick_molecule_creation; the nodes only map fields.
 
 The four sticky notes are the images from render_n8n_note_images.py, loaded from
 raw.githubusercontent.com at --notes-sha so they keep working after a merge.
@@ -26,9 +26,9 @@ NOTES_DIR = ROOT / "n8n-notes" / "peptide_molecule_vid_gen_v2"
 OUT = ROOT / "workflows" / "peptide_molecule_vid_gen_v2.sdk.js"
 RAW_BASE = "https://raw.githubusercontent.com/PalmBeach-Vitality/store/{sha}/marketing/n8n-notes/peptide_molecule_vid_gen_v2/{file}#full-width"
 
-SHEET_DOC = "1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs"
-SHEET_GID = "105980795"
-SHEET_TAB = "23-molecule-smoke-2"
+SHEET_DOC = "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0"
+SHEET_GID = "1875736401"
+SHEET_TAB = "14-chem-breakdown-54"
 PICK = "$('pick_molecule_creation').first().json"
 
 # Same canvas rhythm as the other vid-gen workflows: one row of nodes at y=240,

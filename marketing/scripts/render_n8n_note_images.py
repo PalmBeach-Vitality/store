@@ -63,7 +63,7 @@ NOTES = [
         "heading_ink": (180, 83, 9),
         "lines": [
             ("title", "Molecule video v2"),
-            ("body", "Smoke test · 23-molecule-smoke-2"),
+            ("body", "14-chem-breakdown-54 · 54 looks"),
             ("body", "30s · 1080 × 1920 · 9:16 · no sound"),
             ("body", "Every prompt comes from the sheet"),
             ("gap", ""),
