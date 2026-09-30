@@ -52,7 +52,7 @@ Set node, one field `tile_id` (string). Change it to pick the tile.
 
 **Before → this → After:** `choose_tile` → **get_site_tiles** → `filter_tiles_active`
 
-Google Sheets Get Rows, sheet 24-site-tiles-4 tab gid 0, credential `OGHfxWtOUeZbDesw`. Execute Once = ON.
+Google Sheets Get Rows, sheet 24-site-tiles-4 tab `Untitled` (gid `73402774`), credential `OGHfxWtOUeZbDesw`. Execute Once = ON.
 
 ## Node 4 — `filter_tiles_active`
 
