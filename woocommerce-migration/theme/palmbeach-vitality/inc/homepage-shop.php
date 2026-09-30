@@ -96,8 +96,17 @@ function pbv_render_homepage_collections() {
         <p class="pbv-home-shop__lede">Peptides, pens, and metabolic research compounds — intended for laboratory research use only.</p>
         <div class="pbv-home-collections">
           <?php foreach ($cards as $card) :
-              $url   = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
-              $image = pbv_asset_uri('assets/images/' . $card['image']);
+              $url      = function_exists('pbv_category_url') ? pbv_category_url($card['slug']) : home_url('/shop/');
+              $relative = 'assets/images/' . $card['image'];
+              $image    = pbv_asset_uri($relative);
+              $ver      = defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '';
+              $path     = function_exists('pbv_asset_path') ? pbv_asset_path($relative) : '';
+              if ($path && file_exists($path)) {
+                  $ver = $ver . '-' . (string) filemtime($path);
+              }
+              if ($ver !== '') {
+                  $image .= '?ver=' . rawurlencode($ver);
+              }
               ?>
             <a
               class="pbv-home-collection"
