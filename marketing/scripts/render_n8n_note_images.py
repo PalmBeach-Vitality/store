@@ -71,7 +71,7 @@ NOTES = [
             ("gap", ""),
             ("heading", "How to run"),
             ("body", "1. save_still_url → Execute step"),
-            ("indent", "Makes the still only"),
+            ("indent", "(makes the still only)"),
             ("body", "2. Like it? Pin save_still_url"),
             ("body", "3. sheets_update_video →"),
             ("indent", "Execute step (the 30s video)"),
@@ -166,7 +166,12 @@ def render(note: dict) -> dict:
 
     path = OUT_DIR / note["file"]
     out.quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(path, optimize=True)
-    alt = " · ".join(t for k, t in note["lines"] if k != "gap")
+    alt = ""
+    for kind, text in note["lines"]:
+        if kind == "gap":
+            continue
+        joins_previous = kind == "indent" or alt.endswith((",", "→"))
+        alt += (" " if joins_previous else " · ") + text if alt else text
     return {
         "name": note["name"],
         "file": note["file"],

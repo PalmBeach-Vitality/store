@@ -6,8 +6,8 @@
     "sticky_width": 2860,
     "image_width": 2836,
     "image_height": 2298,
-    "alt": "Molecule video v2 · Smoke test · 23-molecule-smoke-2 · 30s · 1080 × 1920 · 9:16 · no sound · Every prompt comes from the sheet · How to run · 1. save_still_url → Execute step · Makes the still only · 2. Like it? Pin save_still_url · 3. sheets_update_video → · Execute step (the 30s video) · 4. Unpin save_still_url",
-    "bytes": 257215
+    "alt": "Molecule video v2 · Smoke test · 23-molecule-smoke-2 · 30s · 1080 × 1920 · 9:16 · no sound · Every prompt comes from the sheet · How to run · 1. save_still_url → Execute step (makes the still only) · 2. Like it? Pin save_still_url · 3. sheets_update_video → Execute step (the 30s video) · 4. Unpin save_still_url",
+    "bytes": 258461
   },
   {
     "name": "note_1_still",
@@ -26,7 +26,7 @@
     "sticky_width": 2860,
     "image_width": 2836,
     "image_height": 901,
-    "alt": "2 · Hop 1 (0:00–0:15) · fal Kling v3 Pro · 1080p · 15s · Creatomate grabs frame 359, · the first frame of hop 2",
+    "alt": "2 · Hop 1 (0:00–0:15) · fal Kling v3 Pro · 1080p · 15s · Creatomate grabs frame 359, the first frame of hop 2",
     "bytes": 104943
   },
   {
