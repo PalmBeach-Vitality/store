@@ -6,6 +6,7 @@
 **Sheet:** `13-chem-breakdown-54` (same columns as Sheet 9)  
 **Name the workflow exactly:** `peptide_molecule_vid_gen`  
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/EcGTbpZ9VG3C69pq  
+**Smoke test (unpublished, not run):** `peptide_molecule_vid_gen_v2`, https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn. See *Smoke test* below.  
 **Workbook:** https://docs.google.com/spreadsheets/d/1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0 — tab `13-chem-breakdown-54`.
 
 **Vibe (mandatory):** dark cinematic 3D **medical animation of a cellular chemical reaction** — living cells + amino acids forming peptide bonds at microscopic scale. Not a sunlit studio. Not a glass pedestal. Not the pen workflow. **No logo. No text. No sound** (add those after vid gen). Clip is muted (`audio: false`).
@@ -68,15 +69,20 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 
 ---
 
-## Smoke test — `23-molecule-smoke-2` (proposed 2026-09-30 · waiting on Sal)
+## Smoke test — `23-molecule-smoke-2` (built 2026-09-30 as `peptide_molecule_vid_gen_v2` · not run)
 
-**No n8n node has been changed and nothing has run.** This is the proposal Sal approves or edits before one atomic update. The live workflow stays at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea` until then, and that version stays restorable from history afterwards.
+**Built as a new workflow. Nothing has run.** Sal chose a new workflow over editing the old one, so `peptide_molecule_vid_gen` keeps all 42 nodes at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea`, untouched.
+- **Workflow:** `peptide_molecule_vid_gen_v2`, ID `Hc1US0JgKRvM2opn`, unpublished, in the root of Sal's personal project. [Open it](https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn).
+- **Source:** `python3 marketing/scripts/build_molecule_vid_gen_v2.py --notes-sha <commit>` writes `marketing/workflows/peptide_molecule_vid_gen_v2.sdk.js`, the Workflow SDK code the workflow was created from.
+- **Checked after creation:** 33 nodes (29 working + 4 notes), every credential attached, no pinned data, and every Code node byte-for-byte equal to its file in `marketing/n8n-molecule-smoke/`.
 
 **Sal's calls (2026-09-30):**
 1. Kling v3 Pro, 15s + 15s, stitched in Creatomate.
 2. Keep the Grok Imagine 2.0 still node and add GPT Image 2.5 for a smoke test.
 3. Hyperreal but sci-fi — it has to look cool, not like microscope footage. Start with a new sheet of 2 rows; rebuild Sheet 13 only if he likes the result.
 4. Count a use only after the video is saved, and reset CHEM-001 … 009 to unused.
+5. Build it as a new workflow and leave the old one alone.
+6. Make the sticky-note text 4× bigger.
 
 ### Sheet
 
@@ -150,21 +156,21 @@ manual_trigger → get_chem_creations → filter_chem_active → pick_molecule_c
 → sheets_update_video → end
 ```
 
-The canvas goes from 42 to 30 nodes (29 working + sticky).
+The canvas has 33 nodes: 29 working + 4 notes. Compared with the old workflow's 42 (41 working + 1 note):
 
-- **Remove (23):**
+- **Dropped (23):**
   - `sheets_update_chem`
   - OpenRouter video: `openrouter_i2v_start`, `openrouter_i2v_poll`, `openrouter_i2v_extend`, `openrouter_i2v_extend_poll`
   - OpenRouter waits: `wait_i2v`, `wait_i2v_again`, `wait_i2v_quota`, `wait_i2v_extend`, `wait_i2v_extend_again`, `wait_i2v_extend_quota`
   - Quota retry and routing: `retry_hop1_body`, `retry_hop2_body`, `route_hop1`, `route_hop2`, `switch_hop1`, `switch_hop2`
   - Rehost: `download_hop1`, `upload_hop1_public`, `parse_hop1_public`, `download_hop2`, `upload_hop2_public`, `parse_hop2_public`
-- **Add (11):**
+- **New (11):**
   - Still branch: `route_still_model`, `gpt_image_molecule_still`, `check_gpt_still`, `gpt_still_to_file`, `upload_gpt_still`
   - Video: `fal_kling_hop1`, `fal_kling_hop2`
   - Creatomate loops: `route_last_frame`, `switch_last_frame`, `route_concat`, `switch_concat`
-- **Unchanged:** `manual_trigger`, `filter_chem_active`. Every other kept node is edited as below.
+- **Same as the old workflow:** `manual_trigger`, `filter_chem_active`. In the headings below, (edit) means the node differs from the old node of the same name as described.
 
-Code for every Code node is in `marketing/n8n-molecule-smoke/` (proposed, not live). `route_last_frame` and `route_concat` share `route_render.js`. All Code nodes run Once for All Items with Execute Once **OFF**.
+Code for every Code node is in `marketing/n8n-molecule-smoke/`, pasted unchanged into v2. `route_last_frame` and `route_concat` share `route_render.js`. All Code nodes run Once for All Items with Execute Once **OFF**.
 
 #### `get_chem_creations` (edit)
 
@@ -235,7 +241,7 @@ HTTP Request 4.5.
 - POST `https://litterbox.catbox.moe/resources/internals/api.php`.
 - Form-Data: `reqtype` = `fileupload`, `time` = `72h`, and `fileToUpload` = n8n Binary File from `data`.
 - Response Format **Text**; the URL lands in `$json.data`.
-- Same as the live `upload_hop1_public`, minus its fixed timeout.
+- Same as the old workflow's `upload_hop1_public`, except Options → Timeout comes from the sheet: `={{ $('pick_molecule_creation').first().json.still_timeout_seconds * 1000 }}`.
 
 #### `grok_imagine_molecule_still` (edit)
 
@@ -358,20 +364,25 @@ Google Sheets 4.7, Update Row.
 - Columns, each `={{ $json.<column> }}`: `creation_id`, `still_url`, `hop1_video_url`, `last_frame_url`, `hop2_video_url`, `video_url`, `times_used` (number), `last_used_at`.
 - Options → Cell Format **RAW**, so values are stored exactly as sent.
 
-#### Sticky note (edit)
+#### Sticky notes (new)
 
-Replace its text with the new flow: Grok or GPT still → fal Kling v3 Pro 15s → Creatomate hand-off frame → fal Kling v3 Pro 15s → Creatomate 30s join. Sheet `23-molecule-smoke-2`. No logo, no text, no sound.
+Four notes in a 2 × 2 grid: overview and how to run (top left), the still (top right), hop 1 (bottom left), hop 2 (bottom right).
+- **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 144 px and titles are 176 px, 4× the H1 size, rendered at 2× so they stay sharp when zoomed in.
+- **Source:** `python3 marketing/scripts/render_n8n_note_images.py` writes the PNGs and `notes.json` to `marketing/n8n-notes/peptide_molecule_vid_gen_v2/`.
+- **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `162c6f0`, which stays reachable after the PR merges. The image's alt text carries the full wording.
+- **Editing:** the text can't be edited inside n8n. Change the lines in the script, render, commit, then point the note's image link at the new commit.
 
 ### Checks already done (no spend)
 
 - **Local simulation:** every Code node ran against the smoke CSV with fake API responses — typed and all-string cells, both engines, and the Hold and A/B cases. 115 checks pass, including every fail-closed path.
 - **Image measurement:** `check_gpt_still` measured real 1440 × 2560 PNG, JPEG and WebP files (lossy, lossless, alpha) and rejected an 864 × 1536 PNG.
 - **n8n schema:** every new or changed node config passed `validate_node_config`.
+- **n8n build:** the full workflow passed `validate_workflow` before it was created.
 - **Creatomate:** both bodies passed `dry_run`.
 
 ### Run plan
 
-Sal runs both halves from the n8n editor. The n8n MCP `execute_workflow` has no stop-at-node option: an agent can only start the whole chain, which would spend on video before Sal has seen the still. An agent starts nothing without "you may run the workflow" or "you can start the workflow".
+Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The n8n MCP `execute_workflow` has no stop-at-node option: an agent can only start the whole chain, which would spend on video before Sal has seen the still. An agent starts nothing without "you may run the workflow" or "you can start the workflow".
 
 1. **Still only.** Open `save_still_url` → **Execute step**. Only the sheet read and one still run, and nothing is written to the sheet. Row 1 (GPT Image 2.5) goes first: both rows are at `times_used` 0 and row 1 has the lower `rank`.
 2. **Pin the still** if Sal likes it: pin `save_still_url`. On both engines its output is one small `still_url` field (the GPT base64 nodes are too big to pin).
