@@ -143,12 +143,13 @@ if (file_exists($pbv_lab_video)) :
   <div class="pbv-desk__stage"<?php echo $pbv_lab_poster_uri ? ' style="background-image:url(' . esc_url($pbv_lab_poster_uri) . ')"' : ''; ?>>
     <video
       class="pbv-desk__video"
+      src="<?php echo esc_url($pbv_lab_video_uri); ?>"
       muted
       loop
       playsinline
-      preload="none"
+      autoplay
+      preload="auto"
       <?php echo $pbv_lab_poster_uri ? ' poster="' . esc_url($pbv_lab_poster_uri) . '"' : ''; ?>
-      data-src="<?php echo esc_url($pbv_lab_video_uri); ?>"
     ></video>
     <div class="pbv-desk__wash" aria-hidden="true"></div>
     <div class="pbv-desk__overlay">
@@ -174,11 +175,25 @@ if (file_exists($pbv_lab_video)) :
 (function () {
   var video = document.querySelector('.pbv-desk__video');
   if (!video) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var src = video.getAttribute('data-src');
-  if (!src) return;
-  video.src = src;
-  video.play().catch(function () {});
+  video.muted = true;
+  video.defaultMuted = true;
+  video.loop = true;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    video.removeAttribute('autoplay');
+    video.pause();
+    return;
+  }
+  function start() {
+    var pending = video.play();
+    if (pending && pending.catch) pending.catch(function () {});
+  }
+  video.addEventListener('ended', function () {
+    video.currentTime = 0;
+    start();
+  });
+  if (video.readyState >= 2) start();
+  else video.addEventListener('canplay', start);
+  start();
 })();
 </script>
     <?php
