@@ -30,8 +30,8 @@ function pbv_homepage_collections() {
             'title'  => 'Peptide Pens',
             'alt'    => 'Pens — Peptides',
             'image'  => 'home-peptide-pens.jpg',
-            'width'  => 1792,
-            'height' => 1008,
+            'width'  => 1824,
+            'height' => 1024,
         ),
         array(
             'slug'   => 'weight-loss',
