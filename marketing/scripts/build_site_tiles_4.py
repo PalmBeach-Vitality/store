@@ -147,6 +147,7 @@ TILES = [
                     )
                 ),
                 FINISH.format(eyebrow="PENS", title="Peptides"),
+                "The overlay stays in the bottom-left corner only. The small word is spelled exactly PENS and the large white word is spelled exactly Peptides.",
             ]
         ),
     },
