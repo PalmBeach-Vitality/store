@@ -27,7 +27,7 @@ OUT = ROOT / "workflows" / "peptide_molecule_vid_gen_v2.sdk.js"
 RAW_BASE = "https://raw.githubusercontent.com/PalmBeach-Vitality/store/{sha}/marketing/n8n-notes/peptide_molecule_vid_gen_v2/{file}#full-width"
 
 SHEET_DOC = "1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0"
-SHEET_GID = "1875736401"
+SHEET_GID = "425569919"
 SHEET_TAB = "14-chem-breakdown-54"
 PICK = "$('pick_molecule_creation').first().json"
 

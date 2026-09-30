@@ -72,6 +72,9 @@ manual_trigger → get_chem_creations (filter status = Active) → pick_molecule
 ## Smoke test — `23-molecule-smoke-2` (built 2026-09-30 as `peptide_molecule_vid_gen_v2`)
 
 **Built as a new workflow.** Sal chose a new workflow over editing the old one, so `peptide_molecule_vid_gen` keeps all 42 nodes at version `80cb697c-b426-4f0f-aa76-8b68aa10e4ea`, untouched. Row 1's 30s video is saved (exec 2585).
+
+**Live sheet (2026-09-30, after both smokes):** `peptide_molecule_vid_gen_v2` now reads **`14-chem-breakdown-54`**, not the 2-row smoke tab. Sheet 13 is untouched, so the old workflow still has its own library. The new tab is the smoke-test shape: GPT Image 2.5 Sunburst stills, fal Kling v3 Pro 15s+15s at 1080p, 1080×1920, `times_used` 0 on every row.
+
 - **Workflow:** `peptide_molecule_vid_gen_v2`, ID `Hc1US0JgKRvM2opn`, unpublished, in the root of Sal's personal project. [Open it](https://stockjohnson.app.n8n.cloud/workflow/Hc1US0JgKRvM2opn).
 - **Source:** `python3 marketing/scripts/build_molecule_vid_gen_v2.py --notes-sha <commit>` writes `marketing/workflows/peptide_molecule_vid_gen_v2.sdk.js`, the Workflow SDK code the workflow was created from.
 - **Checked after creation:** 33 nodes (29 working + 4 notes), every credential attached, no pinned data, and every Code node byte-for-byte equal to its file in `marketing/n8n-molecule-smoke/`.
@@ -178,8 +181,8 @@ Code for every Code node is in `marketing/n8n-molecule-smoke/`, pasted unchanged
 **Before → this → After:** `manual_trigger` → **get_chem_creations** → `filter_chem_active`
 
 Google Sheets 4.7, Get Row(s).
-- Document **By ID** `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`.
-- Sheet **From list** `23-molecule-smoke-2` (gid `105980795`).
+- Document **By ID** `1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0`.
+- Sheet **From list** `14-chem-breakdown-54` (gid `425569919`).
 - Options empty. Execute Once stays ON.
 
 #### `pick_molecule_creation` (edit)
@@ -362,7 +365,7 @@ Paste `save_video_url.js`. The run's only sheet write comes after it, so a still
 **Before → this → After:** `save_video_url` → **sheets_update_video** → `end`
 
 Google Sheets 4.7, Update Row.
-- Document **By ID** `1QQggXUyfbLTeQDzNN-HwHJ7lZwDN8y2qSyyIcFHVsLs`, Sheet `23-molecule-smoke-2` (gid `105980795`).
+- Document **By ID** `1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0`, Sheet `14-chem-breakdown-54` (gid `425569919`).
 - Map Each Column Below, matching on `creation_id`.
 - Columns, each `={{ $json.<column> }}`: `creation_id`, `still_url`, `hop1_video_url`, `last_frame_url`, `hop2_video_url`, `video_url`, `times_used` (number), `last_used_at`.
 - Options → Cell Format **RAW**, so values are stored exactly as sent.
@@ -372,7 +375,7 @@ Google Sheets 4.7, Update Row.
 Four notes sit above the one row of nodes, left to right: overview and how to run, the still, hop 1, hop 2.
 - **Size:** n8n's largest typed text is an H1 heading at 36 px, so each note is an image instead. Body text is 72 px and titles are 88 px, twice the H1 size and half the first pass. The notes are only as wide as their text.
 - **Source:** `python3 marketing/scripts/render_n8n_note_images.py` writes the PNGs and `notes.json` to `marketing/n8n-notes/peptide_molecule_vid_gen_v2/`.
-- **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `9286103d786213a43499839e21e24928324aaba0`, which stays reachable after the PR merges. The image's alt text carries the full wording.
+- **Hosting:** each note loads its PNG from `raw.githubusercontent.com` at commit `09777bf62dfe12959788ac79565606543350c9d5`, which stays reachable after the PR merges. The image's alt text carries the full wording. The overview line reads `14-chem-breakdown-54 · 54 looks`.
 - **Editing:** the text can't be edited inside n8n. Change the lines in the script, render, commit, then point the note's image link at the new commit.
 
 ### Checks already done (no spend)
@@ -391,8 +394,8 @@ Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The 
 2. **Pin the still** if Sal likes it: pin `save_still_url`. On both engines its output is one small `still_url` field (the GPT base64 nodes are too big to pin).
 3. **Video.** In the same editor session, open `sheets_update_video` → **Execute step**. n8n reuses the earlier run's data for the nodes before the pin; pen runs 2366 → 2367 did not re-run nodes 0–6. A page reload can drop that data, so if the page was reloaded, start again from step 1.
 4. **Unpin `save_still_url`** after the video run. A pin left in place makes the next run animate the old still with the next row's prompts.
-5. **Next row.** The pick takes the least-used Active row, then the lower `rank`, so row 2 comes up once row 1's video is saved. To run row 2 first, set row 1's `status` to `Hold`.
-6. **A/B is parked.** `grok_imagine_molecule_still` is deactivated, so do not set a row's `model_still` to `grok-imagine-image-2.0` until that node is turned back on. Row 2's `model_still` is `openai/gpt-image-2.5-sunburst`.
+5. **Next row.** The pick takes the least-used Active row, then the lower `rank`. On `14-chem-breakdown-54` every row starts at `times_used` 0, so the next pick is `PBVita-Chem-001` (BPC-157, Violet span). To skip a row, set its `status` to `Hold`.
+6. **A/B is parked.** `grok_imagine_molecule_still` is deactivated, so do not set a row's `model_still` to `grok-imagine-image-2.0` until that node is turned back on. Every row on `14-chem-breakdown-54` is already `openai/gpt-image-2.5-sunburst`.
 
 **Per full run:** GPT still about $0.2–0.5 (Grok $0.04), plus Kling $3.36, plus about 16 Creatomate credits.
 
@@ -403,11 +406,21 @@ Sal runs both halves from the n8n editor, in `peptide_molecule_vid_gen_v2`. The 
 - **Slow editor:** the editor may be slow to show the base64 still (several MB of JSON on two nodes).
 - **Measure before it counts:** every output is checked with ffprobe first — 1080 × 1920, about 30.0s, no sound.
 
-### Sheet 13 reset (Sal: YES)
+### Sheet 14 — `14-chem-breakdown-54` (live for v2)
+
+Both smokes looked good, so the chem library was rebuilt in that shape on a **new tab**. Sheet 13 stays as it was for `peptide_molecule_vid_gen`.
+
+- **Workbook:** `1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0` (same file as Sheet 13). [Open the tab](https://docs.google.com/spreadsheets/d/1XiCR6vs0tb4EawPE5hVlqYn3JElsOKsTDaH6HLbyHY0/edit#gid=425569919).
+- **Tab:** `14-chem-breakdown-54`, gid `425569919`. This is not the pen sheet `14-pen-creations-150`.
+- **Mirror:** `marketing/sheets/14-chem-breakdown-54.csv`, built by `python3 marketing/scripts/build_14_chem_breakdown_54.py` (looks in `marketing/scripts/chem14_looks.py`).
+- **54 rows,** `PBVita-Chem-001` … `054`, same compound order as Sheet 13. Two unique looks per compound. `Cagrilintide` uses the catalog spelling (Sheet 13 still says `Cagrilinitide`).
+- **Every row:** `model_still` `openai/gpt-image-2.5-sunburst`, `still_size` 1440x2560, `still_quality` high, `model_video` `fal-ai/kling-video/v3/pro/image-to-video`, `resolution` 1080p, hops 15+15, render 1080×1920, `times_used` 0, output columns blank.
+- **Reset:** CHEM-001 … 009 start unused on this tab. Their Sheet 13 counts were not edited.
+
+### Sheet 13 reset (Sal: YES) — done on the new tab
 
 - **Change:** CHEM-001 … 009 → `times_used` 0, `last_used_at` blank.
-- **Blocker:** it's a sheet write, so it needs either a throwaway n8n write workflow (node creation plus "you may run the workflow"), or folding into the 54-row rebuild after the smoke test.
-- **Not urgent:** it doesn't block the smoke test, and Sheet 13 is blocked by the 720p ban anyway.
+- **Where:** the new tab starts every row at 0, which is that reset. Sheet 13 itself was not rewritten.
 
 ---
 
