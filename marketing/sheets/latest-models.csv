@@ -4,4 +4,5 @@ tab,role,model,resolution,status,notes
 14-pen-creations-150,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only.
 12-import-still-queue,still,grok-imagine-image-2.0,2k,required,Grok Imagine Image 2.0 only.
 7-unique-reel-creations-500,still,grok-imagine-image-2.0,2k,required,Legacy library. Grok Imagine Image 2.0 only.
-18-motsc-film-stills,still,black-forest-labs/flux.2-max,9:16,trial,MOTS-C film stills only. OpenRouter Flux.2 Max. Do not use Flux on any other tab.
+18-motsc-film-stills,still,black-forest-labs/flux.2-max,9:16,trial,MOTS-C film stills. OpenRouter Flux.2 Max. Flux is allowed only here and on 24-site-tiles-4.
+24-site-tiles-4,still,black-forest-labs/flux.2-max,16:9,required,Homepage collection tiles for the website (not social). OpenRouter Flux.2 Max with product-photo input_references. Sal 2026-09-30.
