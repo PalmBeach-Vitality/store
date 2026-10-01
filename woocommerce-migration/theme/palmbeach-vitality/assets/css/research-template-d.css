@@ -347,9 +347,9 @@
   font-family: "Libre Baskerville", Georgia, serif;
   font-style: italic;
   font-weight: 400;
-  font-size: clamp(1.45rem, 2.4vw, 1.85rem);
-  line-height: 1.2;
-  color: #111;
+  font-size: clamp(2.15rem, 3.5vw, 2.75rem);
+  line-height: 1.15;
+  color: #145e6b;
 }
 
 .pbv-rd__grid {
