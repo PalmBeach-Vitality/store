@@ -490,8 +490,8 @@ function pbv_research_catalog() {
             ),
         ),
         'mots-c' => array(
-            'kicker' => 'Metabolic',
-            'category' => 'Metabolic',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'MOTS-c',
             'subtitle' => 'Mitochondrial-Derived Peptide',
             'sequence_note' => 'Mitochondrial peptide (16 aa): MRWQEMGYIFYPRKLR',
@@ -533,8 +533,8 @@ function pbv_research_catalog() {
             ),
         ),
         'nad' => array(
-            'kicker' => 'Immune',
-            'category' => 'Immune',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'NAD+',
             'subtitle' => 'Nicotinamide Adenine Dinucleotide',
             'sequence_note' => 'Not a peptide — dinucleotide coenzyme (nicotinamide + ribose + ADP-ribose). Diagram shows modular units.',
@@ -841,8 +841,8 @@ function pbv_research_catalog() {
             ),
         ),
         'ss-31' => array(
-            'kicker' => 'Metabolic',
-            'category' => 'Metabolic',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'SS-31',
             'subtitle' => 'Mitochondria-Targeted Tetrapeptide',
             'sequence_note' => 'D-Arg–dimethylTyr–Lys–Phe. D-Arg and dimethyltyrosine are marked as modified.',

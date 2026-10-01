@@ -301,6 +301,7 @@ function pbv_research_category_order() {
     return array(
         'Growth Factors',
         'Metabolic',
+        'Mitochondrial',
         'Cognitive',
         'Hormonal',
         'Immune',
@@ -316,10 +317,11 @@ function pbv_research_category_order() {
 function pbv_research_category_slugs() {
     return array(
         'Growth Factors' => array('bpc-157', 'tb-500', 'ghk-cu'),
-        'Metabolic'      => array('semaglutide', 'tirzepatide', 'retatrutide', 'aod-9604', '5-amino-1mq', 'cagrilintide', 'mots-c', 'ss-31'),
+        'Metabolic'      => array('semaglutide', 'tirzepatide', 'retatrutide', 'aod-9604', '5-amino-1mq', 'cagrilintide'),
+        'Mitochondrial'  => array('mots-c', 'ss-31', 'nad'),
         'Cognitive'      => array('semax', 'selank', 'dsip'),
         'Hormonal'       => array('ipamorelin', 'cjc-1295', 'tesamorelin', 'melanotan', 'pt-141', 'sermorelin'),
-        'Immune'         => array('kpv', 'nad', 'ta-1'),
+        'Immune'         => array('kpv', 'ta-1'),
         'Stacks'         => array('wolverine', 'glow', 'klow', 'cjc-ipamorelin', 'tesamorelin-ipamorelin'),
     );
 }
