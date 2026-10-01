@@ -225,7 +225,6 @@ function pbv_redirect_legacy_storefront_paths() {
         '/telehealth'                   => home_url('/contact/'),
         '/hello-world'                  => $home,
         '/2026/07/29/hello-world'       => $home,
-        '/research'                     => $home,
         '/privacy-policy'               => home_url('/terms/#privacy'),
         '/refund-policy'                => home_url('/terms/#refund'),
         '/refund_returns'               => home_url('/terms/#refund'),
@@ -303,11 +302,6 @@ function pbv_redirect_legacy_storefront_paths() {
     }
 
     if (is_author() || is_date()) {
-        wp_safe_redirect($home, 301);
-        exit;
-    }
-
-    if (strpos($lower, '/research/') === 0) {
         wp_safe_redirect($home, 301);
         exit;
     }
