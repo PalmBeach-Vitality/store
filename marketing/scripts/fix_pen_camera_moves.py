@@ -353,7 +353,7 @@ const writeCamera = node({{
           {{ id: 'negative_prompt', displayName: 'negative_prompt', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true }},
         ],
       }},
-      options: {{ cellFormat: 'RAW', handlingExtraData: 'ignoreIt' }},
+      options: {{ cellFormat: 'RAW', handlingExtraData: 'insertInNewColumn' }},
     }},
     output: [{{ creation_id: 'PBVita-Pen-169', camera_move: 'Slow steady dolly-in' }}],
   }},

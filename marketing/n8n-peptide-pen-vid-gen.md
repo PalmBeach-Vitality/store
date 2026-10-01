@@ -166,7 +166,7 @@ Exec 2635 ran Pen-169 on the sheet's locked-tripod sentence. The camera arced le
 
 Part suppression stays in `negative_prompt`. That column also lists orbit, circling, arc around, camera shake, and handheld.
 
-Live write: unpublished `fix_pen_camera_moves` (id pending). Do not run `pen_motion_from_sheet` (`adQ4aqtXaLutOKYf`, exec 2634) again. Do not run `peptide_pen_vid_gen` until Salvatore says to.
+Live write: archived `fix_pen_camera_moves` (`wb1ul4oWo22L79iA`) exec **2636**. The read-back assert was 168 rows, bad 0, Pen-169 still a dolly-in, and Pen-169 `video_prompt` still contains `SHOT FAMILY: static_lock`. Do not run that one-shot again. Do not run `pen_motion_from_sheet` (`adQ4aqtXaLutOKYf`, exec 2634) again. Do not run `peptide_pen_vid_gen` until Salvatore says to.
 
 **Check:** `still_url` https, `video_motion_prompt` contains that row's `camera_move`, and it does not contain `locked`, `then hold`, or `same place on the surface`.
 
