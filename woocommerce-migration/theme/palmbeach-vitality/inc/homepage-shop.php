@@ -85,10 +85,32 @@ function pbv_homepage_featured_product_ids() {
 }
 
 /**
+ * Tile order for the homepage grid. Same sequence on every viewport:
+ * Peptide Pens, Peptide Vials, Metabolic Pens, Metabolic Vials.
+ *
+ * @return array<int, array{slug:string,title:string,alt:string,image:string,width:int,height:int}>
+ */
+function pbv_homepage_collection_tiles() {
+    $by_slug = array();
+    foreach (pbv_homepage_collections() as $card) {
+        $by_slug[$card['slug']] = $card;
+    }
+
+    $tiles = array();
+    foreach (array('peptide-pens', 'peptides', 'weight-loss-pens', 'weight-loss') as $slug) {
+        if (isset($by_slug[$slug])) {
+            $tiles[] = $by_slug[$slug];
+        }
+    }
+
+    return $tiles;
+}
+
+/**
  * Collection tiles between the hero and the product grid.
  */
 function pbv_render_homepage_collections() {
-    $cards = pbv_homepage_collections();
+    $cards = pbv_homepage_collection_tiles();
     ?>
     <section class="pbv-home-shop" id="shop-collections" aria-labelledby="pbv-home-collections-title">
       <div class="pbv-container pbv-home-shop__inner">
