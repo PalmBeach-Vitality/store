@@ -268,6 +268,31 @@ function pbv_render_research_compound($slug) {
 }
 
 /**
+ * Pen photo when the compound is sold as a pen. Vial photo when it is not.
+ *
+ * @param string $slug  Catalog slug.
+ * @param string $title Compound title.
+ * @return array{src:string,alt:string}
+ */
+function pbv_research_product_photo($slug, $title) {
+    $vial_only = array('aod-9604' => true);
+    $format = isset($vial_only[$slug]) ? 'vial' : 'pen';
+    $relative = 'assets/images/research-products/' . $slug . '.png';
+    $path = function_exists('pbv_asset_path') ? pbv_asset_path($relative) : '';
+    if (!$path || !file_exists($path)) {
+        return array('src' => '', 'alt' => '');
+    }
+    $src = pbv_asset_uri($relative);
+    $ver = defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '';
+    $ver = $ver . '-' . (string) filemtime($path);
+    $src .= '?ver=' . rawurlencode($ver);
+    return array(
+        'src' => $src,
+        'alt' => $title . ' ' . $format,
+    );
+}
+
+/**
  * Index of every compound, in the same card system.
  */
 function pbv_render_research_index() {
@@ -285,7 +310,11 @@ function pbv_render_research_index() {
     echo '</article>';
     echo '<div class="pbv-rd__grid">';
     foreach ($catalog as $slug => $row) {
+        $photo = pbv_research_product_photo($slug, $row['title']);
         echo '<a class="pbv-rd__card pbv-rd__pick" href="' . esc_url(pbv_research_url($slug)) . '">';
+        if ($photo['src'] !== '') {
+            echo '<img class="pbv-rd__photo" src="' . esc_url($photo['src']) . '" alt="' . esc_attr($photo['alt']) . '" width="640" height="800" decoding="async" />';
+        }
         echo '<p class="pbv-rd__kicker">' . esc_html($row['kicker']) . '</p>';
         echo '<h2>' . esc_html($row['title']) . '</h2>';
         echo '<p>' . esc_html($row['subtitle']) . '</p>';
