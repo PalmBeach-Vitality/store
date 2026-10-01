@@ -67,6 +67,19 @@
       </div>
     </div>
 
+    <nav class="desktop-nav" aria-label="<?php esc_attr_e('Primary', 'palmbeach-vitality'); ?>">
+      <?php
+      wp_nav_menu(array(
+          'theme_location'  => 'primary',
+          'container'       => false,
+          'menu_id'         => 'desktop-primary-menu',
+          'fallback_cb'     => 'pbv_fallback_menu',
+          'depth'           => 2,
+          'pbv_desktop_nav' => true,
+      ));
+      ?>
+    </nav>
+
     <nav id="primary-nav-dropdown" class="mobile-nav" aria-label="<?php esc_attr_e('Primary', 'palmbeach-vitality'); ?>" data-mobile-nav hidden>
       <?php
       wp_nav_menu(array(
