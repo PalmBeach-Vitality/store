@@ -978,6 +978,9 @@ function pbv_render_product_research_section($product = null) {
     echo '<section class="pbv-product-research" aria-label="' . esc_attr(sprintf(__('%s research studies', 'palmbeach-vitality'), $label)) . '">';
     echo '<h2 class="pbv-product-research__title">' . esc_html(sprintf(__('%s Research Studies', 'palmbeach-vitality'), $label)) . '</h2>';
     echo '<p class="pbv-product-research__intro">' . esc_html__('Selected English-language peer-reviewed references for laboratory research context. Links open publisher or PubMed/PMC records.', 'palmbeach-vitality') . '</p>';
+    if (function_exists('pbv_research_url')) {
+        echo '<p class="pbv-product-research__intro"><a href="' . esc_url(pbv_research_url($key)) . '">' . esc_html(sprintf(__('Read the %s research overview', 'palmbeach-vitality'), $label)) . '</a></p>';
+    }
     echo '<ol class="pbv-product-research__list">';
 
     foreach ($studies as $study) {
