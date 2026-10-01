@@ -1,20 +1,23 @@
 #!/usr/bin/env python3
 """Rewrite Sheet 14 video_motion_prompt for pen I2V.
 
-Exec 2631 added "same place on the surface" and "the product stays a still
-object" on every row, including pull-backs and rises. That froze the camera.
-Those lines are gone.
+The spoken sentence is that row's camera_move only. shot_family is a sheet
+label and is not pasted into the prompt: Kling treated "static_lock" and
+"no travel / locked" as instructions and either froze or invented an arc.
 
-The camera sentence is that row's camera_move, shot_family, camera_angle,
-and camera_direction. Do not name the cap, clip, dial, or plunger.
-negative_prompt is its own column. The fal node reads it.
+Do not name the cap, clip, dial, or plunger. negative_prompt is its own
+column. The fal node reads it.
 """
 
 from __future__ import annotations
 
 import csv
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from audit_pen_camera_moves import find_defects  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV14 = ROOT / "sheets" / "14-pen-creations-150.csv"
@@ -26,7 +29,8 @@ PEN_LOCK = "The product matches the start image. Same silhouette, same colors, s
 NEGATIVE_PROMPT = (
     "morphing, melting, transforming, shape change, cap moving, "
     "clip sliding, uncapping, dial turning, knob rotating, plunger extending, "
-    "button popping out, deformation, growing, shrinking"
+    "button popping out, deformation, growing, shrinking, "
+    "orbit, circling, arc around, camera shake, handheld, wobble, dutch angle, snap zoom"
 )
 
 ADDED_FREEZE = (
@@ -90,9 +94,6 @@ def build_motion_prompt(row: dict) -> str:
     prompt = (
         f"{PEN_LOCK} "
         f"{move}. "
-        f"Shot {require(row, 'shot_family')}, "
-        f"angle {require(row, 'camera_angle')}, "
-        f"direction {require(row, 'camera_direction')}. "
         "No new objects. No people, hands, faces, needles, or burn-in. "
         f"Keep label '{compound}' and '3ml Pen' unchanged."
     )
@@ -107,6 +108,9 @@ def build_motion_prompt(row: dict) -> str:
             raise SystemExit(f"{row.get('creation_id')}: added camera freeze: {phrase}")
     if move not in prompt:
         raise SystemExit(f"{row.get('creation_id')}: dropped the sheet camera move")
+    defects = find_defects(prompt)
+    if defects:
+        raise SystemExit(f"{row.get('creation_id')}: camera defect in motion: {defects}")
     return prompt
 
 
