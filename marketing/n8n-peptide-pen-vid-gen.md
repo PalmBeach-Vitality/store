@@ -160,7 +160,9 @@ Paste: `marketing/n8n-code-prep-pen-video-start.js`
 
 Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws if the sheet motion still has vial / flip-off language (that morphs the pen into a vial).
 
-**Check:** `still_url` https + `grok_video_body_json` starts with `PEN LOCK`
+The motion line has to freeze the **whole pen**, not only the clip-cap. Exec 2627 (`PBVita-Pen-169`, IGF-LR3) sent a locked-tripod prompt that named the cap and then said "the pen does not" plus "then hold". Kling had no camera travel to animate, so it turned the white ridged dose dial into a solid red ribbed end. `video_motion_prompt` now names the white ridged dial, the red plunger tip, the window, and the liquid, and it drops "then hold".
+
+**Check:** `still_url` https + `video_motion_prompt` contains `White ridged dose dial`
 
 ---
 
