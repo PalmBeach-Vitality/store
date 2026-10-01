@@ -1,0 +1,353 @@
+/* Template D — compound research cards. Store type and colors. */
+.pbv-rd {
+  background: #f7f7f7;
+  padding: 1.25rem 0 3.5rem;
+}
+
+.pbv-rd a {
+  text-decoration: none;
+}
+
+.pbv-rd__inner {
+  width: min(100% - 2rem, 60rem);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pbv-rd__card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  padding: 1.5rem 1.6rem 1.55rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.pbv-rd__card h2,
+.pbv-rd__pick h2 {
+  margin: 0 0 0.7rem;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.45rem, 2vw, 1.75rem);
+  line-height: 1.25;
+  color: #111;
+}
+
+.pbv-rd__card p,
+.pbv-rd__pick p {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #111;
+}
+
+.pbv-rd__kicker {
+  margin: 0 0 0.45rem !important;
+  font-family: "Work Sans", system-ui, sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #145e6b !important;
+}
+
+.pbv-rd__title {
+  margin: 0 0 0.35rem;
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  line-height: 1.15;
+  color: #111;
+}
+
+.pbv-rd__sub {
+  margin: 0 0 1.15rem !important;
+  color: #6b6b6b !important;
+  font-size: 1.12rem !important;
+}
+
+.pbv-rd__back {
+  color: #145e6b;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.pbv-rd__back:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.pbv-rd__ruler {
+  margin-top: 0.4rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.pbv-rd__ruler-kicker,
+.pbv-rd__ruler-dir {
+  margin: 0 0 0.55rem !important;
+  font-size: 0.82rem !important;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #333 !important;
+}
+
+.pbv-rd__ruler-dir {
+  color: #111 !important;
+  letter-spacing: 0;
+  text-transform: none;
+  font-size: 0.95rem !important;
+}
+
+.pbv-rd__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pbv-rd__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: flex-end;
+}
+
+.pbv-rd__res {
+  width: 4.35rem;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pbv-rd__bar {
+  display: block;
+  width: 100%;
+  height: 8px;
+  background: #94a3b8;
+}
+
+.pbv-rd__res--polar .pbv-rd__bar,
+.pbv-rd__swatch--polar { background: #0d9488; }
+.pbv-rd__res--hydrophobic .pbv-rd__bar,
+.pbv-rd__swatch--hydrophobic { background: #1e3a5f; }
+.pbv-rd__res--acidic .pbv-rd__bar,
+.pbv-rd__swatch--acidic { background: #b45309; }
+.pbv-rd__res--basic .pbv-rd__bar,
+.pbv-rd__swatch--basic { background: #7c3aed; }
+.pbv-rd__res--other .pbv-rd__bar { background: #64748b; }
+
+.pbv-rd__pos {
+  margin-top: 0.35rem;
+  font-size: 0.72rem;
+  color: #6b6b6b;
+}
+
+.pbv-rd__letter {
+  font-family: "Libre Baskerville", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  color: #111;
+}
+
+.pbv-rd__code {
+  margin: 0.15rem 0 0.45rem;
+  font-size: 0.75rem;
+  color: #333;
+}
+
+.pbv-rd__cap {
+  align-self: center;
+  font-weight: 600;
+  color: #145e6b;
+  padding: 0 0.35rem 1.2rem;
+}
+
+.pbv-rd__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem 1.1rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+  color: #333;
+  font-size: 0.88rem;
+}
+
+.pbv-rd__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pbv-rd__swatch {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 4px;
+}
+
+.pbv-rd__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pbv-rd__chips li {
+  border: 1px solid #e5e5e5;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.pbv-rd__note {
+  color: #333 !important;
+}
+
+.pbv-rd__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pbv-rd__list li {
+  position: relative;
+  padding: 0.28rem 0 0.28rem 1rem;
+  line-height: 1.5;
+}
+
+.pbv-rd__list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #145e6b;
+}
+
+.pbv-rd__studies {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pbv-rd__studies li {
+  padding: 0.7rem 0;
+  border-top: 1px solid #eee;
+}
+
+.pbv-rd__studies a {
+  color: #145e6b;
+  font-weight: 500;
+}
+
+.pbv-rd__studies a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.pbv-rd__studies span {
+  display: block;
+  margin-top: 0.15rem;
+  color: #6b6b6b;
+  font-size: 0.85rem;
+}
+
+.pbv-rd__related a {
+  color: #145e6b;
+  font-weight: 600;
+}
+
+.pbv-rd__related a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.pbv-rd__disclaimer p {
+  color: #6b6b6b !important;
+  font-size: 0.95rem !important;
+}
+
+.pbv-rd__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 0.25rem 0 0;
+}
+
+.pbv-rd__btn {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #111;
+  border-radius: 999px;
+  padding: 0.7rem 1.15rem;
+  background: #fff;
+  color: #111;
+  font-weight: 500;
+}
+
+.pbv-rd__btn:hover {
+  opacity: 1;
+  background: #f7f7f7;
+}
+
+.pbv-rd__btn--solid {
+  background: #111;
+  color: #fff;
+}
+
+.pbv-rd__btn--solid:hover {
+  background: #145e6b;
+  border-color: #145e6b;
+}
+
+.pbv-rd__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.pbv-rd__pick {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  color: inherit;
+  min-height: 100%;
+}
+
+.pbv-rd__pick:hover {
+  opacity: 1;
+  border-color: #145e6b;
+}
+
+.pbv-rd__pick h2 {
+  margin-bottom: 0;
+}
+
+.pbv-rd__pick p {
+  color: #6b6b6b;
+  flex: 1;
+}
+
+.pbv-rd__more {
+  margin-top: 0.6rem;
+  color: #145e6b;
+  font-weight: 600;
+}
+
+@media (min-width: 800px) {
+  .pbv-rd__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
