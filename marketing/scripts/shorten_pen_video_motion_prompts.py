@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """Rewrite Sheet 14 video_motion_prompt for pen I2V.
 
-The still already has the pen. Kling must not invent mechanism motion.
-Do NOT mention vials / flip-off / uncap — I2V morphs the pen into a vial.
-Do NOT say only the clip-cap is frozen. A locked camera plus "then hold"
-makes Kling twist the dose dial and grow the red plunger, which is what
-happened on PBVita-Pen-169 (exec 2627).
+Exec 2627 turned the dose dial red. Exec 2630 (PBVita-Pen-170) used the
+part-by-part lock and a locked tripod, and Kling still opened the clip
+and pushed the red tip out. Naming the parts and forbidding camera travel
+is what makes Kling animate the pen.
 
-The whole pen is frozen: cap, clip, white ridged dial, red plunger tip,
-window, liquid, label, helix.
+Positive prompt: the product is a rigid copy of the start image. Do not
+name the cap, clip, dial, or plunger. Camera wording is the sheet's own
+camera_move, shot_family, camera_angle, and camera_direction, unchanged.
+negative_prompt is its own column. The fal node reads it.
 """
 
 from __future__ import annotations
@@ -23,11 +24,14 @@ CSV14 = ROOT / "sheets" / "14-pen-creations-150.csv"
 MAX_MOTION = 1400
 
 PEN_LOCK = (
-    "PEN LOCK: Frozen product. Nothing on the pen moves, rotates, extends, "
-    "recolors, or changes shape. White clip-cap stays on. White ridged dose "
-    "dial stays white with the same ridges, no twist and no spin. Red plunger "
-    "tip stays the same size, color, and position. Window, liquid level, "
-    "label, and helix stay identical to the first frame."
+    "The product in the start image is rigid and unchanged for every frame. "
+    "Same silhouette, same colors, same parts, same place on the surface."
+)
+
+NEGATIVE_PROMPT = (
+    "morphing, melting, transforming, shape change, parts moving, cap moving, "
+    "clip sliding, uncapping, dial turning, knob rotating, plunger extending, "
+    "button popping out, deformation, growing, shrinking, product animation"
 )
 
 BAD_MOTION = re.compile(
@@ -76,30 +80,22 @@ def strip_vial_lock_prefix(text: str) -> str:
     return ascii(t)
 
 
-def camera_line(move: str) -> str:
-    text = ascii(move)
-    text = re.sub(r",?\s*then hold\b", "", text, flags=re.I)
-    text = re.sub(r"\s+", " ", text).strip(" ,.-")
-    return text[:160]
-
-
 def build_motion_prompt(row: dict) -> str:
     compound = require(row, "compound_name")
-    move = camera_line(require(row, "camera_move"))
+    move = require(row, "camera_move")
     prompt = (
         f"{PEN_LOCK} "
-        f"Slow cinematic camera only: {move}. "
+        f"Camera, from the sheet: {move}. "
         f"Shot {require(row, 'shot_family')}, "
         f"angle {require(row, 'camera_angle')}, "
         f"direction {require(row, 'camera_direction')}. "
-        f"Keep the exact same laboratory research scene, materials, and lighting. "
-        f"No orbit. No new objects. No people, hands, faces, needles, or burn-in. "
-        f"The dose dial does not turn. The plunger does not travel. The cap does not move. "
+        "No new objects. No people, hands, faces, needles, or burn-in. "
+        "Background light may shift. The product stays a still object. "
         f"Keep label '{compound}' and '3ml Pen' unchanged."
     )
     prompt = ascii(prompt)
     if len(prompt) > MAX_MOTION:
-        prompt = prompt[: MAX_MOTION - 1].rsplit(" ", 1)[0] + "."
+        raise SystemExit(f"{row.get('creation_id')}: motion is {len(prompt)} characters")
     if BAD_MOTION.search(prompt):
         raise SystemExit(f"motion still has vial/cap-action language: {prompt[:180]}")
     return prompt
@@ -109,6 +105,7 @@ def patch_rows(rows: list[dict]) -> None:
     extra = ("lab_item", "material_detail", "hero_style", "scene_brief")
     for r in rows:
         r["video_motion_prompt"] = build_motion_prompt(r)
+        r["negative_prompt"] = NEGATIVE_PROMPT
         for key in extra:
             if key in r and r[key]:
                 r[key] = strip_vial_lock_prefix(r[key])
@@ -121,6 +118,8 @@ def main() -> None:
         raise SystemExit(f"expected 168 rows, got {len(rows)}")
 
     patch_rows(rows)
+    for r in rows:
+        r.pop("cfg_scale", None)
     lens = [len(r["video_motion_prompt"]) for r in rows]
     leftover = sum(
         1

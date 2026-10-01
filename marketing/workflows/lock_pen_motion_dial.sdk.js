@@ -1,4 +1,4 @@
-import { workflow, node, trigger, expr } from '@n8n/workflow-sdk';
+import { workflow, node, trigger } from '@n8n/workflow-sdk';
 
 const credSheets = { googleSheetsOAuth2Api: { id: 'OGHfxWtOUeZbDesw', name: 'Google Sheets account' } };
 const penDoc = {
@@ -49,7 +49,7 @@ const rewriteMotion = node({
     parameters: {
       mode: 'runOnceForAllItems',
       language: 'javaScript',
-      jsCode: "var PEN_LOCK = 'PEN LOCK: Frozen product. Nothing on the pen moves, rotates, extends, recolors, or changes shape. White clip-cap stays on. White ridged dose dial stays white with the same ridges, no twist and no spin. Red plunger tip stays the same size, color, and position. Window, liquid level, label, and helix stay identical to the first frame.'; function ascii(s) { var t = String(s || ''); var map = {}; map[String.fromCharCode(8216)] = String.fromCharCode(39); map[String.fromCharCode(8217)] = String.fromCharCode(39); map[String.fromCharCode(8220)] = String.fromCharCode(34); map[String.fromCharCode(8221)] = String.fromCharCode(34); map[String.fromCharCode(8211)] = '-'; map[String.fromCharCode(8212)] = '-'; map[String.fromCharCode(8722)] = '-'; map[String.fromCharCode(8230)] = '...'; map[String.fromCharCode(215)] = 'x'; var out = ''; var i; for (i = 0; i < t.length; i++) { var ch = t.charAt(i); var code = t.charCodeAt(i); if (map[ch]) out += map[ch]; else if (code === 9 || code === 10 || code === 13 || (code >= 32 && code <= 126)) out += ch; else out += ' '; } while (out.indexOf('  ') !== -1) out = out.split('  ').join(' '); return out.replace(/^ +| +$/g, ''); } function must(row, key) { var v = ascii(row[key]); if (!v) throw new Error('rewrite_pen_motion: ' + (row.creation_id || '?') + ' missing ' + key); return v; } function cameraLine(move) { var text = ascii(move); var low = text.toLowerCase(); var at = low.indexOf('then hold'); while (at !== -1) { var start = at; if (start > 0 && text.charAt(start - 1) === ' ') start--; if (start > 0 && text.charAt(start - 1) === ',') start--; text = text.slice(0, start) + text.slice(at + 9); low = text.toLowerCase(); at = low.indexOf('then hold'); } while (text.indexOf('  ') !== -1) text = text.split('  ').join(' '); var ends = ' ,.-'; while (text.length && ends.indexOf(text.charAt(0)) !== -1) text = text.slice(1); while (text.length && ends.indexOf(text.charAt(text.length - 1)) !== -1) text = text.slice(0, -1); return text.slice(0, 160); } var rows = $input.all().map(function (i) { return i.json; }); if (rows.length !== 168) throw new Error('rewrite_pen_motion: expected 168 rows, got ' + rows.length); var seen = {}; return rows.map(function (row) { var id = must(row, 'creation_id'); if (seen[id]) throw new Error('rewrite_pen_motion: duplicate ' + id); seen[id] = true; var compound = must(row, 'compound_name'); var q = String.fromCharCode(39); var prompt = PEN_LOCK + ' Slow cinematic camera only: ' + cameraLine(must(row, 'camera_move')) + '. Shot ' + must(row, 'shot_family') + ', angle ' + must(row, 'camera_angle') + ', direction ' + must(row, 'camera_direction') + '. Keep the exact same laboratory research scene, materials, and lighting. No orbit. No new objects. No people, hands, faces, needles, or burn-in. The dose dial does not turn. The plunger does not travel. The cap does not move. Keep label ' + q + compound + q + ' and ' + q + '3ml Pen' + q + ' unchanged.'; prompt = ascii(prompt); if (prompt.length > 1400) throw new Error('rewrite_pen_motion: ' + id + ' motion is ' + prompt.length + ' characters'); var lowPrompt = prompt.toLowerCase(); if (lowPrompt.indexOf('then hold') !== -1 || lowPrompt.indexOf('vial visual lock') !== -1 || lowPrompt.indexOf('flip-off') !== -1 || lowPrompt.indexOf('flip off') !== -1 || lowPrompt.indexOf('uncap') !== -1) throw new Error('rewrite_pen_motion: ' + id + ' still has then-hold or vial language'); if (prompt.indexOf('White ridged dose dial') === -1) throw new Error('rewrite_pen_motion: ' + id + ' does not lock the dose dial'); return { json: { creation_id: id, video_motion_prompt: prompt } }; });",
+      jsCode: "var PEN_LOCK = 'The product in the start image is rigid and unchanged for every frame. Same silhouette, same colors, same parts, same place on the surface.'; var NEGATIVE = 'morphing, melting, transforming, shape change, parts moving, cap moving, clip sliding, uncapping, dial turning, knob rotating, plunger extending, button popping out, deformation, growing, shrinking, product animation'; function ascii(s) { var t = String(s || ''); var map = {}; map[String.fromCharCode(8216)] = String.fromCharCode(39); map[String.fromCharCode(8217)] = String.fromCharCode(39); map[String.fromCharCode(8220)] = String.fromCharCode(34); map[String.fromCharCode(8221)] = String.fromCharCode(34); map[String.fromCharCode(8211)] = '-'; map[String.fromCharCode(8212)] = '-'; map[String.fromCharCode(8722)] = '-'; map[String.fromCharCode(8230)] = '...'; map[String.fromCharCode(215)] = 'x'; var out = ''; var i; for (i = 0; i < t.length; i++) { var ch = t.charAt(i); var code = t.charCodeAt(i); if (map[ch]) out += map[ch]; else if (code === 9 || code === 10 || code === 13 || (code >= 32 && code <= 126)) out += ch; else out += ' '; } while (out.indexOf('  ') !== -1) out = out.split('  ').join(' '); while (out.charAt(0) === ' ') out = out.slice(1); while (out.charAt(out.length - 1) === ' ') out = out.slice(0, -1); return out; } function must(row, key) { var v = ascii(row[key]); if (!v) throw new Error('rewrite_pen_motion: ' + (row.creation_id || '?') + ' missing ' + key); return v; } var rows = $input.all().map(function (i) { return i.json; }); if (rows.length !== 168) throw new Error('rewrite_pen_motion: expected 168 rows, got ' + rows.length); var seen = {}; return rows.map(function (row) { var id = must(row, 'creation_id'); if (seen[id]) throw new Error('rewrite_pen_motion: duplicate ' + id); seen[id] = true; var compound = must(row, 'compound_name'); var q = String.fromCharCode(39); var prompt = PEN_LOCK + ' Camera, from the sheet: ' + must(row, 'camera_move') + '. Shot ' + must(row, 'shot_family') + ', angle ' + must(row, 'camera_angle') + ', direction ' + must(row, 'camera_direction') + '. No new objects. No people, hands, faces, needles, or burn-in. Background light may shift. The product stays a still object. Keep label ' + q + compound + q + ' and ' + q + '3ml Pen' + q + ' unchanged.'; prompt = ascii(prompt); if (prompt.length > 1400) throw new Error('rewrite_pen_motion: ' + id + ' motion is ' + prompt.length + ' characters'); var lowPrompt = prompt.toLowerCase(); if (lowPrompt.indexOf('vial visual lock') !== -1 || lowPrompt.indexOf('flip-off') !== -1 || lowPrompt.indexOf('uncap') !== -1) throw new Error('rewrite_pen_motion: ' + id + ' still has vial language'); if (prompt.indexOf(must(row, 'camera_move')) === -1) throw new Error('rewrite_pen_motion: ' + id + ' dropped the sheet camera move'); return { json: { creation_id: id, video_motion_prompt: prompt, negative_prompt: NEGATIVE } }; });",
     },
     output: [{ creation_id: 'PBVita-Pen-169', video_motion_prompt: 'PEN LOCK: Frozen product.' }],
   },
@@ -68,25 +68,59 @@ const writeMotion = node({
       documentId: penDoc,
       sheetName: penTab,
       columns: {
-        mappingMode: 'defineBelow',
+        mappingMode: 'autoMapInputData',
         matchingColumns: ['creation_id'],
-        value: {
-          creation_id: expr('{{ $json.creation_id }}'),
-          video_motion_prompt: expr('{{ $json.video_motion_prompt }}'),
-        },
+        value: {},
         schema: [
           { id: 'creation_id', displayName: 'creation_id', required: true, defaultMatch: true, display: true, type: 'string', canBeUsedToMatch: true },
           { id: 'video_motion_prompt', displayName: 'video_motion_prompt', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
+          { id: 'negative_prompt', displayName: 'negative_prompt', required: false, defaultMatch: false, display: true, type: 'string', canBeUsedToMatch: true },
         ],
       },
-      options: { cellFormat: 'RAW' },
+      options: { cellFormat: 'RAW', handlingExtraData: 'insertInNewColumn' },
     },
     output: [{ creation_id: 'PBVita-Pen-169', video_motion_prompt: 'PEN LOCK: Frozen product.' }],
   },
 });
 
-export default workflow('lock_pen_motion_dial', 'One-shot. Rewrites 14-pen video_motion_prompt so the dose dial and plunger stay frozen.')
+const readBack = node({
+  type: 'n8n-nodes-base.googleSheets',
+  version: 4.7,
+  config: {
+    name: 'read_pen_rows_back',
+    position: [1040, 240],
+    executeOnce: true,
+    credentials: credSheets,
+    parameters: {
+      resource: 'sheet',
+      operation: 'read',
+      documentId: penDoc,
+      sheetName: penTab,
+      options: { returnAllMatches: 'returnAllMatches' },
+    },
+    output: [{ creation_id: 'PBVita-Pen-170', video_motion_prompt: 'Camera, from the sheet: locked tripod hold', negative_prompt: 'cap moving' }],
+  },
+});
+
+const assertCamera = node({
+  type: 'n8n-nodes-base.code',
+  version: 2,
+  config: {
+    name: 'assert_sheet_camera',
+    position: [1280, 240],
+    parameters: {
+      mode: 'runOnceForAllItems',
+      language: 'javaScript',
+      jsCode: "var rows = $input.all().map(function (i) { return i.json; }); if (rows.length !== 168) throw new Error('assert_sheet_camera: expected 168, got ' + rows.length); var missing = 0; var planted = 0; var named = 0; var emptyNeg = 0; var pen170 = ''; var i; for (i = 0; i < rows.length; i++) { var m = String(rows[i].video_motion_prompt || ''); var n = String(rows[i].negative_prompt || ''); var low = m.toLowerCase(); if (m.indexOf('Camera, from the sheet:') === -1) missing++; if (m.indexOf('product stays planted') !== -1) planted++; if (low.indexOf('the cap does not move') !== -1 || m.indexOf('White ridged dose dial') !== -1) named++; if (n.indexOf('cap moving') === -1) emptyNeg++; if (String(rows[i].creation_id) === 'PBVita-Pen-170') pen170 = m; } if (!pen170) throw new Error('assert_sheet_camera: Pen-170 missing'); if (pen170.indexOf('locked tripod hold at three-quarter-right') === -1) throw new Error('assert_sheet_camera: Pen-170 dropped the sheet camera'); if (pen170.indexOf('then hold') === -1) throw new Error('assert_sheet_camera: Pen-170 stripped then hold'); if (missing || planted || named || emptyNeg) throw new Error('assert_sheet_camera: missing=' + missing + ' planted=' + planted + ' named=' + named + ' emptyNeg=' + emptyNeg); return [{ json: { rows: 168, missing: missing, planted: planted, named: named, emptyNeg: emptyNeg, pen170_ok: true } }];",
+    },
+    output: [{ rows: 168, missing: 0, planted: 0, named: 0, emptyNeg: 0, pen170_ok: true }],
+  },
+});
+
+export default workflow('lock_pen_sheet_camera', 'One-shot. Copies each Sheet 14 camera_move into video_motion_prompt and writes negative_prompt. Does not replace the sheet camera.')
   .add(startTrigger)
   .to(readPenRows)
   .to(rewriteMotion)
-  .to(writeMotion);
+  .to(writeMotion)
+  .to(readBack)
+  .to(assertCamera);

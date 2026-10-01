@@ -8,7 +8,7 @@
 **Live (unpublished):** https://stockjohnson.app.n8n.cloud/workflow/eLM4xCpHflgqJGfB  
 **Workbook:** the `14-pen-creations-150` spreadsheet already imported (document ID is wired in n8n; not stored in this repo).
 
-**Canonical Grok still prompt (frozen).** `grok_imagine_pen_still` POSTs `prompt: $json.video_prompt` to `https://api.x.ai/v1/images/generations` with `model: $json.model_still` (`grok-imagine-image-2.0`). Last live hit: exec **2305** (`PBVita-Pen-181` / Kisspeptin). Keep those Sheet 14 `video_prompt` cells byte-for-byte. Do not overlay a second lock (the measured-catalog rewrite on PR #81 is invalid). `lab_item` / `material_detail` / `hero_style` / `still_edit_prompt` are not sent on the live skip-edit path. I2V still uses `video_motion_prompt` → fal Kling; that column is unchanged too.
+**Canonical Grok still prompt (frozen).** `grok_imagine_pen_still` POSTs `prompt: $json.video_prompt` to `https://api.x.ai/v1/images/generations` with `model: $json.model_still` (`grok-imagine-image-2.0`). Last live hit: exec **2305** (`PBVita-Pen-181` / Kisspeptin). Keep those Sheet 14 `video_prompt` cells byte-for-byte. Do not overlay a second lock (the measured-catalog rewrite on PR #81 is invalid). `lab_item` / `material_detail` / `hero_style` / `still_edit_prompt` are not sent on the live skip-edit path. I2V uses `video_motion_prompt` plus the sheet `negative_prompt` column. Camera wording in the motion prompt is that row's own `camera_move`, `shot_family`, `camera_angle`, and `camera_direction`.
 
 **Pen input (from `3-image-scenes-150`):** `product_hero`, `product_form_detail`, `lab_environment`, `camera`, `lighting`, `scene_category`, `scene_brief`.  
 Exactly **one** white matte insulin-style **3ml** pen, **10–20% longer** full-length barrel (not stubby). Cap on (white clip). Label = **compound name + `3ml Pen` only** — no milligram dosage. GLOW liquid = bright blue in the small window; everyone else clear. Stack SKUs on the sheet: **GLOW**, **KLOW**, **Wolverine** (type any of those on `choose_compound`). Hardware, ink, and FORBIDDEN clauses live on Sheet 14 `video_prompt` — copy that cell, do not invent a second spec here.
@@ -103,7 +103,7 @@ Maps catalog nicknames **GLOW**, **KLOW**, **Wolverine** onto chemical blend str
 **Type:** Code · Run Once for All Items  
 **Before → this → After:** `alias_stack_names` → **pull_sheet_row** → `grok_imagine_pen_still`
 
-Reads `choose_compound.compound_name`. Picks the least-used Active Sheet 14 row for that match. Passes every field as-is.
+Reads `choose_compound.compound_name`. Picks the least-used Active Sheet 14 row for that match. Passes sheet fields as-is, including `camera_move` and `negative_prompt`. Throws if `negative_prompt` is empty.
 
 ---
 
@@ -158,11 +158,13 @@ is how a row can claim one model while another one renders.
 
 Paste: `marketing/n8n-code-prep-pen-video-start.js`
 
-Reads `video_motion_prompt` from `pull_sheet_row`. Does **not** truncate. Throws if the sheet motion still has vial / flip-off language (that morphs the pen into a vial).
+Reads `video_motion_prompt` and `negative_prompt` from `pull_sheet_row`. Does **not** truncate. Throws if the positive motion prompt still has vial / flip-off / uncap language. The `uncap` check looks at the positive prompt only — the sheet negative column is allowed to say `uncapping`.
 
-The motion line has to freeze the **whole pen**, not only the clip-cap. Exec 2627 (`PBVita-Pen-169`, IGF-LR3) sent a locked-tripod prompt that named the cap and then said "the pen does not" plus "then hold". Kling had no camera travel to animate, so it turned the white ridged dose dial into a solid red ribbed end. `video_motion_prompt` now names the white ridged dial, the red plunger tip, the window, and the liquid, and it drops "then hold".
+Exec 2627 (`PBVita-Pen-169`) and exec 2630 (`PBVita-Pen-170`, https://v3b.fal.media/files/b/0aaca753/x6hD3WRSS-AkYQOU8X4d__output.mp4) both changed the pen. Naming the cap, clip, dial, or plunger in the positive prompt is what Kling animates. The positive line now says the product is a rigid copy of the start image and then copies the sheet camera fields, including `locked tripod` and `then hold` when the sheet says that. Part suppression lives only in `negative_prompt`.
 
-**Check:** `still_url` https + `video_motion_prompt` contains `White ridged dose dial`
+Live write: unpublished `lock_pen_sheet_camera` (`Fc9aDld02l3PRvr0`) exec **2631** rewrote all 168 `video_motion_prompt` cells from each row's own camera fields and added `negative_prompt`. Read-back in that same run: 168/168, 0 missing sheet-camera phrases, 0 push overrides, Pen-170 still says `locked tripod hold at three-quarter-right` and `then hold`. Archived after the write. Do not run it again. Do not run `peptide_pen_vid_gen` until Salvatore says to.
+
+**Check:** `still_url` https, `video_motion_prompt` contains `Camera, from the sheet:`, and `negative_prompt` is the sheet cell.
 
 ---
 
@@ -179,6 +181,7 @@ The motion line has to freeze the **whole pen**, not only the clip-cap. Exec 262
 | Parameter `start_image_url` | **ON** | `={{ $json.still_url }}` |
 | Parameter `duration` | **ON** | `={{ String($json.duration_seconds) }}` |
 | Parameter `generate_audio` | **ON** | `={{ false }}` |
+| Parameter `negative_prompt` | **ON** | `={{ $json.negative_prompt }}` |
 | Wait For Completion | — | **ON** (poll 5s, max 600s) |
 | Credential | — | `fal.ai account` |
 
