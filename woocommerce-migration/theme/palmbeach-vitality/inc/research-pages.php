@@ -293,13 +293,76 @@ function pbv_research_product_photo($slug, $title) {
 }
 
 /**
- * Index of every compound, in the same card system.
+ * Category order for the research index, matching the .com catalog tabs.
+ *
+ * @return array<int,string>
+ */
+function pbv_research_category_order() {
+    return array(
+        'Growth Factors',
+        'Metabolic',
+        'Mitochondrial',
+        'Cognitive',
+        'Hormonal',
+        'Immune',
+        'Stacks',
+    );
+}
+
+/**
+ * Compound order inside each category.
+ *
+ * @return array<string,array<int,string>>
+ */
+function pbv_research_category_slugs() {
+    return array(
+        'Growth Factors' => array('bpc-157', 'tb-500', 'ghk-cu'),
+        'Metabolic'      => array('semaglutide', 'tirzepatide', 'retatrutide', 'aod-9604', '5-amino-1mq', 'cagrilintide'),
+        'Mitochondrial'  => array('mots-c', 'ss-31', 'nad'),
+        'Cognitive'      => array('semax', 'selank', 'dsip'),
+        'Hormonal'       => array('ipamorelin', 'cjc-1295', 'tesamorelin', 'melanotan', 'pt-141', 'sermorelin'),
+        'Immune'         => array('kpv', 'ta-1'),
+        'Stacks'         => array('wolverine', 'glow', 'klow', 'cjc-ipamorelin', 'tesamorelin-ipamorelin'),
+    );
+}
+
+/**
+ * @param string $category Category label.
+ * @return string
+ */
+function pbv_research_category_anchor($category) {
+    return 'research-' . sanitize_title($category);
+}
+
+/**
+ * Index of every compound, grouped by category.
  */
 function pbv_render_research_index() {
     $catalog = pbv_research_catalog();
-    uasort($catalog, function ($a, $b) {
-        return strcasecmp($a['title'], $b['title']);
-    });
+    $grouped = array();
+    foreach (pbv_research_category_order() as $category) {
+        $grouped[$category] = array();
+    }
+    $placed = array();
+    foreach (pbv_research_category_slugs() as $category => $slugs) {
+        foreach ($slugs as $slug) {
+            if (!isset($catalog[$slug])) {
+                continue;
+            }
+            $grouped[$category][$slug] = $catalog[$slug];
+            $placed[$slug] = true;
+        }
+    }
+    foreach ($catalog as $slug => $row) {
+        if (isset($placed[$slug])) {
+            continue;
+        }
+        $category = isset($row['category']) ? $row['category'] : (isset($row['kicker']) ? $row['kicker'] : 'Metabolic');
+        if (!isset($grouped[$category])) {
+            $grouped[$category] = array();
+        }
+        $grouped[$category][$slug] = $row;
+    }
 
     echo '<div class="pbv-rd">';
     echo '<div class="pbv-rd__inner">';
@@ -307,21 +370,38 @@ function pbv_render_research_index() {
     echo '<p class="pbv-rd__kicker">Research library</p>';
     echo '<h1 class="pbv-rd__title">Compound overviews</h1>';
     echo '<p class="pbv-rd__sub">Scientific context for every compound in the catalog. Laboratory research use only.</p>';
-    echo '</article>';
-    echo '<div class="pbv-rd__grid">';
-    foreach ($catalog as $slug => $row) {
-        $photo = pbv_research_product_photo($slug, $row['title']);
-        echo '<a class="pbv-rd__card pbv-rd__pick" href="' . esc_url(pbv_research_url($slug)) . '">';
-        if ($photo['src'] !== '') {
-            echo '<img class="pbv-rd__photo" src="' . esc_url($photo['src']) . '" alt="' . esc_attr($photo['alt']) . '" width="640" height="800" decoding="async" />';
+    echo '<nav class="pbv-rd__jumps" aria-label="' . esc_attr__('Compound types', 'palmbeach-vitality') . '">';
+    foreach (array_keys($grouped) as $category) {
+        if (!$grouped[$category]) {
+            continue;
         }
-        echo '<p class="pbv-rd__kicker">' . esc_html($row['kicker']) . '</p>';
-        echo '<h2>' . esc_html($row['title']) . '</h2>';
-        echo '<p>' . esc_html($row['subtitle']) . '</p>';
-        echo '<span class="pbv-rd__more">Read overview</span>';
-        echo '</a>';
+        echo '<a href="#' . esc_attr(pbv_research_category_anchor($category)) . '">' . esc_html($category) . '</a>';
     }
-    echo '</div></div></div>';
+    echo '</nav>';
+    echo '</article>';
+
+    foreach ($grouped as $category => $rows) {
+        if (!$rows) {
+            continue;
+        }
+        echo '<section class="pbv-rd__section" id="' . esc_attr(pbv_research_category_anchor($category)) . '">';
+        echo '<h2 class="pbv-rd__section-title">' . esc_html($category) . '</h2>';
+        echo '<div class="pbv-rd__grid">';
+        foreach ($rows as $slug => $row) {
+            $photo = pbv_research_product_photo($slug, $row['title']);
+            echo '<a class="pbv-rd__card pbv-rd__pick" href="' . esc_url(pbv_research_url($slug)) . '">';
+            if ($photo['src'] !== '') {
+                echo '<img class="pbv-rd__photo" src="' . esc_url($photo['src']) . '" alt="' . esc_attr($photo['alt']) . '" width="640" height="800" decoding="async" />';
+            }
+            echo '<p class="pbv-rd__kicker">' . esc_html(isset($row['category']) ? $row['category'] : $row['kicker']) . '</p>';
+            echo '<h2>' . esc_html($row['title']) . '</h2>';
+            echo '<p>' . esc_html($row['subtitle']) . '</p>';
+            echo '<span class="pbv-rd__more">Read overview</span>';
+            echo '</a>';
+        }
+        echo '</div></section>';
+    }
+    echo '</div></div>';
 }
 
 /**

@@ -17,6 +17,7 @@ function pbv_research_catalog() {
     return array(
         '5-amino-1mq' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => '5-Amino-1MQ',
             'subtitle' => 'NNMT Inhibitor',
             'sequence_note' => 'Small molecule, not a peptide: 5-amino-1-methylquinolinium',
@@ -42,6 +43,7 @@ function pbv_research_catalog() {
         ),
         'aod-9604' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => 'AOD-9604',
             'subtitle' => 'hGH Fragment 176–191 Analog',
             'sequence_note' => 'Tyr-hGH(176–191) lipolytic domain analog (AOD9604)',
@@ -85,6 +87,7 @@ function pbv_research_catalog() {
         ),
         'bpc-157' => array(
             'kicker' => 'Growth Factors',
+            'category' => 'Growth Factors',
             'title' => 'BPC-157',
             'subtitle' => 'Body Protection Compound-157',
             'sequence_note' => 'Pentadecapeptide (15 aa): GEPPPGKPADDAGLV',
@@ -126,6 +129,7 @@ function pbv_research_catalog() {
         ),
         'cagrilintide' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => 'Cagrilintide',
             'subtitle' => 'Long-Acting Amylin Analog',
             'sequence_note' => 'C20 diacid–γ-Glu–KCNTATCATQRLAEFLRHSSNNFGPILPPTNVGSNTP. Disulfide Cys2–Cys7.',
@@ -190,6 +194,7 @@ function pbv_research_catalog() {
         ),
         'cjc-1295' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'CJC-1295 (DAC)',
             'subtitle' => 'Long-Acting GHRH Analog',
             'sequence_note' => 'GHRH(1–29)-based analog; DAC constructs add Drug Affinity Complex albumin-binding chemistry',
@@ -245,6 +250,7 @@ function pbv_research_catalog() {
         ),
         'cjc-ipamorelin' => array(
             'kicker' => 'Stacks',
+            'category' => 'Stacks',
             'title' => 'CJC/Ipamorelin',
             'subtitle' => 'CJC + Ipamorelin',
             'sequence_note' => 'Combo display: CJC no DAC YADAIFTQSYRKVLAQLSARKLLQDILSR · Ipamorelin',
@@ -270,6 +276,7 @@ function pbv_research_catalog() {
         ),
         'dsip' => array(
             'kicker' => 'Cognitive',
+            'category' => 'Cognitive',
             'title' => 'DSIP',
             'subtitle' => 'Delta Sleep-Inducing Peptide',
             'sequence_note' => 'Nonapeptide (9 aa): WAGGDASGE',
@@ -305,6 +312,7 @@ function pbv_research_catalog() {
         ),
         'ghk-cu' => array(
             'kicker' => 'Growth Factors',
+            'category' => 'Growth Factors',
             'title' => 'GHK-Cu',
             'subtitle' => 'Copper Tripeptide (Gly-His-Lys·Cu²⁺)',
             'sequence_note' => 'Tripeptide GHK complexed with copper(II)',
@@ -334,6 +342,7 @@ function pbv_research_catalog() {
         ),
         'glow' => array(
             'kicker' => 'Stacks',
+            'category' => 'Stacks',
             'title' => 'GLOW Stack',
             'subtitle' => 'BPC-157 + TB-500 + GHK-Cu',
             'sequence_note' => 'Combo display: GHK · BPC-157 · TB-500 motif',
@@ -359,6 +368,7 @@ function pbv_research_catalog() {
         ),
         'ipamorelin' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'Ipamorelin',
             'subtitle' => 'Selective Growth Hormone Secretagogue',
             'sequence_note' => 'Pentapeptide GHS: Aib-His-D-2-Nal-D-Phe-Lys-NH₂',
@@ -390,6 +400,7 @@ function pbv_research_catalog() {
         ),
         'klow' => array(
             'kicker' => 'Stacks',
+            'category' => 'Stacks',
             'title' => 'KLOW Stack',
             'subtitle' => 'KPV + BPC-157 + TB-500 + GHK-Cu',
             'sequence_note' => 'Combo schematic: KPV · GHK · BPC-157 · TB-500 components',
@@ -415,6 +426,7 @@ function pbv_research_catalog() {
         ),
         'kpv' => array(
             'kicker' => 'Immune',
+            'category' => 'Immune',
             'title' => 'KPV',
             'subtitle' => 'α-MSH C-Terminal Tripeptide',
             'sequence_note' => 'Lys-Pro-Val (α-MSH 11–13)',
@@ -443,6 +455,7 @@ function pbv_research_catalog() {
         ),
         'melanotan' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'Melanotan II',
             'subtitle' => 'Melanocortin Receptor Agonist',
             'sequence_note' => 'Cyclic lactam: Ac-Nle-cyclo[Asp-His-D-Phe-Arg-Trp-Lys]-NH2',
@@ -477,7 +490,8 @@ function pbv_research_catalog() {
             ),
         ),
         'mots-c' => array(
-            'kicker' => 'Metabolic',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'MOTS-c',
             'subtitle' => 'Mitochondrial-Derived Peptide',
             'sequence_note' => 'Mitochondrial peptide (16 aa): MRWQEMGYIFYPRKLR',
@@ -519,7 +533,8 @@ function pbv_research_catalog() {
             ),
         ),
         'nad' => array(
-            'kicker' => 'Immune',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'NAD+',
             'subtitle' => 'Nicotinamide Adenine Dinucleotide',
             'sequence_note' => 'Not a peptide — dinucleotide coenzyme (nicotinamide + ribose + ADP-ribose). Diagram shows modular units.',
@@ -544,6 +559,7 @@ function pbv_research_catalog() {
         ),
         'pt-141' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'PT-141',
             'subtitle' => 'Bremelanotide, Melanocortin Agonist',
             'sequence_note' => 'Cyclic lactam: Ac-Nle-cyclo[Asp-His-D-Phe-Arg-Trp-Lys]-OH',
@@ -578,6 +594,7 @@ function pbv_research_catalog() {
         ),
         'retatrutide' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => 'Retatrutide',
             'subtitle' => 'Triple Agonist (GLP-1 / GIP / Glucagon)',
             'sequence_note' => 'Investigational triple agonist scaffold (retatrutide / LY3437943 class); X denotes Aib-like substitution in display',
@@ -644,6 +661,7 @@ function pbv_research_catalog() {
         ),
         'selank' => array(
             'kicker' => 'Cognitive',
+            'category' => 'Cognitive',
             'title' => 'Selank',
             'subtitle' => 'Tuftsin Analog Heptapeptide',
             'sequence_note' => 'Thr-Lys-Pro-Arg-Pro-Gly-Pro (synthetic tuftsin analog)',
@@ -676,6 +694,7 @@ function pbv_research_catalog() {
         ),
         'semaglutide' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => 'Semaglutide',
             'subtitle' => 'GLP-1 Receptor Agonist',
             'sequence_note' => 'GLP-1(7–37)-based backbone with Aib8 substitution and Lys26 fatty-acid acylation (commercial semaglutide chemistry)',
@@ -734,6 +753,7 @@ function pbv_research_catalog() {
         ),
         'semax' => array(
             'kicker' => 'Cognitive',
+            'category' => 'Cognitive',
             'title' => 'Semax',
             'subtitle' => 'ACTH(4–10) Heptapeptide Analog',
             'sequence_note' => 'Met-Glu-His-Phe-Pro-Gly-Pro (ACTH4–10 analog)',
@@ -766,6 +786,7 @@ function pbv_research_catalog() {
         ),
         'sermorelin' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'Sermorelin',
             'subtitle' => 'GHRH(1–29) Analog',
             'sequence_note' => 'GHRH(1–29) (29 aa): YADAIFTNSYRKVLGQLSARKLLQDIMSR',
@@ -820,7 +841,8 @@ function pbv_research_catalog() {
             ),
         ),
         'ss-31' => array(
-            'kicker' => 'Metabolic',
+            'kicker' => 'Mitochondrial',
+            'category' => 'Mitochondrial',
             'title' => 'SS-31',
             'subtitle' => 'Mitochondria-Targeted Tetrapeptide',
             'sequence_note' => 'D-Arg–dimethylTyr–Lys–Phe. D-Arg and dimethyltyrosine are marked as modified.',
@@ -852,6 +874,7 @@ function pbv_research_catalog() {
         ),
         'ta-1' => array(
             'kicker' => 'Immune',
+            'category' => 'Immune',
             'title' => 'TA-1',
             'subtitle' => 'Thymosin Alpha-1',
             'sequence_note' => 'N-acetyl thymosin α1 (28 aa): SDAAVDTSSEITTKDLKEKKEVVEEAEN',
@@ -906,6 +929,7 @@ function pbv_research_catalog() {
         ),
         'tb-500' => array(
             'kicker' => 'Growth Factors',
+            'category' => 'Growth Factors',
             'title' => 'TB-500',
             'subtitle' => 'Thymosin Beta-4 Fragment (LKKTETQ motif)',
             'sequence_note' => 'Active-site fragment commonly associated with TB-500 research: Ac-LKKTETQ (derived from thymosin β4)',
@@ -939,6 +963,7 @@ function pbv_research_catalog() {
         ),
         'tesamorelin' => array(
             'kicker' => 'Hormonal',
+            'category' => 'Hormonal',
             'title' => 'Tesamorelin',
             'subtitle' => 'Stabilized GHRH(1–44) Analog',
             'sequence_note' => 'Trans-3-hexenoyl-GHRH(1–44)-NH₂ analog class (tesamorelin scaffold display)',
@@ -1009,6 +1034,7 @@ function pbv_research_catalog() {
         ),
         'tesamorelin-ipamorelin' => array(
             'kicker' => 'Stacks',
+            'category' => 'Stacks',
             'title' => 'Tesamorelin/Ipamorelin',
             'subtitle' => 'Tesamorelin + Ipamorelin',
             'sequence_note' => 'Combo display: tesamorelin scaffold · Ipamorelin Aib-His-D-2-Nal-D-Phe-Lys',
@@ -1034,6 +1060,7 @@ function pbv_research_catalog() {
         ),
         'tirzepatide' => array(
             'kicker' => 'Metabolic',
+            'category' => 'Metabolic',
             'title' => 'Tirzepatide',
             'subtitle' => 'Dual GIP/GLP-1 Receptor Agonist',
             'sequence_note' => '39–residue dual agonist peptide with fatty-acid modification (tirzepatide scaffold; X denotes Aib)',
@@ -1100,6 +1127,7 @@ function pbv_research_catalog() {
         ),
         'wolverine' => array(
             'kicker' => 'Stacks',
+            'category' => 'Stacks',
             'title' => 'Wolverine Stack',
             'subtitle' => 'BPC-157 + TB-500',
             'sequence_note' => 'Combo display: BPC-157 sequence · TB-500/LKKTETQ motif',
