@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.94');
+define('PBV_THEME_VERSION', '2.10.95');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -983,6 +983,31 @@ function pbv_desktop_nav_exclude_tb500($items, $args) {
     return $kept;
 }
 add_filter('wp_nav_menu_objects', 'pbv_desktop_nav_exclude_tb500', 10, 2);
+
+/**
+ * Drop the Research Material item that points at the .com product index.
+ * Applies to both the desktop bar and the mobile menu. The store Research item stays.
+ *
+ * @param array<int,object> $items Menu items.
+ * @return array<int,object>
+ */
+function pbv_nav_exclude_com_research_material($items) {
+    $kept = array();
+    foreach ($items as $item) {
+        $url   = isset($item->url) ? (string) $item->url : '';
+        $title = isset($item->title) ? wp_strip_all_tags((string) $item->title) : '';
+        $host  = strtolower((string) wp_parse_url($url, PHP_URL_HOST));
+        $path  = strtolower((string) wp_parse_url($url, PHP_URL_PATH));
+        $com_products = (strpos($host, 'palmbeach-vitality.com') !== false) && (strpos($path, '/products') === 0);
+        $labeled = strcasecmp(trim($title), 'Research Material') === 0;
+        if ($com_products || ($labeled && strpos($host, 'palmbeach-vitality.com') !== false)) {
+            continue;
+        }
+        $kept[] = $item;
+    }
+    return $kept;
+}
+add_filter('wp_nav_menu_objects', 'pbv_nav_exclude_com_research_material', 11);
 
 /**
  * Ensure product categories exist for menu links.
