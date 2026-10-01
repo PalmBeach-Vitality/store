@@ -3,7 +3,7 @@ Theme Name: Palm Beach Vitality
 Theme URI: https://palmbeach-vitality.store
 Author: Palm Beach Vitality
 Description: WooCommerce storefront matched to the Shopify homepage — announcement bar, 2.35:1 logo banner, centered lab hero, FAQ accordion.
-Version: 2.10.86
+Version: 2.10.87
 Requires at least: 6.4
 Requires PHP: 8.1
 Text Domain: palmbeach-vitality
@@ -74,7 +74,7 @@ a:hover { opacity: 0.7; }
   padding: 0.75rem 1rem;
 }
 
-/* Header — hamburger dropdown on all viewports (same as mobile) */
+/* Header — hamburger on small screens. At 900px and up, a single row of links. */
 .site-header {
   position: sticky;
   top: 0;
@@ -219,6 +219,150 @@ a:hover { opacity: 0.7; }
   .mobile-nav a {
     font-size: 1rem;
     padding: 0.85rem 0.25rem;
+  }
+}
+
+/* Desktop link row. Hidden below 900px so the hamburger menu is unchanged. */
+.desktop-nav {
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .site-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.4rem;
+    width: 100%;
+    padding-inline: max(1.5rem, calc((100% - 80rem) / 2));
+  }
+
+  .site-header__inner {
+    grid-column: 2;
+    grid-row: 1;
+    width: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0.35rem 0;
+  }
+
+  .header-actions {
+    gap: 0.45rem;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .mobile-nav,
+  .mobile-nav.is-open {
+    display: none !important;
+  }
+
+  .desktop-nav {
+    display: block;
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+  }
+
+  .desktop-nav .menu {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .desktop-nav .menu > li {
+    position: relative;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .desktop-nav .menu > li > a {
+    display: block;
+    padding: 0.8rem 0.12rem;
+    font-size: clamp(0.75rem, -0.05rem + 1.05vw, 0.9rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+    color: #111;
+  }
+
+  .desktop-nav .menu > li > a:hover,
+  .desktop-nav .menu > li > a:focus-visible {
+    opacity: 1;
+    color: #0b3a5b;
+  }
+
+  .desktop-nav .menu-item-home > a::after {
+    content: "";
+    display: inline-block;
+    width: 0.32rem;
+    height: 0.32rem;
+    margin-left: 0.22rem;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.12rem) rotate(45deg);
+    vertical-align: middle;
+  }
+
+  .desktop-nav .sub-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 5;
+    min-width: 9.5rem;
+    margin: 0;
+    padding: 0.3rem 0;
+    list-style: none;
+    background: #fff;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  .desktop-nav .menu-item-home > .sub-menu::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.5rem;
+    height: 0.5rem;
+  }
+
+  .desktop-nav .menu-item-home:hover > .sub-menu,
+  .desktop-nav .menu-item-home:focus-within > .sub-menu {
+    display: block;
+  }
+
+  .desktop-nav .sub-menu a {
+    display: block;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: nowrap;
+    color: #111;
+  }
+
+  .desktop-nav .sub-menu a:hover,
+  .desktop-nav .sub-menu a:focus-visible {
+    opacity: 1;
+    background: #f6f6f6;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .desktop-nav .menu > li > a {
+    font-size: 0.66rem;
+    letter-spacing: -0.02em;
   }
 }
 

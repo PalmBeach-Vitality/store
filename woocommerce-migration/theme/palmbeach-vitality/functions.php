@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.86');
+define('PBV_THEME_VERSION', '2.10.87');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -954,6 +954,34 @@ function pbv_fallback_menu() {
     }
     echo '</ul>';
 }
+
+/**
+ * Desktop bar only: drop the TB-500 research-vial formats item.
+ * The hamburger menu is unchanged.
+ *
+ * @param array<int,object> $items
+ * @param stdClass          $args
+ * @return array<int,object>
+ */
+function pbv_desktop_nav_exclude_tb500($items, $args) {
+    if (empty($args->pbv_desktop_nav)) {
+        return $items;
+    }
+
+    $kept = array();
+    foreach ($items as $item) {
+        $url   = isset($item->url) ? (string) $item->url : '';
+        $title = isset($item->title) ? wp_strip_all_tags((string) $item->title) : '';
+        $path  = (string) wp_parse_url($url, PHP_URL_PATH);
+        if (stripos($path, 'tb-500') !== false || preg_match('/tb-?\s*500/i', $title)) {
+            continue;
+        }
+        $kept[] = $item;
+    }
+
+    return $kept;
+}
+add_filter('wp_nav_menu_objects', 'pbv_desktop_nav_exclude_tb500', 10, 2);
 
 /**
  * Ensure product categories exist for menu links.
