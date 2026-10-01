@@ -160,11 +160,13 @@ Paste: `marketing/n8n-code-prep-pen-video-start.js`
 
 Reads `video_motion_prompt` and `negative_prompt` from `pull_sheet_row`. Does **not** truncate. Throws if the positive motion prompt still has vial / flip-off / uncap language. The `uncap` check looks at the positive prompt only — the sheet negative column is allowed to say `uncapping`.
 
-Exec 2627 (`PBVita-Pen-169`) and exec 2630 (`PBVita-Pen-170`, https://v3b.fal.media/files/b/0aaca753/x6hD3WRSS-AkYQOU8X4d__output.mp4) both changed the pen. Naming the cap, clip, dial, or plunger in the positive prompt is what Kling animates. The positive line now says the product is a rigid copy of the start image and then copies the sheet camera fields, including `locked tripod` and `then hold` when the sheet says that. Part suppression lives only in `negative_prompt`.
+Exec 2627 (`PBVita-Pen-169`) and exec 2630 (`PBVita-Pen-170`, https://v3b.fal.media/files/b/0aaca753/x6hD3WRSS-AkYQOU8X4d__output.mp4) both changed the pen. Naming the cap, clip, dial, or plunger in the positive prompt is what Kling animates. Exec 2631 then added "same place on the surface" and "the product stays a still object" on every row, which froze camera travel on pull-backs and rises. Those lines are removed.
 
-Live write: unpublished `lock_pen_sheet_camera` (`Fc9aDld02l3PRvr0`) exec **2631** rewrote all 168 `video_motion_prompt` cells from each row's own camera fields and added `negative_prompt`. Read-back in that same run: 168/168, 0 missing sheet-camera phrases, 0 push overrides, Pen-170 still says `locked tripod hold at three-quarter-right` and `then hold`. Archived after the write. Do not run it again. Do not run `peptide_pen_vid_gen` until Salvatore says to.
+The camera sentence is that row's `camera_move`, then `shot_family`, `camera_angle`, and `camera_direction`. A row whose sheet move is a pull-back stays a pull-back. A row whose sheet move is a locked tripod stays that, because that text is the sheet cell. Part suppression lives only in `negative_prompt`.
 
-**Check:** `still_url` https, `video_motion_prompt` contains `Camera, from the sheet:`, and `negative_prompt` is the sheet cell.
+Live write: unpublished `pen_motion_from_sheet` (`adQ4aqtXaLutOKYf`) exec **2634**. Read-back: 168/168, 0 freeze lines, Pen-003 still says `creeping straight pull-back`. Archived after the write. Do not run it again. Do not run `peptide_pen_vid_gen` until Salvatore says to.
+
+**Check:** `still_url` https, `video_motion_prompt` contains that row's `camera_move`, and it does not contain `same place on the surface`.
 
 ---
 

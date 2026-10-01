@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """Rewrite Sheet 14 video_motion_prompt for pen I2V.
 
-Exec 2627 turned the dose dial red. Exec 2630 (PBVita-Pen-170) used the
-part-by-part lock and a locked tripod, and Kling still opened the clip
-and pushed the red tip out. Naming the parts and forbidding camera travel
-is what makes Kling animate the pen.
+Exec 2631 added "same place on the surface" and "the product stays a still
+object" on every row, including pull-backs and rises. That froze the camera.
+Those lines are gone.
 
-Positive prompt: the product is a rigid copy of the start image. Do not
-name the cap, clip, dial, or plunger. Camera wording is the sheet's own
-camera_move, shot_family, camera_angle, and camera_direction, unchanged.
+The camera sentence is that row's camera_move, shot_family, camera_angle,
+and camera_direction. Do not name the cap, clip, dial, or plunger.
 negative_prompt is its own column. The fal node reads it.
 """
 
@@ -23,15 +21,21 @@ CSV14 = ROOT / "sheets" / "14-pen-creations-150.csv"
 
 MAX_MOTION = 1400
 
-PEN_LOCK = (
-    "The product in the start image is rigid and unchanged for every frame. "
-    "Same silhouette, same colors, same parts, same place on the surface."
-)
+PEN_LOCK = "The product matches the start image. Same silhouette, same colors, same parts."
 
 NEGATIVE_PROMPT = (
-    "morphing, melting, transforming, shape change, parts moving, cap moving, "
+    "morphing, melting, transforming, shape change, cap moving, "
     "clip sliding, uncapping, dial turning, knob rotating, plunger extending, "
-    "button popping out, deformation, growing, shrinking, product animation"
+    "button popping out, deformation, growing, shrinking"
+)
+
+ADDED_FREEZE = (
+    "same place on the surface",
+    "stays a still object",
+    "rigid and unchanged",
+    "Camera, from the sheet",
+    "product stays planted",
+    "Only the camera",
 )
 
 BAD_MOTION = re.compile(
@@ -85,12 +89,11 @@ def build_motion_prompt(row: dict) -> str:
     move = require(row, "camera_move")
     prompt = (
         f"{PEN_LOCK} "
-        f"Camera, from the sheet: {move}. "
+        f"{move}. "
         f"Shot {require(row, 'shot_family')}, "
         f"angle {require(row, 'camera_angle')}, "
         f"direction {require(row, 'camera_direction')}. "
         "No new objects. No people, hands, faces, needles, or burn-in. "
-        "Background light may shift. The product stays a still object. "
         f"Keep label '{compound}' and '3ml Pen' unchanged."
     )
     prompt = ascii(prompt)
@@ -98,6 +101,12 @@ def build_motion_prompt(row: dict) -> str:
         raise SystemExit(f"{row.get('creation_id')}: motion is {len(prompt)} characters")
     if BAD_MOTION.search(prompt):
         raise SystemExit(f"motion still has vial/cap-action language: {prompt[:180]}")
+    low = prompt.lower()
+    for phrase in ADDED_FREEZE:
+        if phrase.lower() in low:
+            raise SystemExit(f"{row.get('creation_id')}: added camera freeze: {phrase}")
+    if move not in prompt:
+        raise SystemExit(f"{row.get('creation_id')}: dropped the sheet camera move")
     return prompt
 
 
