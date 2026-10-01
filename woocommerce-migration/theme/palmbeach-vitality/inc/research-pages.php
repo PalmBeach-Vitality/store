@@ -356,12 +356,75 @@ function pbv_research_flush_rewrites() {
 add_action('init', 'pbv_research_flush_rewrites', 20);
 
 /**
+ * Catalog slug from /research/{slug}/, ignoring the query string.
+ *
+ * @return string
+ */
+function pbv_research_request_slug() {
+    $path = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
+    $path = strtok((string) $path, '?');
+    $path = strtolower(trim($path, '/'));
+    if (!preg_match('#^research/([a-z0-9-]+)$#', $path, $matches)) {
+        return '';
+    }
+    $slug = $matches[1];
+    $catalog = pbv_research_catalog();
+    return isset($catalog[$slug]) ? $slug : '';
+}
+
+/**
+ * Force the research query var even when a page or product rule matched first.
+ *
+ * @param array<string,mixed> $query_vars Parsed query vars.
+ * @return array<string,mixed>
+ */
+function pbv_research_force_query_var($query_vars) {
+    if (!empty($query_vars['pbv_research'])) {
+        return $query_vars;
+    }
+    $slug = pbv_research_request_slug();
+    if ($slug === '') {
+        return $query_vars;
+    }
+    $query_vars['pbv_research'] = $slug;
+    unset($query_vars['pagename'], $query_vars['name'], $query_vars['page_id'], $query_vars['attachment'], $query_vars['error']);
+    return $query_vars;
+}
+add_filter('request', 'pbv_research_force_query_var');
+
+/**
+ * Do not let canonical or 404 slug-guessing send /research/{slug}/ to a product.
+ *
+ * @param string|false $redirect_url Proposed redirect.
+ * @return string|false
+ */
+function pbv_research_block_canonical_redirect($redirect_url) {
+    if (get_query_var('pbv_research') || pbv_research_request_slug() !== '') {
+        return false;
+    }
+    return $redirect_url;
+}
+add_filter('redirect_canonical', 'pbv_research_block_canonical_redirect', 0);
+
+/**
+ * @param bool $do_guess Whether WordPress may guess a 404 permalink.
+ * @return bool
+ */
+function pbv_research_block_404_guess($do_guess) {
+    if (pbv_research_request_slug() !== '') {
+        return false;
+    }
+    return $do_guess;
+}
+add_filter('do_redirect_guess_404_permalink', 'pbv_research_block_404_guess');
+
+/**
  * @param bool     $preempt Whether to short-circuit 404 handling.
  * @param WP_Query $query   Query.
  * @return bool
  */
 function pbv_research_prevent_404($preempt, $query) {
-    if ($query->is_main_query() && get_query_var('pbv_research')) {
+    if ($query->is_main_query() && (get_query_var('pbv_research') || pbv_research_request_slug() !== '')) {
         return true;
     }
     return $preempt;
@@ -370,14 +433,20 @@ add_filter('pre_handle_404', 'pbv_research_prevent_404', 10, 2);
 
 /**
  * Render a compound overview inside the normal header and footer.
+ * Priority 0 runs before redirect_canonical (priority 10).
  */
 function pbv_research_template_redirect() {
     $slug = get_query_var('pbv_research');
     if (!$slug) {
+        $slug = pbv_research_request_slug();
+    }
+    if (!$slug) {
         return;
     }
     global $wp_query;
-    $wp_query->is_404 = false;
+    if ($wp_query instanceof WP_Query) {
+        $wp_query->is_404 = false;
+    }
     status_header(200);
     get_header();
     echo '<main class="site-main">';
@@ -386,7 +455,7 @@ function pbv_research_template_redirect() {
     get_footer();
     exit;
 }
-add_action('template_redirect', 'pbv_research_template_redirect');
+add_action('template_redirect', 'pbv_research_template_redirect', 0);
 
 /**
  * Replace the Research page body with the compound index.
