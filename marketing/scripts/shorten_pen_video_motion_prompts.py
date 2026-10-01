@@ -1,26 +1,45 @@
 #!/usr/bin/env python3
 """Rewrite Sheet 14 video_motion_prompt for pen I2V.
 
-Grok video already has the pen still. Motion must stay short and affirmative.
-Do NOT mention vials / flip-off / uncap — I2V morphs the pen into a vial.
+The spoken sentence is that row's camera_move only. shot_family is a sheet
+label and is not pasted into the prompt: Kling treated "static_lock" and
+"no travel / locked" as instructions and either froze or invented an arc.
 
-PEN LOCK: white catalog pen, clip-cap on and frozen. Camera may move; the pen does not.
+Do not name the cap, clip, dial, or plunger. negative_prompt is its own
+column. The fal node reads it.
 """
 
 from __future__ import annotations
 
 import csv
 import re
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from audit_pen_camera_moves import find_defects  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV14 = ROOT / "sheets" / "14-pen-creations-150.csv"
 
-MAX_MOTION = 700
+MAX_MOTION = 1400
 
-PEN_LOCK = (
-    "PEN LOCK: One white catalog injection pen. White clip-cap on and frozen. "
-    "Camera may move; the pen does not."
+PEN_LOCK = "The product matches the start image. Same silhouette, same colors, same parts."
+
+NEGATIVE_PROMPT = (
+    "morphing, melting, transforming, shape change, cap moving, "
+    "clip sliding, uncapping, dial turning, knob rotating, plunger extending, "
+    "button popping out, deformation, growing, shrinking, "
+    "orbit, circling, arc around, camera shake, handheld, wobble, dutch angle, snap zoom"
+)
+
+ADDED_FREEZE = (
+    "same place on the surface",
+    "stays a still object",
+    "rigid and unchanged",
+    "Camera, from the sheet",
+    "product stays planted",
+    "Only the camera",
 )
 
 BAD_MOTION = re.compile(
@@ -71,22 +90,27 @@ def strip_vial_lock_prefix(text: str) -> str:
 
 def build_motion_prompt(row: dict) -> str:
     compound = require(row, "compound_name")
-    move = require(row, "camera_move")[:160]
+    move = require(row, "camera_move")
     prompt = (
         f"{PEN_LOCK} "
-        f"Slow cinematic camera: {move}. "
-        f"Shot {require(row, 'shot_family')}, "
-        f"angle {require(row, 'camera_angle')}, "
-        f"direction {require(row, 'camera_direction')}. "
-        f"Keep the exact same laboratory research scene, materials, and lighting. "
-        f"No orbit. No new objects. No people, hands, faces, needles, or burn-in. "
-        f"Keep label '{compound}' and '3ml Pen' unchanged if visible."
+        f"{move}. "
+        "No new objects. No people, hands, faces, needles, or burn-in. "
+        f"Keep label '{compound}' and '3ml Pen' unchanged."
     )
     prompt = ascii(prompt)
     if len(prompt) > MAX_MOTION:
-        prompt = prompt[: MAX_MOTION - 1].rsplit(" ", 1)[0] + "."
+        raise SystemExit(f"{row.get('creation_id')}: motion is {len(prompt)} characters")
     if BAD_MOTION.search(prompt):
         raise SystemExit(f"motion still has vial/cap-action language: {prompt[:180]}")
+    low = prompt.lower()
+    for phrase in ADDED_FREEZE:
+        if phrase.lower() in low:
+            raise SystemExit(f"{row.get('creation_id')}: added camera freeze: {phrase}")
+    if move not in prompt:
+        raise SystemExit(f"{row.get('creation_id')}: dropped the sheet camera move")
+    defects = find_defects(prompt)
+    if defects:
+        raise SystemExit(f"{row.get('creation_id')}: camera defect in motion: {defects}")
     return prompt
 
 
@@ -94,6 +118,7 @@ def patch_rows(rows: list[dict]) -> None:
     extra = ("lab_item", "material_detail", "hero_style", "scene_brief")
     for r in rows:
         r["video_motion_prompt"] = build_motion_prompt(r)
+        r["negative_prompt"] = NEGATIVE_PROMPT
         for key in extra:
             if key in r and r[key]:
                 r[key] = strip_vial_lock_prefix(r[key])
@@ -102,10 +127,12 @@ def patch_rows(rows: list[dict]) -> None:
 def main() -> None:
     with CSV14.open(newline="", encoding="utf-8") as f:
         rows = list(csv.DictReader(f))
-    if len(rows) != 150:
-        raise SystemExit(f"expected 150 rows, got {len(rows)}")
+    if len(rows) != 168:
+        raise SystemExit(f"expected 168 rows, got {len(rows)}")
 
     patch_rows(rows)
+    for r in rows:
+        r.pop("cfg_scale", None)
     lens = [len(r["video_motion_prompt"]) for r in rows]
     leftover = sum(
         1
@@ -122,7 +149,7 @@ def main() -> None:
         w.writeheader()
         w.writerows(rows)
     print(f"Wrote {CSV14}")
-    print(f"PASS: motion min/avg/max = {min(lens)}/{sum(lens)//150}/{max(lens)}")
+    print(f"PASS: motion min/avg/max = {min(lens)}/{sum(lens)//len(rows)}/{max(lens)}")
     print("sample:", rows[0]["video_motion_prompt"])
 
 
