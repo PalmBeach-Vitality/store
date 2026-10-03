@@ -885,6 +885,161 @@ function pbv_product_research_library() {
                 ),
             ),
         ),
+        'dihexa' => array(
+            'label'  => 'Dihexa',
+            'amino'  => 'assets/images/amino/dihexa.svg',
+            'studies' => array(
+                array(
+                    'title'  => 'Evaluation of Metabolically Stabilized Angiotensin IV Analogs as Procognitive/Antidementia Agents',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/23055539/',
+                    'source' => 'PubMed 23055539',
+                ),
+                array(
+                    'title'  => 'The Brain Hepatocyte Growth Factor/c-Met Receptor System: A New Target for the Treatment of Alzheimer\'s Disease',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/25649658/',
+                    'source' => 'PubMed 25649658',
+                ),
+                array(
+                    'title'  => 'AngIV-Analog Dihexa Rescues Cognitive Impairment and Recovers Memory in the APP/PS1 Mouse via the PI3K/AKT Signaling Pathway',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/34827486/',
+                    'source' => 'PubMed 34827486',
+                ),
+                array(
+                    'title'  => 'Stem cell, Granulocyte-Colony Stimulating Factor and/or Dihexa to promote limb function recovery in a rat sciatic nerve damage-repair model',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/34703584/',
+                    'source' => 'PubMed 34703584',
+                ),
+                array(
+                    'title'  => 'RETRACTED: The procognitive and synaptogenic effects of angiotensin IV-derived peptides are dependent on activation of the hepatocyte growth factor/c-Met system',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/25187433/',
+                    'source' => 'PubMed 25187433',
+                ),
+            ),
+        ),
+        'epithalon' => array(
+            'label'  => 'Epithalon',
+            'amino'  => 'assets/images/amino/epithalon.svg',
+            'studies' => array(
+                array(
+                    'title'  => 'Overview of Epitalon-Highly Bioactive Pineal Tetrapeptide with Promising Properties',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/40141333/',
+                    'source' => 'PubMed 40141333',
+                ),
+                array(
+                    'title'  => 'Epitalon increases telomere length in human cell lines through telomerase upregulation or ALT activity',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/40908429/',
+                    'source' => 'PubMed 40908429',
+                ),
+                array(
+                    'title'  => 'Epitalon protects against post-ovulatory aging-related damage of mouse oocytes in vitro',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/35413689/',
+                    'source' => 'PubMed 35413689',
+                ),
+                array(
+                    'title'  => 'The Antioxidant Tetrapeptide Epitalon Enhances Delayed Wound Healing in an in Vitro Model of Diabetic Retinopathy',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/40493162/',
+                    'source' => 'PubMed 40493162',
+                ),
+                array(
+                    'title'  => 'Effect of the synthetic pineal peptide epitalon on spontaneous carcinogenesis in female C3H/He mice',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/16634527/',
+                    'source' => 'PubMed 16634527',
+                ),
+            ),
+        ),
+        'glutathione' => array(
+            'label'  => 'Glutathione',
+            'amino'  => 'assets/images/amino/glutathione.svg',
+            'studies' => array(
+                array(
+                    'title'  => 'Glutathione: overview of its protective roles, measurement, and biosynthesis',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/18796312/',
+                    'source' => 'PubMed 18796312',
+                ),
+                array(
+                    'title'  => 'Glutathione synthesis',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/22995213/',
+                    'source' => 'PubMed 22995213',
+                ),
+                array(
+                    'title'  => 'Glutathione metabolism and its implications for health',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/14988435/',
+                    'source' => 'PubMed 14988435',
+                ),
+                array(
+                    'title'  => 'Glutathione metabolism and its selective modification',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/3053703/',
+                    'source' => 'PubMed 3053703',
+                ),
+                array(
+                    'title'  => 'The importance of glutathione in human disease',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/12818476/',
+                    'source' => 'PubMed 12818476',
+                ),
+            ),
+        ),
+        'igf-lr3' => array(
+            'label'  => 'IGF-LR3',
+            'amino'  => 'assets/images/amino/igf-lr3.svg',
+            'studies' => array(
+                array(
+                    'title'  => 'The somatotropic axis in neonatal calves can be modulated by nutrition, growth hormone, and Long-R3-IGF-I',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/9252489/',
+                    'source' => 'PubMed 9252489',
+                ),
+                array(
+                    'title'  => 'Physicochemical characteristics of LR3-IGF1 protein inclusion bodies: electrophoretic mobility studies',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/11485445/',
+                    'source' => 'PubMed 11485445',
+                ),
+                array(
+                    'title'  => 'Recombinant expression of IGF-1 and LR3 IGF-1 fused with xylanase in Pichia pastoris',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/37261455/',
+                    'source' => 'PubMed 37261455',
+                ),
+                array(
+                    'title'  => 'IGF-1 LR3 does not promote growth in late-gestation growth-restricted fetal sheep',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/39679943/',
+                    'source' => 'PubMed 39679943',
+                ),
+                array(
+                    'title'  => 'Attenuated glucose-stimulated insulin secretion during an acute IGF-1 LR3 infusion into fetal sheep does not persist in isolated islets',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/37114757/',
+                    'source' => 'PubMed 37114757',
+                ),
+            ),
+        ),
+        'kisspeptin' => array(
+            'label'  => 'Kisspeptin',
+            'amino'  => 'assets/images/amino/kisspeptin.svg',
+            'studies' => array(
+                array(
+                    'title'  => 'The Role of Kisspeptin in the Control of the Hypothalamic-Pituitary-Gonadal Axis and Reproduction',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/35837314/',
+                    'source' => 'PubMed 35837314',
+                ),
+                array(
+                    'title'  => 'Kisspeptin/GPR54 System: What Do We Know About Its Role in Human Reproduction?',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/30205368/',
+                    'source' => 'PubMed 30205368',
+                ),
+                array(
+                    'title'  => 'The role of kisspeptin/GPR54 in the reproductive system',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/21576407/',
+                    'source' => 'PubMed 21576407',
+                ),
+                array(
+                    'title'  => 'Invited review: Translating kisspeptin and neurokinin B biology into new therapies for reproductive health',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/36262016/',
+                    'source' => 'PubMed 36262016',
+                ),
+                array(
+                    'title'  => 'Oestrogen, kisspeptin, GPR54 and the pre-ovulatory luteinising hormone surge',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/19207812/',
+                    'source' => 'PubMed 19207812',
+                ),
+            ),
+        ),
     );
 }
 
@@ -912,6 +1067,11 @@ function pbv_product_research_key($product) {
         'cjc-ipamorelin' => '/cjc[^a-z0-9]{0,3}ipamorelin|ipamorelin[^a-z0-9]{0,3}cjc/',
         'tesamorelin-ipamorelin' => '/tesamorelin[^a-z0-9]{0,3}ipamorelin|ipamorelin[^a-z0-9]{0,3}tesamorelin/',
         // Weight-loss / named compounds.
+        'dihexa' => '/dihexa/',
+        'epithalon' => '/epithalon|epitalon/',
+        'glutathione' => '/glutathione|\bgsh\b/',
+        'igf-lr3' => '/igf[\s-]?lr[\s-]?3|long[\s-]?arg3/',
+        'kisspeptin' => '/kisspeptin/',
         'retatrutide' => '/retatrut(?:ide|ride)/',
         'tirzepatide' => '/tirzepatide/',
         'semaglutide' => '/semaglutide/',

@@ -81,6 +81,15 @@
   text-decoration: underline;
 }
 
+.pbv-rd__diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0.85rem 0 0;
+  border-radius: 16px;
+  background: #fff;
+}
+
 .pbv-rd__ruler {
   margin-top: 0.4rem;
   padding-top: 1rem;
