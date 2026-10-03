@@ -502,7 +502,15 @@ function pbv_research_request_slug() {
  * @return array<string,mixed>
  */
 function pbv_research_force_query_var($query_vars) {
+    $catalog = function_exists('pbv_research_catalog') ? pbv_research_catalog() : array();
     if (!empty($query_vars['pbv_research'])) {
+        $slug = (string) $query_vars['pbv_research'];
+        if (!isset($catalog[$slug])) {
+            unset($query_vars['pbv_research']);
+            if (empty($query_vars['pagename']) && empty($query_vars['page_id'])) {
+                $query_vars['pagename'] = 'research/' . $slug;
+            }
+        }
         return $query_vars;
     }
     $slug = pbv_research_request_slug();
@@ -563,7 +571,7 @@ function pbv_research_template_redirect() {
     if (!$slug) {
         $slug = pbv_research_request_slug();
     }
-    if (!$slug) {
+    if (!$slug || !isset(pbv_research_catalog()[$slug])) {
         return;
     }
     global $wp_query;
