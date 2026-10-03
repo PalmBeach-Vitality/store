@@ -910,9 +910,9 @@ function pbv_product_research_library() {
                     'source' => 'PubMed 34703584',
                 ),
                 array(
-                    'title'  => 'RETRACTED: The procognitive and synaptogenic effects of angiotensin IV-derived peptides are dependent on activation of the hepatocyte growth factor/c-Met system',
-                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/25187433/',
-                    'source' => 'PubMed 25187433',
+                    'title'  => 'Effects of an Angiotensin IV Analog on 3-Nitropropionic Acid-Induced Huntington\'s Disease-Like Symptoms in Rats',
+                    'url'    => 'https://pubmed.ncbi.nlm.nih.gov/38489193/',
+                    'source' => 'PubMed 38489193',
                 ),
             ),
         ),
