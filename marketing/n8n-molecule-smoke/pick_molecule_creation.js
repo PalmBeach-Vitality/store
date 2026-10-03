@@ -1,5 +1,5 @@
 // n8n Code node: pick_molecule_creation
-// Workflow: peptide_molecule_vid_gen (EcGTbpZ9VG3C69pq)
+// Workflow: peptide_molecule_vid_gen_v2 (Sheet 14-chem-breakdown-54)
 // Mode: Run Once for All Items. Settings → Execute Once = OFF (it must see every Active row).
 // After: filter_chem_active   Before: route_still_model
 //
