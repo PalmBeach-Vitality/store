@@ -26,6 +26,12 @@ function pbv_research_label_index() {
     $index['klow stack'] = 'klow';
     $index['wolverine stack'] = 'wolverine';
     $index['melanotan ii'] = 'melanotan';
+    $index['epitalon'] = 'epithalon';
+    $index['igf-lr3'] = 'igf-lr3';
+    $index['igf lr3'] = 'igf-lr3';
+    $index['long arg3 igf-i'] = 'igf-lr3';
+    $index['gsh'] = 'glutathione';
+    $index['kisspeptin-10'] = 'kisspeptin';
     return $index;
 }
 
@@ -93,14 +99,45 @@ function pbv_research_residue_code($token) {
 }
 
 /**
+ * Circle diagram from the compound's amino SVG, when the catalog asks for it.
+ *
+ * @param string $slug  Catalog slug.
+ * @param string $title Compound title.
+ */
+function pbv_research_render_diagram($slug, $title) {
+    $library = function_exists('pbv_product_research_library') ? pbv_product_research_library() : array();
+    if (empty($library[$slug]['amino'])) {
+        return;
+    }
+    $relative = $library[$slug]['amino'];
+    $path = function_exists('pbv_asset_path') ? pbv_asset_path($relative) : '';
+    if (!$path || !file_exists($path)) {
+        return;
+    }
+    $src = pbv_asset_uri($relative);
+    $ver = defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '';
+    $ver = $ver . '-' . (string) filemtime($path);
+    $src .= '?ver=' . rawurlencode($ver);
+    if ($slug === 'nad') {
+        $caption = __('NAD+ — dinucleotide structure', 'palmbeach-vitality');
+        echo '<figure class="pbv-rd__diagram-figure">';
+        echo '<img class="pbv-rd__diagram" src="' . esc_url($src) . '" alt="' . esc_attr($caption) . '" width="720" height="152" decoding="async" />';
+        echo '<figcaption class="pbv-rd__diagram-caption">' . esc_html($caption) . '</figcaption>';
+        echo '</figure>';
+        return;
+    }
+    echo '<img class="pbv-rd__diagram" src="' . esc_url($src) . '" alt="' . esc_attr($title . ' diagram') . '" width="720" decoding="async" />';
+}
+
+/**
  * @param array<string,mixed> $row Catalog row.
  */
 function pbv_research_render_ruler($row) {
     $tokens = isset($row['tokens']) && is_array($row['tokens']) ? $row['tokens'] : array();
     $kind = isset($row['kind']) ? $row['kind'] : 'linear';
     echo '<div class="pbv-rd__ruler">';
-    echo '<p class="pbv-rd__ruler-kicker">Amino acid sequence</p>';
     if ($tokens) {
+        echo '<p class="pbv-rd__ruler-kicker">Amino acid sequence</p>';
         $dir = $kind === 'cyclic' ? 'Cyclic · N-terminus →' : 'N-terminus →';
         echo '<p class="pbv-rd__ruler-dir">' . esc_html($dir) . '</p>';
         $rows = array_chunk($tokens, 8);
@@ -128,11 +165,14 @@ function pbv_research_render_ruler($row) {
             echo '<li><span class="pbv-rd__swatch pbv-rd__swatch--' . esc_attr($class) . '"></span>' . esc_html($label) . '</li>';
         }
         echo '</ul>';
-    } else {
+    } elseif (empty($row['diagram'])) {
+        echo '<p class="pbv-rd__ruler-kicker">Amino acid sequence</p>';
         echo '<p class="pbv-rd__note">' . esc_html($row['sequence_note']) . '</p>';
     }
     $chips = array();
-    if ($kind === 'stack') {
+    if (!empty($row['chip'])) {
+        $chips[] = $row['chip'];
+    } elseif ($kind === 'stack') {
         $chips[] = 'Stack';
     } elseif ($kind === 'molecule') {
         $chips[] = 'Small molecule';
@@ -196,6 +236,9 @@ function pbv_render_research_compound($slug) {
     echo '<p class="pbv-rd__kicker">' . esc_html($row['kicker']) . '</p>';
     echo '<h1 class="pbv-rd__title">' . esc_html($row['title']) . '</h1>';
     echo '<p class="pbv-rd__sub">' . esc_html($row['subtitle']) . '</p>';
+    if (!empty($row['diagram'])) {
+        pbv_research_render_diagram($slug, $row['title']);
+    }
     pbv_research_render_ruler($row);
     echo '</article>';
 
@@ -316,12 +359,12 @@ function pbv_research_category_order() {
  */
 function pbv_research_category_slugs() {
     return array(
-        'Growth Factors' => array('bpc-157', 'tb-500', 'ghk-cu'),
+        'Growth Factors' => array('bpc-157', 'tb-500', 'ghk-cu', 'igf-lr3'),
         'Metabolic'      => array('semaglutide', 'tirzepatide', 'retatrutide', 'aod-9604', '5-amino-1mq', 'cagrilintide'),
         'Mitochondrial'  => array('mots-c', 'ss-31', 'nad'),
-        'Cognitive'      => array('semax', 'selank', 'dsip'),
-        'Hormonal'       => array('ipamorelin', 'cjc-1295', 'tesamorelin', 'melanotan', 'pt-141', 'sermorelin'),
-        'Immune'         => array('kpv', 'ta-1'),
+        'Cognitive'      => array('semax', 'selank', 'dihexa', 'dsip'),
+        'Hormonal'       => array('ipamorelin', 'cjc-1295', 'tesamorelin', 'epithalon', 'kisspeptin', 'melanotan', 'pt-141', 'sermorelin'),
+        'Immune'         => array('kpv', 'glutathione', 'ta-1'),
         'Stacks'         => array('wolverine', 'glow', 'klow', 'cjc-ipamorelin', 'tesamorelin-ipamorelin'),
     );
 }
