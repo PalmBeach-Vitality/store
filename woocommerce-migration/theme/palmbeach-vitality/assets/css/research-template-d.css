@@ -90,6 +90,12 @@
   background: #fff;
 }
 
+.pbv-rd__diagram-caption {
+  margin: 0.45rem 0 0;
+  font-size: 0.78rem;
+  color: #6b6b6b;
+}
+
 .pbv-rd__ruler {
   margin-top: 0.4rem;
   padding-top: 1rem;

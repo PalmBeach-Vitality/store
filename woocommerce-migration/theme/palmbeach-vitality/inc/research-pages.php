@@ -118,6 +118,14 @@ function pbv_research_render_diagram($slug, $title) {
     $ver = defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '';
     $ver = $ver . '-' . (string) filemtime($path);
     $src .= '?ver=' . rawurlencode($ver);
+    if ($slug === 'nad') {
+        $caption = __('NAD+ — dinucleotide structure', 'palmbeach-vitality');
+        echo '<figure class="pbv-rd__diagram-figure">';
+        echo '<img class="pbv-rd__diagram" src="' . esc_url($src) . '" alt="' . esc_attr($caption) . '" width="720" height="152" decoding="async" />';
+        echo '<figcaption class="pbv-rd__diagram-caption">' . esc_html($caption) . '</figcaption>';
+        echo '</figure>';
+        return;
+    }
     echo '<img class="pbv-rd__diagram" src="' . esc_url($src) . '" alt="' . esc_attr($title . ' diagram') . '" width="720" decoding="async" />';
 }
 

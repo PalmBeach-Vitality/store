@@ -1133,7 +1133,12 @@ function pbv_render_product_research_section($product = null) {
     $label   = isset($entry['label']) ? $entry['label'] : $key;
     $studies = array_slice($entry['studies'], 0, 5);
     $amino   = isset($entry['amino']) ? $entry['amino'] : '';
-    $amino_uri = ($amino && file_exists(pbv_asset_path($amino))) ? pbv_asset_uri($amino) : '';
+    $amino_path = ($amino && function_exists('pbv_asset_path')) ? pbv_asset_path($amino) : '';
+    $amino_uri = ($amino_path && file_exists($amino_path) && function_exists('pbv_asset_uri')) ? pbv_asset_uri($amino) : '';
+    if ($amino_uri !== '') {
+        $ver = (defined('PBV_THEME_VERSION') ? PBV_THEME_VERSION : '') . '-' . (string) filemtime($amino_path);
+        $amino_uri .= '?ver=' . rawurlencode($ver);
+    }
 
     echo '<section class="pbv-product-research" aria-label="' . esc_attr(sprintf(__('%s research studies', 'palmbeach-vitality'), $label)) . '">';
     echo '<h2 class="pbv-product-research__title">' . esc_html(sprintf(__('%s Research Studies', 'palmbeach-vitality'), $label)) . '</h2>';
@@ -1161,9 +1166,16 @@ function pbv_render_product_research_section($product = null) {
     echo '</ol>';
 
     if ($amino_uri) {
+        $is_nad = ($key === 'nad');
+        $caption = $is_nad
+            ? __('NAD+ — dinucleotide structure', 'palmbeach-vitality')
+            : sprintf(__('%s — amino acid chain (N→C)', 'palmbeach-vitality'), $label);
+        $alt = $is_nad
+            ? $caption
+            : sprintf(__('%s amino acid chain', 'palmbeach-vitality'), $label);
         echo '<figure class="pbv-product-research__amino">';
-        echo '<img src="' . esc_url($amino_uri) . '" alt="' . esc_attr(sprintf(__('%s amino acid chain', 'palmbeach-vitality'), $label)) . '" width="720" height="232" loading="lazy" decoding="async" />';
-        echo '<figcaption>' . esc_html(sprintf(__('%s — amino acid chain (N→C)', 'palmbeach-vitality'), $label)) . '</figcaption>';
+        echo '<img src="' . esc_url($amino_uri) . '" alt="' . esc_attr($alt) . '" width="720" height="' . ($is_nad ? '152' : '232') . '" loading="lazy" decoding="async" />';
+        echo '<figcaption>' . esc_html($caption) . '</figcaption>';
         echo '</figure>';
     }
 
