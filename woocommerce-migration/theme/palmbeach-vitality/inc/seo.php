@@ -545,8 +545,8 @@ function pbv_schema_shipping_delivery_time() {
 }
 
 /**
- * Free cold-pack shipping at $250, in the ShippingConditions shape Google documents.
- * Does not change checkout, zones, or the $250 threshold.
+ * Free cold-pack shipping at $200, in the ShippingConditions shape Google documents.
+ * Does not change checkout or shipping zones. The checkout threshold is already $200.
  *
  * @param array<string,mixed> $destination DefinedRegion.
  * @return array<string,mixed>
@@ -555,7 +555,7 @@ function pbv_schema_cold_pack_shipping_service($destination) {
     return array(
         '@type'              => 'ShippingService',
         'name'               => 'Cold-pack Next-Day Air',
-        'description'        => 'Cold-pack Next-Day Air; free shipping on orders over $250',
+        'description'        => 'Cold-pack Next-Day Air; free shipping on orders over $200',
         'fulfillmentType'    => 'FulfillmentTypeDelivery',
         'shippingConditions' => array(
             array(
@@ -564,7 +564,7 @@ function pbv_schema_cold_pack_shipping_service($destination) {
                 'orderValue'          => array(
                     '@type'    => 'MonetaryAmount',
                     'minValue' => 0,
-                    'maxValue' => 249.99,
+                    'maxValue' => 199.99,
                     'currency' => 'USD',
                 ),
                 'shippingRate'        => pbv_schema_shipping_rate_amount(),
@@ -574,7 +574,7 @@ function pbv_schema_cold_pack_shipping_service($destination) {
                 'shippingDestination' => $destination,
                 'orderValue'          => array(
                     '@type'    => 'MonetaryAmount',
-                    'minValue' => 250,
+                    'minValue' => '200.00',
                     'currency' => 'USD',
                 ),
                 'shippingRate'        => array(
@@ -588,7 +588,7 @@ function pbv_schema_cold_pack_shipping_service($destination) {
 }
 
 /**
- * One OfferShippingDetails block: plain MonetaryAmount rate, plus the $250 threshold.
+ * One OfferShippingDetails block: plain MonetaryAmount rate, plus the $200 threshold.
  *
  * @param array<string,mixed> $existing Existing OfferShippingDetails, if any.
  * @return array<string,mixed>
@@ -642,6 +642,29 @@ function pbv_schema_fix_shipping_tree($data) {
     }
 
     foreach ($data as $key => $value) {
+        if ($key === 'shippingLabel' && is_string($value)) {
+            $data[$key] = str_replace(
+                array('over $250', 'under $250'),
+                array('over $200', 'under $200'),
+                $value
+            );
+            continue;
+        }
+        // Rank Math puts freeShippingThreshold on shippingRate. That is not a
+        // schema.org MonetaryAmount property, and Google flags the object.
+        // Keep the rate as value + currency, and express $200 in ShippingConditions.
+        if ($key === 'freeShippingThreshold' && is_array($value)) {
+            $value['value'] = '200.00';
+            if (empty($value['currency'])) {
+                $value['currency'] = 'USD';
+            }
+            $data[$key] = $value;
+            continue;
+        }
+        if ($key === 'shippingRate' && is_array($value) && isset($value['freeShippingThreshold'])) {
+            $data[$key] = pbv_schema_shipping_rate_amount();
+            continue;
+        }
         if ($key === 'shippingDetails') {
             $data[$key] = pbv_schema_single_shipping_details($value);
             continue;
@@ -674,6 +697,132 @@ function pbv_rank_math_fix_shipping_rate($data, $jsonld = null) {
 }
 add_filter('rank_math/json_ld', 'pbv_rank_math_fix_shipping_rate', PHP_INT_MAX, 2);
 add_filter('rank_math/snippet/rich_snippet_product_entity', 'pbv_schema_fix_shipping_tree', PHP_INT_MAX);
+
+/**
+ * Swap the retired $250 free-shipping sentences for $200.
+ * Coupon copy that mentions $250 (AS-1010 / AS-1515) is left alone.
+ *
+ * @param string $text HTML or plain text.
+ * @return string
+ */
+function pbv_replace_free_shipping_250($text) {
+    $text = (string) $text;
+    if ($text === '' || strpos($text, '$250') === false) {
+        return $text;
+    }
+
+    $text = str_replace(
+        array(
+            'under $250 — check cart totals',
+            'under $250 – check cart totals',
+            'under $250 - check cart totals',
+            'under $250 &#8212; check cart totals',
+            'under $250 &mdash; check cart totals',
+            'Free shipping on research orders over $250',
+            'Free shipping on orders over $250',
+            'free shipping on orders over $250',
+        ),
+        array(
+            'under $200 — check cart totals',
+            'under $200 — check cart totals',
+            'under $200 — check cart totals',
+            'under $200 &#8212; check cart totals',
+            'under $200 &mdash; check cart totals',
+            'Free shipping on research orders over $200',
+            'Free shipping on orders over $200',
+            'free shipping on orders over $200',
+        ),
+        $text
+    );
+
+    return preg_replace_callback(
+        '/(<[^>]*\bpbv-how-to-pay\b[^>]*>)(.*?)(<\/div>)/is',
+        static function ($matches) {
+            return $matches[1] . str_replace('$250', '$200', $matches[2]) . $matches[3];
+        },
+        $text
+    );
+}
+
+/**
+ * @param string $html Content HTML.
+ * @return string
+ */
+function pbv_filter_free_shipping_250_html($html) {
+    return pbv_replace_free_shipping_250($html);
+}
+add_filter('the_content', 'pbv_filter_free_shipping_250_html', 12);
+add_filter('woocommerce_product_get_description', 'pbv_filter_free_shipping_250_html', 12);
+
+/**
+ * Homepage and social blurbs stored in Rank Math still say $250.
+ *
+ * @param string $desc Meta description.
+ * @return string
+ */
+function pbv_filter_free_shipping_250_meta($desc) {
+    return pbv_replace_free_shipping_250($desc);
+}
+add_filter('rank_math/frontend/description', 'pbv_filter_free_shipping_250_meta', 30);
+
+/**
+ * Write the $200 wording into stored pages and product descriptions once.
+ * Does not touch coupon amounts.
+ */
+function pbv_apply_free_shipping_200_copy() {
+    if (get_option('pbv_free_shipping_copy_200') === '1') {
+        return;
+    }
+    if (!isset($GLOBALS['wpdb'])) {
+        return;
+    }
+    global $wpdb;
+    $ids = $wpdb->get_col(
+        "SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE '%\$250%' AND post_status NOT IN ('trash','auto-draft')"
+    );
+    if (is_array($ids)) {
+        foreach ($ids as $id) {
+            $id = (int) $id;
+            $content = $wpdb->get_var($wpdb->prepare("SELECT post_content FROM {$wpdb->posts} WHERE ID = %d", $id));
+            $updated = pbv_replace_free_shipping_250((string) $content);
+            if ($updated === (string) $content) {
+                continue;
+            }
+            $wpdb->update(
+                $wpdb->posts,
+                array('post_content' => $updated),
+                array('ID' => $id),
+                array('%s'),
+                array('%d')
+            );
+            clean_post_cache($id);
+        }
+    }
+
+    $titles = get_option('rank-math-options-titles');
+    if (is_array($titles)) {
+        $changed = false;
+        array_walk_recursive(
+            $titles,
+            static function (&$value) use (&$changed) {
+                if (!is_string($value) || strpos($value, '$250') === false) {
+                    return;
+                }
+                $next = pbv_replace_free_shipping_250($value);
+                if ($next !== $value) {
+                    $value = $next;
+                    $changed = true;
+                }
+            }
+        );
+        if ($changed) {
+            update_option('rank-math-options-titles', $titles);
+        }
+    }
+
+    update_option('pbv_free_shipping_copy_200', '1', false);
+}
+add_action('init', 'pbv_apply_free_shipping_200_copy', 30);
 
 /**
  * Build MerchantReturnPolicy — all sales final (matches /terms/#refund).
