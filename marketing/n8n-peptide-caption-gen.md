@@ -50,7 +50,7 @@ Sep 14 catalog add: **Dihexa, Epithalon, Glutathione, IGF-LR3, Ipamorelin, Kissp
 1. Open `enter_compound` → set `COMPOUND = 'BPC-157'` → Execute.
 2. Check your inbox for 2 vial + 2 pen captions.
 
-**SMS:** no Twilio credential on this n8n instance. Email only for now (`salvatorejohnson1984@gmail.com`, cc `sales@palmbeach-vitality.com`).
+**SMS:** no Twilio credential on this n8n instance. Email goes to `sales@palmbeach-vitality.com` only.
 
 ---
 
@@ -159,8 +159,7 @@ Paste: `marketing/n8n-code-prep-caption-email.js`
 |---|---|---|
 | Resource | — | Message |
 | Operation | — | Send |
-| To | **ON** | `={{ $json.email_to }}` |
-| CC | **ON** | `={{ $json.email_cc }}` |
+| To | **ON** | `={{ $json.email_to }}` (`sales@palmbeach-vitality.com`) |
 | Subject | **ON** | `={{ $json.email_subject }}` |
 | Email Type | — | Text |
 | Message | **ON** | `={{ $json.email_body }}` |
