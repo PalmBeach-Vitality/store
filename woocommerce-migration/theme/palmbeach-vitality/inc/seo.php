@@ -825,7 +825,8 @@ function pbv_apply_free_shipping_200_copy() {
 add_action('init', 'pbv_apply_free_shipping_200_copy', 30);
 
 /**
- * Build MerchantReturnPolicy — all sales final (matches /terms/#refund).
+ * Build MerchantReturnPolicy — returns are not accepted (matches /terms/#refund).
+ * Exchanges are described on that page. They are not a return window.
  *
  * @return array<string,mixed>
  */
@@ -1197,6 +1198,62 @@ function pbv_filter_product_meta_description($desc) {
 }
 add_filter('wpseo_metadesc', 'pbv_filter_product_meta_description', 20);
 add_filter('rank_math/frontend/description', 'pbv_filter_product_meta_description', 20);
+
+/**
+ * First paragraph of the approved Refund and Return Policy.
+ * Replaces Rank Math's excerpt of the old "no exchanges" sentence.
+ *
+ * @return string
+ */
+function pbv_terms_return_policy_lead() {
+    return 'All products are sold for laboratory research use only. We do not accept returns and we do not issue refunds. Opened, used, and unused products cannot be taken back, for hygiene, safety, and regulatory reasons.';
+}
+
+/**
+ * @param string $desc Description text.
+ * @return string
+ */
+function pbv_terms_replace_old_return_description($desc) {
+    if (!is_string($desc)) {
+        return $desc;
+    }
+    if (strpos($desc, 'do not accept returns, refunds') === false && strpos($desc, 'all sales are final') === false) {
+        return $desc;
+    }
+    if (!function_exists('is_page') || !is_page('terms')) {
+        return $desc;
+    }
+    return pbv_terms_return_policy_lead();
+}
+add_filter('rank_math/frontend/description', 'pbv_terms_replace_old_return_description', 40);
+
+/**
+ * @param mixed $data Rank Math JSON-LD.
+ * @return mixed
+ */
+function pbv_terms_jsonld_return_description($data) {
+    if (!function_exists('is_page') || !is_page('terms') || !is_array($data)) {
+        return $data;
+    }
+    $lead = pbv_terms_return_policy_lead();
+    $walk = static function (&$node) use (&$walk, $lead) {
+        if (!is_array($node)) {
+            return;
+        }
+        foreach ($node as $key => &$value) {
+            if ($key === 'description' && is_string($value) && (strpos($value, 'do not accept returns, refunds') !== false || strpos($value, 'all sales are final') !== false)) {
+                $value = $lead;
+                continue;
+            }
+            if (is_array($value)) {
+                $walk($value);
+            }
+        }
+    };
+    $walk($data);
+    return $data;
+}
+add_filter('rank_math/json_ld', 'pbv_terms_jsonld_return_description', PHP_INT_MAX);
 
 /**
  * Stronger SERP title tags (document title only — no on-page visual changes).
