@@ -238,7 +238,7 @@ if (function_exists('pbv_render_homepage_products')) {
 
       <details class="pbv-faq__item">
         <summary>How should research peptides be stored?<span class="pbv-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="pbv-faq__answer">Lyophilized peptides are typically stable at room temperature for short periods but should be refrigerated (2–8°C) or frozen for long-term storage. Once reconstituted, follow the protocol for that compound. Protect from light and moisture.</div>
+        <div class="pbv-faq__answer">These are pre-mixed research peptides, ready to use with no mixing. Refrigerate them at 36–46°F as soon as they arrive, and put them back in the refrigerator after each use. Do not freeze, and do not leave them at room temperature for long. Keep the pen or vial sealed and protected from light and moisture. Practical shelf life is 6–8 weeks.</div>
       </details>
 
       <details class="pbv-faq__item">
