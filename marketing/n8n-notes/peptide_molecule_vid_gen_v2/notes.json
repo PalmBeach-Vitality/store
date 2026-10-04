@@ -1,0 +1,42 @@
+[
+  {
+    "name": "note_overview",
+    "file": "0-overview.png",
+    "sticky_color": 1,
+    "sticky_width": 1364,
+    "image_width": 1340,
+    "image_height": 1105,
+    "alt": "Molecule video v2 · 14-chem-breakdown-54 · 54 looks · 30s · 1080 × 1920 · 9:16 · no sound · Every prompt comes from the sheet · How to run · 1. gpt_image_molecule_still → Execute step (the still only) · 2. Like it? Pin save_still_url · 3. sheets_update_video → Execute step (the 30s video) · 4. Unpin save_still_url",
+    "bytes": 105906
+  },
+  {
+    "name": "note_1_still",
+    "file": "1-still.png",
+    "sticky_color": 5,
+    "sticky_width": 1244,
+    "image_width": 1220,
+    "image_height": 435,
+    "alt": "1 · The still · Least-used Active row goes first · GPT Image 2.5 (OpenRouter) · Grok Imagine 2.0 is off",
+    "bytes": 38895
+  },
+  {
+    "name": "note_2_hop1",
+    "file": "2-hop1.png",
+    "sticky_color": 4,
+    "sticky_width": 1144,
+    "image_width": 1120,
+    "image_height": 435,
+    "alt": "2 · Hop 1 (0:00–0:15) · fal Kling v3 Pro · 1080p · 15s · Creatomate grabs frame 359, the first frame of hop 2",
+    "bytes": 42094
+  },
+  {
+    "name": "note_3_hop2",
+    "file": "3-hop2.png",
+    "sticky_color": 6,
+    "sticky_width": 1204,
+    "image_width": 1180,
+    "image_height": 435,
+    "alt": "3 · Hop 2 (0:15–0:30) · fal Kling v3 Pro · 1080p · 15s · Creatomate joins the 30s video · Saves the URLs to the sheet",
+    "bytes": 43796
+  }
+]
