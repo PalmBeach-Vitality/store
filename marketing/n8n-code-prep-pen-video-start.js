@@ -4,12 +4,12 @@
 // After: skip_still_edit (skip) or save_edited_still_url (edit)
 // Before: fal_kling_generate
 //
-// SHEETS-ONLY. Motion / model / duration / resolution from pull_sheet_row.
+// SHEETS-ONLY. Motion / model / duration / resolution / negative_prompt from pull_sheet_row.
 // fal_kling_generate reads model_video off this node's output, so the sheet owns the
 // tier. Never pin a slug on the node. grok_video_body_json is only for the disabled
 // Grok path.
 // Do not truncate. Do not invent a fallback prompt.
-// Fail if Sheet 14 motion contains vial / flip-off language (I2V morphs the pen).
+// The uncap check is the positive prompt only. negative_prompt may say uncapping.
 
 function firstJson(name) {
   try {
@@ -73,6 +73,7 @@ if (
     'prep_pen_video_start: video_motion_prompt on Sheet 14 still has vial/flip-off language. Fix the sheet — I2V will morph the pen.'
   );
 }
+var negative = mustStr(pick.negative_prompt || input.negative_prompt, 'negative_prompt');
 if (motion.indexOf('Silent video') === -1) {
   motion =
     'Silent video. No soundtrack, no music, no sound effects, no dialogue, no ambient audio. ' +
@@ -101,6 +102,7 @@ return [
     json: {
       still_url: still,
       video_motion_prompt: motion,
+      negative_prompt: negative,
       model_video: modelVideo,
       duration_seconds: duration,
       resolution: resolution,

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Generate unique per-row camera angle / direction / move recipes for Grok video."""
+"""Generate unique per-row camera angle / direction / move recipes for Grok video.
+
+Do not use this generator for Sheet 14 pens. Its templates lock the camera,
+name a start frame the still does not have, end in "then hold", and describe
+parts a pen does not have. Kling then either freezes or invents an arc.
+Pen moves are written by scripts/fix_pen_camera_moves.py.
+"""
 
 from __future__ import annotations
 
