@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.101');
+define('PBV_THEME_VERSION', '2.10.102');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -1298,9 +1298,14 @@ function pbv_default_terms_html() {
 
 function pbv_policy_refund_html() {
     return <<<HTML
-<h3>No Refund / No Return Policy</h3>
-<p>Due to the nature of our products being research chemicals intended for laboratory use only, all sales are final. We do not accept returns, refunds, or exchanges for any reason. Please make sure you are certain about your purchase before ordering, as we cannot accept opened, used, or unused products back for hygiene, safety, and regulatory reasons.</p>
-<p>By completing your purchase, you acknowledge and agree to this no refund / no return policy. If you have any questions about a product before buying, feel free to contact us. Thank you for understanding.</p>
+<h3>Returns and Refunds</h3>
+<p>All products are sold for laboratory research use only. We do not accept returns and we do not issue refunds. Opened, used, and unused products cannot be taken back, for hygiene, safety, and regulatory reasons.</p>
+<h3>Exchanges</h3>
+<p>We accept exchanges only when conditions permit. Exchanges are accepted only for damaged, defective, or incorrect items. The item must be unopened, unused, and in its original sealed packaging. Email us within 7 days of delivery with your order number and photos.</p>
+<h3>Damaged, Lost, or Stolen Packages</h3>
+<p>If your package arrives damaged, or is lost or stolen in transit, we replace it at no charge once you send us the carrier report. See our <a href="#shipping">Shipping Policy</a> for details.</p>
+<h3>How to Request an Exchange</h3>
+<p>Email <a href="mailto:sales@palmbeach-vitality.com">sales@palmbeach-vitality.com</a> with your order number and clear photos. We reply with next steps.</p>
 HTML;
 }
 
@@ -1407,7 +1412,7 @@ function pbv_policy_tos_html() {
 <p>You must be at least 21 years of age to purchase products from this website. By placing an order, you represent and warrant that you are 18 years or older and legally able to enter into this agreement.</p>
 
 <h3>4. Orders, Shipping &amp; Returns</h3>
-<p>All sales are final. Due to the nature of research chemicals, we do not accept returns or offer refunds. Please review our full Shipping Policy and No Refund Policy before placing an order.</p>
+<p>All products are for laboratory research use only; we do not accept returns or issue refunds, and exchanges are accepted only as described in our <a href="#refund">Refund and Return Policy</a>; damaged, lost, or stolen packages are replaced at no charge with a carrier report.</p>
 
 <h3>5. Limitation of Liability</h3>
 <p>To the fullest extent permitted by law, Palm Beach Vitality shall not be liable for any direct, indirect, incidental, consequential, or punitive damages arising from the use or inability to use our products or website. This includes, but is not limited to, any damages resulting from misuse, improper handling, or failure to follow applicable laws and regulations.</p>
@@ -1583,6 +1588,32 @@ function pbv_seed_storefront() {
 add_action('after_switch_theme', 'pbv_seed_storefront');
 add_action('init', 'pbv_seed_storefront', 30);
 add_action('woocommerce_init', 'pbv_seed_storefront');
+
+/**
+ * Copy the current terms template into the stored Terms page once.
+ * Rank Math builds the Article description from that stored text.
+ * Does not bump the storefront seed, so other pages stay untouched.
+ */
+function pbv_sync_terms_return_policy_once() {
+    if (get_option('pbv_terms_returns_option_b') === '1') {
+        return;
+    }
+    $page = get_page_by_path('terms');
+    if (!$page instanceof WP_Post) {
+        return;
+    }
+    wp_update_post(array(
+        'ID'           => $page->ID,
+        'post_content' => pbv_default_terms_html(),
+    ));
+    $description = 'All products are sold for laboratory research use only. We do not accept returns and we do not issue refunds. Opened, used, and unused products cannot be taken back, for hygiene, safety, and regulatory reasons.';
+    $stored = get_post_meta($page->ID, 'rank_math_description', true);
+    if (!is_string($stored) || $stored === '' || strpos($stored, 'do not accept returns, refunds') !== false || strpos($stored, 'all sales are final') !== false) {
+        update_post_meta($page->ID, 'rank_math_description', $description);
+    }
+    update_option('pbv_terms_returns_option_b', '1', false);
+}
+add_action('init', 'pbv_sync_terms_return_policy_once', 40);
 
 /**
  * One-time Primary menu rebuild: wipe duplicates, keep a single clean set.
