@@ -20,6 +20,9 @@ import re
 import sys
 from pathlib import Path
 
+from lock_lab_bottle_still import LOCK as LAB_LOCK
+from lock_lab_bottle_still import build_motion as build_lab_motion
+
 ROOT = Path(__file__).resolve().parents[1]
 SHEETS = ROOT / "sheets"
 LAB = SHEETS / "9-lab-item-creations-500.csv"
@@ -67,6 +70,8 @@ def build_motion(row: dict, *, lab: bool) -> str:
     ):
         if not val:
             raise SystemExit(f"{cid}: empty {name}")
+    if lab:
+        return build_lab_motion(row)
     printed = label_of(row.get("video_motion_prompt") or "", cid)
     no_orbit = ""
     if lab and not ORBIT_RE.search(move):
@@ -108,7 +113,7 @@ def assert_samples(lab_rows: list[dict], well_rows: list[dict]) -> None:
     by_lab = {r["creation_id"]: r["video_motion_prompt"] for r in lab_rows}
     by_well = {r["creation_id"]: r["video_motion_prompt"] for r in well_rows}
     m501 = by_lab["PBVita-Lab-501"]
-    if "crane-down" not in m501 or "Shot crane_settle" not in m501:
+    if "crane-down" not in m501:
         raise SystemExit("PBVita-Lab-501 motion is not the crane settle on the row")
     if "side-profile" in m501:
         raise SystemExit("PBVita-Lab-501 still carries the side-profile track")
@@ -127,10 +132,18 @@ def assert_samples(lab_rows: list[dict], well_rows: list[dict]) -> None:
         raise SystemExit("wellness orbit row was told No orbit")
     if any("No orbit." in r["video_motion_prompt"] for r in well_rows):
         raise SystemExit("wellness motion should not say No orbit")
-    for r in lab_rows + well_rows:
+    for r in lab_rows:
+        motion = r["video_motion_prompt"]
+        if not motion.startswith(LAB_LOCK):
+            raise SystemExit(f"{r['creation_id']}: bottle lock missing")
+        if "The small DNA mark keeps the same shape" not in motion:
+            raise SystemExit(f"{r['creation_id']}: DNA mark line missing")
+    for r in well_rows:
         motion = r["video_motion_prompt"]
         if not motion.startswith(LOCK):
             raise SystemExit(f"{r['creation_id']}: CAMERA LOCK missing")
+    for r in lab_rows + well_rows:
+        motion = r["video_motion_prompt"]
         if CONTINUITY not in motion:
             raise SystemExit(f"{r['creation_id']}: continuity sentence missing")
         if "needles" in motion:
