@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.103');
+define('PBV_THEME_VERSION', '2.10.104');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -637,8 +637,9 @@ add_filter('loop_shop_columns', 'pbv_loop_columns');
 /**
  * Single product layout (all products):
  * - Centered image + text
- * - Main description first
- * - Short description + Add to cart below it
+ * - Main description first, ending at the handling bullets
+ * - Add to cart immediately after the description
+ * - No short-description line between the bullets and the button
  * - Related products after the product card (same collection)
  * - No data tabs / SKU / category / tags meta row
  */
@@ -725,7 +726,7 @@ function pbv_strip_embedded_research_disclaimer($html) {
 
 /**
  * Drop the stored "Research Use Only" heading and disclaimer paragraph.
- * That block is not part of the product page format. Short descriptions stay.
+ * That block is not part of the product page format.
  *
  * @param string $html Product description HTML.
  * @return string
@@ -766,14 +767,8 @@ function pbv_single_product_details_and_cart() {
     }
     echo '</div>';
 
-    $short = ($product instanceof WC_Product) ? $product->get_short_description() : '';
-    $short = pbv_strip_embedded_research_disclaimer($short);
-    if (trim(wp_strip_all_tags((string) $short)) !== '') {
-        echo '<div class="woocommerce-product-details__short-description">';
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo apply_filters('woocommerce_short_description', $short);
-        echo '</div>';
-    }
+    // Short description is a one-line blurb (for example "NAD+ 500mg research pen… RUO").
+    // It is not part of the product layout. The description ends, then Add to cart.
 
     woocommerce_template_single_add_to_cart();
 
