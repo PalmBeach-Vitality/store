@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.102');
+define('PBV_THEME_VERSION', '2.10.103');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -638,7 +638,6 @@ add_filter('loop_shop_columns', 'pbv_loop_columns');
  * Single product layout (all products):
  * - Centered image + text
  * - Main description first
- * - Research use only banner at bottom of description (every product)
  * - Short description + Add to cart below it
  * - Related products after the product card (same collection)
  * - No data tabs / SKU / category / tags meta row
@@ -724,6 +723,28 @@ function pbv_strip_embedded_research_disclaimer($html) {
     return $html;
 }
 
+/**
+ * Drop the stored "Research Use Only" heading and disclaimer paragraph.
+ * That block is not part of the product page format. Short descriptions stay.
+ *
+ * @param string $html Product description HTML.
+ * @return string
+ */
+function pbv_strip_product_ruo_paragraph($html) {
+    $html = (string) $html;
+    if ($html === '' || stripos($html, 'Research Use Only') === false) {
+        return $html;
+    }
+
+    $stripped = preg_replace(
+        '/<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>\s*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>/is',
+        '',
+        $html
+    );
+
+    return is_string($stripped) ? $stripped : $html;
+}
+
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
         return;
@@ -736,6 +757,7 @@ function pbv_single_product_details_and_cart() {
     // Show the full product description exactly as stored in WooCommerce.
     $description = ($product instanceof WC_Product) ? $product->get_description() : '';
     $description = pbv_strip_embedded_research_disclaimer($description);
+    $description = pbv_strip_product_ruo_paragraph($description);
 
     echo '<div class="pbv-product-description">';
     if (trim(wp_strip_all_tags((string) $description)) !== '') {
