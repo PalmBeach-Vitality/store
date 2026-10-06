@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.102');
+define('PBV_THEME_VERSION', '2.10.103');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -723,6 +723,64 @@ function pbv_strip_embedded_research_disclaimer($html) {
 
     return $html;
 }
+
+/**
+ * Drop the Research Use Only block from the TB-500 10mg pen description only.
+ *
+ * @param string $html Product description HTML.
+ * @return string
+ */
+function pbv_tb500_pen_strip_ruo_disclaimer($html) {
+    $html = (string) $html;
+    $stripped = preg_replace(
+        '/\s*<h2>\s*Research Use Only\s*<\/h2>\s*<p>\s*<strong>\s*For laboratory research use only\s*\(RUO\)\.\s*<\/strong>.*?<\/p>\s*/is',
+        '',
+        $html,
+        1
+    );
+    return is_string($stripped) ? $stripped : $html;
+}
+
+/**
+ * @param string     $description Description HTML.
+ * @param WC_Product $product     Product.
+ * @return string
+ */
+function pbv_tb500_pen_description($description, $product) {
+    if ($product instanceof WC_Product && $product->get_slug() === 'tb-500-10mg-pen') {
+        return pbv_tb500_pen_strip_ruo_disclaimer($description);
+    }
+    return $description;
+}
+add_filter('woocommerce_product_get_description', 'pbv_tb500_pen_description', 20, 2);
+
+/**
+ * Remove that block from the stored TB-500 10mg pen description once.
+ */
+function pbv_tb500_pen_remove_ruo_once() {
+    if (get_option('pbv_tb500_pen_ruo_removed') === '1') {
+        return;
+    }
+    $posts = get_posts(array(
+        'name'           => 'tb-500-10mg-pen',
+        'post_type'      => 'product',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+    ));
+    if (!$posts) {
+        return;
+    }
+    $post = $posts[0];
+    $updated = pbv_tb500_pen_strip_ruo_disclaimer($post->post_content);
+    if ($updated !== $post->post_content) {
+        wp_update_post(array(
+            'ID'           => $post->ID,
+            'post_content' => $updated,
+        ));
+    }
+    update_option('pbv_tb500_pen_ruo_removed', '1', false);
+}
+add_action('init', 'pbv_tb500_pen_remove_ruo_once', 40);
 
 function pbv_single_product_details_and_cart() {
     if (!is_product()) {
