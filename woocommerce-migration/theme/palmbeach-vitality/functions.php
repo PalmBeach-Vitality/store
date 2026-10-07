@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.106');
+define('PBV_THEME_VERSION', '2.10.107');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -738,7 +738,7 @@ function pbv_strip_product_ruo_paragraph($html) {
     }
 
     $stripped = preg_replace(
-        '/(?:<!--\s*wp:heading\b[^>]*-->\s*)?<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>(?:\s|<!--.*?-->)*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>(?:\s*<!--\s*\/wp:paragraph\s*-->)?/is',
+        '/(?:<!--\s*wp:heading\b[^>]*-->\s*)?<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>(?:\s|<!--.*?-->)*(?:<p[^>]*>)?.*?qualified researcher purchasing for lawful research purposes only\.\s*(?:<\/p>)?(?:\s*<!--\s*\/wp:paragraph\s*-->)?/is',
         '',
         $html
     );
@@ -762,8 +762,12 @@ function pbv_single_product_details_and_cart() {
 
     echo '<div class="pbv-product-description">';
     if (trim(wp_strip_all_tags((string) $description)) !== '') {
-        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-        echo apply_filters('the_content', $description);
+        $description = apply_filters('the_content', $description);
+        $description = pbv_strip_product_ruo_paragraph($description);
+        if (trim(wp_strip_all_tags((string) $description)) !== '') {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $description;
+        }
     }
     echo '</div>';
 
