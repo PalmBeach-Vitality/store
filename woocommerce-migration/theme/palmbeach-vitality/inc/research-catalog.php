@@ -970,17 +970,17 @@ function pbv_research_catalog() {
             'subtitle' => 'Stabilized GHRH(1–44) Analog',
             'sequence_note' => 'Trans-3-hexenoyl-GHRH(1–44)-NH₂ analog class (tesamorelin scaffold display)',
             'kind' => 'linear',
-            'overview' => 'Tesamorelin is a stabilized GHRH analog studied and used clinically for reduction of excess visceral adipose tissue in HIV-associated lipodystrophy, with additional metabolic and hepatic-fat research.',
-            'mechanism' => 'Pulsatile GH release via GHRH receptor activation; visceral fat and liver-fat endpoints have been primary clinical research readouts.',
+            'overview' => 'Tesamorelin is a stabilized GHRH analog studied for pulsatile growth-hormone secretion, visceral adipose tissue in abdominal obesity, and short-term insulin sensitivity in healthy men.',
+            'mechanism' => 'Pulsatile GH release via GHRH receptor activation. Published readouts include overnight GH secretion, IGF-I, visceral fat, and insulin-stimulated glucose uptake.',
             'uses' => array(
                 'Visceral adiposity and body-composition research',
-                'HIV lipodystrophy metabolic models',
-                'Liver-fat / NAFLD-adjacent imaging endpoints',
+                'Growth-hormone pulsatility models',
+                'Insulin-sensitivity clamp studies',
                 'GH axis therapeutics pharmacology',
             ),
             'notations' => array(
-                'Case-study notation: randomized studies reported reductions in visceral and liver fat in HIV patients with abdominal fat accumulation.',
-                'Case-study notation: newer work examines tesamorelin with modern antiretroviral regimens and neurocognitive outcomes.',
+                'Case-study notation: a 12-month randomized trial in abdominally obese adults reported lower visceral fat, triglycerides, C-reactive protein, and carotid intima-media thickness versus placebo.',
+                'Case-study notation: a 2-week study in healthy men reported higher overnight GH and IGF-I, with insulin-stimulated glucose uptake preserved.',
                 'Present research-grade material separately from approved branded drug product.',
             ),
             'related' => array(
