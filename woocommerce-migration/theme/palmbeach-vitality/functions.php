@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('PBV_THEME_VERSION', '2.10.104');
+define('PBV_THEME_VERSION', '2.10.105');
 define('PBV_SEED_VERSION', '2.5.4');
 define('PBV_MENU_FIX_VERSION', '2.7.1');
 define('PBV_ANNOUNCE_FIX_VERSION', '2.10.72');
@@ -738,7 +738,7 @@ function pbv_strip_product_ruo_paragraph($html) {
     }
 
     $stripped = preg_replace(
-        '/<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>\s*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>/is',
+        '/(?:<!--\s*wp:heading\b[^>]*-->\s*)?<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>(?:\s|<!--.*?-->)*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>(?:\s*<!--\s*\/wp:paragraph\s*-->)?/is',
         '',
         $html
     );
