@@ -738,7 +738,7 @@ function pbv_strip_product_ruo_paragraph($html) {
     }
 
     $stripped = preg_replace(
-        '/<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>\s*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>/is',
+        '/(?:<!--\s*wp:heading\b[^>]*-->\s*)?<h[23][^>]*>\s*Research Use Only\s*<\/h[23]>(?:\s|<!--.*?-->)*<p[^>]*>.*?qualified researcher purchasing for lawful research purposes only\.\s*<\/p>(?:\s*<!--\s*\/wp:paragraph\s*-->)?/is',
         '',
         $html
     );
